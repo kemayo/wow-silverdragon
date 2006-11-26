@@ -4,8 +4,8 @@ local L = AceLibrary("AceLocale-2.2"):new("SilverDragon")
 
 SilverDragon = AceLibrary("AceAddon-2.0"):new("AceEvent-2.0", "AceConsole-2.0", "AceDB-2.0", "FuBarPlugin-2.0")
 
-SilverDragon.version = "2.0." .. string.sub("$Revision: 17964 $", 12, -3)
-SilverDragon.date = string.sub("$Date: 2006-11-24 06:17:48 -0800 (Fri, 24 Nov 2006) $", 8, 17)
+SilverDragon.version = "2.0." .. string.sub("$Revision$", 12, -3)
+SilverDragon.date = string.sub("$Date$", 8, 17)
 SilverDragon.hasIcon = L["DefaultIcon"]
 
 function SilverDragon:OnInitialize()
