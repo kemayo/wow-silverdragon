@@ -15,53 +15,130 @@ function SilverDragon:OnInitialize()
 			--zone
 			["*"] = {},
 		},
+		scan = true,
+		announce = true,
 	})
+	local optionsTable = {
+		type="group",
+		args={
+			settings = {
+				name=L["Settings"], desc=L["Configuration options"],
+				type="group",
+				args={
+					scan = {
+						name=L["Scan"], desc=L["Scan for nearby rares at a regular interval"],
+						type="toggle",
+						get=function() return self.db.profile.scan end,
+						set=function(t)
+							self.db.profile.scan = t
+							if t then self:ScheduleRepeatingEvent('SilverDragon_Scan', self.CheckNearby, 5, self)
+							else self:CancelScheduledEvent('SilverDragon_Scan') end
+						end,
+					},
+					announce = {
+						name=L["Announce"], desc=L["Display a message when a rare is detected nearby"],
+						type="toggle",
+						get=function() return self.db.profile.announce end,
+						set=function(t) self.db.profile.announce = t end,
+					},
+				},
+			},
+			scan = {
+				name=L["Scan"], desc=L["Scan for nearby rares"],
+				type="execute", func="CheckNearby",
+			},
+		}
+	}
+	self:RegisterChatCommand(L["ChatCommands"], optionsTable)
+	self.OnMenuRequest = optionsTable
 	self.lastseen = {}
 end
 
 function SilverDragon:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+	if self.db.profile.scan then
+		self:ScheduleRepeatingEvent('SilverDragon_Scan', self.CheckNearby, 5, self)
+	end
 end
 
 function SilverDragon:PLAYER_TARGET_CHANGED()
-	self:RareScan('target')
+	self:IsRare('target')
 end
 
 function SilverDragon:UPDATE_MOUSEOVER_UNIT()
-	self:RareScan('mouseover')
+	self:IsRare('mouseover')
 end
 
-function SilverDragon:RareScan(unit)
+function SilverDragon:IsRare(unit)
 	local c12n = UnitClassification(unit)
 	if c12n == 'rare' or c12n == 'rareelite' then
 		local x, y = GetPlayerMapPosition("player")
 		if x == 0 and y == 0 then return end
 		
+		local seen = time()
 		local name = UnitName(unit)
-		if self.lastseen[name] and self.lastseen[name] < (time() - 600) then
+		if (not self.lastseen[name]) or (self.lastseen[name] < (seen - 600)) then
 			-- Only grab each rare every 10 minutes, preventing spam.
-			-- Store as: x:y:name:level:elite:type:subzone
-			self.db.profile.mobs[GetRealZoneText()] = string.format("%d:%d:%s:%d:%d:%s:%s", x, y, name, UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText())
-			self.lastseen[name] = time()
-			
+			-- Store as: x:y:name:level:elite:type:subzone:lastseen
+			self.db.profile.mobs[GetRealZoneText()] = string.format("%d:%d:%s:%d:%d:%s:%s:%d", x, y, name, UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
+			self.lastseen[name] = seen
+			if self.db.profile.announce then
+				self:ScheduleEvent(self.Announce, 1, self, name, UnitIsDead(unit))
+			end
 			self:Update()
 		end
 	end
 end
 
+function SilverDragon:Announce(name, dead)
+	UIErrorsFrame:AddMessage(string.format(L["%s seen!"], name), 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+	if dead then
+		UIErrorsFrame:AddMessage(L["(it's dead)"], 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+	end
+end
+
+function SilverDragon:CheckNearby()
+	UIErrorsFrame:Hide() -- This can spam some "Unknown Unit" errors to the error frame.
+	local nowTargetted = UnitName("target")
+	for mob in pairs(self.db.profile.mobs[GetRealZoneText()]) do
+		local _,_,name = string.find(mob, "^%d:%d:(%s):")
+		TargetByName(name)
+	end
+	if nowTargetted then TargetByName(nowTargetted) end
+	UIErrorsFrame:Clear(); UIErrorsFrame:Show()
+end
+
 function SilverDragon:OnTooltipUpdate()
 	local zone, subzone = GetRealZoneText(), GetSubZoneText()
-	cat = tablet:AddCategory('text', zone, 'columns', 4)
+	cat = tablet:AddCategory('text', zone, 'columns', 5)
 	for mob in pairs(self.db.profile.mobs[zone]) do
-		local _,_,x,y,name,level,elite,ctype,csubzone = string.find(mob, "(%d):(%d):(%s):(%d):(%d):(%s):(%s)")
+		local _,_,x,y,name,level,elite,ctype,csubzone,lastseen = string.find(mob, "^(%d):(%d):(%s):(%d):(%d):(%s):(%s):(%d)")
 		cat:AddLine(
 			'text', name, 'textR', subzone == csubzone and 0 or nil, 'textR', subzone == csubzone and 1 or nil, 'textR', subzone == csubzone and 0 or nil,
 			'text2', string.format("level %d%s %s", level, elite==1 and '+' or '', ctype),
 			'text3', csubzone,
-			'text4', string.format("%d, %d", x, y)
+			'text4', (lastseen == 0) and L["Never"] or self:LastSeen(lastseen)
+			'text5', string.format("%d, %d", x, y)
 		)
 	end
+end
+
+function SilverDragon:LastSeen(t)
+	local lastseen
+	local currentTime = time()
+	local minutes = math.ceil((currentTime - t) / 60)
+	if minutes > 59 then
+		local hours = math.ceil((currentTime - t) / 3600)
+		if hours > 23 then
+			lastseen = math.ceil((currentTime - t) / 86400)..L[" day(s)"]
+		else
+			lastseen = hours..L[" hour(s)"]
+		end
+	else
+		lastseen = minutes..L[" minute(s)"]
+	end
+	return lastseen
 end
 
 function SilverDragon:OnTextUpdate()
