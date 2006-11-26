@@ -16,7 +16,7 @@ function SilverDragon:OnInitialize()
 			["*"] = {},
 		},
 	})
-	self.lastsaw = {}
+	self.lastseen = {}
 end
 
 function SilverDragon:OnEnable()
