@@ -16,7 +16,10 @@ function SilverDragon:OnInitialize()
 			["*"] = {},
 		},
 		scan = true,
-		announce = true,
+		announce = {
+			chat = true,
+			error = true,
+		},
 	})
 	local optionsTable = {
 		type="group",
@@ -37,9 +40,20 @@ function SilverDragon:OnInitialize()
 					},
 					announce = {
 						name=L["Announce"], desc=L["Display a message when a rare is detected nearby"],
-						type="toggle",
-						get=function() return self.db.profile.announce end,
-						set=function(t) self.db.profile.announce = t end,
+						type="group", args={
+							chat = {
+								name=L["Chat"], desc=L["In the chatframe"],
+								type="toggle",
+								get=function() return self.db.profile.announce.chat end,
+								set=function(t) self.db.profile.announce.chat = t end,
+							},
+							error = {
+								name=L["Error"], desc=L["In the errorframe"],
+								type="toggle",
+								get=function() return self.db.profile.announce.error end,
+								set=function(t) self.db.profile.announce.error = t end,
+							},
+						},
 					},
 				},
 			},
@@ -83,18 +97,21 @@ function SilverDragon:IsRare(unit)
 			-- Store as: x:y:level:elite:type:subzone:lastseen
 			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 100), math.floor(y * 100), UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
 			self.lastseen[name] = seen
-			if self.db.profile.announce then
-				self:ScheduleEvent(self.Announce, 1, self, name, UnitIsDead(unit))
-			end
+			self:ScheduleEvent(self.Announce, 1, self, name, UnitIsDead(unit))
 			self:Update()
 		end
 	end
 end
 
 function SilverDragon:Announce(name, dead)
-	UIErrorsFrame:AddMessage(string.format(L["%s seen!"], name), 1, 0, 0, 1, UIERRORS_HOLD_TIME)
-	if dead then
-		UIErrorsFrame:AddMessage(L["(it's dead)"], 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+	if self.db.profile.announce.error then
+		UIErrorsFrame:AddMessage(string.format(L["%s seen!"], name), 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+		if dead then
+			UIErrorsFrame:AddMessage(L["(it's dead)"], 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+		end
+	end
+	if self.db.profile.announce.chat then
+		self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or nil)
 	end
 end
 
