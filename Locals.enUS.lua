@@ -4,6 +4,7 @@ L:RegisterTranslations("enUS", function() return {
 	["DefaultIcon"] = "Interface\\Icons\\Ability_Hunter_BeastCall",
 	["ChatCommands"] = {"/silverdragon", "/sd"},
 	
+	["Do scan"] = true,
 	["Settings"] = true,
 	["Configuration options"] = true,
 	["Scan"] = true,

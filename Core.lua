@@ -44,7 +44,7 @@ function SilverDragon:OnInitialize()
 				},
 			},
 			scan = {
-				name=L["Scan"], desc=L["Scan for nearby rares"],
+				name=L["Do scan"], desc=L["Scan for nearby rares"],
 				type="execute", func="CheckNearby",
 			},
 		}
@@ -100,10 +100,16 @@ end
 
 function SilverDragon:CheckNearby()
 	UIErrorsFrame:Hide() -- This can spam some "Unknown Unit" errors to the error frame.
-	local nowTargetted = UnitName("target")
+	local startTarget = UnitName("target")
 	for name,_ in pairs(self.db.profile.mobs[GetRealZoneText()]) do
+		self:Print("looking for", name)
 		TargetByName(name, true)
-		if nowTargetted then TargetLastTarget() else ClearTarget() end
+		local newTarget = UnitName('target')
+		if (startTarget and not (newTarget and newTarget == startTarget)) then
+			TargetLastTarget()
+		elseif (newTarget and not (newTarget == startTarget)) then
+			ClearTarget()
+		end
 	end
 	UIErrorsFrame:Clear(); UIErrorsFrame:Show()
 end
