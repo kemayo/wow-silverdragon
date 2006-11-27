@@ -81,7 +81,7 @@ function SilverDragon:IsRare(unit)
 		if (not self.lastseen[name]) or (self.lastseen[name] < (seen - 600)) then
 			-- Only grab each rare every 10 minutes, preventing spam.
 			-- Store as: x:y:level:elite:type:subzone:lastseen
-			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", x, y, UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
+			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 100), math.floor(y * 100), UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
 			self.lastseen[name] = seen
 			if self.db.profile.announce then
 				self:ScheduleEvent(self.Announce, 1, self, name, UnitIsDead(unit))
@@ -113,12 +113,12 @@ function SilverDragon:OnTooltipUpdate()
 	local zone, subzone = GetRealZoneText(), GetSubZoneText()
 	cat = tablet:AddCategory('text', zone, 'columns', 5)
 	for name,mob in pairs(self.db.profile.mobs[zone]) do
-		local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(mob, "^(%d):(%d):(%d):(%d):(%s):(%s):(%d)")
+		local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(mob, "^(%d+):(%d+):(%d+):(%d+):(.+):(.+):(%d+)")
 		cat:AddLine(
 			'text', name, 'textR', subzone == csubzone and 0 or nil, 'textR', subzone == csubzone and 1 or nil, 'textR', subzone == csubzone and 0 or nil,
 			'text2', string.format("level %d%s %s", level, elite==1 and '+' or '', ctype),
 			'text3', csubzone,
-			'text4', (lastseen == 0) and L["Never"] or self:LastSeen(lastseen)
+			'text4', (lastseen == 0) and L["Never"] or self:LastSeen(lastseen),
 			'text5', string.format("%d, %d", x, y)
 		)
 	end
