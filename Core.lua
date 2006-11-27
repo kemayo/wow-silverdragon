@@ -102,9 +102,9 @@ function SilverDragon:CheckNearby()
 	UIErrorsFrame:Hide() -- This can spam some "Unknown Unit" errors to the error frame.
 	local nowTargetted = UnitName("target")
 	for name,_ in pairs(self.db.profile.mobs[GetRealZoneText()]) do
-		TargetByName(name)
+		TargetByName(name, true)
 	end
-	if nowTargetted then TargetByName(nowTargetted)
+	if nowTargetted then TargetByName(nowTargetted, true)
 	else ClearTarget() end
 	UIErrorsFrame:Clear(); UIErrorsFrame:Show()
 end
