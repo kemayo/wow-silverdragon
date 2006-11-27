@@ -103,9 +103,8 @@ function SilverDragon:CheckNearby()
 	local nowTargetted = UnitName("target")
 	for name,_ in pairs(self.db.profile.mobs[GetRealZoneText()]) do
 		TargetByName(name, true)
+		if nowTargetted then TargetLastTarget() else ClearTarget() end
 	end
-	if nowTargetted then TargetByName(nowTargetted, true)
-	else ClearTarget() end
 	UIErrorsFrame:Clear(); UIErrorsFrame:Show()
 end
 
