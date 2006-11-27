@@ -80,8 +80,8 @@ function SilverDragon:IsRare(unit)
 		local name = UnitName(unit)
 		if (not self.lastseen[name]) or (self.lastseen[name] < (seen - 600)) then
 			-- Only grab each rare every 10 minutes, preventing spam.
-			-- Store as: x:y:name:level:elite:type:subzone:lastseen
-			self.db.profile.mobs[GetRealZoneText()] = string.format("%d:%d:%s:%d:%d:%s:%s:%d", x, y, name, UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
+			-- Store as: x:y:level:elite:type:subzone:lastseen
+			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", x, y, UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
 			self.lastseen[name] = seen
 			if self.db.profile.announce then
 				self:ScheduleEvent(self.Announce, 1, self, name, UnitIsDead(unit))
@@ -101,19 +101,19 @@ end
 function SilverDragon:CheckNearby()
 	UIErrorsFrame:Hide() -- This can spam some "Unknown Unit" errors to the error frame.
 	local nowTargetted = UnitName("target")
-	for mob in pairs(self.db.profile.mobs[GetRealZoneText()]) do
-		local _,_,name = string.find(mob, "^%d:%d:(%s):")
+	for name,_ in pairs(self.db.profile.mobs[GetRealZoneText()]) do
 		TargetByName(name)
 	end
-	if nowTargetted then TargetByName(nowTargetted) end
+	if nowTargetted then TargetByName(nowTargetted)
+	else ClearTarget() end
 	UIErrorsFrame:Clear(); UIErrorsFrame:Show()
 end
 
 function SilverDragon:OnTooltipUpdate()
 	local zone, subzone = GetRealZoneText(), GetSubZoneText()
 	cat = tablet:AddCategory('text', zone, 'columns', 5)
-	for mob in pairs(self.db.profile.mobs[zone]) do
-		local _,_,x,y,name,level,elite,ctype,csubzone,lastseen = string.find(mob, "^(%d):(%d):(%s):(%d):(%d):(%s):(%s):(%d)")
+	for name,mob in pairs(self.db.profile.mobs[zone]) do
+		local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(mob, "^(%d):(%d):(%d):(%d):(%s):(%s):(%d)")
 		cat:AddLine(
 			'text', name, 'textR', subzone == csubzone and 0 or nil, 'textR', subzone == csubzone and 1 or nil, 'textR', subzone == csubzone and 0 or nil,
 			'text2', string.format("level %d%s %s", level, elite==1 and '+' or '', ctype),
