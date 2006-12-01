@@ -91,6 +91,10 @@ function SilverDragon:OnEnable()
 	end
 end
 
+function SilverDragon:OnDisable()
+	self:ToggleCartographer(false)
+end
+
 function SilverDragon:ToggleCartographer(enable)
 	if Cartographer_Notes then
 		if enable then
