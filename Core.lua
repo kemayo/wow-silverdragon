@@ -98,7 +98,7 @@ end
 function SilverDragon:ToggleCartographer(enable)
 	if Cartographer_Notes then
 		if enable then
-			Cartographer_Notes:RegisterIcon("Rare", {text = L["Rare mob"], path = "Interface\\TaxiFrame\\UI-Taxi-Icon-Green"})
+			Cartographer_Notes:RegisterIcon("Rare", {text = L["Rare mob"], path = "Interface\\Icons\\INV_Misc_Head_Dragon_01"})
 			Cartographer_Notes:RegisterNotesDatabase("SilverDragon", self.db.profile.notesdb, SilverDragon)
 		else
 			Cartographer_Notes:UnregisterNotesDatabase("SilverDragon")

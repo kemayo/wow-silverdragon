@@ -1,7 +1,7 @@
 local L = AceLibrary("AceLocale-2.2"):new("SilverDragon")
 
 L:RegisterTranslations("enUS", function() return {
-	["DefaultIcon"] = "Interface\\Icons\\Ability_Hunter_BeastCall",
+	["DefaultIcon"] = "Interface\\Icons\\INV_Misc_Head_Dragon_01",
 	["ChatCommands"] = {"/silverdragon", "/sd"},
 	
 	["Do scan"] = true,
