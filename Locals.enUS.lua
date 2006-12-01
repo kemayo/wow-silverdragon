@@ -15,6 +15,8 @@ L:RegisterTranslations("enUS", function() return {
 	["In the chatframe"] = true,
 	["Error"] = true,
 	["In the errorframe"] = true,
+	["Notes"] = true,
+	["Make notes in Cartographer"] = true,
 	["Scan for nearby rares"] = true,
 	
 	["%s seen!"] = true,

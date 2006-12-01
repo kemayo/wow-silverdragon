@@ -15,6 +15,8 @@ function SilverDragon:OnInitialize()
 			--zone
 			["*"] = {},
 		},
+		notesdb = {},
+		notes = true,
 		scan = true,
 		announce = {
 			chat = true,
@@ -55,6 +57,19 @@ function SilverDragon:OnInitialize()
 							},
 						},
 					},
+					notes = {
+						name=L["Notes"], desc=L["Make notes in Cartographer"],
+						type="toggle",
+						get = function() return self.db.profile.notes end,
+						set = function(t)
+							self.db.profile.hook.notes = t
+							self:ToggleCartographer(t)
+						end,
+						disabled = function()
+							if Cartographer_Notes then return false
+							else return true end
+						end,
+					}
 				},
 			},
 			scan = {
@@ -74,6 +89,22 @@ function SilverDragon:OnEnable()
 	if self.db.profile.scan then
 		self:ScheduleRepeatingEvent('SilverDragon_Scan', self.CheckNearby, 5, self)
 	end
+end
+
+function SilverDragon:ToggleCartographer(enable)
+	if Cartographer_Notes then
+		if enable then
+			Cartographer_Notes:RegisterIcon("Rare", {text = L["Rare mob"], path = "Interface\\TaxiFrame\\UI-Taxi-Icon-Green"})
+			Cartographer_Notes:RegisterNotesDatabase("SilverDragon", self.db.profile.notesdb, SilverDragon)
+		else
+			Cartographer_Notes:UnregisterNotesDatabase("SilverDragon")
+		end
+	end
+end
+
+function SilverDragon:SetNoteHere(text)
+	local x,y = GetPlayerMapPosition('player')
+	Cartographer_Notes:SetCustomNote(GetRealZoneText(), x, y, 'Rare', 'SilverDragon', 'title', text)
 end
 
 function SilverDragon:PLAYER_TARGET_CHANGED()
@@ -99,6 +130,10 @@ function SilverDragon:IsRare(unit)
 			self.lastseen[name] = seen
 			self:ScheduleEvent(self.Announce, 1, self, name, UnitIsDead(unit))
 			self:Update()
+			
+			if self.db.profile.notes and Cartographer_Notes then
+				self:SetNoteHere(name)
+			end
 		end
 	end
 end
