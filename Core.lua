@@ -62,7 +62,7 @@ function SilverDragon:OnInitialize()
 						type="toggle",
 						get = function() return self.db.profile.notes end,
 						set = function(t)
-							self.db.profile.hook.notes = t
+							self.db.profile.notes = t
 							self:ToggleCartographer(t)
 						end,
 						disabled = function()
@@ -89,6 +89,7 @@ function SilverDragon:OnEnable()
 	if self.db.profile.scan then
 		self:ScheduleRepeatingEvent('SilverDragon_Scan', self.CheckNearby, 5, self)
 	end
+	self:ToggleCartographer(self.db.profile.notes)
 end
 
 function SilverDragon:OnDisable()
@@ -98,7 +99,7 @@ end
 function SilverDragon:ToggleCartographer(enable)
 	if Cartographer_Notes then
 		if enable then
-			Cartographer_Notes:RegisterIcon("Rare", {text = L["Rare mob"], path = "Interface\\Icons\\INV_Misc_Head_Dragon_01"})
+			Cartographer_Notes:RegisterIcon("Rare", {text = L["Rare mob"], path = "Interface\\Icons\\INV_Misc_Head_Dragon_01", width=12, height=12})
 			Cartographer_Notes:RegisterNotesDatabase("SilverDragon", self.db.profile.notesdb, SilverDragon)
 		else
 			Cartographer_Notes:UnregisterNotesDatabase("SilverDragon")
@@ -155,18 +156,20 @@ function SilverDragon:Announce(name, dead)
 end
 
 function SilverDragon:CheckNearby()
-	UIErrorsFrame:Hide() -- This can spam some "Unknown Unit" errors to the error frame.
-	local startTarget = UnitName("target")
-	for name,_ in pairs(self.db.profile.mobs[GetRealZoneText()]) do
-		TargetByName(name, true)
-		local newTarget = UnitName('target')
-		if (startTarget and not (newTarget and newTarget == startTarget)) then
-			TargetLastTarget()
-		elseif (newTarget and not (newTarget == startTarget)) then
-			ClearTarget()
+	if not UnitAffectingCombat("player") then
+		UIErrorsFrame:Hide() -- This can spam some "Unknown Unit" errors to the error frame.
+		local startTarget = UnitName("target")
+		for name,_ in pairs(self.db.profile.mobs[GetRealZoneText()]) do
+			TargetByName(name, true)
+			local newTarget = UnitName('target')
+			if (startTarget and not (newTarget and newTarget == startTarget)) then
+				TargetLastTarget()
+			elseif (newTarget and not (newTarget == startTarget)) then
+				ClearTarget()
+			end
 		end
+		UIErrorsFrame:Clear(); UIErrorsFrame:Show()
 	end
-	UIErrorsFrame:Clear(); UIErrorsFrame:Show()
 end
 
 function SilverDragon:OnTooltipUpdate()
