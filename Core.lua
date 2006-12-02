@@ -102,6 +102,7 @@ function SilverDragon:ToggleCartographer(enable)
 			Cartographer_Notes:RegisterIcon("Rare", {text = L["Rare mob"], path = "Interface\\Icons\\INV_Misc_Head_Dragon_01", width=12, height=12})
 			Cartographer_Notes:RegisterNotesDatabase("SilverDragon", self.db.profile.notesdb, SilverDragon)
 		else
+			Cartographer_Notes:UnregisterIcon("Rare")
 			Cartographer_Notes:UnregisterNotesDatabase("SilverDragon")
 		end
 	end

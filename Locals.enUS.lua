@@ -4,6 +4,8 @@ L:RegisterTranslations("enUS", function() return {
 	["DefaultIcon"] = "Interface\\Icons\\INV_Misc_Head_Dragon_01",
 	["ChatCommands"] = {"/silverdragon", "/sd"},
 	
+	["Rare mob"] = true,
+	
 	["Do scan"] = true,
 	["Settings"] = true,
 	["Configuration options"] = true,
