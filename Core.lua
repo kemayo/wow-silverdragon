@@ -110,7 +110,7 @@ end
 
 function SilverDragon:SetNoteHere(text)
 	local x,y = GetPlayerMapPosition('player')
-	Cartographer_Notes:SetCustomNote(GetRealZoneText(), x, y, 'Rare', 'SilverDragon', 'title', text)
+	Cartographer_Notes:SetNote(GetRealZoneText(), x, y, 'Rare', 'SilverDragon', 'title', text)
 end
 
 function SilverDragon:PLAYER_TARGET_CHANGED()
