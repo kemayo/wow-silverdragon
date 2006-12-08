@@ -1,4 +1,4 @@
-## Interface: 11200
+## Interface: 20000
 ## Title: SilverDragon |cff7fff7f -Ace2-|r
 ## Notes: Remember where rares were
 ## Version: 1.0

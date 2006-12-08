@@ -30,7 +30,7 @@ function SilverDragon:OnInitialize()
 				name=L["Settings"], desc=L["Configuration options"],
 				type="group",
 				args={
-					scan = {
+					--[[scan = {
 						name=L["Scan"], desc=L["Scan for nearby rares at a regular interval"],
 						type="toggle",
 						get=function() return self.db.profile.scan end,
@@ -39,7 +39,7 @@ function SilverDragon:OnInitialize()
 							if t then self:ScheduleRepeatingEvent('SilverDragon_Scan', self.CheckNearby, 5, self)
 							else self:CancelScheduledEvent('SilverDragon_Scan') end
 						end,
-					},
+					},--]]
 					announce = {
 						name=L["Announce"], desc=L["Display a message when a rare is detected nearby"],
 						type="group", args={
@@ -72,10 +72,10 @@ function SilverDragon:OnInitialize()
 					}
 				},
 			},
-			scan = {
+			--[[scan = {
 				name=L["Do scan"], desc=L["Scan for nearby rares"],
 				type="execute", func="CheckNearby",
-			},
+			},--]]
 		}
 	}
 	self:RegisterChatCommand(L["ChatCommands"], optionsTable)
@@ -86,9 +86,9 @@ end
 function SilverDragon:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-	if self.db.profile.scan then
+	--[[if self.db.profile.scan then
 		self:ScheduleRepeatingEvent('SilverDragon_Scan', self.CheckNearby, 5, self)
-	end
+	end--]]
 	self:ToggleCartographer(self.db.profile.notes)
 end
 
@@ -155,7 +155,7 @@ function SilverDragon:Announce(name, dead)
 		self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or nil)
 	end
 end
-
+--[[
 function SilverDragon:CheckNearby()
 	if not UnitAffectingCombat("player") then
 		UIErrorsFrame:Hide() -- This can spam some "Unknown Unit" errors to the error frame.
@@ -172,7 +172,7 @@ function SilverDragon:CheckNearby()
 		UIErrorsFrame:Clear(); UIErrorsFrame:Show()
 	end
 end
-
+--]]
 function SilverDragon:OnTooltipUpdate()
 	local zone, subzone = GetRealZoneText(), GetSubZoneText()
 	cat = tablet:AddCategory('text', zone, 'columns', 5)
