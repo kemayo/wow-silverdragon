@@ -132,7 +132,7 @@ function SilverDragon:IsRare(unit)
 		if (not self.lastseen[name]) or (self.lastseen[name] < (seen - 600)) then
 			-- Only grab each rare every 10 minutes, preventing spam.
 			-- Store as: x:y:level:elite:type:subzone:lastseen
-			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 100), math.floor(y * 100), level, c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
+			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 100), math.floor(y * 100), UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
 			self.lastseen[name] = seen
 			self:ScheduleEvent(self.Announce, 1, self, name, UnitIsDead(unit))
 			self:Update()
