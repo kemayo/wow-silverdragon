@@ -74,7 +74,7 @@ function SilverDragon:OnInitialize()
 			},
 			--[[scan = {
 				name=L["Do scan"], desc=L["Scan for nearby rares"],
-				type="execute", func="CheckNearby",
+				type="execute", func="NameplateScan",
 			},--]]
 		}
 	}
@@ -87,7 +87,7 @@ function SilverDragon:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 	--[[if self.db.profile.scan then
-		self:ScheduleRepeatingEvent('SilverDragon_Scan', self.CheckNearby, 5, self)
+		self:ScheduleRepeatingEvent('SilverDragon_Scan', self.NameplateScan, 5, self)
 	end--]]
 	self:ToggleCartographer(self.db.profile.notes)
 end
@@ -152,7 +152,7 @@ function SilverDragon:Announce(name, dead)
 		end
 	end
 	if self.db.profile.announce.chat then
-		self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or nil)
+		self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or '')
 	end
 end
 --[[
@@ -208,3 +208,60 @@ end
 function SilverDragon:OnTextUpdate()
 	self:SetText(L["Rares"])
 end
+--[[
+local worldchildren
+local nameplates = {}
+function SilverDragon:NameplateScan()
+	if worldchildren ~= WorldFrame:GetNumChildren() then
+		for _, frame in ipairs({WorldFrame:GetChildren()}) do
+			CheckForNameplate(frame)
+		end
+		worldchildren = WorldFrame:GetNumChildren()
+	end
+	local zone = GetRealZoneText()
+	for nameplate, regions in ipairs(nameplates) do
+		if self.db.profile.mobs[zone][regions.name:GetText()] then
+			self:Announce(regions.name:GetText())
+		end
+	end
+end
+
+local function CheckForNameplate(frame)
+	-- Nameplates are unnamed children of WorldFrame.
+	-- So: drop it if it's not a button, has a name, or we already know about it.
+	if frame:GetObjectType() ~= "Button" or frame:GetName() or nameplates[frame] then
+		return
+	end
+	local name, level, bar, icon, border, glow
+	for _, region in ipairs({frame:GetRegions()}) do
+		local oType = region:GetObjectType()
+		if oType == "FontString" then
+			local point, _, relativePoint = region:GetPoint()
+			if point == "BOTTOM" and relativePoint == "CENTER" then
+				name = region
+			elseif point == "CENTER" and relativePoint == "BOTTOMRIGHT" then
+				level = region
+			end
+		elseif oType == "Texture" then
+			local path = region:GetTexture()
+			if path == "Interface\\TargetingFrame\\UI-RaidTargetingIcons" then
+				icon = region
+			elseif path == "Interface\\Tooltips\\Nameplate-Border" then
+				border = region
+			elseif path == "Interface\\Tooltips\\Nameplate-Glow" then
+				glow = region
+			end
+		end
+	end
+	for _, childFrame in ipairs({frame:GetChildren()}) do
+		if childFrame:GetObjectType() == "StatusBar" then
+			bar = childFrame
+		end
+	end
+	
+	if name and level and bar and border and glow then -- We have a nameplate!
+		nameplates[frame] = {name = name, level = level, bar = bar, border = border, glow = glow}
+		return true
+	end
+end
+--]]
