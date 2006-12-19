@@ -180,7 +180,7 @@ function SilverDragon:OnTooltipUpdate()
 		local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(mob, "^(%d*):(%d*):(-?%d*):(%d*):(.*):(.*):(%d*)")
 		cat:AddLine(
 			'text', name, 'textR', subzone == csubzone and 0 or nil, 'textR', subzone == csubzone and 1 or nil, 'textR', subzone == csubzone and 0 or nil,
-			'text2', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite==1 and '+' or '', ctype and ctype or '?'),
+			'text2', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite=='1' and '+' or '', ctype and ctype or '?'),
 			'text3', csubzone,
 			'text4', (lastseen == 0) and L["Never"] or self:LastSeen(lastseen),
 			'text5', string.format("%d, %d", x, y)
