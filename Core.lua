@@ -1,8 +1,9 @@
 local tablet = AceLibrary("Tablet-2.0")
-
 local L = AceLibrary("AceLocale-2.2"):new("SilverDragon")
 
-SilverDragon = AceLibrary("AceAddon-2.0"):new("AceEvent-2.0", "AceConsole-2.0", "AceDB-2.0", "FuBarPlugin-2.0")
+local nameplatesShowing
+
+SilverDragon = AceLibrary("AceAddon-2.0"):new("AceEvent-2.0", "AceConsole-2.0", "AceDB-2.0", "AceHook-2.1", "FuBarPlugin-2.0")
 
 SilverDragon.version = "2.0." .. string.sub("$Revision$", 12, -3)
 SilverDragon.date = string.sub("$Date$", 8, 17)
@@ -30,7 +31,7 @@ function SilverDragon:OnInitialize()
 				name=L["Settings"], desc=L["Configuration options"],
 				type="group",
 				args={
-					--[[scan = {
+					scan = {
 						name=L["Scan"], desc=L["Scan for nearby rares at a regular interval"],
 						type="toggle",
 						get=function() return self.db.profile.scan end,
@@ -39,7 +40,7 @@ function SilverDragon:OnInitialize()
 							if t then self:ScheduleRepeatingEvent('SilverDragon_Scan', self.CheckNearby, 5, self)
 							else self:CancelScheduledEvent('SilverDragon_Scan') end
 						end,
-					},--]]
+					},
 					announce = {
 						name=L["Announce"], desc=L["Display a message when a rare is detected nearby"],
 						type="group", args={
@@ -72,10 +73,10 @@ function SilverDragon:OnInitialize()
 					}
 				},
 			},
-			--[[scan = {
+			scan = {
 				name=L["Do scan"], desc=L["Scan for nearby rares"],
-				type="execute", func="NameplateScan",
-			},--]]
+				type="execute", func="CheckNearby",
+			},
 		}
 	}
 	self:RegisterChatCommand(L["ChatCommands"], optionsTable)
@@ -86,10 +87,14 @@ end
 function SilverDragon:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-	--[[if self.db.profile.scan then
-		self:ScheduleRepeatingEvent('SilverDragon_Scan', self.NameplateScan, 5, self)
-	end--]]
+	if self.db.profile.scan then
+		self:ScheduleRepeatingEvent('SilverDragon_Scan', self.CheckNearby, 5, self)
+	end
 	self:ToggleCartographer(self.db.profile.notes)
+	
+	self:SecureHook("ShowNameplates", function() nameplatesShowing = true; end)
+	self:SecureHook("HideNameplates", function() nameplatesShowing = false; end)
+	UpdateNameplates() -- Calling this causes ShowNameplates to be called if nameplates are showing!
 end
 
 function SilverDragon:OnDisable()
@@ -155,24 +160,14 @@ function SilverDragon:Announce(name, dead)
 		self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or '')
 	end
 end
---[[
+
 function SilverDragon:CheckNearby()
-	if not UnitAffectingCombat("player") then
-		UIErrorsFrame:Hide() -- This can spam some "Unknown Unit" errors to the error frame.
-		local startTarget = UnitName("target")
-		for name,_ in pairs(self.db.profile.mobs[GetRealZoneText()]) do
-			TargetByName(name, true)
-			local newTarget = UnitName('target')
-			if (startTarget and not (newTarget and newTarget == startTarget)) then
-				TargetLastTarget()
-			elseif (newTarget and not (newTarget == startTarget)) then
-				ClearTarget()
-			end
-		end
-		UIErrorsFrame:Clear(); UIErrorsFrame:Show()
+	if nameplatesShowing then
+		self:NameplateScan()
 	end
+	--self:TargetScan()
 end
---]]
+
 function SilverDragon:OnTooltipUpdate()
 	local zone, subzone = GetRealZoneText(), GetSubZoneText()
 	cat = tablet:AddCategory('text', zone, 'columns', 5)
@@ -208,28 +203,14 @@ end
 function SilverDragon:OnTextUpdate()
 	self:SetText(L["Rares"])
 end
---[[
+
 local worldchildren
 local nameplates = {}
-function SilverDragon:NameplateScan()
-	if worldchildren ~= WorldFrame:GetNumChildren() then
-		for _, frame in ipairs({WorldFrame:GetChildren()}) do
-			CheckForNameplate(frame)
-		end
-		worldchildren = WorldFrame:GetNumChildren()
-	end
-	local zone = GetRealZoneText()
-	for nameplate, regions in ipairs(nameplates) do
-		if self.db.profile.mobs[zone][regions.name:GetText()] then
-			self:Announce(regions.name:GetText())
-		end
-	end
-end
 
 local function CheckForNameplate(frame)
 	-- Nameplates are unnamed children of WorldFrame.
-	-- So: drop it if it's not a button, has a name, or we already know about it.
-	if frame:GetObjectType() ~= "Button" or frame:GetName() or nameplates[frame] then
+	-- So: drop it if it's not the right type, has a name, or we already know about it.
+	if frame:GetObjectType() ~= "Frame" or frame:GetName() or nameplates[frame] then
 		return
 	end
 	local name, level, bar, icon, border, glow
@@ -258,10 +239,41 @@ local function CheckForNameplate(frame)
 			bar = childFrame
 		end
 	end
-	
 	if name and level and bar and border and glow then -- We have a nameplate!
 		nameplates[frame] = {name = name, level = level, bar = bar, border = border, glow = glow}
 		return true
 	end
 end
---]]
+
+function SilverDragon:NameplateScan(hideNameplates)
+	--[[if not nameplatesShowing then
+		ShowNameplates()
+		self:ScheduleEvent(self.NameplateScan, 0, self, true)
+		self:ScheduleEvent(HideNameplates, 0)
+		return
+	end--]]
+	if worldchildren ~= WorldFrame:GetNumChildren() then
+		for _, frame in ipairs({WorldFrame:GetChildren()}) do
+			CheckForNameplate(frame)
+		end
+		worldchildren = WorldFrame:GetNumChildren()
+	end
+	local zone = GetRealZoneText()
+	for nameplate, regions in pairs(nameplates) do
+		if self.db.profile.mobs[zone][regions.name:GetText()] then
+			self:Announce(regions.name:GetText())
+			break
+			-- (Nameplates can get reused.  We might want to forcibly flush the nameplate cache at some point here.)
+		end
+	end
+	--[[if hideNameplates then
+		HideNameplates()
+	end--]]
+end
+
+function SilverDragon:TargetScan()
+	for i=1, GetNumPartyMembers(), 1 do
+		self:IsRare(("party%dtarget"):format(i))
+		self:IsRare(("partypet%dtarget"):format(i))
+	end
+end
