@@ -16,7 +16,7 @@ function SilverDragon:OnInitialize()
 			--zone
 			["*"] = {},
 		},
-		notesdb = {},
+		--notesdb = {},
 		notes = true,
 		scan = true,
 		announce = {
@@ -94,18 +94,28 @@ function SilverDragon:OnEnable()
 	
 	self:SecureHook("ShowNameplates", function() nameplatesShowing = true; end)
 	self:SecureHook("HideNameplates", function() nameplatesShowing = false; end)
-	UpdateNameplates() -- Calling this causes ShowNameplates to be called if nameplates are showing!
+	UpdateNameplates() -- Calling this causes ShowNameplates to be called if nameplates are showing, or HideNameplates if they aren't!
 end
 
 function SilverDragon:OnDisable()
 	self:ToggleCartographer(false)
 end
 
+local cartdb = {}
+local cartdb_populated
 function SilverDragon:ToggleCartographer(enable)
 	if Cartographer_Notes then
 		if enable then
 			Cartographer_Notes:RegisterIcon("Rare", {text = L["Rare mob"], path = "Interface\\Icons\\INV_Misc_Head_Dragon_01", width=12, height=12})
 			Cartographer_Notes:RegisterNotesDatabase("SilverDragon", self.db.profile.notesdb, SilverDragon)
+			if not cartdb_populated then
+				for zone, mobs in pairs(self.db.profile.mobs) do
+					for name, info in pairs(mobs) do
+						local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(info, "^(%d*):(%d*):(-?%d*):(%d*):(.*):(.*):(%d*)")
+						Cartographer_Notes:SetNote(zone, tonumber(x)/100, tonumber(y)/100, 'Rare', 'SilverDragon', 'title', name)
+					end
+				end
+			end
 		else
 			Cartographer_Notes:UnregisterIcon("Rare")
 			Cartographer_Notes:UnregisterNotesDatabase("SilverDragon")
