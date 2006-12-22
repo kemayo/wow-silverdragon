@@ -107,7 +107,7 @@ function SilverDragon:ToggleCartographer(enable)
 	if Cartographer_Notes then
 		if enable then
 			Cartographer_Notes:RegisterIcon("Rare", {text = L["Rare mob"], path = "Interface\\Icons\\INV_Misc_Head_Dragon_01", width=12, height=12})
-			Cartographer_Notes:RegisterNotesDatabase("SilverDragon", self.db.profile.notesdb, SilverDragon)
+			Cartographer_Notes:RegisterNotesDatabase("SilverDragon", cartdb, SilverDragon)
 			if not cartdb_populated then
 				for zone, mobs in pairs(self.db.profile.mobs) do
 					for name, info in pairs(mobs) do
@@ -218,6 +218,7 @@ local worldchildren
 local nameplates = {}
 
 local function CheckForNameplate(frame)
+	-- This was mostly copied from "Nameplates - Nameplate Modifications" by Biozera.
 	-- Nameplates are unnamed children of WorldFrame.
 	-- So: drop it if it's not the right type, has a name, or we already know about it.
 	if frame:GetObjectType() ~= "Frame" or frame:GetName() or nameplates[frame] then
