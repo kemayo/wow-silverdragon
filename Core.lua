@@ -141,15 +141,12 @@ end
 function SilverDragon:IsRare(unit)
 	local c12n = UnitClassification(unit)
 	if c12n == 'rare' or c12n == 'rareelite' then
-		local seen = time()
 		local name = UnitName(unit)
-		if (not self.lastseen[name]) or (self.lastseen[name] < (seen - 600)) then
-			-- Only grab each rare every 10 minutes, preventing spam.
+		if self:Announce(name, UnitIsDead(unit)) then
 			-- Store as: x:y:level:elite:type:subzone:lastseen
 			local x, y = GetPlayerMapPosition("player")
-			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 100), math.floor(y * 100), UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
-			self.lastseen[name] = seen
-			self:ScheduleEvent(self.Announce, 1, self, name, UnitIsDead(unit))
+			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 100), math.floor(y * 100), UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), self.lastseen[name])
+			
 			self:Update()
 			if self.db.profile.notes and Cartographer_Notes and not (x == 0 and y == 0) then
 				self:SetNoteHere(name)
@@ -159,14 +156,22 @@ function SilverDragon:IsRare(unit)
 end
 
 function SilverDragon:Announce(name, dead)
-	if self.db.profile.announce.error then
-		UIErrorsFrame:AddMessage(string.format(L["%s seen!"], name), 1, 0, 0, 1, UIERRORS_HOLD_TIME)
-		if dead then
-			UIErrorsFrame:AddMessage(L["(it's dead)"], 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+	-- Announce the discovery of a rare.  Return true if we announced.
+	-- Only announce each rare every 10 minutes, preventing spam.
+	-- TODO: Make that time configurable.
+	if (not self.lastseen[name]) or (self.lastseen[name] < (time() - 600)) then
+		if self.db.profile.announce.error then
+			UIErrorsFrame:AddMessage(string.format(L["%s seen!"], name), 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+			if dead then
+				UIErrorsFrame:AddMessage(L["(it's dead)"], 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+			end
 		end
-	end
-	if self.db.profile.announce.chat then
-		self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or '')
+		if self.db.profile.announce.chat then
+			self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or '')
+		end
+		
+		self.lastseen[name] = time()
+		return true
 	end
 end
 
@@ -270,10 +275,9 @@ function SilverDragon:NameplateScan(hideNameplates)
 	end
 	local zone = GetRealZoneText()
 	for nameplate, regions in pairs(nameplates) do
-		if self.db.profile.mobs[zone][regions.name:GetText()] then
-			self:Announce(regions.name:GetText())
+		if nameplate:IsVisible() and self.db.profile.mobs[zone][regions.name:GetText()] then
+			self:Announce(regions.name:GetText()) -- It's probably possible to check the live-ness of a mob by examining the bar frame.  Work out how to do this.
 			break
-			-- (Nameplates can get reused.  We might want to forcibly flush the nameplate cache at some point here.)
 		end
 	end
 	--[[if hideNameplates then
