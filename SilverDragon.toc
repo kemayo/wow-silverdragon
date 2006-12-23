@@ -23,6 +23,6 @@ Libs\Tablet-2.0\Tablet-2.0.lua
 Libs\FuBarPlugin-2.0\FuBarPlugin-2.0.lua
 ## LIBS END
 
-Locals.enUS.lua
+Locale.enUS.lua
 
 Core.lua

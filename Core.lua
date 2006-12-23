@@ -112,7 +112,9 @@ function SilverDragon:ToggleCartographer(enable)
 				for zone, mobs in pairs(self.db.profile.mobs) do
 					for name, info in pairs(mobs) do
 						local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(info, "^(%d*):(%d*):(-?%d*):(%d*):(.*):(.*):(%d*)")
-						Cartographer_Notes:SetNote(zone, tonumber(x)/100, tonumber(y)/100, 'Rare', 'SilverDragon', 'title', name)
+						if x > 0 and y > 0 then
+							Cartographer_Notes:SetNote(zone, tonumber(x)/100, tonumber(y)/100, 'Rare', 'SilverDragon', 'title', name)
+						end
 					end
 				end
 			end
@@ -139,20 +141,17 @@ end
 function SilverDragon:IsRare(unit)
 	local c12n = UnitClassification(unit)
 	if c12n == 'rare' or c12n == 'rareelite' then
-		local x, y = GetPlayerMapPosition("player")
-		if x == 0 and y == 0 then return end
-		
 		local seen = time()
 		local name = UnitName(unit)
 		if (not self.lastseen[name]) or (self.lastseen[name] < (seen - 600)) then
 			-- Only grab each rare every 10 minutes, preventing spam.
 			-- Store as: x:y:level:elite:type:subzone:lastseen
+			local x, y = GetPlayerMapPosition("player")
 			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 100), math.floor(y * 100), UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), seen)
 			self.lastseen[name] = seen
 			self:ScheduleEvent(self.Announce, 1, self, name, UnitIsDead(unit))
 			self:Update()
-			
-			if self.db.profile.notes and Cartographer_Notes then
+			if self.db.profile.notes and Cartographer_Notes and not (x == 0 and y == 0) then
 				self:SetNoteHere(name)
 			end
 		end
