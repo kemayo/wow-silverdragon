@@ -112,7 +112,7 @@ function SilverDragon:ToggleCartographer(enable)
 				for zone, mobs in pairs(self.db.profile.mobs) do
 					for name, info in pairs(mobs) do
 						local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(info, "^(%d*):(%d*):(-?%d*):(%d*):(.*):(.*):(%d*)")
-						if x > 0 and y > 0 then
+						if tonumber(x) > 0 and tonumber(y) > 0 then
 							Cartographer_Notes:SetNote(zone, tonumber(x)/100, tonumber(y)/100, 'Rare', 'SilverDragon', 'title', name)
 						end
 					end
