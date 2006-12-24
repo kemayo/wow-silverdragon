@@ -77,7 +77,12 @@ function SilverDragon:OnInitialize()
 				name=L["Do scan"], desc=L["Scan for nearby rares"],
 				type="execute", func="CheckNearby",
 			},
-		}
+			defaults = {
+				name=L["Import defaults"], desc=L["Import a default database of rares"],
+				type="execute", func = function() self:ImportDefaults() end,
+				disabled = function() return type(self.ImportDefaults) ~= 'function' end,
+			},
+		},
 	}
 	self:RegisterChatCommand(L["ChatCommands"], optionsTable)
 	self.OnMenuRequest = optionsTable
@@ -110,9 +115,9 @@ function SilverDragon:ToggleCartographer(enable)
 			Cartographer_Notes:RegisterNotesDatabase("SilverDragon", cartdb, SilverDragon)
 			if not cartdb_populated then
 				for zone, mobs in pairs(self.db.profile.mobs) do
-					for name, info in pairs(mobs) do
-						local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(info, "^(%d*):(%d*):(-?%d*):(%d*):(.*):(.*):(%d*)")
-						if tonumber(x) > 0 and tonumber(y) > 0 then
+					for name in pairs(mobs) do
+						local x,y = self:GetMobInfo(zone, name)
+						if x > 0 and y > 0 then
 							Cartographer_Notes:SetNote(zone, tonumber(x)/100, tonumber(y)/100, 'Rare', 'SilverDragon', 'title', name)
 						end
 					end
@@ -138,14 +143,22 @@ function SilverDragon:UPDATE_MOUSEOVER_UNIT()
 	self:IsRare('mouseover')
 end
 
+function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
+	self.db.profile.mobs[zone][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 1000)/10, math.floor(y * 1000)/10, level, elite, ctype, subzone, self.lastseen[name] or 0)
+end
+function SilverDragon:GetMobInfo(zone, name)
+	local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(self.db.profile.mobs[zone][name], "^(%d*):(%d*):(-?%d*):(%d*):(.*):(.*):(%d*)")
+	return tonumber(x), tonumber(y), tonumber(level), tonumber(elite), ctype, csubzone, tonumber(lastseen)
+end
+
 function SilverDragon:IsRare(unit)
 	local c12n = UnitClassification(unit)
 	if c12n == 'rare' or c12n == 'rareelite' then
 		local name = UnitName(unit)
-		if self:Announce(name, UnitIsDead(unit)) then
+		if UnitIsVisible(unit) and self:Announce(name, UnitIsDead(unit)) then
 			-- Store as: x:y:level:elite:type:subzone:lastseen
 			local x, y = GetPlayerMapPosition("player")
-			self.db.profile.mobs[GetRealZoneText()][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 100), math.floor(y * 100), UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText(), self.lastseen[name])
+			self:SaveMob(GetRealZoneText(), name, x, y, UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText())
 			
 			self:Update()
 			if self.db.profile.notes and Cartographer_Notes and not (x == 0 and y == 0) then
@@ -179,25 +192,26 @@ function SilverDragon:CheckNearby()
 	if nameplatesShowing then
 		self:NameplateScan()
 	end
-	--self:TargetScan()
+	self:TargetScan()
 end
 
 function SilverDragon:OnTooltipUpdate()
 	local zone, subzone = GetRealZoneText(), GetSubZoneText()
 	cat = tablet:AddCategory('text', zone, 'columns', 5)
-	for name,mob in pairs(self.db.profile.mobs[zone]) do
-		local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(mob, "^(%d*):(%d*):(-?%d*):(%d*):(.*):(.*):(%d*)")
+	for name in pairs(self.db.profile.mobs[zone]) do
+		local x,y,level,elite,ctype,csubzone,lastseen = self:GetMobInfo(zone, name)
 		cat:AddLine(
 			'text', name, 'textR', subzone == csubzone and 0 or nil, 'textR', subzone == csubzone and 1 or nil, 'textR', subzone == csubzone and 0 or nil,
-			'text2', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite=='1' and '+' or '', ctype and ctype or '?'),
+			'text2', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite==1 and '+' or '', ctype and ctype or '?'),
 			'text3', csubzone,
-			'text4', (lastseen == 0) and L["Never"] or self:LastSeen(lastseen),
+			'text4', self:LastSeen(lastseen),
 			'text5', string.format("%d, %d", x, y)
 		)
 	end
 end
 
 function SilverDragon:LastSeen(t)
+	if t == 0 then return L['Never'] end
 	local lastseen
 	local currentTime = time()
 	local minutes = math.ceil((currentTime - t) / 60)
@@ -289,5 +303,19 @@ function SilverDragon:TargetScan()
 	for i=1, GetNumPartyMembers(), 1 do
 		self:IsRare(("party%dtarget"):format(i))
 		self:IsRare(("partypet%dtarget"):format(i))
+	end
+end
+
+function SilverDragon:RaretrackerImport()
+	if RT_Database then
+		for zone, mobs in pairs(RT_Database) do
+			for name, info in pairs(mobs) do
+				if not self.db.profile.mobs[zone][name] then
+					self:SaveMob(zone, name, info.locX or 0, info.locY or 0, info.level, info.elite or 0, info.creatureType or '', info.subZone or '')
+				end
+			end
+		end
+	else
+		self:Print(L["Raretracker needs to be loaded for this to work."])
 	end
 end

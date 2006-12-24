@@ -20,6 +20,8 @@ L:RegisterTranslations("enUS", function() return {
 	["Notes"] = true,
 	["Make notes in Cartographer"] = true,
 	["Scan for nearby rares"] = true,
+	["Import defaults"] = true,
+	["Import a default database of rares"] = true,
 	
 	["%s seen!"] = true,
 	["(it's dead)"] = true,
@@ -29,4 +31,6 @@ L:RegisterTranslations("enUS", function() return {
 	[" day(s)"] = true,
 	[" hour(s)"] = true,
 	[" minute(s)"] = true,
+	
+	["Raretracker needs to be loaded for this to work."] = true,
 } end)
