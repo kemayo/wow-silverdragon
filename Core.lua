@@ -116,7 +116,7 @@ function SilverDragon:ToggleCartographer(enable)
 			if not cartdb_populated then
 				for zone, mobs in pairs(self.db.profile.mobs) do
 					for name in pairs(mobs) do
-						local x,y = self:GetMobInfo(zone, name)
+						local x, y = self:GetMobInfo(zone, name)
 						if x > 0 and y > 0 then
 							Cartographer_Notes:SetNote(zone, tonumber(x)/100, tonumber(y)/100, 'Rare', 'SilverDragon', 'title', name)
 						end
@@ -144,10 +144,10 @@ function SilverDragon:UPDATE_MOUSEOVER_UNIT()
 end
 
 function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
-	self.db.profile.mobs[zone][name] = string.format("%d:%d:%d:%d:%s:%s:%d", math.floor(x * 1000)/10, math.floor(y * 1000)/10, level, elite, ctype, subzone, self.lastseen[name] or 0)
+	self.db.profile.mobs[zone][name] = string.format("%s:%s:%d:%d:%s:%s:%d", math.floor(x * 1000)/10, math.floor(y * 1000)/10, level, elite, ctype, subzone, self.lastseen[name] or 0)
 end
 function SilverDragon:GetMobInfo(zone, name)
-	local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(self.db.profile.mobs[zone][name], "^(%d*):(%d*):(-?%d*):(%d*):(.*):(.*):(%d*)")
+	local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(self.db.profile.mobs[zone][name], "^(.*):(.*):(-?%d*):(%d*):(.*):(.*):(%d*)")
 	return tonumber(x), tonumber(y), tonumber(level), tonumber(elite), ctype, csubzone, tonumber(lastseen)
 end
 
@@ -205,7 +205,7 @@ function SilverDragon:OnTooltipUpdate()
 			'text2', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite==1 and '+' or '', ctype and ctype or '?'),
 			'text3', csubzone,
 			'text4', self:LastSeen(lastseen),
-			'text5', string.format("%d, %d", x, y)
+			'text5', string.format("%s, %s", x, y)
 		)
 	end
 end
