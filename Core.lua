@@ -16,7 +16,6 @@ function SilverDragon:OnInitialize()
 			--zone
 			["*"] = {},
 		},
-		--notesdb = {},
 		notes = true,
 		scan = true,
 		announce = {
@@ -232,6 +231,10 @@ function SilverDragon:OnTextUpdate()
 	self:SetText(L["Rares"])
 end
 
+------------------------
+-- Nameplate Scanning --
+------------------------
+
 local worldchildren
 local nameplates = {}
 
@@ -243,7 +246,9 @@ local function CheckForNameplate(frame)
 		return
 	end
 	local name, level, bar, icon, border, glow
-	for _, region in ipairs({frame:GetRegions()}) do
+	--for _, region in ipairs({frame:GetRegions()}) do
+	for i=1,frame:GetNumRegions(),1 do
+		local region = select(i, frame:GetRegions())
 		local oType = region:GetObjectType()
 		if oType == "FontString" then
 			local point, _, relativePoint = region:GetPoint()
@@ -263,7 +268,9 @@ local function CheckForNameplate(frame)
 			end
 		end
 	end
-	for _, childFrame in ipairs({frame:GetChildren()}) do
+	for i=1,frame:GetNumChildren(),1 do
+	--for _, childFrame in ipairs({frame:GetChildren()}) do
+		local childFrame = select(i, frame:GetChildren())
 		if childFrame:GetObjectType() == "StatusBar" then
 			bar = childFrame
 		end
@@ -282,8 +289,8 @@ function SilverDragon:NameplateScan(hideNameplates)
 		return
 	end--]]
 	if worldchildren ~= WorldFrame:GetNumChildren() then
-		for _, frame in ipairs({WorldFrame:GetChildren()}) do
-			CheckForNameplate(frame)
+		for i=1,WorldFrame:GetNumChildren(),1 do
+			CheckForNameplate(select(i, WorldFrame:GetChildren()))
 		end
 		worldchildren = WorldFrame:GetNumChildren()
 	end
@@ -299,12 +306,20 @@ function SilverDragon:NameplateScan(hideNameplates)
 	end--]]
 end
 
+---------------------
+-- Target Scanning --
+---------------------
+
 function SilverDragon:TargetScan()
 	for i=1, GetNumPartyMembers(), 1 do
 		self:IsRare(("party%dtarget"):format(i))
 		self:IsRare(("partypet%dtarget"):format(i))
 	end
 end
+
+-------------
+-- Imports --
+-------------
 
 function SilverDragon:RaretrackerImport()
 	if RT_Database then
