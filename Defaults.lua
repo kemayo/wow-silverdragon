@@ -469,7 +469,48 @@ function SilverDragon:ImportDefaults()
 			["Hissperak"] = "41:60:37:0:Beast::0",
 			["Cursed Centaur"] = "0:0:43:0:Humanoid::0",
 			["Ravenclaw Regent"] = "0:0:22:0:Undead::0",
-		},
+		}, 
+		--- TBC Rares
+		["Karazhan"] = {
+			["Shadikith the Glider"] = "0:0:73:1:Beast::0",
+			["Rokad the Ravager"] = "0:0:73:1:Demon::0",
+			},
+		["Nagrand"] = {
+			["Goretooth"] = "0:0:65:0:Beast::0",
+			["Voidhunter Yar"] = "0:0:68:0:Demon::0",
+			["Bro'Gaz the Clanless"] = "0:0:66:0:Humanoid::0",
+			},
+		["Netherstorm"] = {
+			["Nuramoc"] = "0:0:70:1:Beast::0",
+			["Ever-Core the Punisher"] = "0:0:68:0:Elemental::0",
+			["Chief Engineer Lorthander"] = "0:0:69:0:Humanoid::0",
+			},
+		["Zangarmarsh"] = {
+			["Marticar"] = "0:0:63:1:Beast::0",
+			["Bog Lurker"] = "0:0:63:0:Elemental::0",
+			["Coilfang Emissary"] = "0:0:63:0:Humanoid::0",
+			},
+		["Shadowmoon Valley"] = {
+			["Ambassador Jerrikar"] = "0:0:69:0:Demon::0",
+			["Collidus the Warp-Watcher"] = "0:0:68:1:Demon::0",
+			["Kraator"] = "0:0:68:1:Demon::0",
+			},
+		["Hellfire Peninsula"] = {
+			["Vorakem Doomspeaker"] = "0:0:62:0:Demon::0",
+			["Mekthorg the Wild"] = "0:0:61:0:Humanoid::0",
+			["Fulgorge"] = "0:0:62:1:::0",
+			},
+		["Blade's Edge Mountains"] = {
+			["Morcrush"] = "0:0:68:1:Giant::0",
+			["Speaker Mar'grom"] = "0:0:68:0:Humanoid::0",
+			["Hemathion"] = "0:0:68:1:Dragonkin::0",
+			["Sabellian"] = "0:0:72:1:Dragonkin::0",
+			},
+		["Terokkar Forest"] = {
+			["Crippler"] = "0:0:65:0:Undead::0",
+			["Doomsayer Jurim"] = "0:0:64:0:Humanoid::0",
+			["Okrek"] = "0:0:64:0:Humanoid::0",
+			},
 	}
 	for zone, mobs in pairs(defaults) do
 		for name, info in pairs(mobs) do
