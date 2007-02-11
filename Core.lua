@@ -200,7 +200,7 @@ function SilverDragon:OnTooltipUpdate()
 	for name in pairs(self.db.profile.mobs[zone]) do
 		local x,y,level,elite,ctype,csubzone,lastseen = self:GetMobInfo(zone, name)
 		cat:AddLine(
-			'text', name, 'textR', subzone == csubzone and 0 or nil, 'textR', subzone == csubzone and 1 or nil, 'textR', subzone == csubzone and 0 or nil,
+			'text', name, 'textR', subzone == csubzone and 0 or nil, 'textG', subzone == csubzone and 1 or nil, 'textB', subzone == csubzone and 0 or nil,
 			'text2', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite==1 and '+' or '', ctype and ctype or '?'),
 			'text3', csubzone,
 			'text4', self:LastSeen(lastseen),
@@ -229,6 +229,22 @@ end
 
 function SilverDragon:OnTextUpdate()
 	self:SetText(L["Rares"])
+end
+
+----------------------------
+-- Cartographer Overrides --
+----------------------------
+
+function SilverDragon:OnNoteTooltipRequest(zone, id, data, inMinimap)
+	local x,y,level,elite,ctype,csubzone,lastseen = self:GetMobInfo(zone, data.title)
+	local cat = tablet:AddCategory('text', data.title, 'justify', 'CENTER')
+	cat:AddLine('text', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite==1 and '+' or '', ctype and ctype or '?'))
+	cat:AddLine('text', self:LastSeen(lastseen))
+end
+
+function SilverDragon:OnNoteTooltipLineRequest(zone, id, data, inMinimap)
+	local x,y,level,elite,ctype,csubzone,lastseen = self:GetMobInfo(zone, data.title)
+	return 'text', string.format("%s: level %s%s %s", data.title, (level and tonumber(level) > 1) and level or '?', elite==1 and '+' or '', ctype and ctype or '?')
 end
 
 ------------------------
