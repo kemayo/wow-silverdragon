@@ -471,46 +471,58 @@ function SilverDragon:ImportDefaults()
 			["Ravenclaw Regent"] = "0:0:22:0:Undead::0",
 		}, 
 		--- TBC Rares
+		--- x:y:level:elite?:type:subzone:lastseen
+		["Eversong Woods"] = {
+			["Tregla"] = "70.5:72.3:10:0:Humanoid::0",
+			["Eldinarcus"] = "69.0:46.7:11:0:Elemental::0",
+		},
+		["Ghostlands"] = {
+			["Dr. Whitherlimb"] = "36.0:88.8:18:0:Undead::0",
+		},
+		["Bloodmyst Isle"] = {
+			["Fenissa the Assassin"] = "19.5:54.3:18:0:Humanoid::0",
+		},
+		["Hellfire Peninsula"] = {
+			["Mekthorg the Wild"] = "45.3:44.1:61:0:Humanoid::0",
+			["Vorakem Doomspeaker"] = "72.7:42.0:62:0:Demon::0",
+			["Fulgorge"] = "24.0:55.4:62:1:::0",
+		},
+		["Zangarmarsh"] = {
+			["Bog Lurker"] = "50.9:61.0:63:0:Elemental::0",
+			["Coilfang Emissary"] = "64.7:41.1:63:0:Humanoid::0",
+			["Marticar"] = "16.5:36.7:63:1:Beast::0",
+		},
+		["Terokkar Forest"] = {
+			["Doomsayer Jurim"] = "35.8:34.4:64:0:Humanoid::0",
+			["Okrek"] = "58.5:23.4:64:0:Humanoid::0",
+			["Crippler"] = "38.6:66.9:65:0:Undead::0",
+		},
+		["Nagrand"] = {
+			["Goretooth"] = "32.5:53.0:65:0:Beast::0",
+			["Bro'Gaz the Clanless"] = "29.0:35.0:66:0:Humanoid::0",
+			["Voidhunter Yar"] = "32.3:72.8:68:0:Demon::0",
+		},
+		["Shadowmoon Valley"] = {
+			["Collidus the Warp-Watcher"] = "43.5:47.9:68:1:Demon::0",
+			["Kraator"] = "45.3:12.3:68:1:Demon::0",
+			["Ambassador Jerrikar"] = "47.5:68.2:69:0:Demon::0",
+		},
+		["Netherstorm"] = {
+			["Ever-Core the Punisher"] = "20.2:69.8:68:0:Elemental::0",
+			["Chief Engineer Lorthander"] = "59.4:62.5:69:0:Humanoid::0",
+			["Nuramoc"] = "35.1:22.8:70:1:Beast::0",
+		},
+		["Blade's Edge Mountains"] = {
+			["Hemathion"] = "28.5:67.6:68:1:Dragonkin::0",
+			["Morcrush"] = "67.4:47.3:68:1:Giant::0",
+			["Speaker Mar'grom"] = "42.2:50.8:68:0:Humanoid::0",
+			["Sabellian"] = "64.0:19.0:72:1:Dragonkin::0",
+		},
 		["Karazhan"] = {
+			["Hyakiss the Lurker"] = "0:0:73:1:Beast::0",
 			["Shadikith the Glider"] = "0:0:73:1:Beast::0",
 			["Rokad the Ravager"] = "0:0:73:1:Demon::0",
-			},
-		["Nagrand"] = {
-			["Goretooth"] = "0:0:65:0:Beast::0",
-			["Voidhunter Yar"] = "0:0:68:0:Demon::0",
-			["Bro'Gaz the Clanless"] = "0:0:66:0:Humanoid::0",
-			},
-		["Netherstorm"] = {
-			["Nuramoc"] = "0:0:70:1:Beast::0",
-			["Ever-Core the Punisher"] = "0:0:68:0:Elemental::0",
-			["Chief Engineer Lorthander"] = "0:0:69:0:Humanoid::0",
-			},
-		["Zangarmarsh"] = {
-			["Marticar"] = "0:0:63:1:Beast::0",
-			["Bog Lurker"] = "0:0:63:0:Elemental::0",
-			["Coilfang Emissary"] = "0:0:63:0:Humanoid::0",
-			},
-		["Shadowmoon Valley"] = {
-			["Ambassador Jerrikar"] = "0:0:69:0:Demon::0",
-			["Collidus the Warp-Watcher"] = "0:0:68:1:Demon::0",
-			["Kraator"] = "0:0:68:1:Demon::0",
-			},
-		["Hellfire Peninsula"] = {
-			["Vorakem Doomspeaker"] = "0:0:62:0:Demon::0",
-			["Mekthorg the Wild"] = "0:0:61:0:Humanoid::0",
-			["Fulgorge"] = "0:0:62:1:::0",
-			},
-		["Blade's Edge Mountains"] = {
-			["Morcrush"] = "0:0:68:1:Giant::0",
-			["Speaker Mar'grom"] = "0:0:68:0:Humanoid::0",
-			["Hemathion"] = "0:0:68:1:Dragonkin::0",
-			["Sabellian"] = "0:0:72:1:Dragonkin::0",
-			},
-		["Terokkar Forest"] = {
-			["Crippler"] = "0:0:65:0:Undead::0",
-			["Doomsayer Jurim"] = "0:0:64:0:Humanoid::0",
-			["Okrek"] = "0:0:64:0:Humanoid::0",
-			},
+		},
 	}
 	for zone, mobs in pairs(defaults) do
 		for name, info in pairs(mobs) do
