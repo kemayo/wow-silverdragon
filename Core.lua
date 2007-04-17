@@ -265,22 +265,24 @@ local function CheckForNameplate(frame)
 	--for _, region in ipairs({frame:GetRegions()}) do
 	for i=1,frame:GetNumRegions(),1 do
 		local region = select(i, frame:GetRegions())
-		local oType = region:GetObjectType()
-		if oType == "FontString" then
-			local point, _, relativePoint = region:GetPoint()
-			if point == "BOTTOM" and relativePoint == "CENTER" then
-				name = region
-			elseif point == "CENTER" and relativePoint == "BOTTOMRIGHT" then
-				level = region
-			end
-		elseif oType == "Texture" then
-			local path = region:GetTexture()
-			if path == "Interface\\TargetingFrame\\UI-RaidTargetingIcons" then
-				icon = region
-			elseif path == "Interface\\Tooltips\\Nameplate-Border" then
-				border = region
-			elseif path == "Interface\\Tooltips\\Nameplate-Glow" then
-				glow = region
+		if region then
+			local oType = region:GetObjectType()
+			if oType == "FontString" then
+				local point, _, relativePoint = region:GetPoint()
+				if point == "BOTTOM" and relativePoint == "CENTER" then
+					name = region
+				elseif point == "CENTER" and relativePoint == "BOTTOMRIGHT" then
+					level = region
+				end
+			elseif oType == "Texture" then
+				local path = region:GetTexture()
+				if path == "Interface\\TargetingFrame\\UI-RaidTargetingIcons" then
+					icon = region
+				elseif path == "Interface\\Tooltips\\Nameplate-Border" then
+					border = region
+				elseif path == "Interface\\Tooltips\\Nameplate-Glow" then
+					glow = region
+				end
 			end
 		end
 	end
