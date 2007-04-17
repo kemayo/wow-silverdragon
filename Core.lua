@@ -146,8 +146,12 @@ function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
 	self.db.profile.mobs[zone][name] = string.format("%s:%s:%d:%d:%s:%s:%d", math.floor(x * 1000)/10, math.floor(y * 1000)/10, level, elite, ctype, subzone, self.lastseen[name] or 0)
 end
 function SilverDragon:GetMobInfo(zone, name)
-	local _,_,x,y,level,elite,ctype,csubzone,lastseen = string.find(self.db.profile.mobs[zone][name], "^(.*):(.*):(-?%d*):(%d*):(.*):(.*):(%d*)")
-	return tonumber(x), tonumber(y), tonumber(level), tonumber(elite), ctype, csubzone, tonumber(lastseen)
+	if self.db.profile.mobs[zone][name] then
+		local x,y,level,elite,ctype,csubzone,lastseen = string.match(self.db.profile.mobs[zone][name], "^(.*):(.*):(-?%d*):(%d*):(.*):(.*):(%d*)")
+		return tonumber(x), tonumber(y), tonumber(level), tonumber(elite), ctype, csubzone, tonumber(lastseen)
+	else
+		return 0, 0, 0, 0, '', '', nil
+	end
 end
 
 function SilverDragon:IsRare(unit)
