@@ -158,7 +158,14 @@ function SilverDragon:IsRare(unit)
 	local c12n = UnitClassification(unit)
 	if c12n == 'rare' or c12n == 'rareelite' then
 		local name = UnitName(unit)
-		if UnitIsVisible(unit) and self:Announce(name, UnitIsDead(unit)) then
+		--[[local distance
+		if CheckInteractDistance(unit, 3) then
+			distance = 10
+		elseif CheckInteractDistance(unit, 4)
+			distance = 30
+		end--]]
+		self:Announce(name, UnitIsDead(unit))
+		if UnitIsVisible(unit) and CheckInteractDistance(unit, 4) then -- (Are we 30 yards or less from it; trying to prevent wildly inaccurate notes, here.)
 			-- Store as: x:y:level:elite:type:subzone:lastseen
 			local x, y = GetPlayerMapPosition("player")
 			self:SaveMob(GetRealZoneText(), name, x, y, UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText())
@@ -173,7 +180,7 @@ end
 
 function SilverDragon:Announce(name, dead)
 	-- Announce the discovery of a rare.  Return true if we announced.
-	-- Only announce each rare every 10 minutes, preventing spam.
+	-- Only announce each rare every 10 minutes, preventing spam while we're in combat.
 	-- TODO: Make that time configurable.
 	if (not self.lastseen[name]) or (self.lastseen[name] < (time() - 600)) then
 		if self.db.profile.announce.error then
