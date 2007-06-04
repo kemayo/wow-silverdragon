@@ -160,7 +160,7 @@ do
 		local c12n = UnitClassification(unit)
 		if c12n == 'rare' or c12n == 'rareelite' then
 			local name = UnitName(unit)
-			local distance
+			local distance = 1000
 			if CheckInteractDistance(unit, 3) then
 				distance = 10
 			elseif CheckInteractDistance(unit, 4) then
