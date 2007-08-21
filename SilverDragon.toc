@@ -7,6 +7,7 @@
 ## Author: Kemayo
 ## eMail: kemayo at gmail dot com
 ## X-Category: Interface Enhancements
+## X-Donate: PayPal:kemayo AT gmail DOT com
 ## OptionalDependencies: Ace2, FuBarPlugin-2.0, TabletLib, DewdropLib, FuBar, Cartographer
 ## SavedVariables: SilverDragonDB
 ## LoadOnDemand: 0
