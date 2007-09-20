@@ -28,7 +28,9 @@ Libs\FuBarPlugin-2.0\FuBarPlugin-2.0.lua
 
 Locale.enUS.lua
 Locale.zhTW.lua
+Locale.deDE.lua
 
 Core.lua
 Defaults.lua
 Defaults.zhTW.lua
+Defaults.deDE.lua
