@@ -6,7 +6,7 @@ function SilverDragon:ImportDefaults()
 	local defaults = {
 		["D\195\188sterbruch"] = {
 			["Mushgog"] = "43:67:60:1:Elementar::0",
-			["Skarr der Unbezwingbare"] = "43:67:58:1:Humanoid::0",
+			["Skarr der Unbezwingbare"] = "43.4:67.4:58:1:Humanoid:Die Schl\195\164gergrube:",
 			["Der Razza"] = "43:67:60:1:Wildtier::0",
 			["Lord Hel'nurath"] = "0:0:62:1:D\195\164mon::0",
 			["Tsu'zee"] = "0:0:59:1:Untoter::0",
@@ -229,7 +229,7 @@ function SilverDragon:ImportDefaults()
 			["Lady Sesspira"] = "35:51:51:0:Humanoid::0",
 		},
 		["Stratholme"] = {
-			["Herdsinger Forresten"] = "0:0:57:1:Untoter::0",
+			["Herdsinger Forresten"] = "0:0:57:1:Untoter:Marktgasse:",
 			["Timmy der Grausame"] = "0:0:58:1:Untoter::0",
 			["Steinbuckel"] = "0:0:60:1:Untoter::0",
 			["Skul"] = "0:0:58:1:Untoter::0",
@@ -251,7 +251,7 @@ function SilverDragon:ImportDefaults()
 			["Waldl\195\164uferlord Falkenspeer"] = "53:17:60:0:Humanoid::0",
 			["Hochgeneral Abbendis"] = "88:86:59:1:Humanoid::0",
 			["Zul'Brin Wirbelstab"] = "72:14:59:0:Humanoid::0",
-			["Gish der Unbewegliche"] = "55:45:56:0:Untoter::0",
+			["Gish der Unbewegliche"] = "52.1:42.5:56:0:Untoter:Faulholzsee:",
 			["Todessprecher Selendre"] = "39:51:56:0:Humanoid::0",
 			["Lord Finstersense"] = "32:25:57:0:Untoter::0",
 			["Duggan Wildhammer"] = "0:0:55:0:Humanoid::0",
@@ -510,7 +510,7 @@ function SilverDragon:ImportDefaults()
 		},
 		["Zangarmarschen"] = {
 			["Sumpflauerer"] = "50.9:61.0:63:0:Elementar::0",
-			["Abgesandter des Echsenkessels"] = "64.7:41.1:63:0:Humanoid::0",
+			["Abgesandter des Echsenkessels"] = "62.1:69.3:63:0:Humanoid:Enklave der Dunkelk\195\164mme:",
 			["Marticar"] = "16.5:36.7:63:1:Wildtier::0",
 		},
 		["W\195\164lder von Terokkar"] = {
