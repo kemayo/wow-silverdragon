@@ -1,5 +1,20 @@
+local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
+local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
+
 function SilverDragon:ImportDefaults()
 	local defaults = {
+		--[[
+		[zone] = {
+			[name] = {
+				locations = {{x, y, subzone, times_seen}, ...},
+				level = [int level],
+				elite = [bool isElite],
+				type = [string creaturetype],
+				lastseen = [int lastseen],
+			},
+			...
+		},
+		--]]
 		["Dire Maul"] = {
 			["Mushgog"] = "43:67:60:1:Elemental:The Maul:0",
 			["Skarr the Unbreakable"] = "43:67:58:1:Humanoid:The Maul:0",

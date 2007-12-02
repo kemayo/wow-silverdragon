@@ -1,6 +1,10 @@
 local tablet = AceLibrary("Tablet-2.0")
 local L = AceLibrary("AceLocale-2.2"):new("SilverDragon")
 
+local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
+local BCT = LibStub("LibBabble-CreatureType-3.0"):GetLookupTable()
+local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
+
 local nameplatesShowing
 
 SilverDragon = AceLibrary("AceAddon-2.0"):new("AceEvent-2.0", "AceConsole-2.0", "AceDB-2.0", "AceHook-2.1", "FuBarPlugin-2.0")
@@ -21,6 +25,7 @@ function SilverDragon:OnInitialize()
 		announce = {
 			chat = true,
 			error = true,
+			sound = true,
 		},
 	})
 	local optionsTable = {
@@ -86,6 +91,29 @@ function SilverDragon:OnInitialize()
 	self:RegisterChatCommand(L["ChatCommands"], optionsTable)
 	self.OnMenuRequest = optionsTable
 	self.lastseen = {}
+	
+	--update the db
+	if not self.db.profile.version or self.db.profile.version < 2 then
+		for zone, mobs in pairs(self.db.profile.mobs) do
+			for name, mob in pairs(mobs) do
+				if type(mob) == 'string' then
+					local x, y, level, elite, ctype, csubzone, lastseen = string.match(mob, "^(.*):(.*):(-?%d*):(%d*):(.*):(.*):(%d*)")
+					mob = {}
+					mob.locations = {{tonumber(x), tonumber(y), csubzone, 1},}
+					mob.level = tonumber(level)
+					mob.elite = tonumber(elite)==1
+					mob.type = BCTR[ctype]
+					mob.lastseen = tonumber(lastseen)
+					
+					if not self.db.profile.mobs[BZR[zone]] then
+						self.db.profile.mobs[BZR[zone]] = {}
+					end
+					self.db.profile.mobs[BZR[zone]][name] = mob
+				end
+			end
+		end
+		self.db.profile.version = 2
+	end
 end
 
 function SilverDragon:OnEnable()
@@ -96,8 +124,8 @@ function SilverDragon:OnEnable()
 	end
 	self:ToggleCartographer(self.db.profile.notes)
 	
-	self:SecureHook("ShowNameplates", function() nameplatesShowing = true; end)
-	self:SecureHook("HideNameplates", function() nameplatesShowing = false; end)
+	self:SecureHook("ShowNameplates", function() nameplatesShowing = true end)
+	self:SecureHook("HideNameplates", function() nameplatesShowing = false end)
 	UpdateNameplates() -- Calling this causes ShowNameplates to be called if nameplates are showing, or HideNameplates if they aren't!
 end
 
@@ -114,13 +142,15 @@ function SilverDragon:ToggleCartographer(enable)
 			Cartographer_Notes:RegisterNotesDatabase("SilverDragon", cartdb, SilverDragon)
 			if not cartdb_populated then
 				for zone, mobs in pairs(self.db.profile.mobs) do
-					for name in pairs(mobs) do
-						local x, y = self:GetMobInfo(zone, name)
-						if x > 0 and y > 0 then
-							Cartographer_Notes:SetNote(zone, tonumber(x)/100, tonumber(y)/100, 'Rare', 'SilverDragon', 'title', name)
+					for name, mob in pairs(mobs) do
+						for _, loc in ipairs(mob.locations) do
+							if loc[1] > 0 and loc[2] > 0 then
+								Cartographer_Notes:SetNote(zone, tonumber(loc[1])/100, tonumber(loc[2])/100, 'Rare', 'SilverDragon', 'title', name)
+							end
 						end
 					end
 				end
+				cartdb_populated = true
 			end
 		else
 			Cartographer_Notes:UnregisterIcon("Rare")
@@ -143,14 +173,36 @@ function SilverDragon:UPDATE_MOUSEOVER_UNIT()
 end
 
 function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
-	self.db.profile.mobs[zone][name] = string.format("%s:%s:%d:%d:%s:%s:%d", math.floor(x * 1000)/10, math.floor(y * 1000)/10, level, elite, ctype, subzone, self.lastseen[name] or 0)
+	if not self.db.profile.mobs[BZR[zone]][name] then self.db.profile.mobs[BZR[zone]][name] = {} end
+	local mob = self.db.profile.mobs[BZR[zone]][name]
+	mob.level = level
+	mob.elite = elite
+	mob.ctype = BCTR[ctype] -- saves the english creature type
+	if not mob.locations then mob.locations = {} end
+	-- convert the raw locs into 'xx.x'.
+	x = math.floor(x * 1000)/10
+	y = math.floor(y * 1000)/10
+	local newloc = true
+	for _, loc in ipairs(mob.locations) do
+		if (abs(loc[1] - x) < 5) and (abs(loc[2] - y) < 5) then
+			-- We've seen it close to here before. (within 5% of the zone)
+			-- So, +1 to number of times seen
+			loc[4] = loc[4] + 1
+			newloc = false
+			break
+		end
+	end
+	if newloc then
+		table.insert(mob.locations, {x, y, subzone, 1})
+		return true
+	end
 end
 function SilverDragon:GetMobInfo(zone, name)
-	if self.db.profile.mobs[zone][name] then
-		local x,y,level,elite,ctype,csubzone,lastseen = string.match(self.db.profile.mobs[zone][name], "^(.*):(.*):(-?%d*):(%d*):(.*):(.*):(%d*)")
-		return tonumber(x), tonumber(y), tonumber(level), tonumber(elite), ctype, csubzone, tonumber(lastseen)
+	local mob = self.db.profile.mobs[BZR[zone]][name]
+	if mob then
+		return #mob.locations, mob.level, mob.elite, mob.type, mob.lastseen
 	else
-		return 0, 0, 0, 0, '', '', nil
+		return 0, 0, false, 'Unknown', nil
 	end
 end
 
@@ -168,13 +220,12 @@ do
 			end
 			self:Announce(name, UnitIsDead(unit))
 			if UnitIsVisible(unit) and distance < (distanceCache[name] or 100) then -- (Are we 30 yards or less from it; trying to prevent wildly inaccurate notes, here.)
-				-- Store as: x:y:level:elite:type:subzone:lastseen
 				distanceCache[name] = distance
 				local x, y = GetPlayerMapPosition("player")
-				self:SaveMob(GetRealZoneText(), name, x, y, UnitLevel(unit), c12n=='rareelite' and 1 or 0, UnitCreatureType(unit), GetSubZoneText())
+				local newloc = self:SaveMob(GetRealZoneText(), name, x, y, UnitLevel(unit), c12n=='rareelite', UnitCreatureType(unit), GetSubZoneText())
 				
 				self:Update()
-				if self.db.profile.notes and Cartographer_Notes and not (x == 0 and y == 0) then
+				if newloc and self.db.profile.notes and Cartographer_Notes and not (x == 0 and y == 0) then
 					self:SetNoteHere(name)
 				end
 			end
@@ -196,6 +247,9 @@ function SilverDragon:Announce(name, dead)
 		if self.db.profile.announce.chat then
 			self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or '')
 		end
+		if self.db.profile.announce.sound then
+			
+		end
 		
 		self.lastseen[name] = time()
 		return true
@@ -212,59 +266,63 @@ end
 function SilverDragon:OnTooltipUpdate()
 	local zone, subzone = GetRealZoneText(), GetSubZoneText()
 	cat = tablet:AddCategory('text', zone, 'columns', 5)
-	for name in pairs(self.db.profile.mobs[zone]) do
-		local x,y,level,elite,ctype,csubzone,lastseen = self:GetMobInfo(zone, name)
+	for name, mob in pairs(self.db.profile.mobs[BZR[zone]]) do
+		--local numLocs, level, elite, ctype, lastseen = self:GetMobInfo(zone, name)
 		cat:AddLine(
-			'text', name, 'textR', subzone == csubzone and 0 or nil, 'textG', subzone == csubzone and 1 or nil, 'textB', subzone == csubzone and 0 or nil,
-			'text2', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite==1 and '+' or '', ctype and ctype or '?'),
-			'text3', csubzone,
-			'text4', self:LastSeen(lastseen),
-			'text5', string.format("%s, %s", x, y)
+			'text', name,
+			'text2', string.format("level %s%s %s", (mob.level and tonumber(mob.level) > 1) and mob.level or '?', mob.elite and '+' or '', mob.type and BCT[mob.type] or '?'),
+			'text5', self:LastSeen(mob.lastseen)
 		)
+		for _, loc in ipairs(mob.locations) do
+			local nearby = subzone == loc[3]
+			cat:AddLine(
+				'text', ' ',
+				'text3', loc[3],
+				'text3R', nearby and 0 or nil, 'text3G', nearby and 1 or nil, 'text3B', nearby and 0 or nil,
+				'text4', string.format("%s, %s", loc[1], loc[2]),
+				'text4R', nearby and 0 or nil, 'text4G', nearby and 1 or nil, 'text4B', nearby and 0 or nil,
+				'text5', 'x'..loc[4],
+				'text5R', nearby and 0 or nil, 'text5G', nearby and 1 or nil, 'text5B', nearby and 0 or nil
+			)
+		end
 	end
 end
 
 function SilverDragon:LastSeen(t)
 	if t == 0 then return L['Never'] end
-	local lastseen
 	local currentTime = time()
 	local minutes = math.ceil((currentTime - t) / 60)
 	if minutes > 59 then
 		local hours = math.ceil((currentTime - t) / 3600)
 		if hours > 23 then
-			lastseen = math.ceil((currentTime - t) / 86400)..L[" day(s)"]
+			return math.ceil((currentTime - t) / 86400)..L[" day(s)"]
 		else
-			lastseen = hours..L[" hour(s)"]
+			return hours..L[" hour(s)"]
 		end
 	else
-		lastseen = minutes..L[" minute(s)"]
+		return minutes..L[" minute(s)"]
 	end
-	return lastseen
 end
 
 function SilverDragon:OnTextUpdate()
 	self:SetText(L["Rares"])
 end
 
-----------------------------
 -- Cartographer Overrides --
-----------------------------
 
 function SilverDragon:OnNoteTooltipRequest(zone, id, data, inMinimap)
-	local x,y,level,elite,ctype,csubzone,lastseen = self:GetMobInfo(zone, data.title)
+	local numLocs, level, elite, ctype, lastseen = self:GetMobInfo(zone, data.title)
 	local cat = tablet:AddCategory('text', data.title, 'justify', 'CENTER')
-	cat:AddLine('text', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite==1 and '+' or '', ctype and ctype or '?'))
+	cat:AddLine('text', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite and '+' or '', ctype and BCT[ctype] or '?'))
 	cat:AddLine('text', self:LastSeen(lastseen))
 end
 
 function SilverDragon:OnNoteTooltipLineRequest(zone, id, data, inMinimap)
-	local x,y,level,elite,ctype,csubzone,lastseen = self:GetMobInfo(zone, data.title)
-	return 'text', string.format("%s: level %s%s %s", data.title, (level and tonumber(level) > 1) and level or '?', elite==1 and '+' or '', ctype and ctype or '?')
+	local numLocs, level, elite, ctype, lastseen = self:GetMobInfo(zone, data.title)
+	return 'text', string.format("%s: level %s%s %s", data.title, (level and tonumber(level) > 1) and level or '?', elite and '+' or '', ctype and BCT[ctype] or '?')
 end
 
-------------------------
 -- Nameplate Scanning --
-------------------------
 
 local worldchildren
 local nameplates = {}
@@ -277,7 +335,6 @@ local function CheckForNameplate(frame)
 		return
 	end
 	local name, level, bar, icon, border, glow
-	--for _, region in ipairs({frame:GetRegions()}) do
 	for i=1,frame:GetNumRegions(),1 do
 		local region = select(i, frame:GetRegions())
 		if region then
@@ -302,7 +359,6 @@ local function CheckForNameplate(frame)
 		end
 	end
 	for i=1,frame:GetNumChildren(),1 do
-	--for _, childFrame in ipairs({frame:GetChildren()}) do
 		local childFrame = select(i, frame:GetChildren())
 		if childFrame:GetObjectType() == "StatusBar" then
 			bar = childFrame
@@ -329,7 +385,7 @@ function SilverDragon:NameplateScan(hideNameplates)
 	end
 	local zone = GetRealZoneText()
 	for nameplate, regions in pairs(nameplates) do
-		if nameplate:IsVisible() and self.db.profile.mobs[zone][regions.name:GetText()] then
+		if nameplate:IsVisible() and self.db.profile.mobs[BZR[zone]][regions.name:GetText()] then
 			self:Announce(regions.name:GetText()) -- It's probably possible to check the live-ness of a mob by examining the bar frame.  Work out how to do this.
 			break
 		end
@@ -339,26 +395,24 @@ function SilverDragon:NameplateScan(hideNameplates)
 	end--]]
 end
 
----------------------
 -- Target Scanning --
----------------------
 
 function SilverDragon:TargetScan()
+	self:IsRare("target")
+	self:IsRare("targettarget")
 	for i=1, GetNumPartyMembers(), 1 do
 		self:IsRare(("party%dtarget"):format(i))
 		self:IsRare(("partypet%dtarget"):format(i))
 	end
 end
 
--------------
 -- Imports --
--------------
 
 function SilverDragon:RaretrackerImport()
 	if RT_Database then
 		for zone, mobs in pairs(RT_Database) do
 			for name, info in pairs(mobs) do
-				if not self.db.profile.mobs[zone][name] then
+				if not self.db.profile.mobs[BZR[zone]][name] then
 					self:SaveMob(zone, name, info.locX or 0, info.locY or 0, info.level, info.elite or 0, info.creatureType or '', info.subZone or '')
 				end
 			end
