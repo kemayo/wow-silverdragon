@@ -147,9 +147,11 @@ function SilverDragon:ToggleCartographer(enable)
 			if not cartdb_populated then
 				for zone, mobs in pairs(self.db.profile.mobs) do
 					for name, mob in pairs(mobs) do
-						for _, loc in ipairs(mob.locations) do
-							if loc[1] > 0 and loc[2] > 0 then
-								Cartographer_Notes:SetNote(zone, tonumber(loc[1])/100, tonumber(loc[2])/100, 'Rare', 'SilverDragon', 'title', name)
+						if mob.locations then
+							for _, loc in ipairs(mob.locations) do
+								if loc[1] > 0 and loc[2] > 0 then
+									Cartographer_Notes:SetNote(zone, tonumber(loc[1])/100, tonumber(loc[2])/100, 'Rare', 'SilverDragon', 'title', name)
+								end
 							end
 						end
 					end
