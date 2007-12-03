@@ -190,6 +190,9 @@ function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
 		if (math.abs(loc[1] - x) < 5) and (math.abs(loc[2] - y) < 5) then
 			-- We've seen it close to here before. (within 5% of the zone)
 			-- So, +1 to number of times seen
+			if loc[4] == 0 and loc[3] == '' then
+				loc[3] = subzone
+			end
 			loc[4] = loc[4] + 1
 			newloc = false
 			break
