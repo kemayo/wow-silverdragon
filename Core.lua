@@ -288,7 +288,7 @@ function SilverDragon:OnTooltipUpdate()
 end
 
 function SilverDragon:LastSeen(t)
-	if t == 0 then return L['Never'] end
+	if not t or t == 0 then return L['Never'] end
 	local currentTime = time()
 	local minutes = math.ceil((currentTime - t) / 60)
 	if minutes > 59 then
