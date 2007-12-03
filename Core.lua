@@ -95,6 +95,7 @@ function SilverDragon:OnInitialize()
 	--update the db
 	if not self.db.profile.version or self.db.profile.version < 2 then
 		for zone, mobs in pairs(self.db.profile.mobs) do
+			if zone == "The Stockades" then zone = "The Stockade" end
 			for name, mob in pairs(mobs) do
 				if type(mob) == 'string' then
 					local x, y, level, elite, ctype, csubzone, lastseen = string.match(mob, "^(.*):(.*):(-?%d*):(%d*):(.*):(.*):(%d*)")
