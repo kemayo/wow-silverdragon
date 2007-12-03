@@ -184,7 +184,7 @@ function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
 	y = math.floor(y * 1000)/10
 	local newloc = true
 	for _, loc in ipairs(mob.locations) do
-		if (abs(loc[1] - x) < 5) and (abs(loc[2] - y) < 5) then
+		if (math.abs(loc[1] - x) < 5) and (math.abs(loc[2] - y) < 5) then
 			-- We've seen it close to here before. (within 5% of the zone)
 			-- So, +1 to number of times seen
 			loc[4] = loc[4] + 1
@@ -267,7 +267,6 @@ function SilverDragon:OnTooltipUpdate()
 	local zone, subzone = GetRealZoneText(), GetSubZoneText()
 	cat = tablet:AddCategory('text', zone, 'columns', 5)
 	for name, mob in pairs(self.db.profile.mobs[BZR[zone]]) do
-		--local numLocs, level, elite, ctype, lastseen = self:GetMobInfo(zone, name)
 		cat:AddLine(
 			'text', name,
 			'text2', string.format("level %s%s %s", (mob.level and tonumber(mob.level) > 1) and mob.level or '?', mob.elite and '+' or '', mob.type and BCT[mob.type] or '?'),
@@ -371,12 +370,6 @@ local function CheckForNameplate(frame)
 end
 
 function SilverDragon:NameplateScan(hideNameplates)
-	--[[if not nameplatesShowing then
-		ShowNameplates()
-		self:ScheduleEvent(self.NameplateScan, 0, self, true)
-		self:ScheduleEvent(HideNameplates, 0)
-		return
-	end--]]
 	if worldchildren ~= WorldFrame:GetNumChildren() then
 		for i=1,WorldFrame:GetNumChildren(),1 do
 			CheckForNameplate(select(i, WorldFrame:GetChildren()))
@@ -390,9 +383,6 @@ function SilverDragon:NameplateScan(hideNameplates)
 			break
 		end
 	end
-	--[[if hideNameplates then
-		HideNameplates()
-	end--]]
 end
 
 -- Target Scanning --
