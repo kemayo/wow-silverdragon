@@ -99,7 +99,10 @@ function SilverDragon:OnInitialize()
 				if type(mob) == 'string' then
 					local x, y, level, elite, ctype, csubzone, lastseen = string.match(mob, "^(.*):(.*):(-?%d*):(%d*):(.*):(.*):(%d*)")
 					mob = {}
-					mob.locations = {{tonumber(x), tonumber(y), csubzone, 1},}
+					mob.locations = {}
+					if not (x == 0 and y == 0) or (lastseen and tonumber(lastseen) > 0) then
+						table.insert(mob.locations, {tonumber(x), tonumber(y), csubzone, 1})
+					end
 					mob.level = tonumber(level)
 					mob.elite = tonumber(elite)==1
 					mob.type = BCTR[ctype]
