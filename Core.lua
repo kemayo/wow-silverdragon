@@ -153,7 +153,7 @@ function SilverDragon:ToggleCartographer(enable)
 					for name, mob in pairs(mobs) do
 						if mob.locations then
 							for _, loc in ipairs(mob.locations) do
-								if loc[1] > 0 and loc[2] > 0 then
+								if loc[1] and loc[2] and loc[1] > 0 and loc[2] > 0 then
 									Cartographer_Notes:SetNote(zone, tonumber(loc[1])/100, tonumber(loc[2])/100, 'Rare', 'SilverDragon', 'title', name)
 								end
 							end
