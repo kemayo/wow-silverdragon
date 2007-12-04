@@ -96,23 +96,27 @@ function SilverDragon:OnInitialize()
 	if not self.db.profile.version or self.db.profile.version < 2 then
 		for zone, mobs in pairs(self.db.profile.mobs) do
 			if zone == "The Stockades" then zone = "The Stockade" end
-			for name, mob in pairs(mobs) do
-				if type(mob) == 'string' then
-					local x, y, level, elite, ctype, csubzone, lastseen = string.match(mob, "^(.*):(.*):(-?%d*):(%d*):(.*):(.*):(%d*)")
-					mob = {}
-					mob.locations = {}
-					if not (x == 0 and y == 0) or (lastseen and tonumber(lastseen) > 0) then
-						table.insert(mob.locations, {tonumber(x), tonumber(y), csubzone, 1})
+			if not BZR[zone] then
+				self:Print("A translation for the zone '"..zone.."' could not be found.")
+			else
+				for name, mob in pairs(mobs) do
+					if type(mob) == 'string' then
+						local x, y, level, elite, ctype, csubzone, lastseen = string.match(mob, "^(.*):(.*):(-?%d*):(%d*):(.*):(.*):(%d*)")
+						mob = {}
+						mob.locations = {}
+						if not (x == 0 and y == 0) or (lastseen and tonumber(lastseen) > 0) then
+							table.insert(mob.locations, {tonumber(x), tonumber(y), csubzone, 1})
+						end
+						mob.level = tonumber(level)
+						mob.elite = tonumber(elite)==1
+						mob.type = BCTR[ctype]
+						mob.lastseen = tonumber(lastseen)
+						
+						if not self.db.profile.mobs[BZR[zone]] then
+							self.db.profile.mobs[BZR[zone]] = {}
+						end
+						self.db.profile.mobs[BZR[zone]][name] = mob
 					end
-					mob.level = tonumber(level)
-					mob.elite = tonumber(elite)==1
-					mob.type = BCTR[ctype]
-					mob.lastseen = tonumber(lastseen)
-					
-					if not self.db.profile.mobs[BZR[zone]] then
-						self.db.profile.mobs[BZR[zone]] = {}
-					end
-					self.db.profile.mobs[BZR[zone]][name] = mob
 				end
 			end
 		end
@@ -207,7 +211,7 @@ function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
 	end
 end
 function SilverDragon:GetMobInfo(zone, name)
-	local mob = self.db.profile.mobs[BZR[zone]][name]
+	local mob = BZR[zone] and self.db.profile.mobs[BZR[zone]][name]
 	if mob then
 		return #mob.locations, mob.level, mob.elite, mob.type, mob.lastseen
 	else
