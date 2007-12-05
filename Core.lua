@@ -2,7 +2,7 @@ local tablet = AceLibrary("Tablet-2.0")
 local L = AceLibrary("AceLocale-2.2"):new("SilverDragon")
 
 local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
-local BCT = LibStub("LibBabble-CreatureType-3.0"):GetLookupTable()
+local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 
 local nameplatesShowing
