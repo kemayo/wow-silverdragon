@@ -215,7 +215,7 @@ function SilverDragon:GetMobInfo(zone, name)
 	if mob then
 		return #mob.locations, mob.level, mob.elite, mob.type, mob.lastseen
 	else
-		return 0, 0, false, 'Unknown', nil
+		return 0, 0, false, nil, nil
 	end
 end
 
@@ -323,9 +323,10 @@ end
 -- Cartographer Overrides --
 
 function SilverDragon:OnNoteTooltipRequest(zone, id, data, inMinimap)
-	local numLocs, level, elite, ctype, lastseen = self:GetMobInfo(zone, data.title)
+	local mob = self.db.profile.mobs[zone][data.title]
+	if not mob then return end
 	local cat = tablet:AddCategory('text', data.title, 'justify', 'CENTER')
-	cat:AddLine('text', string.format("level %s%s %s", (level and tonumber(level) > 1) and level or '?', elite and '+' or '', ctype and BCT[ctype] or '?'))
+	cat:AddLine('text', string.format("level %s%s %s", (mob.level and tonumber(mob.level) > 1) and mob.level or '?', mob.elite and '+' or '', mob.type and BCT[mob.type] or '?'))
 	cat:AddLine('text', self:LastSeen(lastseen))
 end
 
