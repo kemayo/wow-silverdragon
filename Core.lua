@@ -207,6 +207,9 @@ function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
 	end
 	if newloc then
 		table.insert(mob.locations, {x, y, subzone, 1})
+		if self.db.profile.notes and Cartographer_Notes and not (x == 0 and y == 0) then
+			self:SetNoteHere(name)
+		end
 		return true
 	end
 end
@@ -238,9 +241,6 @@ do
 				local newloc = self:SaveMob(GetRealZoneText(), name, x, y, UnitLevel(unit), c12n=='rareelite', UnitCreatureType(unit), GetSubZoneText())
 				
 				self:Update()
-				if newloc and self.db.profile.notes and Cartographer_Notes and not (x == 0 and y == 0) then
-					self:SetNoteHere(name)
-				end
 			end
 		end
 	end
