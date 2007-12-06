@@ -183,7 +183,9 @@ function SilverDragon:UPDATE_MOUSEOVER_UNIT()
 end
 
 function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
-	if not self.db.profile.mobs[BZR[zone]][name] then self.db.profile.mobs[BZR[zone]][name] = {} end
+	if not self.db.profile.mobs[BZR[zone]][name] or type(self.db.profile.mobs[BZR[zone]][name]) ~= 'table' then
+		self.db.profile.mobs[BZR[zone]][name] = {}
+	end
 	local mob = self.db.profile.mobs[BZR[zone]][name]
 	mob.level = level
 	mob.elite = elite
@@ -285,17 +287,19 @@ function SilverDragon:OnTooltipUpdate()
 			'text2', string.format("level %s%s %s", (mob.level and tonumber(mob.level) > 1) and mob.level or '?', mob.elite and '+' or '', mob.type and BCT[mob.type] or '?'),
 			'text5', self:LastSeen(mob.lastseen)
 		)
-		for _, loc in ipairs(mob.locations) do
-			local nearby = subzone == loc[3]
-			cat:AddLine(
-				'text', ' ',
-				'text3', loc[3],
-				'text3R', nearby and 0 or nil, 'text3G', nearby and 1 or nil, 'text3B', nearby and 0 or nil,
-				'text4', string.format("%s, %s", loc[1], loc[2]),
-				'text4R', nearby and 0 or nil, 'text4G', nearby and 1 or nil, 'text4B', nearby and 0 or nil,
-				'text5', 'x'..loc[4],
-				'text5R', nearby and 0 or nil, 'text5G', nearby and 1 or nil, 'text5B', nearby and 0 or nil
-			)
+		if mob.locations then
+			for _, loc in ipairs(mob.locations) do
+				local nearby = subzone == loc[3]
+				cat:AddLine(
+					'text', ' ',
+					'text3', loc[3],
+					'text3R', nearby and 0 or nil, 'text3G', nearby and 1 or nil, 'text3B', nearby and 0 or nil,
+					'text4', string.format("%s, %s", loc[1], loc[2]),
+					'text4R', nearby and 0 or nil, 'text4G', nearby and 1 or nil, 'text4B', nearby and 0 or nil,
+					'text5', 'x'..loc[4],
+					'text5R', nearby and 0 or nil, 'text5G', nearby and 1 or nil, 'text5B', nearby and 0 or nil
+				)
+			end
 		end
 	end
 end
