@@ -305,6 +305,7 @@ function SilverDragon:OnTooltipUpdate()
 end
 
 function SilverDragon:LastSeen(t)
+	t = tonumber(t)
 	if not t or t == 0 then return L['Never'] end
 	local currentTime = time()
 	local minutes = math.ceil((currentTime - t) / 60)
@@ -388,6 +389,7 @@ local function CheckForNameplate(frame)
 end
 
 function SilverDragon:NameplateScan(hideNameplates)
+	if not WorldFrame then return end
 	if worldchildren ~= WorldFrame:GetNumChildren() then
 		for i=1,WorldFrame:GetNumChildren(),1 do
 			CheckForNameplate(select(i, WorldFrame:GetChildren()))
