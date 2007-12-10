@@ -389,7 +389,6 @@ local function CheckForNameplate(frame)
 end
 
 function SilverDragon:NameplateScan(hideNameplates)
-	if not WorldFrame then return end
 	if worldchildren ~= WorldFrame:GetNumChildren() then
 		for i=1,WorldFrame:GetNumChildren(),1 do
 			CheckForNameplate(select(i, WorldFrame:GetChildren()))
@@ -397,6 +396,7 @@ function SilverDragon:NameplateScan(hideNameplates)
 		worldchildren = WorldFrame:GetNumChildren()
 	end
 	local zone = GetRealZoneText()
+	if not (zone and BZR[zone]) then return end
 	for nameplate, regions in pairs(nameplates) do
 		if nameplate:IsVisible() and self.db.profile.mobs[BZR[zone]][regions.name:GetText()] then
 			self:Announce(regions.name:GetText()) -- It's probably possible to check the live-ness of a mob by examining the bar frame.  Work out how to do this.
