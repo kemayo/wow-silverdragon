@@ -190,6 +190,7 @@ function SilverDragon:SaveMob(zone, name, x, y, level, elite, ctype, subzone)
 	mob.level = level
 	mob.elite = elite
 	mob.ctype = BCTR[ctype] -- saves the english creature type
+	mob.lastseen = time()
 	if not mob.locations then mob.locations = {} end
 	-- convert the raw locs into 'xx.x'.
 	x = math.floor(x * 1000)/10
@@ -224,26 +225,16 @@ function SilverDragon:GetMobInfo(zone, name)
 	end
 end
 
-do
-	local distanceCache = {}
-	function SilverDragon:IsRare(unit)
-		local c12n = UnitClassification(unit)
-		if c12n == 'rare' or c12n == 'rareelite' then
-			local name = UnitName(unit)
-			local distance = 1000
-			if CheckInteractDistance(unit, 3) then
-				distance = 10
-			elseif CheckInteractDistance(unit, 4) then
-				distance = 30
-			end
-			self:Announce(name, UnitIsDead(unit))
-			if UnitIsVisible(unit) and distance < (distanceCache[name] or 100) then -- (Are we 30 yards or less from it; trying to prevent wildly inaccurate notes, here.)
-				distanceCache[name] = distance
-				local x, y = GetPlayerMapPosition("player")
-				local newloc = self:SaveMob(GetRealZoneText(), name, x, y, UnitLevel(unit), c12n=='rareelite', UnitCreatureType(unit), GetSubZoneText())
-				
-				self:Update()
-			end
+function SilverDragon:IsRare(unit)
+	local c12n = UnitClassification(unit)
+	if c12n == 'rare' or c12n == 'rareelite' then
+		local name = UnitName(unit)
+		self:Announce(name, UnitIsDead(unit))
+		if UnitIsVisible(unit) then
+			local x, y = GetPlayerMapPosition("player")
+			local newloc = self:SaveMob(GetRealZoneText(), name, x, y, UnitLevel(unit), c12n=='rareelite', UnitCreatureType(unit), GetSubZoneText())
+			
+			self:Update()
 		end
 	end
 end
