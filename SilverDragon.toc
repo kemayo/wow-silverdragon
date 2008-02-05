@@ -8,25 +8,13 @@
 ## eMail: kemayo at gmail dot com
 ## X-Category: Interface Enhancements
 ## X-Donate: PayPal:kemayo AT gmail DOT com
-## OptionalDependencies: Ace2, FuBarPlugin-2.0, TabletLib, DewdropLib, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, FuBar, Cartographer
+## OptionalDependencies: Ace2, FuBarPlugin-2.0, TabletLib, DewdropLib, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, FuBar, Cartographer, Sink-1.0
 ## SavedVariables: SilverDragonDB
 ## LoadOnDemand: 0
 
-## X-Embeds: Ace2, DewdropLib, FuBarPlugin-2.0, TabletLib, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0
-Libs\AceLibrary\AceLibrary.lua
-Libs\AceOO-2.0\AceOO-2.0.lua
-Libs\AceConsole-2.0\AceConsole-2.0.lua
-Libs\AceEvent-2.0\AceEvent-2.0.lua
-Libs\AceHook-2.1\AceHook-2.1.lua
-Libs\AceAddon-2.0\AceAddon-2.0.lua
-Libs\AceDB-2.0\AceDB-2.0.lua
-Libs\AceLocale-2.2\AceLocale-2.2.lua
-Libs\Dewdrop-2.0\Dewdrop-2.0.lua
-Libs\Tablet-2.0\Tablet-2.0.lua
-Libs\FuBarPlugin-2.0\FuBarPlugin-2.0.lua
-Libs\LibBabble-CreatureType-3.0\lib.xml
-Libs\LibBabble-Zone-3.0\lib.xml
-## LIBS END
+## X-Embeds: Ace2, DewdropLib, FuBarPlugin-2.0, TabletLib, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, Sink-1.0
+
+embeds.xml
 
 Locale.enUS.lua
 Locale.zhTW.lua

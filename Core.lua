@@ -7,7 +7,7 @@ local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 
 local nameplatesShowing
 
-SilverDragon = AceLibrary("AceAddon-2.0"):new("AceEvent-2.0", "AceConsole-2.0", "AceDB-2.0", "AceHook-2.1", "FuBarPlugin-2.0")
+SilverDragon = AceLibrary("AceAddon-2.0"):new("AceEvent-2.0", "AceConsole-2.0", "AceDB-2.0", "AceHook-2.1", "FuBarPlugin-2.0", "Sink-1.0")
 
 SilverDragon.version = "2.0." .. string.sub("$Revision$", 12, -3)
 SilverDragon.date = string.sub("$Date$", 8, 17)
@@ -27,6 +27,7 @@ function SilverDragon:OnInitialize()
 			error = true,
 			sound = true,
 		},
+		--sink10OutputSink = "Default",
 	})
 	local optionsTable = {
 		type="group",
@@ -88,6 +89,7 @@ function SilverDragon:OnInitialize()
 			},
 		},
 	}
+	optionsTable.args.output = AceLibrary("Sink-1.0"):GetAceOptionsDataTable(self).output
 	self:RegisterChatCommand(L["ChatCommands"], optionsTable)
 	self.OnMenuRequest = optionsTable
 	self.lastseen = {}
@@ -245,9 +247,9 @@ function SilverDragon:Announce(name, dead)
 	-- TODO: Make that time configurable.
 	if (not self.lastseen[name]) or (self.lastseen[name] < (time() - 600)) then
 		if self.db.profile.announce.error then
-			UIErrorsFrame:AddMessage(string.format(L["%s seen!"], name), 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+			self:Pour(string.format(L["%s seen!"], name), 1, 0, 0)
 			if dead then
-				UIErrorsFrame:AddMessage(L["(it's dead)"], 1, 0, 0, 1, UIERRORS_HOLD_TIME)
+				self:Pour(L["(it's dead)"], 1, 0, 0)
 			end
 		end
 		if self.db.profile.announce.chat then
