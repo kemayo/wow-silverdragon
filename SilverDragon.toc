@@ -3,6 +3,7 @@
 ## Notes: Remember where rares were
 ## Title-zhTW: |cFF00FFFF[戰鬥]|r銀龍 SilverDragon
 ## Notes-zhTW: 協助記錄稀有怪位置,以及MouseOver時提示你.
+## Notes-zhCN: 记录稀有怪物位置。
 ## Version: 1.0
 ## Author: Kemayo
 ## eMail: kemayo at gmail dot com
@@ -18,7 +19,7 @@ embeds.xml
 
 Locale.enUS.lua
 Locale.zhTW.lua
-Locale.deDE.lua
+Locale.zhCN.lua
 
 Core.lua
 Defaults.lua
