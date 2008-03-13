@@ -231,12 +231,12 @@ function SilverDragon:IsRare(unit)
 	local c12n = UnitClassification(unit)
 	if c12n == 'rare' or c12n == 'rareelite' then
 		local name = UnitName(unit)
-		self:Announce(name, UnitIsDead(unit))
-		if UnitIsVisible(unit) then
+		if UnitIsVisible(unit) and (not self.lastseen[name]) or (self.lastseen[name] < (time() - 600)) then
 			local x, y = GetPlayerMapPosition("player")
 			local newloc = self:SaveMob(GetRealZoneText(), name, x, y, UnitLevel(unit), c12n=='rareelite', UnitCreatureType(unit), GetSubZoneText())
-			
+			self:Announce(name, UnitIsDead(unit))
 			self:Update()
+			self.lastseen[name] = time()
 		end
 	end
 end
@@ -245,23 +245,19 @@ function SilverDragon:Announce(name, dead)
 	-- Announce the discovery of a rare.  Return true if we announced.
 	-- Only announce each rare every 10 minutes, preventing spam while we're in combat.
 	-- TODO: Make that time configurable.
-	if (not self.lastseen[name]) or (self.lastseen[name] < (time() - 600)) then
-		if self.db.profile.announce.error then
-			self:Pour(string.format(L["%s seen!"], name), 1, 0, 0)
-			if dead then
-				self:Pour(L["(it's dead)"], 1, 0, 0)
-			end
+	if self.db.profile.announce.error then
+		self:Pour(string.format(L["%s seen!"], name), 1, 0, 0)
+		if dead then
+			self:Pour(L["(it's dead)"], 1, 0, 0)
 		end
-		if self.db.profile.announce.chat then
-			self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or '')
-		end
-		if self.db.profile.announce.sound then
-			
-		end
-		
-		self.lastseen[name] = time()
-		return true
 	end
+	if self.db.profile.announce.chat then
+		self:Print(string.format(L["%s seen!"], name), dead and L["(it's dead)"] or '')
+	end
+	if self.db.profile.announce.sound then
+		
+	end
+	return true
 end
 
 function SilverDragon:CheckNearby()
