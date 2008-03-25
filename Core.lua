@@ -269,7 +269,7 @@ end
 
 function SilverDragon:OnTooltipUpdate()
 	local zone, subzone = GetRealZoneText(), GetSubZoneText()
-	cat = tablet:AddCategory('text', zone, 'columns', 5)
+	local cat = tablet:AddCategory('text', zone, 'columns', 5)
 	for name, mob in pairs(self.db.profile.mobs[BZR[zone]]) do
 		cat:AddLine(
 			'text', name,
