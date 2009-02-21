@@ -127,7 +127,7 @@ local function write_output(data)
 		for name, info in pairs(mobs) do
 			if not self.db.profile.mobs[zone][name] then self.db.profile.mobs[zone][name] = {} end
 			local mob = self.db.profile.mobs[zone][name]
-			mob.type = info.type
+			mob.creature_type = info.creature_type
 			mob.level = info.level
 			mob.elite = info.elite
 			mob.lastseen = (mob.lastseen and tonumber(mob.lastseen) > 0) and tonumber(mob.lastseen) or 0
@@ -247,7 +247,7 @@ local function main()
 				if not defaults[zone] then defaults[zone] = {} end
 				defaults[zone][name] = {
 					level = level,
-					type = ctype,
+					creature_type = ctype,
 					locations = locations,
 					elite = elite,
 					lastseen = 0,
