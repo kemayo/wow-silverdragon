@@ -1,7 +1,7 @@
-﻿## Interface: 20300
-## Title: SilverDragon |cff7fff7f -Ace2-|r
+﻿## Interface: 30000
+## Title: SilverDragon
 ## Notes: Remember where rares were
-## Title-zhTW: |cFF00FFFF[戰鬥]|r銀龍 SilverDragon
+## Title-zhTW: SilverDragon
 ## Notes-zhTW: 協助記錄稀有怪位置,以及MouseOver時提示你.
 ## Notes-zhCN: 记录稀有怪物位置。
 ## Version: 1.0
@@ -9,19 +9,18 @@
 ## eMail: kemayo at gmail dot com
 ## X-Category: Interface Enhancements
 ## X-Donate: PayPal:kemayo AT gmail DOT com
-## OptionalDependencies: Ace2, FuBarPlugin-2.0, TabletLib, DewdropLib, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, FuBar, Cartographer, Sink-1.0
-## SavedVariables: SilverDragonDB
+## OptionalDependencies: Ace3, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, Cartographer, LibSink-2.0
+## SavedVariables: SilverDragon2DB
 ## LoadOnDemand: 0
 
-## X-Embeds: Ace2, DewdropLib, FuBarPlugin-2.0, TabletLib, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, Sink-1.0
+## X-Embeds: Ace3, LibSink-2.0, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0
 
 embeds.xml
 
-Locale.enUS.lua
-Locale.zhTW.lua
-Locale.zhCN.lua
+core.lua
+ldb.lua
+announce.lua
 
-Core.lua
-Defaults.lua
-Defaults.zhTW.lua
-Defaults.deDE.lua
+handynotes.lua
+cartographer.lua
+
