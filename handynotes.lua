@@ -20,13 +20,17 @@ do
 		while current_mob do
 			current_coord, coord_value = next(core.db.global.mob_locations[current_mob], current_coord)
 			if coord_value then
+				--LibStub("AceConsole-2.0"):PrintLiteral("returning", current_mob, coord_value)
 				return coord_value, nil, icon, db.icon_scale, db.icon_alpha
 			end
-			current_mob, value = next(t, current_mob)
+			current_mob = next(t, current_mob)
 		end
 		return nil, nil, nil, nil, nil
 	end
 	function handler:GetNodes(mapFile)
+		--LibStub("AceConsole-2.0"):PrintLiteral("GetNodes", mapFile)
+		--LibStub("AceConsole-2.0"):PrintLiteral(core.db.global.mobs_byzone[mapFile])
+		current_mob, current_coord, coord_value = nil, nil, nil
 		return iter, core.db.global.mobs_byzone[mapFile], nil
 	end
 end
