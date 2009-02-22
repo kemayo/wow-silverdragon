@@ -9,29 +9,26 @@ local module = core:NewModule("HandyNotes", "AceEvent-3.0")
 local db
 local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
 
+local nodes = {}
+for _, mapFile in pairs(core.zone_to_mapfile) do
+	nodes[mapFile] = {}
+end
+
 local handler = {}
 do
-	local current_mob, current_coord, coord_value
 	local function iter(t, prestate)
 		if not t then return nil end
-		if not coord_value then
-			current_mob = next(t, current_mob)
-		end
-		while current_mob do
-			current_coord, coord_value = next(core.db.global.mob_locations[current_mob], current_coord)
-			if coord_value then
-				--LibStub("AceConsole-2.0"):PrintLiteral("returning", current_mob, coord_value)
-				return coord_value, nil, icon, db.icon_scale, db.icon_alpha
+		local state, value = next(t, prestate)
+		while state do
+			if value then
+				return state, nil, icon, db.icon_scale, db.icon_alpha
 			end
-			current_mob = next(t, current_mob)
+			state, value = next(t, state)
 		end
 		return nil, nil, nil, nil, nil
 	end
 	function handler:GetNodes(mapFile)
-		--LibStub("AceConsole-2.0"):PrintLiteral("GetNodes", mapFile)
-		--LibStub("AceConsole-2.0"):PrintLiteral(core.db.global.mobs_byzone[mapFile])
-		current_mob, current_coord, coord_value = nil, nil, nil
-		return iter, core.db.global.mobs_byzone[mapFile], nil
+		return iter, nodes[mapFile], nil
 	end
 end
 
@@ -179,10 +176,20 @@ function module:OnInitialize()
 			},
 		},
 	})
+	for zone, mobs in pairs(core.db.global.mobs_byzone) do
+		if nodes[zone] then
+			for name in pairs(mobs) do
+				for _, loc in ipairs(core.db.global.mob_locations[name]) do
+					nodes[zone][loc] = name
+				end
+			end
+		end
+	end
 end
 
 function module:Seen(callback, zone, name, x, y, dead, new_location)
 	if new_location then
+		nodes[zone][core:GetCoord(x, y)] = name
 		self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
 	end
 end
