@@ -1,3 +1,4 @@
+local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 
@@ -63,23 +64,25 @@ function addon:ProcessUnit(unit)
 	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc)
 end
 
-function addon:SaveMob(zone, name, x, y, level, elite, creature_type)
+function addon:SaveMob(zone, name, x, y, level, elite, creature_type, force, unseen)
 	-- saves a mob's information, returns true if this is the first time a mob has been seen at this location
 	if not globaldb.mob_locations then globaldb.mob_locations = {} end
 
-	globaldb.mobs_byzone[zone][name] = time()
+	globaldb.mobs_byzone[zone][name] = unseen and 0 or time()
 	globaldb.mob_level[name] = level
 	if elite then globaldb.mob_elite[name] = true end
 	globaldb.mob_type[name] = BCTR[creature_type]
-	globaldb.mob_count[name] = globaldb.mob_count[name] + 1
+	globaldb.mob_count[name] = globaldb.mob_count[name] + (unseen and 0 or 1)
 	
 	local newloc = true
-	for _, coord in ipairs(globaldb.mob_locations[name]) do
-		local loc_x, loc_y = self:GetXY(coord)
-		if (math.abs(loc_x - x) < 0.03) and (math.abs(loc_y - y) < 0.03) then
-			-- We've seen it close to here before. (within 5% of the zone)
-			newloc = false
-			break
+	if not force then
+		for _, coord in ipairs(globaldb.mob_locations[name]) do
+			local loc_x, loc_y = self:GetXY(coord)
+			if (math.abs(loc_x - x) < 0.03) and (math.abs(loc_y - y) < 0.03) then
+				-- We've seen it close to here before. (within 5% of the zone)
+				newloc = false
+				break
+			end
 		end
 	end
 	if newloc then
@@ -214,14 +217,18 @@ function addon:FormatLastSeen(t)
 end
 
 local continent_list = { GetMapContinents() }
+local zone_to_mapfile = {}
 for C in pairs(continent_list) do
 	local zones = { GetMapZones(C) }
 	continent_list[C] = zones
-	for Z in ipairs(zones) do
+	for Z, Zname in ipairs(zones) do
 		SetMapZoom(C, Z)
 		zones[Z] = GetMapInfo()
+		zone_to_mapfile[Zname] = zones[Z]
 	end
 end
+addon.continent_list = continent_list
+addon.zone_to_mapfile = zone_to_mapfile
 
 function addon:GetPlayerLocation()
 	-- returns mapFile (e.g. "Stormwind"), x, y
@@ -238,7 +245,7 @@ function addon:GetPlayerLocation()
 			x, y = GetPlayerMapPosition('player')
 			if x <= 0 and y <= 0 then
 				-- we're in an instance, probably
-				return
+				return BZR[GetRealZoneText()], 0, 0
 			end
 		end
 		local C2, Z2 = GetCurrentMapContinent(), GetCurrentMapZone()
