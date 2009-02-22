@@ -1,4 +1,3 @@
-local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 
@@ -15,15 +14,16 @@ local dataobject = LibStub("LibDataBroker-1.1"):NewDataObject("SilverDragon", {
 
 local tooltip
 function dataobject:OnEnter()
-	local zone, subzone = GetRealZoneText(), GetSubZoneText()
+	local zone, x, y = core:GetPlayerLocation()
 
-	tooltip = LibQTip:Acquire("SilverDragonTooltip", 3, "LEFT", "CENTER", "RIGHT")
-	tooltip:AddHeader("Name", "Level", "Last Seen")
+	tooltip = LibQTip:Acquire("SilverDragonTooltip", 5, "LEFT", "CENTER", "RIGHT", "RIGHT", "RIGHT")
+	tooltip:AddHeader("Name", "Level", "Type", "Count", "Last Seen")
 	
 	local n = 0
-	for name, mob in pairs(core.db.profile.mobs[BZR[zone]]) do
+	for name in pairs(core.db.global.mobs_byzone[zone]) do
 		n = n + 1
-		tooltip:AddLine(name, ("%s%s"):format(mob.level > 0 and mob.level or '?', mob.elite and '+' or ''), core:FormatLastSeen(mob.lastseen))
+		local num_locations, level, elite, creature_type, lastseen, count = core:GetMob(zone, name)
+		tooltip:AddLine(name, ("%s%s"):format(level > 0 and level or '?', elite and '+' or ''), BCT[creature_type], count, core:FormatLastSeen(lastseen))
 	end
 	if n == 0 then
 		tooltip:AddLine("None")

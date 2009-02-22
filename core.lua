@@ -1,29 +1,41 @@
-local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 
-local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0")
+local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0")
 SilverDragon = addon
 addon.events = LibStub("CallbackHandler-1.0"):New(addon)
 
-local mobs
+local globaldb
 function addon:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("SilverDragon2DB", {
-		profile = {
-			mobs = {
+		global = {
+			mobs_byzone = {
 				['*'] = {}, -- zones
 			},
+			mob_locations = {
+				['*'] = {}, -- mob names
+			},
+			mob_type = {},
+			mob_level = {},
+			mob_elite = {},
+			mob_count = {
+				['*'] = 0,
+			},
+		},
+		profile = {
 			scan = 0.5, -- scan interval, 0 for never
 			delay = 600, -- number of seconds to wait between recording the same mob
 		},
 	})
-	mobs = self.db.profile.mobs
+	globaldb = self.db.global
 end
 
 function addon:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-	--self:RegisterEvent("CVAR_UPDATE")
+	if self.db.profile.scan > 0 then
+		self:ScheduleRepeatingTimer("CheckNearby", self.db.profile.scan)
+	end
 end
 
 function addon:PLAYER_TARGET_CHANGED()
@@ -41,61 +53,65 @@ function addon:ProcessUnit(unit)
 	local name = UnitName(unit)
 	if not (UnitIsVisible(unit) and (not lastseen[name]) or (lastseen[name] < (time() - self.db.profile.delay))) then return end
 
-	local x, y = GetPlayerMapPosition('player') -- 'player' because 'target' doesn't work on mobs
-	local zone = GetRealZoneText()
-	local subzone = GetSubZoneText()
+	local zone, x, y = self:GetPlayerLocation()
 	local level = UnitLevel(unit)
 	local creature_type = UnitCreatureType(unit)
 	
-	self:SaveMob(GetRealZoneText(), name, x, y, UnitLevel(unit), unittype=='rareelite', UnitCreatureType(unit), GetSubZoneText())
+	local newloc = self:SaveMob(zone, name, x, y, level, unittype=='rareelite', creature_type)
 
 	lastseen[name] = time()
-	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit))
+	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc)
 end
 
-function addon:SaveMob(zone, name, x, y, level, elite, creature_type, subzone)
+function addon:SaveMob(zone, name, x, y, level, elite, creature_type)
 	-- saves a mob's information, returns true if this is the first time a mob has been seen at this location
-	zone = BZR[zone]
-	creature_type = BCTR[creature_type]
-	
-	if not mobs[zone][name] then mobs[zone][name] = {} end
-	local mob = mobs[zone][name]
-	if not mob.locations then mob.locations = {} end
-	
-	mob.level = level
-	mob.elite = elite
-	mob.creature_type = creature_type
-	mob.lastseen = time()
-	
-	-- convert the raw locs into 'xx.x'.
-	x = math.floor(x * 1000)/10
-	y = math.floor(y * 1000)/10
+	if not globaldb.mob_locations then globaldb.mob_locations = {} end
 
+	globaldb.mobs_byzone[zone][name] = time()
+	globaldb.mob_level[name] = level
+	if elite then globaldb.mob_elite[name] = true end
+	globaldb.mob_type[name] = BCTR[creature_type]
+	globaldb.mob_count[name] = globaldb.mob_count[name] + 1
+	
 	local newloc = true
-	for _, loc in ipairs(mob.locations) do
-		if (math.abs(loc[1] - x) < 5) and (math.abs(loc[2] - y) < 5) then
+	for _, coord in ipairs(globaldb.mob_locations[name]) do
+		local loc_x, loc_y = self:GetXY(coord)
+		if (math.abs(loc_x - x) < 0.03) and (math.abs(loc_y - y) < 0.03) then
 			-- We've seen it close to here before. (within 5% of the zone)
-			if loc[4] == 0 and loc[3] == '' then
-				loc[3] = subzone
-			end
-			loc[4] = loc[4] + 1
 			newloc = false
 			break
 		end
 	end
 	if newloc then
-		table.insert(mob.locations, {x, y, subzone, 1})
-		return true
+		table.insert(globaldb.mob_locations[name], self:GetCoord(x, y))
 	end
+	return newloc
 end
 
 function addon:GetMob(zone, name)
-	local mob = BZR[zone] and mobs[BZR[zone]][name]
-	if mob then
-		return #mob.locations, mob.level, mob.elite, mob.creature_type, mob.lastseen
-	else
+	if not globaldb.mobs_byzone[zone][name] then
 		return 0, 0, false, nil, nil
 	end
+	return #globaldb.mob_locations[name], globaldb.mob_level[name], globaldb.mob_elite[name], BCT[globaldb.mob_type[name]], globaldb.mobs_byzone[zone][name], globaldb.mob_count[name]
+end
+
+function addon:GetMobByCoord(zone, coord)
+	for name in pairs(globaldb.mobs_byzone[zone]) do
+		for _, mob_coord in ipairs(globaldb.mob_locations[name]) do
+			if coord == mob_coord then
+				return name, self:GetMob(zone, name)
+			end
+		end
+	end
+end
+
+function addon:DeleteMob(zone, name)
+	globaldb.mobs_byzone[zone][name] = nil
+	globaldb.mob_level[name] = nil
+	globaldb.mob_elite[name] = nil
+	globaldb.mob_type[name] = nil
+	globaldb.mob_count[name] = nil
+	globaldb.mob_locations[name] = nil
 end
 
 -- Scanning:
@@ -167,13 +183,12 @@ function addon:ScanNameplates()
 			process_possible_nameplate(select(i, WorldFrame:GetChildren()))
 		end
 	end
-	local zone = GetRealZoneText()
-	if not BZR[zone] then return end
-	local zone_mobs = mobs[BZR[GetRealZoneText()]]
+	local zone = self:GetPlayerLocation()
+	local zone_mobs = globaldb.mobs_byzone[zone]
 	for nameplate, regions in pairs(nameplates) do
 		if nameplate:IsVisible() and zone_mobs[regions.name:GetText()] then
 			local x, y = GetPlayerMapPosition('player')
-			self.events:Fire("Seen", zone, name, x, y, false)
+			self.events:Fire("Seen", zone, name, x, y, false, false)
 			break -- it's pretty unlikely there'll be two rares on screen at once
 		end
 	end
@@ -196,5 +211,50 @@ function addon:FormatLastSeen(t)
 	else
 		return minutes.." minute(s)"
 	end
+end
+
+local continent_list = { GetMapContinents() }
+for C in pairs(continent_list) do
+	local zones = { GetMapZones(C) }
+	continent_list[C] = zones
+	for Z in ipairs(zones) do
+		SetMapZoom(C, Z)
+		zones[Z] = GetMapInfo()
+	end
+end
+
+function addon:GetPlayerLocation()
+	-- returns mapFile (e.g. "Stormwind"), x, y
+	local x, y = GetPlayerMapPosition('player')
+	local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()
+	if x <= 0 and y <= 0 then
+		if WorldMapFrame:IsVisible() then
+			return
+		end
+		SetMapToCurrentZone()
+		x, y = GetPlayerMapPosition('player')
+		if x <= 0 and y <= 0 then
+			SetMapZoom(GetCurrentMapContinent())
+			x, y = GetPlayerMapPosition('player')
+			if x <= 0 and y <= 0 then
+				-- we're in an instance, probably
+				return
+			end
+		end
+		local C2, Z2 = GetCurrentMapContinent(), GetCurrentMapZone()
+		if C2 ~= C or Z2 ~= Z then
+			SetMapZoom(C, Z)
+		end
+		C, Z = C2, Z2
+	end
+	return continent_list[C][Z], x, y
+end
+
+function addon:GetCoord(x, y)
+	return floor(x * 10000 + 0.5) * 10000 + floor(y * 10000 + 0.5)
+end
+
+function addon:GetXY(coord)
+	return floor(coord / 10000) / 10000, (coord % 10000) / 10000
 end
 
