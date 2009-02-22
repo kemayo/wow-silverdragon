@@ -1,0 +1,14 @@
+﻿## Interface: 30000
+## Title: SilverDragon (Data)
+## Notes: Default set of rares for SilverDragon
+## Version: 1.0
+## Author: Kemayo
+## eMail: kemayo at gmail dot com
+## X-Category: Interface Enhancements
+## X-Donate: PayPal:kemayo AT gmail DOT com
+## Dependencies: SilverDragon
+## LoadOnDemand: 1
+
+module.lua
+defaults.lua
+
