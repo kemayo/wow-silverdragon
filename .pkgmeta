@@ -1,14 +1,8 @@
 package-as: SilverDragon
+
 externals:
-    libs/LibStub:
-        url: svn://svn.wowace.com/wow/libstub/mainline/trunk
-        tag: latest
-    libs/CallbackHandler-1.0:
-        url: svn://svn.wowace.com/wow/callbackhandler/mainline/trunk/CallbackHandler-1.0
-        tag: latest
-    lib/LibSink-2.0:
-		url: svn://svn.wowace.com/wow/libsink-2-0/mainline/trunk/LibSink-2.0
-		tag: latest
+    lib/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
+    lib/CallbackHandler-1.0: svn://svn.wowace.com/wow/callbackhandler/mainline/trunk/CallbackHandler-1.0
     lib/AceAddon-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
     lib/AceConfig-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConfig-3.0
     lib/AceConsole-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConsole-3.0
@@ -16,6 +10,13 @@ externals:
     lib/AceDBOptions-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDBOptions-3.0
     lib/AceEvent-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceEvent-3.0
     lib/AceGUI-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
-    Libs/LibBabble-CreatureType-3.0: svn://svn.wowace.com/wow/libbabble-creaturetype-3-0/mainline/trunk
-    Libs/LibBabble-Zone-3.0: svn://svn.wowace.com/wow/libbabble-zone-3-0/mainline/trunk
+    lib/LibSink-2.0: svn://svn.wowace.com/wow/libsink-2-0/mainline/trunk/LibSink-2.0
+    lib/LibBabble-CreatureType-3.0: svn://svn.wowace.com/wow/libbabble-creaturetype-3-0/mainline/trunk
+    lib/LibBabble-Zone-3.0: svn://svn.wowace.com/wow/libbabble-zone-3-0/mainline/trunk
+
+move-folders:
+	SilverDragon/Data: SilverDragon_Data
+
+ignore:
+	Data/dataminer.lua
 
