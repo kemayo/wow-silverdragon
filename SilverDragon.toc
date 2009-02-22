@@ -24,3 +24,6 @@ announce.lua
 handynotes.lua
 cartographer.lua
 
+Data\module.lua
+Data\defaults.lua
+
