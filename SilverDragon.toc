@@ -16,6 +16,7 @@
 ## X-Embeds: Ace3, LibSink-2.0, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0
 
 embeds.xml
+lib\LibDataBroker-1.1.lua
 
 core.lua
 
