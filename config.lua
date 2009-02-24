@@ -72,3 +72,8 @@ function module:OnInitialize()
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("SilverDragon", "SilverDragon")
 	self:RegisterChatCommand("silverdragon", function() LibStub("AceConfigDialog-3.0"):Open("SilverDragon") end)
 end
+
+function module:ShowConfig()
+	LibStub("AceConfigDialog-3.0"):Open("SilverDragon")
+end
+

@@ -38,6 +38,16 @@ function dataobject:OnLeave()
 	tooltip = nil
 end
 
+function dataobject:OnClick(button)
+	if button ~= "RightButton" then
+		return
+	end
+	local config = core:GetModule("Config", true)
+	if config then
+		config:ShowConfig()
+	end
+end
+
 core.RegisterCallback("LDB", "Seen", function(callback, zone, name)
 	dataobject.text = name
 end)
