@@ -1,7 +1,7 @@
 local HandyNotes = LibStub("AceAddon-3.0"):GetAddon("HandyNotes", true)
-local Astrolabe = DongleStub("Astrolabe-0.4")
-
 if not HandyNotes then return end
+
+local Astrolabe = DongleStub("Astrolabe-0.4")
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("HandyNotes", "AceEvent-3.0")

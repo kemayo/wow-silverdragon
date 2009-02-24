@@ -18,6 +18,8 @@
 embeds.xml
 
 core.lua
+
+config.lua
 ldb.lua
 announce.lua
 

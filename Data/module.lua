@@ -9,12 +9,14 @@ function module:Import()
 	if not self.GetDefaults then return end
 	local defaults = self:GetDefaults()
 	local gdb = core.db.global
+	local mob_count = 0
 	for zone, mobs in pairs(defaults) do
 		if core.zone_to_mapfile[BZ[zone]] then
 			-- instances get to stay as they are, note
 			zone = core.zone_to_mapfile[BZ[zone]]
 		end
 		for name, info in pairs(mobs) do
+			mob_count = mob_count + 1
 			gdb.mob_level[name] = info.level
 			gdb.mob_type[name] = BCTR[info.creature_type]
 			if info.elite then gdb.mob_elite[name] = true end
@@ -42,7 +44,6 @@ function module:Import()
 		end
 	end
 	defaults = nil
+	return mob_count
 end
-
--- there'll be some config here soon for importing this
 
