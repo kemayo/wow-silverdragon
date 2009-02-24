@@ -9,7 +9,7 @@
 ## eMail: kemayo at gmail dot com
 ## X-Category: Interface Enhancements
 ## X-Donate: PayPal:kemayo AT gmail DOT com
-## OptionalDependencies: Ace3, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, Cartographer, LibSink-2.0
+## OptionalDependencies: Ace3, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, HandyNotes, Cartographer, Cartographer_Notes, LibSink-2.0
 ## SavedVariables: SilverDragon2DB
 ## LoadOnDemand: 0
 

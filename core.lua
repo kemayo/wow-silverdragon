@@ -99,6 +99,7 @@ function addon:GetMob(zone, name)
 end
 
 function addon:GetMobByCoord(zone, coord)
+	if not globaldb.mobs_byzone[zone] then return end
 	for name in pairs(globaldb.mobs_byzone[zone]) do
 		for _, mob_coord in ipairs(globaldb.mob_locations[name]) do
 			if coord == mob_coord then
@@ -218,6 +219,7 @@ end
 
 local continent_list = { GetMapContinents() }
 local zone_to_mapfile = {}
+local mapfile_to_zone = {}
 for C in pairs(continent_list) do
 	local zones = { GetMapZones(C) }
 	continent_list[C] = zones
@@ -225,10 +227,12 @@ for C in pairs(continent_list) do
 		SetMapZoom(C, Z)
 		zones[Z] = GetMapInfo()
 		zone_to_mapfile[Zname] = zones[Z]
+		mapfile_to_zone[zones[Z]] = Zname
 	end
 end
 addon.continent_list = continent_list
 addon.zone_to_mapfile = zone_to_mapfile
+addon.mapfile_to_zone = mapfile_to_zone
 
 function addon:GetPlayerLocation()
 	-- returns mapFile (e.g. "Stormwind"), x, y
