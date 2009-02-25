@@ -11,6 +11,7 @@
 <Include file="lib\AceConfig-3.0\AceConfig-3.0.xml"/>
 <Include file="lib\LibBabble-Zone-3.0\lib.xml"/>
 <Include file="lib\LibBabble-CreatureType-3.0\lib.xml"/>
+<Include file="lib\LibSink-2.0\lib.xml"/>
 <Script file="lib\LibQTip-1.0\LibQTip-1.0.lua"/>
 
 </Ui>
