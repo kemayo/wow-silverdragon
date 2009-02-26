@@ -60,6 +60,7 @@ local options = {
 	plugins = {
 	},
 }
+module.options = options
 
 function module:OnInitialize()
 	db = core.db.profile
