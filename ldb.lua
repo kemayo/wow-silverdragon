@@ -75,7 +75,7 @@ function module:OnInitialize()
 	end
 	local config = core:GetModule("Config", true)
 	if config then
-		core.options.plugins.LDB = {
+		config.options.plugins.LDB = {
 			type = "group",
 			name = "LDB",
 			args = {
