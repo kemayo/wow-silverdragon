@@ -75,45 +75,47 @@ function module:OnInitialize()
 	end
 	local config = core:GetModule("Config", true)
 	if config then
-		config.options.plugins.LDB = {
-			type = "group",
-			name = "LDB",
-			args = {
-				show_lastseen = {
-					type = "toggle",
-					name = "Show last seen rare",
-					desc = "Toggle showing or hiding the last seen rare as the dataobject's text",
-					get = function() return db.show_lastseen end,
-					set = function(info, v)
-						db.show_lastseen = v
-						if v then
-							if last_seen then
-								dataobject.text = last_seen
-							else
-								dataobject.text = "None"
+		config.options.plugins.broker = {
+			broker = {
+				type = "group",
+				name = "LDB",
+				args = {
+					show_lastseen = {
+						type = "toggle",
+						name = "Show last seen rare",
+						desc = "Toggle showing or hiding the last seen rare as the dataobject's text",
+						get = function() return db.show_lastseen end,
+						set = function(info, v)
+							db.show_lastseen = v
+							if v then
+								if last_seen then
+									dataobject.text = last_seen
+								else
+									dataobject.text = "None"
+								end
 							end
-						end
-					end,
-					order = 10,
-					width = "full",
-				},
-				minimap = {
-					type = "toggle",
-					name = "Show minimap icon",
-					desc = "Toggle showing or hiding the minimap icon.",
-					get = function() return not db.minimap.hide end,
-					set = function(info, v)
-						local hide = not v
-						db.minimap.hide = hide
-						if hide then
-							icon:Hide("SilverDragon")
-						else
-							icon:Show("SilverDragon")
-						end
-					end,
-					order = 30,
-					width = "full",
-					hidden = function() return not icon or not dataobject or not icon:IsRegistered("SilverDragon") end,
+						end,
+						order = 10,
+						width = "full",
+					},
+					minimap = {
+						type = "toggle",
+						name = "Show minimap icon",
+						desc = "Toggle showing or hiding the minimap icon.",
+						get = function() return not db.minimap.hide end,
+						set = function(info, v)
+							local hide = not v
+							db.minimap.hide = hide
+							if hide then
+								icon:Hide("SilverDragon")
+							else
+								icon:Show("SilverDragon")
+							end
+						end,
+						order = 30,
+						width = "full",
+						hidden = function() return not icon or not dataobject or not icon:IsRegistered("SilverDragon") end,
+					},
 				},
 			},
 		}
