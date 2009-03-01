@@ -5,6 +5,7 @@
 <Include file="lib\CallbackHandler-1.0\CallbackHandler-1.0.xml"/>
 <Include file="lib\AceAddon-3.0\AceAddon-3.0.xml"/>
 <Include file="lib\AceEvent-3.0\AceEvent-3.0.xml"/>
+<Include file="lib\AceTimer-3.0\AceTimer-3.0.xml"/>
 <Include file="lib\AceDB-3.0\AceDB-3.0.xml"/>
 <Include file="lib\AceDBOptions-3.0\AceDBOptions-3.0.xml"/>
 <Include file="lib\AceGUI-3.0\AceGUI-3.0.xml"/>
