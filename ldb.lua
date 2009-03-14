@@ -55,7 +55,7 @@ end
 local last_seen
 core.RegisterCallback("LDB", "Seen", function(callback, zone, name)
 	last_seen = name
-	if db.show_lastseen then
+	if db.profile.show_lastseen then
 		dataobject.text = name
 	end
 end)
@@ -66,11 +66,11 @@ function module:OnInitialize()
 			minimap = {},
 		},
 	})
-	db = self.db.profile
+	db = self.db
 	if icon then
 		icon:Register("SilverDragon", dataobject, self.db.profile.minimap)
 	end
-	if db.show_lastseen then
+	if db.profile.show_lastseen then
 		dataobject.text = "None"
 	end
 	local config = core:GetModule("Config", true)
@@ -86,7 +86,7 @@ function module:OnInitialize()
 						desc = "Toggle showing or hiding the last seen rare as the dataobject's text",
 						get = function() return db.show_lastseen end,
 						set = function(info, v)
-							db.show_lastseen = v
+							db.profile.show_lastseen = v
 							if v then
 								if last_seen then
 									dataobject.text = last_seen
@@ -102,10 +102,10 @@ function module:OnInitialize()
 						type = "toggle",
 						name = "Show minimap icon",
 						desc = "Toggle showing or hiding the minimap icon.",
-						get = function() return not db.minimap.hide end,
+						get = function() return not db.profile.minimap.hide end,
 						set = function(info, v)
 							local hide = not v
-							db.minimap.hide = hide
+							db.profile.minimap.hide = hide
 							if hide then
 								icon:Hide("SilverDragon")
 							else
