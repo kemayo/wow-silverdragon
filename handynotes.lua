@@ -189,8 +189,11 @@ end
 
 function module:Seen(callback, zone, name, x, y, dead, new_location)
 	if new_location then
-		nodes[zone][core:GetCoord(x, y)] = name
-		self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
+		local coord = core:GetCoord(x, y)
+		if coord then
+			nodes[zone][coord] = name
+			self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
+		end
 	end
 end
 core.RegisterCallback(module, "Seen")
