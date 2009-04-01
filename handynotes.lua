@@ -188,6 +188,7 @@ function module:OnInitialize()
 end
 
 function module:Seen(callback, zone, name, x, y, dead, new_location)
+	if not nodes[zone] then return end
 	if new_location then
 		local coord = core:GetCoord(x, y)
 		if coord then
