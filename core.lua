@@ -178,7 +178,7 @@ end
 
 local num_worldchildren
 function addon:ScanNameplates()
-	if GetCVar("nameplateShowEnemies") ~= 1 then
+	if GetCVar("nameplateShowEnemies") ~= "1" then
 		return
 	end
 	if num_worldchildren ~= WorldFrame:GetNumChildren() then
@@ -190,9 +190,11 @@ function addon:ScanNameplates()
 	local zone = self:GetPlayerLocation()
 	local zone_mobs = globaldb.mobs_byzone[zone]
 	for nameplate, regions in pairs(nameplates) do
-		if nameplate:IsVisible() and zone_mobs[regions.name:GetText()] then
+		local name = regions.name:GetText()
+		if nameplate:IsVisible() and zone_mobs[name] and (not lastseen[name] or (lastseen[name] < (time() - self.db.profile.delay))) then
 			local x, y = GetPlayerMapPosition('player')
 			self.events:Fire("Seen", zone, name, x, y, false, false)
+			lastseen[name] = time()
 			break -- it's pretty unlikely there'll be two rares on screen at once
 		end
 	end
