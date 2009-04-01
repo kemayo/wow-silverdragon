@@ -260,6 +260,9 @@ function addon:GetPlayerLocation()
 		end
 		C, Z = C2, Z2
 	end
+	if not (continent_list[C] and continent_list[C][Z]) then
+		return
+	end
 	return continent_list[C][Z], x, y
 end
 
