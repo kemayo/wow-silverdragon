@@ -189,6 +189,7 @@ function addon:ScanNameplates()
 	end
 	local zone = self:GetPlayerLocation()
 	local zone_mobs = globaldb.mobs_byzone[zone]
+	if not zone_mobs then return end
 	for nameplate, regions in pairs(nameplates) do
 		local name = regions.name:GetText()
 		if nameplate:IsVisible() and zone_mobs[name] and (not lastseen[name] or (lastseen[name] < (time() - self.db.profile.delay))) then
