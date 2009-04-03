@@ -20,6 +20,10 @@ local tooltip
 function dataobject:OnEnter()
 	local zone, x, y = core:GetPlayerLocation()
 
+	if not (core.db and core.db.global.mobs_byzone[zone]) then
+		return
+	end
+
 	tooltip = LibQTip:Acquire("SilverDragonTooltip", 5, "LEFT", "CENTER", "RIGHT", "RIGHT", "RIGHT")
 	tooltip:AddHeader("Name", "Level", "Type", "Count", "Last Seen")
 	
