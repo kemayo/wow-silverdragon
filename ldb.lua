@@ -84,7 +84,7 @@ function module:OnInitialize()
 						type = "toggle",
 						name = "Show last seen rare",
 						desc = "Toggle showing or hiding the last seen rare as the dataobject's text",
-						get = function() return db.show_lastseen end,
+						get = function() return db.profile.show_lastseen end,
 						set = function(info, v)
 							db.profile.show_lastseen = v
 							if v then
@@ -93,6 +93,8 @@ function module:OnInitialize()
 								else
 									dataobject.text = "None"
 								end
+							else
+								dataobject.text = ""
 							end
 						end,
 						order = 10,
