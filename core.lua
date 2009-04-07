@@ -61,7 +61,7 @@ function addon:ProcessUnit(unit)
 	local newloc = self:SaveMob(zone, name, x, y, level, unittype=='rareelite', creature_type)
 
 	lastseen[name] = time()
-	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc)
+	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, "target")
 end
 
 function addon:SaveMob(zone, name, x, y, level, elite, creature_type, force, unseen)
@@ -123,9 +123,10 @@ end
 function addon:CheckNearby()
 	addon:ScanTargets()
 	addon:ScanNameplates()
+	addon:ScanCache()
 end
 
-local units_to_scan = {'target', 'targettarget', 'party1target', 'party2target', 'party3target', 'party4target', 'party5target'}
+local units_to_scan = {'targettarget', 'party1target', 'party2target', 'party3target', 'party4target', 'party5target'}
 function addon:ScanTargets()
 	for _, unit in ipairs(units_to_scan) do
 		self:ProcessUnit(unit)
@@ -194,7 +195,7 @@ function addon:ScanNameplates()
 		local name = regions.name:GetText()
 		if nameplate:IsVisible() and zone_mobs[name] and (not lastseen[name] or (lastseen[name] < (time() - self.db.profile.delay))) then
 			local x, y = GetPlayerMapPosition('player')
-			self.events:Fire("Seen", zone, name, x, y, false, false)
+			self.events:Fire("Seen", zone, name, x, y, false, false, "nameplate")
 			lastseen[name] = time()
 			break -- it's pretty unlikely there'll be two rares on screen at once
 		end

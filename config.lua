@@ -52,6 +52,7 @@ local options = {
 						end
 						local count = Data:Import()
 						module:Print(("Imported %d rares."):format(count))
+						core.events:Fire("Import")
 					end,
 				},
 			},
