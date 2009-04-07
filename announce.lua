@@ -48,7 +48,7 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source)
 		self:Pour(("Rare seen: %s%s (%s)"):format(name, dead and "... but it's dead" or '', source or ''))
 	end
 	if self.db.profile.sound then
-		--PlaySoundfile(What to play...?)
+		PlaySound("ReadyCheck")
 	end
 	if self.db.profile.flash then
 		UIFrameFlash(LowHealthFrame, 0.5, 0.5, 6, false, 0.5)
