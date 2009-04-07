@@ -41,7 +41,7 @@ function handler:OnEnter(mapFile, coord)
 	end
 	local name, _, level, elite, creature_type, lastseen = core:GetMobByCoord(mapFile, coord)
 	tooltip:AddLine(name)
-	tooltip:AddDoubleLine(("%s%s"):format(level or '??', elite and '+' or ''), creature_type)
+	tooltip:AddDoubleLine(("%s%s"):format(level or '??', elite and '+' or ''), creature_type or UNKNOWN)
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
 	tooltip:Show()
 end
