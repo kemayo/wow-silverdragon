@@ -30,7 +30,7 @@ function module:OnNoteTooltipRequest(zone, id, data, inMinimap)
 	if not zone or not core.db.global.mobs_byzone[zone][data.title] then return end
 	local _, level, elite, creature_type, lastseen = core:GetMob(zone, data.title)
 	local cat = tablet:AddCategory('text', data.title, 'justify', 'CENTER')
-	cat:AddLine('text', ("%s%s %s"):format(level or '??', elite and '+' or '', creature_type))
+	cat:AddLine('text', ("%s%s %s"):format(level or '??', elite and '+' or '', creature_type or UNKNOWN))
 	cat:AddLine('text', "Last seen: "..core:FormatLastSeen(lastseen))
 end
 
