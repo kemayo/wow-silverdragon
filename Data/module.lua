@@ -17,8 +17,10 @@ function module:Import()
 		end
 		for name, info in pairs(mobs) do
 			mob_count = mob_count + 1
+			gdb.mob_id[name] = info.id
 			gdb.mob_level[name] = info.level
 			gdb.mob_type[name] = BCTR[info.creature_type]
+			gdb.mob_tameable[name] = info.tameable
 			if info.elite then gdb.mob_elite[name] = true end
 			if not gdb.mobs_byzone[zone][name] then
 				gdb.mobs_byzone[zone][name] = 0 -- never seen

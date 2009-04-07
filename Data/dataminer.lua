@@ -4,7 +4,7 @@
 --get socket here: http://luaforge.net/projects/luasocket/
 --if available curl will be used, which allows connection re-use
 
-local SOURCE = SOURCE or "Defaults.lua"
+local SOURCE = SOURCE or "defaults.lua"
 local DEBUG = DEBUG or 1
 
 local function dprint(dlevel, ...)
@@ -116,9 +116,11 @@ function module:GetDefaults()
 		f:write('\t\t["'..zone..'"] = {\n')
 		for name, mob in pairs(mobs) do
 			f:write('\t\t\t["'..name..'"] = {')
+			if mob.id then f:write('id='..mob.id..',') end
 			if mob.level then f:write('level='..mob.level..',') end
 			if mob.creature_type then f:write('creature_type="'..mob.creature_type..'",') end
 			if mob.elite then f:write('elite=true,') end
+			if mob.tameable then f:write('tameable=true,') end
 			f:write('locations = {')
 			for _,loc in pairs(mob.locations) do
 				f:write(loc..',')
@@ -171,6 +173,18 @@ local function npc_coords(id)
 		table.insert(coords, {tonumber(x)/100, tonumber(y)/100})
 	end
 	return coords
+end
+
+local function npc_tameable(id)
+	local url = "http://www.wowhead.com/?npc="..id
+	local page = getpage(url)
+	if not page then return end
+	
+	page = page:match("<div>Tameable %([^)]+%)</div>")
+	if page then
+		return true
+	end
+	return nil
 end
 
 local npctypes = {
@@ -244,10 +258,12 @@ local function main()
 				end
 				if not defaults[zone] then defaults[zone] = {} end
 				defaults[zone][name] = {
+					id = id,
 					level = level,
 					creature_type = ctype,
 					locations = locations,
 					elite = elite,
+					tameable = npc_tameable(id),
 				}
 				print("Added "..name.." to "..zone)
 			end
