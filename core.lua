@@ -98,7 +98,7 @@ function addon:GetMob(zone, name)
 	if not globaldb.mobs_byzone[zone][name] then
 		return 0, 0, false, nil, nil
 	end
-	return #globaldb.mob_locations[name], globaldb.mob_level[name], globaldb.mob_elite[name], BCT[globaldb.mob_type[name]], globaldb.mobs_byzone[zone][name], globaldb.mob_count[name]
+	return #globaldb.mob_locations[name], globaldb.mob_level[name], globaldb.mob_elite[name], BCT[globaldb.mob_type[name]], globaldb.mobs_byzone[zone][name], globaldb.mob_count[name], globaldb.mob_id[name], globaldb.mob_tameable[name]
 end
 
 function addon:GetMobByCoord(zone, coord)
