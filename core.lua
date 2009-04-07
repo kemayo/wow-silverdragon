@@ -239,7 +239,7 @@ function addon:ScanCache()
 	if not zone_mobs then return end
 	for mob, lastseen in pairs(zone_mobs) do
 		local id = globaldb.mob_id[mob]
-		if (not globaldb.mob_tameable[mob] or self.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
+		if id and (not globaldb.mob_tameable[mob] or self.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
 			already_cached[id] = true
 			self.events:Fire("Seen", zone, mob, x, y, false, false, "cache")
 		end
