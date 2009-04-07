@@ -30,7 +30,7 @@ local options = {
 				},
 				cache_tameable = {
 					type = "toggle",
-					name = "Cached: Tameable",
+					name = "Cache alert: Tameable",
 					desc = "The cache-scanning method has no way to tell whether a mob is a hunter's pet. So to avoid getting spam, you can disable notifications for mobs found through this method that it is possible to tame.",
 					order = 30,
 				},
