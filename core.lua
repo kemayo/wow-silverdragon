@@ -16,6 +16,7 @@ function addon:OnInitialize()
 			mob_locations = {
 				['*'] = {}, -- mob names
 			},
+			mob_id = {}, -- NPC ids, only available for mobs from wowhead
 			mob_type = {},
 			mob_level = {},
 			mob_elite = {},
@@ -201,6 +202,56 @@ function addon:ScanNameplates()
 		end
 	end
 end
+
+local already_cached = {}
+local first_cachescan = true
+local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip")
+cache_tooltip:AddFontStrings(
+    cache_tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"),
+	cache_tooltip:CreateFontString("$parentTextRight1", nil, "GameTooltipText")
+)
+
+local function is_cached(id)
+	-- this doesn't work with just clearlines and the setowner outside of this, and I'm not sure why
+	cache_tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
+	cache_tooltip:SetHyperlink(("unit:0xF53000%04X000000"):format(id))
+	return cache_tooltip:IsShown()
+end
+addon.is_cached = is_cached
+
+addon.already_cached = already_cached
+
+function addon:ScanCache()
+	if first_cachescan then
+		for mob, id in pairs(globaldb.mob_id) do
+			if is_cached(id) then
+				already_cached[id] = true
+			end
+		end
+		first_cachescan = false
+		return
+	end
+	local zone = self:GetPlayerLocation()
+	local x, y = GetPlayerMapPosition('player')
+	local zone_mobs = globaldb.mobs_byzone[zone]
+	if not zone_mobs then return end
+	for mob, lastseen in pairs(zone_mobs) do
+		local id = globaldb.mob_id[mob]
+		if not already_cached[id] and is_cached(id) then
+			already_cached[id] = true
+			if not first_cachescan then
+				self.events:Fire("Seen", zone, mob, x, y, false, false, "cache")
+			end
+		end
+	end
+	first_cachescan = false
+end
+addon.RegisterCallback(addon, "Import", function()
+	if first_cachescan then
+		table.wipe(already_cached)
+		first_cachescan = true
+	end
+end)
 
 -- Utility:
 
