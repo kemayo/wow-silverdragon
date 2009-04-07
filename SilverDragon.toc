@@ -21,6 +21,7 @@ lib\LibDataBroker-1.1.lua
 core.lua
 
 config.lua
+
 ldb.lua
 announce.lua
 
