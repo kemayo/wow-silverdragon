@@ -20,6 +20,7 @@ function addon:OnInitialize()
 			mob_type = {},
 			mob_level = {},
 			mob_elite = {},
+			mob_tameable = {},
 			mob_count = {
 				['*'] = 0,
 			},
@@ -27,6 +28,7 @@ function addon:OnInitialize()
 		profile = {
 			scan = 0.5, -- scan interval, 0 for never
 			delay = 600, -- number of seconds to wait between recording the same mob
+			cache_tameable = true, -- whether to alert for tameable mobs found through cache-scanning
 		},
 	})
 	globaldb = self.db.global
@@ -237,11 +239,9 @@ function addon:ScanCache()
 	if not zone_mobs then return end
 	for mob, lastseen in pairs(zone_mobs) do
 		local id = globaldb.mob_id[mob]
-		if not already_cached[id] and is_cached(id) then
+		if (not globaldb.mob_tameable[mob] or self.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
 			already_cached[id] = true
-			if not first_cachescan then
-				self.events:Fire("Seen", zone, mob, x, y, false, false, "cache")
-			end
+			self.events:Fire("Seen", zone, mob, x, y, false, false, "cache")
 		end
 	end
 	first_cachescan = false

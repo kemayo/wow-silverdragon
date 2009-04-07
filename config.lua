@@ -28,6 +28,12 @@ local options = {
 					min = 30, max = (60 * 60), step = 10,
 					order = 20,
 				},
+				cache_tameable = {
+					type = "toggle",
+					name = "Cached: Tameable",
+					desc = "The cache-scanning method has no way to tell whether a mob is a hunter's pet. So to avoid getting spam, you can disable notifications for mobs found through this method that it is possible to tame.",
+					order = 30,
+				},
 			},
 		},
 		import = {
