@@ -31,6 +31,8 @@ lib\LibSink-2.0\lib.xml
 lib\LibDataBroker-1.1.lua
 lib\LibDBIcon-1.0\LibDBIcon-1.0.lua
 lib\LibQTip-1.0\LibQTip-1.0.lua
+lib\LibSharedMedia-3.0\lib.xml
+lib\AceGUI-3.0-SharedMediaWidgets\widget.xml
 #@end-no-lib-strip@
 
 # the core
@@ -46,6 +48,8 @@ clicktarget.lua
 handynotes.lua
 cartographer.lua
 
+#@alpha@
 # data imports
 Data\module.lua
 Data\defaults.lua
+#@end-alpha@
