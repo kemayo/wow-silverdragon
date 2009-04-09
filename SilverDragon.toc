@@ -15,11 +15,23 @@
 
 ## X-Embeds: Ace3, LibSink-2.0, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0
 
-embeds.xml
+lib\LibStub\LibStub.lua
+lib\CallbackHandler-1.0\CallbackHandler-1.0.xml
+lib\AceAddon-3.0\AceAddon-3.0.xml
+lib\AceEvent-3.0\AceEvent-3.0.xml
+lib\AceTimer-3.0\AceTimer-3.0.xml
+lib\AceDB-3.0\AceDB-3.0.xml
+lib\AceDBOptions-3.0\AceDBOptions-3.0.xml
+lib\AceGUI-3.0\AceGUI-3.0.xml
+lib\AceConfig-3.0\AceConfig-3.0.xml
+lib\LibBabble-Zone-3.0\lib.xml
+lib\LibBabble-CreatureType-3.0\lib.xml
+lib\LibSink-2.0\lib.xml
 lib\LibDataBroker-1.1.lua
+lib\LibDBIcon-1.0\LibDBIcon-1.0.lua
+lib\LibQTip-1.0\LibQTip-1.0.lua
 
 core.lua
-
 config.lua
 
 ldb.lua
@@ -30,4 +42,3 @@ cartographer.lua
 
 Data\module.lua
 Data\defaults.lua
-
