@@ -42,5 +42,7 @@ announce.lua
 handynotes.lua
 cartographer.lua
 
+#@alpha@
 Data\module.lua
 Data\defaults.lua
+#@end-alpha@
