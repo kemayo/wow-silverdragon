@@ -1,7 +1,7 @@
 ﻿## Interface: 30000
 ## Title: SilverDragon (Data)
 ## Notes: Default set of rares for SilverDragon
-## Version: 1.0
+## Version: @project-version@
 ## Author: Kemayo
 ## eMail: kemayo at gmail dot com
 ## X-Category: Interface Enhancements
@@ -11,4 +11,3 @@
 
 module.lua
 defaults.lua
-
