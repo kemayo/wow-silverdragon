@@ -4,7 +4,7 @@
 ## Title-zhTW: SilverDragon
 ## Notes-zhTW: 協助記錄稀有怪位置,以及MouseOver時提示你.
 ## Notes-zhCN: 记录稀有怪物位置。
-## Version: 1.0
+## Version: @project-version@
 ## Author: Kemayo
 ## eMail: kemayo at gmail dot com
 ## X-Category: Interface Enhancements
@@ -15,6 +15,7 @@
 
 ## X-Embeds: Ace3, LibSink-2.0, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0
 
+#@no-lib-strip@
 lib\LibStub\LibStub.lua
 lib\CallbackHandler-1.0\CallbackHandler-1.0.xml
 lib\AceAddon-3.0\AceAddon-3.0.xml
@@ -30,6 +31,7 @@ lib\LibSink-2.0\lib.xml
 lib\LibDataBroker-1.1.lua
 lib\LibDBIcon-1.0\LibDBIcon-1.0.lua
 lib\LibQTip-1.0\LibQTip-1.0.lua
+#@end-no-lib-strip@
 
 core.lua
 config.lua
