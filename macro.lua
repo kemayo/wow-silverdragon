@@ -15,8 +15,8 @@ function module:OnInitialize()
 		local function toggle(name, desc)
 			return {type = "toggle", name = name, desc = desc,}
 		end
-		config.options.plugins.clicktarget = {
-			clicktarget = {
+		config.options.plugins.macro = {
+			macro = {
 				type = "group",
 				name = "Macro",
 				get = function(info) return self.db.profile[info[#info]] end,
