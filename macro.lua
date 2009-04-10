@@ -26,7 +26,7 @@ function module:OnInitialize()
 						type = "description",
 						name = "Creates a button that can be used in a macro to target rares that might be nearby.\n\n"..
 							"Either create a macro that says: /click SilverDragonMacroButton\n\n"..
-							"...or click the \"Create Macro\" button below.",
+							"...or click the \"Create Macro\" button below. It'll make a new macro called SilverDragon. Drag it to your bars and click it to target rares that might be nearby.",
 						order = 0,
 					},
 					create = {
@@ -61,7 +61,7 @@ end
 
 function module:CreateMacro()
 	if InCombatLockdown() then
-		return self:Print("Can't make a macro while in combat!", 1, 0, 0)
+		return self:Print("|cffff0000Can't make a macro while in combat!|r")
 	end
 	LoadAddOn("Blizzard_MacroUI") -- required for MAX_ACCOUNT_MACROS
 	local macroIndex = GetMacroIndexByName("SilverDragon")
@@ -71,8 +71,10 @@ function module:CreateMacro()
 			--/script for i=1,GetNumMacroIcons() do if GetMacroIconInfo(i):match("SniperTraining$") then DEFAULT_CHAT_FRAME:AddMessage(i) end end
 			CreateMacro("SilverDragon", 180, "/click SilverDragonMacroButton", nil, nil)
 		else
-			self:Print("Couldn't create rare-scanning macro, too many macros already created.", 1, 0, 0)
+			self:Print("|cffff0000Couldn't create rare-scanning macro, too many macros already created.|r")
 		end
+	else
+		self:Print("|cffff0000A macro named SilverDragon already exists.|r")
 	end
 end
 
