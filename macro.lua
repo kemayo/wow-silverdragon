@@ -77,7 +77,6 @@ function module:CreateMacro()
 end
 
 function module:ZONE_CHANGED_NEW_AREA(...)
-	LibStub("AceConsole-2.0"):PrintLiteral(..., core:GetPlayerLocation())
 	if InCombatLockdown() then
 		self.waiting = true
 	else
