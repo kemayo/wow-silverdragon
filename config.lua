@@ -62,28 +62,29 @@ local options = {
 			type = "group",
 			name = "Import Data",
 			hidden = function()
-				return not (core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")))
+				return not ( core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")) )
 			end,
 			order = 10,
 			args = {
 				desc = {
 					order = 0,
 					type = "description",
-					name = "",
+					name = "SilverDragon comes with a pre-built database of known locations of rare mobs. Click the button below to import the data.",
 				},
 				load = {
 					order = 10,
 					type = "execute",
 					name = "Import Data",
 					func = function()
-						local loaded, reason = LoadAddOn("SilverDragon_Data")
-						local Data = core:GetModule("Data")
+						LoadAddOn("SilverDragon_Data")
+						local Data = core:GetModule("Data", true)
 						if not Data then
-							module:Print("Couldn't find SilverDragon_Data.")
+							module:Print("Database not found. Aborting import.") -- safety check, just in case.
+							return
 						end
 						local count = Data:Import()
-						module:Print(("Imported %d rares."):format(count))
 						core.events:Fire("Import")
+						module:Print(("Imported %d rares."):format(count))
 					end,
 				},
 			},
@@ -109,4 +110,3 @@ end
 function module:ShowConfig()
 	LibStub("AceConfigDialog-3.0"):Open("SilverDragon")
 end
-
