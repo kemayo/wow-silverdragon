@@ -51,7 +51,7 @@ function addon:UPDATE_MOUSEOVER_UNIT()
 end
 
 local lastseen = {}
-function addon:ProcessUnit(unit)
+function addon:ProcessUnit(unit, source)
 	local unittype = UnitClassification(unit)
 	if not (unittype == 'rare' or unittype == 'rareelite') then return end
 	local name = UnitName(unit)
@@ -64,7 +64,7 @@ function addon:ProcessUnit(unit)
 	local newloc = self:SaveMob(zone, name, x, y, level, unittype=='rareelite', creature_type)
 
 	lastseen[name] = time()
-	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, "target")
+	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, 'target', unit)
 end
 
 function addon:SaveMob(zone, name, x, y, level, elite, creature_type, force, unseen)

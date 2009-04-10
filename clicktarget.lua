@@ -5,6 +5,7 @@ function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("ClickTarget", {
 		profile = {
 			show = true,
+			model = true,
 		},
 	})
 	core.RegisterCallback(self, "Seen")
@@ -27,14 +28,15 @@ function module:OnInitialize()
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
-					show = toggle("Show", "Show the click-target frame.")
+					show = toggle("Show", "Show the click-target frame."),
+					model = toggle("Model", "Show a 3d model of the rare, if possible."),
 				},
 			},
 		}
 	end
 end
 
-function module:ShowFrame(zone, name)
+function module:ShowFrame(zone, name, unit)
 	local id = select(7, core:GetMob(zone, name))
 	local popup = self.popup
 	popup:SetAttribute("macrotext", "/cleartarget\n/targetexact "..name)
@@ -43,18 +45,24 @@ function module:ShowFrame(zone, name)
 
 	popup:SetText(name)
 
-	popup.model:SetCreature(id)
-	--if type(popup.model:GetModel()) == "string" then
-		-- fiddle with positioning?
-	--end
+	if self.db.profile.model and (id or unit) then
+		if id then
+			popup.model:SetCreature(id)
+		else
+			popup.model:SetUnit(unit)
+		end
+		popup.model:SetModelScale(0.7)
+	else
+		popup.model:Hide()
+	end
 end
 
-function module:Seen(callback, zone, name, x, y, dead, newloc, source)
+function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit)
 	if InCombatLockdown() then
 		self.next_zone = zone
 		self.next_name = name
 	else
-		self:ShowFrame(zone, name)
+		self:ShowFrame(zone, name, unit)
 	end
 end
 
@@ -101,6 +109,7 @@ back:SetPoint("BOTTOMLEFT", 3, 3)
 back:SetPoint("TOPRIGHT", -3, -3)
 back:SetTexCoord(0, 1, 0, 0.25)
 
+--[[
 local titleback = popup:CreateTexture(nil, "ARTWORK")
 popup.titleback = titleback
 titleback:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Title")
@@ -109,15 +118,16 @@ titleback:SetPoint("LEFT", 5, 0)
 titleback:SetHeight(18)
 titleback:SetTexCoord(0, 0.9765625, 0, 0.3125)
 titleback:SetAlpha(0.8)
+--]]
 
-local title = popup:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall");
+local title = popup:CreateFontString(nil, "OVERLAY", "GameFontHighlightMedium");
 popup.title = title
-title:SetPoint("TOPLEFT", titleback, "TOPLEFT", 32, -4)
-title:SetPoint("RIGHT", titleback, "RIGHT")
+title:SetPoint("TOPLEFT", popup, "TOPLEFT", 4, -6)
+title:SetPoint("RIGHT", popup, "RIGHT")
 popup:SetFontString(title)
 
 local subtitle = popup:CreateFontString(nil, "OVERLAY", "GameFontBlackTiny")
-subtitle:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 12, 4)
+subtitle:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 4, 6)
 subtitle:SetPoint("RIGHT", title)
 subtitle:SetText("Click to Target")
 
@@ -134,7 +144,7 @@ popup.drag = popup:CreateTitleRegion()
 -- Close button
 local close = CreateFrame("Button", nil, popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
 popup.close = close
-close:SetPoint("TOPLEFT")
+close:SetPoint("TOPRIGHT", popup, "TOPRIGHT", 12, 12)
 close:SetWidth(32)
 close:SetHeight(32)
 close:SetScale(0.8)
@@ -163,11 +173,11 @@ popup.glow = glow
 glow:SetPoint("CENTER")
 glow:SetWidth(400 / 300 * popup:GetWidth())
 glow:SetHeight(171 / 88 * popup:GetHeight())
-local Texture = glow:CreateTexture(nil, "OVERLAY")
-Texture:SetAllPoints()
-Texture:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Alert-glow")
-Texture:SetBlendMode("ADD")
-Texture:SetTexCoord(0, 0.78125, 0, 0.66796875)
+local texture = glow:CreateTexture(nil, "OVERLAY")
+texture:SetAllPoints()
+texture:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Alert-glow")
+texture:SetBlendMode("ADD")
+texture:SetTexCoord(0, 0.78125, 0, 0.66796875)
 
 popup:SetAttribute("type", "macro")
 
@@ -180,7 +190,6 @@ local on_show = function()
 	
 	local model = popup.model
 	model:ClearModel()
-	model:SetModelScale(0.75)
 	model:SetPosition(0, 0, 0)
 	model:SetFacing(0)
 end
