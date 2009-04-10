@@ -43,6 +43,7 @@ config.lua
 ldb.lua
 announce.lua
 clicktarget.lua
+macro.lua
 
 # map plugins
 handynotes.lua
