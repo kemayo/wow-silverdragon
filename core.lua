@@ -29,6 +29,10 @@ function addon:OnInitialize()
 			scan = 0.5, -- scan interval, 0 for never
 			delay = 600, -- number of seconds to wait between recording the same mob
 			cache_tameable = true, -- whether to alert for tameable mobs found through cache-scanning
+			mouseover = true,
+			targets = true,
+			nameplates = true,
+			cache = true,
 		},
 	})
 	globaldb = self.db.global
@@ -43,11 +47,15 @@ function addon:OnEnable()
 end
 
 function addon:PLAYER_TARGET_CHANGED()
-	self:ProcessUnit('target')
+	if self.db.profile.targets then
+		self:ProcessUnit('target')
+	end
 end
 
 function addon:UPDATE_MOUSEOVER_UNIT()
-	self:ProcessUnit('mouseover')
+	if self.db.profile.mouseover then
+		self:ProcessUnit('mouseover')
+	end
 end
 
 local lastseen = {}
@@ -126,9 +134,15 @@ end
 -- Scanning:
 
 function addon:CheckNearby()
-	addon:ScanTargets()
-	addon:ScanNameplates()
-	addon:ScanCache()
+	if self.db.profile.targets then
+		addon:ScanTargets()
+	end
+	if self.db.profile.nameplates then
+		addon:ScanNameplates()
+	end
+	if self.db.profile.cache then
+		addon:ScanCache()
+	end
 end
 
 local units_to_scan = {'targettarget', 'party1target', 'party2target', 'party3target', 'party4target', 'party5target'}

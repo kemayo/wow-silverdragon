@@ -15,11 +15,7 @@ function module:OnInitialize()
 	local config = core:GetModule("Config", true)
 	if config then
 		local function toggle(name, desc)
-			return {
-				type = "toggle",
-				name = name,
-				desc = desc,
-			}
+			return {type = "toggle", name = name, desc = desc,}
 		end
 		config.options.plugins.clicktarget = {
 			clicktarget = {

@@ -3,6 +3,10 @@ local module = core:NewModule("Config", "AceConsole-3.0")
 
 local db
 
+local function toggle(name, desc, order)
+	return {type = "toggle", name = name, desc = desc, order=order,}
+end
+
 local options = {
 	type = "group",
 	name = "SilverDragon",
@@ -28,11 +32,29 @@ local options = {
 					min = 30, max = (60 * 60), step = 10,
 					order = 20,
 				},
+				methods = {
+					type = "group",
+					name = "Scan methods",
+					desc = "Which approaches to use for scanning.",
+					order = 30,
+					inline = true,
+					args = {
+						about = {
+							type = "description",
+							name = "Choose the approaches to be used when searching for rare mobs. Note that if you disable all of them, this addon becomes pretty useless...",
+							order = 0,
+						},
+						mouseover = toggle("Mouseover", "Check mobs that you mouse over.", 10),
+						targets = toggle("Targets", "Check the targets of people in your group.", 20),
+						nameplates = toggle("Nameplates", "Check nameplates of mobs that you are close to", 30),
+						cache = toggle("Cache", "Scan the mob cache for never-before-found mobs.", 40),
+					},
+				},
 				cache_tameable = {
 					type = "toggle",
 					name = "Cache alert: Tameable",
 					desc = "The cache-scanning method has no way to tell whether a mob is a hunter's pet. So to avoid getting spam, you can disable notifications for mobs found through this method that it is possible to tame.",
-					order = 30,
+					order = 40,
 				},
 			},
 		},
