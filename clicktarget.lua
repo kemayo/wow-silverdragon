@@ -6,6 +6,13 @@ function module:OnInitialize()
 		profile = {
 			show = true,
 			model = true,
+			sources = {
+				target = false,
+				grouptarget = true,
+				cache = true,
+				mouseover = true,
+				nameplate = true,
+			},
 		},
 	})
 	core.RegisterCallback(self, "Seen")
@@ -14,8 +21,8 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
-		local function toggle(name, desc)
-			return {type = "toggle", name = name, desc = desc,}
+		local function toggle(name, desc, order)
+			return {type = "toggle", name = name, desc = desc, order=order,}
 		end
 		config.options.plugins.clicktarget = {
 			clicktarget = {
@@ -24,8 +31,27 @@ function module:OnInitialize()
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
-					show = toggle("Show", "Show the click-target frame."),
-					model = toggle("Model", "Show a 3d model of the rare, if possible."),
+					about = {
+						type = "description",
+						name = "Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it. It can show a 3d model of that rare, but only if we already know the ID of the rare (though a data import), or if it was found by being targetted. Nameplates are right out.",
+						order = 0,
+					},
+					show = toggle("Show", "Show the click-target frame.", 10),
+					model = toggle("Model", "Show a 3d model of the rare, if possible.", 20),
+					sources = {
+						type="multiselect",
+						name = "Rare Sources",
+						desc = "Which ways of finding a rare should cause this frame to appear?",
+						get = function(info, key) return self.db.profile.sources[key] end,
+						set = function(info, key, v) self.db.profile.sources[key] = v end,
+						values = {
+							target = "Targets",
+							grouptarget = "Group targets",
+							mouseover = "Mouseover",
+							nameplate = "Nameplates",
+							cache = "Unit cache",
+						},
+					},
 				},
 			},
 		}
@@ -54,6 +80,7 @@ function module:ShowFrame(zone, name, unit)
 end
 
 function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit)
+	if not self.db.profile.sources[source] then return end
 	if InCombatLockdown() then
 		self.next_zone = zone
 		self.next_name = name

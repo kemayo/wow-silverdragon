@@ -48,13 +48,13 @@ end
 
 function addon:PLAYER_TARGET_CHANGED()
 	if self.db.profile.targets then
-		self:ProcessUnit('target')
+		self:ProcessUnit('target', 'target')
 	end
 end
 
 function addon:UPDATE_MOUSEOVER_UNIT()
 	if self.db.profile.mouseover then
-		self:ProcessUnit('mouseover')
+		self:ProcessUnit('mouseover', 'mouseover')
 	end
 end
 
@@ -72,7 +72,7 @@ function addon:ProcessUnit(unit, source)
 	local newloc = self:SaveMob(zone, name, x, y, level, unittype=='rareelite', creature_type)
 
 	lastseen[name] = time()
-	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, 'target', unit)
+	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, source or 'target', unit)
 end
 
 function addon:SaveMob(zone, name, x, y, level, elite, creature_type, force, unseen)
@@ -148,7 +148,7 @@ end
 local units_to_scan = {'targettarget', 'party1target', 'party2target', 'party3target', 'party4target', 'party5target'}
 function addon:ScanTargets()
 	for _, unit in ipairs(units_to_scan) do
-		self:ProcessUnit(unit)
+		self:ProcessUnit(unit, 'grouptarget')
 	end
 end
 
