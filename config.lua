@@ -61,6 +61,9 @@ local options = {
 		import = {
 			type = "group",
 			name = "Import Data",
+			hidden = function()
+				return not (core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")))
+			end,
 			order = 10,
 			args = {
 				desc = {
