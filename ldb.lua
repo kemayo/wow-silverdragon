@@ -24,14 +24,21 @@ function dataobject:OnEnter()
 		return
 	end
 
-	tooltip = LibQTip:Acquire("SilverDragonTooltip", 6, "LEFT", "CENTER", "RIGHT", "RIGHT", "RIGHT", "RIGHT")
+	tooltip = LibQTip:Acquire("SilverDragonTooltip", 6, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT")
 	tooltip:AddHeader("Name", "Level", "Type", "Count", "Last Seen")
 	
 	local n = 0
 	for name in pairs(core.db.global.mobs_byzone[zone]) do
 		n = n + 1
 		local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
-		tooltip:AddLine(name, ("%s%s"):format(level > 0 and level or '?', elite and '+' or ''), BCT[creature_type], count, core:FormatLastSeen(lastseen), tameable and 'Tameable')
+		local cached = id and core.already_cached[id]
+		tooltip:AddLine(name,
+			("%s%s"):format(level > 0 and level or '?', elite and '+' or ''),
+			BCT[creature_type],
+			count,
+			core:FormatLastSeen(lastseen),
+			(tameable and 'Tameable' or '') .. ((tameable and cached) and ', ' or '') .. (cached and 'Cached' or '')
+		)
 	end
 	if n == 0 then
 		tooltip:AddLine("None")
