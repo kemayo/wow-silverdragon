@@ -130,12 +130,12 @@ function module:ToggleDrag(state)
 	end
 end
 
--- And set up the frame (it's mostly a clone of the achievement frame)
+-- And set up the frame
 local popup = CreateFrame("Button", "SilverDragonPopupButton", nil, "SecureActionButtonTemplate")
 module.popup = popup
 
 popup:SetWidth(190)
-popup:SetHeight(60)
+popup:SetHeight(70)
 popup:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -260, 270)
 popup:SetMovable(true)
 popup:SetUserPlaced(true)
@@ -150,23 +150,22 @@ back:SetPoint("BOTTOMLEFT", 3, 3)
 back:SetPoint("TOPRIGHT", -3, -3)
 back:SetTexCoord(0, 1, 0, 0.25)
 
--- Model view
-local model = CreateFrame("PlayerModel", nil, popup)
-popup.model = model
-model:SetHeight(popup:GetHeight() - 10)
-model:SetWidth(popup:GetHeight() - 10)
-model:SetPoint("TOPLEFT", popup, "TOPLEFT", 6, -6)
-model:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 6, 6)
-
 local title = popup:CreateFontString(nil, "OVERLAY", "GameFontHighlightMedium");
 popup.title = title
-title:SetPoint("TOPLEFT", model, "TOPRIGHT", 2, -2)
+title:SetPoint("TOPLEFT", popup, "TOPLEFT", 6, -6)
 title:SetPoint("RIGHT", popup, "RIGHT", -4, 0)
 popup:SetFontString(title)
 
+local model = CreateFrame("PlayerModel", nil, popup)
+popup.model = model
+model:SetHeight(popup:GetHeight() - 20)
+model:SetWidth(popup:GetHeight() - 20)
+model:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -2)
+model:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 6, 6)
+
 local details = popup:CreateFontString(nil, "OVERLAY", "GameFontBlackTiny")
 popup.details = details
-details:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
+details:SetPoint("TOPLEFT", model, "TOPRIGHT", 2, -2)
 details:SetPoint("RIGHT", title)
 
 local subtitle = popup:CreateFontString(nil, "OVERLAY", "GameFontBlackTiny")
