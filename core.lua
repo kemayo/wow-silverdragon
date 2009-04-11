@@ -66,6 +66,7 @@ function addon:ProcessUnit(unit, source)
 	if not (UnitIsVisible(unit) and (not lastseen[name]) or (lastseen[name] < (time() - self.db.profile.delay))) then return end
 
 	local zone, x, y = self:GetPlayerLocation()
+	if not zone then return end
 	local level = UnitLevel(unit)
 	local creature_type = UnitCreatureType(unit)
 	
@@ -76,8 +77,9 @@ function addon:ProcessUnit(unit, source)
 end
 
 function addon:SaveMob(zone, name, x, y, level, elite, creature_type, force, unseen)
+	if not (zone and name) then return end
 	-- saves a mob's information, returns true if this is the first time a mob has been seen at this location
-	if not globaldb.mob_locations then globaldb.mob_locations = {} end
+	if not globaldb.mob_locations[name] then globaldb.mob_locations[name] = {} end
 
 	globaldb.mobs_byzone[zone][name] = unseen and 0 or time()
 	globaldb.mob_level[name] = level
@@ -85,6 +87,8 @@ function addon:SaveMob(zone, name, x, y, level, elite, creature_type, force, uns
 	globaldb.mob_type[name] = BCTR[creature_type]
 	globaldb.mob_count[name] = globaldb.mob_count[name] + (unseen and 0 or 1)
 	
+	if not (x and y and x > 0 and y > 0) then return end
+
 	local newloc = true
 	if not force then
 		for _, coord in ipairs(globaldb.mob_locations[name]) do
@@ -104,7 +108,7 @@ end
 
 -- Returns num_locs, level, is_elite, creature_type, last_seen, times_seen, mob_id, is_tameable
 function addon:GetMob(zone, name)
-	if not globaldb.mobs_byzone[zone][name] then
+	if not (zone and name and globaldb.mobs_byzone[zone][name]) then
 		return 0, 0, false, nil, nil
 	end
 	return #globaldb.mob_locations[name], globaldb.mob_level[name], globaldb.mob_elite[name], BCT[globaldb.mob_type[name]], globaldb.mobs_byzone[zone][name], globaldb.mob_count[name], globaldb.mob_id[name], globaldb.mob_tameable[name]
@@ -208,6 +212,7 @@ function addon:ScanNameplates()
 		end
 	end
 	local zone = self:GetPlayerLocation()
+	if not zone then return end
 	local zone_mobs = globaldb.mobs_byzone[zone]
 	if not zone_mobs then return end
 	for nameplate, regions in pairs(nameplates) do
@@ -249,8 +254,8 @@ function addon:ScanCache()
 		first_cachescan = false
 		return
 	end
-	local zone = self:GetPlayerLocation()
-	local x, y = GetPlayerMapPosition('player')
+	local zone, x, y = self:GetPlayerLocation()
+	if not zone then return end
 	local zone_mobs = globaldb.mobs_byzone[zone]
 	if not zone_mobs then return end
 	for mob, lastseen in pairs(zone_mobs) do
