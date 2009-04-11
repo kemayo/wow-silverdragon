@@ -1,3 +1,5 @@
+local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("ClickTarget", "AceEvent-3.0")
 
@@ -59,13 +61,14 @@ function module:OnInitialize()
 end
 
 function module:ShowFrame(zone, name, unit)
-	local id = select(7, core:GetMob(zone, name))
+	local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
 	local popup = self.popup
 	popup:SetAttribute("macrotext", "/cleartarget\n/targetexact "..name)
 	popup:Enable()
 	popup:Show()
 
 	popup:SetText(name)
+	popup.details:SetText(("%s%s %s"):format(level or '??', elite and '+' or '', BCT[creature_type]))
 
 	if self.db.profile.model and (id or unit) then
 		if id then
@@ -73,7 +76,7 @@ function module:ShowFrame(zone, name, unit)
 		else
 			popup.model:SetUnit(unit)
 		end
-		popup.model:SetModelScale(0.7)
+		popup.model:SetCamera(0) -- portrait
 	else
 		popup.model:Hide()
 	end
@@ -116,8 +119,8 @@ end
 local popup = CreateFrame("Button", "SilverDragonPopupButton", nil, "SecureActionButtonTemplate")
 module.popup = popup
 
-popup:SetWidth(170)
-popup:SetHeight(40)
+popup:SetWidth(190)
+popup:SetHeight(60)
 popup:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -260, 270)
 popup:SetMovable(true)
 popup:SetUserPlaced(true)
@@ -132,26 +135,29 @@ back:SetPoint("BOTTOMLEFT", 3, 3)
 back:SetPoint("TOPRIGHT", -3, -3)
 back:SetTexCoord(0, 1, 0, 0.25)
 
---[[
-local titleback = popup:CreateTexture(nil, "ARTWORK")
-popup.titleback = titleback
-titleback:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Title")
-titleback:SetPoint("TOPRIGHT", -5, -5)
-titleback:SetPoint("LEFT", 5, 0)
-titleback:SetHeight(18)
-titleback:SetTexCoord(0, 0.9765625, 0, 0.3125)
-titleback:SetAlpha(0.8)
---]]
+-- Model view
+local model = CreateFrame("PlayerModel", nil, popup)
+popup.model = model
+model:SetHeight(popup:GetHeight() - 10)
+model:SetWidth(popup:GetHeight() - 10)
+model:SetPoint("TOPLEFT", popup, "TOPLEFT", 6, -6)
+model:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 6, 6)
 
 local title = popup:CreateFontString(nil, "OVERLAY", "GameFontHighlightMedium");
 popup.title = title
-title:SetPoint("TOPLEFT", popup, "TOPLEFT", 4, -6)
-title:SetPoint("RIGHT", popup, "RIGHT")
+title:SetPoint("TOPLEFT", model, "TOPRIGHT", 2, -2)
+title:SetPoint("RIGHT", popup, "RIGHT", -4, 0)
 popup:SetFontString(title)
 
+local details = popup:CreateFontString(nil, "OVERLAY", "GameFontBlackTiny")
+popup.details = details
+details:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
+details:SetPoint("RIGHT", title)
+
 local subtitle = popup:CreateFontString(nil, "OVERLAY", "GameFontBlackTiny")
-subtitle:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 4, 6)
-subtitle:SetPoint("RIGHT", title)
+popup.subtitle = subtitle
+subtitle:SetPoint("TOPLEFT", details, "BOTTOMLEFT", 0, -4)
+subtitle:SetPoint("RIGHT", details)
 subtitle:SetText("Click to Target")
 
 -- Border
@@ -167,28 +173,15 @@ popup.drag = popup:CreateTitleRegion()
 -- Close button
 local close = CreateFrame("Button", nil, popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
 popup.close = close
-close:SetPoint("TOPRIGHT", popup, "TOPRIGHT", 12, 12)
-close:SetWidth(32)
-close:SetHeight(32)
-close:SetScale(0.8)
+close:SetPoint("TOPLEFT", popup, "TOPRIGHT", -5, 0)
+close:SetWidth(26)
+close:SetHeight(26)
 close:SetHitRectInsets(8, 8, 8, 8)
 close:SetAttribute("_onclick", [[
 	local button = self:GetParent()
 	button:Disable()
 	button:Hide()
 ]])
-
--- Model view
-local model = CreateFrame("PlayerModel", nil, popup)
-popup.model = model
-model:SetPoint("BOTTOMLEFT", popup, "TOPLEFT", 0, -4)
-model:SetPoint("RIGHT")
-model:SetHeight(popup:GetWidth() * 0.6)
-popup:SetClampRectInsets(0, 0, model:GetTop() - popup:GetTop(), 0)
-local rate = math.pi / 4
-model:SetScript("OnUpdate", function(self, elapsed)
-	self:SetFacing(self:GetFacing() + elapsed * rate)
-end)
 
 -- Flash frame
 local glow = CreateFrame("Frame", "$parentGlow", popup)
