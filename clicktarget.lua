@@ -68,17 +68,22 @@ function module:ShowFrame(zone, name, unit)
 	popup:Show()
 
 	popup:SetText(name)
-	popup.details:SetText(("%s%s %s"):format(level or '??', elite and '+' or '', BCT[creature_type]))
+	popup.details:SetText(("%s%s %s"):format(level or '??', elite and '+' or '', creature_type and BCT[creature_type] or ''))
 
+	local model = popup.model
 	if self.db.profile.model and (id or unit) then
 		if id then
-			popup.model:SetCreature(id)
+			model:SetCreature(id)
 		else
-			popup.model:SetUnit(unit)
+			model:SetUnit(unit)
 		end
-		popup.model:SetCamera(0) -- portrait
+		model:SetCamera(0) -- portrait
 	else
-		popup.model:Hide()
+		-- This is, indeed, an exact copy of the settings used in PitBull
+		-- That's fine, since I wrote those settings myself. :D
+		model:SetModelScale(4.25)
+		model:SetPosition(0, 0, -1.5)
+		model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
 	end
 end
 
