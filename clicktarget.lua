@@ -8,6 +8,7 @@ function module:OnInitialize()
 		profile = {
 			show = true,
 			model = true,
+			camera = 0,
 			sources = {
 				target = false,
 				grouptarget = true,
@@ -54,6 +55,15 @@ function module:OnInitialize()
 							cache = "Unit cache",
 						},
 					},
+					camera = {
+						type = "select",
+						name = "Model style",
+						desc = "How to display the model",
+						values = {
+							[0] = "Portrait",
+							[1] = "Full body",
+						},
+					},
 				},
 			},
 		}
@@ -77,7 +87,7 @@ function module:ShowFrame(zone, name, unit)
 		else
 			model:SetUnit(unit)
 		end
-		model:SetCamera(0) -- portrait
+		model:SetCamera(self.db.profile.camera)
 	else
 		-- This is, indeed, an exact copy of the settings used in PitBull
 		-- That's fine, since I wrote those settings myself. :D
