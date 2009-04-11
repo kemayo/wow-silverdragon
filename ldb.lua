@@ -33,7 +33,7 @@ function dataobject:OnEnter()
 		local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
 		local cached = id and core.already_cached[id]
 		tooltip:AddLine(name,
-			("%s%s"):format(level > 0 and level or '?', elite and '+' or ''),
+			("%s%s"):format((level and level > 0) and level or '?', elite and '+' or ''),
 			BCT[creature_type],
 			count,
 			core:FormatLastSeen(lastseen),
