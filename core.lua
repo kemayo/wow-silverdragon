@@ -61,12 +61,18 @@ end
 local lastseen = {}
 function addon:ProcessUnit(unit, source)
 	local unittype = UnitClassification(unit)
-	if not (unittype == 'rare' or unittype == 'rareelite') then return end
-	local name = UnitName(unit)
-	if not (UnitIsVisible(unit) and (not lastseen[name]) or (lastseen[name] < (time() - self.db.profile.delay))) then return end
-
+	if not (unittype == 'rare' or unittype == 'rareelite') or not UnitIsVisible(unit) then return end
+	-- from this point on, it's a rare
 	local zone, x, y = self:GetPlayerLocation()
-	if not zone then return end
+	if not zone then return end -- there are only a few places where this will happen
+	
+	local name = UnitName(unit)
+	if lastseen[name] and time() < lastseen[name] + self.db.profile.delay then
+		-- we saw it too recently to *record* it, but we'll let the caller know
+		self.events:Fire("Seen_Silent", zone, name, x, y, UnitIsDead(unit), false, source or 'target', unit)
+		return true
+	end
+
 	local level = UnitLevel(unit)
 	local creature_type = UnitCreatureType(unit)
 	
@@ -74,6 +80,7 @@ function addon:ProcessUnit(unit, source)
 
 	lastseen[name] = time()
 	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, source or 'target', unit)
+	return true
 end
 
 function addon:SaveMob(zone, name, x, y, level, elite, creature_type, force, unseen)
