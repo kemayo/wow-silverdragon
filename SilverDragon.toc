@@ -28,7 +28,7 @@ lib\AceConfig-3.0\AceConfig-3.0.xml
 lib\LibBabble-Zone-3.0\lib.xml
 lib\LibBabble-CreatureType-3.0\lib.xml
 lib\LibSink-2.0\lib.xml
-lib\LibDataBroker-1.1.lua
+lib\LibDataBroker-1.1\LibDataBroker-1.1.lua
 lib\LibDBIcon-1.0\LibDBIcon-1.0.lua
 lib\LibQTip-1.0\LibQTip-1.0.lua
 lib\LibSharedMedia-3.0\lib.xml
