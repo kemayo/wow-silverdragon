@@ -69,7 +69,7 @@ function addon:ProcessUnit(unit, source)
 	local name = UnitName(unit)
 	if lastseen[name] and time() < lastseen[name] + self.db.profile.delay then
 		-- we saw it too recently to *record* it, but we'll let the caller know
-		self.events:Fire("Seen_Silent", zone, name, x, y, UnitIsDead(unit), false, source or 'target', unit)
+		self.events:Fire("Seen_Silent", zone, name, x, y, UnitIsDead(unit), false, source or 'target', unit, globaldb.mob_id[name])
 		return true
 	end
 
@@ -79,7 +79,7 @@ function addon:ProcessUnit(unit, source)
 	local newloc = self:SaveMob(zone, name, x, y, level, unittype=='rareelite', creature_type)
 
 	lastseen[name] = time()
-	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, source or 'target', unit)
+	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, source or 'target', unit, globaldb.mob_id[name])
 	return true
 end
 
