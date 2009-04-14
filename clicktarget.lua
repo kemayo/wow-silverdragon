@@ -32,7 +32,7 @@ function module:OnInitialize()
 				type = "group",
 				name = "ClickTarget",
 				get = function(info) return self.db.profile[info[#info]] end,
-				set = function(info, v) self.db.profile[info[#info]] = v end,
+				set = function(info, v) self.db.profile[info[#info]] = v; self:ShowModel() end,
 				args = {
 					about = {
 						type = "description",
@@ -70,47 +70,86 @@ function module:OnInitialize()
 	end
 end
 
-function module:ShowFrame(zone, name, unit)
+local current = {}
+function module:ShowFrame()
+	local zone, name, unit = current.zone, current.name, current.unit
+	if not (zone and name) then return end
+
 	local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
 	local popup = self.popup
 	popup:SetAttribute("macrotext", "/cleartarget\n/targetexact "..name)
 	popup:Enable()
 	popup:Show()
 
+	self:ShowModel()
+
 	popup:SetText(name)
 	popup.details:SetText(("%s%s %s"):format(level or '??', elite and '+' or '', creature_type and BCT[creature_type] or ''))
 
 	local model = popup.model
-	if self.db.profile.model and (id or unit) then
-		if id then
-			model:SetCreature(id)
-		else
-			model:SetUnit(unit)
-		end
-		model:SetCamera(self.db.profile.camera)
-	else
-		-- This is, indeed, an exact copy of the settings used in PitBull
-		-- That's fine, since I wrote those settings myself. :D
-		model:SetModelScale(4.25)
-		model:SetPosition(0, 0, -1.5)
-		model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
-	end
 end
 
-function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit)
-	if not self.db.profile.sources[source] then return end
-	if InCombatLockdown() then
-		self.next_zone = zone
-		self.next_name = name
+function module:ShowModel()
+	local popup = self.popup
+	local model, title, details = popup.model, popup.title, popup.details
+
+	model:ClearAllPoints()
+	if self.db.profile.model and self.db.profile.camera == 1 then
+		-- portrait
+		model:SetHeight(popup:GetHeight() - 20)
+		model:SetWidth(popup:GetHeight() - 20)
+		model:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -2)
+		model:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 6, 6)
+		details:SetPoint("TOPLEFT", model, "TOPRIGHT", 2, -2)
 	else
-		self:ShowFrame(zone, name, unit)
+		-- full-body or hidden-model (works for both because the model is totally out of
+		-- the way for the full-body case.)
+		model:SetHeight(popup:GetHeight() * 3)
+		model:SetWidth(popup:GetWidth())
+		model:SetPoint("BOTTOMLEFT", popup, "TOPLEFT", 0, -4)
+		details:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -2)
 	end
+	if self.db.profile.model then
+		model:Show()
+		local id, unit = current.id, current.unit
+		if id or unit then
+			if id then
+				model:SetCreature(id)
+			else
+				model:SetUnit(unit)
+			end
+			model:SetCamera(self.db.profile.camera)
+		else
+			-- This is, indeed, an exact copy of the settings used in PitBull
+			-- That's fine, since I wrote those settings myself. :D
+			model:SetModelScale(4.25)
+			model:SetPosition(0, 0, -1.5)
+			model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
+		end
+	else
+		model:Hide()
+	end
+
+end
+
+function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit, id)
+	if not self.db.profile.sources[source] then return end
+	current.zone = zone
+	current.name = name
+	current.id = id
+	current.unit = unit
+	if InCombatLockdown() then
+		current.pending = true
+	else
+		self:ShowFrame()
+	end
+	current.unit = nil -- can't be trusted to remain the same
 end
 
 function module:PLAYER_REGEN_ENABLED()
-	if self.next_zone and self.next_name then
-		self:ShowFrame(self.next_zone, self.next_name)
-		self.next_zone, self.next_name = nil, nil
+	if current.pending then
+		current.pending = nil
+		self:ShowFrame()
 	end
 end
 
@@ -150,6 +189,9 @@ back:SetPoint("BOTTOMLEFT", 3, 3)
 back:SetPoint("TOPRIGHT", -3, -3)
 back:SetTexCoord(0, 1, 0, 0.25)
 
+-- Just a note:
+-- The anchors in this next section are incomplete. The frame isn't finished until
+-- module.ShowModel is called.
 local title = popup:CreateFontString(nil, "OVERLAY", "GameFontHighlightMedium");
 popup.title = title
 title:SetPoint("TOPLEFT", popup, "TOPLEFT", 6, -6)
@@ -158,14 +200,9 @@ popup:SetFontString(title)
 
 local model = CreateFrame("PlayerModel", nil, popup)
 popup.model = model
-model:SetHeight(popup:GetHeight() - 20)
-model:SetWidth(popup:GetHeight() - 20)
-model:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -2)
-model:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 6, 6)
 
 local details = popup:CreateFontString(nil, "OVERLAY", "GameFontBlackTiny")
 popup.details = details
-details:SetPoint("TOPLEFT", model, "TOPRIGHT", 2, -2)
 details:SetPoint("RIGHT", title)
 
 local subtitle = popup:CreateFontString(nil, "OVERLAY", "GameFontBlackTiny")
