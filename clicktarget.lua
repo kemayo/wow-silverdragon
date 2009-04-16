@@ -94,7 +94,7 @@ function module:ShowModel()
 	local model, title, details = popup.model, popup.title, popup.details
 
 	model:ClearAllPoints()
-	if self.db.profile.model and self.db.profile.camera == 1 then
+	if self.db.profile.model and self.db.profile.camera == 0 then
 		-- portrait
 		model:SetHeight(popup:GetHeight() - 20)
 		model:SetWidth(popup:GetHeight() - 20)
