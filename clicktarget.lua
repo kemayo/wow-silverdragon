@@ -111,6 +111,7 @@ function module:ShowModel()
 	end
 	if self.db.profile.model then
 		model:Show()
+		model:ClearModel()
 		local id, unit = current.id, current.unit
 		if id or unit then
 			if id then
@@ -119,6 +120,9 @@ function module:ShowModel()
 				model:SetUnit(unit)
 			end
 			model:SetCamera(self.db.profile.camera)
+			if self.db.profile.camera == 1 then
+				model:SetModelScale(0.7)
+			end
 		else
 			-- This is, indeed, an exact copy of the settings used in PitBull
 			-- That's fine, since I wrote those settings myself. :D
