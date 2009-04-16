@@ -226,7 +226,7 @@ function addon:ScanNameplates()
 		local name = regions.name:GetText()
 		if nameplate:IsVisible() and zone_mobs[name] and (not lastseen[name] or (lastseen[name] < (time() - self.db.profile.delay))) then
 			local x, y = GetPlayerMapPosition('player')
-			self.events:Fire("Seen", zone, name, x, y, false, false, "nameplate")
+			self.events:Fire("Seen", zone, name, x, y, false, false, "nameplate", false, globaldb.mob_id[name])
 			lastseen[name] = time()
 			break -- it's pretty unlikely there'll be two rares on screen at once
 		end
@@ -269,7 +269,7 @@ function addon:ScanCache()
 		local id = globaldb.mob_id[mob]
 		if id and (not globaldb.mob_tameable[mob] or self.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
 			already_cached[id] = true
-			self.events:Fire("Seen", zone, mob, x, y, false, false, "cache")
+			self.events:Fire("Seen", zone, mob, x, y, false, false, "cache", false, id)
 		end
 	end
 	first_cachescan = false
