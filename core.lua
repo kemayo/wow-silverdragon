@@ -135,6 +135,7 @@ function addon:GetMobByCoord(zone, coord)
 end
 
 function addon:DeleteMob(zone, name)
+	if not (zone and name) then return end
 	globaldb.mobs_byzone[zone][name] = nil
 	globaldb.mob_level[name] = nil
 	globaldb.mob_elite[name] = nil
