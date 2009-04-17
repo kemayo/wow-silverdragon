@@ -60,6 +60,7 @@ end
 
 local lastseen = {}
 function addon:ProcessUnit(unit, source)
+	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
 	local unittype = UnitClassification(unit)
 	if not (unittype == 'rare' or unittype == 'rareelite') or not UnitIsVisible(unit) then return end
 	-- from this point on, it's a rare
