@@ -52,6 +52,5 @@ cartographer.lua
 
 #@alpha@
 # data imports
-Data\module.lua
-Data\defaults.lua
+Data\module.xml
 #@end-alpha@

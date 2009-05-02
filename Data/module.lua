@@ -2,6 +2,8 @@ local BZ = LibStub("LibBabble-Zone-3.0"):GetUnstrictLookupTable()
 local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 
+local R = LibStub("AceLocale-3.0"):GetLocale("SilverDragon_Rares")
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Data")
 
@@ -16,6 +18,7 @@ function module:Import()
 			zone = core.zone_to_mapfile[BZ[zone]]
 		end
 		for name, info in pairs(mobs) do
+			name = R[name] -- gets it into the local language
 			mob_count = mob_count + 1
 			gdb.mob_id[name] = info.id
 			gdb.mob_level[name] = info.level
