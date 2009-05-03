@@ -117,7 +117,7 @@ end
 -- Returns num_locs, level, is_elite, creature_type, last_seen, times_seen, mob_id, is_tameable
 function addon:GetMob(zone, name)
 	if not (zone and name and globaldb.mobs_byzone[zone][name]) then
-		return 0, 0, false, nil, nil
+		return 0, 0, false, UNKNOWN, nil, 0, nil, nil
 	end
 	return #globaldb.mob_locations[name], globaldb.mob_level[name], globaldb.mob_elite[name], BCT[globaldb.mob_type[name]], globaldb.mobs_byzone[zone][name], globaldb.mob_count[name], globaldb.mob_id[name], globaldb.mob_tameable[name]
 end
