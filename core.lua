@@ -147,6 +147,9 @@ end
 -- Scanning:
 
 function addon:CheckNearby()
+	local zone = self:GetPlayerLocation()
+	if not zone then return end
+	
 	if self.db.profile.targets then
 		addon:ScanTargets()
 	end
@@ -210,7 +213,7 @@ local function process_possible_nameplate(frame)
 end
 
 local num_worldchildren
-function addon:ScanNameplates()
+function addon:ScanNameplates(zone)
 	if GetCVar("nameplateShowEnemies") ~= "1" then
 		return
 	end
@@ -220,8 +223,7 @@ function addon:ScanNameplates()
 			process_possible_nameplate(select(i, WorldFrame:GetChildren()))
 		end
 	end
-	local zone = self:GetPlayerLocation()
-	if not zone then return end
+	
 	local zone_mobs = globaldb.mobs_byzone[zone]
 	if not zone_mobs then return end
 	for nameplate, regions in pairs(nameplates) do
@@ -253,7 +255,7 @@ addon.is_cached = is_cached
 
 addon.already_cached = already_cached
 
-function addon:ScanCache()
+function addon:ScanCache(zone)
 	if first_cachescan then
 		for mob, id in pairs(globaldb.mob_id) do
 			if is_cached(id) then
@@ -263,8 +265,7 @@ function addon:ScanCache()
 		first_cachescan = false
 		return
 	end
-	local zone, x, y = self:GetPlayerLocation()
-	if not zone then return end
+	
 	local zone_mobs = globaldb.mobs_byzone[zone]
 	if not zone_mobs then return end
 	for mob, lastseen in pairs(zone_mobs) do
