@@ -322,6 +322,7 @@ addon.mapfile_to_zone = mapfile_to_zone
 
 function addon:GetPlayerLocation()
 	-- returns mapFile (e.g. "Stormwind"), x, y
+	if IsInInstance() then return end
 	local x, y = GetPlayerMapPosition('player')
 	local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()
 	if x <= 0 and y <= 0 then
