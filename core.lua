@@ -151,13 +151,13 @@ function addon:CheckNearby()
 	if not zone then return end
 	
 	if self.db.profile.targets then
-		addon:ScanTargets()
+		addon:ScanTargets(zone)
 	end
 	if self.db.profile.nameplates then
-		addon:ScanNameplates()
+		addon:ScanNameplates(zone)
 	end
 	if self.db.profile.cache then
-		addon:ScanCache()
+		addon:ScanCache(zone)
 	end
 end
 
