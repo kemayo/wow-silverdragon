@@ -322,7 +322,9 @@ addon.mapfile_to_zone = mapfile_to_zone
 
 function addon:GetPlayerLocation()
 	-- returns mapFile (e.g. "Stormwind"), x, y
-	if IsInInstance() then return end
+	if IsInInstance() then
+		return BZR[GetRealZoneText()], 0, 0
+	end
 	local x, y = GetPlayerMapPosition('player')
 	local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()
 	if x <= 0 and y <= 0 then
@@ -335,7 +337,8 @@ function addon:GetPlayerLocation()
 			SetMapZoom(GetCurrentMapContinent())
 			x, y = GetPlayerMapPosition('player')
 			if x <= 0 and y <= 0 then
-				-- we're in an instance, probably
+				-- this is confusing; we're probably in an instance, but
+				-- IsInInstance() returned false above.
 				return BZR[GetRealZoneText()], 0, 0
 			end
 		end
