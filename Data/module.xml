@@ -5,6 +5,7 @@
   <Script file="rares_deDE.lua"/>
   <Script file="rares_ruRU.lua"/>
   <Script file="rares_frFR.lua"/>
+  <Script file="rares_zhTW.lua"/>
   <Script file="module.lua"/>
   <Script file="defaults.lua"/>
 </Ui>
