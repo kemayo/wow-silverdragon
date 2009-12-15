@@ -1,4 +1,4 @@
-﻿## Interface: 30200
+﻿## Interface: 30300
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
