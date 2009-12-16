@@ -158,10 +158,8 @@ local function zone_mappings()
 	dprint(3, "Loaded locales")
 	page = page:match('g_zones={([^}]+)};')
 	if not page then return end
-	dprint(3, "Found zones in locales")
-	for entry in page:gmatch('%d+:"[^"]+"') do
-		dprint(3, "Processing zone", entry)
-		local id, zone = entry:match('^(%d+):"([^"]+)"$')
+	dprint(3, "Found zones in locales", page)
+	for id, zone in page:gmatch('"(%d+)":"([^"]+)"') do
 		zones[id] = zone
 		dprint(3, "added", id, zone)
 	end
@@ -260,7 +258,7 @@ local function main()
 			local zone = zones[entry:match("location:%[(%d+)")]
 			dprint(3, "Found:", id, name, level, ctype, elite, zone)
 			english_id_name_mapping[id] = name
-			if zone then
+			if zone and name ~= "Vern" then
 				local locations = {}
 				local raw_coords = npc_coords(id)
 				if raw_coords and #raw_coords > 0 then
