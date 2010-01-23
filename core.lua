@@ -33,6 +33,7 @@ function addon:OnInitialize()
 			targets = true,
 			nameplates = true,
 			cache = true,
+			instances = true,
 		},
 	})
 	globaldb = self.db.global
@@ -149,6 +150,7 @@ end
 function addon:CheckNearby()
 	local zone = self:GetPlayerLocation()
 	if not zone then return end
+	if (not self.db.profile.instances) and IsInInstance() then return end
 	
 	if self.db.profile.targets then
 		addon:ScanTargets(zone)

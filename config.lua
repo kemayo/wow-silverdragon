@@ -54,8 +54,14 @@ local options = {
 					type = "toggle",
 					name = "Cache alert: Tameable",
 					desc = "The cache-scanning method has no way to tell whether a mob is a hunter's pet. So to avoid getting spam, you can disable notifications for mobs found through this method that it is possible to tame.",
-					order = 40,
+					order = 50,
 				},
+				instances = {
+					type = "toggle",
+					name = "Scan in instances",
+					desc = "There aren't that many actual rares in instances, and scanning might slow things down at a time when you'd like the most performance possible.",
+					order = 40,
+				}
 			},
 		},
 		import = {
