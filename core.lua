@@ -137,12 +137,23 @@ end
 
 function addon:DeleteMob(zone, name)
 	if not (zone and name) then return end
+	if not globaldb.mobs_byzone[zone] then return end
 	globaldb.mobs_byzone[zone][name] = nil
 	globaldb.mob_level[name] = nil
 	globaldb.mob_elite[name] = nil
 	globaldb.mob_type[name] = nil
 	globaldb.mob_count[name] = nil
 	globaldb.mob_locations[name] = nil
+end
+
+function addon:DeleteAllMobs()
+	local n = 0
+	for zone,mobs in pairs(globaldb.mobs_byzone) do for name, info in pairs(mobs) do
+		self:DeleteMob(zone, name)
+		n = n + 1
+	end end
+	DEFAULT_CHAT_FRAME:AddMessage("SilverDragon: Removed "..n.." rare mobs from database.")
+	self.events:Fire("DeleteAll", n)
 end
 
 -- Scanning:
