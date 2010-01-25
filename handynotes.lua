@@ -10,9 +10,6 @@ local db
 local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
 
 local nodes = {}
-for _, mapFile in pairs(core.zone_to_mapfile) do
-	nodes[mapFile] = {}
-end
 
 local handler = {}
 do
@@ -176,15 +173,7 @@ function module:OnInitialize()
 			},
 		},
 	})
-	for zone, mobs in pairs(core.db.global.mobs_byzone) do
-		if nodes[zone] then
-			for name in pairs(mobs) do
-				for _, loc in ipairs(core.db.global.mob_locations[name]) do
-					nodes[zone][loc] = name
-				end
-			end
-		end
-	end
+	self:UpdateNodes()
 end
 
 function module:Seen(callback, zone, name, x, y, dead, new_location)
@@ -199,3 +188,21 @@ function module:Seen(callback, zone, name, x, y, dead, new_location)
 end
 core.RegisterCallback(module, "Seen")
 
+function module:UpdateNodes()
+	for _, mapFile in pairs(core.zone_to_mapfile) do
+		nodes[mapFile] = {}
+	end
+	for zone, mobs in pairs(core.db.global.mobs_byzone) do
+		if nodes[zone] then
+			for name in pairs(mobs) do
+				for _, loc in ipairs(core.db.global.mob_locations[name]) do
+					nodes[zone][loc] = name
+				end
+			end
+		end
+	end
+	self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
+end
+
+core.RegisterCallback(module, "Import", "UpdateNodes")
+core.RegisterCallback(module, "DeleteAll", "UpdateNodes")
