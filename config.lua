@@ -62,43 +62,68 @@ local options = {
 					desc = "There aren't that many actual rares in instances, and scanning might slow things down at a time when you'd like the most performance possible.",
 					order = 50,
 				},
-				clear = {
-					type = "execute",
-					name = "Clear all rares",
-					desc = "Forget all seen rares.",
-					order = 60,
-					func = function() core:DeleteAllMobs() end,
+				taxi = {
+					type = "toggle",
+					name = "Scan on taxis",
+					desc = "Keep scanning for rares while flying on a taxi. Just hope that it'll still be there after you land and make your way back...",
+					order = 55,
 				},
 			},
 		},
-		import = {
+		data = {
 			type = "group",
-			name = "Import Data",
-			hidden = function()
-				return not ( core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")) )
-			end,
+			name = "Data Management",
 			order = 10,
 			args = {
-				desc = {
-					order = 0,
-					type = "description",
-					name = "SilverDragon comes with a pre-built database of known locations of rare mobs. Click the button below to import the data.",
-				},
-				load = {
-					order = 10,
-					type = "execute",
+				import = {
+					type = "group",
 					name = "Import Data",
-					func = function()
-						LoadAddOn("SilverDragon_Data")
-						local Data = core:GetModule("Data", true)
-						if not Data then
-							module:Print("Database not found. Aborting import.") -- safety check, just in case.
-							return
-						end
-						local count = Data:Import()
-						core.events:Fire("Import")
-						module:Print(("Imported %d rares."):format(count))
+					order = 10,
+					hidden = function()
+						return not ( core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")) )
 					end,
+					args = {
+						desc = {
+							order = 0,
+							type = "description",
+							name = "SilverDragon comes with a pre-built database of known locations of rare mobs. Click the button below to import the data.",
+						},
+						load = {
+							order = 10,
+							type = "execute",
+							name = "Import Data",
+							func = function()
+								LoadAddOn("SilverDragon_Data")
+								local Data = core:GetModule("Data", true)
+								if not Data then
+									module:Print("Database not found. Aborting import.") -- safety check, just in case.
+									return
+								end
+								local count = Data:Import()
+								core.events:Fire("Import")
+								module:Print(("Imported %d rares."):format(count))
+							end,
+						},
+					},
+				},
+				clear = {
+					type = "group",
+					name = "Clear Data",
+					order = 20,
+					args = {
+						desc = {
+							order = 0,
+							type = "description",
+							name = "This will forget all the rare mobs that SilverDragon knows about. You might want to do this if you want to import fresh data from a more recent version of SilverDragon.",
+						},
+						all = {
+							type = "execute",
+							name = "Clear all rares",
+							desc = "Forget all seen rares.",
+							order = 10,
+							func = function() core:DeleteAllMobs() end,
+						},
+					},
 				},
 			},
 		},
