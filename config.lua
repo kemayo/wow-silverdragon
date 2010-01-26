@@ -73,12 +73,13 @@ local options = {
 		data = {
 			type = "group",
 			name = "Data Management",
-			order = 10,
+			order = 15,
 			args = {
 				import = {
 					type = "group",
 					name = "Import Data",
 					order = 10,
+					inline = true,
 					hidden = function()
 						return not ( core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")) )
 					end,
@@ -110,6 +111,7 @@ local options = {
 					type = "group",
 					name = "Clear Data",
 					order = 20,
+					inline = true,
 					args = {
 						desc = {
 							order = 0,
