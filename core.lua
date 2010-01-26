@@ -34,6 +34,7 @@ function addon:OnInitialize()
 			nameplates = true,
 			cache = true,
 			instances = true,
+			taxi = true,
 		},
 	})
 	globaldb = self.db.global
@@ -162,6 +163,7 @@ function addon:CheckNearby()
 	local zone = self:GetPlayerLocation()
 	if not zone then return end
 	if (not self.db.profile.instances) and IsInInstance() then return end
+	if (not self.db.profile.taxi) and UnitOnTaxi('player') then return end
 	
 	if self.db.profile.targets then
 		addon:ScanTargets(zone)
