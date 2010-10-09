@@ -6,6 +6,10 @@ local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "
 SilverDragon = addon
 addon.events = LibStub("CallbackHandler-1.0"):New(addon)
 
+local debugf = tekDebug and tekDebug:GetFrame("SilverDragon")
+local function Debug(...) if debugf then debugf:AddMessage(string.join(", ", tostringall(...))) end end
+addon.Debug = Debug
+
 local globaldb
 function addon:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("SilverDragon2DB", {

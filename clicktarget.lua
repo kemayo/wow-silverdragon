@@ -77,7 +77,8 @@ function module:ShowFrame()
 
 	local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
 	local popup = self.popup
-	popup:SetAttribute("macrotext", "/cleartarget\n/targetexact "..name)
+	local macrotext = "/cleartarget\n/targetexact "..name
+	popup:SetAttribute("macrotext", macrotext)
 	popup:Enable()
 	popup:Show()
 
@@ -256,7 +257,6 @@ local on_enter = function() popup:SetBackdropBorderColor(1, 1, 0.15) end
 local on_leave = function() popup:SetBackdropBorderColor(0.7, 0.15, 0.05) end
 local on_show = function()
 	UIFrameFadeRemoveFrame(popup.glow)
-	UIFrameFlashRemoveFrame(popup.glow)
 	UIFrameFlash(popup.glow, 0.1, 0.7, 0.8)
 	
 	local model = popup.model
