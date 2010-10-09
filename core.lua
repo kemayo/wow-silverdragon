@@ -260,7 +260,7 @@ local already_cached = {}
 local first_cachescan = true
 local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip")
 cache_tooltip:AddFontStrings(
-    cache_tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"),
+	cache_tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"),
 	cache_tooltip:CreateFontString("$parentTextRight1", nil, "GameTooltipText")
 )
 

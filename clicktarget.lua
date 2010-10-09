@@ -2,6 +2,7 @@ local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("ClickTarget", "AceEvent-3.0")
+local Debug = core.Debug
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("ClickTarget", {
@@ -253,7 +254,13 @@ texture:SetTexCoord(0, 0.78125, 0, 0.66796875)
 
 popup:SetAttribute("type", "macro")
 
-local on_enter = function() popup:SetBackdropBorderColor(1, 1, 0.15) end
+local on_enter = function()
+	popup:SetBackdropBorderColor(1, 1, 0.15)
+	if not IsAltKeyDown() then
+		-- alt-tabbing screws this up, so play it safe
+		module:ToggleDrag(false)
+	end
+end
 local on_leave = function() popup:SetBackdropBorderColor(0.7, 0.15, 0.05) end
 local on_show = function()
 	UIFrameFadeRemoveFrame(popup.glow)
