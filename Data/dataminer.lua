@@ -165,23 +165,24 @@ local function zone_mappings()
 	end
 end
 
-local function npc_coords(id)
+local function npc_coords(id, zone)
 	local url = "http://www.wowhead.com/?npc="..id
 	local page = getpage(url)
 	if not page then return end
 	
-	page = page:match("myMapper.update(%b())")
+	page = page:match("g_mapperData = (%b{})")
 	if not page then return end
-	page = page:match("coords: (%b{})")
+    page = page:match(zone..": (%b{})")
+    if not page then return end
+	page = page:match("coords: (%b[])")
 	if not page then return end
-	--page = page:match("^%d:%[(.-)%]$") -- only one floor
-	--if not page then return end
 	
 	coords = {}
 	for entry in page:gmatch("%[[0-9%.,]+%]") do
 		local x, y = entry:match("([0-9%.]+),([0-9%.]+)")
 		table.insert(coords, {tonumber(x)/100, tonumber(y)/100})
 	end
+    dprint(3, 'found coords', id, zone, #coords)
 	return coords
 end
 
@@ -244,23 +245,24 @@ local function main()
 		dprint(3, "Found data.")
 		for entry in page:gmatch("%b{}") do
 			dprint(3, "Processing:", entry)
-			local id = entry:match("{id:(%d+)")
-			local name = entry:match("name:'(.-)',")
+			local id = entry:match("\"id\":(%d+)")
+			local name = entry:match("\"name\":['\"](.-)['\"],")
 			name = name:gsub("\\'", "'")
-			local level = tonumber(entry:match("maxlevel:(%d+)"))
-			local ctype = tonumber(entry:match("type:(%d+)"))
+			local level = tonumber(entry:match("\"maxlevel\":(%d+)"))
+			local ctype = tonumber(entry:match("\"type\":(%d+)"))
 			if ctype==10 then
 				ctype = nil
 			else
 				ctype = npctypes[ctype]
 			end
-			local elite = (entry:match("classification:(%d+)") == '2')
-			local zone = zones[entry:match("location:%[(%d+)")]
-			dprint(3, "Found:", id, name, level, ctype, elite, zone)
+			local elite = (entry:match("\"classification\":(%d+)") == '2')
+            local zoneid = entry:match("\"location\":%[(%d+)")
+			local zone = zones[zoneid]
+			dprint(3, "Found:", id, name, level, ctype, elite, zoneid, zone)
 			english_id_name_mapping[id] = name
 			if zone and name ~= "Vern" then
 				local locations = {}
-				local raw_coords = npc_coords(id)
+				local raw_coords = npc_coords(id, zoneid)
 				if raw_coords and #raw_coords > 0 then
 					for _,loc in pairs(raw_coords) do
 						local x,y = unpack(loc)
@@ -304,8 +306,8 @@ local function main()
 			dprint(3, "Found data.")
 			for entry in page:gmatch("%b{}") do
 				dprint(3, "Processing:", entry)
-				local id = entry:match("{id:(%d+)")
-				local name = entry:match("name:'(.-)',")
+				local id = entry:match("\"id\":(%d+)")
+				local name = entry:match("\"name\":['\"](.-)['\"],")
 				name = name:gsub("\\'", "'")
 				translations[language][english_id_name_mapping[id]] = name
 			end
