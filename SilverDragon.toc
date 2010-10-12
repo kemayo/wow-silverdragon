@@ -1,5 +1,4 @@
-﻿## Interface: 30300
-## X-Compatible-With: 40000
+﻿## Interface: 40000
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
