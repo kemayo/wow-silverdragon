@@ -1,4 +1,4 @@
-﻿## Interface: 30300
+﻿## Interface: 40000
 ## Title: SilverDragon (Data)
 ## Notes: Default set of rares for SilverDragon
 ## Version: @project-version@
