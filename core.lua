@@ -2,7 +2,7 @@ local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 
-local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0")
+local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0")
 SilverDragon = addon
 addon.events = LibStub("CallbackHandler-1.0"):New(addon)
 
@@ -267,7 +267,7 @@ cache_tooltip:AddFontStrings(
 local function is_cached(id)
 	-- this doesn't work with just clearlines and the setowner outside of this, and I'm not sure why
 	cache_tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
-	cache_tooltip:SetHyperlink(("unit:0xF53000%04X000000"):format(id))
+	cache_tooltip:SetHyperlink(("unit:0xF53%05X00000000"):format(id))
 	return cache_tooltip:IsShown()
 end
 addon.is_cached = is_cached
@@ -284,12 +284,15 @@ function addon:ScanCache(zone)
 		first_cachescan = false
 		return
 	end
+	Debug("Scanning Cache", zone, globaldb.mobs_byzone[zone])
 	
 	local zone_mobs = globaldb.mobs_byzone[zone]
 	if not zone_mobs then return end
 	for mob, lastseen in pairs(zone_mobs) do
 		local id = globaldb.mob_id[mob]
+		Debug("Checking for", id, mob, lastseen)
 		if id and (not globaldb.mob_tameable[mob] or self.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
+			Debug("They're new!")
 			already_cached[id] = true
 			self.events:Fire("Seen", zone, mob, x, y, false, false, "cache", false, id)
 		end
@@ -300,6 +303,22 @@ addon.RegisterCallback(addon, "Import", function()
 	if first_cachescan then
 		table.wipe(already_cached)
 		first_cachescan = true
+	end
+end)
+
+addon:RegisterChatCommand("sdcached", function()
+	local lookup = {}
+	for mob,id in pairs(globaldb.mob_id) do
+		lookup[id] = mob
+	end
+	local output
+	addon:Print("The following mobs are in the NPC cache, and so will not be detected by the cache scanner.")
+	for id,_ in pairs(already_cached) do
+		addon:Print(" ", lookup[id])
+		output = true
+	end
+	if not output then
+		addon:Print("Nothing")
 	end
 end)
 
