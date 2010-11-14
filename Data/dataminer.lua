@@ -5,7 +5,7 @@
 --if available curl will be used, which allows connection re-use
 
 local SOURCE = SOURCE or "defaults.lua"
-local DEBUG = DEBUG or 1
+local DEBUG = tonumber(arg[1]) or DEBUG or 1
 
 local function dprint(dlevel, ...)
 	if dlevel and DEBUG >= dlevel then
