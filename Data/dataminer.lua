@@ -166,7 +166,7 @@ local function zone_mappings()
 end
 
 local function npc_coords(id, zone)
-	local url = "http://www.wowhead.com/?npc="..id
+	local url = "http://www.wowhead.com/npc="..id
 	local page = getpage(url)
 	if not page then return end
 	
@@ -187,11 +187,11 @@ local function npc_coords(id, zone)
 end
 
 local function npc_tameable(id)
-	local url = "http://www.wowhead.com/?npc="..id
+	local url = "http://www.wowhead.com/npc="..id
 	local page = getpage(url)
 	if not page then return end
 	
-	page = page:match("<div>Tameable %([^)]+%)</div>")
+	page = page:match("Tameable %([^)]+%)")
 	if page then
 		return true
 	end
@@ -233,7 +233,7 @@ local function main()
 	local english_id_name_mapping = {}
 	for i,c in pairs(npctypes) do
 		print("Acquiring rares for category: "..c)
-		local url = "http://www.wowhead.com/?npcs="..i.."&filter=cl=4:2"
+		local url = "http://www.wowhead.com/npcs="..i.."&filter=cl=4:2"
 		local page = getpage(url)
 		if not page then return end
 		dprint(3, "Loaded page.")
@@ -294,7 +294,7 @@ local function main()
 
 		-- and localize
 		for subdomain,language in pairs(languages) do
-			local url = "http://"..subdomain..".wowhead.com/?npcs="..i.."&filter=cl=4:2"
+			local url = "http://"..subdomain..".wowhead.com/npcs="..i.."&filter=cl=4:2"
 			local page = getpage(url)
 			if not page then return end
 			dprint(3, "Loaded page.")
