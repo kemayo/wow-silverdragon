@@ -307,9 +307,13 @@ local function main()
 			for entry in page:gmatch("%b{}") do
 				dprint(3, "Processing:", entry)
 				local id = entry:match("\"id\":(%d+)")
-				local name = entry:match("\"name\":['\"](.-)['\"],")
-				name = name:gsub("\\'", "'")
-				translations[language][english_id_name_mapping[id]] = name
+                if english_id_name_mapping[id] then
+    				local name = entry:match("\"name\":['\"](.-)['\"],")
+	    			name = name:gsub("\\'", "'")
+		    		translations[language][english_id_name_mapping[id]] = name
+                else
+                    dprint(2, "NPC in translation only", language, name, id)
+                end
 			end
 		end
 	end
