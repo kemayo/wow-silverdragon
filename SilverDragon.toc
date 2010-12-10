@@ -51,7 +51,7 @@ macro.lua
 handynotes.lua
 cartographer.lua
 
-#@alpha@
+#@debug@
 # data imports
 Data\module.xml
-#@end-alpha@
+#@end-debug@
