@@ -76,6 +76,7 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source)
 		PlaySoundFile(LSM:Fetch("sound", self.db.profile.soundfile))
 	end
 	if self.db.profile.flash then
-		UIFrameFlash(LowHealthFrame, 0.5, 0.5, 6, false, 0.5)
+		LowHealthFrame_StartFlashing(0.5, 0.5, 6, false, 0.5)
 	end
 end
+
