@@ -73,6 +73,7 @@ end
 
 local current = {}
 function module:ShowFrame()
+	if not self.db.profile.show then return end
 	local zone, name, unit = current.zone, current.name, current.unit
 	if not (zone and name) then return end
 
