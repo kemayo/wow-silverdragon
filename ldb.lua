@@ -18,6 +18,7 @@ local db
 
 local tooltip
 function dataobject:OnEnter()
+	SetMapToCurrentZone()--This should fix the login problems and menu not populating I hope
 	local zone, x, y = core:GetPlayerLocation()
 
 	if not (core.db and core.db.global.mobs_byzone[zone]) then
@@ -33,7 +34,7 @@ function dataobject:OnEnter()
 		local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
 		local cached = id and core.already_cached[id]
 		tooltip:AddLine(name,
-			("%s%s"):format((level and level > 0) and level or '?', elite and '+' or ''),
+			("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or ''),
 			BCT[creature_type],
 			count,
 			core:FormatLastSeen(lastseen),

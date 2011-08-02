@@ -1,6 +1,7 @@
 local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
+local LSM = LibStub("LibSharedMedia-3.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0")
 SilverDragon = addon
@@ -37,8 +38,11 @@ function addon:OnInitialize()
 			targets = true,
 			nameplates = true,
 			cache = true,
-			instances = true,
+			sync = true,
+			gsync = false,
+			instances = false,
 			taxi = true,
+			announceclassic = true,
 		},
 	})
 	globaldb = self.db.global
@@ -47,6 +51,8 @@ end
 function addon:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+	self:RegisterEvent("CHAT_MSG_ADDON")
+	self:RegisterEvent("CHAT_MSG_SYSTEM")
 	if self.db.profile.scan > 0 then
 		self:ScheduleRepeatingTimer("CheckNearby", self.db.profile.scan)
 	end
@@ -64,6 +70,50 @@ function addon:UPDATE_MOUSEOVER_UNIT()
 	end
 end
 
+--8/2 08:03:29.127  [SERVER] This realm is scheduled for a rolling restart. Thank you for your patience and understanding.
+--8/2 08:03:35.504  [SERVER] Restart in 15:00
+function addon:CHAT_MSG_SYSTEM(event, msg)
+	if not msg:find("[SERVER]") then return end--If message isn't from server we don't care about it.
+	if msg:find("realm") and (msg:find("restart") or msg:find("maintenance")) then--Message contains both "realm" and "restart" or "realm" and "maintenance" in same sentance it's probalby right message
+		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSDStart01.wav", "Master")
+	elseif msg:find("10:00") then
+		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSD10.wav", "Master")
+	elseif msg:find("5:00") then
+		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSD05.wav", "Master")
+	elseif msg:find("1:00") then
+		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSD01.wav", "Master")
+	elseif msg:find("0:15") then
+		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSD00.wav", "Master")
+	end
+end
+
+--Begin Experimental sync handler
+local soundSpam = 0
+function addon:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
+	if (not self.db.profile.instances) and IsInInstance() then return end
+	if (not self.db.profile.taxi) and UnitOnTaxi('player') then return end
+	if prefix == "SilverDragon" and sender ~= UnitName("player") then
+		if channel == "GUILD" and self.db.profile.gsync or (channel == "RAID" or channel == "PARTY") and self.db.profile.sync and not CheckInteractDistance(sender, 4) then
+			local msgType, name, zone, level = strsplit("\t", msg)
+			level = tonumber(level or "")
+			if not (msgType and name and zone and level) then return end
+			if (not self.db.profile.announceclassic) and (level >= 2 and level < 61) then return end
+			if msgType == "seen" and GetTime() - soundSpam > 5 then
+				soundSpam = GetTime()
+				--I hate ace stuff. If anyone can figure out how to check an option from a different file here so i can actually honor sound options that'd be great.
+				PlaySoundFile( [[Sound\Event Sounds\Event_wardrum_ogre.wav]], "Master" )
+				PlaySoundFile( [[Sound\Events\scourge_horn.wav]], "Master" )
+				if channel == "GUILD" then
+					addon:Print(("%s, in your guild, has seen %s in %s"):format(sender, name, zone))
+				else
+					addon:Print(("%s, in your party, has seen %s in %s"):format(sender, name, zone))
+				end
+			end
+		end
+	end
+end
+--End Experimental sync handler
+
 local lastseen = {}
 function addon:ProcessUnit(unit, source)
 	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
@@ -80,13 +130,13 @@ function addon:ProcessUnit(unit, source)
 		return true
 	end
 
-	local level = UnitLevel(unit)
+	local level = (UnitLevel(unit) or -1)
 	local creature_type = UnitCreatureType(unit)
 	
 	local newloc = self:SaveMob(zone, name, x, y, level, unittype=='rareelite', creature_type)
 
 	lastseen[name] = time()
-	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, source or 'target', unit, globaldb.mob_id[name])
+	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, source or 'target', unit, globaldb.mob_id[name], level)
 	return true
 end
 
@@ -247,9 +297,10 @@ function addon:ScanNameplates(zone)
 	if not zone_mobs then return end
 	for nameplate, regions in pairs(nameplates) do
 		local name = regions.name:GetText()
+		local level = (regions.level:GetText() or -1)
 		if nameplate:IsVisible() and zone_mobs[name] and (not lastseen[name] or (lastseen[name] < (time() - self.db.profile.delay))) then
 			local x, y = GetPlayerMapPosition('player')
-			self.events:Fire("Seen", zone, name, x, y, false, false, "nameplate", false, globaldb.mob_id[name])
+			self.events:Fire("Seen", zone, name, x, y, false, false, "nameplate", false, globaldb.mob_id[name], level)
 			lastseen[name] = time()
 			break -- it's pretty unlikely there'll be two rares on screen at once
 		end
@@ -290,11 +341,12 @@ function addon:ScanCache(zone)
 	if not zone_mobs then return end
 	for mob, lastseen in pairs(zone_mobs) do
 		local id = globaldb.mob_id[mob]
+		local level = (globaldb.mob_level[mob] or -1)
 		Debug("Checking for", id, mob, lastseen)
 		if id and (not globaldb.mob_tameable[mob] or self.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
 			Debug("They're new!")
 			already_cached[id] = true
-			self.events:Fire("Seen", zone, mob, x, y, false, false, "cache", false, id)
+			self.events:Fire("Seen", zone, mob, x, y, false, false, "cache", false, id, level)
 		end
 	end
 	first_cachescan = false
@@ -362,6 +414,9 @@ function addon:GetPlayerLocation()
 	-- returns mapFile (e.g. "Stormwind"), x, y
 	if IsInInstance() then
 		return BZR[GetRealZoneText()], 0, 0
+	end
+	if GetCurrentMapAreaID() == 795 then--We are in molten front
+		return BZR[GetRealZoneText()], 1189.58331298828, 793.749938964844--Just hack it into table.
 	end
 	local x, y = GetPlayerMapPosition('player')
 	local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()

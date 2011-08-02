@@ -48,6 +48,8 @@ local options = {
 						targets = toggle("Targets", "Check the targets of people in your group.", 20),
 						nameplates = toggle("Nameplates", "Check nameplates of mobs that you are close to", 30),
 						cache = toggle("Cache", "Scan the mob cache for never-before-found mobs.", 40),
+						sync = toggle("Group Sync", "Will accept syncs from other party members, allowing you to detect their scan from unlimited range. Note: disabling this disables receiving only. You will still send sync to others in group.", 50),
+						gsync = toggle("Guild Sync", "Will accept syncs from other guild members, allowing you to detect their scan even if you're not grouped. Note: disabling this disables receiving only. You will still send sync to others in guild.", 60),
 					},
 				},
 				cache_tameable = {
@@ -67,6 +69,12 @@ local options = {
 					name = "Scan on taxis",
 					desc = "Keep scanning for rares while flying on a taxi. Just hope that it'll still be there after you land and make your way back...",
 					order = 55,
+				},
+				announceclassic = {
+					type = "toggle",
+					name = "Announce lvls 2-60",
+					desc = "Disable notifications for mobs that are between levels 2-60. Note: Camel Figures are level 1 so that's why this option excludes level 1s.",
+					order = 60,
 				},
 			},
 		},

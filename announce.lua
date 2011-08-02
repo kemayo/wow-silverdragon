@@ -10,19 +10,21 @@ LSM:Register("sound", "Explosion", [[Sound\Doodad\Hellfire_Raid_FX_Explosion05.w
 LSM:Register("sound", "Shing!", [[Sound\Doodad\PortcullisActive_Closed.wav]])
 LSM:Register("sound", "Wham!", [[Sound\Doodad\PVP_Lordaeron_Door_Open.wav]])
 LSM:Register("sound", "Simon Chime", [[Sound\Doodad\SimonGame_LargeBlueTree.wav]])
-LSM:Register("sound", "War Drums", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])
+LSM:Register("sound", "War Drums", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])--NPC Scan default
+LSM:Register("sound", "Scourge Horn", [[Sound\Events\scourge_horn.wav]])--NPC Scan default
 LSM:Register("sound", "Cheer", [[Sound\Event Sounds\OgreEventCheerUnique.wav]])
 LSM:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.wav]])
 LSM:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.wav]])
 LSM:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.wav]])
 LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
+LSM:Register("sound", "NPCScan", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Announce", {
 		profile = {
 			sink = true,
 			sound = true,
-			soundfile = "Wham!",
+			soundfile = "NPCScan",
 			flash = true,
 			sink_opts = {},
 		},
@@ -68,12 +70,28 @@ function module:OnInitialize()
 	end
 end
 
-function module:Seen(callback, zone, name, x, y, dead, newloc, source)
+function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, level)
+	--Send sync first even if we don't have any alert methods turned on.
+	if IsInGuild() then
+		SendAddonMessage("SilverDragon", "seen" .. "\t" .. name .. "\t" .. zone .. "\t" .. level, "GUILD")
+	end
+	if GetRealNumRaidMembers() > 0 then
+		SendAddonMessage("SilverDragon", "seen" .. "\t" .. name .. "\t" .. zone .. "\t" .. level, "RAID")
+	elseif GetRealNumPartyMembers() > 0 then
+		SendAddonMessage("SilverDragon", "seen" .. "\t" .. name .. "\t" .. zone .. "\t" .. level, "PARTY")
+	end
+	level = tonumber(level or "")
+	if (not self.db.profile.announceclassic) and (level >= 2 and level < 61) then return end
 	if self.db.profile.sink then
 		self:Pour(("Rare seen: %s%s (%s)"):format(name, dead and "... but it's dead" or '', source or ''))
 	end
 	if self.db.profile.sound then
-		PlaySoundFile(LSM:Fetch("sound", self.db.profile.soundfile))
+		if self.db.profile.soundfile == "NPCScan" then--Override default behavior and force npcscan behavior of two sounds at once
+			PlaySoundFile( [[Sound\Event Sounds\Event_wardrum_ogre.wav]], "Master" )
+			PlaySoundFile( [[Sound\Events\scourge_horn.wav]], "Master" )
+		else--Play whatever sound is set
+			PlaySoundFile(LSM:Fetch("sound", self.db.profile.soundfile), "Master")
+		end
 	end
 	if self.db.profile.flash then
 		LowHealthFrame_StartFlashing(0.5, 0.5, 6, false, 0.5)
