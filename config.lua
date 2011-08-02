@@ -6,6 +6,7 @@ local db
 local function toggle(name, desc, order)
 	return {type = "toggle", name = name, desc = desc, order=order,}
 end
+module.toggle = toggle
 
 local options = {
 	type = "group",
@@ -48,8 +49,6 @@ local options = {
 						targets = toggle("Targets", "Check the targets of people in your group.", 20),
 						nameplates = toggle("Nameplates", "Check nameplates of mobs that you are close to", 30),
 						cache = toggle("Cache", "Scan the mob cache for never-before-found mobs.", 40),
-						sync = toggle("Group Sync", "Will accept syncs from other party members, allowing you to detect their scan from unlimited range. Note: disabling this disables receiving only. You will still send sync to others in group.", 50),
-						gsync = toggle("Guild Sync", "Will accept syncs from other guild members, allowing you to detect their scan even if you're not grouped. Note: disabling this disables receiving only. You will still send sync to others in guild.", 60),
 					},
 				},
 				cache_tameable = {

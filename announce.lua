@@ -24,7 +24,7 @@ function module:OnInitialize()
 		profile = {
 			sink = true,
 			sound = true,
-			soundfile = "NPCScan",
+			soundfile = "Wham!",
 			flash = true,
 			sink_opts = {},
 		},
@@ -35,13 +35,6 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
-		local function toggle(name, desc)
-			return {
-				type = "toggle",
-				name = name,
-				desc = desc,
-			}
-		end
 		config.options.plugins.announce = {
 			announce = {
 				type = "group",
@@ -52,18 +45,18 @@ function module:OnInitialize()
 					sink = {
 						type = "group", name = "Message", inline = true,
 						args = {
-							sink = toggle("Message", "Send a message to whatever scrolling text addon you're using."),
+							sink = config.toggle("Message", "Send a message to whatever scrolling text addon you're using."),
 							output = self:GetSinkAce3OptionsDataTable()
 						},
 					},
-					sound = toggle("Sound", "Play a sound."),
+					sound = config.toggle("Sound", "Play a sound."),
 					soundfile = {
 						type = "select", dialogControl = "LSM30_Sound",
 						name = "Sound to Play", desc = "Choose a sound file to play.",
 						values = AceGUIWidgetLSMlists.sound,
 						disabled = function() return not self.db.profile.sound end,
 					},
-					flash = toggle("Flash", "Flash the edges of the screen."),
+					flash = config.toggle("Flash", "Flash the edges of the screen."),
 				},
 			},
 		}
@@ -71,24 +64,18 @@ function module:OnInitialize()
 end
 
 function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, level)
-	--Send sync first even if we don't have any alert methods turned on.
-	if IsInGuild() then
-		SendAddonMessage("SilverDragon", "seen" .. "\t" .. name .. "\t" .. zone .. "\t" .. level, "GUILD")
-	end
-	if GetRealNumRaidMembers() > 0 then
-		SendAddonMessage("SilverDragon", "seen" .. "\t" .. name .. "\t" .. zone .. "\t" .. level, "RAID")
-	elseif GetRealNumPartyMembers() > 0 then
-		SendAddonMessage("SilverDragon", "seen" .. "\t" .. name .. "\t" .. zone .. "\t" .. level, "PARTY")
-	end
 	level = tonumber(level or "")
-	if (not self.db.profile.announceclassic) and (level >= 2 and level < 61) then return end
+	if (not self.db.profile.announceclassic) and (level >= 2 and level < 61) then
+		return
+	end
 	if self.db.profile.sink then
 		self:Pour(("Rare seen: %s%s (%s)"):format(name, dead and "... but it's dead" or '', source or ''))
 	end
 	if self.db.profile.sound then
-		if self.db.profile.soundfile == "NPCScan" then--Override default behavior and force npcscan behavior of two sounds at once
-			PlaySoundFile( [[Sound\Event Sounds\Event_wardrum_ogre.wav]], "Master" )
-			PlaySoundFile( [[Sound\Events\scourge_horn.wav]], "Master" )
+		if self.db.profile.soundfile == "NPCScan" then
+			--Override default behavior and force npcscan behavior of two sounds at once
+			PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
+			PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), "Master")
 		else--Play whatever sound is set
 			PlaySoundFile(LSM:Fetch("sound", self.db.profile.soundfile), "Master")
 		end

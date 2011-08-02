@@ -1,7 +1,6 @@
 local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
-local LSM = LibStub("LibSharedMedia-3.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0")
 SilverDragon = addon
@@ -38,8 +37,6 @@ function addon:OnInitialize()
 			targets = true,
 			nameplates = true,
 			cache = true,
-			sync = true,
-			gsync = false,
 			instances = false,
 			taxi = true,
 			announceclassic = true,
@@ -51,8 +48,6 @@ end
 function addon:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-	self:RegisterEvent("CHAT_MSG_ADDON")
-	self:RegisterEvent("CHAT_MSG_SYSTEM")
 	if self.db.profile.scan > 0 then
 		self:ScheduleRepeatingTimer("CheckNearby", self.db.profile.scan)
 	end
@@ -69,50 +64,6 @@ function addon:UPDATE_MOUSEOVER_UNIT()
 		self:ProcessUnit('mouseover', 'mouseover')
 	end
 end
-
---8/2 08:03:29.127  [SERVER] This realm is scheduled for a rolling restart. Thank you for your patience and understanding.
---8/2 08:03:35.504  [SERVER] Restart in 15:00
-function addon:CHAT_MSG_SYSTEM(event, msg)
-	if not msg:find("[SERVER]") then return end--If message isn't from server we don't care about it.
-	if msg:find("realm") and (msg:find("restart") or msg:find("maintenance")) then--Message contains both "realm" and "restart" or "realm" and "maintenance" in same sentance it's probalby right message
-		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSDStart01.wav", "Master")
-	elseif msg:find("10:00") then
-		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSD10.wav", "Master")
-	elseif msg:find("5:00") then
-		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSD05.wav", "Master")
-	elseif msg:find("1:00") then
-		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSD01.wav", "Master")
-	elseif msg:find("0:15") then
-		PlaySoundFile("Sound\\Creature\\ArchivumSystem\\UR_Archivum_MimironSD00.wav", "Master")
-	end
-end
-
---Begin Experimental sync handler
-local soundSpam = 0
-function addon:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
-	if (not self.db.profile.instances) and IsInInstance() then return end
-	if (not self.db.profile.taxi) and UnitOnTaxi('player') then return end
-	if prefix == "SilverDragon" and sender ~= UnitName("player") then
-		if channel == "GUILD" and self.db.profile.gsync or (channel == "RAID" or channel == "PARTY") and self.db.profile.sync and not CheckInteractDistance(sender, 4) then
-			local msgType, name, zone, level = strsplit("\t", msg)
-			level = tonumber(level or "")
-			if not (msgType and name and zone and level) then return end
-			if (not self.db.profile.announceclassic) and (level >= 2 and level < 61) then return end
-			if msgType == "seen" and GetTime() - soundSpam > 5 then
-				soundSpam = GetTime()
-				--I hate ace stuff. If anyone can figure out how to check an option from a different file here so i can actually honor sound options that'd be great.
-				PlaySoundFile( [[Sound\Event Sounds\Event_wardrum_ogre.wav]], "Master" )
-				PlaySoundFile( [[Sound\Events\scourge_horn.wav]], "Master" )
-				if channel == "GUILD" then
-					addon:Print(("%s, in your guild, has seen %s in %s"):format(sender, name, zone))
-				else
-					addon:Print(("%s, in your party, has seen %s in %s"):format(sender, name, zone))
-				end
-			end
-		end
-	end
-end
---End Experimental sync handler
 
 local lastseen = {}
 function addon:ProcessUnit(unit, source)

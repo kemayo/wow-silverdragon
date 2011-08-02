@@ -46,6 +46,7 @@ ldb.lua
 announce.lua
 clicktarget.lua
 macro.lua
+sync.lua
 
 # map plugins
 handynotes.lua
