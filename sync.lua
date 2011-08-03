@@ -36,9 +36,19 @@ function module:OnInitialize()
 	end
 end
 
+local protocol_version = 1
 local function SAM(channel, ...)
-	core.Debug("Sending message", channel, ...)
-	SendAddonMessage("SilverDragon", strjoin("\t", ...), channel)
+	core.Debug("Sending message", channel, protocol_version, ...)
+	SendAddonMessage("SilverDragon", strjoin("\t", tostringall(protocol_version, ...)), channel)
+end
+local function deSAM(val)
+	if val == "nil" then
+		return nil
+	end
+	if val:match("\d+\.?\d*") then
+		return tonumber(val)
+	end
+	return val
 end
 
 function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit, id, level)
@@ -50,12 +60,12 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit, id,
 		return
 	end
 	if IsInGuild() then
-		SAM("GUILD", name, zone, level, x, y)
+		SAM("GUILD", "seen", id, name, zone, level, x, y)
 	end
 	if GetRealNumRaidMembers() > 0 then
-		SAM("RAID", name, zone, level, x, y)
+		SAM("RAID", "seen", id, name, zone, level, x, y)
 	elseif GetRealNumPartyMembers() > 0 then
-		SAM("PARTY", name, zone, level, x, y)
+		SAM("PARTY", "seen", id, name, zone, level, x, y)
 	end
 end
 
@@ -77,27 +87,36 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		return
 	end
 
-	local msgType, name, zone, level, x, y = strsplit("\t", msg)
-	Debug("Message", msgType, name, zone, level, x, y)
+	local ver, msgType, id, name, zone, level, x, y = strsplit("\t", msg)
+	Debug("Message", msgType, id, name, zone, level, x, y)
+
+	ver = deSAM(ver)
+	level = deSAM(level)
+	x = deSAM(x)
+	y = deSAM(y)
+
+	if tonumber(ver or "") ~= protocol_version then
+		Debug("Skipping: incompatible version")
+		return
+	end
 
 	if msgType ~= "seen" then
 		-- only one so far
+		Debug("Skipping: unknown msgtype")
 		return
 	end
 
 	if not (msgType and name and zone and level) then
+		Debug("Skipping: insufficient data")
 		return
 	end
 
 	if spam[name] and spam[name] > (time() - core.db.profile.delay) then
+		Debug("Skipping: spam for mob", name, spam[name], time() - core.db.profile.delay)
 		return
 	end
 	spam[name] = time()
 
-	level = tonumber(level or "")
-	x = tonumber(x or "")
-	y = tonumber(y or "")
-
 	-- zone, name, x, y, dead, new_location, source, unit, id, level
-	core.events:Fire("Seen", zone, name, x, y, false, false, "sync:"..channel..":"..sender, false, core.db.global.mob_id[name], level)
+	core.events:Fire("Seen", zone, name, x, y, false, false, "sync:"..channel..":"..sender, false, id or core.db.global.mob_id[name], level)
 end

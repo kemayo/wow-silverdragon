@@ -3,21 +3,23 @@ local module = core:NewModule("Announce", "LibSink-2.0")
 
 local LSM = LibStub("LibSharedMedia-3.0")
 
--- Register some media
-LSM:Register("sound", "Rubber Ducky", [[Sound\Doodad\Goblin_Lottery_Open01.wav]])
-LSM:Register("sound", "Cartoon FX", [[Sound\Doodad\Goblin_Lottery_Open03.wav]])
-LSM:Register("sound", "Explosion", [[Sound\Doodad\Hellfire_Raid_FX_Explosion05.wav]])
-LSM:Register("sound", "Shing!", [[Sound\Doodad\PortcullisActive_Closed.wav]])
-LSM:Register("sound", "Wham!", [[Sound\Doodad\PVP_Lordaeron_Door_Open.wav]])
-LSM:Register("sound", "Simon Chime", [[Sound\Doodad\SimonGame_LargeBlueTree.wav]])
-LSM:Register("sound", "War Drums", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])--NPC Scan default
-LSM:Register("sound", "Scourge Horn", [[Sound\Events\scourge_horn.wav]])--NPC Scan default
-LSM:Register("sound", "Cheer", [[Sound\Event Sounds\OgreEventCheerUnique.wav]])
-LSM:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.wav]])
-LSM:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.wav]])
-LSM:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.wav]])
-LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
-LSM:Register("sound", "NPCScan", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
+if LSM then
+	-- Register some media
+	LSM:Register("sound", "Rubber Ducky", [[Sound\Doodad\Goblin_Lottery_Open01.wav]])
+	LSM:Register("sound", "Cartoon FX", [[Sound\Doodad\Goblin_Lottery_Open03.wav]])
+	LSM:Register("sound", "Explosion", [[Sound\Doodad\Hellfire_Raid_FX_Explosion05.wav]])
+	LSM:Register("sound", "Shing!", [[Sound\Doodad\PortcullisActive_Closed.wav]])
+	LSM:Register("sound", "Wham!", [[Sound\Doodad\PVP_Lordaeron_Door_Open.wav]])
+	LSM:Register("sound", "Simon Chime", [[Sound\Doodad\SimonGame_LargeBlueTree.wav]])
+	LSM:Register("sound", "War Drums", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])--NPC Scan default
+	LSM:Register("sound", "Scourge Horn", [[Sound\Events\scourge_horn.wav]])--NPC Scan default
+	LSM:Register("sound", "Cheer", [[Sound\Event Sounds\OgreEventCheerUnique.wav]])
+	LSM:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.wav]])
+	LSM:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.wav]])
+	LSM:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.wav]])
+	LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
+	LSM:Register("sound", "NPCScan", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
+end
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Announce", {
@@ -50,19 +52,25 @@ function module:OnInitialize()
 							output = self:GetSinkAce3OptionsDataTable()
 						},
 					},
-					sound = config.toggle("Sound", "Play a sound."),
-					soundfile = {
-						type = "select", dialogControl = "LSM30_Sound",
-						name = "Sound to Play", desc = "Choose a sound file to play.",
-						values = AceGUIWidgetLSMlists.sound,
-						disabled = function() return not self.db.profile.sound end,
-					},
 					flash = config.toggle("Flash", "Flash the edges of the screen."),
 					classic = config.toggle("Announce lvls 2-60", "Toggle notifications for mobs that are between levels 2-60. Note: Camel Figures are level 1 so that's why this option excludes level 1s."),
 				},
 			},
 		}
+		if LSM then
+			config.options.plugins.announce.announce.args.sound = config.toggle("Sound", "Play a sound.")
+			config.options.plugins.announce.announce.args.soundfile = {
+				type = "select", dialogControl = "LSM30_Sound",
+				name = "Sound to Play", desc = "Choose a sound file to play.",
+				values = AceGUIWidgetLSMlists.sound,
+				disabled = function() return not self.db.profile.sound end,
+			}
+		end
 	end
+end
+
+local function round(num, precision)
+	return math.floor(num * math.pow(10, precision) + 0.5) / math.pow(10, precision)
 end
 
 function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, level)
@@ -71,9 +79,15 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, lev
 		return
 	end
 	if self.db.profile.sink then
+		if source:match("^sync") then
+			local channel, player = source:match("sync:(.+):(.+)")
+			if channel and player then
+				source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. zone .. " @ " .. round(x* 100, 1) .. "," .. round(y * 100, 1)
+			end
+		end
 		self:Pour(("Rare seen: %s%s (%s)"):format(name, dead and "... but it's dead" or '', source or ''))
 	end
-	if self.db.profile.sound then
+	if self.db.profile.sound and LSM then
 		if self.db.profile.soundfile == "NPCScan" then
 			--Override default behavior and force npcscan behavior of two sounds at once
 			PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")

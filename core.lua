@@ -285,16 +285,16 @@ function addon:ScanCache(zone)
 		first_cachescan = false
 		return
 	end
-	Debug("Scanning Cache", zone, globaldb.mobs_byzone[zone])
+	-- Debug("Scanning Cache", zone, globaldb.mobs_byzone[zone])
 	
 	local zone_mobs = globaldb.mobs_byzone[zone]
 	if not zone_mobs then return end
 	for mob, lastseen in pairs(zone_mobs) do
 		local id = globaldb.mob_id[mob]
 		local level = (globaldb.mob_level[mob] or -1)
-		Debug("Checking for", id, mob, lastseen)
+		-- Debug("Checking for", id, mob, lastseen)
 		if id and (not globaldb.mob_tameable[mob] or self.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
-			Debug("They're new!")
+			-- Debug("They're new!")
 			already_cached[id] = true
 			self.events:Fire("Seen", zone, mob, x, y, false, false, "cache", false, id, level)
 		end
