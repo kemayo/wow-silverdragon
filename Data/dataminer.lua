@@ -150,6 +150,55 @@ local function write_translations(data)
 	end
 end
 
+local npctypes = {
+	[1] = 'Beast',
+	[2] = 'Dragonkin',
+	[3] = 'Demon',
+	[4] = 'Elemental',
+	[5] = 'Giant',
+	[6] = 'Undead',
+	[7] = 'Humanoid',
+--	[8] = 'Critter',
+	[9] = 'Mechanical',
+	[10] = 'Uncategorized',
+}
+
+local languages = {
+	de = "deDE",
+	es = "esES",
+	fr = "frFR",
+	ru = "ruRU",
+}
+
+local defaults, translations, english_id_name_mapping
+
+-- Mobs which, although rare, shouldn't be included
+local blacklist = {
+    32435, -- Vern
+}
+-- Mobs which should be included even though they're not rare
+local force_include = {
+    17591, -- Blood Elf Bandit
+    50409, -- Mysterious Camel Figurine
+    50410, -- Mysterious Camel Figurine (remnants)
+}
+local name_overrides = {
+    [50410] = "Crumbled Statue Remnants",
+    [51401] = "Madexx (red)",
+    [51402] = "Madexx (green)",
+    [51403] = "Madexx (black)",
+    [51404] = "Madexx (blue)",
+    [50154] = "Madexx (brown)",
+
+}
+
+local function pack_coords(x, y)
+	return math.floor(x * 10000 + 0.5) * 10000 + math.floor(y * 10000 + 0.5)
+end
+local function unpack_coords(coord)
+	return math.floor(coord / 10000) / 10000, (coord % 10000) / 10000
+end
+
 local zones = {}
 local function zone_mappings()
 	local url = "http://static.wowhead.com/js/locale_enus.js?250"
@@ -198,43 +247,88 @@ local function npc_tameable(id)
 	return nil
 end
 
-local npctypes = {
-	[1] = 'Beast',
-	[2] = 'Dragonkin',
-	[3] = 'Demon',
-	[4] = 'Elemental',
-	[5] = 'Giant',
-	[6] = 'Undead',
-	[7] = 'Humanoid',
---	[8] = 'Critter',
-	[9] = 'Mechanical',
-	[10] = 'Uncategorized',
-}
+local function npc_from_list_entry(entry)
+	dprint(3, "Processing:", entry)
+	local id = tonumber(entry:match("\"id\":(%d+)"))
+	local name = entry:match("\"name\":['\"](.-)['\"],")
+	name = name:gsub("\\'", "'")
+	local level = tonumber(entry:match("\"maxlevel\":(%d+)"))
+	local ctype = tonumber(entry:match("\"type\":(%d+)"))
+	if ctype == 10 then
+		ctype = nil -- Uncategorized
+	else
+		ctype = npctypes[ctype]
+	end
+	local elite = (entry:match("\"classification\":(%d+)") == '2')
+	local zoneid = entry:match("\"location\":%[(%d+)")
+	local zone = zones[zoneid]
+	dprint(3, "Found:", id, name, level, ctype, elite, zoneid, zone)
+	
+	if blacklist[id] then
+		return
+	end
+	if not zone then
+		return
+	end
+    if name_overrides[id] then
+        name = name_overrides[id]
+    end
+	
+	english_id_name_mapping[id] = name
 
-local languages = {
-	de = "deDE",
-	es = "esES",
-	fr = "frFR",
-	ru = "ruRU",
-}
-
-local function pack_coords(x, y)
-	return math.floor(x * 10000 + 0.5) * 10000 + math.floor(y * 10000 + 0.5)
+	local locations = {}
+	local raw_coords = npc_coords(id, zoneid)
+	if raw_coords and #raw_coords > 0 then
+		for _,loc in pairs(raw_coords) do
+			local x,y = unpack(loc)
+			local is_new = true
+			for _,oldloc in pairs(locations) do
+				local old_x, old_y = unpack_coords(oldloc)
+				if math.abs(old_x - x) < 0.05 and math.abs(old_y - y) < 0.05 then
+					is_new = false
+					break
+				end
+			end
+			if is_new then
+				table.insert(locations, pack_coords(x, y))
+			end
+		end
+	end
+	return name, zone, {
+		id = id,
+		level = level,
+		creature_type = ctype,
+		locations = locations,
+		elite = elite,
+		tameable = npc_tameable(id),
+	}
 end
-local function unpack_coords(coord)
-	return math.floor(coord / 10000) / 10000, (coord % 10000) / 10000
+
+local function npcs_from_list_page(url)
+	local page = getpage(url)
+	if not page then return end
+	dprint(3, "Loaded page.")
+	page = page:match("new Listview(%b())")
+	if not page then return end
+	dprint(3, "Found listview.")
+	page = page:match("data: (%b[])")
+	if not page then return end
+	dprint(3, "Found data.")
+	for entry in page:gmatch("%b{}") do
+		local name, zone, npc = npc_from_list_entry(entry)
+		if name then
+			if not defaults[zone] then defaults[zone] = {} end
+			defaults[zone][name] = npc
+			print("Added "..name.." to "..zone)
+		end
+	end
 end
 
-local function main()
-	zone_mappings()
-	defaults = {}
-	translations = {}
-	for k,v in pairs(languages) do translations[v] = {} end
-	local english_id_name_mapping = {}
-	for i,c in pairs(npctypes) do
-		print("Acquiring rares for category: "..c)
-		local url = "http://www.wowhead.com/npcs="..i.."&filter=cl=4:2"
-		local page = getpage(url)
+local function translations_from_list_page(url)
+	for subdomain,language in pairs(languages) do
+		local lang_url = url:gsub("//www", "//"..subdomain)
+        print("Translations: "..language.." "..lang_url)
+		local page = getpage(lang_url)
 		if not page then return end
 		dprint(3, "Loaded page.")
 		page = page:match("new Listview(%b())")
@@ -245,77 +339,38 @@ local function main()
 		dprint(3, "Found data.")
 		for entry in page:gmatch("%b{}") do
 			dprint(3, "Processing:", entry)
-			local id = entry:match("\"id\":(%d+)")
-			local name = entry:match("\"name\":['\"](.-)['\"],")
-			name = name:gsub("\\'", "'")
-			local level = tonumber(entry:match("\"maxlevel\":(%d+)"))
-			local ctype = tonumber(entry:match("\"type\":(%d+)"))
-			if ctype==10 then
-				ctype = nil
+			local id = tonumber(entry:match("\"id\":(%d+)"))
+			if english_id_name_mapping[id] and not name_overrides[id] then
+				local name = entry:match("\"name\":['\"](.-)['\"],")
+				name = name:gsub("\\'", "'")
+				translations[language][english_id_name_mapping[id]] = name
 			else
-				ctype = npctypes[ctype]
-			end
-			local elite = (entry:match("\"classification\":(%d+)") == '2')
-            local zoneid = entry:match("\"location\":%[(%d+)")
-			local zone = zones[zoneid]
-			dprint(3, "Found:", id, name, level, ctype, elite, zoneid, zone)
-			english_id_name_mapping[id] = name
-			if zone and name ~= "Vern" then
-				local locations = {}
-				local raw_coords = npc_coords(id, zoneid)
-				if raw_coords and #raw_coords > 0 then
-					for _,loc in pairs(raw_coords) do
-						local x,y = unpack(loc)
-						local is_new = true
-						for _,oldloc in pairs(locations) do
-							local old_x, old_y = unpack_coords(oldloc)
-							if math.abs(old_x - x) < 0.05 and math.abs(old_y - y) < 0.05 then
-								is_new = false
-								break
-							end
-						end
-						if is_new then
-							table.insert(locations, pack_coords(x, y))
-						end
-					end
-				end
-				if not defaults[zone] then defaults[zone] = {} end
-				defaults[zone][name] = {
-					id = id,
-					level = level,
-					creature_type = ctype,
-					locations = locations,
-					elite = elite,
-					tameable = npc_tameable(id),
-				}
-				print("Added "..name.." to "..zone)
+				dprint(2, "NPC in translation only", language, name, id)
 			end
 		end
 
-		-- and localize
-		for subdomain,language in pairs(languages) do
-			local url = "http://"..subdomain..".wowhead.com/npcs="..i.."&filter=cl=4:2"
-			local page = getpage(url)
-			if not page then return end
-			dprint(3, "Loaded page.")
-			page = page:match("new Listview(%b())")
-			if not page then return end
-			dprint(3, "Found listview.")
-			page = page:match("data: (%b[])")
-			if not page then return end
-			dprint(3, "Found data.")
-			for entry in page:gmatch("%b{}") do
-				dprint(3, "Processing:", entry)
-				local id = entry:match("\"id\":(%d+)")
-                if english_id_name_mapping[id] then
-    				local name = entry:match("\"name\":['\"](.-)['\"],")
-	    			name = name:gsub("\\'", "'")
-		    		translations[language][english_id_name_mapping[id]] = name
-                else
-                    dprint(2, "NPC in translation only", language, name, id)
-                end
-			end
-		end
+	end
+end
+
+local function main()
+	zone_mappings()
+	defaults = {}
+	translations = {}
+	for k,v in pairs(languages) do translations[v] = {} end
+	english_id_name_mapping = {}
+	for i,c in pairs(npctypes) do
+		print("Acquiring rares for category: "..c)
+		local url = "http://www.wowhead.com/npcs="..i.."&filter=cl=4:2"
+
+		npcs_from_list_page(url)
+		translations_from_list_page(url)
+	end
+	for i, id in ipairs(force_include) do
+		print("Acquiring forced ID: "..id)
+		local url = "http://www.wowhead.com/npcs?filter=cr=37;crs=3;crv=" .. id
+		
+		npcs_from_list_page(url)
+		translations_from_list_page(url)
 	end
 	write_output(defaults)
 	write_translations(translations)
