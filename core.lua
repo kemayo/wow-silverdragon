@@ -64,6 +64,18 @@ function addon:UPDATE_MOUSEOVER_UNIT()
 	end
 end
 
+local function npc_id_from_guid(guid)
+	local unit_type = bit.band(tonumber("0x"..strsub(guid, 3,5)), 0x00f)
+	if unit_type ~= 0x003 then
+		-- npcs only
+		return
+	end
+	return tonumber("0x"..strsub(guid,9,12))
+end
+function addon:UnitID(unit)
+	return npc_id_from_guid(UnitGUID(unit))
+end
+
 local lastseen = {}
 function addon:ProcessUnit(unit, source)
 	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
@@ -82,36 +94,38 @@ function addon:ProcessUnit(unit, source)
 
 	local level = (UnitLevel(unit) or -1)
 	local creature_type = UnitCreatureType(unit)
-	
-	local newloc = self:SaveMob(zone, name, x, y, level, unittype=='rareelite', creature_type)
+	local id = self:UnitID(unit)
+
+	local newloc = self:SaveMob(zone, name, x, y, level, unittype=='rareelite', creature_type, id)
 
 	lastseen[name] = time()
 	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, source or 'target', unit, globaldb.mob_id[name], level)
 	return true
 end
 
-function addon:SaveMob(zone, name, x, y, level, elite, creature_type, force, unseen)
+function addon:SaveMob(zone, name, x, y, level, elite, creature_type, id)
 	if not (zone and name) then return end
 	-- saves a mob's information, returns true if this is the first time a mob has been seen at this location
 	if not globaldb.mob_locations[name] then globaldb.mob_locations[name] = {} end
 
-	globaldb.mobs_byzone[zone][name] = unseen and 0 or time()
+	globaldb.mobs_byzone[zone][name] = time()
 	globaldb.mob_level[name] = level
 	if elite then globaldb.mob_elite[name] = true end
 	globaldb.mob_type[name] = BCTR[creature_type]
-	globaldb.mob_count[name] = globaldb.mob_count[name] + (unseen and 0 or 1)
+	globaldb.mob_count[name] = globaldb.mob_count[name] + 1
+	if id then
+		globaldb.mob_id[name] = id
+	end
 	
 	if not (x and y and x > 0 and y > 0) then return end
 
 	local newloc = true
-	if not force then
-		for _, coord in ipairs(globaldb.mob_locations[name]) do
-			local loc_x, loc_y = self:GetXY(coord)
-			if (math.abs(loc_x - x) < 0.03) and (math.abs(loc_y - y) < 0.03) then
-				-- We've seen it close to here before. (within 5% of the zone)
-				newloc = false
-				break
-			end
+	for _, coord in ipairs(globaldb.mob_locations[name]) do
+		local loc_x, loc_y = self:GetXY(coord)
+		if (math.abs(loc_x - x) < 0.03) and (math.abs(loc_y - y) < 0.03) then
+			-- We've seen it close to here before. (within 5% of the zone)
+			newloc = false
+			break
 		end
 	end
 	if newloc then
