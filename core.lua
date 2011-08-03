@@ -39,7 +39,6 @@ function addon:OnInitialize()
 			cache = true,
 			instances = false,
 			taxi = true,
-			announceclassic = true,
 		},
 	})
 	globaldb = self.db.global

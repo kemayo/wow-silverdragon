@@ -1,5 +1,6 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Sync", "AceEvent-3.0")
+local Debug = core.Debug
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Sync", {
@@ -36,6 +37,7 @@ function module:OnInitialize()
 end
 
 local function SAM(channel, ...)
+	core.Debug("Sending message", channel, ...)
 	SendAddonMessage("SilverDragon", strjoin("\t", ...), channel)
 end
 
@@ -58,7 +60,7 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit, id,
 end
 
 local spam = {}
-function addon:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
+function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if prefix ~= "SilverDragon" or sender == UnitName("player") then
 		return
 	end
@@ -76,6 +78,7 @@ function addon:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	end
 
 	local msgType, name, zone, level, x, y = strsplit("\t", msg)
+	Debug("Message", msgType, name, zone, level, x, y)
 
 	if msgType ~= "seen" then
 		-- only one so far

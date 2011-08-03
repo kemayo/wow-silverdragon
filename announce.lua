@@ -26,6 +26,7 @@ function module:OnInitialize()
 			sound = true,
 			soundfile = "Wham!",
 			flash = true,
+			classic = true,
 			sink_opts = {},
 		},
 	})
@@ -57,6 +58,7 @@ function module:OnInitialize()
 						disabled = function() return not self.db.profile.sound end,
 					},
 					flash = config.toggle("Flash", "Flash the edges of the screen."),
+					classic = config.toggle("Announce lvls 2-60", "Toggle notifications for mobs that are between levels 2-60. Note: Camel Figures are level 1 so that's why this option excludes level 1s."),
 				},
 			},
 		}
@@ -65,7 +67,7 @@ end
 
 function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, level)
 	level = tonumber(level or "")
-	if (not self.db.profile.announceclassic) and (level >= 2 and level < 61) then
+	if (not self.db.profile.classic) and (level >= 2 and level < 61) then
 		return
 	end
 	if self.db.profile.sink then

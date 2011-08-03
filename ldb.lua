@@ -18,7 +18,7 @@ local db
 
 local tooltip
 function dataobject:OnEnter()
-	SetMapToCurrentZone()--This should fix the login problems and menu not populating I hope
+	-- SetMapToCurrentZone()--This should fix the login problems and menu not populating I hope
 	local zone, x, y = core:GetPlayerLocation()
 
 	if not (core.db and core.db.global.mobs_byzone[zone]) then

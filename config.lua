@@ -69,12 +69,6 @@ local options = {
 					desc = "Keep scanning for rares while flying on a taxi. Just hope that it'll still be there after you land and make your way back...",
 					order = 55,
 				},
-				announceclassic = {
-					type = "toggle",
-					name = "Announce lvls 2-60",
-					desc = "Disable notifications for mobs that are between levels 2-60. Note: Camel Figures are level 1 so that's why this option excludes level 1s.",
-					order = 60,
-				},
 			},
 		},
 		data = {
