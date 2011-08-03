@@ -39,7 +39,7 @@ end
 local protocol_version = 1
 local function SAM(channel, ...)
 	core.Debug("Sending message", channel, protocol_version, ...)
-	SendAddonMessage("SilverDragon", strjoin("\t", tostringall(protocol_version, ...)), channel)
+	ChatThrottleLib:SendAddonMessage("NORMAL", "SilverDragon", strjoin("\t", tostringall(protocol_version, ...)), channel)
 end
 local function deSAM(val)
 	if val == "nil" then
