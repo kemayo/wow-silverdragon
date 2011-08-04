@@ -174,23 +174,24 @@ local defaults, translations, english_id_name_mapping
 
 -- Mobs which, although rare, shouldn't be included
 local blacklist = {
-    32435, -- Vern
+	32435, -- Vern
 }
 -- Mobs which should be included even though they're not rare
 local force_include = {
-    17591, -- Blood Elf Bandit
-    50409, -- Mysterious Camel Figurine
-    50410, -- Mysterious Camel Figurine (remnants)
-    3868, -- Blood Seeker (thought to share Aeonaxx's spawn timer)
+	17591, -- Blood Elf Bandit
+	50409, -- Mysterious Camel Figurine
+	50410, -- Mysterious Camel Figurine (remnants)
+	3868, -- Blood Seeker (thought to share Aeonaxx's spawn timer)
+	50005, -- Poseidus
 }
 local name_overrides = {
-    [50410] = "Crumbled Statue Remnants",
-    [51401] = "Madexx (red)",
-    [51402] = "Madexx (green)",
-    [51403] = "Madexx (black)",
-    [51404] = "Madexx (blue)",
-    [50154] = "Madexx (brown)",
-    [51236] = "Aeonaxx (engaged)"
+	[50410] = "Crumbled Statue Remnants",
+	[51401] = "Madexx (red)",
+	[51402] = "Madexx (green)",
+	[51403] = "Madexx (black)",
+	[51404] = "Madexx (blue)",
+	[50154] = "Madexx (brown)",
+	[51236] = "Aeonaxx (engaged)"
 }
 
 local function pack_coords(x, y)
@@ -222,8 +223,8 @@ local function npc_coords(id, zone)
 	
 	page = page:match("g_mapperData = (%b{})")
 	if not page then return end
-    page = page:match(zone..": (%b{})")
-    if not page then return end
+	page = page:match(zone..": (%b{})")
+	if not page then return end
 	page = page:match("coords: (%b[])")
 	if not page then return end
 	
@@ -232,7 +233,7 @@ local function npc_coords(id, zone)
 		local x, y = entry:match("([0-9%.]+),([0-9%.]+)")
 		table.insert(coords, {tonumber(x)/100, tonumber(y)/100})
 	end
-    dprint(3, 'found coords', id, zone, #coords)
+	dprint(3, 'found coords', id, zone, #coords)
 	return coords
 end
 
@@ -261,48 +262,52 @@ local function npc_from_list_entry(entry)
 		ctype = npctypes[ctype]
 	end
 	local elite = (entry:match("\"classification\":(%d+)") == '2')
-	local zoneid = entry:match("\"location\":%[(%d+)")
-	local zone = zones[zoneid]
-	dprint(3, "Found:", id, name, level, ctype, elite, zoneid, zone)
+	local zoneids = entry:match("\"location\":%[([%d,]+)]")
+	dprint(3, "Found:", id, name, level, ctype, elite, zoneid)
 	
 	if blacklist[id] then
 		return
 	end
-	if not zone then
+	if not zoneids then
 		return
 	end
-    if name_overrides[id] then
-        name = name_overrides[id]
-    end
+	if name_overrides[id] then
+		name = name_overrides[id]
+	end
 	
 	english_id_name_mapping[id] = name
 
-	local locations = {}
-	local raw_coords = npc_coords(id, zoneid)
-	if raw_coords and #raw_coords > 0 then
-		for _,loc in pairs(raw_coords) do
-			local x,y = unpack(loc)
-			local is_new = true
-			for _,oldloc in pairs(locations) do
-				local old_x, old_y = unpack_coords(oldloc)
-				if math.abs(old_x - x) < 0.05 and math.abs(old_y - y) < 0.05 then
-					is_new = false
-					break
+	local instances = {}
+	for zoneid in zoneids:gfind("%d+") do
+		local zone = zones[zoneid]
+		local locations = {}
+		local raw_coords = npc_coords(id, zoneid)
+		if raw_coords and #raw_coords > 0 then
+			for _,loc in pairs(raw_coords) do
+				local x,y = unpack(loc)
+				local is_new = true
+				for _,oldloc in pairs(locations) do
+					local old_x, old_y = unpack_coords(oldloc)
+					if math.abs(old_x - x) < 0.05 and math.abs(old_y - y) < 0.05 then
+						is_new = false
+						break
+					end
+				end
+				if is_new then
+					table.insert(locations, pack_coords(x, y))
 				end
 			end
-			if is_new then
-				table.insert(locations, pack_coords(x, y))
-			end
 		end
+		instances[zone] = {
+			id = id,
+			level = level,
+			creature_type = ctype,
+			locations = locations,
+			elite = elite,
+			tameable = npc_tameable(id),
+		}
 	end
-	return name, zone, {
-		id = id,
-		level = level,
-		creature_type = ctype,
-		locations = locations,
-		elite = elite,
-		tameable = npc_tameable(id),
-	}
+	return name, instances
 end
 
 local function npcs_from_list_page(url)
@@ -316,11 +321,13 @@ local function npcs_from_list_page(url)
 	if not page then return end
 	dprint(3, "Found data.")
 	for entry in page:gmatch("%b{}") do
-		local name, zone, npc = npc_from_list_entry(entry)
+		local name, npc_zones = npc_from_list_entry(entry)
 		if name then
-			if not defaults[zone] then defaults[zone] = {} end
-			defaults[zone][name] = npc
-			print("Added "..name.." to "..zone)
+			for zone, npc in pairs(npc_zones) do
+				if not defaults[zone] then defaults[zone] = {} end
+				defaults[zone][name] = npc
+				print("Added "..name.." to "..zone)
+			end
 		end
 	end
 end
@@ -328,7 +335,7 @@ end
 local function translations_from_list_page(url)
 	for subdomain,language in pairs(languages) do
 		local lang_url = url:gsub("//www", "//"..subdomain)
-        print("Translations: "..language.." "..lang_url)
+		print("Translations: "..language.." "..lang_url)
 		local page = getpage(lang_url)
 		if not page then return end
 		dprint(3, "Loaded page.")
