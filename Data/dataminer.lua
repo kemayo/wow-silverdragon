@@ -181,6 +181,7 @@ local force_include = {
     17591, -- Blood Elf Bandit
     50409, -- Mysterious Camel Figurine
     50410, -- Mysterious Camel Figurine (remnants)
+    3868, -- Blood Seeker (thought to share Aeonaxx's spawn timer)
 }
 local name_overrides = {
     [50410] = "Crumbled Statue Remnants",
@@ -189,7 +190,7 @@ local name_overrides = {
     [51403] = "Madexx (black)",
     [51404] = "Madexx (blue)",
     [50154] = "Madexx (brown)",
-
+    [51236] = "Aeonaxx (engaged)"
 }
 
 local function pack_coords(x, y)
