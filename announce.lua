@@ -82,7 +82,7 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, lev
 		if source:match("^sync") then
 			local channel, player = source:match("sync:(.+):(.+)")
 			if channel and player then
-				source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. zone
+				source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. (zone or UNKNOWN)
 				if x and y then
 					source = source .. " @ " .. round(x* 100, 1) .. "," .. round(y * 100, 1)
 				end
