@@ -7,70 +7,8 @@ local LibQTip = LibStub("LibQTip-1.0")
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("LDB")
 
-local dataobject = LibStub("LibDataBroker-1.1"):NewDataObject("SilverDragon", {
-	type = "data source",
-	icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01",
-	label = "Rares",
-	text = "",
-})
-
+local dataobject
 local db
-
-local tooltip
-function dataobject:OnEnter()
-	-- SetMapToCurrentZone()--This should fix the login problems and menu not populating I hope
-	local zone, x, y = core:GetPlayerLocation()
-
-	if not (core.db and core.db.global.mobs_byzone[zone]) then
-		return
-	end
-
-	tooltip = LibQTip:Acquire("SilverDragonTooltip", 6, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT")
-	tooltip:AddHeader("Name", "Level", "Type", "Count", "Last Seen")
-	
-	local n = 0
-	for name in pairs(core.db.global.mobs_byzone[zone]) do
-		n = n + 1
-		local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
-		local cached = id and core.already_cached[id]
-		tooltip:AddLine(name,
-			("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or ''),
-			BCT[creature_type],
-			count,
-			core:FormatLastSeen(lastseen),
-			(tameable and 'Tameable' or '') .. ((tameable and cached) and ', ' or '') .. (cached and 'Cached' or '')
-		)
-	end
-	if n == 0 then
-		tooltip:AddLine("None")
-	end
-
-	tooltip:SmartAnchorTo(self)
-	tooltip:Show()
-end
-
-function dataobject:OnLeave()
-	LibQTip:Release(tooltip)
-	tooltip = nil
-end
-
-function dataobject:OnClick(button)
-	if button ~= "RightButton" then
-		return
-	end
-	local config = core:GetModule("Config", true)
-	if config then
-		config:ShowConfig()
-	end
-end
-
-local last_seen
-core.RegisterCallback("LDB", "Seen", function(callback, zone, name)
-	last_seen = name
-	if db.profile.show_lastseen then
-		dataobject.text = name
-	end
-end)
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("LDB", {
@@ -79,12 +17,9 @@ function module:OnInitialize()
 		},
 	})
 	db = self.db
-	if icon then
-		icon:Register("SilverDragon", dataobject, self.db.profile.minimap)
-	end
-	if db.profile.show_lastseen then
-		dataobject.text = "None"
-	end
+
+	self:SetupDataObject()
+
 	local config = core:GetModule("Config", true)
 	if config then
 		config.options.plugins.broker = {
@@ -136,3 +71,74 @@ function module:OnInitialize()
 	end
 end
 
+function module:SetupDataObject()
+	dataobject = LibStub("LibDataBroker-1.1"):NewDataObject("SilverDragon", {
+		type = "data source",
+		icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01",
+		label = "Rares",
+		text = "",
+	})
+
+	local tooltip
+	function dataobject:OnEnter()
+		-- SetMapToCurrentZone()--This should fix the login problems and menu not populating I hope
+		local zone, x, y = core:GetPlayerLocation()
+
+		if not (core.db and core.db.global.mobs_byzone[zone]) then
+			return
+		end
+
+		tooltip = LibQTip:Acquire("SilverDragonTooltip", 6, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT")
+		tooltip:AddHeader("Name", "Level", "Type", "Count", "Last Seen")
+		
+		local n = 0
+		for name in pairs(core.db.global.mobs_byzone[zone]) do
+			n = n + 1
+			local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
+			local cached = id and core.already_cached[id]
+			tooltip:AddLine(name,
+				("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or ''),
+				BCT[creature_type],
+				count,
+				core:FormatLastSeen(lastseen),
+				(tameable and 'Tameable' or '') .. ((tameable and cached) and ', ' or '') .. (cached and 'Cached' or '')
+			)
+		end
+		if n == 0 then
+			tooltip:AddLine("None")
+		end
+
+		tooltip:SmartAnchorTo(self)
+		tooltip:Show()
+	end
+
+	function dataobject:OnLeave()
+		LibQTip:Release(tooltip)
+		tooltip = nil
+	end
+
+	function dataobject:OnClick(button)
+		if button ~= "RightButton" then
+			return
+		end
+		local config = core:GetModule("Config", true)
+		if config then
+			config:ShowConfig()
+		end
+	end
+
+	local last_seen
+	core.RegisterCallback("LDB", "Seen", function(callback, zone, name)
+		last_seen = name
+		if db.profile.show_lastseen then
+			dataobject.text = name
+		end
+	end)
+
+	if icon then
+		icon:Register("SilverDragon", dataobject, self.db.profile.minimap)
+	end
+	if db.profile.show_lastseen then
+		dataobject.text = "None"
+	end
+end
