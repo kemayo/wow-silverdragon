@@ -255,6 +255,9 @@ local function npc_from_list_entry(entry)
 	local name = entry:match("\"name\":['\"](.-)['\"],")
 	name = name:gsub("\\'", "'")
 	local level = tonumber(entry:match("\"maxlevel\":(%d+)"))
+	if level == 9999 then
+		level = -1 -- boss mobs
+	end
 	local ctype = tonumber(entry:match("\"type\":(%d+)"))
 	if ctype == 10 then
 		ctype = nil -- Uncategorized
