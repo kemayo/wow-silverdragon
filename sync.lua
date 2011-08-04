@@ -28,7 +28,7 @@ function module:OnInitialize()
 					party = config.toggle("Party", "Accept syncs from party members"),
 					raid = config.toggle("Raid", "Accept syncs from raid members"),
 					guild = config.toggle("Guild Sync", "Accept syncs from guild members"),
-					nearby = config.toggle("Nearby only", "Only accept syncs from people who are nearby"),
+					nearby = config.toggle("Nearby only", "Only accept syncs from people who are nearby. Information about guild members isn't available, so they'll only count as nearby if they're in your group."),
 					quiet = config.toggle("Be quiet", "Don't send rare information to others"),
 				},
 			},
@@ -45,7 +45,7 @@ local function deSAM(val)
 	if val == "nil" then
 		return nil
 	end
-	if val:match("\d+\.?\d*") then
+	if val and val:match("\d+\.?\d*") then
 		return tonumber(val)
 	end
 	return val
@@ -84,6 +84,9 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		return
 	end
 	if self.db.profile.nearby and not CheckInteractDistance(sender, 4) then
+		-- note: will only ever detect group members as being nearby
+		-- could enhance to include guild members via roster scanning to compare zones,
+		-- or by using some guild member position lib.
 		return
 	end
 
