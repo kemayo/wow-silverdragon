@@ -183,6 +183,8 @@ local force_include = {
 	50410, -- Mysterious Camel Figurine (remnants)
 	3868, -- Blood Seeker (thought to share Aeonaxx's spawn timer)
 	50005, -- Poseidus
+	51236, -- Aeonaxx (engaged)
+	50053, -- Thartuk the Exile (a rare, but wowhead doesn't include him in search results for some reason)
 }
 local name_overrides = {
 	[50410] = "Crumbled Statue Remnants",
@@ -372,7 +374,6 @@ local function main()
 	for i,c in pairs(npctypes) do
 		print("Acquiring rares for category: "..c)
 		local url = "http://www.wowhead.com/npcs="..i.."&filter=cl=4:2"
-
 		npcs_from_list_page(url)
 		translations_from_list_page(url)
 	end
