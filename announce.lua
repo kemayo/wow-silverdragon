@@ -82,7 +82,10 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, lev
 		if source:match("^sync") then
 			local channel, player = source:match("sync:(.+):(.+)")
 			if channel and player then
-				source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. zone .. " @ " .. round(x* 100, 1) .. "," .. round(y * 100, 1)
+				source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. zone
+				if x and y then
+					source = source .. " @ " .. round(x* 100, 1) .. "," .. round(y * 100, 1)
+				end
 			end
 		end
 		self:Pour(("Rare seen: %s%s (%s)"):format(name, dead and "... but it's dead" or '', source or ''))
