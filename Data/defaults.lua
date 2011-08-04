@@ -74,7 +74,8 @@ function module:GetDefaults()
 		},
 		["Abyssal Depths"] = {
 			["Ghostcrawler"] = {id=50051,level=85,creature_type="Beast",tameable=true,locations = {12208400,13007880,16407300,17608760,18205820,18207820,18405100,18406420,22407220,23407860,23604740,23606260,28207360,29008280,},},
-			["Mobus"] = {id=50009,level=9999,creature_type="Beast",elite=true,locations = {61802940,63401880,63402420,64003460,68003960,68401820,68602440,73403480,74202480,74401700,74404060,78403360,},},
+			["Mobus"] = {id=50009,level=-1,creature_type="Beast",elite=true,locations = {61802940,63401880,63402420,64003460,68003960,68401820,68602440,73403480,74202480,74401700,74404060,78403360,},},
+			["Poseidus"] = {id=50005,level=81,creature_type="Beast",locations = {40007560,},},
 			["Shok'sharak"] = {id=50050,level=82,locations = {41403180,46602940,47403460,},},
 		},
 		["Maraudon"] = {
@@ -131,8 +132,9 @@ function module:GetDefaults()
 		["Deepholm"] = {
 			["Golgarok"] = {id=50059,level=83,creature_type="Elemental",locations = {32207640,36808160,43008640,},},
 			["Jadefang"] = {id=49822,level=85,creature_type="Beast",tameable=true,locations = {61202240,},},
+			["Blood Seeker"] = {id=3868,level=15,creature_type="Beast",tameable=true,locations = {42604740,43405940,51604340,52406380,},},
 			["Terborus"] = {id=50060,level=83,creature_type="Elemental",locations = {55202440,},},
-			["Xariona"] = {id=50061,level=9999,creature_type="Dragonkin",elite=true,locations = {40005220,40604700,41205800,43404040,44606340,48603760,50206540,53803940,56006140,57404520,58405140,},},
+			["Xariona"] = {id=50061,level=-1,creature_type="Dragonkin",elite=true,locations = {40005220,40604700,41205800,43404040,44606340,48603760,50206540,53803940,56006140,57404520,58405140,},},
 			["Aeonaxx"] = {id=50062,level=85,creature_type="Dragonkin",locations = {42404780,43005900,51004320,51806360,},},
 		},
 		["Azuremyst Isle"] = {
@@ -220,7 +222,7 @@ function module:GetDefaults()
 			["Madexx (brown)"] = {id=50154,level=84,creature_type="Beast",tameable=true,locations = {44201000,44202120,50002340,53801840,},},
 			["Madexx (black)"] = {id=51403,level=84,creature_type="Beast",tameable=true,locations = {5606280,44201080,44202180,50001980,},},
 			["Crumbled Statue Remnants"] = {id=50410,level=1,locations = {22206400,25405120,28406340,29602040,31406940,32004500,33202820,37006400,38405520,40003840,40004360,40804940,45201580,46204420,47207640,50403120,50405040,51807060,64803020,69805780,72004400,73407340,},},
-			["Akma'hat"] = {id=50063,level=9999,creature_type="Humanoid",elite=true,locations = {38006020,},},
+			["Akma'hat"] = {id=50063,level=-1,creature_type="Humanoid",elite=true,locations = {38006020,},},
 			["Mysterious Camel Figurine"] = {id=50409,locations = {22206420,25405120,28406340,29602040,31406940,32004520,33202820,37006420,38405480,40003840,40804980,45201580,46204480,47207640,50403120,51405120,51807060,64603040,70005820,72004400,73209160,},},
 			["Cyrus the Black"] = {id=50064,level=84,creature_type="Humanoid",locations = {58008240,58206120,66406800,70807420,},},
 			["Armagedillo"] = {id=50065,level=84,creature_type="Beast",locations = {44604120,},},
@@ -381,7 +383,7 @@ function module:GetDefaults()
 			["Duskstalker"] = {id=14430,level=8,creature_type="Beast",tameable=true,locations = {49406620,52007720,57406640,},},
 			["Agal"] = {id=2162,level=9,creature_type="Humanoid",locations = {47204480,},},
 			["Threggil"] = {id=14432,level=7,creature_type="Demon",locations = {53004440,},},
-			["Blackmoss the Fetid"] = {id=3535,level=8,creature_type="Elemental",locations = {52006380,},},
+			["Blackmoss the Fetid"] = {id=3535,level=8,creature_type="Elemental",locations = {},},
 			["Grimmaw"] = {id=14429,level=8,creature_type="Humanoid",locations = {51603840,},},
 			["Fury Shelda"] = {id=14431,level=9,creature_type="Humanoid",locations = {37203020,39403520,},},
 		},
@@ -407,6 +409,7 @@ function module:GetDefaults()
 			["High Thane Jorfus"] = {id=32501,level=80,creature_type="Undead",locations = {29606960,31006420,35206940,46408480,47407800,51808560,67003740,72403520,80002620,},},
 		},
 		["Vashj'ir"] = {
+			["Captain Florence"] = {id=51071,level=81,creature_type="Humanoid",locations = {68407380,},},
 			["Captain Foulwind"] = {id=51079,level=81,creature_type="Humanoid",locations = {66806940,},},
 		},
 		["Netherstorm"] = {
@@ -432,7 +435,7 @@ function module:GetDefaults()
 		["Twilight Highlands"] = {
 			["Karoma"] = {id=50138,level=85,creature_type="Beast",tameable=true,locations = {48407700,52605180,53407540,57804140,58006360,58205460,65405940,},},
 			["Tarvus the Vile"] = {id=50086,level=85,creature_type="Dragonkin",locations = {51008240,},},
-			["Julak-Doom"] = {id=50089,level=9999,creature_type="Giant",elite=true,locations = {49201020,54201360,56400640,},},
+			["Julak-Doom"] = {id=50089,level=-1,creature_type="Giant",elite=true,locations = {49201020,54201360,56400640,},},
 			["Sambas"] = {id=50159,level=85,creature_type="Beast",tameable=true,locations = {36405160,40803840,45402940,49002300,55605600,67602340,98006780,},},
 			["Overlord Sunderfury"] = {id=50085,level=85,creature_type="Elemental",locations = {57803340,},},
 		},
@@ -513,8 +516,8 @@ function module:GetDefaults()
 			["Anthriss"] = {id=54338,level=85,creature_type="Beast",tameable=true,locations = {54203780,},},
 		},
 		["Mount Hyjal"] = {
-			["Blazewing"] = {id=50057,level=81,creature_type="Elemental",locations = {},},
-			["Garr"] = {id=50056,level=9999,creature_type="Elemental",elite=true,locations = {36407860,36807300,41608020,},},
+			["Blazewing"] = {id=50057,level=81,creature_type="Elemental",locations = {42205880,47205740,50205220,53205740,56605120,58205760,63205720,63805120,69205580,},},
+			["Garr"] = {id=50056,level=-1,creature_type="Elemental",elite=true,locations = {36407860,36807300,41608020,},},
 			["Terrorpene"] = {id=50058,level=81,creature_type="Beast",tameable=true,locations = {49407140,52208340,54207740,},},
 			["Magria"] = {id=54319,level=85,creature_type="Beast",tameable=true,locations = {27405140,32605140,38005400,},},
 			["Ankha"] = {id=54318,level=85,creature_type="Beast",tameable=true,locations = {27405100,32605140,37805380,},},
