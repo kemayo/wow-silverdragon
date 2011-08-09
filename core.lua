@@ -65,12 +65,16 @@ function addon:UPDATE_MOUSEOVER_UNIT()
 end
 
 local function npc_id_from_guid(guid)
+	if not guid then return end
 	local unit_type = bit.band(tonumber("0x"..strsub(guid, 3,5)), 0x00f)
 	if unit_type ~= 0x003 then
 		-- npcs only
 		return
 	end
-	return tonumber("0x"..strsub(guid,9,12))
+	-- So, interesting point, docs say that 9-12 are the ones to use here. However... in actual
+	-- practive 7-10 appears to be correct.
+	-- return tonumber("0x"..strsub(guid,9,12))
+	return tonumber("0x"..strsub(guid,7,10))
 end
 function addon:UnitID(unit)
 	return npc_id_from_guid(UnitGUID(unit))
