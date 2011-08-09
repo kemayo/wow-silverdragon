@@ -1,5 +1,6 @@
 ﻿local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Announce", "LibSink-2.0")
+local Debug = core.Debug
 
 local LSM = LibStub("LibSharedMedia-3.0")
 
@@ -74,11 +75,14 @@ local function round(num, precision)
 end
 
 function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, level)
+	Debug("Announce:Seen", zone, name, x, y, dead, newloc, source, level)
 	level = tonumber(level or "")
 	if (not self.db.profile.classic) and (level >= 2 and level < 61) then
+		Debug("Skipping classic rare")
 		return
 	end
 	if self.db.profile.sink then
+		Debug("Pouring message")
 		if source:match("^sync") then
 			local channel, player = source:match("sync:(.+):(.+)")
 			if channel and player then
@@ -91,6 +95,7 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, lev
 		self:Pour(("Rare seen: %s%s (%s)"):format(name, dead and "... but it's dead" or '', source or ''))
 	end
 	if self.db.profile.sound and LSM then
+		Debug("Playing sound", self.db.profile.soundfile)
 		if self.db.profile.soundfile == "NPCScan" then
 			--Override default behavior and force npcscan behavior of two sounds at once
 			PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
@@ -100,6 +105,7 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, lev
 		end
 	end
 	if self.db.profile.flash then
+		Debug("Flashing")
 		LowHealthFrame_StartFlashing(0.5, 0.5, 6, false, 0.5)
 	end
 end
