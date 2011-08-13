@@ -1,3 +1,4 @@
+local BZ = LibStub("LibBabble-Zone-3.0"):GetUnstrictLookupTable()
 local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
@@ -392,13 +393,19 @@ addon.continent_list = continent_list
 addon.zone_to_mapfile = zone_to_mapfile
 addon.mapfile_to_zone = mapfile_to_zone
 
+-- MoltenFront (MapAreaID:795) is needed, but isn't returned by GetMapZones...
+-- while you're in it you're in continent -1, zone 0.
+if not continent_list[-1] then
+	continent_list[-1] = {}
+end
+continent_list[-1][0] = "MoltenFront"
+zone_to_mapfile[BZ["Molten Front"]] = "MoltenFront"
+mapfile_to_zone["MoltenFront"] = BZ["Molten Front"]
+
 function addon:GetPlayerLocation()
 	-- returns mapFile (e.g. "Stormwind"), x, y
 	if IsInInstance() then
 		return BZR[GetRealZoneText()], 0, 0
-	end
-	if GetCurrentMapAreaID() == 795 then--We are in molten front
-		return BZR[GetRealZoneText()], 1189.58331298828, 793.749938964844--Just hack it into table.
 	end
 	local x, y = GetPlayerMapPosition('player')
 	local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()
