@@ -2,7 +2,9 @@
 local module = core:NewModule("Announce", "LibSink-2.0")
 local Debug = core.Debug
 
+local Tourist = LibStub("LibTourist-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
+local BZ = LibStub("LibBabble-Zone-3.0"):GetUnstrictLookupTable()
 
 if LSM then
 	-- Register some media
@@ -29,7 +31,14 @@ function module:OnInitialize()
 			sound = true,
 			soundfile = "Wham!",
 			flash = true,
-			classic = true,
+			instances = true,
+			expansions = {
+				classic = true,
+				bc = true,
+				wrath = true,
+				cataclysm = true,
+				unknown = true,
+			},
 			sink_opts = {},
 		},
 	})
@@ -39,6 +48,7 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
+		local toggle = config.toggle
 		config.options.plugins.announce = {
 			announce = {
 				type = "group",
@@ -49,17 +59,34 @@ function module:OnInitialize()
 					sink = {
 						type = "group", name = "Message", inline = true,
 						args = {
-							sink = config.toggle("Message", "Send a message to whatever scrolling text addon you're using."),
+							sink = toggle("Message", "Send a message to whatever scrolling text addon you're using."),
 							output = self:GetSinkAce3OptionsDataTable()
 						},
 					},
-					flash = config.toggle("Flash", "Flash the edges of the screen."),
-					classic = config.toggle("Announce lvls 2-60", "Toggle notifications for mobs that are between levels 2-60. Note: Camel Figures are level 1 so that's why this option excludes level 1s."),
+					flash = toggle("Flash", "Flash the edges of the screen."),
+					instances = toggle("Instances", "Show announcements while in an instance"),
+					expansions = {
+						type = "group", name = "Expansions", inline = true,
+						get = function(info) return self.db.profile.expansions[info[#info]] end,
+						set = function(info, v) self.db.profile.expansions[info[#info]] = v end,
+						args = {
+							desc = {
+								type = "description",
+								name = "Whether to announce rares in zones from this expansion",
+								order = 0,
+							},
+							classic = toggle("Classic", "Vanilla. Basic. 1-60. Whatevs.", 10),
+							bc = toggle("Burning Crusade", "Illidan McGrumpypants. 61-70.", 20),
+							wrath = toggle("Wrath of the Lich King", "Emo Arthas. 71-80.", 30),
+							cataclysm = toggle("Cataclysm", "Play it off, keyboard cataclysm! 81-85.", 40),
+							unknown = toggle(UNKNOWN, "Not sure where they fit.", 50),
+						},
+					},
 				},
 			},
 		}
 		if LSM then
-			config.options.plugins.announce.announce.args.sound = config.toggle("Sound", "Play a sound.")
+			config.options.plugins.announce.announce.args.sound = toggle("Sound", "Play a sound.")
 			config.options.plugins.announce.announce.args.soundfile = {
 				type = "select", dialogControl = "LSM30_Sound",
 				name = "Sound to Play", desc = "Choose a sound file to play.",
@@ -74,19 +101,94 @@ local function round(num, precision)
 	return math.floor(num * math.pow(10, precision) + 0.5) / math.pow(10, precision)
 end
 
+-- next tables are for zones which can't be caught by continent
+-- TODO: check instance coverage
+local bc_zones = {
+	["AzuremystIsle"] = true,
+	["BloodmystIsle"] = true,
+	["Ghostlands"] = true,
+	["SilvermoonCity"] = true,
+	["Sunwell"] = true, -- Isle of Quel'Danas
+	["TheExodar"] = true,
+}
+local cata_zones = {
+	["Deepholm"] = true,
+	["Hyjal"] = true,
+	["Kezan"] = true,
+	["MoltenFront"] = true,
+	["RuinsofGilneas"] = true,
+	["RuinsofGilneasCity"] = true,
+	["TheLostIsles"] = true,
+	["TheMaelstrom"] = true,
+	["TolBarad"] = true,
+	["TolBaradDailyArea"] = true,
+	["TwilightHighlands"] = true,
+	["Uldum"] = true,
+	["Vashjir"] = true,
+	["VashjirDepths"] = true, -- Abyssal Depths
+	["VashjirKelpForest"] = true, -- Kelp'thar Forest
+	["VashjirRuins"] = true, -- Shimmering Expanse
+}
+local function guess_expansion(zone)
+	if not zone then
+		return 'unknown'
+	end
+	local localized_zone = core.mapfile_to_zone[zone]
+	if not localized_zone then
+		return 'unknown'
+	end
+	if bc_zones[zone] then
+		return 'bc'
+	end
+	if cata_zones[zone] then
+		return 'cataclysm'
+	end
+	if Tourist:IsInNorthrend(localized_zone) then
+		return 'wrath'
+	end
+	if Tourist:IsInOutland(localized_zone) then
+		return 'bc'
+	end
+	if Tourist:IsInTheMaelstrom(localized_zone) then
+		return 'cataclysm'
+	end
+	if Tourist:IsInKalimdor(localized_zone) then
+		return 'classic'
+	end
+	if Tourist:IsInEasternKingdoms(localized_zone) then
+		return 'classic'
+	end
+	return 'unknown'
+end
+core.guess_expansion = guess_expansion
+
 function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, level)
 	Debug("Announce:Seen", zone, name, x, y, dead, newloc, source, level)
-	level = tonumber(level or "")
-	if (not self.db.profile.classic) and (level >= 2 and level < 61) then
-		Debug("Skipping classic rare")
+
+	if not self.db.profile.instances and IsInInstance() then
 		return
 	end
+
+	local exp = guess_expansion(zone)
+	if exp and not self.db.profile.expansions[exp] then
+		Debug("Skipping due to expansion", exp)
+		return
+	end
+	local localized_zone = zone and core.mapfile_to_zone[zone]
+	if zone and not localized_zone then
+		-- This is probably an instance, so try to localize it
+		localized_zone = BZ[zone]
+	end
+	if not localized_zone then
+		localized_zone = UNKNOWN
+	end
+
 	if self.db.profile.sink then
 		Debug("Pouring message")
 		if source:match("^sync") then
 			local channel, player = source:match("sync:(.+):(.+)")
 			if channel and player then
-				source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. (zone or UNKNOWN)
+				source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. localized_zone
 				if x and y then
 					source = source .. " @ " .. round(x* 100, 1) .. "," .. round(y * 100, 1)
 				end
