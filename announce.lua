@@ -97,10 +97,6 @@ function module:OnInitialize()
 	end
 end
 
-local function round(num, precision)
-	return math.floor(num * math.pow(10, precision) + 0.5) / math.pow(10, precision)
-end
-
 -- next tables are for zones which can't be caught by continent
 -- TODO: check instance coverage
 local bc_zones = {
@@ -190,7 +186,7 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, lev
 			if channel and player then
 				source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. localized_zone
 				if x and y then
-					source = source .. " @ " .. round(x* 100, 1) .. "," .. round(y * 100, 1)
+					source = source .. " @ " .. core.round(x* 100, 1) .. "," .. core.round(y * 100, 1)
 				end
 			end
 		end

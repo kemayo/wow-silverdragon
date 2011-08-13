@@ -79,6 +79,7 @@ function module:SetupDataObject()
 		text = "",
 	})
 
+	local rares_seen = {}
 	local tooltip
 	function dataobject:OnEnter()
 		-- SetMapToCurrentZone()--This should fix the login problems and menu not populating I hope
@@ -108,6 +109,22 @@ function module:SetupDataObject()
 			tooltip:AddLine("None")
 		end
 
+		if #rares_seen > 0 then
+			tooltip:AddHeader("Seen this session")
+			tooltip:AddHeader("Name", "Zone", "Coords", "When", "Source")
+			for i,rare in ipairs(rares_seen) do
+				tooltip:AddLine(
+					rare.name,
+					core.mapfile_to_zone[rare.zone],
+					(rare.x and rare.y) and (core.round(rare.x * 100, 1) .. ', ' .. core.round(rare.y * 100, 1)) or UNKNOWN,
+					core:FormatLastSeen(rare.when),
+					rare.source or UNKNOWN
+				)
+			end
+		else
+			tooltip:AddHeader("None seen this session")
+		end
+
 		tooltip:SmartAnchorTo(self)
 		tooltip:Show()
 	end
@@ -128,11 +145,19 @@ function module:SetupDataObject()
 	end
 
 	local last_seen
-	core.RegisterCallback("LDB", "Seen", function(callback, zone, name)
+	core.RegisterCallback("LDB", "Seen", function(callback, zone, name, x, y, dead, newloc, source)
 		last_seen = name
 		if db.profile.show_lastseen then
 			dataobject.text = name
 		end
+		table.insert(rares_seen, {
+			name = name,
+			zone = zone,
+			x = x,
+			y = y,
+			source = source,
+			when = time(),
+		})
 	end)
 
 	if icon then

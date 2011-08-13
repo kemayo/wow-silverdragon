@@ -359,6 +359,10 @@ end)
 
 -- Utility:
 
+addon.round = function(num, precision)
+	return math.floor(num * math.pow(10, precision) + 0.5) / math.pow(10, precision)
+end
+
 function addon:FormatLastSeen(t)
 	t = tonumber(t)
 	if not t or t == 0 then return 'Never' end
