@@ -9,11 +9,11 @@
 ## eMail: kemayo at gmail dot com
 ## X-Category: Interface Enhancements
 ## X-Donate: PayPal:kemayo AT gmail DOT com
-## OptionalDependencies: Ace3, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, LibSharedMedia-3.0, HandyNotes, Cartographer, Cartographer_Notes, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, tekDebug, ChatThrottleLib
+## OptionalDependencies: Ace3, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, LibSharedMedia-3.0, HandyNotes, Cartographer, Cartographer_Notes, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, tekDebug, ChatThrottleLib, LibTourist-3.0
 ## SavedVariables: SilverDragon2DB
 ## LoadOnDemand: 0
 
-## X-Embeds: Ace3, LibSink-2.0, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, LibSharedMedia-3.0, ChatThrottleLib
+## X-Embeds: Ace3, LibSink-2.0, LibBabble-CreatureType-3.0, LibBabble-Zone-3.0, LibSharedMedia-3.0, ChatThrottleLib, LibTourist-3.0
 
 #@no-lib-strip@
 lib\LibStub\LibStub.lua
@@ -34,6 +34,7 @@ lib\LibSink-2.0\lib.xml
 lib\LibDataBroker-1.1\LibDataBroker-1.1.lua
 lib\LibDBIcon-1.0\LibDBIcon-1.0.lua
 lib\LibQTip-1.0\LibQTip-1.0.lua
+lib\LibTourist-3.0\lib.xml
 lib\LibSharedMedia-3.0\lib.xml
 lib\AceGUI-3.0-SharedMediaWidgets\widget.xml
 #@end-no-lib-strip@

@@ -1,6 +1,7 @@
 local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
+local Tourist = LibStub("LibTourist-3.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0")
 SilverDragon = addon
@@ -30,7 +31,7 @@ function addon:OnInitialize()
 			},
 		},
 		profile = {
-			scan = 0.5, -- scan interval, 0 for never
+			scan = 1, -- scan interval, 0 for never
 			delay = 600, -- number of seconds to wait between recording the same mob
 			cache_tameable = true, -- whether to alert for tameable mobs found through cache-scanning
 			mouseover = true,
@@ -39,6 +40,7 @@ function addon:OnInitialize()
 			cache = true,
 			instances = false,
 			taxi = true,
+			neighbors = true,
 		},
 	})
 	globaldb = self.db.global
@@ -186,15 +188,27 @@ function addon:CheckNearby()
 	if not zone then return end
 	if (not self.db.profile.instances) and IsInInstance() then return end
 	if (not self.db.profile.taxi) and UnitOnTaxi('player') then return end
-	
+
+	-- zone is a mapfile here, note
+
 	if self.db.profile.targets then
-		addon:ScanTargets(zone)
+		addon:ScanTargets()
 	end
 	if self.db.profile.nameplates then
 		addon:ScanNameplates(zone)
 	end
 	if self.db.profile.cache then
 		addon:ScanCache(zone)
+	end
+	if self.db.profile.neighbors then
+		for z in Tourist:IterateBorderZones(self.mapfile_to_zone[zone], true) do
+			if self.db.profile.nameplates then
+				addon:ScanNameplates(self.zone_to_mapfile[z])
+			end
+			if self.db.profile.cache then
+				addon:ScanCache(self.zone_to_mapfile[z])
+			end
+		end
 	end
 end
 
