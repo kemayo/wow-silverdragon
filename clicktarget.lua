@@ -82,6 +82,7 @@ function module:ShowFrame()
 	local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
 	local popup = self.popup
 	local macrotext = "/cleartarget\n/targetexact "..name
+	local level_text = (level and level > 0) and level or (level and level == -1) and 'Boss' or '?'
 	popup:SetAttribute("macrotext", macrotext)
 	popup:Enable()
 	popup:Show()
@@ -89,7 +90,7 @@ function module:ShowFrame()
 	self:ShowModel()
 
 	popup:SetText(name)
-	popup.details:SetText(("%s%s %s"):format(level or '??', elite and '+' or '', creature_type and BCT[creature_type] or ''))
+	popup.details:SetText(("%s%s %s"):format(level_text, elite and '+' or '', creature_type and BCT[creature_type] or ''))
 
 	local model = popup.model
 end
