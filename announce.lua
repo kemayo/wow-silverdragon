@@ -158,8 +158,8 @@ local function guess_expansion(zone)
 end
 core.guess_expansion = guess_expansion
 
-function module:Seen(callback, zone, name, x, y, dead, newloc, source, _, _, level)
-	Debug("Announce:Seen", zone, name, x, y, dead, newloc, source, level)
+function module:Seen(callback, zone, name, x, y, dead, newloc, source)
+	Debug("Announce:Seen", zone, name, x, y, dead, newloc, source)
 
 	if not self.db.profile.instances and IsInInstance() then
 		return
