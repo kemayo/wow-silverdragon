@@ -84,6 +84,17 @@ function addon:UnitID(unit)
 end
 
 local lastseen = {}
+function addon:ShouldSave(zone, name)
+	local last_saved = globaldb.mobs_byzone[zone][name]
+	if not last_saved then
+		return true
+	end
+	if time() > (last_saved + self.db.profile.delay) then
+		return true
+	end
+	return false
+end
+
 function addon:ProcessUnit(unit, source)
 	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
 	local unittype = UnitClassification(unit)
@@ -93,11 +104,6 @@ function addon:ProcessUnit(unit, source)
 	if not zone then return end -- there are only a few places where this will happen
 	
 	local name = UnitName(unit)
-	if lastseen[name] and time() < lastseen[name] + self.db.profile.delay then
-		-- we saw it too recently to *record* it, but we'll let the caller know
-		self.events:Fire("Seen_Silent", zone, name, x, y, UnitIsDead(unit), false, source or 'target', unit, globaldb.mob_id[name])
-		return true
-	end
 
 	local level = (UnitLevel(unit) or -1)
 	local creature_type = UnitCreatureType(unit)
@@ -105,8 +111,7 @@ function addon:ProcessUnit(unit, source)
 
 	local newloc = self:SaveMob(zone, name, x, y, level, unittype=='rareelite', creature_type, id)
 
-	lastseen[name] = time()
-	self.events:Fire("Seen", zone, name, x, y, UnitIsDead(unit), newloc, source or 'target', unit, globaldb.mob_id[name], level)
+	self:NotifyMob(zone, name, x, y, UnitIsDead(unit), newloc, source or 'target', unit)
 	return true
 end
 
@@ -114,6 +119,7 @@ function addon:SaveMob(zone, name, x, y, level, elite, creature_type, id)
 	if not (zone and name) then return end
 	-- saves a mob's information, returns true if this is the first time a mob has been seen at this location
 	if not globaldb.mob_locations[name] then globaldb.mob_locations[name] = {} end
+	if not self:ShouldSave(zone, name) then return end
 
 	globaldb.mobs_byzone[zone][name] = time()
 	globaldb.mob_level[name] = level
@@ -147,6 +153,14 @@ function addon:GetMob(zone, name)
 		return 0, 0, false, UNKNOWN, nil, 0, nil, nil
 	end
 	return #globaldb.mob_locations[name], globaldb.mob_level[name], globaldb.mob_elite[name], BCT[globaldb.mob_type[name]], globaldb.mobs_byzone[zone][name], globaldb.mob_count[name], globaldb.mob_id[name], globaldb.mob_tameable[name]
+end
+
+function addon:NotifyMob(zone, name, x, y, is_dead, is_new_location, source, unit)
+	if lastseen[name] and time() < lastseen[name] + self.db.profile.delay then
+		return
+	end
+	lastseen[name] = time()
+	self.events:Fire("Seen", zone, name, x, y, id_dead, is_new_location, source, unit, globaldb.mob_id[name], globaldb.mob_level[level])
 end
 
 -- Returns name, addon:GetMob(zone, name)
@@ -283,8 +297,7 @@ function addon:ScanNameplates(zone)
 		local level = (regions.level:GetText() or -1)
 		if nameplate:IsVisible() and zone_mobs[name] and (not lastseen[name] or (lastseen[name] < (time() - self.db.profile.delay))) then
 			local x, y = GetPlayerMapPosition('player')
-			self.events:Fire("Seen", zone, name, x, y, false, false, "nameplate", false, globaldb.mob_id[name], level)
-			lastseen[name] = time()
+			self:NotifyMob(zone, name, x, y, false, false, "nameplate", false)
 			break -- it's pretty unlikely there'll be two rares on screen at once
 		end
 	end
@@ -329,7 +342,7 @@ function addon:ScanCache(zone)
 		if id and (not globaldb.mob_tameable[mob] or self.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
 			-- Debug("They're new!")
 			already_cached[id] = true
-			self.events:Fire("Seen", zone, mob, x, y, false, false, "cache", false, id, level)
+			self:NotifyMob(zone, mob, x, y, false, false, "cache", false)
 		end
 	end
 	first_cachescan = false

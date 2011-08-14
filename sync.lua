@@ -120,6 +120,6 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	end
 	spam[name] = time()
 
-	-- zone, name, x, y, dead, new_location, source, unit, id, level
-	core.events:Fire("Seen", zone, name, x, y, false, false, "sync:"..channel..":"..sender, false, id or core.db.global.mob_id[name], level)
+	-- zone, name, x, y, dead, new_location, source, unit
+	core:NotifyMob(zone, name, x, y, false, false, "sync:"..channel..":"..sender, false)
 end
