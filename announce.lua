@@ -158,8 +158,8 @@ local function guess_expansion(zone)
 end
 core.guess_expansion = guess_expansion
 
-function module:Seen(callback, zone, name, x, y, dead, newloc, source)
-	Debug("Announce:Seen", zone, name, x, y, dead, newloc, source)
+function module:Seen(callback, zone, ...)
+	Debug("Announce:Seen", zone, ...)
 
 	if not self.db.profile.instances and IsInInstance() then
 		return
@@ -170,6 +170,15 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source)
 		Debug("Skipping due to expansion", exp)
 		return
 	end
+
+	core.events:Fire("Announce", zone, ...)
+end
+
+core.RegisterCallback("SD Announce Sink", "Announce", function(callback, zone, name, x, y, dead, newloc, source)
+	if not module.db.profile.sink then
+		return
+	end
+
 	local localized_zone = zone and core.mapfile_to_zone[zone]
 	if zone and not localized_zone then
 		-- This is probably an instance, so try to localize it
@@ -179,32 +188,40 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source)
 		localized_zone = UNKNOWN
 	end
 
-	if self.db.profile.sink then
-		Debug("Pouring message")
-		if source:match("^sync") then
-			local channel, player = source:match("sync:(.+):(.+)")
-			if channel and player then
-				source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. localized_zone
-				if x and y then
-					source = source .. " @ " .. core.round(x* 100, 1) .. "," .. core.round(y * 100, 1)
-				end
+	Debug("Pouring message")
+	if source:match("^sync") then
+		local channel, player = source:match("sync:(.+):(.+)")
+		if channel and player then
+			source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. localized_zone
+			if x and y then
+				source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
 			end
 		end
-		self:Pour(("Rare seen: %s%s (%s)"):format(name, dead and "... but it's dead" or '', source or ''))
 	end
-	if self.db.profile.sound and LSM then
-		Debug("Playing sound", self.db.profile.soundfile)
-		if self.db.profile.soundfile == "NPCScan" then
-			--Override default behavior and force npcscan behavior of two sounds at once
-			PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
-			PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), "Master")
-		else--Play whatever sound is set
-			PlaySoundFile(LSM:Fetch("sound", self.db.profile.soundfile), "Master")
-		end
+	module:Pour(("Rare seen: %s%s (%s)"):format(name, dead and "... but it's dead" or '', source or ''))
+end)
+
+core.RegisterCallback("SD Announce Sound", "Announce", function(callback)
+	if not (module.db.profile.sound and LSM) then
+		return
 	end
-	if self.db.profile.flash then
-		Debug("Flashing")
-		LowHealthFrame_StartFlashing(0.5, 0.5, 6, false, 0.5)
+
+	Debug("Playing sound", module.db.profile.soundfile)
+	if module.db.profile.soundfile == "NPCScan" then
+		--Override default behavior and force npcscan behavior of two sounds at once
+		PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
+		PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), "Master")
+	else--Play whatever sound is set
+		PlaySoundFile(LSM:Fetch("sound", module.db.profile.soundfile), "Master")
 	end
-end
+end)
+
+core.RegisterCallback("SD Announce Flash", "Announce", function(callback)
+	if not module.db.profile.flash then
+		return
+	end
+
+	Debug("Flashing")
+	LowHealthFrame_StartFlashing(0.5, 0.5, 6, false, 0.5)
+end)
 

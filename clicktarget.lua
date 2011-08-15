@@ -20,7 +20,7 @@ function module:OnInitialize()
 			},
 		},
 	})
-	core.RegisterCallback(self, "Seen")
+	core.RegisterCallback(self, "Announce")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
 
@@ -142,9 +142,13 @@ function module:ShowModel()
 
 end
 
-function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit, id)
-	if source:match("^sync") then source = "sync" end
-	if not self.db.profile.sources[source] then return end
+function module:Announce(callback, zone, name, x, y, dead, newloc, source, unit, id)
+	if source:match("^sync") then
+		source = "sync"
+	end
+	if not self.db.profile.sources[source] then
+		return
+	end
 	current.zone = zone
 	current.name = name
 	current.id = id
