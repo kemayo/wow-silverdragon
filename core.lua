@@ -160,7 +160,7 @@ function addon:NotifyMob(zone, name, x, y, is_dead, is_new_location, source, uni
 		return
 	end
 	lastseen[name] = time()
-	self.events:Fire("Seen", zone, name, x, y, id_dead, is_new_location, source, unit, globaldb.mob_id[name])
+	self.events:Fire("Seen", zone, name, x, y, is_dead, is_new_location, source, unit, globaldb.mob_id[name])
 end
 
 -- Returns name, addon:GetMob(zone, name)
