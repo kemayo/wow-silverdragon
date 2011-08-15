@@ -8,6 +8,7 @@ local db
 local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
 
 local nodes = {}
+module.nodes = nodes
 
 local handler = {}
 do
@@ -36,7 +37,12 @@ function handler:OnEnter(mapFile, coord)
 	end
 	local name, _, level, elite, creature_type, lastseen = core:GetMobByCoord(mapFile, coord)
 	tooltip:AddLine(name)
-	tooltip:AddDoubleLine(("%s%s"):format(level or '??', elite and '+' or ''), creature_type or UNKNOWN)
+	local display_level = level or '?'
+	if display_level == -1 then
+		display_level = 'Boss'
+	end
+	local display_level = ("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or '')
+	tooltip:AddDoubleLine(display_level, creature_type or UNKNOWN)
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
 	tooltip:Show()
 end
