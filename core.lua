@@ -294,7 +294,6 @@ function addon:ScanNameplates(zone)
 	if not zone_mobs then return end
 	for nameplate, regions in pairs(nameplates) do
 		local name = regions.name:GetText()
-		local level = (regions.level:GetText() or -1)
 		if nameplate:IsVisible() and zone_mobs[name] and (not lastseen[name] or (lastseen[name] < (time() - self.db.profile.delay))) then
 			local current_zone, x, y = self:GetPlayerLocation()
 			self:NotifyMob(current_zone, name, x, y, false, false, "nameplate", false)
@@ -337,7 +336,6 @@ function addon:ScanCache(zone)
 	if not zone_mobs then return end
 	for mob, lastseen in pairs(zone_mobs) do
 		local id = globaldb.mob_id[mob]
-		local level = (globaldb.mob_level[mob] or -1)
 		-- Debug("Checking for", id, mob, lastseen)
 		if id and (not globaldb.mob_tameable[mob] or self.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
 			-- Debug("They're new!")
