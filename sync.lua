@@ -15,6 +15,7 @@ function module:OnInitialize()
 
 	core.RegisterCallback(self, "Seen")
 	self:RegisterEvent("CHAT_MSG_ADDON")
+	RegisterAddonMessagePrefix("SilverDragon")
 
 	local config = core:GetModule("Config", true)
 	if config then
