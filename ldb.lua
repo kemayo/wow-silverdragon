@@ -82,8 +82,7 @@ function module:SetupDataObject()
 	local rares_seen = {}
 	local tooltip
 	function dataobject:OnEnter()
-		-- SetMapToCurrentZone()--This should fix the login problems and menu not populating I hope
-		local zone, x, y = core:GetPlayerLocation()
+		local zone = core:GetPlayerZone()
 
 		if not (core.db and core.db.global.mobs_byzone[zone]) then
 			return

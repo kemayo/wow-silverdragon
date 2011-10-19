@@ -50,6 +50,7 @@ end
 function addon:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	if self.db.profile.scan > 0 then
 		self:ScheduleRepeatingTimer("CheckNearby", self.db.profile.scan)
 	end
@@ -199,7 +200,7 @@ end
 -- Scanning:
 
 function addon:CheckNearby()
-	local zone = self:GetPlayerLocation()
+	local zone = self:GetPlayerZone()
 	if not zone then return end
 	if (not self.db.profile.instances) and IsInInstance() then return end
 	if (not self.db.profile.taxi) and UnitOnTaxi('player') then return end
@@ -392,15 +393,23 @@ function addon:FormatLastSeen(t)
 	end
 end
 
+-- location code from here on in has been heavily modified by mysticalos
+-- see http://www.wowace.com/addons/silver-dragon/tickets/86-better-player-location-code/
 local continent_list = { GetMapContinents() }
 local zone_to_mapfile = {}
 local mapfile_to_zone = {}
+local currentContinent = nil
+local currentZone = nil
 for C in pairs(continent_list) do
 	local zones = { GetMapZones(C) }
 	continent_list[C] = zones
 	for Z, Zname in ipairs(zones) do
 		SetMapZoom(C, Z)
 		zones[Z] = GetMapInfo()
+		--Fix bug where silver dragon will fail to detect, or populate rares in two diff zones for different phases.
+		if zones[Z] == "Hyjal_terrain1" then zones[Z] = "Hyjal" end
+		if zones[Z] == "TwilightHighlands_terrain1" then zones[Z] = "TwilightHighlands" end
+		if zones[Z] == "Uldum_terrain1" then zones[Z] = "Uldum" end
 		zone_to_mapfile[Zname] = zones[Z]
 		mapfile_to_zone[zones[Z]] = Zname
 	end
@@ -418,33 +427,61 @@ continent_list[-1][0] = "MoltenFront"
 zone_to_mapfile[BZ["Molten Front"]] = "MoltenFront"
 mapfile_to_zone["MoltenFront"] = BZ["Molten Front"]
 
-function addon:GetPlayerLocation()
-	-- returns mapFile (e.g. "Stormwind"), x, y
+function addon:ZONE_CHANGED_NEW_AREA()
+	if WorldMapFrame:IsVisible() then--World Map is open
+		local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()--Save current map settings.
+		SetMapToCurrentZone()
+		currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZone()--Get right info after we set map to right place.
+		if currentContinent ~= C or currentZone ~= Z then
+			SetMapZoom(C, Z)--Restore old map settings if they differed to what they were prior to forcing mapchange and user has map open.
+		end
+	else--Map is not open, no reason to go extra miles, just force map to right zone and get right info.
+		SetMapToCurrentZone()
+		currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZone()--Get right info after we set map to right place.
+	end
+end
+
+--Zone functions split into 2, location, and coords. There is no reason to spam check player coords and do complex map checks when we only need zone.
+--So this should save a lot of wasted calls.
+function addon:GetPlayerZone()--Simplier function that just uses cached zone from last actual zone change to return current zone we are in and scanning.
 	if IsInInstance() then
+		return BZR[GetRealZoneText()]
+	end
+	--Silver dragon loads AFTER first ZONE_CHANGED_NEW_AREA on login, so we need a hack for initial lack of ZONE_CHANGED_NEW_AREA.
+	if currentContinent == nil and currentZone == nil then
+		if WorldMapFrame:IsVisible() then--World Map is open
+			local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()--Save current map settings.
+			SetMapToCurrentZone()
+			currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZone()--Get right info after we set map to right place.
+			if currentContinent ~= C or currentZone ~= Z then
+				SetMapZoom(C, Z)--Restore old map settings if they differed to what they were prior to forcing mapchange and user has map open.
+			end
+		else--Map is not open, no reason to go extra miles, just force map to right zone and get right info.
+			SetMapToCurrentZone()
+			currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZone()--Get right info after we set map to right place.
+		end
+	end
+	if not (continent_list[currentContinent] and continent_list[currentContinent][currentZone]) then
+		return
+	end
+	return continent_list[currentContinent][currentZone]
+end
+
+function addon:GetPlayerLocation()--Advanced function that actually gets the player coords for when we actually find/save a rare. No reason to run this function every second though.
+	local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()--Save current map settings.
+	SetMapToCurrentZone()
+	local x, y = GetPlayerMapPosition('player')--Get right info after we set map to right place.
+	local C2, Z2 = currentContinent, currentZone--Check what map was set to compared to actual current zone cached from when we last saw ZONE_CHANGED_NEW_AREA
+	if C2 ~= C or Z2 ~= Z and WorldMapFrame:IsVisible() then
+		SetMapZoom(C, Z)--Restore old map settings if they differed to what they were prior to forcing mapchange and user has map open.
+	end
+	C, Z = C2, Z2
+	if x <= 0 and y <= 0 then
+		--This should never happen, no zone is without map anymore.
 		return BZR[GetRealZoneText()], 0, 0
 	end
-	local x, y = GetPlayerMapPosition('player')
-	local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()
-	if x <= 0 and y <= 0 then
-		if WorldMapFrame:IsVisible() then
-			return
-		end
-		SetMapToCurrentZone()
-		x, y = GetPlayerMapPosition('player')
-		if x <= 0 and y <= 0 then
-			SetMapZoom(GetCurrentMapContinent())
-			x, y = GetPlayerMapPosition('player')
-			if x <= 0 and y <= 0 then
-				-- this is confusing; we're probably in an instance, but
-				-- IsInInstance() returned false above.
-				return BZR[GetRealZoneText()], 0, 0
-			end
-		end
-		local C2, Z2 = GetCurrentMapContinent(), GetCurrentMapZone()
-		if C2 ~= C or Z2 ~= Z then
-			SetMapZoom(C, Z)
-		end
-		C, Z = C2, Z2
+	if IsInInstance() then
+		return BZR[GetRealZoneText()], x, y
 	end
 	if not (continent_list[C] and continent_list[C][Z]) then
 		return

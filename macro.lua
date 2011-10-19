@@ -48,7 +48,7 @@ end
 function module:Update()
 	if not self.db.profile.enabled then return end
 	-- first, create the macro text on the button:
-	local zone = core:GetPlayerLocation()
+	local zone = core:GetPlayerZone()
 	local mobs = core.db.global.mobs_byzone[zone]
 	if not mobs then return end
 	local macro = {}
