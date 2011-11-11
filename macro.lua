@@ -1,5 +1,6 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Macro", "AceEvent-3.0", "AceConsole-3.0")
+local Debug = core.Debug
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Macro", {
@@ -8,7 +9,7 @@ function module:OnInitialize()
 		},
 	})
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	core.RegisterCallback(self, "ZoneChanged")
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -42,7 +43,7 @@ function module:OnInitialize()
 		}
 	end
 
-	self:ZONE_CHANGED_NEW_AREA()
+	self:ZoneChanged()
 end
 
 function module:Update()
@@ -79,7 +80,8 @@ function module:CreateMacro()
 	end
 end
 
-function module:ZONE_CHANGED_NEW_AREA(...)
+function module:ZoneChanged(...)
+	Debug("ZoneChanged", ...)
 	if InCombatLockdown() then
 		self.waiting = true
 	else
@@ -89,6 +91,7 @@ end
 
 function module:PLAYER_REGEN_ENABLED()
 	if self.waiting then
+		self.waiting = false
 		self:Update()
 	end
 end

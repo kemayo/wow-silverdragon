@@ -439,6 +439,7 @@ function addon:ZONE_CHANGED_NEW_AREA()
 		SetMapToCurrentZone()
 		currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZone()--Get right info after we set map to right place.
 	end
+	self.events:Fire("ZoneChanged", currentContinent, currentZone)
 end
 
 --Zone functions split into 2, location, and coords. There is no reason to spam check player coords and do complex map checks when we only need zone.
