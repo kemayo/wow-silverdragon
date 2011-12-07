@@ -418,26 +418,40 @@ addon.continent_list = continent_list
 addon.zone_to_mapfile = zone_to_mapfile
 addon.mapfile_to_zone = mapfile_to_zone
 
--- MoltenFront (MapAreaID:795) is needed, but isn't returned by GetMapZones...
--- while you're in it you're in continent -1, zone 0.
+-- Blizzard has started sending us to zones that aren't returned by
+-- GetMapZones... they tend to be continent -1, zone 0. So I'm making up
+-- a convention of storing them under their actual areaid and remembering
+-- that as the current zone when it's given as 0
 if not continent_list[-1] then
 	continent_list[-1] = {}
 end
-continent_list[-1][0] = "MoltenFront"
+continent_list[-1][795] = "MoltenFront"
 zone_to_mapfile[BZ["Molten Front"]] = "MoltenFront"
 mapfile_to_zone["MoltenFront"] = BZ["Molten Front"]
+continent_list[-1][823] = "DarkmoonFaireIsland"
+zone_to_mapfile[BZ["Darkmoon Island"]] = "DarkmoonFaireIsland"
+mapfile_to_zone["DarkmoonFaireIsland"] = BZ["Darkmoon Island"]
+
+local function GetCurrentMapZoneSafe()
+	local zone = GetCurrentMapZone()
+	if zone == 0 then
+		return GetCurrentMapAreaID(), zone
+	end
+	return zone, zone
+end
 
 function addon:ZONE_CHANGED_NEW_AREA()
 	if WorldMapFrame:IsVisible() then--World Map is open
-		local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()--Save current map settings.
+		local C, Z, actualZ = GetCurrentMapContinent(), GetCurrentMapZoneSafe()--Save current map settings.
 		SetMapToCurrentZone()
-		currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZone()--Get right info after we set map to right place.
-		if currentContinent ~= C or currentZone ~= Z then
+		local actualZ2
+		currentContinent, currentZone, actualZ2 = GetCurrentMapContinent(), GetCurrentMapZoneSafe()--Get right info after we set map to right place.
+		if currentContinent ~= C or currentZone ~= actualZ then
 			SetMapZoom(C, Z)--Restore old map settings if they differed to what they were prior to forcing mapchange and user has map open.
 		end
 	else--Map is not open, no reason to go extra miles, just force map to right zone and get right info.
 		SetMapToCurrentZone()
-		currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZone()--Get right info after we set map to right place.
+		currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZoneSafe()--Get right info after we set map to right place.
 	end
 	self.events:Fire("ZoneChanged", currentContinent, currentZone)
 end
@@ -450,17 +464,7 @@ function addon:GetPlayerZone()--Simplier function that just uses cached zone fro
 	end
 	--Silver dragon loads AFTER first ZONE_CHANGED_NEW_AREA on login, so we need a hack for initial lack of ZONE_CHANGED_NEW_AREA.
 	if currentContinent == nil and currentZone == nil then
-		if WorldMapFrame:IsVisible() then--World Map is open
-			local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()--Save current map settings.
-			SetMapToCurrentZone()
-			currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZone()--Get right info after we set map to right place.
-			if currentContinent ~= C or currentZone ~= Z then
-				SetMapZoom(C, Z)--Restore old map settings if they differed to what they were prior to forcing mapchange and user has map open.
-			end
-		else--Map is not open, no reason to go extra miles, just force map to right zone and get right info.
-			SetMapToCurrentZone()
-			currentContinent, currentZone = GetCurrentMapContinent(), GetCurrentMapZone()--Get right info after we set map to right place.
-		end
+		self:ZONE_CHANGED_NEW_AREA()
 	end
 	if not (continent_list[currentContinent] and continent_list[currentContinent][currentZone]) then
 		return
@@ -469,12 +473,12 @@ function addon:GetPlayerZone()--Simplier function that just uses cached zone fro
 end
 
 function addon:GetPlayerLocation()--Advanced function that actually gets the player coords for when we actually find/save a rare. No reason to run this function every second though.
-	local C, Z = GetCurrentMapContinent(), GetCurrentMapZone()--Save current map settings.
+	local C, Z, actualZ = GetCurrentMapContinent(), GetCurrentMapZoneSafe()--Save current map settings.
 	SetMapToCurrentZone()
 	local x, y = GetPlayerMapPosition('player')--Get right info after we set map to right place.
 	local C2, Z2 = currentContinent, currentZone--Check what map was set to compared to actual current zone cached from when we last saw ZONE_CHANGED_NEW_AREA
 	if C2 ~= C or Z2 ~= Z and WorldMapFrame:IsVisible() then
-		SetMapZoom(C, Z)--Restore old map settings if they differed to what they were prior to forcing mapchange and user has map open.
+		SetMapZoom(C, actualZ)--Restore old map settings if they differed to what they were prior to forcing mapchange and user has map open.
 	end
 	C, Z = C2, Z2
 	if x <= 0 and y <= 0 then
