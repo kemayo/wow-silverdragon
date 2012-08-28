@@ -97,6 +97,7 @@ function addon:ShouldSave(zone, name)
 end
 
 function addon:ProcessUnit(unit, source)
+	if not UnitExists(unit) then return end
 	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
 	local unittype = UnitClassification(unit)
 	if not (unittype == 'rare' or unittype == 'rareelite') or not UnitIsVisible(unit) then return end

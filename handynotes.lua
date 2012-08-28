@@ -3,6 +3,7 @@ if not HandyNotes then return end
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("HandyNotes", "AceEvent-3.0")
+local Debug = core.Debug
 
 local db
 local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
@@ -205,6 +206,7 @@ function module:UpdateNodes()
 			end
 		end
 	end
+	self.nodes = nodes
 	self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
 end
 
