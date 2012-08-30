@@ -36,6 +36,8 @@ function module:OnInitialize()
 				bc = true,
 				wrath = true,
 				cataclysm = true,
+				pandaria = true,
+				cities = true,
 				unknown = true,
 			},
 			sink_opts = {},
@@ -115,7 +117,7 @@ local bc_zones = {
 	["Netherstorm"] = true,
 	["ShadowmoonValley"] = true,
 }
-+local wrath_zones = {
+local wrath_zones = {
 	["HowlingFjord"] = true,
 	["BoreanTundra"] = true,
 	["Dragonblight"] = true,
