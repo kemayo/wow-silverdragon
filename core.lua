@@ -2,7 +2,6 @@ local BZ = LibStub("LibBabble-Zone-3.0"):GetUnstrictLookupTable()
 local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
-local Tourist = LibStub("LibTourist-3.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0")
 SilverDragon = addon
@@ -41,7 +40,7 @@ function addon:OnInitialize()
 			cache = true,
 			instances = false,
 			taxi = true,
-			neighbors = true,
+			-- neighbors = true,
 		},
 	})
 	globaldb = self.db.global
@@ -217,6 +216,7 @@ function addon:CheckNearby()
 	if self.db.profile.cache then
 		addon:ScanCache(zone)
 	end
+	--[[
 	if self.db.profile.neighbors then
 		for z in Tourist:IterateBorderZones(self.mapfile_to_zone[zone], true) do
 			if self.db.profile.nameplates then
@@ -227,6 +227,7 @@ function addon:CheckNearby()
 			end
 		end
 	end
+	--]]
 end
 
 local units_to_scan = {'targettarget', 'party1target', 'party2target', 'party3target', 'party4target', 'party5target'}

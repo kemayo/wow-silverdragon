@@ -2,7 +2,6 @@
 local module = core:NewModule("Announce", "LibSink-2.0")
 local Debug = core.Debug
 
-local Tourist = LibStub("LibTourist-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 local BZ = LibStub("LibBabble-Zone-3.0"):GetUnstrictLookupTable()
 
@@ -79,7 +78,9 @@ function module:OnInitialize()
 							bc = toggle("Burning Crusade", "Illidan McGrumpypants. 61-70.", 20),
 							wrath = toggle("Wrath of the Lich King", "Emo Arthas. 71-80.", 30),
 							cataclysm = toggle("Cataclysm", "Play it off, keyboard cataclysm! 81-85.", 40),
-							unknown = toggle(UNKNOWN, "Not sure where they fit.", 50),
+							pandaria = toggle("Mists of Pandaria", "Everybody was kung fu fighting. 86-90.", 50),
+							cities = toggle("Capitol Cities", "Expansion indifferent and ever evolving.", 60),
+							unknown = toggle(UNKNOWN, "Not sure where they fit.", 70),
 						},
 					},
 				},
@@ -106,10 +107,29 @@ local bc_zones = {
 	["SilvermoonCity"] = true,
 	["Sunwell"] = true, -- Isle of Quel'Danas
 	["TheExodar"] = true,
+	["Hellfire"] = true,
+	["Zangarmarsh"] = true,
+	["TerokkarForest"] = true,
+	["Nagrand"] = true,
+	["BladesEdgeMountains"] = true,
+	["Netherstorm"] = true,
+	["ShadowmoonValley"] = true,
+}
++local wrath_zones = {
+	["HowlingFjord"] = true,
+	["BoreanTundra"] = true,
+	["Dragonblight"] = true,
+	["GrizzlyHills"] = true,
+	["ZulDrak"] = true,
+	["CrystalsongForest"] = true,
+	["SholazarBasin"] = true,
+	["TheStormPeaks"] = true,
+	["IcecrownGlacier"] = true,
+	["LakeWintergrasp"] = true,
 }
 local cata_zones = {
 	["Deepholm"] = true,
-	["Hyjal"] = true,
+	["Hyjal"] = true, -- Inferno, too
 	["Kezan"] = true,
 	["MoltenFront"] = true,
 	["RuinsofGilneas"] = true,
@@ -125,6 +145,32 @@ local cata_zones = {
 	["VashjirKelpForest"] = true, -- Kelp'thar Forest
 	["VashjirRuins"] = true, -- Shimmering Expanse
 }
+local mop_zones = {
+	["TheJadeForest"] = true,
+	["ValleyoftheFourWinds"] = true,
+	["TheWanderingIsle"] = true,
+	["KunLaiSummit"] = true,
+	["TownlongWastes"] = true,
+	["ValeofEternalBlossoms"] = true,
+	["Krasarang"] = true,
+	["DreadWastes"] = true,
+	["Pandaria"] = true,
+	["TheHiddenPass"] = true,--The Veiled Stair
+}
+local main_cities = {
+	["StormwindCity"] = true,
+	["Ironforge"] = true,
+	["Darnassus"] = true,
+	["TheExodar"] = true,
+	["ThunderBluff"] = true,
+	["Orgrimmar"] = true,
+	["Undercity"] = true,
+	["SilvermoonCity"] = true,
+	["ShattrathCity"] = true,
+	["Dalaran"] = true,
+	["ShrineofTwoMoons"] = true,
+	["ShrineofSevenStars"] = true,
+}
 local function guess_expansion(zone)
 	if not zone then
 		return 'unknown'
@@ -136,25 +182,19 @@ local function guess_expansion(zone)
 	if bc_zones[zone] then
 		return 'bc'
 	end
+	if wrath_zones[zone] then
+		return 'wrath'
+	end
 	if cata_zones[zone] then
 		return 'cataclysm'
 	end
-	if Tourist:IsInNorthrend(localized_zone) then
-		return 'wrath'
+	if mop_zones[zone] then
+		return 'pandaria'
 	end
-	if Tourist:IsInOutland(localized_zone) then
-		return 'bc'
+	if main_cities[zone] then
+		return 'cities'
 	end
-	if Tourist:IsInTheMaelstrom(localized_zone) then
-		return 'cataclysm'
-	end
-	if Tourist:IsInKalimdor(localized_zone) then
-		return 'classic'
-	end
-	if Tourist:IsInEasternKingdoms(localized_zone) then
-		return 'classic'
-	end
-	return 'unknown'
+	return 'classic'
 end
 core.guess_expansion = guess_expansion
 
