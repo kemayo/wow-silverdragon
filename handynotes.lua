@@ -77,8 +77,6 @@ local function createWaypoint(button, mapFile, coord)
 			world = false
 		end
 		TomTom:AddZWaypoint(c, z, x*100, y*100, name, persistent, minimap, world)
-	elseif Cartographer_Waypoints then
-		Cartographer_Waypoints:AddWaypoint(NotePoint:new(HandyNotes:GetCZToZone(c, z), x, y, name))
 	end
 end
 
@@ -92,7 +90,7 @@ local function generateMenu(button, level)
 		info.notCheckable = 1
 		UIDropDownMenu_AddButton(info, level)
 
-		if TomTom or Cartographer_Waypoints then
+		if TomTom then
 			-- Waypoint menu item
 			info.disabled     = nil
 			info.isTitle      = nil
