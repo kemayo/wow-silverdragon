@@ -64,9 +64,9 @@ function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit, id)
 	if IsInGuild() then
 		SAM("GUILD", "seen", id, name, zone, level, x, y)
 	end
-	if GetRealNumRaidMembers() > 0 then
+	if IsInRaid() then
 		SAM("RAID", "seen", id, name, zone, level, x, y)
-	elseif GetRealNumPartyMembers() > 0 then
+	elseif GetNumGroupMembers() > 0 then
 		SAM("PARTY", "seen", id, name, zone, level, x, y)
 	end
 end
@@ -97,6 +97,7 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 
 	ver = deSAM(ver)
 	level = deSAM(level)
+	id = deSAM(id)
 	x = deSAM(x)
 	y = deSAM(y)
 
