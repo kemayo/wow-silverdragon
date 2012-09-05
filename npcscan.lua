@@ -37,7 +37,7 @@ function module:OnInitialize()
 
 	core.RegisterCallback(self, "Seen")
 
-	self:SendMessage("NpcOverlay_RegisterScanner", "SilverDragon")
+	-- self:SendMessage("NpcOverlay_RegisterScanner", "SilverDragon")
 end
 
 function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit, id)
