@@ -47,23 +47,9 @@ function addon:OnInitialize()
 end
 
 function addon:OnEnable()
-	self:RegisterEvent("PLAYER_TARGET_CHANGED")
-	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	if self.db.profile.scan > 0 then
 		self:ScheduleRepeatingTimer("CheckNearby", self.db.profile.scan)
-	end
-end
-
-function addon:PLAYER_TARGET_CHANGED()
-	if self.db.profile.targets then
-		self:ProcessUnit('target', 'target')
-	end
-end
-
-function addon:UPDATE_MOUSEOVER_UNIT()
-	if self.db.profile.mouseover then
-		self:ProcessUnit('mouseover', 'mouseover')
 	end
 end
 

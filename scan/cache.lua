@@ -4,6 +4,9 @@ local module = core:NewModule("Scan_Cache", "AceEvent-3.0", "AceConsole-3.0")
 local globaldb
 function module:OnInitialize()
 	globaldb = core.db.global
+end
+
+function module:OnEnable()
 	core.RegisterCallback(self, "Scan")
 end
 
