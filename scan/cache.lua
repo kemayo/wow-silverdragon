@@ -24,6 +24,9 @@ end
 module.already_cached = already_cached
 
 function module:Scan(callback, zone)
+	if not core.db.profile.cache then
+		return
+	end
 	if first_cachescan then
 		for mob, id in pairs(globaldb.mob_id) do
 			if is_cached(id) then

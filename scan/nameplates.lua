@@ -53,6 +53,9 @@ end
 
 local num_worldchildren
 function module:Scan(callback, zone)
+	if not core.db.profile.nameplates then
+		return
+	end
 	if GetCVar("nameplateShowEnemies") ~= "1" then
 		return
 	end
