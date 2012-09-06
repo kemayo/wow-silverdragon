@@ -207,7 +207,7 @@ function addon:CheckNearby()
 
 	-- zone is a mapfile here, note
 
-	if self.db.profile.targets then
+	if self.db.profile.targets and IsInGroup() then
 		addon:ScanTargets()
 	end
 	if self.db.profile.nameplates then
