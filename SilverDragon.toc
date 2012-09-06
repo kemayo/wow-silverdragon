@@ -42,6 +42,10 @@ lib\AceGUI-3.0-SharedMediaWidgets\widget.xml
 core.lua
 config.lua
 
+scan\targets.lua
+scan\nameplates.lua
+scan\cache.lua
+
 # optional bits
 ldb.lua
 announce.lua

@@ -6,6 +6,7 @@ local LibQTip = LibStub("LibQTip-1.0")
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("LDB")
+local cache = core:GetModule("Scan_Cache")
 
 local dataobject
 local db
@@ -95,7 +96,7 @@ function module:SetupDataObject()
 		for name in pairs(core.db.global.mobs_byzone[zone]) do
 			n = n + 1
 			local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
-			local cached = id and core.already_cached[id]
+			local cached = id and cache.already_cached[id]
 			tooltip:AddLine(name,
 				("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or ''),
 				BCT[creature_type],
