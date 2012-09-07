@@ -76,10 +76,10 @@ end
 local current = {}
 function module:ShowFrame()
 	if not self.db.profile.show then return end
-	local zone, name, unit = current.zone, current.name, current.unit
+	local id, zone, name, unit = current.id, current.zone, current.name, current.unit
 	if not (zone and name) then return end
 
-	local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
+	local _, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
 	local popup = self.popup
 	local macrotext = "/cleartarget\n/targetexact "..name
 	local level_text = (level and level > 0) and level or (level and level == -1) and 'Boss' or '?'
@@ -142,7 +142,7 @@ function module:ShowModel()
 
 end
 
-function module:Announce(callback, zone, name, x, y, dead, newloc, source, unit, id)
+function module:Announce(callback, id, name, zone, x, y, dead, newloc, source, unit)
 	if source:match("^sync") then
 		source = "sync"
 	end

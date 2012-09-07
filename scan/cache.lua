@@ -39,18 +39,14 @@ function module:Scan(callback, zone)
 		first_cachescan = false
 		return
 	end
-	-- Debug("Scanning Cache", zone, globaldb.mobs_byzone[zone])
-	
-	local zone_mobs = globaldb.mobs_byzone[zone]
+
+	local zone_mobs = globaldb.mobs_byzoneid[zone]
 	if not zone_mobs then return end
-	for mob, lastseen in pairs(zone_mobs) do
-		local id = globaldb.mob_id[mob]
-		-- Debug("Checking for", id, mob, lastseen)
-		if id and (not globaldb.mob_tameable[mob] or core.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
-			-- Debug("They're new!")
+	for id, lastseen in pairs(zone_mobs) do
+		if (not globaldb.mob_tameable[id] or core.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
 			already_cached[id] = true
 			local current_zone, x, y = core:GetPlayerLocation()
-			core:NotifyMob(current_zone, mob, x, y, false, false, "cache", false)
+			core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, false, "cache", false)
 		end
 	end
 	first_cachescan = false
@@ -64,16 +60,16 @@ end)
 
 module:RegisterChatCommand("sdcached", function()
 	local lookup = {}
-	for mob,id in pairs(globaldb.mob_id) do
+	for mob, id in pairs(globaldb.mob_id) do
 		lookup[id] = mob
 	end
 	local output
-	self:Print("The following mobs are in the NPC cache, and so will not be detected by the cache scanner.")
+	module:Print("The following mobs are in the NPC cache, and so will not be detected by the cache scanner.")
 	for id,_ in pairs(already_cached) do
-		self:Print(" ", lookup[id])
+		module:Print(" ", lookup[id])
 		output = true
 	end
 	if not output then
-		self:Print("Nothing")
+		module:Print("Nothing")
 	end
 end)

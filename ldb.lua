@@ -85,7 +85,7 @@ function module:SetupDataObject()
 	function dataobject:OnEnter()
 		local zone = core:GetPlayerZone()
 
-		if not (core.db and core.db.global.mobs_byzone[zone]) then
+		if not (core.db and core.db.global.mobs_byzoneid[zone]) then
 			return
 		end
 
@@ -93,10 +93,10 @@ function module:SetupDataObject()
 		tooltip:AddHeader("Name", "Level", "Type", "Count", "Last Seen")
 		
 		local n = 0
-		for name in pairs(core.db.global.mobs_byzone[zone]) do
+		for id in pairs(core.db.global.mobs_byzoneid[zone]) do
 			n = n + 1
-			local num_locations, level, elite, creature_type, lastseen, count, id, tameable = core:GetMob(zone, name)
-			local cached = id and cache.already_cached[id]
+			local name, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
+			local cached = cache.already_cached[id]
 			tooltip:AddLine(name,
 				("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or ''),
 				BCT[creature_type],
@@ -115,7 +115,7 @@ function module:SetupDataObject()
 			for i,rare in ipairs(rares_seen) do
 				tooltip:AddLine(
 					rare.name,
-					core.mapfile_to_zone[rare.zone],
+					GetMapNameByID(rare.zone),
 					(rare.x and rare.y) and (core.round(rare.x * 100, 1) .. ', ' .. core.round(rare.y * 100, 1)) or UNKNOWN,
 					core:FormatLastSeen(rare.when),
 					rare.source or UNKNOWN
@@ -145,12 +145,13 @@ function module:SetupDataObject()
 	end
 
 	local last_seen
-	core.RegisterCallback("LDB", "Seen", function(callback, zone, name, x, y, dead, newloc, source)
+	core.RegisterCallback("LDB", "Seen", function(callback, id, name, zone, x, y, dead, newloc, source)
 		last_seen = name
 		if db.profile.show_lastseen then
 			dataobject.text = name
 		end
 		table.insert(rares_seen, {
+			id = id,
 			name = name,
 			zone = zone,
 			x = x,

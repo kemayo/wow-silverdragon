@@ -3,7 +3,6 @@ local module = core:NewModule("Announce", "LibSink-2.0")
 local Debug = core.Debug
 
 local LSM = LibStub("LibSharedMedia-3.0")
-local BZ = LibStub("LibBabble-Zone-3.0"):GetUnstrictLookupTable()
 
 if LSM then
 	-- Register some media
@@ -20,6 +19,11 @@ if LSM then
 	LSM:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.wav]])
 	LSM:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.wav]])
 	LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
+	LSM:Register("sound", "PVP Flag", [[Sound\Spells\PVPFlagTaken.wav]])
+	LSM:Register("sound", "Algalon: Beware!", [[Sound\Creature\AlgalonTheObserver\UR_Algalon_BHole01.wav]])
+	LSM:Register("sound", "Yogg Saron: Laugh", [[Sound\Creature\YoggSaron\UR_YoggSaron_Slay01.wav]])
+	LSM:Register("sound", "Illidan: Not Prepared", [[Sound\Creature\Illidan\BLACK_Illidan_04.wav]])
+	LSM:Register("sound", "Magtheridon: I am Unleashed", [[Sound\Creature\Magtheridon\HELL_Mag_Free01.wav]])
 	LSM:Register("sound", "NPCScan", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
 end
 
@@ -100,86 +104,149 @@ function module:OnInitialize()
 	end
 end
 
--- next tables are for zones which can't be caught by continent
--- TODO: check instance coverage
+-- It's possible I should library-ise this...
+local classic_zones = {
+	[101] = "Desolace",
+	[11] = "Barrens",
+	[121] = "Feralas",
+	[13] = "Kalimdor",
+	[14] = "Azeroth",
+	[141] = "Dustwallow",
+	[16] = "Arathi",
+	[161] = "Tanaris",
+	[17] = "Badlands",
+	[181] = "Aszhara",
+	[182] = "Felwood",
+	[19] = "BlastedLands",
+	[20] = "Tirisfal",
+	[201] = "UngoroCrater",
+	[21] = "Silverpine",
+	[22] = "WesternPlaguelands",
+	[23] = "EasternPlaguelands",
+	[24] = "HillsbradFoothills",
+	[241] = "Moonglade",
+	[26] = "Hinterlands",
+	[261] = "Silithus",
+	[27] = "DunMorogh",
+	[28] = "SearingGorge",
+	[281] = "Winterspring",
+	[29] = "BurningSteppes",
+	[30] = "Elwynn",
+	[32] = "DeadwindPass",
+	[34] = "Duskwood",
+	[35] = "LochModan",
+	[36] = "Redridge",
+	[37] = "StranglethornJungle",
+	[38] = "SwampOfSorrows",
+	[39] = "Westfall",
+	[4] = "Durotar",
+	[40] = "Wetlands",
+	[41] = "Teldrassil",
+	[42] = "Darkshore",
+	[43] = "Ashenvale",
+	[462] = "EversongWoods",
+	[607] = "SouthernBarrens",
+	[61] = "ThousandNeedles",
+	[673] = "TheCapeOfStranglethorn",
+	[689] = "StranglethornVale",
+	[772] = "AhnQirajTheFallenKingdom",
+	[81] = "StonetalonMountains",
+	[9] = "Mulgore",
+	-- starting zones
+	[864] = "Northshire",
+	[866] = "ColdridgeValley",
+	[888] = "ShadowglenStart",
+	[890] = "CampNaracheStart",
+	[892] = "DeathknellStart",
+	[895] = "NewTinkertownStart",
+}
 local bc_zones = {
-	["AzuremystIsle"] = true,
-	["BloodmystIsle"] = true,
-	["Ghostlands"] = true,
-	["SilvermoonCity"] = true,
-	["Sunwell"] = true, -- Isle of Quel'Danas
-	["TheExodar"] = true,
-	["Hellfire"] = true,
-	["Zangarmarsh"] = true,
-	["TerokkarForest"] = true,
-	["Nagrand"] = true,
-	["BladesEdgeMountains"] = true,
-	["Netherstorm"] = true,
-	["ShadowmoonValley"] = true,
+	[465] = "Hellfire",
+	[466] = "Expansion01",
+	[467] = "Zangarmarsh",
+	[473] = "ShadowmoonValley",
+	[475] = "BladesEdgeMountains",
+	[477] = "Nagrand",
+	[478] = "TerokkarForest",
+	[479] = "Netherstorm",
+	[499] = "Sunwell",
+	-- starting zones
+	[463] = "Ghostlands",
+	[464] = "AzuremystIsle",
+	[476] = "BloodmystIsle",
+	[893] = "SunstriderIsleStart",
+	[894] = "AmmenValeStart",
 }
 local wrath_zones = {
-	["HowlingFjord"] = true,
-	["BoreanTundra"] = true,
-	["Dragonblight"] = true,
-	["GrizzlyHills"] = true,
-	["ZulDrak"] = true,
-	["CrystalsongForest"] = true,
-	["SholazarBasin"] = true,
-	["TheStormPeaks"] = true,
-	["IcecrownGlacier"] = true,
-	["LakeWintergrasp"] = true,
+	[485] = "Northrend",
+	[486] = "BoreanTundra",
+	[488] = "Dragonblight",
+	[490] = "GrizzlyHills",
+	[491] = "HowlingFjord",
+	[492] = "IcecrownGlacier",
+	[493] = "SholazarBasin",
+	[495] = "TheStormPeaks",
+	[496] = "ZulDrak",
+	[501] = "LakeWintergrasp",
+	[510] = "CrystalsongForest",
+	[541] = "HrothgarsLanding",
 }
 local cata_zones = {
-	["Deepholm"] = true,
-	["Hyjal"] = true, -- Inferno, too
-	["Kezan"] = true,
-	["MoltenFront"] = true,
-	["RuinsofGilneas"] = true,
-	["RuinsofGilneasCity"] = true,
-	["TheLostIsles"] = true,
-	["TheMaelstrom"] = true,
-	["TolBarad"] = true,
-	["TolBaradDailyArea"] = true,
-	["TwilightHighlands"] = true,
-	["Uldum"] = true,
-	["Vashjir"] = true,
-	["VashjirDepths"] = true, -- Abyssal Depths
-	["VashjirKelpForest"] = true, -- Kelp'thar Forest
-	["VashjirRuins"] = true, -- Shimmering Expanse
+	[606] = "Hyjal",
+	[610] = "VashjirKelpForest",
+	[613] = "Vashjir",
+	[614] = "VashjirDepths",
+	[615] = "VashjirRuins",
+	[640] = "Deepholm",
+	[700] = "TwilightHighlands",
+	[708] = "TolBarad",
+	[709] = "TolBaradDailyArea",
+	[720] = "Uldum",
+	[737] = "TheMaelstrom",
+	[751] = "TheMaelstromContinent",
+	[795] = "MoltenFront",
+	-- starting zones
+	[544] = "TheLostIsles",
+	[605] = "Kezan",
+	[684] = "RuinsofGilneas",
+	[685] = "RuinsofGilneasCity",
+	[891] = "EchoIslesStart",
 }
 local mop_zones = {
-	["TheJadeForest"] = true,
-	["ValleyoftheFourWinds"] = true,
-	["TheWanderingIsle"] = true,
-	["KunLaiSummit"] = true,
-	["TownlongWastes"] = true,
-	["ValeofEternalBlossoms"] = true,
-	["Krasarang"] = true,
-	["DreadWastes"] = true,
-	["Pandaria"] = true,
-	["TheHiddenPass"] = true,--The Veiled Stair
+	[806] = "TheJadeForest",
+	[807] = "ValleyoftheFourWinds",
+	[809] = "KunLaiSummit",
+	[810] = "TownlongWastes",
+	[811] = "ValeofEternalBlossoms",
+	[857] = "Krasarang",
+	[858] = "DreadWastes",
+	[862] = "Pandaria",
+	[873] = "TheHiddenPass",
+	[903] = "ShrineofTwoMoons",
+	[905] = "ShrineofSevenStars",
+	-- starting zones
+	[889] = "ValleyofTrialsStart",
 }
 local main_cities = {
-	["StormwindCity"] = true,
-	["Ironforge"] = true,
-	["Darnassus"] = true,
-	["TheExodar"] = true,
-	["ThunderBluff"] = true,
-	["Orgrimmar"] = true,
-	["Undercity"] = true,
-	["SilvermoonCity"] = true,
-	["ShattrathCity"] = true,
-	["Dalaran"] = true,
-	["ShrineofTwoMoons"] = true,
-	["ShrineofSevenStars"] = true,
+	[301] = "StormwindCity",
+	[321] = "Orgrimmar",
+	[341] = "Ironforge",
+	[362] = "ThunderBluff",
+	[381] = "Darnassus",
+	[382] = "Undercity",
+	[471] = "TheExodar",
+	[480] = "SilvermoonCity",
+	[481] = "ShattrathCity",
+	[504] = "Dalaran",
+	[823] = "DarkmoonFaireIsland",
 }
+
 local function guess_expansion(zone)
 	if not zone then
 		return 'unknown'
 	end
-	local localized_zone = core.mapfile_to_zone[zone]
-	if not localized_zone then
-		return 'unknown'
+	if classic_zones[zone] then
+		return 'classic'
 	end
 	if bc_zones[zone] then
 		return 'bc'
@@ -196,12 +263,12 @@ local function guess_expansion(zone)
 	if main_cities[zone] then
 		return 'cities'
 	end
-	return 'classic'
+	return 'unknown'
 end
 core.guess_expansion = guess_expansion
 
-function module:Seen(callback, zone, ...)
-	Debug("Announce:Seen", zone, ...)
+function module:Seen(callback, id, name, zone, ...)
+	Debug("Announce:Seen", id, name, zone, ...)
 
 	if not self.db.profile.instances and IsInInstance() then
 		return
@@ -213,27 +280,19 @@ function module:Seen(callback, zone, ...)
 		return
 	end
 
-	core.events:Fire("Announce", zone, ...)
+	core.events:Fire("Announce", id, name, zone, ...)
 end
 
-core.RegisterCallback("SD Announce Sink", "Announce", function(callback, zone, name, x, y, dead, newloc, source)
+core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, name, zone, x, y, dead, newloc, source)
 	if not module.db.profile.sink then
 		return
 	end
 
-	local localized_zone = zone and core.mapfile_to_zone[zone]
-	if zone and not localized_zone then
-		-- This is probably an instance, so try to localize it
-		localized_zone = BZ[zone]
-	end
-	if not localized_zone then
-		localized_zone = UNKNOWN
-	end
-
-	Debug("Pouring message")
+	Debug("Pouring")
 	if source:match("^sync") then
 		local channel, player = source:match("sync:(.+):(.+)")
 		if channel and player then
+			local localized_zone = GetMapNameByID(zone) or UNKNOWN
 			source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. localized_zone
 			if x and y then
 				source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
@@ -253,7 +312,8 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback)
 		--Override default behavior and force npcscan behavior of two sounds at once
 		PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
 		PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), "Master")
-	else--Play whatever sound is set
+	else
+		--Play whatever sound is set
 		PlaySoundFile(LSM:Fetch("sound", module.db.profile.soundfile), "Master")
 	end
 end)

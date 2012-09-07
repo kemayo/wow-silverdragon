@@ -13,6 +13,8 @@ local function dprint(dlevel, ...)
 	end
 end
 
+require "map" -- gets us zonename_to_zoneid
+
 local url = require("socket.url")
 local httptime, httpcount = 0, 0
 local getpage
@@ -113,9 +115,10 @@ function module:GetDefaults()
 	local defaults = {
 ]])
 	for zone, mobs in pairs(data) do
-		f:write('\t\t["'..zone..'"] = {\n')
-		for name, mob in pairs(mobs) do
-			f:write('\t\t\t["'..name..'"] = {')
+		f:write('\t\t['..zone..'] = {\n')
+		for id, mob in pairs(mobs) do
+			f:write('\t\t\t['..id..'] = {')
+			if mob.name then f:write('name="'..mob.name..'",') end
 			if mob.id then f:write('id='..mob.id..',') end
 			if mob.level then f:write('level='..mob.level..',') end
 			if mob.creature_type then f:write('creature_type="'..mob.creature_type..'",') end
@@ -213,8 +216,12 @@ local function zone_mappings()
 	if not page then return end
 	dprint(3, "Found zones in locales", page)
 	for id, zone in page:gmatch('"(%d+)":"([^"]+)"') do
-		zones[id] = zone
-		dprint(3, "added", id, zone)
+		if zonename_to_zoneid[zone] then
+			zones[id] = zonename_to_zoneid[zone]
+			dprint(3, "added", id, zone)
+		else
+			dprint(1, "Skipping zone translation", id, zone)
+		end
 	end
 end
 
@@ -285,34 +292,39 @@ local function npc_from_list_entry(entry)
 	local instances = {}
 	for zoneid in zoneids:gfind("%d+") do
 		local zone = zones[zoneid]
-		local locations = {}
-		local raw_coords = npc_coords(id, zoneid)
-		if raw_coords and #raw_coords > 0 then
-			for _,loc in pairs(raw_coords) do
-				local x,y = unpack(loc)
-				local is_new = true
-				for _,oldloc in pairs(locations) do
-					local old_x, old_y = unpack_coords(oldloc)
-					if math.abs(old_x - x) < 0.05 and math.abs(old_y - y) < 0.05 then
-						is_new = false
-						break
+		if zone then
+			local locations = {}
+			local raw_coords = npc_coords(id, zoneid)
+			if raw_coords and #raw_coords > 0 then
+				for _,loc in pairs(raw_coords) do
+					local x,y = unpack(loc)
+					local is_new = true
+					for _,oldloc in pairs(locations) do
+						local old_x, old_y = unpack_coords(oldloc)
+						if math.abs(old_x - x) < 0.05 and math.abs(old_y - y) < 0.05 then
+							is_new = false
+							break
+						end
+					end
+					if is_new then
+						table.insert(locations, pack_coords(x, y))
 					end
 				end
-				if is_new then
-					table.insert(locations, pack_coords(x, y))
-				end
 			end
+			instances[zone] = {
+				id = id,
+				name = name,
+				level = level,
+				creature_type = ctype,
+				locations = locations,
+				elite = elite,
+				tameable = npc_tameable(id),
+			}
+		else
+			dprint(1, "Skipping adding to zone", zoneid)
 		end
-		instances[zone] = {
-			id = id,
-			level = level,
-			creature_type = ctype,
-			locations = locations,
-			elite = elite,
-			tameable = npc_tameable(id),
-		}
 	end
-	return name, instances
+	return id, instances
 end
 
 local function npcs_from_list_page(url)
@@ -326,12 +338,12 @@ local function npcs_from_list_page(url)
 	if not page then return end
 	dprint(3, "Found data.")
 	for entry in page:gmatch("%b{}") do
-		local name, npc_zones = npc_from_list_entry(entry)
-		if name then
+		local id, npc_zones = npc_from_list_entry(entry)
+		if id then
 			for zone, npc in pairs(npc_zones) do
 				if not defaults[zone] then defaults[zone] = {} end
-				defaults[zone][name] = npc
-				print("Added "..name.." to "..zone)
+				defaults[zone][id] = npc
+				print("Added "..id.." (".. npc.name ..") to "..zone)
 			end
 		end
 	end
@@ -361,7 +373,6 @@ local function translations_from_list_page(url)
 				dprint(2, "NPC in translation only", language, name, id)
 			end
 		end
-
 	end
 end
 

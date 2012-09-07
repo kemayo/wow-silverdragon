@@ -52,7 +52,7 @@ local function deSAM(val)
 	return val
 end
 
-function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit, id)
+function module:Seen(callback, id, name, zone, x, y, dead, newloc, source, unit)
 	if source and source:match("^sync") then
 		-- No feedback loops, kthxbai
 		return
@@ -112,17 +112,11 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		return
 	end
 
-	if not (msgType and name and zone and level) then
+	if not (msgType and name and zone and level and id) then
 		Debug("Skipping: insufficient data")
 		return
 	end
 
-	if spam[name] and spam[name] > (time() - core.db.profile.delay) then
-		Debug("Skipping: spam for mob", name, spam[name], time() - core.db.profile.delay)
-		return
-	end
-	spam[name] = time()
-
-	-- zone, name, x, y, dead, new_location, source, unit
-	core:NotifyMob(zone, name, x, y, false, false, "sync:"..channel..":"..sender, false)
+	-- id, name, zone, x, y, dead, new_location, source, unit
+	core:NotifyMob(id, name, zone, x, y, false, false, "sync:"..channel..":"..sender, false)
 end

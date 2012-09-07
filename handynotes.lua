@@ -25,7 +25,7 @@ do
 		return nil, nil, nil, nil, nil
 	end
 	function handler:GetNodes(mapFile)
-		return iter, nodes[mapFile], nil
+		return iter, nodes[core.zoneid_from_mapfile(mapFile)], nil
 	end
 end
 
@@ -36,7 +36,8 @@ function handler:OnEnter(mapFile, coord)
 	else
 		tooltip:SetOwner(self, "ANCHOR_RIGHT")
 	end
-	local name, _, level, elite, creature_type, lastseen = core:GetMobByCoord(mapFile, coord)
+	local zoneid = core.zoneid_from_mapfile(mapFile)
+	local id, name, _, level, elite, creature_type, lastseen = core:GetMobByCoord(zoneid, coord)
 	tooltip:AddLine(name)
 	local display_level = level or '?'
 	if display_level == -1 then
@@ -60,15 +61,16 @@ local clicked_zone, clicked_coord
 local info = {}
 
 local function deletePin(button, mapFile, coord)
-	local name = core:GetMobByCoord(mapFile, coord)
-	core:DeleteMob(mapFile, name)
+	local zoneid = core.zoneid_from_mapfile(mapFile)
+	local id = core:GetMobByCoord(zoneid, coord)
+	core:DeleteMob(id)
 	module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
 end
 
 local function createWaypoint(button, mapFile, coord)
 	local c, z = HandyNotes:GetCZ(mapFile)
 	local x, y = HandyNotes:getXY(coord)
-	local name = core:GetMobByCoord(mapFile, coord)
+	local id, name = core:GetMobByCoord(mapFile, coord)
 	if TomTom then
 		local persistent, minimap, world
 		if temporary then
@@ -179,7 +181,7 @@ function module:OnInitialize()
 	self:UpdateNodes()
 end
 
-function module:Seen(callback, zone, name, x, y, dead, new_location)
+function module:Seen(callback, id, name, zone, x, y, dead, new_location)
 	if not nodes[zone] then return end
 	if new_location then
 		local coord = core:GetCoord(x, y)
@@ -192,14 +194,13 @@ end
 core.RegisterCallback(module, "Seen")
 
 function module:UpdateNodes()
-	for _, mapFile in pairs(core.zone_to_mapfile) do
-		nodes[mapFile] = {}
-	end
-	for zone, mobs in pairs(core.db.global.mobs_byzone) do
-		if nodes[zone] then
-			for name in pairs(mobs) do
-				for _, loc in ipairs(core.db.global.mob_locations[name]) do
-					nodes[zone][loc] = name
+	for zone, mobs in pairs(core.db.global.mobs_byzoneid) do
+		local mapFile = core.mapfile_from_zoneid(zone)
+		if mapFile then
+			nodes[zone] = {}
+			for id, locs in pairs(mobs) do
+				for _, loc in ipairs(locs) do
+					nodes[zone][loc] = core.db.global.mob_name[id]
 				end
 			end
 		end

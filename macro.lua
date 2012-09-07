@@ -50,11 +50,12 @@ function module:Update()
 	if not self.db.profile.enabled then return end
 	-- first, create the macro text on the button:
 	local zone = core:GetPlayerZone()
-	local mobs = core.db.global.mobs_byzone[zone]
+	local mobs = core.db.global.mobs_byzoneid[zone]
 	if not mobs then return end
 	local macro = {}
-	for mob in pairs(mobs) do
-		table.insert(macro, "/targetexact "..mob)
+	for id in pairs(mobs) do
+		Debug("Macro mobs", id, core.db.global.mob_name[id])
+		table.insert(macro, "/targetexact "..core.db.global.mob_name[id])
 	end
 	self.button:SetAttribute("macrotext", ("\n"):join(unpack(macro)))
 	table.wipe(macro)

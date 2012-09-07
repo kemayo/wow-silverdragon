@@ -40,7 +40,7 @@ function module:OnInitialize()
 	-- self:SendMessage("NpcOverlay_RegisterScanner", "SilverDragon")
 end
 
-function module:Seen(callback, zone, name, x, y, dead, newloc, source, unit, id)
+function module:Seen(callback, id, name, zone, x, y, dead, newloc, source, unit)
 	if not id then return end
 	if not self.db.profile.enabled then return end
 	if source and source:match("^sync") then return end -- this is disabled until I get around to switching to mapids
