@@ -42,7 +42,10 @@ function addon:OnInitialize()
 			mob_count = {
 				['*'] = 0,
 			},
-			always_check = {}
+			always = {},
+			ignore = {
+				[32435] = true, -- Vern!
+			},
 		},
 		profile = {
 			scan = 1, -- scan interval, 0 for never
@@ -130,7 +133,7 @@ end
 
 local lastseen = {}
 function addon:ShouldSave(zone, id)
-	local last_saved = globaldb.mobs_byzoneid[zone][id]
+	local last_saved = globaldb.mob_seen[id]
 	if not last_saved then
 		return true
 	end
@@ -184,7 +187,7 @@ function addon:GetMob(zone, id)
 end
 
 function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit)
-	if lastseen[id] and time() < lastseen[id] + self.db.profile.delay then
+	if globaldb.ignore[id] or (lastseen[id] and time() < lastseen[id] + self.db.profile.delay) then
 		Debug("Skipping notification", id, name, lastseen[id], time() - self.db.profile.delay)
 		return
 	end

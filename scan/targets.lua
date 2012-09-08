@@ -35,7 +35,7 @@ function module:ProcessUnit(unit, source)
 	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
 	local unittype = UnitClassification(unit)
 	local id = core:UnitID(unit)
-	if (core.db.global.always_check[id] or (unittype == 'rare' or unittype == 'rareelite')) and UnitIsVisible(unit) then
+	if (core.db.global.always[id] or (unittype == 'rare' or unittype == 'rareelite')) and UnitIsVisible(unit) then
 		-- from this point on, it's a rare
 		local zone, x, y = core:GetPlayerLocation()
 		if not zone then return end -- there are only a few places where this will happen

@@ -8,6 +8,68 @@ local function toggle(name, desc, order)
 end
 module.toggle = toggle
 
+local function removable_mob(id)
+	local name = core.db.global.mob_name[id]
+	return {
+		type = "execute",
+		name = (name or UNKNOWN) .. ' (id:'..tostring(id)..')',
+		desc = not name and "Don't know the name" or nil,
+		arg = id,
+	}
+end
+
+local function mob_list_group(name, order, description, db_table)
+	local group = {
+		type = "group",
+		name = name,
+		order = order,
+		args = {},
+	}
+	group.args.about = {
+		type = "description",
+		name = description,
+		order = 0,
+	}
+	group.args.add = {
+		type = "input",
+		name = "Add",
+		desc = "Add a mob by entering its id. (Check wowhead.)",
+		get = function(info) return '' end,
+		set = function(info, v)
+			local id = tonumber(v)
+			db_table[id] = true
+			group.args.remove.args[tostring(id)] = removable_mob(id)
+		end,
+		validate = function(info, v)
+			if v:match("^%d+$") then
+				return true
+			end
+		end,
+		order = 10,
+	}
+	group.args.remove = {
+		type = "group",
+		inline = true,
+		name = "Remove",
+		order = 20,
+		func = function(info)
+			db_table[info.arg] = nil
+			group.args.remove.args[info[#info]] = nil
+		end,
+		args = {
+			about = {
+				type = "description",
+				name = "Remove a mob.",
+				order = 0,
+			},
+		},
+	}
+	for id in pairs(db_table) do
+		group.args.remove.args[tostring(id)] = removable_mob(id)
+	end
+	return group
+end
+
 local options = {
 	type = "group",
 	name = "SilverDragon",
@@ -124,6 +186,9 @@ module.options = options
 
 function module:OnInitialize()
 	db = core.db.profile
+
+	options.args.always = mob_list_group("Always", 20, "Mobs you always want to scan for", core.db.global.always)
+	options.args.ignore = mob_list_group("Ignore", 25, "Mobs you just want to ignore, already", core.db.global.ignore)
 
 	options.plugins["profiles"] = {
 		profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(core.db)

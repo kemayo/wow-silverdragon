@@ -45,7 +45,7 @@ function module:Scan(callback, zone)
 	for id, lastseen in pairs(zone_mobs) do
 		self:NotifyIfNeeded(id)
 	end
-	for id in pairs(globaldb.always_check) do
+	for id in pairs(globaldb.always) do
 		self:NotifyIfNeeded(id)
 	end
 	first_cachescan = false
