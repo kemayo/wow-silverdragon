@@ -240,7 +240,7 @@ end
 
 function addon:DeleteAllMobs()
 	local n = 0
-	for id in pairs(global.db.mob_name) do
+	for id in pairs(globaldb.mob_name) do
 		self:DeleteMob(id)
 		n = n + 1
 	end
