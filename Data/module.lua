@@ -17,6 +17,7 @@ function module:Import()
 			local name = R[info.name] -- gets it into the local language
 			mob_count = mob_count + 1
 			gdb.mob_id[name] = id
+			gdb.mob_name[id] = name
 			gdb.mob_level[id] = info.level
 			gdb.mob_type[id] = BCTR[info.creature_type]
 			gdb.mob_tameable[id] = info.tameable
