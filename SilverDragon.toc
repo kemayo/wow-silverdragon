@@ -47,6 +47,7 @@ scan\cache.lua
 scan\macro.lua
 
 # optional bits
+outputs\tooltip.lua
 outputs\ldb.lua
 outputs\announce.lua
 outputs\clicktarget.lua
