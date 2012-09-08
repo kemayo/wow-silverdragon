@@ -43,14 +43,29 @@ function module:Scan(callback, zone)
 	local zone_mobs = globaldb.mobs_byzoneid[zone]
 	if not zone_mobs then return end
 	for id, lastseen in pairs(zone_mobs) do
-		if (not globaldb.mob_tameable[id] or core.db.profile.cache_tameable) and not already_cached[id] and is_cached(id) then
-			already_cached[id] = true
-			local current_zone, x, y = core:GetPlayerLocation()
-			core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, false, "cache", false)
-		end
+		self:NotifyIfNeeded(id)
+	end
+	for id in pairs(globaldb.always_check) do
+		self:NotifyIfNeeded(id)
 	end
 	first_cachescan = false
 end
+
+function module:NotifyIfNeeded(id)
+	if globaldb.mob_tameable[id] and not core.db.profile.cache_tameable then
+		return
+	end
+	if already_cached[id] then
+		return
+	end
+	if not is_cached(id)  then
+		return
+	end
+	already_cached[id] = true
+	local current_zone, x, y = core:GetPlayerLocation()
+	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, false, "cache", false)
+end
+
 core.RegisterCallback(module, "Import", function()
 	if first_cachescan then
 		table.wipe(already_cached)

@@ -42,6 +42,7 @@ function addon:OnInitialize()
 			mob_count = {
 				['*'] = 0,
 			},
+			always_check = {}
 		},
 		profile = {
 			scan = 1, -- scan interval, 0 for never
@@ -137,26 +138,6 @@ function addon:ShouldSave(zone, id)
 		return true
 	end
 	return false
-end
-
-function addon:ProcessUnit(unit, source)
-	if not UnitExists(unit) then return end
-	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
-	local unittype = UnitClassification(unit)
-	if not (unittype == 'rare' or unittype == 'rareelite') or not UnitIsVisible(unit) then return end
-	-- from this point on, it's a rare
-	local zone, x, y = self:GetPlayerLocation()
-	if not zone then return end -- there are only a few places where this will happen
-
-	local id = self:UnitID(unit)
-	local name = UnitName(unit)
-	local level = (UnitLevel(unit) or -1)
-	local creature_type = UnitCreatureType(unit)
-
-	local newloc = self:SaveMob(id, name, zone, x, y, level, unittype=='rareelite', creature_type)
-
-	self:NotifyMob(id, name, zone, x, y, UnitIsDead(unit), newloc, source or 'target', unit)
-	return true
 end
 
 function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
@@ -256,7 +237,6 @@ function addon:CheckNearby()
 	if (not self.db.profile.instances) and IsInInstance() then return end
 	if (not self.db.profile.taxi) and UnitOnTaxi('player') then return end
 
-	-- zone is a mapfile here, note
 	self.events:Fire("Scan", zone)
 end
 
