@@ -74,7 +74,16 @@ function module:NotifyIfNeeded(id)
 	end
 	already_notified[id] = true
 	local current_zone, x, y = core:GetPlayerLocation()
-	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, false, "cache", false)
+	local newloc = false
+	if not globaldb.mob_tameable[id] then
+		--Pull some info from global database since it's not sent from syncs, and we don't want
+		-- to erase that info with savemob function just copy it over.
+		local creature_type = globaldb.mob_type[id]
+		local elite = globaldb.mob_elite[id]
+		local level = globaldb.mob_level[id]
+		newloc = core:SaveMob(id, name, current_zone, x, y, level, elite, creature_type)
+	end
+	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, newloc, "cache", false)
 end
 
 core.RegisterCallback(module, "Import", function()

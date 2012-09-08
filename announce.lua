@@ -299,7 +299,7 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, nam
 			end
 		end
 	end
-	module:Pour(("Rare seen: %s%s (%s)"):format(name, dead and "... but it's dead" or '', source or ''))
+	module:Pour(("Rare seen: %s%s (%s)"):format(name or UNKNOWN, dead and "... but it's dead" or '', source or ''))
 end)
 
 core.RegisterCallback("SD Announce Sound", "Announce", function(callback)
