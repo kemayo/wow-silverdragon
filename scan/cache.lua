@@ -1,5 +1,6 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Scan_Cache", "AceEvent-3.0", "AceConsole-3.0")
+local Debug = core.Debug
 
 local globaldb
 function module:OnInitialize()
@@ -23,7 +24,12 @@ local function is_cached(id)
 	-- this doesn't work with just clearlines and the setowner outside of this, and I'm not sure why
 	cache_tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 	cache_tooltip:SetHyperlink(("unit:0xF53%05X00000000"):format(id))
-	return cache_tooltip:IsShown()
+	if cache_tooltip:IsShown() then
+		local name = SDCacheTooltipTextLeft1:GetText()
+		globaldb.mob_id[name] = id
+		globaldb.mob_name[id] = name
+		return true
+	end
 end
 module.already_cached = already_cached
 
