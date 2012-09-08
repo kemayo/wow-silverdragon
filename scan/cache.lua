@@ -11,6 +11,7 @@ function module:OnEnable()
 end
 
 local already_cached = {}
+local already_notified = {}
 local first_cachescan = true
 local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip")
 cache_tooltip:AddFontStrings(
@@ -34,40 +35,50 @@ function module:Scan(callback, zone)
 		for mob, id in pairs(globaldb.mob_id) do
 			if is_cached(id) then
 				already_cached[id] = true
+				already_notified[id] = true
 			end
 		end
 		first_cachescan = false
 		return
 	end
 
+	for mob, id in pairs(globaldb.mob_id) do
+		if id and not already_cached[id] and is_cached(id) then
+			already_cached[id] = true
+		end
+	end
+	for id in pairs(globaldb.always) do
+		if id and not already_cached[id] and is_cached(id) then
+			already_cached[id] = true
+		end
+	end
+
 	local zone_mobs = globaldb.mobs_byzoneid[zone]
-	if not zone_mobs then return end
 	for id, lastseen in pairs(zone_mobs) do
 		self:NotifyIfNeeded(id)
 	end
 	for id in pairs(globaldb.always) do
 		self:NotifyIfNeeded(id)
 	end
-	first_cachescan = false
 end
 
 function module:NotifyIfNeeded(id)
+	if already_notified[id] then
+		return
+	end
+	if not already_cached[id] then
+		return
+	end
 	if globaldb.mob_tameable[id] and not core.db.profile.cache_tameable then
 		return
 	end
-	if already_cached[id] then
-		return
-	end
-	if not is_cached(id)  then
-		return
-	end
-	already_cached[id] = true
+	already_notified[id] = true
 	local current_zone, x, y = core:GetPlayerLocation()
 	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, false, "cache", false)
 end
 
 core.RegisterCallback(module, "Import", function()
-	if first_cachescan then
+	if not first_cachescan then
 		table.wipe(already_cached)
 		first_cachescan = true
 	end
@@ -79,7 +90,7 @@ module:RegisterChatCommand("sdcached", function()
 		lookup[id] = mob
 	end
 	local output
-	module:Print("The following mobs are in the NPC cache, and so will not be detected by the cache scanner.")
+	module:Print("The following mobs are in the NPC cache, and so will not be detected by the cache scanner:")
 	for id,_ in pairs(already_cached) do
 		module:Print(" ", lookup[id])
 		output = true
