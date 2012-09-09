@@ -350,9 +350,7 @@ function module:GetDefaults()
 			[9219] = {name="Spirestone Butcher",id=9219,creature_type="Humanoid",elite=true,},
 			[5934] = {name="Heartrazor",id=5934,creature_type="Beast",elite=true,},
 			[4015] = {name="Pridewing Patriarch",id=4015,creature_type="Beast",},
-			[50410] = {name="Crumbled Statue Remnants",id=50410,},
 			[2283] = {name="Ravenclaw Regent",id=2283,creature_type="Undead",},
-			[50409] = {name="Mysterious Camel Figurine",id=50409,},
 			[59369] = {name="Doctor Theolen Krastinov",id=59369,creature_type="Humanoid",elite=true,},
 			[10263] = {name="Burning Felguard",id=10263,creature_type="Demon",elite=true,},
 			[10201] = {name="Lady Hederine",id=10201,creature_type="Demon",elite=true,},
@@ -594,6 +592,8 @@ function module:GetDefaults()
 			[51403] = {name="Madexx (black)",id=51403,creature_type="Beast",tameable=true,locations = {44402160,44601060,50202040,},},
 			[51402] = {name="Madexx (green)",id=51402,creature_type="Beast",tameable=true,locations = {44001040,44402180,48208820,49802040,},},
 			[50063] = {name="Akma'hat",id=50063,creature_type="Humanoid",elite=true,locations = {38006020,},},
+			[50409] = {name="Mysterious Camel Figurine",id=50409,level=1,locations = {22206420,25405120,28406340,29602040,31406940,32004520,33202820,37006420,38405480,40003840,40804980,45201580,46204480,47207640,50403120,51405120,51807060,64603040,70005820,72004400,73209160,},},
+			[50410] = {name="Crumbled Statue Remnants",id=50410,level=1,locations = {22206400,25405120,28406340,29602040,31406940,32004500,33202820,37006400,38405520,40003840,40004360,40804940,45201580,46204420,47207640,50403120,50405040,51807060,64803020,69805780,72004400,73407340,},},
 		},
 		[756] = {
 			[596] = {name="Brainwashed Noble",id=596,level=15,creature_type="Humanoid",locations = {41007680,},},
