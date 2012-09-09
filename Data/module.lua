@@ -19,24 +19,27 @@ function module:Import()
 			gdb.mob_tameable[id] = info.tameable
 			gdb.mob_elite[id] = info.elite
 			if not gdb.mob_seen[id] then gdb.mob_seen[id] = 0 end
-			if not gdb.mobs_byzoneid[zone][id] then
-				gdb.mobs_byzoneid[zone][id] = {} -- never seen
-				for _, loc in pairs(info.locations) do
-					table.insert(gdb.mobs_byzoneid[zone][id], loc)
-				end
-			else
-				for _, loc in pairs(info.locations) do
-					local new_x, new_y = core:GetXY(loc)
-					local newloc = true
-					for _, oldloc in pairs(gdb.mobs_byzoneid[zone][id]) do
-						local old_x, old_y = core:GetXY(loc)
-						if math.abs(new_x - old_x) < 0.05 and math.abs(new_y - old_y) < 0.05 then
-							newloc = false
-							break
-						end
-					end
-					if newloc then
+			-- zone -1 is the "we don't know!" one
+			if zone ~= -1 then
+				if not gdb.mobs_byzoneid[zone][id] then
+					gdb.mobs_byzoneid[zone][id] = {} -- never seen
+					for _, loc in pairs(info.locations) do
 						table.insert(gdb.mobs_byzoneid[zone][id], loc)
+					end
+				else
+					for _, loc in pairs(info.locations) do
+						local new_x, new_y = core:GetXY(loc)
+						local newloc = true
+						for _, oldloc in pairs(gdb.mobs_byzoneid[zone][id]) do
+							local old_x, old_y = core:GetXY(loc)
+							if math.abs(new_x - old_x) < 0.05 and math.abs(new_y - old_y) < 0.05 then
+								newloc = false
+								break
+							end
+						end
+						if newloc then
+							table.insert(gdb.mobs_byzoneid[zone][id], loc)
+						end
 					end
 				end
 			end

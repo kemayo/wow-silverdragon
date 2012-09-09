@@ -126,11 +126,14 @@ function module:GetDefaults()
 			if mob.creature_type then f:write('creature_type="'..mob.creature_type..'",') end
 			if mob.elite then f:write('elite=true,') end
 			if mob.tameable then f:write('tameable=true,') end
-			f:write('locations = {')
-			for _,loc in pairs(mob.locations) do
-				f:write(loc..',')
+			if mob.locations then
+				f:write('locations = {')
+				for _,loc in pairs(mob.locations) do
+					f:write(loc..',')
+				end
+				f:write('},')
 			end
-			f:write('},},\n')
+			f:write('},\n')
 		end
 		f:write('\t\t},\n')
 	end
@@ -160,7 +163,7 @@ local defaults
 
 -- Mobs which, although rare, shouldn't be included
 local blacklist = {
-	-- 32435, -- Vern
+	[50091] = true, -- untargetable Julak-Doom component
 }
 -- Mobs which should be included even though they're not rare
 local force_include = {
@@ -168,8 +171,8 @@ local force_include = {
 	50409, -- Mysterious Camel Figurine
 	50410, -- Mysterious Camel Figurine (remnants)
 	3868, -- Blood Seeker (thought to share Aeonaxx's spawn timer)
-	50005, -- Poseidus
 	51236, -- Aeonaxx (engaged)
+	58336, -- Darkmoon Rabbit
 }
 local name_overrides = {
 	[50410] = "Crumbled Statue Remnants",
@@ -256,20 +259,19 @@ local function npc_from_list_entry(entry)
 		ctype = npctypes[ctype]
 	end
 	local elite = (entry:match("\"classification\":(%d+)") == '2')
-	local zoneids = entry:match("\"location\":%[([%d,]+)]")
+	local zoneids = entry:match("\"location\":%[([%d,]+)]") or ""
 	dprint(3, "Found:", id, name, level, ctype, elite, zoneid)
 	
 	if blacklist[id] then
 		return
 	end
-	if not zoneids then
-		return
-	end
+
 	if name_overrides[id] then
 		name = name_overrides[id]
 	end
 
 	local instances = {}
+	local in_a_zone = false
 	for zoneid in zoneids:gfind("%d+") do
 		local zone = zones[zoneid]
 		if zone then
@@ -300,9 +302,20 @@ local function npc_from_list_entry(entry)
 				elite = elite,
 				tameable = npc_tameable(id),
 			}
+			in_a_zone = true
 		else
 			dprint(1, "Skipping adding to zone", zoneid)
 		end
+	end
+	if not in_a_zone then
+		instances[-1] = {
+			id = id,
+			name = name,
+			level = level,
+			creature_type = ctype,
+			elite = elite,
+			tameable = npc_tameable(id),
+		}
 	end
 	return id, instances
 end
@@ -351,4 +364,3 @@ local function main()
 end
 
 main()
-
