@@ -87,6 +87,7 @@ function module:NotifyIfNeeded(id)
 		local creature_type = globaldb.mob_type[id]
 		local elite = globaldb.mob_elite[id]
 		local level = globaldb.mob_level[id]
+		local name = globaldb.mob_name[id]
 		newloc = core:SaveMob(id, name, current_zone, x, y, level, elite, creature_type)
 	end
 	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, newloc, "cache", false)

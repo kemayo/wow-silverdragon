@@ -1,5 +1,3 @@
-local BZ = LibStub("LibBabble-Zone-3.0"):GetUnstrictLookupTable()
-local BZR = LibStub("LibBabble-Zone-3.0"):GetReverseLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 
 local R = LibStub("AceLocale-3.0"):GetLocale("SilverDragon_Rares")
