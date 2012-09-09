@@ -7,6 +7,8 @@
 local SOURCE = SOURCE or "defaults.lua"
 local DEBUG = tonumber(arg[1]) or DEBUG or 1
 
+local WOWHEAD_URL = "http://www.wowhead.com/"
+
 local function dprint(dlevel, ...)
 	if dlevel and DEBUG >= dlevel then
 		print(...)
@@ -168,7 +170,6 @@ local force_include = {
 	3868, -- Blood Seeker (thought to share Aeonaxx's spawn timer)
 	50005, -- Poseidus
 	51236, -- Aeonaxx (engaged)
-	50053, -- Thartuk the Exile (a rare, but wowhead doesn't include him in search results for some reason)
 }
 local name_overrides = {
 	[50410] = "Crumbled Statue Remnants",
@@ -207,7 +208,7 @@ local function zone_mappings()
 end
 
 local function npc_coords(id, zone)
-	local url = "http://www.wowhead.com/npc="..id
+	local url = WOWHEAD_URL.."npc="..id
 	local page = getpage(url)
 	if not page then return end
 	
@@ -228,7 +229,7 @@ local function npc_coords(id, zone)
 end
 
 local function npc_tameable(id)
-	local url = "http://www.wowhead.com/npc="..id
+	local url = WOWHEAD_URL.."npc="..id
 	local page = getpage(url)
 	if not page then return end
 	
@@ -335,13 +336,13 @@ local function main()
 		print("Acquiring rares for category: "..c)
 		for expansion = 1, 5 do
 			-- run per-expansion to avoid caps on results-displayed
-			local url = "http://www.wowhead.com/npcs=" .. i .. "&filter=cl=4:2;cr=39;crs=" .. expansion .. ";crv=0"
+			local url = WOWHEAD_URL .. "npcs=" .. i .. "&filter=cl=4:2;cr=39;crs=" .. expansion .. ";crv=0"
 			npcs_from_list_page(url)
 		end
 	end
 	for i, id in ipairs(force_include) do
 		print("Acquiring forced ID: "..id)
-		local url = "http://www.wowhead.com/npcs?filter=cr=37;crs=3;crv=" .. id
+		local url = WOWHEAD_URL .. "npcs?filter=cr=37;crs=3;crv=" .. id
 		
 		npcs_from_list_page(url)
 	end
