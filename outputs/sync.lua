@@ -37,7 +37,7 @@ function module:OnInitialize()
 	end
 end
 
-local protocol_version = 1
+local protocol_version = 2
 local function SAM(channel, ...)
 	core.Debug("Sending message", channel, protocol_version, ...)
 	ChatThrottleLib:SendAddonMessage("NORMAL", "SilverDragon", strjoin("\t", tostringall(protocol_version, ...)), channel)
