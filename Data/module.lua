@@ -1,7 +1,5 @@
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 
-local R = LibStub("AceLocale-3.0"):GetLocale("SilverDragon_Rares")
-
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Data")
 
@@ -12,7 +10,7 @@ function module:Import()
 	local mob_count = 0
 	for zone, mobs in pairs(defaults) do
 		for id, info in pairs(mobs) do
-			local name = R[info.name] -- gets it into the local language
+			local name = info.name
 			mob_count = mob_count + 1
 			gdb.mob_id[name] = id
 			gdb.mob_name[id] = name
