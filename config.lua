@@ -53,7 +53,7 @@ local function mob_list_group(name, order, description, db_table)
 		name = "Remove",
 		order = 20,
 		func = function(info)
-			db_table[info.arg] = nil
+			db_table[info.arg] = false
 			group.args.remove.args[info[#info]] = nil
 		end,
 		args = {
@@ -64,8 +64,10 @@ local function mob_list_group(name, order, description, db_table)
 			},
 		},
 	}
-	for id in pairs(db_table) do
-		group.args.remove.args[tostring(id)] = removable_mob(id)
+	for id, ignored in pairs(db_table) do
+		if ignored then
+			group.args.remove.args[tostring(id)] = removable_mob(id)
+		end
 	end
 	return group
 end
