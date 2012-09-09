@@ -203,6 +203,8 @@ function module:UpdateNodes()
 					nodes[zone][loc] = core.db.global.mob_name[id]
 				end
 			end
+		else
+			Debug("No mapfile for zone!", zone)
 		end
 	end
 	self.nodes = nodes

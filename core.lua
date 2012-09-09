@@ -270,6 +270,17 @@ end
 
 local currentZone
 
+--fix terrain phased zones with multiple IDs
+local zone_overrides = {
+	[606] = 683, -- hyjal_terrain1
+	[720] = 748, -- uldum_terrain1
+	[700] = 770, -- twilight highlands
+	[907] = 141, -- duskwallow marsh before/after theramore
+}
+function addon:CanonicalZoneId(zoneid)
+	return zone_overrides[zoneid] or zoneid
+end
+
 function addon:ZONE_CHANGED_NEW_AREA()
 	if WorldMapFrame:IsVisible() then--World Map is open
 		local Z = GetCurrentMapAreaID()
@@ -282,6 +293,9 @@ function addon:ZONE_CHANGED_NEW_AREA()
 		SetMapToCurrentZone()
 		currentZone = GetCurrentMapAreaID()--Get right info after we set map to right place.
 	end
+
+	currentZone = self:CanonicalZoneId(currentZone)
+
 	self.events:Fire("ZoneChanged", currentZone)
 end
 
@@ -310,7 +324,7 @@ function addon:GetPlayerLocation()--Advanced function that actually gets the pla
 		-- I don't *think* this should be possible any more. But just in case...
 		x, y = 0, 0
 	end
-	return true_Z, x, y
+	return self:GetPlayerZone(), x, y
 end
 
 function addon:GetCoord(x, y)
@@ -324,25 +338,21 @@ end
 do
 	-- need to set up a mapfile-to-mapid mapping
 	-- for: imports, and map notes addons
-	local continent_list = { GetMapContinents() }
+	local MAX_MAPFILE = 950
 	local mapfile_to_zoneid = {}
 	local zoneid_to_mapfile = {}
-	local mapname_to_zoneid = {}
-	continent_list[-1] = {795, 823} -- zones that are hidden away, but which we want to know about
-	for C in pairs(continent_list) do
-		local zones = { GetMapZones(C) }
-		for Z, Zname in ipairs(zones) do
-			SetMapZoom(C, Z)
-			mapfile_to_zoneid[GetMapInfo()] = GetCurrentMapAreaID()
+	for zoneid = 1, MAX_MAPFILE do
+		local name = GetMapNameByID(zoneid)
+		if name then
+			SetMapByID(zoneid)
+			local mapfile = GetMapInfo()
+			mapfile_to_zoneid[mapfile] = zoneid
+			zoneid_to_mapfile[zoneid] = mapfile
 		end
 	end
 
-	for mapfile,zoneid in pairs(mapfile_to_zoneid) do
-		zoneid_to_mapfile[zoneid] = mapfile
-	end
-
 	addon.zoneid_from_mapfile = function(mapfile)
-		return mapfile_to_zoneid[mapfile:gsub("_terrain%d+$", "")]
+		return addon:CanonicalZoneId(mapfile_to_zoneid[mapfile:gsub("_terrain%d+$", "")])
 	end
 	addon.mapfile_from_zoneid = function(zoneid)
 		return zoneid_to_mapfile[zoneid]
