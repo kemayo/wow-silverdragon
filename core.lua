@@ -217,6 +217,7 @@ function addon:DeleteMob(id)
 	globaldb.mob_type[id] = nil
 	globaldb.mob_count[id] = nil
 	globaldb.mob_seen[id] = nil
+	globaldb.mob_tameable[id] = nil
 	local name = globaldb.mob_name[id]
 	globaldb.mob_name[id] = nil
 	globaldb.mob_id[name] = nil
@@ -228,6 +229,8 @@ function addon:DeleteAllMobs()
 		self:DeleteMob(id)
 		n = n + 1
 	end
+	globaldb.mob_name = {}
+	globaldb.mob_id = {}
 	DEFAULT_CHAT_FRAME:AddMessage("SilverDragon: Removed "..n.." rare mobs from database.")
 	self.events:Fire("DeleteAll", n)
 end
