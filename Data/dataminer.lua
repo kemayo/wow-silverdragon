@@ -7,7 +7,7 @@
 local SOURCE = SOURCE or "defaults.lua"
 local DEBUG = tonumber(arg[1]) or DEBUG or 1
 
-local WOWHEAD_URL = "http://www.wowhead.com/"
+local WOWHEAD_URL = "http://mop.wowhead.com/"
 
 local function dprint(dlevel, ...)
 	if dlevel and DEBUG >= dlevel then
@@ -335,6 +335,7 @@ local function main()
 	for i,c in pairs(npctypes) do
 		print("Acquiring rares for category: "..c)
 		for expansion = 1, 5 do
+			print("EXPANSION: "..expansion)
 			-- run per-expansion to avoid caps on results-displayed
 			local url = WOWHEAD_URL .. "npcs=" .. i .. "&filter=cl=4:2;cr=39;crs=" .. expansion .. ";crv=0"
 			npcs_from_list_page(url)
