@@ -161,7 +161,7 @@ local npctypes = {
 	[5] = 'Giant',
 	[6] = 'Undead',
 	[7] = 'Humanoid',
---	[8] = 'Critter',
+	[8] = 'Critter',
 	[9] = 'Mechanical',
 	[10] = 'Uncategorized',
 }
@@ -177,7 +177,7 @@ local defaults, translations, english_id_name_mapping
 
 -- Mobs which, although rare, shouldn't be included
 local blacklist = {
-	32435, -- Vern
+	-- 32435, -- Vern
 }
 -- Mobs which should be included even though they're not rare
 local force_include = {
@@ -384,9 +384,12 @@ local function main()
 	english_id_name_mapping = {}
 	for i,c in pairs(npctypes) do
 		print("Acquiring rares for category: "..c)
-		local url = "http://www.wowhead.com/npcs="..i.."&filter=cl=4:2"
-		npcs_from_list_page(url)
-		translations_from_list_page(url)
+		for expansion = 1, 5 do
+			-- run per-expansion to avoid caps on results-displayed
+			local url = "http://www.wowhead.com/npcs=" .. i .. "&filter=cl=4:2;cr=39;crs=" .. expansion .. ";crv=0"
+			npcs_from_list_page(url)
+			translations_from_list_page(url)
+		end
 	end
 	for i, id in ipairs(force_include) do
 		print("Acquiring forced ID: "..id)
