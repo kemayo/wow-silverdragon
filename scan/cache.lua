@@ -66,7 +66,7 @@ function module:Scan(callback, zone)
 		-- usage somewhat, thus the tradeoff of only doing it when we're trying to suppress tameables.
 		self:ScanMobsInTable(globaldb.mob_tameable, zone)
 	end
-	self:ScanMobsInTable(globaldb.mobs_byzoneid[zone], zone)
+	self:ScanMobsInTable(first_cachescan and globaldb.mob_name or globaldb.mobs_byzoneid[zone], zone)
 	self:ScanMobsInTable(globaldb.always, zone)
 	first_cachescan = false
 end
