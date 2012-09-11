@@ -49,7 +49,11 @@ function module:OnInitialize()
 		profile = {
 			sink = true,
 			sound = true,
+			sound_mount = true,
+			sound_boss = true,
 			soundfile = "Wham!",
+			soundfile_mount = "Illidan: Not Prepared",
+			soundfile_boss = "Magtheridon: I am Unleashed",
 			flash = true,
 			instances = true,
 			expansions = {
@@ -71,51 +75,92 @@ function module:OnInitialize()
 	local config = core:GetModule("Config", true)
 	if config then
 		local toggle = config.toggle
+		local get = function(info) return self.db.profile[info[#info]] end
+		local set = function(info, v) self.db.profile[info[#info]] = v end
+
+		local sink_config = self:GetSinkAce3OptionsDataTable()
+		sink_config.inline = true
+
+		local faker = function(id, name, zone, x, y)
+			return {
+				type = "execute", name = name,
+				desc = "Fake seeing " .. name,
+				func = function()
+					-- id, name, zone, x, y, is_dead, is_new_location, source, unit
+					core.events:Fire("Seen", id, name, zone, x, y, false, false, "fake", false)
+				end,
+			}
+		end
+
 		local options = {
-			announce = {
-				type = "group",
-				name = "Announce",
-				get = function(info) return self.db.profile[info[#info]] end,
-				set = function(info, v) self.db.profile[info[#info]] = v end,
+			general = {
+				type = "group", name = "General", inline = true,
+				order = 10,
+				get = get, set = set,
 				args = {
-					sink = {
-						type = "group", name = "Message", inline = true,
-						args = {
-							sink = toggle("Message", "Send a message to whatever scrolling text addon you're using."),
-							output = self:GetSinkAce3OptionsDataTable()
-						},
-					},
 					flash = toggle("Flash", "Flash the edges of the screen."),
 					instances = toggle("Instances", "Show announcements while in an instance"),
-					expansions = {
-						type = "group", name = "Expansions", inline = true,
-						get = function(info) return self.db.profile.expansions[info[#info]] end,
-						set = function(info, v) self.db.profile.expansions[info[#info]] = v end,
-						args = {
-							desc = {
-								type = "description",
-								name = "Whether to announce rares in zones from this expansion",
-								order = 0,
-							},
-							classic = toggle("Classic", "Vanilla. Basic. 1-60. Whatevs.", 10),
-							bc = toggle("Burning Crusade", "Illidan McGrumpypants. 61-70.", 20),
-							wrath = toggle("Wrath of the Lich King", "Emo Arthas. 71-80.", 30),
-							cataclysm = toggle("Cataclysm", "Play it off, keyboard cataclysm! 81-85.", 40),
-							pandaria = toggle("Mists of Pandaria", "Everybody was kung fu fighting. 86-90.", 50),
-							cities = toggle("Capitol Cities", "Expansion indifferent and ever evolving.", 60),
-							unknown = toggle(UNKNOWN, "Not sure where they fit.", 70),
-						},
-					},
+				},
+			},
+			expansions = {
+				type = "group", name = "Expansions", inline = true,
+				order = 15,
+				get = function(info) return self.db.profile.expansions[info[#info]] end,
+				set = function(info, v) self.db.profile.expansions[info[#info]] = v end,
+				args = {
+					about = config.desc("Whether to announce rares in zones from this expansion", 0),
+					classic = toggle("Classic", "Vanilla. Basic. 1-60. Whatevs.", 10),
+					bc = toggle("Burning Crusade", "Illidan McGrumpypants. 61-70.", 20),
+					wrath = toggle("Wrath of the Lich King", "Emo Arthas. 71-80.", 30),
+					cataclysm = toggle("Cataclysm", "Play it off, keyboard cataclysm! 81-85.", 40),
+					pandaria = toggle("Mists of Pandaria", "Everybody was kung fu fighting. 86-90.", 50),
+					cities = toggle("Capitol Cities", "Expansion indifferent and ever evolving.", 60),
+					unknown = toggle(UNKNOWN, "Not sure where they fit.", 70),
+				},
+			},
+			sink = {
+				type = "group", name = "Message",
+				order = 20,
+				get = get, set = set,
+				args = {
+					sink = toggle("Enabled", "Send a message to whatever scrolling text addon you're using.", 10, true),
+					output = sink_config
+				},
+			},
+			test = {
+				type = "group", name = "Test it!",
+				inline =  true,
+				args = {
+					-- id, name, zone, x, y, is_dead, is_new_location, source, unit
+					time = faker(32491, "Time-Lost Proto Drake (Mount!)", 495, 0.490, 0.362),
+					anger = faker(60491, "Sha of Anger (Boss!)", 809, 0.5, 0.5),
+					vyragosa = faker(32630, "Vyragosa (Boring)", 495, 0.5, 0.5),
 				},
 			},
 		}
 		if LSM then
-			options.announce.args.sound = toggle("Sound", "Play a sound.")
-			options.announce.args.soundfile = {
-				type = "select", dialogControl = "LSM30_Sound",
-				name = "Sound to Play", desc = "Choose a sound file to play.",
-				values = AceGUIWidgetLSMlists.sound,
-				disabled = function() return not self.db.profile.sound end,
+			local soundfile = function(enabled_key, order)
+				return {
+					type = "select", dialogControl = "LSM30_Sound",
+					name = "Sound to Play", desc = "Choose a sound file to play",
+					values = AceGUIWidgetLSMlists.sound,
+					disabled = function() return not self.db.profile[enabled_key] end,
+					order = order,
+				}
+			end
+			options.sound = {
+				type = "group", name = "Sounds",
+				get = get, set = set,
+				order = 10,
+				args = {
+					about = config.desc("Play sounds to announce rare mobs? Can do special things for special mobs. You *really* don't want to miss, say, the Time-Lost Proto Drake, after all...", 0),
+					sound = toggle("Enabled", "Play sounds at all!", 10),
+					soundfile = soundfile("sound", 15),
+					sound_mount = toggle("Mount sounds", "Play a special sound for mobs that drop a mount", 20),
+					soundfile_mount = soundfile("sound_mount", 25),
+					sound_boss = toggle("Boss sounds", "Play a special sound for mobs that require a group", 30),
+					soundfile_boss = soundfile("sound_boss", 35),
+				},
 			}
 		end
 		config.options.args.outputs.plugins.announce = options
@@ -157,20 +202,29 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, nam
 	module:Pour(("Rare seen: %s%s (%s)"):format(name or UNKNOWN, dead and "... but it's dead" or '', source or ''))
 end)
 
-core.RegisterCallback("SD Announce Sound", "Announce", function(callback)
-	if not (module.db.profile.sound and LSM) then
-		return
-	end
-
-	Debug("Playing sound", module.db.profile.soundfile)
-	if module.db.profile.soundfile == "NPCScan" then
+function module:PlaySound(soundfile)
+	Debug("Playing sound", soundfile)
+	if soundfile == "NPCScan" then
 		--Override default behavior and force npcscan behavior of two sounds at once
 		PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
 		PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), "Master")
 	else
 		--Play whatever sound is set
-		PlaySoundFile(LSM:Fetch("sound", module.db.profile.soundfile), "Master")
+		PlaySoundFile(LSM:Fetch("sound", soundfile), "Master")
 	end
+end
+core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id)
+	if not (module.db.profile.sound and LSM) then
+		return
+	end
+	if mount_mobs[id] then
+		soundfile = module.db.profile.soundfile_mount
+	elseif boss_mobs[id] then
+		soundfile = module.db.profile.soundfile_boss
+	else
+		soundfile = module.db.profile.soundfile
+	end
+	module:PlaySound(soundfile)
 end)
 
 core.RegisterCallback("SD Announce Flash", "Announce", function(callback)

@@ -189,7 +189,7 @@ local options = {
 			name = "Outputs",
 			order = 20,
 			args = {
-				about = desc("SilverDragon wants to tell you things. Check out the sub-sections here to adjust how it does that."),
+				about = desc("SilverDragon wants to tell you things. Check out the sub-sections here to adjust how it does that.", 0),
 			},
 			plugins = {},
 		},
@@ -198,7 +198,7 @@ local options = {
 			name = "Addons",
 			order = 30,
 			args = {
-				about = desc("SilverDragon can integrate with some other addons. If you don't see anything here, you don't have any of these addons installed. I'm very sad. ;_;"),
+				about = desc("SilverDragon can integrate with some other addons. If you don't see anything here, you don't have any of these addons installed. I'm very sad. ;_;", 0),
 			},
 			plugins = {},
 		},

@@ -17,6 +17,7 @@ function module:OnInitialize()
 				mouseover = true,
 				nameplate = true,
 				sync = false,
+				fake = true,
 			},
 		},
 	})
