@@ -1,5 +1,5 @@
 ﻿local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
-local module = core:NewModule("Announce", "LibSink-2.0")
+local module = core:NewModule("Announce", "AceTimer-3.0", "LibSink-2.0")
 local Debug = core.Debug
 
 local LSM = LibStub("LibSharedMedia-3.0")
@@ -54,6 +54,9 @@ function module:OnInitialize()
 			soundfile = "Wham!",
 			soundfile_mount = "Illidan: Not Prepared",
 			soundfile_boss = "Magtheridon: I am Unleashed",
+			sound_loop = 1,
+			sound_mount_loop = 1,
+			sound_boss_loop = 1,
 			flash = true,
 			instances = true,
 			expansions = {
@@ -148,18 +151,32 @@ function module:OnInitialize()
 					order = order,
 				}
 			end
+			local soundrange = function(order)
+				return {
+					type = "range",
+					name = "Repeat...",
+					desc = "How many times to repeat the sound",
+					min = 1, max = 10, step = 1,
+					order = order,
+				}
+			end
 			options.sound = {
 				type = "group", name = "Sounds",
 				get = get, set = set,
 				order = 10,
 				args = {
 					about = config.desc("Play sounds to announce rare mobs? Can do special things for special mobs. You *really* don't want to miss, say, the Time-Lost Proto Drake, after all...", 0),
-					sound = toggle("Enabled", "Play sounds at all!", 10),
+					sound = toggle("Enabled", "Play sounds at all!", 10, true),
 					soundfile = soundfile("sound", 15),
-					sound_mount = toggle("Mount sounds", "Play a special sound for mobs that drop a mount", 20),
+					sound_loop = soundrange(17),
+					mount = {type="header", name="", order=20,},
+					sound_mount = toggle("Mount sounds", "Play a special sound for mobs that drop a mount", 21, true),
 					soundfile_mount = soundfile("sound_mount", 25),
-					sound_boss = toggle("Boss sounds", "Play a special sound for mobs that require a group", 30),
+					sound_mount_loop = soundrange(27),
+					boss = {type="header", name="", order=30,},
+					sound_boss = toggle("Boss sounds", "Play a special sound for mobs that require a group", 31, true),
 					soundfile_boss = soundfile("sound_boss", 35),
+					sound_boss_loop = soundrange(37),
 				},
 			}
 		end
@@ -202,29 +219,41 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, nam
 	module:Pour(("Rare seen: %s%s (%s)"):format(name or UNKNOWN, dead and "... but it's dead" or '', source or ''))
 end)
 
-function module:PlaySound(soundfile)
-	Debug("Playing sound", soundfile)
-	if soundfile == "NPCScan" then
+function module:PlaySound(s)
+	-- Arg is a table, to make scheduling the loops easier. I am lazy.
+	Debug("Playing sound", s.soundfile, s.loops)
+	-- boring check:
+	if not s.loops or s.loops == 0 then return end
+	-- now, noise!
+	if s.soundfile == "NPCScan" then
 		--Override default behavior and force npcscan behavior of two sounds at once
 		PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
 		PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), "Master")
 	else
 		--Play whatever sound is set
-		PlaySoundFile(LSM:Fetch("sound", soundfile), "Master")
+		PlaySoundFile(LSM:Fetch("sound", s.soundfile), "Master")
+	end
+	s.loops = s.loops - 1
+	if s.loops > 0 then
+		self:ScheduleTimer("PlaySound", 4.5, s)
 	end
 end
 core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id)
 	if not (module.db.profile.sound and LSM) then
 		return
 	end
+	local soundfile, loops
 	if mount_mobs[id] then
 		soundfile = module.db.profile.soundfile_mount
+		loops = module.db.profile.sound_mount_loop
 	elseif boss_mobs[id] then
 		soundfile = module.db.profile.soundfile_boss
+		loops = module.db.profile.sound_boss_loop
 	else
 		soundfile = module.db.profile.soundfile
+		loops = module.db.profile.sound_loop
 	end
-	module:PlaySound(soundfile)
+	module:PlaySound{soundfile = soundfile, loops = loops}
 end)
 
 core.RegisterCallback("SD Announce Flash", "Announce", function(callback)
