@@ -115,7 +115,7 @@ local options = {
 						cache = toggle("Cache", "Scan the mob cache for never-before-found mobs.", 40),
 					},
 				},
-				cache_tameable = toggle("Cache alert: Tameable", "The cache-scanning method has no way to tell whether a mob is a hunter's pet. So to avoid getting spam, you can disable notifications for mobs found through this method that it is possible to tame.", 40),
+				cache_tameable = toggle("Cache alert: Tameable", "The cache-scanning method has no way to tell whether a mob is a hunter's pet. So to avoid getting spam, you can disable notifications for mobs found through this method that it is possible to tame. Disabling this will increase CPU usage, as we'll have to look for all these mobs while we're outside their normal range.", 40),
 				instances = toggle("Scan in instances", "There aren't that many actual rares in instances, and scanning might slow things down at a time when you'd like the most performance possible.", 50),
 				taxi = toggle("Scan on taxis", "Keep scanning for rares while flying on a taxi. Just hope that it'll still be there after you land and make your way back...", 55),
 				-- neighbors = toggle("Scan neighboring zones", "Look for mobs which are supposed to be in neighboring zones as well. Should help if you're near the border.", 60)
