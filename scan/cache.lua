@@ -9,6 +9,7 @@ end
 
 function module:OnEnable()
 	core.RegisterCallback(self, "Scan")
+	core.RegisterCallback(self, "ZoneChanged")
 end
 
 local already_cached = {}
@@ -33,42 +34,35 @@ local function is_cached(id)
 end
 module.already_cached = already_cached
 
+function module:ZoneChanged(callback, zone)
+	first_cachescan = true
+end
+
 function module:Scan(callback, zone)
 	if not core.db.profile.cache then
 		return
 	end
-	if first_cachescan then
-		for mob, id in pairs(globaldb.mob_id) do
-			if is_cached(id) then
-				already_cached[id] = true
-				already_notified[id] = true
-			end
-		end
-		first_cachescan = false
+	self:ScanMobsInTable(globaldb.mobs_byzoneid[zone])
+	self:ScanMobsInTable(globaldb.always)
+	first_cachescan = false
+end
+
+function module:ScanMobsInTable(mobs)
+	if not mobs then
 		return
 	end
-
-	for mob, id in pairs(globaldb.mob_id) do
-		if id and not already_cached[id] and is_cached(id) then
+	for id in pairs(mobs) do
+		if not already_cached[id] and is_cached(id) then
 			already_cached[id] = true
+			self:NotifyIfNeeded(id)
 		end
-	end
-	for id in pairs(globaldb.always) do
-		if id and not already_cached[id] and is_cached(id) then
-			already_cached[id] = true
-		end
-	end
-
-	local zone_mobs = globaldb.mobs_byzoneid[zone]
-	for id, lastseen in pairs(zone_mobs) do
-		self:NotifyIfNeeded(id)
-	end
-	for id in pairs(globaldb.always) do
-		self:NotifyIfNeeded(id)
 	end
 end
 
 function module:NotifyIfNeeded(id)
+	if first_cachescan then
+		already_notified[id] = true
+	end
 	if already_notified[id] then
 		return
 	end
