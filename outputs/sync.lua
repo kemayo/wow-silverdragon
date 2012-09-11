@@ -26,6 +26,7 @@ function module:OnInitialize()
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
+					about = config.desc("SilverDragon will tell other SilverDragon users about rare mobs you see. If you don't like this, tell it to be quiet.", 0),
 					party = config.toggle("Party", "Accept syncs from party members"),
 					raid = config.toggle("Raid", "Accept syncs from raid members"),
 					guild = config.toggle("Guild Sync", "Accept syncs from guild members"),

@@ -3,10 +3,26 @@ local module = core:NewModule("Config", "AceConsole-3.0")
 
 local db
 
-local function toggle(name, desc, order)
-	return {type = "toggle", name = name, desc = desc, order=order,}
+local function toggle(name, desc, order, inline)
+	return {
+		type = "toggle",
+		name = name,
+		desc = desc,
+		order = order,
+		descStyle = inline and "inline" or nil,
+		width = inline and "full" or nil,
+	}
 end
 module.toggle = toggle
+local function desc(text, order)
+	return {
+		type = "description",
+		name = text,
+		order = order,
+		fontSize = "medium",
+	}
+end
+module.desc = desc
 
 local function removable_mob(id)
 	local name = core.db.global.mob_name[id]
@@ -25,11 +41,7 @@ local function mob_list_group(name, order, description, db_table)
 		order = order,
 		args = {},
 	}
-	group.args.about = {
-		type = "description",
-		name = description,
-		order = 0,
-	}
+	group.args.about = desc(description, 0)
 	group.args.add = {
 		type = "input",
 		name = "Add",
@@ -57,11 +69,7 @@ local function mob_list_group(name, order, description, db_table)
 			group.args.remove.args[info[#info]] = nil
 		end,
 		args = {
-			about = {
-				type = "description",
-				name = "Remove a mob.",
-				order = 0,
-			},
+			about = desc("Remove a mob.", 0),
 		},
 	}
 	for id, ignored in pairs(db_table) do
@@ -78,11 +86,34 @@ local options = {
 	get = function(info) return db[info[#info]] end,
 	set = function(info, v) db[info[#info]] = v end,
 	args = {
-		general = {
+		about = {
 			type = "group",
-			name = "General",
+			name = "About",
+			args = {
+				about = desc("SilverDragon keeps an eye out for rare mobs for you.\n\n"..
+						"If you want to change how it does that, go to the \"Scanning\" section "..
+						"of the config. You can enable or disable the different methods used, and "..
+						"adjust how some of them behave.\n\n"..
+						"If you want to change how it tells you about seeing a rare, check out the "..
+						"\"Outputs\" section.\n\n"..
+						"If you want to add a custom mob to scan for, look at \"Always\" in the \"Mobs\" "..
+						"section.\n\n"..
+						"If you want SilverDragon to please, please stop telling you about a certain "..
+						"mob, look at \"Ignore\" in the \"Mobs\" section.\n\n"..
+						"If you think SilverDragon hasn't told you about a rare that it should have, "..
+						"make sure that (a) you've imported the bundled rares in the \"Mobs\", and (b) "..
+						"you've cleared your mob cache by quitting WoW and deleting Cache\\WDB\\enUS\\creaturecache.wdb "..
+						"from your WoW install directory. Check the website you downloaded SilverDragon from "..
+						"for more detailed instructions if you need help with that."),
+			},
+			order = 0,
+		},
+		scanning = {
+			type = "group",
+			name = "Scanning",
 			order = 10,
 			args = {
+				about = desc("SilverDragon is all about scanning for rare mobs. The options you see in this tab apply generally to all the scanning methods used. For more specific controls, check out the sub-sections.", 0),
 				scan = {
 					type = "range",
 					name = "Scan frequency",
@@ -97,53 +128,30 @@ local options = {
 					min = 30, max = (60 * 60), step = 10,
 					order = 20,
 				},
-				methods = {
-					type = "group",
-					name = "Scan methods",
-					desc = "Which approaches to use for scanning.",
-					order = 30,
-					inline = true,
-					args = {
-						about = {
-							type = "description",
-							name = "Choose the approaches to be used when searching for rare mobs. Note that if you disable all of them, this addon becomes pretty useless...",
-							order = 0,
-						},
-						mouseover = toggle("Mouseover", "Check mobs that you mouse over.", 10),
-						targets = toggle("Targets", "Check the targets of people in your group.", 20),
-						nameplates = toggle("Nameplates", "Check nameplates of mobs that you are close to", 30),
-						cache = toggle("Cache", "Scan the mob cache for never-before-found mobs.", 40),
-					},
-				},
-				cache_tameable = toggle("Cache alert: Tameable", "The cache-scanning method has no way to tell whether a mob is a hunter's pet. So to avoid getting spam, you can disable notifications for mobs found through this method that it is possible to tame. Disabling this will increase CPU usage, as we'll have to look for all these mobs while we're outside their normal range.", 40),
 				instances = toggle("Scan in instances", "There aren't that many actual rares in instances, and scanning might slow things down at a time when you'd like the most performance possible.", 50),
 				taxi = toggle("Scan on taxis", "Keep scanning for rares while flying on a taxi. Just hope that it'll still be there after you land and make your way back...", 55),
-				-- neighbors = toggle("Scan neighboring zones", "Look for mobs which are supposed to be in neighboring zones as well. Should help if you're near the border.", 60)
 			},
+			plugins = {},
 		},
-		data = {
+		mobs = {
 			type = "group",
-			name = "Data Management",
+			name = "Mobs",
 			order = 15,
 			args = {
 				import = {
 					type = "group",
-					name = "Import Data",
+					name = "Import Mobs",
 					order = 10,
 					inline = true,
 					hidden = function()
 						return not ( core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")) )
 					end,
 					args = {
-						desc = {
-							order = 0,
-							type = "description",
-							name = "SilverDragon comes with a pre-built database of known locations of rare mobs. Click the button below to import the data.",
-						},
+						about = desc("SilverDragon comes with a pre-built database of known locations of rare mobs. Click the button below to import them all.", 0),
 						load = {
 							order = 10,
 							type = "execute",
-							name = "Import Data",
+							name = "Import Mobs",
 							func = function()
 								LoadAddOn("SilverDragon_Data")
 								local Data = core:GetModule("Data", true)
@@ -164,11 +172,7 @@ local options = {
 					order = 20,
 					inline = true,
 					args = {
-						desc = {
-							order = 0,
-							type = "description",
-							name = "This will forget all the rare mobs that SilverDragon knows about. You might want to do this if you want to import fresh data from a more recent version of SilverDragon.",
-						},
+						about = desc("This will forget all the rare mobs that SilverDragon knows about. You might want to do this if you want to import fresh data from a more recent version of SilverDragon.", 0),
 						all = {
 							type = "execute",
 							name = "Clear all rares",
@@ -180,6 +184,24 @@ local options = {
 				},
 			},
 		},
+		outputs = {
+			type = "group",
+			name = "Outputs",
+			order = 20,
+			args = {
+				about = desc("SilverDragon wants to tell you things. Check out the sub-sections here to adjust how it does that."),
+			},
+			plugins = {},
+		},
+		addons = {
+			type = "group",
+			name = "Addons",
+			order = 30,
+			args = {
+				about = desc("SilverDragon can integrate with some other addons. If you don't see anything here, you don't have any of these addons installed. I'm very sad. ;_;"),
+			},
+			plugins = {},
+		},
 	},
 	plugins = {
 	},
@@ -189,8 +211,8 @@ module.options = options
 function module:OnInitialize()
 	db = core.db.profile
 
-	options.args.always = mob_list_group("Always", 20, "Mobs you always want to scan for", core.db.global.always)
-	options.args.ignore = mob_list_group("Ignore", 25, "Mobs you just want to ignore, already", core.db.global.ignore)
+	options.args.mobs.args.always = mob_list_group("Always", 20, "Mobs you always want to scan for", core.db.global.always)
+	options.args.mobs.args.ignore = mob_list_group("Ignore", 25, "Mobs you just want to ignore, already", core.db.global.ignore)
 
 	options.plugins["profiles"] = {
 		profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(core.db)

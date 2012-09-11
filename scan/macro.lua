@@ -13,23 +13,17 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
-		local function toggle(name, desc)
-			return {type = "toggle", name = name, desc = desc,}
-		end
-		config.options.plugins.macro = {
+		config.options.args.scanning.plugins.macro = {
 			macro = {
 				type = "group",
 				name = "Macro",
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
-					about = {
-						type = "description",
-						name = "Creates a button that can be used in a macro to target rares that might be nearby.\n\n"..
+					about = config.desc("Creates a button that can be used in a macro to target rares that might be nearby.\n\n"..
 							"Either create a macro that says: /click SilverDragonMacroButton\n\n"..
 							"...or click the \"Create Macro\" button below. It'll make a new macro called SilverDragon. Drag it to your bars and click it to target rares that might be nearby.",
-						order = 0,
-					},
+							0),
 					create = {
 						type = "execute",
 						name = "Create Macro",
@@ -39,6 +33,7 @@ function module:OnInitialize()
 						end
 					},
 				},
+				-- order = 99,
 			},
 		}
 	end

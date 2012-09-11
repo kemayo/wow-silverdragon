@@ -5,6 +5,29 @@ local Debug = core.Debug
 local globaldb
 function module:OnInitialize()
 	globaldb = core.db.global
+
+	self.db = core.db:RegisterNamespace("Scan_Cache", {
+		profile = {
+			enabled = true,
+			tameable = false,
+		},
+	})
+
+	local config = core:GetModule("Config", true)
+	if config then
+		config.options.args.scanning.plugins.cache = {
+			cache = {
+				type = "group",
+				name = "Cache",
+				get = function(info) return self.db.profile[info[#info]] end,
+				set = function(info, v) self.db.profile[info[#info]] = v end,
+				args = {
+					enabled = config.toggle("Enabled", "Scan the mob cache for never-before-found mobs.", 10, true),
+					tameable = config.toggle("Special treatment for hunter pets", "Tameable mobs can show up absolutely anywhere, and we can't tell whether they're owned by a hunter or not. Checking this will perform extra scanning to look for hunter pets being added to the cache outside of their normal zones, so we can avoid notifying you of them when we later enter the correct zone. Unchecking this means we use appreciably less CPU.", 20, true),
+				},
+			},
+		}
+	end
 end
 
 function module:OnEnable()
@@ -37,7 +60,7 @@ function module:Scan(callback, zone)
 	if not core.db.profile.cache then
 		return
 	end
-	if not core.db.profile.cache_tameable then
+	if self.db.profile.tameable then
 		-- We are scanning all tameable mobs because if we see one outside its own zone, we don't want
 		-- to suddenly notice it's cached the instant we step into its zone. This *does* increase CPU
 		-- usage somewhat, thus the tradeoff of only doing it when we're trying to suppress tameables.
@@ -60,13 +83,13 @@ function module:ScanMobsInTable(mobs, zone)
 	end
 end
 
--- work out whether a mob is completely skippable, as in "suppress future notifications for this"
+-- Work out whether a mob is completely skippable, as in "suppress future notifications for this"
+-- This basically means "is this a mob we know is tameable and know is from another zone?"
 function module:IsBypassableMob(id, zone)
 	if first_cachescan then
 		return true
 	end
-	if core.db.profile.cache_tameable then
-		-- we're allowing alerts for tameable mobs, so just go ahead
+	if not self.db.profile.tameable then
 		return
 	end
 	if not globaldb.mob_tameable[id] then

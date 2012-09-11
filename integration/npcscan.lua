@@ -16,20 +16,16 @@ function module:OnInitialize()
 	local config = core:GetModule("Config", true)
 	if config then
 		local toggle = config.toggle
-		config.options.plugins.npcscan = {
+		config.options.args.addons.plugins.npcscan = {
 			npcscan = {
 				type = "group",
 				name = "_NPCScan.Overlay",
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
-					desc = {
-						type = "description",
-						name = "Tell _NPCScan.Overlay about rares when we see them. This will only produce an effect on certain rares which it knows about.",
-						order = 0,
-					},
+					desc = config.desc("Tell _NPCScan.Overlay about rares when we see them. This will only produce an effect on certain rares which it knows about.", 0),
 					enabled = toggle("Enabled", "Whether to do anything at all", 10),
-					-- sync = toggle("Sync", "Show when the source is syncs", 20),
+					sync = toggle("Sync", "Show when the source is syncs", 20),
 				},
 			},
 		}

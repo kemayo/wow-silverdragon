@@ -1,6 +1,34 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Scan_Targets", "AceEvent-3.0")
 
+local globaldb
+function module:OnInitialize()
+	globaldb = core.db.global
+
+	self.db = core.db:RegisterNamespace("Scan_Targets", {
+		profile = {
+			mouseover = true,
+			targets = true,
+		},
+	})
+
+	local config = core:GetModule("Config", true)
+	if config then
+		config.options.args.scanning.plugins.targets = {
+			targets = {
+				type = "group",
+				name = "Targets",
+				get = function(info) return self.db.profile[info[#info]] end,
+				set = function(info, v) self.db.profile[info[#info]] = v end,
+				args = {
+					mouseover = config.toggle("Mouseover", "Check mobs that you mouse over.", 10, true),
+					targets = config.toggle("Targets", "Check the targets of people in your group.", 20, true),
+				},
+			},
+		}
+	end
+end
+
 function module:OnEnable()
 	core.RegisterCallback(self, "Scan")
 
@@ -9,20 +37,20 @@ function module:OnEnable()
 end
 
 function module:PLAYER_TARGET_CHANGED()
-	if core.db.profile.targets then
+	if self.db.profile.targets then
 		self:ProcessUnit('target', 'target')
 	end
 end
 
 function module:UPDATE_MOUSEOVER_UNIT()
-	if core.db.profile.mouseover then
+	if self.db.profile.mouseover then
 		self:ProcessUnit('mouseover', 'mouseover')
 	end
 end
 
 local units_to_scan = {'targettarget', 'party1target', 'party2target', 'party3target', 'party4target', 'party5target'}
 function module:Scan(callback, zone)
-	if not (core.db.profile.targets and IsInGroup()) then
+	if not (self.db.profile.targets and IsInGroup()) then
 		return
 	end
 	for _, unit in ipairs(units_to_scan) do
@@ -35,7 +63,7 @@ function module:ProcessUnit(unit, source)
 	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
 	local unittype = UnitClassification(unit)
 	local id = core:UnitID(unit)
-	if (core.db.global.always[id] or (unittype == 'rare' or unittype == 'rareelite')) and UnitIsVisible(unit) then
+	if (globaldb.always[id] or (unittype == 'rare' or unittype == 'rareelite')) and UnitIsVisible(unit) then
 		-- from this point on, it's a rare
 		local zone, x, y = core:GetPlayerLocation()
 		if not zone then return end -- there are only a few places where this will happen

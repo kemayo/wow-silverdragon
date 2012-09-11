@@ -29,18 +29,14 @@ function module:OnInitialize()
 		local function toggle(name, desc, order)
 			return {type = "toggle", name = name, desc = desc, order=order,}
 		end
-		config.options.plugins.clicktarget = {
+		config.options.args.outputs.plugins.clicktarget = {
 			clicktarget = {
 				type = "group",
 				name = "ClickTarget",
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v; self:ShowModel() end,
 				args = {
-					about = {
-						type = "description",
-						name = "Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it. It can show a 3d model of that rare, but only if we already know the ID of the rare (though a data import), or if it was found by being targetted. Nameplates are right out.",
-						order = 0,
-					},
+					about = config.desc("Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it. It can show a 3d model of that rare, but only if we already know the ID of the rare (though a data import), or if it was found by being targetted. Nameplates are right out.", 0),
 					show = toggle("Show", "Show the click-target frame.", 10),
 					model = toggle("Model", "Show a 3d model of the rare, if possible.", 20),
 					sources = {

@@ -37,6 +37,7 @@ function module:OnInitialize()
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
+					about = config.desc("SilverDragon can put some information about mobs into their tooltips. For rares, that can include whether you actually need to kill them for an achievement.", 0),
 					achievement = config.toggle("Achievements", "Show if you need a rare mob for an achiemvenet"),
 					id = config.toggle("Unit IDs", "Show mob ids in tooltips"),
 				},

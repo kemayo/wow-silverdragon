@@ -50,11 +50,6 @@ function addon:OnInitialize()
 		profile = {
 			scan = 1, -- scan interval, 0 for never
 			delay = 600, -- number of seconds to wait between recording the same mob
-			cache_tameable = true, -- whether to alert for tameable mobs found through cache-scanning
-			mouseover = true,
-			targets = true,
-			nameplates = true,
-			cache = true,
 			instances = false,
 			taxi = true,
 		},

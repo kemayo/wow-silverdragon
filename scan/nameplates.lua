@@ -4,6 +4,27 @@ local module = core:NewModule("Scan_Nameplates", "AceEvent-3.0")
 local globaldb
 function module:OnInitialize()
 	globaldb = core.db.global
+
+	self.db = core.db:RegisterNamespace("Scan_Nameplates", {
+		profile = {
+			enabled = true,
+		},
+	})
+
+	local config = core:GetModule("Config", true)
+	if config then
+		config.options.args.scanning.plugins.nameplates = {
+			nameplates = {
+				type = "group",
+				name = "Nameplates",
+				get = function(info) return self.db.profile[info[#info]] end,
+				set = function(info, v) self.db.profile[info[#info]] = v end,
+				args = {
+					enabled = config.toggle("Enabled", "Check nameplates of mobs that you are close to. Nameplate addons will probably interfere.", 10, true),
+				},
+			},
+		}
+	end
 end
 
 function module:OnEnable()

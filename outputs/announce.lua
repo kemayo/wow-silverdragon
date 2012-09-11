@@ -54,7 +54,7 @@ function module:OnInitialize()
 	local config = core:GetModule("Config", true)
 	if config then
 		local toggle = config.toggle
-		config.options.plugins.announce = {
+		local options = {
 			announce = {
 				type = "group",
 				name = "Announce",
@@ -93,14 +93,15 @@ function module:OnInitialize()
 			},
 		}
 		if LSM then
-			config.options.plugins.announce.announce.args.sound = toggle("Sound", "Play a sound.")
-			config.options.plugins.announce.announce.args.soundfile = {
+			options.announce.args.sound = toggle("Sound", "Play a sound.")
+			options.announce.args.soundfile = {
 				type = "select", dialogControl = "LSM30_Sound",
 				name = "Sound to Play", desc = "Choose a sound file to play.",
 				values = AceGUIWidgetLSMlists.sound,
 				disabled = function() return not self.db.profile.sound end,
 			}
 		end
+		config.options.args.outputs.plugins.announce = options
 	end
 end
 

@@ -23,10 +23,10 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
-		config.options.plugins.broker = {
+		config.options.args.outputs.plugins.broker = {
 			broker = {
 				type = "group",
-				name = "LDB",
+				name = "Broker",
 				args = {
 					show_lastseen = {
 						type = "toggle",
