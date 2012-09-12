@@ -99,6 +99,10 @@ function addon:OnInitialize()
 			end
 		end
 
+		-- Total hack. I'm very disappointed in myself. Blood Seeker is flagged as tamemable, but really isn't.
+		-- (It despawns in 10-ish seconds, and shows up high in the sky.)
+		globaldb.mob_tameable[3868] = nil
+
 		self:Print("Upgraded rare mob database; you may have to reload your UI before everything is 100% there.")
 	end
 end
