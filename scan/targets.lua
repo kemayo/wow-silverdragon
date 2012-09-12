@@ -21,8 +21,8 @@ function module:OnInitialize()
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
-					mouseover = config.toggle("Mouseover", "Check mobs that you mouse over.", 10, true),
-					targets = config.toggle("Targets", "Check the targets of people in your group.", 20, true),
+					mouseover = config.toggle("Mouseover", "Check mobs that you mouse over.", 10),
+					targets = config.toggle("Targets", "Check the targets of people in your group.", 20),
 				},
 			},
 		}

@@ -20,7 +20,7 @@ function module:OnInitialize()
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
-					enabled = config.toggle("Enabled", "Check nameplates of mobs that you are close to. Nameplate addons will probably interfere.", 10, true),
+					enabled = config.toggle("Enabled", "Check nameplates of mobs that you are close to. Nameplate addons will probably interfere.", 10),
 				},
 			},
 		}

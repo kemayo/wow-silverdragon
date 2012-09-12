@@ -22,8 +22,8 @@ function module:OnInitialize()
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
-					enabled = config.toggle("Enabled", "Scan the mob cache for never-before-found mobs.", 10, true),
-					tameable = config.toggle("Special treatment for hunter pets", "Tameable mobs can show up absolutely anywhere, and we can't tell whether they're owned by a hunter or not. Checking this will perform extra scanning to look for hunter pets being added to the cache outside of their normal zones, so we can avoid notifying you of them when we later enter the correct zone. Unchecking this means we use appreciably less CPU.", 20, true),
+					enabled = config.toggle("Enabled", "Scan the mob cache for never-before-found mobs.", 10),
+					tameable = config.toggle("Special treatment for hunter pets", "Tameable mobs can show up absolutely anywhere, and we can't tell whether they're owned by a hunter or not. Checking this will perform extra scanning to look for hunter pets being added to the cache outside of their normal zones, so we can avoid notifying you of them when we later enter the correct zone. Unchecking this means we use appreciably less CPU.", 20),
 				},
 			},
 		}

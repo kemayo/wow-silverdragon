@@ -7,9 +7,10 @@ function module:OnInitialize()
 		profile = {
 			party = true,
 			raid = true,
-			guild = false,
+			guild = true,
 			nearby = false,
 			quiet = false,
+			record = false,
 		},
 	})
 
@@ -27,11 +28,12 @@ function module:OnInitialize()
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
 					about = config.desc("SilverDragon will tell other SilverDragon users about rare mobs you see. If you don't like this, tell it to be quiet.", 0),
-					party = config.toggle("Party", "Accept syncs from party members"),
-					raid = config.toggle("Raid", "Accept syncs from raid members"),
-					guild = config.toggle("Guild Sync", "Accept syncs from guild members"),
-					nearby = config.toggle("Nearby only", "Only accept syncs from people who are nearby. Information about guild members isn't available, so they'll only count as nearby if they're in your group."),
-					quiet = config.toggle("Be quiet", "Don't send rare information to others"),
+					quiet = config.toggle("Be quiet", "Don't send rare information to others", 10),
+					party = config.toggle("Party", "Accept syncs from party members", 20),
+					raid = config.toggle("Raid", "Accept syncs from raid members", 30),
+					guild = config.toggle("Guild Sync", "Accept syncs from guild members", 40),
+					nearby = config.toggle("Nearby only", "Only accept syncs from people who are nearby. Information about guild members isn't available, so they'll only count as nearby if they're in your group.", 50),
+					record = config.toggle("Record", "Record the locations of sync'd mobs, instead of just notifying about them", 60)
 				},
 			},
 		}
@@ -101,6 +103,7 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	id = deSAM(id)
 	x = deSAM(x)
 	y = deSAM(y)
+	zone = deSAM(zone)
 
 	if tonumber(ver or "") ~= protocol_version then
 		Debug("Skipping: incompatible version")
@@ -118,6 +121,15 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		return
 	end
 
+	local newloc = false
+
+	if self.db.profile.record and not core.db.global.mob_tameable[id] then
+		-- two bits that aren't in the sync, so preserve existing values
+		local elite = core.db.global.mob_elite[id]
+		local creature_type = core.db.global.mob_type[id]
+		newloc = core:SaveMob(id, name, zone, x, y, level, elite, creature_type)
+	end
+
 	-- id, name, zone, x, y, dead, new_location, source, unit
-	core:NotifyMob(id, name, zone, x, y, false, false, "sync:"..channel..":"..sender, false)
+	core:NotifyMob(id, name, zone, x, y, false, newloc, "sync:"..channel..":"..sender, false)
 end

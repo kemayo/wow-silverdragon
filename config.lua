@@ -9,8 +9,8 @@ local function toggle(name, desc, order, inline)
 		name = name,
 		desc = desc,
 		order = order,
-		descStyle = inline and "inline" or nil,
-		width = inline and "full" or nil,
+		descStyle = (inline or (inline == nil)) and "inline" or nil,
+		width = (inline or (inline == nil)) and "full" or nil,
 	}
 end
 module.toggle = toggle
@@ -217,6 +217,7 @@ function module:OnInitialize()
 	options.plugins["profiles"] = {
 		profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(core.db)
 	}
+	options.plugins.profiles.profiles.order = -1 -- last!
 
 	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("SilverDragon", options)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("SilverDragon", "SilverDragon")

@@ -47,6 +47,7 @@ function module:OnInitialize()
 						end,
 						order = 10,
 						width = "full",
+						descStyle = "inline",
 					},
 					minimap = {
 						type = "toggle",
@@ -64,6 +65,7 @@ function module:OnInitialize()
 						end,
 						order = 30,
 						width = "full",
+						descStyle = "inline",
 						hidden = function() return not icon or not dataobject or not icon:IsRegistered("SilverDragon") end,
 					},
 				},
