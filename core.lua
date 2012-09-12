@@ -114,16 +114,16 @@ function addon:OnEnable()
 	end
 end
 
+local valid_unit_types = {
+	[0x003] = true, -- npcs
+	[0x005] = true, -- vehicles
+}
 local function npc_id_from_guid(guid)
 	if not guid then return end
 	local unit_type = bit.band(tonumber("0x"..strsub(guid, 3,5)), 0x00f)
-	if unit_type ~= 0x003 then
-		-- npcs only
+	if not valid_unit_types[unit_type] then
 		return
 	end
-	-- So, interesting point, docs say that 9-12 are the ones to use here. However... in actual
-	-- practice 7-10 appears to be correct.
-	-- return tonumber("0x"..strsub(guid,9,12))
 	return tonumber("0x"..strsub(guid,7,10))
 end
 function addon:UnitID(unit)
@@ -142,10 +142,19 @@ function addon:ShouldSave(zone, id)
 	return false
 end
 
+local elite_types = {
+	elite = true,
+	rareelite = true,
+	worldboss = true,
+}
 function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 	if not id then return end
 	-- saves a mob's information, returns true if this is the first time a mob has been seen at this location
 	if not self:ShouldSave(id) then return end
+
+	if type(elite) == 'string' then
+		elite = elite_types[elite] or false
+	end
 
 	globaldb.mob_seen[id] = time()
 	globaldb.mob_level[id] = level
