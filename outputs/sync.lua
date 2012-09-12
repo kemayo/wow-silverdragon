@@ -56,7 +56,7 @@ local function deSAM(val)
 end
 
 function module:Seen(callback, id, name, zone, x, y, dead, newloc, source, unit)
-	if source and source:match("^sync") then
+	if source and (source:match("^sync") or source == "fake") then
 		-- No feedback loops, kthxbai
 		return
 	end
