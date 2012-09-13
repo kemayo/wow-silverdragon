@@ -217,7 +217,7 @@ function module:GetDefaults()
 			[32485] = {name="King Krush",id=32485,creature_type="Beast",tameable=true,locations = {25404760,29404240,32403640,34803040,45404180,50207760,50804340,51608300,56808220,61808280,},},
 			[32517] = {name="Loque'nahak",id=32517,creature_type="Beast",tameable=true,locations = {20404420,21406900,30206660,35203020,50208140,58402140,66207960,70807120,},},
 		},
-		[879] = {
+		[809] = {
 			[50733] = {name="Ski'thik",id=50733,creature_type="Humanoid",locations = {36207920,},},
 			[50354] = {name="Havak",id=50354,creature_type="Humanoid",locations = {57407520,},},
 			[50769] = {name="Norlaxx the Outcast",id=50769,level=88,creature_type="Humanoid",locations = {73207640,},},
