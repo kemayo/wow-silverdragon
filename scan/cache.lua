@@ -57,7 +57,7 @@ end
 module.already_cached = already_cached
 
 function module:Scan(callback, zone)
-	if not core.db.profile.cache then
+	if not self.db.profile.enabled then
 		return
 	end
 	if self.db.profile.tameable then
