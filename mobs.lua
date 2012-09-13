@@ -1,5 +1,5 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
-local module = core:NewModule("Mobs")
+local module = core:NewModule("Mobs", "AceConsole-3.0")
 local Debug = core.Debug
 
 local desc, toggle
