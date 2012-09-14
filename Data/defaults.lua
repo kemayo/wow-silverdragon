@@ -236,7 +236,7 @@ function module:GetDefaults()
 		[610] = {
 			[49913] = {name="Lady La-La",id=49913,level=81,creature_type="Humanoid",locations = {56207780,60207080,},},
 		},
-		[880] = {
+		[806] = {
 			[51078] = {name="Ferdinand",id=51078,creature_type="Humanoid",locations = {52004460,53604980,},},
 			[50338] = {name="Kor'nas Nightsavage",id=50338,creature_type="Humanoid",locations = {43607300,},},
 			[50823] = {name="Mister Ferocious",id=50823,creature_type="Humanoid",locations = {42403880,},},
