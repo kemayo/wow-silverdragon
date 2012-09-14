@@ -122,6 +122,7 @@ function module:ShowModel()
 			model:SetCamera(self.db.profile.camera)
 			if self.db.profile.camera == 1 then
 				model:SetModelScale(0.7)
+				model:SetFacing(math.pi / 4)
 			end
 		else
 			-- This is, indeed, an exact copy of the settings used in PitBull

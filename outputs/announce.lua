@@ -138,6 +138,7 @@ function module:OnInitialize()
 					time = faker(32491, "Time-Lost Proto Drake (Mount!)", 495, 0.490, 0.362),
 					anger = faker(60491, "Sha of Anger (Boss!)", 809, 0.5, 0.5),
 					vyragosa = faker(32630, "Vyragosa (Boring)", 495, 0.5, 0.5),
+					deathmaw = faker(10077, "Deathmaw (Pet!)", 29, 0.5, 0.5),
 				},
 			},
 		}
