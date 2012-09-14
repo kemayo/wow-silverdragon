@@ -1,5 +1,5 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
-local module = core:NewModule("Announce", "AceTimer-3.0", "LibSink-2.0")
+local module = core:NewModule("Announce", "AceTimer-3.0", "LibSink-2.0", "LibToast-1.0")
 local Debug = core.Debug
 
 local LSM = LibStub("LibSharedMedia-3.0")
@@ -76,6 +76,8 @@ function module:OnInitialize()
 	})
 
 	self:SetSinkStorage(self.db.profile.sink_opts)
+	self:DefineSinkToast("Rare seen!", [[Interface\Icons\INV_Misc_Head_Dragon_01]])
+
 	core.RegisterCallback(self, "Seen")
 
 	local config = core:GetModule("Config", true)
@@ -86,6 +88,7 @@ function module:OnInitialize()
 
 		local sink_config = self:GetSinkAce3OptionsDataTable()
 		sink_config.inline = true
+		sink_config.order = 15
 
 		local faker = function(id, name, zone, x, y)
 			return {
@@ -124,13 +127,13 @@ function module:OnInitialize()
 					unknown = toggle(UNKNOWN, "Not sure where they fit.", 70, false),
 				},
 			},
-			sink = {
-				type = "group", name = "Message",
+			message = {
+				type = "group", name = "Messages",
 				order = 20,
 				get = get, set = set,
 				args = {
 					sink = toggle("Enabled", "Send a message to whatever scrolling text addon you're using.", 10),
-					output = sink_config
+					output = sink_config,
 				},
 			},
 			test = {
@@ -221,7 +224,11 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, nam
 			end
 		end
 	end
-	module:Pour(("Rare seen: %s%s (%s)"):format(name or UNKNOWN, dead and "... but it's dead" or '', source or ''))
+	local prefix = "Rare seen: "
+	if module.db.profile.sink_opts.sink20OutputSink == "LibToast-1.0" then
+		prefix = ""
+	end
+	module:Pour((prefix .. "%s%s (%s)"):format(name or UNKNOWN, dead and "... but it's dead" or '', source or ''))
 end)
 
 function module:PlaySound(s)
