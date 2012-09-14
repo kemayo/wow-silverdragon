@@ -14,6 +14,7 @@ if LSM then
 	LSM:Register("sound", "Simon Chime", [[Sound\Doodad\SimonGame_LargeBlueTree.wav]])
 	LSM:Register("sound", "War Drums", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])--NPC Scan default
 	LSM:Register("sound", "Scourge Horn", [[Sound\Events\scourge_horn.wav]])--NPC Scan default
+	LSM:Register("sound", "Pygmy Drums", [[Sound\Doodad\GO_PygmyDrumsStage_Custom0_Loop.ogg]])
 	LSM:Register("sound", "Cheer", [[Sound\Event Sounds\OgreEventCheerUnique.wav]])
 	LSM:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.wav]])
 	LSM:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.wav]])
@@ -24,6 +25,7 @@ if LSM then
 	LSM:Register("sound", "Yogg Saron: Laugh", [[Sound\Creature\YoggSaron\UR_YoggSaron_Slay01.wav]])
 	LSM:Register("sound", "Illidan: Not Prepared", [[Sound\Creature\Illidan\BLACK_Illidan_04.wav]])
 	LSM:Register("sound", "Magtheridon: I am Unleashed", [[Sound\Creature\Magtheridon\HELL_Mag_Free01.wav]])
+	LSM:Register("sound", "Loatheb: I see you", [[Sound\Creature\Loathstare\Loa_Naxx_Aggro02.ogg]])
 	LSM:Register("sound", "NPCScan", [[Sound\Event Sounds\Event_wardrum_ogre.wav]])--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
 end
 
@@ -48,10 +50,11 @@ function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Announce", {
 		profile = {
 			sink = true,
+			drums = true,
 			sound = true,
 			sound_mount = true,
 			sound_boss = true,
-			soundfile = "Wham!",
+			soundfile = "Loatheb: I see you",
 			soundfile_mount = "Illidan: Not Prepared",
 			soundfile_boss = "Magtheridon: I am Unleashed",
 			sound_loop = 1,
@@ -168,6 +171,7 @@ function module:OnInitialize()
 				args = {
 					about = config.desc("Play sounds to announce rare mobs? Can do special things for special mobs. You *really* don't want to miss, say, the Time-Lost Proto Drake, after all...", 0),
 					sound = toggle("Enabled", "Play sounds at all!", 10),
+					drums = toggle("The Sound of Drums", "Underneath it all, the constant drumming", 12),
 					soundfile = soundfile("sound", 15),
 					sound_loop = soundrange(17),
 					mount = {type="header", name="", order=20,},
@@ -226,13 +230,17 @@ function module:PlaySound(s)
 	-- boring check:
 	if not s.loops or s.loops == 0 then return end
 	-- now, noise!
+	local drums = self.db.profile.drums
 	if s.soundfile == "NPCScan" then
 		--Override default behavior and force npcscan behavior of two sounds at once
-		PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
+		drums = true
 		PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), "Master")
 	else
 		--Play whatever sound is set
 		PlaySoundFile(LSM:Fetch("sound", s.soundfile), "Master")
+	end
+	if drums then
+		PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
 	end
 	s.loops = s.loops - 1
 	if s.loops > 0 then
