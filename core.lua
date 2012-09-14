@@ -99,12 +99,12 @@ function addon:OnInitialize()
 			end
 		end
 
-		-- Total hack. I'm very disappointed in myself. Blood Seeker is flagged as tamemable, but really isn't.
-		-- (It despawns in 10-ish seconds, and shows up high in the sky.)
-		globaldb.mob_tameable[3868] = nil
-
 		self:Print("Upgraded rare mob database; you may have to reload your UI before everything is 100% there.")
 	end
+
+	-- Total hack. I'm very disappointed in myself. Blood Seeker is flagged as tamemable, but really isn't.
+	-- (It despawns in 10-ish seconds, and shows up high in the sky.)
+	globaldb.mob_tameable[3868] = nil
 end
 
 function addon:OnEnable()
@@ -162,10 +162,9 @@ function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 		globaldb.mob_elite[id] = elite
 	end
 	globaldb.mob_type[id] = BCTR[creature_type]
-	globaldb.mob_count[id] = globaldb.mob_count[id] + 1
 	globaldb.mob_name[id] = name
 	globaldb.mob_id[name] = id
-	
+
 	if not (zone and x and y and x > 0 and y > 0) then
 		return
 	end
@@ -199,6 +198,7 @@ function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source,
 		Debug("Skipping notification", id, name, lastseen[id], time() - self.db.profile.delay)
 		return
 	end
+	globaldb.mob_count[id] = globaldb.mob_count[id] + 1
 	lastseen[id] = time()
 	self.events:Fire("Seen", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 end

@@ -106,12 +106,15 @@ end
 
 function module:NotifyIfNeeded(id, zone)
 	if already_notified[id] then
+		Debug("Skipping notify", "already done")
 		return
 	end
 	if not already_cached[id] then
+		Debug("Skipping notify", "not seen")
 		return
 	end
 	if self:IsBypassableMob(id, zone) then
+		Debug("Skipping notify", "bypassable")
 		already_notified[id] = true
 		return
 	end

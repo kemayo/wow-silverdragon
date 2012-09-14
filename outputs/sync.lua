@@ -96,7 +96,7 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	end
 
 	local ver, msgType, id, name, zone, level, x, y = strsplit("\t", msg)
-	Debug("Message", msgType, id, name, zone, level, x, y)
+	Debug("Message", channel, sender, msgType, id, name, zone, level, x, y)
 
 	ver = deSAM(ver)
 	level = deSAM(level)

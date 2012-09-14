@@ -60,8 +60,8 @@ local options = {
 				about = desc("SilverDragon is all about scanning for rare mobs. The options you see in this tab apply generally to all the scanning methods used. For more specific controls, check out the sub-sections.", 0),
 				scan = {
 					type = "range",
-					name = "Scan frequency",
-					desc = "How often to scan for nearby rares (0 disables scanning)",
+					name = "Scan interval",
+					desc = "How often to scan for nearby rares, in seconds (0 disables scanning)",
 					min = 0, max = 10, step = 0.1,
 					order = 10,
 				},
