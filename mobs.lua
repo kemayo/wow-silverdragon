@@ -102,10 +102,23 @@ function module:OnInitialize()
 							},
 						},
 					},
+					list = {
+						type = "group",
+						name = "List",
+						order = 15,
+						args = {
+							about = desc("If you want to see a full list o' rare mobs that we know about, click the button below to pop it up. It's behind this button just for the sake of saving a little memory, since I think viewing it is a pretty rare activity.", 0),
+							show = {
+								type = "execute",
+								name = "Show list",
+								func = function() module:ShowFullList(config.options.plugins.mobs) end,
+							},
+						},
+					},
 					clear = {
 						type = "group",
 						name = "Clear Data",
-						order = 15,
+						order = 20,
 						inline = true,
 						args = {
 							about = desc("This will forget all the rare mobs that SilverDragon knows about. You might want to do this if you want to import fresh data from a more recent version of SilverDragon.", 0),
@@ -118,37 +131,30 @@ function module:OnInitialize()
 							},
 						},
 					},
-					always = mob_list_group("Always", 20, "Mobs you always want to scan for", core.db.global.always),
-					ignore = mob_list_group("Ignore", 25, "Mobs you just want to ignore, already", core.db.global.ignore),
-					list = module:FullList(),
+					always = mob_list_group("Always", 30, "Mobs you always want to scan for", core.db.global.always),
+					ignore = mob_list_group("Ignore", 40, "Mobs you just want to ignore, already", core.db.global.ignore),
 				},
 			},
 		}
 	end
 end
 
-function module:FullList()
-	Debug("FullList called")
-	local list
-	list = {
-		type = "group",
-		name = "List",
-		childGroups = "select",
-		args = {
-			about = desc("A full list of mobs we know about, by zone. Click them to delete them.", 0),
-		},
-		func = function(info)
-			local id = info.arg
-			Debug("info", info, info[#info - 1], info[#info])
-			list.args[info[#info - 1]].args[info[#info]] = nil
-			core:DeleteMob(id)
-		end,
-		order = 20,
+function module:ShowFullList(options)
+	local list = options.mobs.args.list
+
+	list.childGroups = "select"
+	list.func = function(info)
+		list.args[info[#info - 1]].args[info[#info]] = nil
+		core:DeleteMob(info.arg)
+	end
+	list.args = {
+		about = desc("A full list of mobs we know about, by zone. Click them to delete them.", 0),
 	}
+
 	for zoneid, mobs in pairs(core.db.global.mobs_byzoneid) do
 		local arg = {
 			type = "group",
-			order = zoneid, -- heh
+			-- order = zoneid, -- heh
 			name = GetMapNameByID(zoneid) or UNKNOWN,
 			args = {}
 		}
@@ -157,5 +163,4 @@ function module:FullList()
 		end
 		list.args[tostring(zoneid)] = arg
 	end
-	return list
 end
