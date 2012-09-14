@@ -1,4 +1,4 @@
-﻿local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
+local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Announce", "AceTimer-3.0", "LibSink-2.0")
 local Debug = core.Debug
 
