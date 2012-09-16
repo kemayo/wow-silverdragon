@@ -54,6 +54,7 @@ local function is_cached(id)
 		return true
 	end
 end
+module.is_cached = is_cached
 module.already_cached = already_cached
 
 function module:Scan(callback, zone)

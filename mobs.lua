@@ -5,6 +5,11 @@ local Debug = core.Debug
 local desc, toggle
 
 local function removable_mob(id)
+	local cache = core:GetModule("Scan_Cache", true)
+	if cache then
+		-- query the cache quickly, to know the name if we didn't already
+		cache.is_cached(id)
+	end
 	local name = core.db.global.mob_name[id]
 	return {
 		type = "execute",
@@ -47,6 +52,7 @@ local function mob_list_group(name, order, description, db_table)
 		func = function(info)
 			db_table[info.arg] = false
 			group.args.remove.args[info[#info]] = nil
+			core:DeleteMob(info.arg)
 		end,
 		args = {
 			about = desc("Remove a mob.", 0),
