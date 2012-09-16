@@ -194,6 +194,7 @@ function addon:GetMob(zone, id)
 end
 
 function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit)
+	self.events:Fire("Seen_Raw", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 	if globaldb.ignore[id] or (lastseen[id] and time() < lastseen[id] + self.db.profile.delay) then
 		Debug("Skipping notification", id, name, lastseen[id], time() - self.db.profile.delay)
 		return

@@ -47,10 +47,10 @@ function module:OnInitialize()
 end
 
 function module:OnEnable()
-	core.RegisterCallback(self, "Seen")
+	core.RegisterCallback(self, "Seen_Raw")
 end
 
-function module:Seen(callback, id, name, zone, x, y, dead, newloc, source, unit)
+function module:Seen_Raw(callback, id, name, zone, x, y, dead, newloc, source, unit)
 	if not unit then
 		return
 	end
