@@ -44,18 +44,24 @@ function module:OnInitialize()
 			},
 		}
 	end
-
-	for achievement in pairs(achievements) do
-		self:LoadAchievementMobs(achievement)
-	end
 end
 
 function module:OnEnable()
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 	self:RegisterEvent("CRITERIA_EARNED")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+end
+
+function module:PLAYER_ENTERING_WORLD()
+	self:LoadAllAchievementMobs()
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 function module:CRITERIA_EARNED(_, achievement, criteria)
+	self:LoadAllAchievementMobs()
+end
+
+function module:LoadAllAchievementMobs()
 	if achievements[achievement] then
 		self:LoadAchievementMobs(achievement)
 	end
@@ -64,12 +70,14 @@ end
 function module:LoadAchievementMobs(achievement)
 	local num_criteria = GetAchievementNumCriteria(achievement)
 	for i = 1, num_criteria do
-		local description, _, completed, _, _, _, _, id = GetAchievementCriteriaInfo(achievement, i)
-		achievement_mobs[id] = completed
-		mobs_to_achievement[id] = achievement
-		-- and grab the names/ids, for the heck of it
-		globaldb.mob_id[description] = id
-		globaldb.mob_name[id] = description
+		local description, ctype, completed, _, _, _, _, id = GetAchievementCriteriaInfo(achievement, i)
+		if ctype == 0 then
+			achievement_mobs[id] = completed
+			mobs_to_achievement[id] = achievement
+			-- and grab the names/ids, for the heck of it
+			globaldb.mob_id[description] = id
+			globaldb.mob_name[id] = description
+		end
 	end
 end
 
