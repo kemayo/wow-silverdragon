@@ -54,6 +54,7 @@ outputs\ldb.lua
 outputs\announce.lua
 outputs\clicktarget.lua
 outputs\sync.lua
+outputs\marker.lua
 
 # map plugins
 integration\handynotes.lua
