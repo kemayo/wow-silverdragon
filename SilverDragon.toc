@@ -41,7 +41,6 @@ lib\AceGUI-3.0-SharedMediaWidgets\widget.xml
 # the core
 core.lua
 config.lua
-mobs.lua
 
 scan\targets.lua
 scan\nameplates.lua
@@ -55,6 +54,8 @@ outputs\announce.lua
 outputs\clicktarget.lua
 outputs\sync.lua
 outputs\marker.lua
+
+mobs.lua
 
 # map plugins
 integration\handynotes.lua
