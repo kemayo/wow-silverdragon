@@ -287,7 +287,6 @@ local zone_overrides = {
 	[606] = 683, -- hyjal_terrain1
 	[720] = 748, -- uldum_terrain1
 	[700] = 770, -- twilight highlands
-	[141] = 907, -- duskwallow marsh before/after theramore
 }
 function addon:CanonicalZoneId(zoneid)
 	return zone_overrides[zoneid] or zoneid

@@ -614,7 +614,7 @@ function module:GetDefaults()
 			[14471] = {name="Setis",id=14471,creature_type="Humanoid",locations = {36008220,},},
 			[14473] = {name="Lapress",id=14473,creature_type="Beast",tameable=true,locations = {54807300,57007820,57206740,62007940,62206840,63007360,},},
 		},
-		[907] = {
+		[141] = {
 			[14235] = {name="The Rot",id=14235,locations = {50405020,51405900,},},
 			[14237] = {name="Oozeworm",id=14237,creature_type="Beast",tameable=true,locations = {37006220,},},
 			[4339] = {name="Brimgore",id=4339,level=39,creature_type="Dragonkin",locations = {50007560,},},
