@@ -62,7 +62,7 @@ function module:CRITERIA_EARNED(_, achievement, criteria)
 end
 
 function module:LoadAllAchievementMobs()
-	if achievements[achievement] then
+	for achievement in pairs(achievements) do
 		self:LoadAchievementMobs(achievement)
 	end
 end
