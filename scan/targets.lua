@@ -72,7 +72,10 @@ function module:ProcessUnit(unit, source)
 		local level = (UnitLevel(unit) or -1)
 		local creature_type = UnitCreatureType(unit)
 
-		local newloc = core:SaveMob(id, name, zone, x, y, level, unittype, creature_type)
+		local newloc
+		if CheckInteractDistance(unit, 4) then
+			newloc = core:SaveMob(id, name, zone, x, y, level, unittype, creature_type)
+		end
 
 		core:NotifyMob(id, name, zone, x, y, UnitIsDead(unit), newloc, source or 'target', unit)
 		return true
