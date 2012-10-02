@@ -117,7 +117,7 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		return
 	end
 
-	if not (msgType and name and zone and level and id) then
+	if not (msgType and name and zone and id) then
 		Debug("Skipping: insufficient data")
 		return
 	end
@@ -128,6 +128,7 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		-- two bits that aren't in the sync, so preserve existing values
 		local elite = core.db.global.mob_elite[id]
 		local creature_type = core.db.global.mob_type[id]
+		level = level or core.db.global.mob_level[id]
 		newloc = core:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 	end
 
