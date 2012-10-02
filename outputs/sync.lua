@@ -63,7 +63,7 @@ function module:Seen(callback, id, name, zone, x, y, dead, newloc, source, unit)
 	if self.db.profile.quiet then
 		return
 	end
-	local level = core.db.global.mob_level[name]
+	local level = core.db.global.mob_level[id]
 	if IsInGuild() then
 		SAM("GUILD", "seen", id, name, zone, level, x, y)
 	end
