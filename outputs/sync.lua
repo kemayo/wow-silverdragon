@@ -49,7 +49,8 @@ local function deSAM(val)
 	if val == "nil" then
 		return nil
 	end
-	if val and val:match("\d+\.?\d*") then
+	if val and tostring(tonumber(val)) == val then
+		-- the good ol' "if it turns into its own string representation" test
 		return tonumber(val)
 	end
 	return val
