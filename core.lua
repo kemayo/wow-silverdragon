@@ -216,6 +216,16 @@ function addon:GetMobByCoord(zone, coord)
 	end
 end
 
+function addon:DeleteMobCoord(zone, id, coord)
+	if not globaldb.mobs_byzoneid[zone] and globaldb.mobs_byzoneid[zone][id] then return end
+	for i, mob_coord in ipairs(globaldb.mobs_byzoneid[zone][id]) do
+		if coord == mob_coord then
+			table.remove(globaldb.mobs_byzoneid[zone][id], i)
+			return
+		end
+	end
+end
+
 function addon:DeleteMob(id)
 	if not (id and globaldb.mob_name[id]) then return end
 	for zone, mobs in pairs(globaldb.mobs_byzoneid) do

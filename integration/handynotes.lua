@@ -63,8 +63,21 @@ local info = {}
 local function deletePin(button, mapFile, coord)
 	local zoneid = core.zoneid_from_mapfile(mapFile)
 	local id = core:GetMobByCoord(zoneid, coord)
-	core:DeleteMob(id)
-	module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
+	if id then
+		core:DeleteMobCoord(zoneid, id, coord)
+		module:UpdateNodes()
+		module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
+	end
+end
+
+local function deleteWholeMob(button, mapFile, coord)
+	local zoneid = core.zoneid_from_mapfile(mapFile)
+	local id = core:GetMobByCoord(zoneid, coord)
+	if id then
+		core:DeleteMob(id)
+		module:UpdateNodes()
+		module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
+	end
 end
 
 local function createWaypoint(button, mapFile, coord)
@@ -109,9 +122,20 @@ local function generateMenu(button, level)
 		info.disabled     = nil
 		info.isTitle      = nil
 		info.notCheckable = nil
-		info.text = "Delete rare"
+		info.text = "Delete location"
 		info.icon = icon
 		info.func = deletePin
+		info.arg1 = clicked_zone
+		info.arg2 = clicked_coord
+		UIDropDownMenu_AddButton(info, level);
+
+		-- Delete menu item
+		info.disabled     = nil
+		info.isTitle      = nil
+		info.notCheckable = nil
+		info.text = "Delete entire mob"
+		info.icon = icon
+		info.func = deleteWholeMob
 		info.arg1 = clicked_zone
 		info.arg2 = clicked_coord
 		UIDropDownMenu_AddButton(info, level);
