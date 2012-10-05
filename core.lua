@@ -297,6 +297,7 @@ local zone_overrides = {
 	[606] = 683, -- hyjal_terrain1
 	[720] = 748, -- uldum_terrain1
 	[700] = 770, -- twilight highlands
+	[905] = 811, -- vale of eternal blossoms
 }
 function addon:CanonicalZoneId(zoneid)
 	return zone_overrides[zoneid] or zoneid
@@ -367,7 +368,11 @@ do
 		if name then
 			SetMapByID(zoneid)
 			local mapfile = GetMapInfo()
-			mapfile_to_zoneid[mapfile] = zoneid
+			if mapfile_to_zoneid[mapfile] then
+				Debug("Duplicate mapfile", mapfile, zoneid_to_mapfile[zoneid])
+			else
+				mapfile_to_zoneid[mapfile] = zoneid
+			end
 			zoneid_to_mapfile[zoneid] = mapfile
 		end
 	end
