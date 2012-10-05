@@ -195,12 +195,23 @@ end
 
 function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit)
 	self.events:Fire("Seen_Raw", id, name, zone, x, y, is_dead, is_new_location, source, unit)
-	if globaldb.ignore[id] or (lastseen[id] and time() < lastseen[id] + self.db.profile.delay) then
-		Debug("Skipping notification", id, name, lastseen[id], time() - self.db.profile.delay)
+
+	if globaldb.ignore[id] then
+		Debug("Skipping notification: ignored", id, name, lastseen[id], time() - self.db.profile.delay)
 		return
 	end
+	if lastseen[id] and time() < lastseen[id] + self.db.profile.delay then
+		Debug("Skipping notification: seen", id, name, lastseen[id], time() - self.db.profile.delay)
+		return
+	end
+	if (not self.db.profile.taxi) and UnitOnTaxi('player') then
+		Debug("Skipping notification: taxi", id, name, lastseen[id], time() - self.db.profile.delay)
+		return
+	end
+
 	globaldb.mob_count[id] = globaldb.mob_count[id] + 1
 	lastseen[id] = time()
+
 	self.events:Fire("Seen", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 end
 
@@ -260,7 +271,6 @@ function addon:CheckNearby()
 	local zone = self:GetPlayerZone()
 	if not zone then return end
 	if (not self.db.profile.instances) and IsInInstance() then return end
-	if (not self.db.profile.taxi) and UnitOnTaxi('player') then return end
 
 	self.events:Fire("Scan", zone)
 end
