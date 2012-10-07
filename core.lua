@@ -193,11 +193,15 @@ function addon:GetMob(zone, id)
 	return globaldb.mob_name[id], #globaldb.mobs_byzoneid[zone][id], globaldb.mob_level[id], globaldb.mob_elite[id], BCT[globaldb.mob_type[id]], globaldb.mob_seen[id], globaldb.mob_count[id], globaldb.mob_tameable[name]
 end
 
-function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit)
+function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit, silent)
 	self.events:Fire("Seen_Raw", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 
+	if silent then
+		Debug("Skipping notification: silent call", id, name)
+		return
+	end
 	if globaldb.ignore[id] then
-		Debug("Skipping notification: ignored", id, name, lastseen[id], time() - self.db.profile.delay)
+		Debug("Skipping notification: ignored", id, name)
 		return
 	end
 	if lastseen[id] and time() < lastseen[id] + self.db.profile.delay then
@@ -205,7 +209,7 @@ function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source,
 		return
 	end
 	if (not self.db.profile.taxi) and UnitOnTaxi('player') then
-		Debug("Skipping notification: taxi", id, name, lastseen[id], time() - self.db.profile.delay)
+		Debug("Skipping notification: taxi", id, name)
 		return
 	end
 
