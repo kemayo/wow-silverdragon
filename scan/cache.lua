@@ -10,6 +10,7 @@ function module:OnInitialize()
 		profile = {
 			enabled = true,
 			tameable = false,
+			location = false,
 		},
 	})
 
@@ -24,6 +25,7 @@ function module:OnInitialize()
 				args = {
 					enabled = config.toggle("Enabled", "Scan the mob cache for never-before-found mobs.", 10),
 					tameable = config.toggle("Special treatment for hunter pets", "Tameable mobs can show up absolutely anywhere, and we can't tell whether they're owned by a hunter or not. Checking this will perform extra scanning to look for hunter pets being added to the cache outside of their normal zones, so we can avoid notifying you of them when we later enter the correct zone. Unchecking this means we use appreciably less CPU.", 20),
+					location = config.toggle("Record location on cache hit", "Record the mob's location when the cache triggers for it. If this isn't set, it'll wait until you target it and are within interaction range to store the location.", 30),
 				},
 			},
 		}
@@ -122,7 +124,7 @@ function module:NotifyIfNeeded(id, zone)
 	already_notified[id] = true
 	local current_zone, x, y = core:GetPlayerLocation()
 	local newloc = false
-	if not globaldb.mob_tameable[id] then
+	if self.db.profile.location and not globaldb.mob_tameable[id] then
 		--Pull some info from global database since it's not sent from syncs, and we don't want
 		-- to erase that info with savemob function just copy it over.
 		local creature_type = globaldb.mob_type[id]
