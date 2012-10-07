@@ -48,7 +48,7 @@ end
 
 function module:OnEnable()
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-	self:RegisterEvent("CRITERIA_EARNED")
+	self:RegisterEvent("CRITERIA_UPDATE")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
@@ -57,7 +57,7 @@ function module:PLAYER_ENTERING_WORLD()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 
-function module:CRITERIA_EARNED(_, achievement, criteria)
+function module:CRITERIA_UPDATE(_, achievement, criteria)
 	self:LoadAllAchievementMobs()
 end
 
