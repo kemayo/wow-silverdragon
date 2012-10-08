@@ -1,5 +1,5 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
-local module = core:NewModule("Tooltip", "AceEvent-3.0")
+local module = core:NewModule("Tooltip", "AceEvent-3.0", "AceBucket-3.0")
 local Debug = core.Debug
 
 local achievements = {
@@ -48,8 +48,10 @@ end
 
 function module:OnEnable()
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-	self:RegisterEvent("CRITERIA_UPDATE")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	self:RegisterBucketEvent("CRITERIA_UPDATE", 1)
 end
 
 function module:PLAYER_ENTERING_WORLD()
@@ -57,7 +59,17 @@ function module:PLAYER_ENTERING_WORLD()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 
-function module:CRITERIA_UPDATE(_, achievement, criteria)
+function module:PLAYER_REGEN_DISABLED()
+	self:UnregisterEvent("CRITERIA_UPDATE")
+end
+
+function module:PLAYER_REGEN_ENABLED()
+	self:RegisterBucketEvent("CRITERIA_UPDATE", 1)
+	self:LoadAllAchievementMobs()
+end
+
+function module:CRITERIA_UPDATE()
+	-- contains no information about what updated, note
 	self:LoadAllAchievementMobs()
 end
 
