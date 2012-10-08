@@ -1,20 +1,16 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
-local module = core:NewModule("Tooltip", "AceEvent-3.0", "AceBucket-3.0")
+local module = core:NewModule("Tooltip", "AceEvent-3.0")
 local Debug = core.Debug
 
 local achievements = {
-	[1312] = true, -- Bloody Rare (BC mobs)
-	[2257] = true, -- Frostbitten (Wrath mobs)
-	[7439] = true, -- Glorious! (Pandaria mobs)
-}
-local achievement_mobs = {
-	-- [43819] = false,
+	[1312] = {}, -- Bloody Rare (BC mobs)
+	[2257] = {}, -- Frostbitten (Wrath mobs)
+	[7439] = {}, -- Glorious! (Pandaria mobs)
 }
 local mobs_to_achievement = {
 	-- [43819] = 2257,
 }
 
-module.achievement_mobs = achievement_mobs
 module.mobs_to_achievement = mobs_to_achievement
 
 local globaldb
@@ -49,23 +45,11 @@ end
 function module:OnEnable()
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	self:RegisterEvent("PLAYER_REGEN_DISABLED")
-	self:RegisterEvent("PLAYER_REGEN_ENABLED")
-	self:RegisterBucketEvent("CRITERIA_UPDATE", 1)
 end
 
 function module:PLAYER_ENTERING_WORLD()
 	self:LoadAllAchievementMobs()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-end
-
-function module:PLAYER_REGEN_DISABLED()
-	self:UnregisterEvent("CRITERIA_UPDATE")
-end
-
-function module:PLAYER_REGEN_ENABLED()
-	self:RegisterBucketEvent("CRITERIA_UPDATE", 1)
-	self:LoadAllAchievementMobs()
 end
 
 function module:CRITERIA_UPDATE()
@@ -84,7 +68,7 @@ function module:LoadAchievementMobs(achievement)
 	for i = 1, num_criteria do
 		local description, ctype, completed, _, _, _, _, id = GetAchievementCriteriaInfo(achievement, i)
 		if ctype == 0 then
-			achievement_mobs[id] = completed
+			achievements[achievement][id] = i
 			mobs_to_achievement[id] = achievement
 			-- and grab the names/ids, for the heck of it
 			globaldb.mob_id[description] = id
@@ -94,19 +78,30 @@ function module:LoadAchievementMobs(achievement)
 end
 
 function module:UPDATE_MOUSEOVER_UNIT()
-	local id = core:UnitID('mouseover')
-	if id then
-		if self.db.profile.id then
-			GameTooltip:AddDoubleLine("id", id, 1, 1, 0, 1, 1, 0)
-		end
-		local got = achievement_mobs[id]
-		if self.db.profile.achievement and got ~= nil then
-			local _, name = GetAchievementInfo(mobs_to_achievement[id])
-			GameTooltip:AddDoubleLine(name, got and ACTION_PARTY_KILL or NEED,
-				1, 1, 0,
-				got and 0 or 1, got and 1 or 0, 0
-			)
-		end
-		GameTooltip:Show()
+	self:UpdateTooltip(core:UnitID('mouseover'))
+end
+
+-- This is split out entirely so I can test this without having to actually hunt down a rare:
+-- /script SilverDragon:GetModule('Tooltip'):UpdateTooltip(51059)
+function module:UpdateTooltip(id)
+	if not id then
+		return
 	end
+
+	if self.db.profile.id then
+		GameTooltip:AddDoubleLine("id", id, 1, 1, 0, 1, 1, 0)
+	end
+
+	if self.db.profile.achievement and mobs_to_achievement[id] then
+		local achievement = mobs_to_achievement[id]
+		local criteria = achievements[achievement][id]
+		local _, name = GetAchievementInfo(achievement)
+		local _, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
+		GameTooltip:AddDoubleLine(name, completed and ACTION_PARTY_KILL or NEED,
+			1, 1, 0,
+			completed and 0 or 1, completed and 1 or 0, 0
+		)
+	end
+
+	GameTooltip:Show()
 end
