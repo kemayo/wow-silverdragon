@@ -25,7 +25,7 @@ function module:OnInitialize()
 				args = {
 					about = config.desc("We can automatically mark a unit with a raid target marker once we see it. \"See it\" in this context means target it or move the mouse over it.", 0),
 					enabled = config.toggle("Mark it", "Set a raid target marker on a mob once you see it.", 30),
-					safely = config.toggle("...safely?", "But only if you're not in a group!", 31),
+					safely = config.toggle("...safely?", "But not if you're in a group!", 31),
 					marker = {
 						type = "select",
 						name = "Which",
@@ -57,7 +57,7 @@ function module:Seen_Raw(callback, id, name, zone, x, y, dead, newloc, source, u
 	if not self.db.profile.enabled then
 		return
 	end
-	if IsInGroup() and not self.db.profile.safely then
+	if IsInGroup() and self.db.profile.safely then
 		return
 	end
 	if GetRaidTargetIndex(unit) then
