@@ -148,9 +148,13 @@ local elite_types = {
 	worldboss = true,
 }
 function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
+	Debug("SaveMob", id, name, zone, x, y, level, elite, creature_type)
 	if not id then return end
 	-- saves a mob's information, returns true if this is the first time a mob has been seen at this location
-	if not self:ShouldSave(id) then return end
+	if not self:ShouldSave(id) then
+		Debug("Shouldn't save")
+		return
+	end
 
 	if type(elite) == 'string' then
 		elite = elite_types[elite] or false
@@ -174,7 +178,7 @@ function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 	for _, coord in ipairs(globaldb.mobs_byzoneid[zone][id]) do
 		local loc_x, loc_y = self:GetXY(coord)
 		if (math.abs(loc_x - x) < 0.03) and (math.abs(loc_y - y) < 0.03) then
-			-- We've seen it close to here before. (within 5% of the zone)
+			-- We've seen it close to here before. (within 3% of the zone)
 			newloc = false
 			break
 		end

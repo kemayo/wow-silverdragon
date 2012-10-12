@@ -1,5 +1,6 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Scan_Targets", "AceEvent-3.0")
+local Debug = core.Debug
 
 local globaldb
 function module:OnInitialize()
