@@ -45,6 +45,8 @@ function addon:OnInitialize()
 			always = {},
 			ignore = {
 				[32435] = true, -- Vern!
+				[64403] = true, -- Alani
+				[60491] = true, -- Sha of Anger
 			},
 		},
 		profile = {
