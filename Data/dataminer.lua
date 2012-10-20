@@ -7,7 +7,7 @@
 local SOURCE = SOURCE or "defaults.lua"
 local DEBUG = tonumber(arg[1]) or DEBUG or 1
 
-local WOWHEAD_URL = "http://mop.wowhead.com/"
+local WOWHEAD_URL = "http://www.wowhead.com/"
 
 local function dprint(dlevel, ...)
 	if dlevel and DEBUG >= dlevel then
@@ -173,6 +173,7 @@ local force_include = {
 	3868, -- Blood Seeker (thought to share Aeonaxx's spawn timer)
 	51236, -- Aeonaxx (engaged)
 	58336, -- Darkmoon Rabbit
+    64004, -- Ghostly Pandaren Fisherman
 }
 local name_overrides = {
 	[50410] = "Crumbled Statue Remnants",
