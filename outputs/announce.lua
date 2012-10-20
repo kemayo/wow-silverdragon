@@ -219,10 +219,10 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, nam
 		if channel and player then
 			local localized_zone = GetMapNameByID(zone) or UNKNOWN
 			source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. localized_zone
-			if x and y then
-				source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
-			end
 		end
+	end
+	if x and y then
+		source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
 	end
 	local prefix = "Rare seen: "
 	if module.db.profile.sink_opts.sink20OutputSink == "LibToast-1.0" then
