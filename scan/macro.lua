@@ -49,8 +49,9 @@ function module:Update()
 	if not mobs then return end
 	local macro = {}
 	for id in pairs(mobs) do
-		Debug("Macro mobs", id, core.db.global.mob_name[id])
-		table.insert(macro, "/targetexact "..core.db.global.mob_name[id])
+		if not core.db.global.ignore[id] then
+			table.insert(macro, "/targetexact "..core.db.global.mob_name[id])
+		end
 	end
 	self.button:SetAttribute("macrotext", ("\n"):join(unpack(macro)))
 	table.wipe(macro)
