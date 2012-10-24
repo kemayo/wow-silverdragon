@@ -122,11 +122,11 @@ local valid_unit_types = {
 }
 local function npc_id_from_guid(guid)
 	if not guid then return end
-	local unit_type = bit.band(tonumber("0x"..strsub(guid, 3,5)), 0x00f)
+	local unit_type = bit.band(tonumber("0x"..strsub(guid, 3, 5)), 0x00f)
 	if not valid_unit_types[unit_type] then
 		return
 	end
-	return tonumber("0x"..strsub(guid,7,10))
+	return tonumber("0x"..strsub(guid, 6, 10))
 end
 function addon:UnitID(unit)
 	return npc_id_from_guid(UnitGUID(unit))
