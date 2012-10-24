@@ -54,6 +54,9 @@ function module:Seen_Raw(callback, id, name, zone, x, y, dead, newloc, source, u
 	if not unit then
 		return
 	end
+	if id and globaldb.ignore[id] then
+		return
+	end
 	if not self.db.profile.enabled then
 		return
 	end
