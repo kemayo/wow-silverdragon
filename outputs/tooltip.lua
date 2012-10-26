@@ -10,6 +10,7 @@ local achievements = {
 local mobs_to_achievement = {
 	-- [43819] = 2257,
 }
+local achievements_loaded = false
 
 module.mobs_to_achievement = mobs_to_achievement
 
@@ -44,17 +45,6 @@ end
 
 function module:OnEnable()
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-end
-
-function module:PLAYER_ENTERING_WORLD()
-	self:LoadAllAchievementMobs()
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-end
-
-function module:CRITERIA_UPDATE()
-	-- contains no information about what updated, note
-	self:LoadAllAchievementMobs()
 end
 
 function module:LoadAllAchievementMobs()
@@ -64,6 +54,7 @@ function module:LoadAllAchievementMobs()
 end
 
 function module:LoadAchievementMobs(achievement)
+	Debug("LoadAchievementMobs", achievement)
 	local num_criteria = GetAchievementNumCriteria(achievement)
 	for i = 1, num_criteria do
 		local description, ctype, completed, _, _, _, _, id = GetAchievementCriteriaInfo(achievement, i)
@@ -73,6 +64,8 @@ function module:LoadAchievementMobs(achievement)
 			-- and grab the names/ids, for the heck of it
 			globaldb.mob_id[description] = id
 			globaldb.mob_name[id] = description
+
+			achievements_loaded = true
 		end
 	end
 end
@@ -92,15 +85,21 @@ function module:UpdateTooltip(id)
 		GameTooltip:AddDoubleLine("id", id, 1, 1, 0, 1, 1, 0)
 	end
 
-	if self.db.profile.achievement and mobs_to_achievement[id] then
-		local achievement = mobs_to_achievement[id]
-		local criteria = achievements[achievement][id]
-		local _, name = GetAchievementInfo(achievement)
-		local _, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
-		GameTooltip:AddDoubleLine(name, completed and ACTION_PARTY_KILL or NEED,
-			1, 1, 0,
-			completed and 0 or 1, completed and 1 or 0, 0
-		)
+	if self.db.profile.achievement then
+		if not achievements_loaded then
+			self:LoadAllAchievementMobs()
+		end
+
+		if mobs_to_achievement[id] then
+			local achievement = mobs_to_achievement[id]
+			local criteria = achievements[achievement][id]
+			local _, name = GetAchievementInfo(achievement)
+			local _, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
+			GameTooltip:AddDoubleLine(name, completed and ACTION_PARTY_KILL or NEED,
+				1, 1, 0,
+				completed and 0 or 1, completed and 1 or 0, 0
+			)
+		end
 	end
 
 	GameTooltip:Show()
