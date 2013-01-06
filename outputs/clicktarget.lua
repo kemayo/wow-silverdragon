@@ -244,18 +244,6 @@ close:SetAttribute("_onclick", [[
 	button:Hide()
 ]])
 
--- Flash frame
-local glow = CreateFrame("Frame", "$parentGlow", popup)
-popup.glow = glow
-glow:SetPoint("CENTER")
-glow:SetWidth(400 / 300 * popup:GetWidth())
-glow:SetHeight(171 / 88 * popup:GetHeight())
-local texture = glow:CreateTexture(nil, "OVERLAY")
-texture:SetAllPoints()
-texture:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Alert-glow")
-texture:SetBlendMode("ADD")
-texture:SetTexCoord(0, 0.78125, 0, 0.66796875)
-
 popup:SetAttribute("type", "macro")
 
 local on_enter = function()
