@@ -267,9 +267,6 @@ local on_enter = function()
 end
 local on_leave = function() popup:SetBackdropBorderColor(0.7, 0.15, 0.05) end
 local on_show = function()
-	UIFrameFadeRemoveFrame(popup.glow)
-	UIFrameFlash(popup.glow, 0.1, 0.7, 0.8)
-	
 	local model = popup.model
 	model:ClearModel()
 	model:SetPosition(0, 0, 0)
