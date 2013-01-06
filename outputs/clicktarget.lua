@@ -78,6 +78,11 @@ function module:ShowFrame()
 	local macrotext = "/cleartarget\n/targetexact "..name
 	local level_text = (level and level > 0) and level or (level and level == -1) and 'Boss' or '?'
 	popup:SetAttribute("macrotext", macrotext)
+
+	if popup:IsVisible() then
+		popup:Hide()
+	end
+
 	popup:Enable()
 	popup:Show()
 
@@ -244,6 +249,44 @@ close:SetAttribute("_onclick", [[
 	button:Hide()
 ]])
 
+-- Flash frame
+local glow = CreateFrame("Frame", "$parentGlow", popup)
+popup.glow = glow
+glow:SetPoint("CENTER")
+glow:SetWidth(400 / 300 * popup:GetWidth())
+glow:SetHeight(171 / 88 * popup:GetHeight())
+local texture = glow:CreateTexture(nil, "OVERLAY")
+texture:SetAllPoints()
+texture:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Alert-glow")
+texture:SetBlendMode("ADD")
+texture:SetTexCoord(0, 0.78125, 0, 0.66796875)
+texture:SetAlpha(0)
+
+local loops = 0
+local animation = texture:CreateAnimationGroup()
+animation:SetLooping("REPEAT")
+
+local pulse_in = animation:CreateAnimation("Alpha")
+pulse_in:SetChange(0.5)
+pulse_in:SetDuration(0.5)
+pulse_in:SetSmoothing("IN")
+pulse_in:SetEndDelay(0.1)
+pulse_in:SetOrder(1)
+local pulse_out = animation:CreateAnimation("Alpha")
+pulse_out:SetChange(-0.5)
+pulse_out:SetDuration(1)
+pulse_out:SetSmoothing("NONE")
+pulse_out:SetOrder(2)
+
+animation:SetScript("OnLoop", function(frame, state)
+	Debug("OnLoop", state)
+	loops = loops + 1
+	if loops == 3 then
+		loops = 0
+		animation:Stop()
+	end
+end)
+
 popup:SetAttribute("type", "macro")
 
 local on_enter = function()
@@ -255,15 +298,21 @@ local on_enter = function()
 end
 local on_leave = function() popup:SetBackdropBorderColor(0.7, 0.15, 0.05) end
 local on_show = function()
+	animation:Play()
 	local model = popup.model
 	model:ClearModel()
 	model:SetPosition(0, 0, 0)
 	model:SetFacing(0)
 end
+local on_hide = function()
+	animation:Stop()
+	on_leave()
+end
 
 popup:SetScript("OnEnter", on_enter)
 popup:SetScript("OnLeave", on_leave)
 popup:SetScript("OnShow", on_show)
+popup:SetScript("OnHide", on_hide)
 
 -- a few setup things:
 popup:Hide()
