@@ -116,6 +116,19 @@ function addon:OnEnable()
 	end
 end
 
+local alliance_ignore_mobs = { --Mobs alliance cannot kill
+	[51071] = true,--Captain Florence (Vashjir)
+	[68318] = true,--Dalan Nightbreaker (Krasarang)
+	[68319] = true,--Disha Fearwarden (Krasarang)
+	[68317] = true,--Mavis Harms (Krasarang)
+}
+local horde_ignore_mobs = { --Mobs horde cannot kill
+	[51079] = true,--Captain Foulwind (Vashjir)
+	[68321] = true,--Kar Warmaker (Krasarang)
+	[68322] = true,--Muerta (Krasarang)
+	[68320] = true,--Ubunti the Shade (Krasarang)
+}
+
 local valid_unit_types = {
 	[0x003] = true, -- npcs
 	[0x005] = true, -- vehicles
@@ -199,6 +212,7 @@ function addon:GetMob(zone, id)
 	return globaldb.mob_name[id], #globaldb.mobs_byzoneid[zone][id], globaldb.mob_level[id], globaldb.mob_elite[id], BCT[globaldb.mob_type[id]], globaldb.mob_seen[id], globaldb.mob_count[id], globaldb.mob_tameable[name]
 end
 
+local faction = UnitFactionGroup("player")
 function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit, silent)
 	self.events:Fire("Seen_Raw", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 
@@ -208,6 +222,11 @@ function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source,
 	end
 	if globaldb.ignore[id] then
 		Debug("Skipping notification: ignored", id, name)
+		return
+	end
+	--Maybe add an option for this later. This checks unit faction and ignores mobs your faction cannot do anything with.
+	if faction == "Alliance" and alliance_ignore_mobs[id] or faction == "Horde" and horde_ignore_mobs[id] then
+		Debug("Skipping notification: faction ignore", id, name)
 		return
 	end
 	if lastseen[id] and time() < lastseen[id] + self.db.profile.delay then
