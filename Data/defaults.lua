@@ -284,6 +284,12 @@ function module:GetDefaults()
 			[50768] = {name="Cournith Waterstrider",id=50768,level=87,creature_type="Humanoid",locations = {30403840,},},
 			[50352] = {name="Qu'nas",id=50352,level=87,creature_type="Humanoid",locations = {67202300,},},
 			[62346] = {name="Galleon",id=62346,level=-1,creature_type="Beast",elite=true,locations = {},},
+			[68318] = {name="Dalan Nightbreaker",id=68318,level=90,creature_type="Humanoid",elite=true,locations = {},},
+			[68321] = {name="Kar Warmaker",id=68321,level=90,creature_type="Humanoid",elite=true,locations = {},},
+			[68319] = {name="Disha Fearwarden",id=68319,level=90,creature_type="Humanoid",elite=true,locations = {},},
+			[68322] = {name="Muerta",id=68322,level=90,creature_type="Humanoid",elite=true,locations = {},},
+			[68317] = {name="Mavis Harms",id=68317,level=90,creature_type="Humanoid",elite=true,locations = {},},
+			[68320] = {name="Ubunti the Shade",id=68320,level=90,creature_type="Humanoid",elite=true,locations = {},},
 		},
 		[4] = {
 			[5826] = {name="Geolord Mottle",id=5826,level=6,creature_type="Humanoid",locations = {43203940,43605020,},},
@@ -383,6 +389,7 @@ function module:GetDefaults()
 			[50836] = {name="Ik-Ik the Nimble",id=50836,level=90,creature_type="Humanoid",locations = {55206380,},},
 			[50334] = {name="Dak the Breaker",id=50334,level=90,creature_type="Humanoid",locations = {25202820,},},
 			[50347] = {name="Karr the Darkener",id=50347,level=90,creature_type="Humanoid",locations = {71803740,},},
+			[65552] = {name="Glinting Rapana Whelk",id=65552,level=1,creature_type="Critter",locations = {},},
 		},
 		[473] = {
 			[18695] = {name="Ambassador Jerrikar",id=18695,level=69,creature_type="Demon",locations = {28004840,29005540,45003000,45406740,55403640,59408420,64407580,68206060,},},
@@ -493,6 +500,7 @@ function module:GetDefaults()
 			[50808] = {name="Urobi the Walker",id=50808,level=85,creature_type="Humanoid",locations = {57207160,},},
 			[50782] = {name="Sarnak",id=50782,level=85,creature_type="Humanoid",locations = {64407400,},},
 			[50350] = {name="Morgrinn Crackfang",id=50350,level=85,creature_type="Humanoid",locations = {40201460,46401680,},},
+			[64272] = {name="Jade Warrior Statue",id=64272,level=86,creature_type="Humanoid",locations = {},},
 		},
 		[181] = {
 			[6118] = {name="Varo'then's Ghost",id=6118,level=12,creature_type="Undead",locations = {34407120,34407680,},},
@@ -597,6 +605,7 @@ function module:GetDefaults()
 			[50364] = {name="Nal'lak the Ripper",id=50364,level=86,creature_type="Humanoid",locations = {8005780,8404960,13205940,14204760,16405260,71804860,},},
 			[50351] = {name="Jonn-Dar",id=50351,level=86,creature_type="Humanoid",locations = {16008280,17807520,},},
 			[64004] = {name="Ghostly Pandaren Fisherman",id=64004,level=86,creature_type="Humanoid",locations = {46802440,},},
+			[64191] = {name="Ghostly Pandaren Craftsman",id=64191,level=86,creature_type="Humanoid",locations = {},},
 			[62346] = {name="Galleon",id=62346,level=-1,creature_type="Beast",elite=true,locations = {70406340,},},
 			[51059] = {name="Blackhoof",id=51059,level=86,creature_type="Humanoid",locations = {32406280,37606040,40005540,40006640,},},
 			[50811] = {name="Nasra Spothide",id=50811,level=86,creature_type="Humanoid",locations = {88401800,},},
