@@ -65,7 +65,7 @@ function module:Seen(callback, id, name, zone, x, y, dead, newloc, source, unit)
 		return
 	end
 	local level = core.db.global.mob_level[id]
-	if IsInGuild() then
+	if IsInGuild() and not IsInInstance() then
 		SAM("GUILD", "seen", id, name, zone, level, x, y)
 	end
 	if IsInRaid() then
