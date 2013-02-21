@@ -198,7 +198,7 @@ local function zone_mappings()
 	local page = getpage(url)
 	if not page then return end
 	dprint(3, "Loaded locales")
-	page = page:match('g_zones={([^}]+)};')
+	page = page:match('g_zones = {([^}]+)};')
 	if not page then return end
 	dprint(3, "Found zones in locales", page)
 	for id, zone in page:gmatch('"(%d+)":"([^"]+)"') do

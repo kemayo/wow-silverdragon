@@ -1,4 +1,4 @@
--- This is here because wowhead doesn't expose zoneds anywhere, that I could see.
+-- This is here because wowhead doesn't expose zoneids anywhere, that I could see.
 
 zonename_to_zoneid = {
     ["A Brewing Storm"] = 878,
@@ -85,7 +85,9 @@ zonename_to_zoneid = {
     ["Icecrown"] = 492,
     ["Ironforge"] = 341,
     ["Isle of Conquest"] = 540,
+    ["Isle of Giants"] = 929,
     ["Isle of Quel'Danas"] = 499,
+    ["Isle of Thunder"] = 928,
     ["Karazhan"] = 799,
     ["Kelp'thar Forest"] = 610,
     ["Kezan"] = 605,

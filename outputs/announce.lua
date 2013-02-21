@@ -44,6 +44,7 @@ local boss_mobs = {
 	[50089] = true, -- Julak-Doom
 	[60491] = true, -- Sha of Anger
 	[62346] = true, -- Galleon
+	[69161] = true, -- Oondasta
 }
 
 function module:OnInitialize()

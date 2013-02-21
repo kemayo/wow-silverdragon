@@ -248,6 +248,8 @@ function module:GetDefaults()
 			[50817] = {name="Ahone the Wanderer",id=50817,level=88,creature_type="Humanoid",locations = {40804240,},},
 			[60491] = {name="Sha of Anger",id=60491,level=-1,creature_type="Elemental",elite=true,locations = {50006880,51208740,67807800,70806360,},},
 			[50354] = {name="Havak",id=50354,level=88,creature_type="Humanoid",locations = {56407520,},},
+			[69768] = {name="Zandalari Warscout",id=69768,creature_type="Humanoid",},
+			[69769] = {name="Zandalari Warbringer",id=69769,creature_type="Humanoid",elite=true,},
 		},
 		[478] = {
 			[18686] = {name="Doomsayer Jurim",id=18686,level=64,creature_type="Humanoid",locations = {5400720,35403760,41202580,46202620,46606660,51602480,52606940,55403240,61003540,65204060,67604580,},},
@@ -290,6 +292,8 @@ function module:GetDefaults()
 			[68322] = {name="Muerta",id=68322,level=90,creature_type="Humanoid",elite=true,locations = {},},
 			[68317] = {name="Mavis Harms",id=68317,level=90,creature_type="Humanoid",elite=true,locations = {},},
 			[68320] = {name="Ubunti the Shade",id=68320,level=90,creature_type="Humanoid",elite=true,locations = {},},
+			[69768] = {name="Zandalari Warscout",id=69768,creature_type="Humanoid",},
+			[69769] = {name="Zandalari Warbringer",id=69769,creature_type="Humanoid",elite=true,},
 		},
 		[4] = {
 			[5826] = {name="Geolord Mottle",id=5826,level=6,creature_type="Humanoid",locations = {43203940,43605020,},},
@@ -390,6 +394,8 @@ function module:GetDefaults()
 			[50334] = {name="Dak the Breaker",id=50334,level=90,creature_type="Humanoid",locations = {25202820,},},
 			[50347] = {name="Karr the Darkener",id=50347,level=90,creature_type="Humanoid",locations = {71803740,},},
 			[65552] = {name="Glinting Rapana Whelk",id=65552,level=1,creature_type="Critter",locations = {},},
+			[69768] = {name="Zandalari Warscout",id=69768,creature_type="Humanoid",},
+			[69769] = {name="Zandalari Warbringer",id=69769,creature_type="Humanoid",elite=true,},
 		},
 		[473] = {
 			[18695] = {name="Ambassador Jerrikar",id=18695,level=69,creature_type="Demon",locations = {28004840,29005540,45003000,45406740,55403640,59408420,64407580,68206060,},},
@@ -501,6 +507,8 @@ function module:GetDefaults()
 			[50782] = {name="Sarnak",id=50782,level=85,creature_type="Humanoid",locations = {64407400,},},
 			[50350] = {name="Morgrinn Crackfang",id=50350,level=85,creature_type="Humanoid",locations = {40201460,46401680,},},
 			[64272] = {name="Jade Warrior Statue",id=64272,level=86,creature_type="Humanoid",locations = {},},
+			[69768] = {name="Zandalari Warscout",id=69768,creature_type="Humanoid",},
+			[69769] = {name="Zandalari Warbringer",id=69769,creature_type="Humanoid",elite=true,},
 		},
 		[181] = {
 			[6118] = {name="Varo'then's Ghost",id=6118,level=12,creature_type="Undead",locations = {34407120,34407680,},},
@@ -651,6 +659,8 @@ function module:GetDefaults()
 			[50840] = {name="Major Nanners",id=50840,level=91,creature_type="Humanoid",locations = {26208840,30409360,31408740,82802840,},},
 			[50359] = {name="Urgolax",id=50359,level=91,creature_type="Humanoid",locations = {36601980,37002740,41802240,42003300,},},
 			[60491] = {name="Sha of Anger",id=60491,level=-1,creature_type="Elemental",elite=true,locations = {},},
+			[69768] = {name="Zandalari Warscout",id=69768,creature_type="Humanoid",},
+			[69769] = {name="Zandalari Warbringer",id=69769,creature_type="Humanoid",elite=true,},
 		},
 		[614] = {
 			[50009] = {name="Mobus",id=50009,level=-1,creature_type="Beast",elite=true,locations = {62202340,62403080,66003940,67602180,69401620,71404080,74403520,75802260,77602940,},},
@@ -752,6 +762,19 @@ function module:GetDefaults()
 		},
 		[873] = {
 			[60491] = {name="Sha of Anger",id=60491,level=-1,creature_type="Elemental",elite=true,locations = {},},--Maybe not nessesary here?
+		},
+		--Isle of Thunder (TODO: Get real names since wowhead has been slacking again at pulling latest ptr data)
+		[928] = {
+			[50358] = {name="Goda",id=50358,level=92,creature_type="Mechanical",elite=true,},
+			[69996] = {name="Ku'lai the Skyclaw",id=69996,level=92,creature_type="Humanoid",elite=true,},
+			[69998] = {name="Rare - Giant Dragon Turtle",id=69998,level=92,creature_type="Beast",elite=true,},
+			[70002] = {name="Rare - Mogu Crafter",id=70002,level=92,creature_type="Humanoid",elite=true,},
+			[69999] = {name="Rare - Zandalari God-Hulk",id=69999,level=92,creature_type="Humanoid",elite=true,},
+			[70003] = {name="Rare - Zandalari Gatekeeper",id=70003,level=92,creature_type="Humanoid",elite=true,},
+			[70000] = {name="Rare - Zandalari Triceratops Rider",id=70000,level=92,creature_type="Humanoid",elite=true,},
+			[69664] = {name="Rare - Mogu Spirit Channeler",id=69664,level=92,creature_type="Humanoid",elite=true,},
+			[69997] = {name="Rare - Saurok Chieftain",id=69997,level=92,creature_type="Humanoid",elite=true,},
+			[70001] = {name="Rare - Mogu Slavemaster",id=70001,level=92,creature_type="Humanoid",elite=true,},
 		},
 	}
 	return defaults
