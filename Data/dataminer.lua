@@ -173,7 +173,18 @@ local force_include = {
 	3868, -- Blood Seeker (thought to share Aeonaxx's spawn timer)
 	51236, -- Aeonaxx (engaged)
 	58336, -- Darkmoon Rabbit
-    64004, -- Ghostly Pandaren Fisherman
+	-- Lost and Found!
+	64004, -- Ghostly Pandaren Fisherman
+	64191, -- Ghostly Pandaren Craftsman
+	65552, -- Glinting Rapana Whelk
+	64272, -- Jade Warrior Statue
+	64227, -- Frozen Trail Packer
+	--In 5.2, world bosses are no longer flagged as rare, even if they are.
+	--Granted, 3 of 4 probably won't be rare. We include anyways because we always have.
+	60491, -- Sha of Anger
+	62346, -- Galleon
+	69099, -- Nalak
+	69161, -- Oondasta
 }
 local name_overrides = {
 	[50410] = "Crumbled Statue Remnants",
@@ -182,7 +193,10 @@ local name_overrides = {
 	[51403] = "Madexx (black)",
 	[51404] = "Madexx (blue)",
 	[50154] = "Madexx (brown)",
-	[51236] = "Aeonaxx (engaged)"
+	[51236] = "Aeonaxx (engaged)",
+	[69769] = "Zandalari Warbringer (Slate)",
+	[69841] = "Zandalari Warbringer (Amber)",
+	[69842] = "Zandalari Warbringer (Jade)",
 }
 
 local function pack_coords(x, y)
