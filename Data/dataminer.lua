@@ -251,7 +251,7 @@ local function npc_tameable(id)
 	local page = getpage(url)
 	if not page then return end
 	
-	page = page:match("Tameable %([^)]+%)")
+	page = page:match("\\x5DTameable\\x20")
 	if page then
 		return true
 	end
