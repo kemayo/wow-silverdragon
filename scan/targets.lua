@@ -66,7 +66,7 @@ function module:ProcessUnit(unit, source)
 		local zone, x, y = core:GetPlayerLocation()
 		if not zone then return end -- there are only a few places where this will happen
 
-		local name = UnitName(unit)
+		local name = globaldb.mob_name[id] or UnitName(unit)--Keep DB name if present; allows custom overrides
 		local level = (UnitLevel(unit) or -1)
 		local creature_type = UnitCreatureType(unit)
 
