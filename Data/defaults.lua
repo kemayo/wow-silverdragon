@@ -273,6 +273,9 @@ function module:GetDefaults()
 			[70002] = {name="Lu-Ban",id=70002,creature_type="Humanoid",elite=true,locations = {54403540,},},
 			[69999] = {name="God-Hulk Ramuk",id=69999,creature_type="Humanoid",elite=true,locations = {61604980,},},
 			[50358] = {name="Haywire Sunreaver Construct",id=50358,creature_type="Mechanical",elite=true,locations = {48608980,56608460,},},
+			[69998] = {name="Goda",id=69998,creature_type="Beast",elite=true,tameable=true,level=92,locations = {54005350,},},
+			[70003] = {name="Molthor",id=70003,creature_type="Humanoid",elite=true,level=92,locations = {59003600,},},
+			[69664] = {name="Mumta",id=69664,creature_type="Humanoid",elite=true,level=92,locations = {35206240,},},
 		},
 		[809] = {
 			[50789] = {name="Nessos the Oracle",id=50789,level=88,creature_type="Humanoid",locations = {63801380,},},
