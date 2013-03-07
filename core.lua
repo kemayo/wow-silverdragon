@@ -47,8 +47,8 @@ function addon:OnInitialize()
 				[32435] = true, -- Vern!
 				[64403] = true, -- Alani
 				[60491] = true, -- Sha of Anger
---				[62346] = true, -- Galleon (depends on if they make his new 5.2 spawn rate very common)
---				[69099] = true, -- Nalak (the next not so rare, rare world boss?)
+				[62346] = true, -- Galleon (depends on if they make his new 5.2 spawn rate very common)
+				[69099] = true, -- Nalak (the next not so rare, rare world boss?)
 				--Throne of Thunder Weekly bosses
 				[70243] = true,--Agony and Anima (Archritualist Kelada)
 				[70238] = true,--Eyes of the Thunder King
