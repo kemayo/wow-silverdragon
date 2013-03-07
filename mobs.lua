@@ -108,6 +108,40 @@ function module:OnInitialize()
 							},
 						},
 					},
+					import_achievement = {
+						type = "group",
+						name = "Import Achievement Mobs",
+						order = 11,
+						inline = true,
+						hidden = function()
+							return not ( core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")) )
+						end,
+						args = {
+							about = desc("Alternatively, maybe you only care about the cool achievement-related mobs. This includes all the mount and pet related ones. Click the button below to import them all.", 0),
+							load = {
+								order = 10,
+								type = "execute",
+								name = "Import Mobs",
+								desc = "Import just the mobs which are tied to an achievement.",
+								func = function()
+									LoadAddOn("SilverDragon_Data")
+									local Data = core:GetModule("Data", true)
+									if not Data then
+										module:Print("Database not found. Aborting import.") -- safety check, just in case.
+										return
+									end
+									local count = Data:ImportAchievementMobs(
+										1312, -- bloody rare
+										2257, -- frostbitten
+										7439, -- glorious
+										8103 -- champions
+									)
+									core.events:Fire("Import")
+									module:Print(("Imported %d rares."):format(count))
+								end,
+							},
+						},
+					},
 					list = {
 						type = "group",
 						name = "List",
