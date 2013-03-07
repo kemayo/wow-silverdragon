@@ -157,7 +157,7 @@ function addon:UnitID(unit)
 end
 
 local lastseen = {}
-function addon:ShouldSave(zone, id)
+function addon:ShouldSave(id)
 	local last_saved = globaldb.mob_seen[id]
 	if not last_saved then
 		return true
