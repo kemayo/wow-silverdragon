@@ -6,6 +6,7 @@ local achievements = {
 	[1312] = {}, -- Bloody Rare (BC mobs)
 	[2257] = {}, -- Frostbitten (Wrath mobs)
 	[7439] = {}, -- Glorious! (Pandaria mobs)
+	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
 }
 local mobs_to_achievement = {
 	-- [43819] = 2257,
