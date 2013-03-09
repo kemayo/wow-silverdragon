@@ -7,12 +7,10 @@ function module:Import(callback)
 	if not self.GetDefaults then return end
 	local defaults = self:GetDefaults()
 	local mob_count = 0
-	for zone, mobs in pairs(defaults) do
-		for id, info in pairs(mobs) do
-			if (not callback) or callback(id, zone, info) then
-				self:ImportMob(id, zone, info)
-				mob_count = mob_count + 1
-			end
+	for id, info in pairs(defaults) do
+		if (not callback) or callback(id, info) then
+			self:ImportMob(id, info)
+			mob_count = mob_count + 1
 		end
 	end
 	defaults = nil
@@ -31,12 +29,12 @@ function module:ImportAchievementMobs(...)
 			end
 		end
 	end
-	return self:Import(function(id, zone, info)
+	return self:Import(function(id, info)
 		return mobs[id]
 	end)
 end
 
-function module:ImportMob(id, zone, info)
+function module:ImportMob(id, info)
 	local gdb = core.db.global
 	local name = info.name
 	gdb.mob_id[name] = id
@@ -46,15 +44,17 @@ function module:ImportMob(id, zone, info)
 	gdb.mob_tameable[id] = info.tameable
 	gdb.mob_elite[id] = info.elite
 	if not gdb.mob_seen[id] then gdb.mob_seen[id] = 0 end
-	-- zone -1 is the "we don't know!" one
-	if zone ~= -1 then
+	if not info.locations then
+		return
+	end
+	for zone,coords in pairs(info.locations) do
 		if not gdb.mobs_byzoneid[zone][id] then
 			gdb.mobs_byzoneid[zone][id] = {} -- never seen
-			for _, loc in pairs(info.locations) do
+			for _, loc in pairs(coords) do
 				table.insert(gdb.mobs_byzoneid[zone][id], loc)
 			end
 		else
-			for _, loc in pairs(info.locations) do
+			for _, loc in pairs(coords) do
 				local new_x, new_y = core:GetXY(loc)
 				local newloc = true
 				for _, oldloc in pairs(gdb.mobs_byzoneid[zone][id]) do
