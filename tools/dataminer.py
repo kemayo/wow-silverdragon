@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
+import sys
+
 from npc import types as npctypes
-from npc.wowhead import WowheadNPC
 
 blacklist = (
     50091, # untargetable Julak-Doom component
@@ -45,16 +46,31 @@ end
 
 if __name__ == '__main__':
     defaults = {}
-    npc = WowheadNPC
-    for categoryid, c in npctypes.items():
-        print("ACQUIRING rares for category", categoryid, c)
-        for expansion in range(1, 6):
-            print("EXPANSION", expansion)
-            # run per-expansion to avoid caps on results-displayed
-            defaults.update(npc.query(categoryid, expansion))
+
+    if len(sys.argv) < 2:
+        npc = "wowdb"
+    else:
+        npc = sys.argv[1]
+
+    if npc == "wowdb":
+        from npc.wowdb import WowdbNPC as npcclass
+        for creature_type in npctypes.values():
+            print("ACQUIRING rares for category", creature_type)
+            defaults.update(npcclass.query(creature_type))
+    elif npc == "wowhead":
+        from npc.wowhead import WowheadNPC as npcclass
+        for categoryid, c in npctypes.items():
+            print("ACQUIRING rares for category", categoryid, c)
+            for expansion in range(1, 6):
+                print("EXPANSION", expansion)
+                # run per-expansion to avoid caps on results-displayed
+                defaults.update(npcclass.query(categoryid, expansion))
+    else:
+        sys.exit("No site chosen")
+
     for id in force_include:
         if id not in defaults:
-            defaults[id] = npc(id)
+            defaults[id] = npcclass(id)
 
     write_output("../Data/defaults.lua", defaults)
     print("Defaults written")

@@ -7,7 +7,7 @@ from .fetch import Fetch
 from . import NPC, types, pack_coords
 from .zones import zonename_to_zoneid
 
-WOWHEAD_URL = 'http://www.wowhead.com/'
+WOWHEAD_URL = 'http://www.wowhead.com'
 
 fetch = Fetch("wowhead.db")
 
@@ -15,7 +15,7 @@ zone_map = False
 
 class WowheadNPC(NPC):
     def __page(self):
-        return fetch('%snpc=%d' % (WOWHEAD_URL, self.id))
+        return fetch('%s/npc=%d' % (WOWHEAD_URL, self.id))
 
     def _name(self):
         info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: '(.+?)'};", self.__page())
@@ -87,7 +87,7 @@ class WowheadNPC(NPC):
 
     @staticmethod
     def query(categoryid, expansion):
-        url = "%snpcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (WOWHEAD_URL, categoryid, expansion)
+        url = "%s/npcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (WOWHEAD_URL, categoryid, expansion)
 
         page = fetch(url)
         match = re.search(r'new Listview\({[^{]+?data: \[(.+?)\]}\);\n', page)

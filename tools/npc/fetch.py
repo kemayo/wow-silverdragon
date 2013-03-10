@@ -36,7 +36,7 @@ class Fetch:
         """
         if cached:
             c = self.store.cursor()
-            c.execute("""SELECT content FROM cache WHERE url = ? AND datetime(time, '+1 day') > datetime('now')""", (url,))
+            c.execute("""SELECT content FROM cache WHERE url = ? AND datetime(time, '+2 day') > datetime('now')""", (url,))
             row = c.fetchone()
             c.close()
             if row:

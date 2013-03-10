@@ -28,6 +28,7 @@ types = {
     8: 'Critter',
     9: 'Mechanical',
     10: 'Uncategorized',
+    15: 'Aberration'
 }
 
 class NPC:

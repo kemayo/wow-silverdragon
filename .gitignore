@@ -1,4 +1,4 @@
 *.pyc
 *.swp
-tools/wowhead.db
+tools/*.db
 
