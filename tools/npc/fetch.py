@@ -7,10 +7,10 @@ from io import BytesIO, StringIO
 from urllib.request import Request, urlopen
 
 __version__ = 1
+USER_AGENT = 'SilverDragon/%s +http://davidlynch.org' % __version__
 
 class Fetch:
     """A store for values by date, sqlite-backed"""
-    USER_AGENT = 'SilverDragon/%s +http://davidlynch.org' % __version__
 
     def __init__(self, storepath):
         """Initializes the store; creates tables if required
@@ -41,7 +41,7 @@ class Fetch:
             c.close()
             if row:
                 return row[0]
-        data = self.__fetch(url, **kw)
+        data = _fetch(url, **kw)
         self.__set(url, data)
         return data
 
@@ -56,21 +56,21 @@ class Fetch:
         self.store.commit()
         c.close()
 
-    def __fetch(url, data=None, ungzip=True):
-        """A generic URL-fetcher, which handles gzipped content, returns a string"""
-        request = Request(url)
-        request.add_header('Accept-encoding', 'gzip')
-        request.add_header('User-agent', USER_AGENT)
+def _fetch(url, data=None, ungzip=True):
+    """A generic URL-fetcher, which handles gzipped content, returns a string"""
+    request = Request(url)
+    request.add_header('Accept-encoding', 'gzip')
+    request.add_header('User-agent', USER_AGENT)
+    try:
+        f = urlopen(request, data)
+    except Exception as e:
+        return None
+    data = f.read()
+    if ungzip and f.headers.get('content-encoding', '') == 'gzip':
+        data = gzip.GzipFile(fileobj=BytesIO(data), mode='r').read()
         try:
-            f = urlopen(request, data)
-        except Exception as e:
-            return None
-        data = f.read()
-        if ungzip and f.headers.get('content-encoding', '') == 'gzip':
-            data = gzip.GzipFile(fileobj=BytesIO(data), mode='r').read()
-            try:
-                data = data.decode()
-            except UnicodeDecodeError:
-                data = data.decode('latin1')
-        f.close()
-        return data
+            data = data.decode()
+        except UnicodeDecodeError:
+            data = data.decode('latin1')
+    f.close()
+    return data
