@@ -27,8 +27,7 @@ move-folders:
    SilverDragon/Data: SilverDragon_Data
 
 ignore:
-   - Data/dataminer.lua
-   - Data/map.lua
+   - tools
    - lib/ChatThrottleLib/ChatThrottleLib.toc
    - lib/ChatThrottleLib/ChatThrottleStats.lua
    - lib/ChatThrottleLib/README.txt

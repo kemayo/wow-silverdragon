@@ -1,106 +1,16 @@
 #!/usr/bin/python
 
-import gzip
 import json
 import math
 import re
-import sqlite3
-
-from io import BytesIO, StringIO
-from urllib.request import Request, urlopen
 
 from map import zonename_to_zoneid
+from fetch import Fetch
+import lua
 
-__version__ = 1
-USER_AGENT = 'SilverDragon/%s +http://davidlynch.org' % __version__
 WOWHEAD_URL = 'http://www.wowhead.com/'
 
-class Cache:
-    """A store for values by date, sqlite-backed"""
-    def __init__(self, storepath):
-        """Initializes the store; creates tables if required
-
-        storepath is the path to a sqlite database, and will be created
-        if it doesn't already exist. (":memory:" will store everything
-        in-memory, if you only need to use this as a temporary thing).
-        """
-        store = sqlite3.connect(storepath)
-        self.store = store
-        c = store.cursor()
-        c.execute("""CREATE TABLE IF NOT EXISTS cache (url TEXT, content BLOB, time TEXT, PRIMARY KEY (url))""")
-        self.store.commit()
-        c.close()
-    def set(self, url, value):
-        """Add a value to the store, at the current time
-
-        url is a string that the value will be associated with
-        value is the value to be stored
-        """
-        c = self.store.cursor()
-        c.execute("""REPLACE INTO cache VALUES (?, ?, CURRENT_TIMESTAMP)""", (url, value,))
-        self.store.commit()
-        c.close()
-    def get(self, url):
-        """Fetch a given url's data
-
-        type is a string to fetch all associated values for
-        """
-        c = self.store.cursor()
-        c.execute("""SELECT content FROM cache WHERE url = ? AND datetime(time, '+1 day') > datetime('now')""", (url,))
-        row = c.fetchone()
-        c.close()
-        if row:
-            return row[0]
-        return False
-CACHE = Cache("wowhead.db")
-
-def _fetch(url, data=None, cached=True, ungzip=True):
-    """A generic URL-fetcher, which handles gzipped content, returns a string"""
-    if cached and CACHE.get(url):
-        return CACHE.get(url)
-    request = Request(url)
-    request.add_header('Accept-encoding', 'gzip')
-    request.add_header('User-agent', USER_AGENT)
-    try:
-        f = urlopen(request, data)
-    except Exception as e:
-        return None
-    data = f.read()
-    if ungzip and f.headers.get('content-encoding', '') == 'gzip':
-        data = gzip.GzipFile(fileobj=BytesIO(data), mode='r').read()
-        try:
-            data = data.decode()
-        except UnicodeDecodeError:
-            data = data.decode('latin1')
-    f.close()
-    CACHE.set(url, data)
-    return data
-
-def _lua_value(v):
-    if v == None:
-        return 'nil'
-    t = type(v)
-    if t == str:
-        return '"' + v.replace('"', '\\"') + '"'
-    if t in (list, tuple, set):
-        return '{' + ','.join(map(_lua_value, v)) + '}'
-    if t == dict:
-        out = ['{']
-        for k in v:
-            vk = _lua_value(v[k])
-            k = str(k)
-            if k.isnumeric():
-                out.extend(('[', k, ']'))
-            elif not k.isalnum():
-                out.extend(('["', k, '"]'))
-            else:
-                out.append(k)
-            out.extend(('=', vk, ','))
-        out.append('}')
-        return ''.join(out)
-    if t == bool:
-        return v and 'true' or 'false'
-    return str(v)
+fetch = Fetch("wowhead.db")
 
 npctypes = {
     1: 'Beast',
@@ -157,7 +67,7 @@ def unpack_coords(coord):
     return math.floor(coord / 10000) / 10000, (coord % 10000) / 10000
 
 def zone_mappings():
-    page = _fetch("http://static.wowhead.com/js/locale_enus.js?250")
+    page = fetch("http://static.wowhead.com/js/locale_enus.js?250")
     if not page:
         return
     match = re.search(r"g_zones = ({[^}]+});", page)
@@ -214,7 +124,7 @@ class NPC:
     def __hash__(self):
         return self.id
     def __page(self):
-        return _fetch('%snpc=%d' % (WOWHEAD_URL, self.id))
+        return fetch('%snpc=%d' % (WOWHEAD_URL, self.id))
     def locations(self):
         page = self.__page()
         if not page:
@@ -239,10 +149,10 @@ class NPC:
             coords[zones[zone]] = [pack_coords(c[0], c[1]) for c in zcoords]
         return coords
     def to_lua(self):
-        return _lua_value(self.data)
+        return lua.serialize(self.data)
 
 def npcs_from_list_page(url):
-    page = _fetch(url)
+    page = fetch(url)
     match = re.search(r'new Listview\({[^{]+?data: \[(.+?)\]}\);\n', page)
     if not match:
         return {}
@@ -280,5 +190,5 @@ if __name__ == '__main__':
         if id not in defaults:
             defaults[id] = NPC(id)
 
-    write_output("defaults.lua", defaults)
+    write_output("../Data/defaults.lua", defaults)
     print("Defaults written")
