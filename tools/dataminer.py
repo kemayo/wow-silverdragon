@@ -158,6 +158,8 @@ def npcs_from_list_page(url):
         return {}
     npcs = {}
     for npc in (NPC(id) for id in re.findall(r'"id":(\d+)', match.group(1))):
+        if npc in blacklist:
+            continue
         print(npc)
         npcs[npc.id] = npc
     return npcs
