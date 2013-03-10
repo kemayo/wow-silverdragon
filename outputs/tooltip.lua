@@ -64,7 +64,7 @@ function module:LoadAchievementMobs(achievement)
 			mobs_to_achievement[id] = achievement
 			-- and grab the names/ids, for the heck of it
 			globaldb.mob_id[description] = id
-			globaldb.mob_name[id] = description
+			globaldb.mob_name[id] = globaldb.mob_name[id] or description
 
 			achievements_loaded = true
 		end
