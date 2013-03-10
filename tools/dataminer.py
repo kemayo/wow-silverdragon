@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import argparse
 import sys
 
 from npc import types as npctypes
@@ -45,32 +46,47 @@ end
 """)
 
 if __name__ == '__main__':
-    defaults = {}
+    parser = argparse.ArgumentParser(description="Suck down a lot of data about rares")
+    parser.add_argument('--wowhead', action='store_true', default=True)
+    parser.add_argument('--no-wowhead', action='store_false', dest='wowhead')
+    parser.add_argument('--wowdb', action='store_true', default=True)
+    parser.add_argument('--no-wowdb', action='store_false', dest='wowdb')
+    ns = parser.parse_args()
 
-    if len(sys.argv) < 2:
-        npc = "wowdb"
-    else:
-        npc = sys.argv[1]
+    wowdb = {}
+    wowhead = {}
 
-    if npc == "wowdb":
-        from npc.wowdb import WowdbNPC as npcclass
+    if ns.wowdb:
+        print("LOADING FROM wowdb")
+        from npc.wowdb import WowdbNPC
         for creature_type in npctypes.values():
             print("ACQUIRING rares for category", creature_type)
-            defaults.update(npcclass.query(creature_type))
-    elif npc == "wowhead":
-        from npc.wowhead import WowheadNPC as npcclass
+            wowdb.update(WowdbNPC.query(creature_type))
+
+        for id in force_include:
+            if id not in wowdb:
+                wowdb[id] = WowdbNPC(id)
+
+    if ns.wowhead:
+        print("LOADING FROM wowhead")
+        from npc.wowhead import WowheadNPC
         for categoryid, c in npctypes.items():
             print("ACQUIRING rares for category", categoryid, c)
             for expansion in range(1, 6):
                 print("EXPANSION", expansion)
                 # run per-expansion to avoid caps on results-displayed
-                defaults.update(npcclass.query(categoryid, expansion))
-    else:
-        sys.exit("No site chosen")
+                wowhead.update(WowheadNPC.query(categoryid, expansion))
 
-    for id in force_include:
-        if id not in defaults:
-            defaults[id] = npcclass(id)
+        for id in force_include:
+            if id not in wowhead:
+                wowhead[id] = WowheadNPC(id)
+
+    defaults = wowhead
+    for id, mob in wowdb.items():
+        if id in defaults:
+            defaults[id].extend(mob)
+        else:
+            defaults[id] = mob
 
     write_output("../Data/defaults.lua", defaults)
     print("Defaults written")

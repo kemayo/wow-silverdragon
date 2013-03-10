@@ -81,8 +81,8 @@ class WowheadNPC(NPC):
             for id, name in re.findall(r'"(\d+)":"([^"]+)"', match.group(1)):
                 if name in zonename_to_zoneid:
                     zone_map[int(id)] = zonename_to_zoneid[name]
-                else:
-                    print("Skipping zone translation", name)
+                # else:
+                #     print("Skipping zone translation", name)
         return zone_map.get(int(wowhead_zone), False)
 
     @staticmethod

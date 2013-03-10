@@ -77,6 +77,32 @@ class NPC:
     def _locations(self):
         pass
 
+    def extend(self, npc):
+        """Take the data from another NPC"""
+        if npc.id != self.id:
+            return
+        self.data['creature_type'] = npc.data['creature_type'] or self.data['creature_type']
+        self.data['elite'] = npc.data['elite'] or self.data['elite']
+        self.data['level'] = npc.data['level'] or self.data['level']
+        self.data['tameable'] = npc.data['tameable'] or self.data['tameable']
+        if self.data['locations']:
+            if npc.data['locations']:
+                for zone, coords in npc.data['locations'].items():
+                    if zone in self.data['locations']:
+                        for xy in coords:
+                            x, y = unpack_coords(xy)
+                            for oldxy in self.data['locations']:
+                                oldx, oldy = unpack_coords(oldxy)
+                                if abs(oldx - x) < 0.05 and abs(oldy - y) < 0.05:
+                                    break
+                            else:
+                                # list fully looped through, not broken.
+                                self.data['locations'][zone].append(xy)
+                    else:
+                        self.data['locations'][zone] = coords
+        else:
+            self.data['locations'] = npc.data['locations']
+
     def to_lua(self):
         clean_data = dict((k, v) for k, v in self.data.items() if v)
         return lua.serialize(clean_data)
