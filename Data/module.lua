@@ -43,7 +43,7 @@ function module:ImportMob(id, info)
 	gdb.mob_type[id] = BCTR[info.creature_type]
 	gdb.mob_tameable[id] = info.tameable
 	gdb.mob_elite[id] = info.elite
-	gdb.mob_notes[id] = info.note
+	gdb.mob_notes[id] = info.notes
 	if not gdb.mob_seen[id] then gdb.mob_seen[id] = 0 end
 	if not info.locations then
 		return
