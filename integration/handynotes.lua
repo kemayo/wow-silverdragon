@@ -38,7 +38,7 @@ function handler:OnEnter(mapFile, coord)
 	end
 	local zoneid = core.zoneid_from_mapfile(mapFile)
 	local id, name, _, level, elite, creature_type, lastseen = core:GetMobByCoord(zoneid, coord)
-	tooltip:AddLine(name)
+	tooltip:AddLine(core:GetMobLabel(id))
 	local display_level = level or '?'
 	if display_level == -1 then
 		display_level = 'Boss'
@@ -46,6 +46,7 @@ function handler:OnEnter(mapFile, coord)
 	local display_level = ("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or '')
 	tooltip:AddDoubleLine(display_level, creature_type or UNKNOWN)
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
+	tooltip:AddDoubleLine("ID", id)
 	tooltip:Show()
 end
 

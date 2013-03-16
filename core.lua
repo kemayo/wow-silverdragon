@@ -438,9 +438,10 @@ do
 	end
 
 	addon.zoneid_from_mapfile = function(mapfile)
-		return addon:CanonicalZoneId(mapfile_to_zoneid[mapfile:gsub("_terrain%d+$", "")])
+		return addon:CanonicalZoneId(mapfile_to_zoneid[mapfile]) -- :gsub("_terrain%d+$", "")
 	end
 	addon.mapfile_from_zoneid = function(zoneid)
 		return zoneid_to_mapfile[zoneid]
 	end
+	-- addon.mapfile_to_zoneid = mapfile_to_zoneid
 end
