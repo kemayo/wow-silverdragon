@@ -224,7 +224,7 @@ function module:UpdateNodes()
 			nodes[zone] = {}
 			for id, locs in pairs(mobs) do
 				for _, loc in ipairs(locs) do
-					nodes[zone][loc] = core.db.global.mob_name[id]
+					nodes[zone][loc] = core:GetMobLabel(id)
 				end
 			end
 		else

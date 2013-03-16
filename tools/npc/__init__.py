@@ -4,19 +4,6 @@ import math
 
 from . import lua
 
-name_overrides = {
-    50410: "Crumbled Statue Remnants",
-    51401: "Madexx (red)",
-    51402: "Madexx (green)",
-    51403: "Madexx (black)",
-    51404: "Madexx (blue)",
-    50154: "Madexx (brown)",
-    51236: "Aeonaxx (engaged)",
-    69769: "Zandalari Warbringer (Slate)",
-    69841: "Zandalari Warbringer (Amber)",
-    69842: "Zandalari Warbringer (Jade)",
-}
-
 types = {
     1: 'Beast',
     2: 'Dragonkin',
@@ -54,10 +41,7 @@ class NPC:
         return self.id
 
     def load(self):
-        if self.id in name_overrides:
-            self.data['name'] = name_overrides[self.id]
-        else:
-            self.data['name'] = self._name()
+        self.data['name'] = self._name()
         self.data['creature_type'] = self._creature_type()
         self.data['elite'] = self._elite()
         self.data['level'] = self._level()
@@ -102,6 +86,9 @@ class NPC:
                         self.data['locations'][zone] = coords
         else:
             self.data['locations'] = npc.data['locations']
+
+    def add_notes(self, notes):
+        self.data['notes'] = notes
 
     def to_lua(self):
         clean_data = dict((k, v) for k, v in self.data.items() if v)

@@ -50,8 +50,7 @@ function module:Update()
 	local macro = {}
 	for id in pairs(mobs) do
 		if core.db.global.mob_name[id] and not core.db.global.ignore[id] then
-			local name = core.db.global.mob_name[id]:gsub("%s+%(.-%)$", "")
-			table.insert(macro, "/targetexact "..name)
+			table.insert(macro, "/targetexact "..core.db.global.mob_name[id])
 		end
 	end
 	self.button:SetAttribute("macrotext", ("\n"):join(unpack(macro)))

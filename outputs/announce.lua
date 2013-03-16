@@ -230,7 +230,7 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, nam
 	if module.db.profile.sink_opts.sink20OutputSink == "LibToast-1.0" then
 		prefix = ""
 	end
-	module:Pour((prefix .. "%s%s (%s)"):format(name or UNKNOWN, dead and "... but it's dead" or '', source or ''))
+	module:Pour((prefix .. "%s%s (%s)"):format(core:GetMobLabel(id) or name or UNKNOWN, dead and "... but it's dead" or '', source or ''))
 end)
 
 function module:PlaySound(s)

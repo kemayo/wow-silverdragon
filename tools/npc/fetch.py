@@ -12,7 +12,7 @@ USER_AGENT = 'SilverDragon/%s +http://davidlynch.org' % __version__
 class Fetch:
     """A store for values by date, sqlite-backed"""
 
-    def __init__(self, storepath):
+    def __init__(self, storepath, cachetime = "+200 day"):
         """Initializes the store; creates tables if required
 
         storepath is the path to a sqlite database, and will be created
@@ -26,6 +26,8 @@ class Fetch:
         self.store.commit()
         c.close()
 
+        self.cachetime = cachetime
+
     def __call__(self, url, **kw):
         return self.get(url, **kw)
 
@@ -36,7 +38,7 @@ class Fetch:
         """
         if cached:
             c = self.store.cursor()
-            c.execute("""SELECT content FROM cache WHERE url = ? AND datetime(time, '+2 day') > datetime('now')""", (url,))
+            c.execute("""SELECT content FROM cache WHERE url = ? AND datetime(time, ?) > datetime('now')""", (url, self.cachetime))
             row = c.fetchone()
             c.close()
             if row:

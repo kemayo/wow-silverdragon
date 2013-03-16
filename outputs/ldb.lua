@@ -99,7 +99,7 @@ function module:SetupDataObject()
 			n = n + 1
 			local name, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
 			local cached = cache.already_cached[id]
-			tooltip:AddLine(name,
+			tooltip:AddLine(core:GetMobLabel(id) or UNKNOWN,
 				("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or ''),
 				BCT[creature_type],
 				count,
@@ -116,7 +116,7 @@ function module:SetupDataObject()
 			tooltip:AddHeader("Name", "Zone", "Coords", "When", "Source")
 			for i,rare in ipairs(rares_seen) do
 				tooltip:AddLine(
-					rare.name,
+					core:GetMobLabel(rare.id) or UNKNOWN,
 					GetMapNameByID(rare.zone),
 					(rare.x and rare.y) and (core.round(rare.x * 100, 1) .. ', ' .. core.round(rare.y * 100, 1)) or UNKNOWN,
 					core:FormatLastSeen(rare.when),

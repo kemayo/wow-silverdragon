@@ -39,6 +39,9 @@ function addon:OnInitialize()
 			mob_tameable = {
 				-- 132132 = nil
 			},
+			mob_notes = {
+				-- 132132 = "Jade"
+			},
 			mob_count = {
 				['*'] = 0,
 			},
@@ -221,6 +224,13 @@ function addon:GetMob(zone, id)
 		return 0, 0, false, UNKNOWN, nil, 0, nil, nil
 	end
 	return globaldb.mob_name[id], #globaldb.mobs_byzoneid[zone][id], globaldb.mob_level[id], globaldb.mob_elite[id], BCT[globaldb.mob_type[id]], globaldb.mob_seen[id], globaldb.mob_count[id], globaldb.mob_tameable[name]
+end
+
+function addon:GetMobLabel(id)
+	if not globaldb.mob_name[id] then
+		return
+	end
+	return globaldb.mob_name[id] .. (globaldb.mob_notes[id] and (" (" .. globaldb.mob_notes[id] .. ")") or "")
 end
 
 local faction = UnitFactionGroup("player")

@@ -10,7 +10,7 @@ local function removable_mob(id)
 		-- query the cache quickly, to know the name if we didn't already
 		cache.is_cached(id)
 	end
-	local name = core.db.global.mob_name[id]
+	local name = core:GetMobLabel(id)
 	return {
 		type = "execute",
 		name = (name or UNKNOWN) .. ' (id:'..tostring(id)..')',

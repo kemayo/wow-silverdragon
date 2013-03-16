@@ -52,7 +52,7 @@ local function is_cached(id)
 	if cache_tooltip:IsShown() then
 		local name = SDCacheTooltipTextLeft1:GetText()
 		globaldb.mob_id[name] = id
-		globaldb.mob_name[id] = globaldb.mob_name[id] or name
+		globaldb.mob_name[id] = name
 		return true
 	end
 end

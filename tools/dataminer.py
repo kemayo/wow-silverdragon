@@ -28,6 +28,18 @@ force_include = (
     69099, # Nalak
     69161, # Oondasta
 )
+notes = {
+    50410: "Crumbled Statue Remnants", # Mysterious Camel Figurine
+    51401: "Red", # Madexx
+    51402: "Green", # Madexx
+    51403: "Black", # Madexx
+    51404: "Blue", # Madexx
+    50154: "Brown", # Madexx
+    51236: "Engaged", # Aeonaxx
+    69769: "Slate", # Zandalari Warbringer
+    69841: "Amber", # Zandalari Warbringer
+    69842: "Jade", # Zandalari Warbringer
+}
 
 def write_output(filename, data, strip = False):
     with open(filename, 'w') as f:
@@ -40,6 +52,8 @@ function module:GetDefaults()
         for id, mob in sorted(data.items()):
             if id in blacklist:
                 continue
+            if id in notes:
+                mob.add_notes(notes[id])
             if (not strip) or mob.data['locations']:
                 f.write('\t\t[%d] = %s,\n' % (id, mob.to_lua()))
         f.write("""\t}

@@ -129,7 +129,6 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		local elite = core.db.global.mob_elite[id]
 		local creature_type = core.db.global.mob_type[id]
 		level = level or core.db.global.mob_level[id]
-		name = core.db.global.mob_name[id] or name -- preserve existing name if we have it, so that local overrides persist
 		newloc = core:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 	end
 
