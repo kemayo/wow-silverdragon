@@ -88,7 +88,7 @@ function module:ShowFrame()
 
 	self:ShowModel()
 
-	popup:SetText(name)
+	popup:SetText(core:GetMobLabel(id) or name or UNKNOWN)
 	popup.details:SetText(("%s%s %s"):format(level_text, elite and '+' or '', creature_type and BCT[creature_type] or ''))
 
 	local model = popup.model
