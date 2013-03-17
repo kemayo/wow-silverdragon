@@ -413,6 +413,8 @@ do
 		[873] = "TheHiddenPass",
 		[903] = "ShrineofTwoMoons",
 		[905] = "ShrineofSevenStars",
+		[928] = "IsleoftheThunderKing",
+		[929] = "IsleOfGiants",
 		-- starting zones
 		[889] = "ValleyofTrialsStart",
 	}
