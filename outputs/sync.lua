@@ -122,6 +122,9 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		return
 	end
 
+	-- We had one version which would include the " (Jade)" stuff in the syncs. Let's just strip that out.
+	name = name:gsub("%s+%(.-%)$", "")
+
 	local newloc = false
 
 	if self.db.profile.record and not core.db.global.mob_tameable[id] then
