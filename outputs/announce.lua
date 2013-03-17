@@ -35,6 +35,9 @@ local mount_mobs = {
 	[50062] = true, -- Aeonaxx
 	[50409] = true, -- Mysterious Camel
 	[64403] = true, -- Alani
+	[69769] = true, -- Zandalari Warbringer (Slate)
+	[69841] = true, -- Zandalari Warbringer (Amber)
+	[69842] = true, -- Zandalari Warbringer (Jade)
 }
 local boss_mobs = {
 	[50009] = true, -- Mobus
