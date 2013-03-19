@@ -427,7 +427,7 @@ do
 		local name = GetMapNameByID(zoneid)
 		if name then
 			SetMapByID(zoneid)
-			local mapfile = GetMapInfo()
+			local mapfile = (GetMapInfo()):gsub("_terrain%d+$", "")
 			if mapfile_to_zoneid[mapfile] then
 				Debug("Duplicate mapfile", mapfile, zoneid_to_mapfile[zoneid])
 			else
@@ -438,7 +438,7 @@ do
 	end
 
 	addon.zoneid_from_mapfile = function(mapfile)
-		return addon:CanonicalZoneId(mapfile_to_zoneid[mapfile]) -- :gsub("_terrain%d+$", "")
+		return addon:CanonicalZoneId(mapfile_to_zoneid[mapfile:gsub("_terrain%d+$", "")])
 	end
 	addon.mapfile_from_zoneid = function(zoneid)
 		return zoneid_to_mapfile[zoneid]
