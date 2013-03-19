@@ -38,7 +38,10 @@ function handler:OnEnter(mapFile, coord)
 	end
 	local zoneid = core.zoneid_from_mapfile(mapFile)
 	local id, name, _, level, elite, creature_type, lastseen = core:GetMobByCoord(zoneid, coord)
-	tooltip:AddLine(core:GetMobLabel(id))
+	tooltip:AddLine(name)
+	if core.db.global.mob_notes[id] then
+		tooltip:AddDoubleLine("Note", core.db.global.mob_notes[id])
+	end
 	local display_level = level or '?'
 	if display_level == -1 then
 		display_level = 'Boss'
