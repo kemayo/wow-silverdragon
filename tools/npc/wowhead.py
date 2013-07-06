@@ -72,10 +72,10 @@ class WowheadNPC(NPC):
         global zone_map
         if not zone_map:
             zone_map = {}
-            page = fetch("http://static.wowhead.com/js/locale_enus.js?250")
+            page = fetch("http://wowjs.zamimg.com/js/locale_enus.js?1372795457")
             if not page:
                 return
-            match = re.search(r"g_zones = ({[^}]+});", page)
+            match = re.search(r"g_zones\s*=\s*({[^}]+});", page)
             if not match:
                 return
             for id, name in re.findall(r'"(\d+)":"([^"]+)"', match.group(1)):
