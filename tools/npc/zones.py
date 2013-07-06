@@ -204,6 +204,7 @@ zonename_to_zoneid = {
     "Thousand Needles": 61,
     "Throne of the Four Winds": 773,
     "Throne of the Tides": 767,
+    "Throne of Thunder": 930,
     "Thunder Bluff": 362,
     "Tirisfal Glades": 20,
     "Tol Barad Peninsula": 709,
