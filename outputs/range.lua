@@ -67,6 +67,7 @@ end
 
 function module:OnEnable()
 	self:RegisterEvent("MINIMAP_UPDATE_ZOOM")
+	core.RegisterCallback(self, "ZoneChanged", "Update")
 	self:Update()
 end
 
