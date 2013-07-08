@@ -204,13 +204,20 @@ function module:Seen(callback, id, name, zone, ...)
 		return
 	end
 
-	local exp = core.guess_expansion(zone)
-	if exp and not self.db.profile.expansions[exp] then
+	if not self:CareAboutZone(zone) then
 		Debug("Skipping due to expansion", exp)
 		return
 	end
 
 	core.events:Fire("Announce", id, name, zone, ...)
+end
+
+function module:CareAboutZone(zone)
+	local exp = core.guess_expansion(zone)
+	if exp and not self.db.profile.expansions[exp] then
+		return
+	end
+	return true
 end
 
 core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, name, zone, x, y, dead, newloc, source)

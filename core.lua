@@ -265,6 +265,15 @@ function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source,
 	self.events:Fire("Seen", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 end
 
+function addon:ZoneContainsMobs(zone)
+	if not globaldb.mobs_byzoneid[zone] then
+		return
+	end
+	for id, locations in pairs(globaldb.mobs_byzoneid[zone]) do
+		return true
+	end
+end
+
 -- Returns id, addon:GetMob(zone, id)
 function addon:GetMobByCoord(zone, coord)
 	if not globaldb.mobs_byzoneid[zone] then return end
