@@ -91,6 +91,8 @@ function module:SetupDataObject()
 			return
 		end
 
+		local mod_tooltip = core:GetModule("Tooltip", true)
+
 		tooltip = LibQTip:Acquire("SilverDragonTooltip", 6, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT")
 		tooltip:AddHeader("Name", "Level", "Type", "Count", "Last Seen")
 		
@@ -99,13 +101,23 @@ function module:SetupDataObject()
 			n = n + 1
 			local name, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
 			local cached = cache.already_cached[id]
-			tooltip:AddLine(core:GetMobLabel(id) or UNKNOWN,
+			local index = tooltip:AddLine(core:GetMobLabel(id) or UNKNOWN,
 				("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or ''),
 				BCT[creature_type],
 				count,
 				core:FormatLastSeen(lastseen),
 				(tameable and 'Tameable' or '') .. ((tameable and cached) and ', ' or '') .. (cached and 'Cached' or '')
 			)
+			if mod_tooltip then
+				local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
+				if achievement then
+					if completed then
+						tooltip:SetLineColor(index, 0, 1, 0)
+					else
+						tooltip:SetLineColor(index, 1, 0, 0)
+					end
+				end
+			end
 		end
 		if n == 0 then
 			tooltip:AddLine("None")

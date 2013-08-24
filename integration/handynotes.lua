@@ -50,6 +50,16 @@ function handler:OnEnter(mapFile, coord)
 	tooltip:AddDoubleLine(display_level, creature_type or UNKNOWN)
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
 	tooltip:AddDoubleLine("ID", id)
+	local mod_tooltip = core:GetModule("Tooltip", true)
+	if mod_tooltip then
+		local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
+		if achievement then
+			tooltip:AddDoubleLine(achievement_name, completed and ACTION_PARTY_KILL or NEED,
+				1, 1, 0,
+				completed and 0 or 1, completed and 1 or 0, 0
+			)
+		end
+	end
 	tooltip:Show()
 end
 
