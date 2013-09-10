@@ -7,6 +7,7 @@ local achievements = {
 	[2257] = {}, -- Frostbitten (Wrath mobs)
 	[7439] = {}, -- Glorious! (Pandaria mobs)
 	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
+	[8714] = {}, -- Timeless Champion (Timeless Isle)
 }
 local mobs_to_achievement = {
 	-- [43819] = 2257,

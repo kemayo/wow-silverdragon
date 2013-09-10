@@ -167,6 +167,7 @@ zonename_to_zoneid = {
     "Temple of the Jade Serpent": 867,
     "Terokkar Forest": 478,
     "Terrace of Endless Spring": 886,
+    "Timeless Isle": 951,
     "The Arcatraz": 731,
     "The Bastion of Twilight": 758,
     "The Battle for Gilneas (Old City Map)": 677,

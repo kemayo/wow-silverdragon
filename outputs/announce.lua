@@ -422,6 +422,7 @@ do
 		[905] = "ShrineofSevenStars",
 		[928] = "IsleoftheThunderKing",
 		[929] = "IsleOfGiants",
+		[951] = "TimelessIsle",
 		-- starting zones
 		[889] = "ValleyofTrialsStart",
 	}

@@ -19,8 +19,9 @@ types = {
 }
 
 class NPC:
-    def __init__(self, id, fetch = True):
+    def __init__(self, id, fetch = True, ptr = False):
         self.id = int(id)
+        self.ptr = ptr
         self.data = {}
         if fetch:
             self.load()

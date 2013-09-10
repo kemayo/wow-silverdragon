@@ -1,4 +1,4 @@
-﻿## Interface: 50300
+﻿## Interface: 50400
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
@@ -9,11 +9,11 @@
 ## eMail: kemayo at gmail dot com
 ## X-Category: Interface Enhancements
 ## X-Donate: PayPal:kemayo AT gmail DOT com
-## OptionalDependencies: Ace3, LibBabble-CreatureType-3.0, LibSharedMedia-3.0, HandyNotes, _NPCScan.Overlay, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, LibToast-1.0, tekDebug, ChatThrottleLib
+## OptionalDependencies: Ace3, LibBabble-CreatureType-3.0, LibSharedMedia-3.0, HandyNotes, _NPCScan.Overlay, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, LibToast-1.0, tekDebug, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets
 ## SavedVariables: SilverDragon2DB
 ## LoadOnDemand: 0
 
-## X-Embeds: Ace3, LibSink-2.0, LibBabble-CreatureType-3.0, LibSharedMedia-3.0, LibToast-1.0, ChatThrottleLib
+## X-Embeds: Ace3, LibSink-2.0, LibBabble-CreatureType-3.0, LibSharedMedia-3.0, LibToast-1.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets
 
 #@no-lib-strip@
 lib\LibStub\LibStub.lua
@@ -46,6 +46,7 @@ scan\targets.lua
 scan\nameplates.lua
 scan\cache.lua
 scan\macro.lua
+scan\vignettes.lua
 
 # optional bits
 outputs\tooltip.lua

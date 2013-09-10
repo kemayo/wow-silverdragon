@@ -8,6 +8,7 @@ from . import NPC, types, pack_coords
 from .zones import zonename_to_zoneid
 
 WOWHEAD_URL = 'http://www.wowhead.com'
+WOWHEAD_URL_PTR = 'http://ptr.wowhead.com'
 
 fetch = Fetch("wowhead.db")
 
@@ -15,7 +16,7 @@ zone_map = False
 
 class WowheadNPC(NPC):
     def __page(self):
-        return fetch('%s/npc=%d' % (WOWHEAD_URL, self.id))
+        return fetch('%s/npc=%d' % (self.ptr and WOWHEAD_URL_PTR or WOWHEAD_URL, self.id))
 
     def _name(self):
         info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: '(.+?)'};", self.__page())
@@ -86,15 +87,15 @@ class WowheadNPC(NPC):
         return zone_map.get(int(wowhead_zone), False)
 
     @staticmethod
-    def query(categoryid, expansion):
-        url = "%s/npcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (WOWHEAD_URL, categoryid, expansion)
+    def query(categoryid, expansion, ptr = False):
+        url = "%s/npcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (ptr and WOWHEAD_URL_PTR or WOWHEAD_URL, categoryid, expansion)
 
         page = fetch(url)
         match = re.search(r'new Listview\({[^{]+?data: \[(.+?)\]}\);\n', page)
         if not match:
             return {}
         npcs = {}
-        for npc in (WowheadNPC(id) for id in re.findall(r'"id":(\d+)', match.group(1))):
+        for npc in (WowheadNPC(id, ptr=ptr) for id in re.findall(r'"id":(\d+)', match.group(1))):
             print(npc)
             npcs[npc.id] = npc
         return npcs
