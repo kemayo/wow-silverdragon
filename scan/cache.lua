@@ -11,6 +11,7 @@ function module:OnInitialize()
 			enabled = true,
 			tameable = false,
 			location = false,
+			always_achievement = true,
 		},
 	})
 
@@ -26,6 +27,7 @@ function module:OnInitialize()
 					enabled = config.toggle("Enabled", "Scan the mob cache for never-before-found mobs.", 10),
 					tameable = config.toggle("Special treatment for hunter pets", "Tameable mobs can show up absolutely anywhere, and we can't tell whether they're owned by a hunter or not. Checking this will perform extra scanning to look for hunter pets being added to the cache outside of their normal zones, so we can avoid notifying you of them when we later enter the correct zone. Unchecking this means we use appreciably less CPU.", 20),
 					location = config.toggle("Record location on cache hit", "Record the mob's location when the cache triggers for it. If this isn't set, it'll wait until you target it and are within interaction range to store the location.", 30),
+					always_achievement = config.toggle("Always look for achievement mobs", "Without running an import, we can look for achievement mobs always... but we don't know what zone they're in, so we have to look a bit inefficiently.", 40),
 				},
 			},
 		}
@@ -70,6 +72,12 @@ function module:Scan(callback, zone)
 		self:ScanMobsInTable(globaldb.mob_tameable, zone)
 	end
 	self:ScanMobsInTable(first_cachescan and globaldb.mob_name or globaldb.mobs_byzoneid[zone], zone)
+	if self.db.profile.always_achievement then
+		local tooltip = core:GetModule("Tooltip", true)
+		if tooltip then
+			self:ScanMobsInTable(tooltip.mobs_to_achievement)
+		end
+	end
 	self:ScanMobsInTable(globaldb.always, zone)
 	first_cachescan = false
 end
