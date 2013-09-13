@@ -271,10 +271,10 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id)
 		return
 	end
 	local soundfile, loops
-	if mount_mobs[id] then
+	if module.db.profile.sound_mount and mount_mobs[id] then
 		soundfile = module.db.profile.soundfile_mount
 		loops = module.db.profile.sound_mount_loop
-	elseif boss_mobs[id] then
+	elseif module.db.profile.sound_boss and boss_mobs[id] then
 		soundfile = module.db.profile.soundfile_boss
 		loops = module.db.profile.sound_boss_loop
 	else
