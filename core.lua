@@ -429,7 +429,7 @@ end
 do
 	-- need to set up a mapfile-to-mapid mapping
 	-- for: imports, and map notes addons
-	local MAX_MAPFILE = 950
+	local MAX_MAPFILE = 1000
 	local mapfile_to_zoneid = {}
 	local zoneid_to_mapfile = {}
 	for zoneid = 1, MAX_MAPFILE do
