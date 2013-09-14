@@ -67,6 +67,7 @@ function module:OnInitialize()
 			sound_boss_loop = 1,
 			flash = true,
 			instances = true,
+			dead = true,
 			expansions = {
 				classic = true,
 				bc = true,
@@ -112,6 +113,7 @@ function module:OnInitialize()
 				order = 10,
 				get = get, set = set,
 				args = {
+					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not, so this isn't entirely reliable."),
 					flash = toggle("Flash", "Flash the edges of the screen."),
 					instances = toggle("Instances", "Show announcements while in an instance"),
 				},
@@ -197,10 +199,14 @@ function module:OnInitialize()
 	end
 end
 
-function module:Seen(callback, id, name, zone, ...)
-	Debug("Announce:Seen", id, name, zone, ...)
+function module:Seen(callback, id, name, zone, x, y, is_dead, ...)
+	Debug("Announce:Seen", id, name, zone, x, y, is_dead, ...)
 
 	if not self.db.profile.instances and IsInInstance() then
+		return
+	end
+
+	if is_dead and not self.db.profile.dead then
 		return
 	end
 
@@ -209,7 +215,7 @@ function module:Seen(callback, id, name, zone, ...)
 		return
 	end
 
-	core.events:Fire("Announce", id, name, zone, ...)
+	core.events:Fire("Announce", id, name, zone, x, y, is_dead, ...)
 end
 
 function module:CareAboutZone(zone)
