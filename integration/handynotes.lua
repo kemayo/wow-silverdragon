@@ -13,12 +13,25 @@ module.nodes = nodes
 
 local handler = {}
 do
+	local function should_show_mob(id)
+		local mod_tooltip = core:GetModule("Tooltip", true)
+		if not mod_tooltip then
+			return true
+		end
+		local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
+		if achievement then
+			return not completed or module.db.profile.achieved
+		end
+		return module.db.profile.achievementless
+	end
 	local function iter(t, prestate)
 		if not t then return nil end
 		local state, value = next(t, prestate)
 		while state do
 			if value then
-				return state, nil, icon, db.icon_scale, db.icon_alpha
+				if should_show_mob(value) then
+					return state, nil, icon, db.icon_scale, db.icon_alpha
+				end
 			end
 			state, value = next(t, state)
 		end
@@ -180,6 +193,8 @@ function module:OnInitialize()
 		profile = {
 			icon_scale = 1.0,
 			icon_alpha = 1.0,
+			achieved = true,
+			achievementless = true,
 		},
 	})
 	db = self.db.profile
@@ -198,13 +213,27 @@ function module:OnInitialize()
 				type = "description",
 				order = 0,
 			},
+			achieved = {
+				type = "toggle",
+				name = "Show achieved",
+				desc = "Whether to show icons for mobs you have already killed (tested by whether you've got their achievement progress)",
+				arg = "achieved",
+				order = 10,
+			},
+			achievementless = {
+				type = "toggle",
+				name = "Show non-achievement mobs",
+				desc = "Whether to show icons for mobs which aren't part of the criteria for any known achievement",
+				arg = "achievementless",
+				order = 10,
+			},
 			icon_scale = {
 				type = "range",
 				name = "Icon Scale",
 				desc = "The scale of the icons",
 				min = 0.25, max = 2, step = 0.01,
 				arg = "icon_scale",
-				order = 10,
+				order = 20,
 			},
 			icon_alpha = {
 				type = "range",
@@ -212,7 +241,7 @@ function module:OnInitialize()
 				desc = "The alpha transparency of the icons",
 				min = 0, max = 1, step = 0.01,
 				arg = "icon_alpha",
-				order = 20,
+				order = 30,
 			},
 		},
 	})
@@ -232,13 +261,14 @@ end
 core.RegisterCallback(module, "Seen")
 
 function module:UpdateNodes()
+	wipe(nodes)
 	for zone, mobs in pairs(core.db.global.mobs_byzoneid) do
 		local mapFile = core.mapfile_from_zoneid(zone)
 		if mapFile then
 			nodes[zone] = {}
 			for id, locs in pairs(mobs) do
 				for _, loc in ipairs(locs) do
-					nodes[zone][loc] = core:GetMobLabel(id)
+					nodes[zone][loc] = id
 				end
 			end
 		else
