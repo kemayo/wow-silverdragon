@@ -342,13 +342,16 @@ end
 
 function addon:FormatLastSeen(t)
 	t = tonumber(t)
-	if not t or t == 0 then return 'Never' end
+	if not t or t == 0 then return NEVER end
 	local currentTime = time()
-	local minutes = math.ceil((currentTime - t) / 60)
+	local minutes = math.floor((currentTime - t) / 60)
+	if minutes == 0 then
+		return "Now"
+	end
 	if minutes > 59 then
-		local hours = math.ceil((currentTime - t) / 3600)
+		local hours = math.floor((currentTime - t) / 3600)
 		if hours > 23 then
-			return math.ceil((currentTime - t) / 86400).." day(s)"
+			return math.floor((currentTime - t) / 86400).." day(s)"
 		else
 			return hours.." hour(s)"
 		end
