@@ -8,6 +8,7 @@ function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("ClickTarget", {
 		profile = {
 			show = true,
+			locked = true,
 			model = true,
 			camera = 0,
 			sources = {
@@ -36,6 +37,7 @@ function module:OnInitialize()
 				args = {
 					about = config.desc("Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it. It can show a 3d model of that rare, but only if we already know the ID of the rare (though a data import), or if it was found by being targetted. Nameplates are right out.", 0),
 					show = config.toggle("Show", "Show the click-target frame.", 10),
+					locked = config.toggle("Locked", "Lock the click-target frame in place unless ALT is held down", 15),
 					model = config.toggle("Model", "Show a 3d model of the rare, if possible.", 20),
 					sources = {
 						type="multiselect",
@@ -279,7 +281,6 @@ pulse_out:SetSmoothing("NONE")
 pulse_out:SetOrder(2)
 
 animation:SetScript("OnLoop", function(frame, state)
-	Debug("OnLoop", state)
 	loops = loops + 1
 	if loops == 3 then
 		loops = 0
@@ -291,9 +292,11 @@ popup:SetAttribute("type", "macro")
 
 local on_enter = function()
 	popup:SetBackdropBorderColor(1, 1, 0.15)
-	if not IsAltKeyDown() then
+	if module.db.profile.locked and not IsAltKeyDown() then
 		-- alt-tabbing screws this up, so play it safe
 		module:ToggleDrag(false)
+	else
+		module:ToggleDrag(true)
 	end
 end
 local on_leave = function() popup:SetBackdropBorderColor(0.7, 0.15, 0.05) end
