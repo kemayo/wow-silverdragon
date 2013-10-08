@@ -198,7 +198,8 @@ function module:OnInitialize()
 		},
 	})
 	db = self.db.profile
-	HandyNotes:RegisterPluginDB("SilverDragon", handler, {
+
+	local options = {
 		type = "group",
 		name = "SilverDragon",
 		desc = "Where the rares are",
@@ -244,7 +245,22 @@ function module:OnInitialize()
 				order = 30,
 			},
 		},
-	})
+	}
+
+	local config = core:GetModule("Config", true)
+	if config then
+		config.options.args.addons.plugins.handynotes = {
+			handynotes = {
+				type = "group",
+				name = "HandyNotes",
+				get = options.get,
+				set = options.set,
+				args = options.args,
+			},
+		}
+	end
+
+	HandyNotes:RegisterPluginDB("SilverDragon", handler, options)
 	self:UpdateNodes()
 end
 
