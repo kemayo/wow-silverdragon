@@ -63,7 +63,7 @@ function module:Seen_Raw(callback, id, name, zone, x, y, dead, newloc, source, u
 	if IsInGroup() and self.db.profile.safely then
 		return
 	end
-	if GetRaidTargetIndex(unit) then
+	if GetRaidTargetIndex(unit) or UnitIsDeadOrGhost(unit) then
 		return
 	end
 	SetRaidTarget(unit, self.db.profile.marker)
