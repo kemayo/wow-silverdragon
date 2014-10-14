@@ -14,10 +14,11 @@ function module:OnInitialize()
 			sources = {
 				target = false,
 				grouptarget = true,
-				cache = true,
 				mouseover = true,
 				nameplate = true,
-				sync = false,
+				vignette = true,
+				groupsync = true,
+				guildsync = false,
 				fake = true,
 			},
 		},
@@ -50,8 +51,9 @@ function module:OnInitialize()
 							grouptarget = "Group targets",
 							mouseover = "Mouseover",
 							nameplate = "Nameplates",
-							cache = "Unit cache",
-							sync = "Sync",
+							vignette = "Vignettes",
+							groupsync = "Group Sync",
+							guildsync = "Guild Sync",
 						},
 					},
 					camera = {
@@ -146,7 +148,12 @@ end
 
 function module:Announce(callback, id, name, zone, x, y, dead, newloc, source, unit)
 	if source:match("^sync") then
-		source = "sync"
+		local channel, player = source:match("sync:(.+):(.+)")
+		if channel == "GUILD" then
+			source = "guildsync"
+		else
+			source = "groupsync"
+		end
 	end
 	if not self.db.profile.sources[source] then
 		return
@@ -284,7 +291,7 @@ animation:SetScript("OnLoop", function(frame, state)
 	loops = loops + 1
 	if loops == 3 then
 		loops = 0
-		animation:Stop()
+		animation:Finish()
 	end
 end)
 
