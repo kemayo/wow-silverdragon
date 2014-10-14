@@ -5,11 +5,7 @@ local Debug = core.Debug
 local desc, toggle
 
 local function removable_mob(id)
-	local cache = core:GetModule("Scan_Cache", true)
-	if cache then
-		-- query the cache quickly, to know the name if we didn't already
-		cache.is_cached(id)
-	end
+	core:RequestCacheForMob(id)
 	local name = core:GetMobLabel(id)
 	return {
 		type = "execute",

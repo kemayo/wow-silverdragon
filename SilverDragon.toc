@@ -44,7 +44,6 @@ config.lua
 
 scan\targets.lua
 scan\nameplates.lua
-scan\cache.lua
 scan\macro.lua
 scan\vignettes.lua
 
@@ -55,7 +54,6 @@ outputs\announce.lua
 outputs\clicktarget.lua
 outputs\sync.lua
 outputs\marker.lua
-outputs\range.lua
 
 mobs.lua
 

@@ -45,9 +45,8 @@ local options = {
 						"If you want SilverDragon to please, please stop telling you about a certain "..
 						"mob, look at \"Ignore\" in the \"Mobs\" section.\n\n"..
 						"If you think SilverDragon hasn't told you about a rare that it should have, "..
-						"make sure that (a) you've imported the bundled rares in the \"Mobs\", and (b) "..
-						"you've cleared your mob cache by quitting WoW and deleting Cache\\WDB\\enUS\\creaturecache.wdb "..
-						"from your WoW install directory. Check the website you downloaded SilverDragon from "..
+						"make sure that you've imported the bundled rares in the \"Mobs\" section."..
+						"Check the website you downloaded SilverDragon from "..
 						"for more detailed instructions if you need help with that."),
 			},
 			order = 0,

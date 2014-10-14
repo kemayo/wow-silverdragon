@@ -149,17 +149,33 @@ local horde_ignore_mobs = { --Mobs horde cannot kill
 	[68320] = true,--Ubunti the Shade (Krasarang)
 }
 
+local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip")
+cache_tooltip:AddFontStrings(
+	cache_tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"),
+	cache_tooltip:CreateFontString("$parentTextRight1", nil, "GameTooltipText")
+)
+function addon:RequestCacheForMob(id)
+	-- this doesn't work with just clearlines and the setowner outside of this, and I'm not sure why
+	cache_tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
+	cache_tooltip:SetHyperlink(("unit:Creature:0:0:0:0:%d"):format(id))
+	if cache_tooltip:IsShown() then
+		local name = SDCacheTooltipTextLeft1:GetText()
+		globaldb.mob_id[name] = id
+		globaldb.mob_name[id] = name
+	end
+end
+
 local valid_unit_types = {
-	[0x003] = true, -- npcs
-	[0x005] = true, -- vehicles
+	Creature = true, -- npcs
+	Vehicle = true, -- vehicles
 }
 local function npc_id_from_guid(guid)
 	if not guid then return end
-	local unit_type = bit.band(tonumber("0x"..strsub(guid, 3, 5)), 0x00f)
-	if not valid_unit_types[unit_type] then
-		return
-	end
-	return tonumber("0x"..strsub(guid, 6, 10))
+	local unit_type, id = guid:match("(%a+)-%d+-%d+-%d+-%d+-(%d+)-.+")
+	if not (unit_type and valid_unit_types[unit_type]) then
+ 		return
+ 	end
+	return tonumber(id)
 end
 function addon:UnitID(unit)
 	return npc_id_from_guid(UnitGUID(unit))
@@ -182,6 +198,7 @@ local elite_types = {
 	rareelite = true,
 	worldboss = true,
 }
+
 function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 	Debug("SaveMob", id, name, zone, x, y, level, elite, creature_type)
 	if not id then return end
@@ -203,7 +220,7 @@ function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 	globaldb.mob_type[id] = BCTR[creature_type]
 	globaldb.mob_name[id] = name
 	globaldb.mob_id[name] = id
-
+	
 	if not (zone and x and y and x > 0 and y > 0) then
 		return
 	end
@@ -330,9 +347,9 @@ end
 -- Scanning:
 
 function addon:CheckNearby()
+	if (not self.db.profile.instances) and IsInInstance() then return end
 	local zone = self:GetPlayerZone()
 	if not zone then return end
-	if (not self.db.profile.instances) and IsInInstance() then return end
 
 	self.events:Fire("Scan", zone)
 end
