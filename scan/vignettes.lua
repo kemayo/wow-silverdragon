@@ -34,14 +34,22 @@ function module:OnEnable()
 	self:RegisterEvent("VIGNETTE_ADDED")
 end
 
+local already_notified = {}
 function module:VIGNETTE_ADDED(event, instanceid, mysterious_number)
 	if not instanceid then
 		-- ...just in case
+		Debug("No Vignette instanceid")
 		return
 	end
+	if already_notified[instanceid] then
+		Debug("Skipping notify", "already done", id)
+		return
+	end
+	already_notified[instanceid] = true
 	local x, y, name, iconid = C_Vignettes.GetVignetteInfoFromInstanceID(instanceid)
 	-- iconid seems to be 40:chests, 41:mobs
 	if not name then
+		Debug("Vignette instanceid bug hit", instanceid)
 		return
 	end
 	if globaldb.mob_id[name] then
@@ -51,13 +59,7 @@ function module:VIGNETTE_ADDED(event, instanceid, mysterious_number)
 	end
 end
 
-local already_notified = {}
 function module:NotifyIfNeeded(id)
-	if already_notified[id] then
-		Debug("Skipping notify", "already done", id)
-		return
-	end
-	already_notified[id] = true
 	local current_zone, x, y = core:GetPlayerLocation()
 	local newloc = false
 	if self.db.profile.location and not globaldb.mob_tameable[id] then
@@ -69,5 +71,5 @@ function module:NotifyIfNeeded(id)
 		local name = globaldb.mob_name[id]
 		newloc = core:SaveMob(id, name, current_zone, x, y, level, elite, creature_type)
 	end
-	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, newloc, "vignette", false)
+	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, newloc, "vignette", false, nil, true)
 end

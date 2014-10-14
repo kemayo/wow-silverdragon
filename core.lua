@@ -9,6 +9,12 @@ local debugf = tekDebug and tekDebug:GetFrame("SilverDragon")
 local function Debug(...) if debugf then debugf:AddMessage(string.join(", ", tostringall(...))) end end
 addon.Debug = Debug
 
+local mfloor, mpow, mabs = math.floor, math.pow, math.abs
+local tinsert, tremove = table.insert, table.remove
+local ipairs, pairs = ipairs, pairs
+local IsInInstance, GetCurrentMapAreaID, SetMapByID, SetMapToCurrentZone = IsInInstance, GetCurrentMapAreaID, SetMapByID, SetMapToCurrentZone
+local wowVersion, buildRevision, _, buildTOC = GetBuildInfo()
+
 local globaldb
 function addon:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("SilverDragon2DB", {
@@ -206,14 +212,14 @@ function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 	local newloc = true
 	for _, coord in ipairs(globaldb.mobs_byzoneid[zone][id]) do
 		local loc_x, loc_y = self:GetXY(coord)
-		if (math.abs(loc_x - x) < 0.03) and (math.abs(loc_y - y) < 0.03) then
+		if (mabs(loc_x - x) < 0.03) and (mabs(loc_y - y) < 0.03) then
 			-- We've seen it close to here before. (within 3% of the zone)
 			newloc = false
 			break
 		end
 	end
 	if newloc then
-		table.insert(globaldb.mobs_byzoneid[zone][id], self:GetCoord(x, y))
+		tinsert(globaldb.mobs_byzoneid[zone][id], self:GetCoord(x, y))
 	end
 	return newloc
 end
@@ -234,34 +240,31 @@ function addon:GetMobLabel(id)
 end
 
 local faction = UnitFactionGroup("player")
-function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit, silent)
+function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit, silent, force)
 	self.events:Fire("Seen_Raw", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 
 	if silent then
 		Debug("Skipping notification: silent call", id, name)
 		return
 	end
+	--Maybe add an option for this later. This checks unit faction and ignores mobs your faction cannot do anything with.
+	if faction == "Alliance" and alliance_ignore_mobs[id] or faction == "Horde" and horde_ignore_mobs[id] then
+		return
+	end
 	if globaldb.ignore[id] then
 		Debug("Skipping notification: ignored", id, name)
 		return
 	end
-	--Maybe add an option for this later. This checks unit faction and ignores mobs your faction cannot do anything with.
-	if faction == "Alliance" and alliance_ignore_mobs[id] or faction == "Horde" and horde_ignore_mobs[id] then
-		Debug("Skipping notification: faction ignore", id, name)
-		return
-	end
-	if lastseen[id] and time() < lastseen[id] + self.db.profile.delay then
-		Debug("Skipping notification: seen", id, name, lastseen[id], time() - self.db.profile.delay)
+	if not force and lastseen[id..zone] and time() < lastseen[id..zone] + self.db.profile.delay then
+		Debug("Skipping notification: seen", id, name, lastseen[id..zone], time() - self.db.profile.delay)
 		return
 	end
 	if (not self.db.profile.taxi) and UnitOnTaxi('player') then
 		Debug("Skipping notification: taxi", id, name)
 		return
 	end
-
 	globaldb.mob_count[id] = globaldb.mob_count[id] + 1
-	lastseen[id] = time()
-
+	lastseen[id..zone] = time()
 	self.events:Fire("Seen", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 end
 
@@ -290,7 +293,7 @@ function addon:DeleteMobCoord(zone, id, coord)
 	if not globaldb.mobs_byzoneid[zone] and globaldb.mobs_byzoneid[zone][id] then return end
 	for i, mob_coord in ipairs(globaldb.mobs_byzoneid[zone][id]) do
 		if coord == mob_coord then
-			table.remove(globaldb.mobs_byzoneid[zone][id], i)
+			tremove(globaldb.mobs_byzoneid[zone][id], i)
 			return
 		end
 	end
