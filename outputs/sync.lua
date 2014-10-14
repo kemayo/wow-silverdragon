@@ -68,10 +68,14 @@ function module:Seen(callback, id, name, zone, x, y, dead, newloc, source, unit)
 	if IsInGuild() and not IsInInstance() then
 		SAM("GUILD", "seen", id, name, zone, level, x, y)
 	end
-	if IsInRaid() then
-		SAM("RAID", "seen", id, name, zone, level, x, y)
-	elseif GetNumGroupMembers() > 0 then
-		SAM("PARTY", "seen", id, name, zone, level, x, y)
+	if IsInGroup(LE_PARTY_CATEGORY_HOME) then--Don't send syncs to INSTANCE_CHAT party/raids (ie LFR/LFG)
+		if IsInRaid() then
+			SAM("RAID", "seen", id, name, zone, level, x, y)
+		else
+			SAM("PARTY", "seen", id, name, zone, level, x, y)
+		end
+	elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and IsInInstance() then
+		SAM("INSTANCE_CHAT", "seen", id, name, zone, level, x, y)
 	end
 end
 
@@ -80,6 +84,7 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if prefix ~= "SilverDragon" or sender == UnitName("player") then
 		return
 	end
+	sender = Ambiguate(sender, "none")
 	if channel == "GUILD" and not self.db.profile.guild then
 		return
 	end
@@ -126,7 +131,7 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	name = name:gsub("%s+%(.-%)$", "")
 
 	local newloc = false
-
+	
 	if self.db.profile.record and not core.db.global.mob_tameable[id] then
 		-- two bits that aren't in the sync, so preserve existing values
 		local elite = core.db.global.mob_elite[id]
