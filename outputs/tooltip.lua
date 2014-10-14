@@ -8,6 +8,8 @@ local achievements = {
 	[7439] = {}, -- Glorious! (Pandaria mobs)
 	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
 	[8714] = {}, -- Timeless Champion (Timeless Isle)
+	[7317] = {}, -- One Many Army (Vale)
+	
 }
 local mobs_to_achievement = {
 	-- [43819] = 2257,
@@ -45,6 +47,20 @@ function module:OnInitialize()
 	end
 end
 
+function module:AchievementMobStatus(id)
+	if not achievements_loaded then
+		self:LoadAllAchievementMobs()
+	end
+	local achievement = mobs_to_achievement[id]
+	if not achievement then
+		return
+	end
+	local criteria = achievements[achievement][id]
+	local _, name = GetAchievementInfo(achievement)
+	local _, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
+	return achievement, name, completed
+end
+
 function module:OnEnable()
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 end
@@ -70,20 +86,6 @@ function module:LoadAchievementMobs(achievement)
 			achievements_loaded = true
 		end
 	end
-end
-
-function module:AchievementMobStatus(id)
-	if not achievements_loaded then
-		self:LoadAllAchievementMobs()
-	end
-	local achievement = mobs_to_achievement[id]
-	if not achievement then
-		return
-	end
-	local criteria = achievements[achievement][id]
-	local _, name = GetAchievementInfo(achievement)
-	local _, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
-	return achievement, name, completed
 end
 
 function module:UPDATE_MOUSEOVER_UNIT()
