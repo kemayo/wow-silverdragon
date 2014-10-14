@@ -3,6 +3,7 @@ local module = core:NewModule("Scan_Targets", "AceEvent-3.0")
 local Debug = core.Debug
 
 local globaldb
+local UnitExists, UnitIsVisible, UnitPlayerControled, UnitName, UnitLevel, UnitCreatureType, UnitGUID = UnitExists, UnitIsVisible, UnitPlayerControled, UnitName, UnitLevel, UnitCreatureType, UnitGUID
 function module:OnInitialize()
 	globaldb = core.db.global
 
@@ -55,13 +56,26 @@ function module:Scan(callback, zone)
 	end
 end
 
+--Rares not actually flagged as rare
+local rare_nonflags = {
+	[3868] = true, -- Blood Seeker
+	[50009] = true, -- Mobus
+	[50056] = true, -- Garr
+	[50061] = true, -- Xariona
+	[50063] = true, -- Akma'hat
+	[50089] = true, -- Julak-Doom
+	[58336] = true, -- Darkmoon Rabbit
+	[62346] = true, -- Galleon
+	[69161] = true, -- Oondasta
+}
+
 function module:ProcessUnit(unit, source)
 	if not UnitExists(unit) then return end
 	if not UnitIsVisible(unit) then return end
 	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
 	local unittype = UnitClassification(unit)
 	local id = core:UnitID(unit)
-	if id and (globaldb.always[id] or (unittype == 'rare' or unittype == 'rareelite')) then
+	if id and (globaldb.always[id] or rare_nonflags[id] or (unittype == 'rare' or unittype == 'rareelite')) then
 		-- from this point on, it's a rare
 		local zone, x, y = core:GetPlayerLocation()
 		if not zone then return end -- there are only a few places where this will happen
@@ -69,6 +83,7 @@ function module:ProcessUnit(unit, source)
 		local name = UnitName(unit)
 		local level = (UnitLevel(unit) or -1)
 		local creature_type = UnitCreatureType(unit)
+		local guid = UnitGUID(unit) or 0
 
 		local newloc
 		if CheckInteractDistance(unit, 4) then
