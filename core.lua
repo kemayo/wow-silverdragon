@@ -51,13 +51,13 @@ function addon:OnInitialize()
 			mob_count = {
 				['*'] = 0,
 			},
-			always = {},
+			always = {
+			},
 			ignore = {
-				[32435] = true, -- Vern!
+				[32435] = true, -- Vern
 				[64403] = true, -- Alani
-				[60491] = true, -- Sha of Anger
-				[62346] = true, -- Galleon (depends on if they make his new 5.2 spawn rate very common)
-				[69099] = true, -- Nalak (the next not so rare, rare world boss?)
+				[62346] = true, -- Galleon (spawns every 2 hourish)
+--				[62346] = true, -- Oondasta (spawns every 2 hoursish now)
 				--Throne of Thunder Weekly bosses
 				[70243] = true,--Agony and Anima (Archritualist Kelada)
 				[70238] = true,--Eyes of the Thunder King
@@ -71,7 +71,7 @@ function addon:OnInitialize()
 		},
 		profile = {
 			scan = 1, -- scan interval, 0 for never
-			delay = 600, -- number of seconds to wait between recording the same mob
+			delay = 1200, -- number of seconds to wait between recording the same mob
 			instances = false,
 			taxi = true,
 		},
@@ -357,21 +357,18 @@ end
 -- Utility:
 
 addon.round = function(num, precision)
-	return math.floor(num * math.pow(10, precision) + 0.5) / math.pow(10, precision)
+	return mfloor(num * mpow(10, precision) + 0.5) / mpow(10, precision)
 end
 
 function addon:FormatLastSeen(t)
 	t = tonumber(t)
 	if not t or t == 0 then return NEVER end
 	local currentTime = time()
-	local minutes = math.floor((currentTime - t) / 60)
-	if minutes == 0 then
-		return "Now"
-	end
-	if minutes > 59 then
-		local hours = math.floor((currentTime - t) / 3600)
+	local minutes = mfloor(((currentTime - t) / 60) + 0.5)
+	if minutes > 119 then
+		local hours = mfloor(((currentTime - t) / 3600) + 0.5)
 		if hours > 23 then
-			return math.floor((currentTime - t) / 86400).." day(s)"
+			return mfloor(((currentTime - t) / 86400) + 0.5).." day(s)"
 		else
 			return hours.." hour(s)"
 		end
