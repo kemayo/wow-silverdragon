@@ -93,9 +93,9 @@ function module:Scan(callback, zone)
 	local zone_mobs = globaldb.mobs_byzoneid[zone]
 	if not zone_mobs then return end
 	for nameplate, regions in pairs(nameplates) do
-		local name = regions.name:GetText()
 		local id = globaldb.mob_id[name]
 		if nameplate:IsVisible() and id and zone_mobs[id] then
+			local name = globaldb.mob_name[id] or regions.name:GetText()
 			local current_zone, x, y = core:GetPlayerLocation()
 			core:NotifyMob(id, name, current_zone, x, y, false, false, "nameplate", false)
 			break -- it's pretty unlikely there'll be two rares on screen at once
