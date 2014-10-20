@@ -8,7 +8,7 @@ from . import NPC, types, pack_coords
 from .zones import zonename_to_zoneid
 
 WOWDB_URL = 'http://www.wowdb.com'
-WOWDB_URL_PTR = 'http://ptr.wowdb.com'
+WOWDB_URL_PTR = 'http://beta.wowdb.com'
 
 fetch = Fetch("wowdb.db")
 
