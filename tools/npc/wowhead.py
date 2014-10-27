@@ -16,7 +16,11 @@ zone_map = False
 
 class WowheadNPC(NPC):
     def __page(self):
-        return fetch('%s/npc=%d' % (self.ptr and WOWHEAD_URL_PTR or WOWHEAD_URL, self.id))
+        page = fetch('%s/npc=%d' % (self.ptr and WOWHEAD_URL_PTR or WOWHEAD_URL, self.id))
+        if not page:
+            print("Couldn't fetch", '%s/npc=%d' % (self.ptr and WOWHEAD_URL_PTR or WOWHEAD_URL, self.id))
+            return ''
+        return page
 
     def _name(self):
         info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: '(.+?)'};", self.__page())
@@ -66,7 +70,7 @@ class WowheadNPC(NPC):
             if level:
                 if level.group(1).isnumeric():
                     return int(level.group(1))
-                return -1
+                return False
 
     @staticmethod
     def __zone(wowhead_zone):

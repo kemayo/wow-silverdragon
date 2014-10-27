@@ -79,7 +79,7 @@ class WowdbNPC(NPC):
             level = re.search(r'<td colspan="2">Level (\d+)', tooltip.group(1))
             if level:
                 return int(level.group(1))
-            return -1
+            return False
 
     @staticmethod
     def query(creature_type, ptr = False):
