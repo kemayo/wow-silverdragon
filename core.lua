@@ -157,11 +157,12 @@ cache_tooltip:AddFontStrings(
 function addon:RequestCacheForMob(id)
 	-- this doesn't work with just clearlines and the setowner outside of this, and I'm not sure why
 	cache_tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
-	cache_tooltip:SetHyperlink(("unit:Creature:0:0:0:0:%d"):format(id))
+	cache_tooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
 	if cache_tooltip:IsShown() then
 		local name = SDCacheTooltipTextLeft1:GetText()
 		globaldb.mob_id[name] = id
 		globaldb.mob_name[id] = name
+		return name
 	end
 end
 
