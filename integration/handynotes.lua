@@ -108,17 +108,16 @@ local function deleteWholeMob(button, mapFile, coord)
 end
 
 local function createWaypoint(button, mapFile, coord)
-	local c, z = HandyNotes:GetCZ(mapFile)
-	local x, y = HandyNotes:getXY(coord)
-	local id, name = core:GetMobByCoord(mapFile, coord)
 	if TomTom then
-		local persistent, minimap, world
-		if temporary then
-			persistent = true
-			minimap = false
-			world = false
-		end
-		TomTom:AddZWaypoint(c, z, x*100, y*100, name, persistent, minimap, world)
+		local mapId = HandyNotes:GetMapFiletoMapID(mapFile)
+		local x, y = HandyNotes:getXY(coord)
+		local id, name = core:GetMobByCoord(mapFile, coord)
+		TomTom:AddMFWaypoint(mapId, nil, x, y, {
+			title = name,
+			persistent = nil,
+			minimap = true,
+			world = true
+			})
 	end
 end
 
