@@ -9,7 +9,14 @@ local achievements = {
 	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
 	[8714] = {}, -- Timeless Champion (Timeless Isle)
 	[7317] = {}, -- One Many Army (Vale)
-	
+	[9400] = {}, -- Gorgrond Monster Hunter
+	[9541] = {}, -- The Song of Silence
+	[9571] = {}, -- Broke Back Precipice
+	[9617] = {}, -- Making the Cut
+	[9633] = {}, -- Cut off the Head (Shatt)
+	[9638] = {}, -- Heralds of the Legion (Shatt)
+	[9655] = {}, -- Fight the Power (Gorgrond)
+	[9678] = {}, -- Ancient No More (Gorgrond)
 }
 local mobs_to_achievement = {
 	-- [43819] = 2257,
