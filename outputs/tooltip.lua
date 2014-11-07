@@ -17,6 +17,7 @@ local achievements = {
 	[9638] = {}, -- Heralds of the Legion (Shatt)
 	[9655] = {}, -- Fight the Power (Gorgrond)
 	[9678] = {}, -- Ancient No More (Gorgrond)
+	[9216] = {}, -- High-value targets (Ashran)
 }
 local mobs_to_achievement = {
 	-- [43819] = 2257,
