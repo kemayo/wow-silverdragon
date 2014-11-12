@@ -52,10 +52,11 @@ function module:VIGNETTE_ADDED(event, instanceid, mysterious_number)
 		Debug("Vignette instanceid bug hit", instanceid)
 		return
 	end
-	if globaldb.mob_id[name] then
+	local mob_id = globaldb.mob_id[name] or globaldb.mob_vignettes[name]
+	if mob_id then
 		-- it's a rare that we know about!
 		-- note, we could instead try using just iconid==41, but I don't know if that's going to actually be all rares yet
-		self:NotifyIfNeeded(globaldb.mob_id[name])
+		self:NotifyIfNeeded(mob_id)
 	end
 end
 
