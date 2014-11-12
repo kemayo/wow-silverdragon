@@ -22,7 +22,7 @@ class WowdbNPC(NPC):
     def _name(self):
         name = re.search(r'<h2 class="header">([^<]+?)</h2>', self.__page())
         if name:
-            return name.group(1).replace('&#x27;', "'")
+            return name.group(1).replace('&#x27;', "'").replace('&quot;', '"')
 
     def _creature_type(self):
         ctype = re.search(r'<td class="right">([^<]+?)</td>', self.__page())

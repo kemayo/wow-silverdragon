@@ -27,6 +27,8 @@ force_include = (
     62346, # Galleon
     69099, # Nalak
     69161, # Oondasta
+    # On to Draenor
+    71992, # Moonfang
 )
 notes = {
     50410: "Crumbled Statue Remnants", # Mysterious Camel Figurine

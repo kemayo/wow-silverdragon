@@ -25,7 +25,7 @@ class WowheadNPC(NPC):
     def _name(self):
         info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: '(.+?)'};", self.__page())
         if info:
-            return info.group(1).replace("\\'", "'")
+            return info.group(1).replace("\\'", "'").replace('&quot;', '"')
 
     def _creature_type(self):
         info = re.search(r"PageTemplate\.set\({breadcrumb: \[0,4,(\d+),0\]}\);", self.__page())
