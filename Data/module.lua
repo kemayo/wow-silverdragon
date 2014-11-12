@@ -44,6 +44,13 @@ function module:ImportMob(id, info)
 	gdb.mob_tameable[id] = info.tameable
 	gdb.mob_elite[id] = info.elite
 	gdb.mob_notes[id] = info.notes
+	gdb.mob_quests[id] = info.quest
+	if info.vignette then
+		if gdb.mob_vignettes[info.vignette] and gdb.mob_vignettes[info.vignette] ~= id then
+			core.Debug("Duplicate vignette import", info.vignette, id, gdb.mob_vignettes[info.vignette])
+		end
+		gdb.mob_vignettes[info.vignette] = id
+	end
 	if not gdb.mob_seen[id] then gdb.mob_seen[id] = 0 end
 	if not info.locations then
 		return

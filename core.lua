@@ -48,6 +48,12 @@ function addon:OnInitialize()
 			mob_notes = {
 				-- 132132 = "Jade"
 			},
+			mob_vignettes = {
+				-- "Something Descriptive That Isn't The Mob Name" = id
+			},
+			mob_quests = {
+				-- mobid = questid
+			},
 			mob_count = {
 				['*'] = 0,
 			},
