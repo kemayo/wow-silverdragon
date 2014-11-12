@@ -72,6 +72,11 @@ class WowheadNPC(NPC):
                     return int(level.group(1))
                 return False
 
+    def _quest(self):
+        info = re.search(r'<pre id="questtracking">/run print\(IsQuestFlaggedCompleted\((\d+)\)\)</pre>', self.__page())
+        if info:
+            return int(info.group(1))
+
     @staticmethod
     def __zone(wowhead_zone):
         global zone_map

@@ -68,6 +68,26 @@ class WowdbNPC(NPC):
     def _tameable(self):
         return "<li>Tamable</li>" in self.__page()
 
+    def _vignette(self):
+        page = self.__page();
+        if not page:
+            return
+        # this is making a bit of an assumption about the quest names matching up, of course
+        match = re.search(r'<a href="[^"]+">Vignette: ([^<]+)</a>', page)
+        if not match:
+            return
+        return match.group(1).replace('&#x27;', "'").replace('&quot;', '"')
+
+    def _quest(self):
+        page = self.__page();
+        if not page:
+            return
+        # this is making a bit of an assumption about the quest names matching up, of course
+        match = re.search(r'<a href="[^"]+/quests/(\d+)-[^"]+">Vignette: ([^<]+)</a>', page)
+        if not match:
+            return
+        return int(match.group(1))
+
     def _elite(self):
         tooltip = re.search(r'<table class="tooltip-table">(.+?)</table>', self.__page())
         if tooltip:

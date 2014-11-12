@@ -24,6 +24,10 @@ class TestNPC:
                 self.assertTrue(coord > 0)
                 self.assertTrue(coord < 100000000)
 
+    def test_quests(self):
+        npc = self.getNPC(77085)  # Dark Emanation
+        self.assertEqual(npc.data['quest'], 33064)
+
 
 class TestWowhead(TestNPC, unittest.TestCase):
     def getNPC(self, id):
@@ -32,6 +36,10 @@ class TestWowhead(TestNPC, unittest.TestCase):
 class TestWowdb(TestNPC, unittest.TestCase):
     def getNPC(self, id):
         return npc.wowdb.WowdbNPC(id)
+
+    def test_vignettes(self):
+        npc = self.getNPC(77085)  # Dark Emanation
+        self.assertEqual(npc.data['vignette'], "Shadowmoon Cultist Ritual")
 
 if __name__ == '__main__':
     unittest.main()

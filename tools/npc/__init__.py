@@ -48,6 +48,11 @@ class NPC:
         self.data['level'] = self._level()
         self.data['tameable'] = self._tameable()
         self.data['locations'] = self._locations()
+        self.data['vignette'] = self._vignette()
+        self.data['quest'] = self._quest()
+
+        if self.data['vignette'] == self.data['name']:
+            self.data['vignette'] = None
 
     def _name(self):
         pass
@@ -61,6 +66,10 @@ class NPC:
         pass
     def _locations(self):
         pass
+    def _vignette(self):
+        pass
+    def _quest(self):
+        pass
 
     def extend(self, npc):
         """Take the data from another NPC"""
@@ -70,6 +79,8 @@ class NPC:
         self.data['elite'] = npc.data['elite'] or self.data['elite']
         self.data['level'] = npc.data['level'] or self.data['level']
         self.data['tameable'] = npc.data['tameable'] or self.data['tameable']
+        self.data['vignette'] = npc.data['vignette'] or self.data['vignette']
+        self.data['quest'] = npc.data['quest'] or self.data['quest']
         if self.data['locations']:
             if npc.data['locations']:
                 for zone, coords in npc.data['locations'].items():
