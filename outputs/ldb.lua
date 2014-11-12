@@ -98,7 +98,7 @@ function module:SetupDataObject()
 		local n = 0
 		for id in pairs(core.db.global.mobs_byzoneid[zone]) do
 			n = n + 1
-			local name, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
+			local name, num_locations, level, elite, creature_type, lastseen, count, tameable, questid = core:GetMob(zone, id)
 			local index = tooltip:AddLine(core:GetMobLabel(id) or UNKNOWN,
 				("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or ''),
 				BCT[creature_type],
@@ -106,14 +106,19 @@ function module:SetupDataObject()
 				core:FormatLastSeen(lastseen),
 				(tameable and 'Tameable' or '')
 			)
-			if mod_tooltip then
+			local completed, completion_knowable
+			if questid then
+				completion_knowable = true
+				completed = IsQuestFlaggedCompleted(questid)
+			elseif mod_tooltip then
 				local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
-				if achievement then
-					if completed then
-						tooltip:SetLineColor(index, 0, 1, 0)
-					else
-						tooltip:SetLineColor(index, 1, 0, 0)
-					end
+				completion_knowable = achievement
+			end
+			if completion_knowable then
+				if completed then
+					tooltip:SetLineColor(index, 0, 1, 0)
+				else
+					tooltip:SetLineColor(index, 1, 0, 0)
 				end
 			end
 		end

@@ -248,12 +248,12 @@ function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 	return newloc
 end
 
--- Returns name, num_locs, level, is_elite, creature_type, last_seen, times_seen, is_tameable
+-- Returns name, num_locs, level, is_elite, creature_type, last_seen, times_seen, is_tameable, questid
 function addon:GetMob(zone, id)
 	if not (zone and id and globaldb.mobs_byzoneid[zone][id]) then
 		return 0, 0, false, UNKNOWN, nil, 0, nil, nil
 	end
-	return globaldb.mob_name[id], #globaldb.mobs_byzoneid[zone][id], globaldb.mob_level[id], globaldb.mob_elite[id], BCT[globaldb.mob_type[id]], globaldb.mob_seen[id], globaldb.mob_count[id], globaldb.mob_tameable[name]
+	return globaldb.mob_name[id], #globaldb.mobs_byzoneid[zone][id], globaldb.mob_level[id], globaldb.mob_elite[id], BCT[globaldb.mob_type[id]], globaldb.mob_seen[id], globaldb.mob_count[id], globaldb.mob_tameable[name], globaldb.mob_quests[id]
 end
 
 function addon:GetMobLabel(id)
