@@ -1,4 +1,4 @@
 *.pyc
 *.swp
-tools/*.db
+*.db
 
