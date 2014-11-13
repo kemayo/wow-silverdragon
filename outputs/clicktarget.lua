@@ -128,10 +128,15 @@ function module:ShowModel()
 			else
 				model:SetUnit(unit)
 			end
-			model:SetCamera(self.db.profile.camera)
 			if self.db.profile.camera == 1 then
+				-- full body
+				model:SetPortraitZoom(0)
 				model:SetModelScale(0.7)
-				model:SetFacing(math.pi / 4)
+				model:SetFacing(-math.pi / 4)
+				model:SetPosition(0, 0, -0.15) -- move it down slightly
+			else
+				-- portrait!
+				model:SetPortraitZoom(1)
 			end
 		else
 			-- This is, indeed, an exact copy of the settings used in PitBull
@@ -219,7 +224,7 @@ back:SetTexCoord(0, 1, 0, 0.25)
 local title = popup:CreateFontString(nil, "OVERLAY", "GameFontHighlightMedium");
 popup.title = title
 title:SetPoint("TOPLEFT", popup, "TOPLEFT", 6, -6)
-title:SetPoint("RIGHT", popup, "RIGHT", -4, 0)
+title:SetPoint("RIGHT", popup, "RIGHT", -30, 0)
 popup:SetFontString(title)
 
 local model = CreateFrame("PlayerModel", nil, popup)
@@ -248,7 +253,7 @@ popup.drag = popup:CreateTitleRegion()
 -- Close button
 local close = CreateFrame("Button", nil, popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
 popup.close = close
-close:SetPoint("TOPLEFT", popup, "TOPRIGHT", -5, 0)
+close:SetPoint("TOPRIGHT", popup, "TOPRIGHT", 0, 0)
 close:SetWidth(26)
 close:SetHeight(26)
 close:SetHitRectInsets(8, 8, 8, 8)
