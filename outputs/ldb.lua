@@ -106,12 +106,12 @@ function module:SetupDataObject()
 				core:FormatLastSeen(lastseen),
 				(tameable and 'Tameable' or '')
 			)
-			local completed, completion_knowable
+			local completed, completion_knowable, achievement, achievement_name
 			if questid then
 				completion_knowable = true
 				completed = IsQuestFlaggedCompleted(questid)
 			elseif mod_tooltip then
-				local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
+				achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
 				completion_knowable = achievement
 			end
 			if completion_knowable then
