@@ -14,6 +14,10 @@ module.nodes = nodes
 local handler = {}
 do
 	local function should_show_mob(id)
+		local questid = core.db.global.mob_quests[id]
+		if questid then
+			return module.db.profile.achieved or not IsQuestFlaggedCompleted(questid)
+		end
 		local mod_tooltip = core:GetModule("Tooltip", true)
 		if not mod_tooltip then
 			return true
