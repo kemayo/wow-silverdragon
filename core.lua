@@ -147,12 +147,20 @@ local alliance_ignore_mobs = { --Mobs alliance cannot kill
 	[68318] = true,--Dalan Nightbreaker (Krasarang)
 	[68319] = true,--Disha Fearwarden (Krasarang)
 	[68317] = true,--Mavis Harms (Krasarang)
+	-- draenor quartermasters...
+	[82876] = true,--Grand Marshal Tremblade (Ashran)
+	[82878] = true,--Marshal Gabriel (Ashran)
+	[82880] = true,--Marshal Karsh Stormforge (Ashran)
 }
 local horde_ignore_mobs = { --Mobs horde cannot kill
 	[51079] = true,--Captain Foulwind (Vashjir)
 	[68321] = true,--Kar Warmaker (Krasarang)
 	[68322] = true,--Muerta (Krasarang)
 	[68320] = true,--Ubunti the Shade (Krasarang)
+	-- draenor quartermasters...
+	[82877] = true,--High Warlord Volrath (Ashran)
+	[82883] = true,--Warlord Noktyn (Ashran)
+	[82882] = true,--General Aved (Ashran)
 }
 
 local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip")
