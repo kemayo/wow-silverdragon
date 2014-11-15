@@ -40,6 +40,14 @@ local mount_mobs = {
 	[69842] = true, -- Zandalari Warbringer (Jade)
 	[70096] = true, -- War-God Dokah (Can drop any of the 3 above warbringer mounts)
 	[73167] = true, -- Huolon
+	-- Draenor goes wild here:
+	[81001] = true, -- Nok-Karosh
+	[87308] = true, -- Gorok the Cleaver
+	[50990] = true, -- Nakk the Thunderer
+	[50981] = true, -- Luk'hok
+	[50985] = true, -- Poundfist
+	[51015] = true, -- Silthide
+	[50883] = true, -- Pathrunner
 }
 local boss_mobs = {
 	[50009] = true, -- Mobus

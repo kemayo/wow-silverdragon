@@ -29,6 +29,13 @@ force_include = (
     69161, # Oondasta
     # On to Draenor
     71992, # Moonfang
+    81001, # Nok-Karosh
+    87308, # Gorok the Cleaver
+    50990, # Nakk the Thunderer
+    50981, # Luk'hok
+    50985, # Poundfist
+    51015, # Silthide
+    50883, # Pathrunner
 )
 notes = {
     50410: "Crumbled Statue Remnants", # Mysterious Camel Figurine

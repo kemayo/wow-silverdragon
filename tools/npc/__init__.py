@@ -106,6 +106,9 @@ class NPC:
         clean_data = dict((k, v) for k, v in self.data.items() if v)
         return lua.serialize(clean_data)
 
+    def html_decode(self, text):
+        return text.replace('&#39;', "'").replace('&#x27;', "'").replace('&quot;', '"')
+
 def pack_coords(x, y):
     return math.floor(x * 10000 + 0.5) * 10000 + math.floor(y * 10000 + 0.5)
 def unpack_coords(coord):

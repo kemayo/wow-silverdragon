@@ -22,7 +22,7 @@ class WowdbNPC(NPC):
     def _name(self):
         name = re.search(r'<h2 class="header">([^<]+?)</h2>', self.__page())
         if name:
-            return name.group(1).replace('&#x27;', "'").replace('&quot;', '"')
+            return self.html_decode(name.group(1))
 
     def _creature_type(self):
         ctype = re.search(r'<td class="right">([^<]+?)</td>', self.__page())
@@ -76,7 +76,7 @@ class WowdbNPC(NPC):
         match = re.search(r'<a href="[^"]+">Vignette: ([^<]+)</a>', page)
         if not match:
             return
-        return match.group(1).replace('&#x27;', "'").replace('&quot;', '"')
+        return self.html_decode(match.group(1))
 
     def _quest(self):
         page = self.__page();
