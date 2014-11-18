@@ -17,7 +17,7 @@ do
 	local function should_show_mob(id)
 		local questid = core.db.global.mob_quests[id]
 		if questid then
-			return module.db.profile.achieved or not IsQuestFlaggedCompleted(questid)
+			return module.db.profile.questcomplete or not IsQuestFlaggedCompleted(questid)
 		end
 		local mod_tooltip = core:GetModule("Tooltip", true)
 		if not mod_tooltip then
@@ -223,6 +223,7 @@ function module:OnInitialize()
 			icon_scale = 1.0,
 			icon_alpha = 1.0,
 			achieved = true,
+			questcomplete = false,
 			achievementless = true,
 		},
 	})
@@ -250,12 +251,19 @@ function module:OnInitialize()
 				arg = "achieved",
 				order = 10,
 			},
+			questcomplete = {
+				type = "toggle",
+				name = "Show quest-complete",
+				desc = "Whether to show icons for mobs you have the tracking quest complete for (which probably means they won't drop anything)",
+				arg = "questcomplete",
+				order = 15,
+			},
 			achievementless = {
 				type = "toggle",
 				name = "Show non-achievement mobs",
 				desc = "Whether to show icons for mobs which aren't part of the criteria for any known achievement",
 				arg = "achievementless",
-				order = 10,
+				order = 20,
 			},
 			icon_scale = {
 				type = "range",
@@ -263,7 +271,7 @@ function module:OnInitialize()
 				desc = "The scale of the icons",
 				min = 0.25, max = 2, step = 0.01,
 				arg = "icon_scale",
-				order = 20,
+				order = 25,
 			},
 			icon_alpha = {
 				type = "range",
@@ -291,6 +299,8 @@ function module:OnInitialize()
 
 	HandyNotes:RegisterPluginDB("SilverDragon", handler, options)
 	self:UpdateNodes()
+
+	self:RegisterEvent("LOOT_CLOSED")
 end
 
 function module:Seen(callback, id, name, zone, x, y, dead, new_location)
@@ -321,6 +331,11 @@ function module:UpdateNodes()
 		end
 	end
 	self.nodes = nodes
+	self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
+end
+
+
+function module:LOOT_CLOSED()
 	self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
 end
 
