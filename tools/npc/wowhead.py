@@ -5,7 +5,7 @@ import re
 
 from .fetch import Fetch
 from . import NPC, types, pack_coords
-from .zones import zonename_to_zoneid
+from .zones import zoneid_to_mapid
 
 WOWHEAD_URL = 'http://www.wowhead.com'
 WOWHEAD_URL_PTR = 'http://wod.wowhead.com'
@@ -41,7 +41,8 @@ class WowheadNPC(NPC):
             return
         coords = {}
         for zone, data in re.findall(r'^,?(\d+): {\n\d: {[^}]*coords: (\[.+?\]) }.*?\n}$', match.group(1), re.MULTILINE):
-            if not self.__zone(zone):
+            zone = int(zone)
+            if not zoneid_to_mapid.get(zone, False):
                 print("Got location for unknown zone", zone, self.id)
                 continue
             zcoords = []
@@ -52,7 +53,7 @@ class WowheadNPC(NPC):
                 else:
                     # list fully looped through, not broken.
                     zcoords.append((x,y))
-            coords[self.__zone(zone)] = [pack_coords(c[0], c[1]) for c in zcoords]
+            coords[zoneid_to_mapid[zone]] = [pack_coords(c[0], c[1]) for c in zcoords]
         return coords
 
     def _tameable(self):
@@ -76,24 +77,6 @@ class WowheadNPC(NPC):
         info = re.search(r'<pre id="questtracking">/run print\(IsQuestFlaggedCompleted\((\d+)\)\)</pre>', self.__page())
         if info:
             return int(info.group(1))
-
-    @staticmethod
-    def __zone(wowhead_zone):
-        global zone_map
-        if not zone_map:
-            zone_map = {}
-            page = fetch("http://wowjs.zamimg.com/js/locale_enus.js?1372795457")
-            if not page:
-                return
-            match = re.search(r"g_zones\s*=\s*({[^}]+});", page)
-            if not match:
-                return
-            for id, name in re.findall(r'"(\d+)":"([^"]+)"', match.group(1)):
-                if name in zonename_to_zoneid:
-                    zone_map[int(id)] = zonename_to_zoneid[name]
-                # else:
-                #     print("Skipping zone translation", name)
-        return zone_map.get(int(wowhead_zone), False)
 
     @staticmethod
     def query(categoryid, expansion, ptr = False):

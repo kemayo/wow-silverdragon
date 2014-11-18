@@ -5,7 +5,7 @@ import re
 
 from .fetch import Fetch
 from . import NPC, types, pack_coords
-from .zones import zonename_to_zoneid
+from .zones import zoneid_to_mapid
 
 WOWDB_URL = 'http://www.wowdb.com'
 WOWDB_URL_PTR = 'http://beta.wowdb.com'
@@ -43,7 +43,8 @@ class WowdbNPC(NPC):
             return
         coords = {}
         for zone, zonedata in data.get('Maps').items():
-            if "Name" not in zonedata or zonedata["Name"] not in zonename_to_zoneid:
+            zone = int(zone)
+            if "Name" not in zonedata or not zoneid_to_mapid.get(zone, False):
                 print("Got location for unknown zone", zonedata.get("Name", False), self.id)
                 continue
             zcoords = []
@@ -62,7 +63,7 @@ class WowdbNPC(NPC):
                     else:
                         # list fully looped through, not broken.
                         zcoords.append((x,y))
-            coords[zonename_to_zoneid[zonedata["Name"]]] = [pack_coords(c[0], c[1]) for c in zcoords]
+            coords[zoneid_to_mapid[zone]] = [pack_coords(c[0], c[1]) for c in zcoords]
         return coords
 
     def _tameable(self):
