@@ -6,7 +6,8 @@ local module = core:NewModule("HandyNotes", "AceEvent-3.0")
 local Debug = core.Debug
 
 local db
-local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
+-- local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
+local icon
 
 local nodes = {}
 module.nodes = nodes
@@ -33,6 +34,20 @@ do
 		local state, value = next(t, prestate)
 		while state do
 			if value then
+				if not icon then
+					local left, right, top, bottom = GetObjectIconTextureCoords(41)
+					icon = {
+						icon = [[Interface\MINIMAP\OBJECTICONS]],
+						tCoordLeft = left + 0.015,
+						tCoordRight = right - 0.015,
+						tCoordTop = top + 0.015,
+						tCoordBottom = bottom - 0.015,
+						r = 1,
+						g = 0.33,
+						b = 0,
+						a = 0.9,
+					}
+				end
 				if should_show_mob(value) then
 					return state, nil, icon, db.icon_scale, db.icon_alpha
 				end
