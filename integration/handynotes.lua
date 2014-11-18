@@ -7,7 +7,7 @@ local Debug = core.Debug
 
 local db
 -- local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
-local icon
+local icon, icon_mount
 
 local nodes = {}
 module.nodes = nodes
@@ -29,27 +29,46 @@ do
 		end
 		return module.db.profile.achievementless
 	end
+	local function icon_for_mob(id)
+		if not icon then
+			local left, right, top, bottom = GetObjectIconTextureCoords(41)
+			icon = {
+				icon = [[Interface\MINIMAP\OBJECTICONS]],
+				tCoordLeft = left + 0.015,
+				tCoordRight = right - 0.015,
+				tCoordTop = top + 0.015,
+				tCoordBottom = bottom - 0.015,
+				r = 1,
+				g = 0.33,
+				b = 0,
+				a = 0.9,
+			}
+			local left, right, top, bottom = GetObjectIconTextureCoords(44)
+			icon_mount = {
+				icon = [[Interface\MINIMAP\OBJECTICONS]],
+				tCoordLeft = left + 0.015,
+				tCoordRight = right - 0.015,
+				tCoordTop = top + 0.015,
+				tCoordBottom = bottom - 0.015,
+				r = 1,
+				g = 0.33,
+				b = 0,
+				a = 0.9,
+			}
+		end
+		local mod_announce = core:GetModule("Announce", true)
+		if not mod_announce then
+			return icon
+		end
+		return mod_announce:HasMount(id) and icon_mount or icon
+	end
 	local function iter(t, prestate)
 		if not t then return nil end
 		local state, value = next(t, prestate)
 		while state do
 			if value then
-				if not icon then
-					local left, right, top, bottom = GetObjectIconTextureCoords(41)
-					icon = {
-						icon = [[Interface\MINIMAP\OBJECTICONS]],
-						tCoordLeft = left + 0.015,
-						tCoordRight = right - 0.015,
-						tCoordTop = top + 0.015,
-						tCoordBottom = bottom - 0.015,
-						r = 1,
-						g = 0.33,
-						b = 0,
-						a = 0.9,
-					}
-				end
 				if should_show_mob(value) then
-					return state, nil, icon, db.icon_scale, db.icon_alpha
+					return state, nil, icon_for_mob(value), db.icon_scale, db.icon_alpha
 				end
 			end
 			state, value = next(t, state)

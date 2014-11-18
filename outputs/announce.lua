@@ -232,6 +232,10 @@ function module:Seen(callback, id, name, zone, x, y, is_dead, ...)
 	core.events:Fire("Announce", id, name, zone, x, y, is_dead, ...)
 end
 
+function module:HasMount(id)
+	return mount_mobs[id]
+end
+
 function module:CareAboutZone(zone)
 	local exp = core.guess_expansion(zone)
 	if exp and not self.db.profile.expansions[exp] then
