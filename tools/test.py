@@ -28,10 +28,14 @@ class TestNPC:
         npc = self.getNPC(77085)  # Dark Emanation
         self.assertEqual(npc.data['quest'], 33064)
 
+        npc = self.getNPC(84810)  # Kalos the Bloodbathed
+        self.assertEqual(npc.data['quest'], 36268)
+
 
 class TestWowhead(TestNPC, unittest.TestCase):
     def getNPC(self, id):
         return npc.wowhead.WowheadNPC(id)
+
 
 class TestWowdb(TestNPC, unittest.TestCase):
     def getNPC(self, id):
@@ -40,6 +44,14 @@ class TestWowdb(TestNPC, unittest.TestCase):
     def test_vignettes(self):
         npc = self.getNPC(77085)  # Dark Emanation
         self.assertEqual(npc.data['vignette'], "Shadowmoon Cultist Ritual")
+
+
+class TestInteractions(unittest.TestCase):
+    def test_extend(self):
+        kalos_wowdb = npc.wowdb.WowdbNPC(84810)
+        kalos_wowhead = npc.wowhead.WowheadNPC(84810)
+        kalos_wowhead.extend(kalos_wowdb)
+        self.assertEqual(kalos_wowhead.data['quest'], 36268)
 
 if __name__ == '__main__':
     unittest.main()

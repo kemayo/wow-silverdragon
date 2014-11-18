@@ -83,8 +83,7 @@ class WowdbNPC(NPC):
         page = self.__page();
         if not page:
             return
-        # this is making a bit of an assumption about the quest names matching up, of course
-        match = re.search(r'<a href="[^"]+/quests/(\d+)-[^"]+">Vignette: ([^<]+)</a>', page)
+        match = re.search(r'<a href="[^"]+/quests/(\d+)-[^"]+">[^<]*Vignette[^<]*</a>', page)
         if not match:
             return
         return int(match.group(1))
