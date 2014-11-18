@@ -70,16 +70,8 @@ function handler:OnEnter(mapFile, coord)
 	end
 	local zoneid = core.zoneid_from_mapfile(mapFile)
 	local id, name, _, level, elite, creature_type, lastseen = core:GetMobByCoord(zoneid, coord)
-	tooltip:AddLine(name)
-	if core.db.global.mob_notes[id] then
-		tooltip:AddDoubleLine("Note", core.db.global.mob_notes[id])
-	end
-	local display_level = level or '?'
-	if display_level == -1 then
-		display_level = 'Boss'
-	end
-	local display_level = ("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or '')
-	tooltip:AddDoubleLine(display_level, creature_type or UNKNOWN)
+	tooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
+
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
 	tooltip:AddDoubleLine("ID", id)
 	local mod_tooltip = core:GetModule("Tooltip", true)
