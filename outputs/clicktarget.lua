@@ -34,7 +34,7 @@ function module:OnInitialize()
 				type = "group",
 				name = "ClickTarget",
 				get = function(info) return self.db.profile[info[#info]] end,
-				set = function(info, v) self.db.profile[info[#info]] = v; self:ShowModel() end,
+				set = function(info, v) self.db.profile[info[#info]] = v; self:PositionModel() end,
 				args = {
 					about = config.desc("Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it. It can show a 3d model of that rare, but only if we already know the ID of the rare (though a data import), or if it was found by being targetted. Nameplates are right out.", 0),
 					show = config.toggle("Show", "Show the click-target frame.", 10),
@@ -69,6 +69,8 @@ function module:OnInitialize()
 			},
 		}
 	end
+
+	self:PositionModel()
 end
 
 local current = {}
@@ -101,54 +103,81 @@ end
 function module:ShowModel()
 	local popup = self.popup
 	local model, title, details = popup.model, popup.title, popup.details
+	if not self.db.profile.model then
+		return
+	end
 
+	self:ResetModel(model)
+	local id, unit = current.id, current.unit
+
+	if not self:IsModelBlacklisted(id, unit) and (id or unit) then
+		if id then
+			model:SetCreature(id)
+		else
+			model:SetUnit(unit)
+		end
+
+		if self.db.profile.camera == 1 then
+			-- full body
+			model:SetPortraitZoom(0)
+			model:SetModelScale(0.7)
+			model:SetFacing(-math.pi / 4)
+			model:SetPosition(0, 0, -0.15) -- move it down slightly
+		else
+			-- portrait!
+			model:SetPortraitZoom(1)
+		end
+	else
+		-- This is, indeed, an exact copy of the settings used in PitBull
+		-- That's fine, since I wrote those settings myself. :D
+		model:SetModelScale(4.25)
+		model:SetPosition(0, 0, -0.7)
+		model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
+	end
+end
+
+function module:PositionModel()
+	local popup = self.popup
+	local model = popup.model
 	model:ClearAllPoints()
 	if self.db.profile.model and self.db.profile.camera == 0 then
 		-- portrait
 		model:SetHeight(popup:GetHeight() - 20)
 		model:SetWidth(popup:GetHeight() - 20)
-		model:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -2)
+		model:SetPoint("TOPLEFT", popup.title, "BOTTOMLEFT", 0, -2)
 		model:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 6, 6)
-		details:SetPoint("TOPLEFT", model, "TOPRIGHT", 2, -2)
+		popup.details:SetPoint("TOPLEFT", model, "TOPRIGHT", 2, -2)
 	else
 		-- full-body or hidden-model (works for both because the model is totally out of
 		-- the way for the full-body case.)
 		model:SetHeight(popup:GetHeight() * 3)
 		model:SetWidth(popup:GetWidth())
 		model:SetPoint("BOTTOMLEFT", popup, "TOPLEFT", 0, -4)
-		details:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -2)
+		popup.details:SetPoint("TOPLEFT", popup.title, "BOTTOMLEFT", 0, -2)
 	end
 	if self.db.profile.model then
 		model:Show()
-		model:ClearModel()
-		local id, unit = current.id, current.unit
-		if id or unit then
-			if id then
-				model:SetCreature(id)
-			else
-				model:SetUnit(unit)
-			end
-			if self.db.profile.camera == 1 then
-				-- full body
-				model:SetPortraitZoom(0)
-				model:SetModelScale(0.7)
-				model:SetFacing(-math.pi / 4)
-				model:SetPosition(0, 0, -0.15) -- move it down slightly
-			else
-				-- portrait!
-				model:SetPortraitZoom(1)
-			end
-		else
-			-- This is, indeed, an exact copy of the settings used in PitBull
-			-- That's fine, since I wrote those settings myself. :D
-			model:SetModelScale(4.25)
-			model:SetPosition(0, 0, -1.5)
-			model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
-		end
 	else
 		model:Hide()
 	end
+	if self.popup:IsVisible() then
+		self:ShowModel()
+	end
+end
 
+do
+	local bad_ids = {
+		[83008] = true, -- Haakun the All-Consuming
+	}
+	function module:IsModelBlacklisted(id, unit)
+		if not (id or unit) then
+			return true
+		end
+		if not id then
+			id = core:UnitID(unit)
+		end
+		return bad_ids[id]
+	end
 end
 
 function module:Announce(callback, id, name, zone, x, y, dead, newloc, source, unit)
@@ -198,6 +227,28 @@ function module:ToggleDrag(state)
 	end
 end
 
+do
+	local function on_update_model(self)
+		self.frame_counter = self.frame_counter + 1
+		if self.frame_counter > 10 then
+			self:SetScript("OnUpdateModel", nil)
+			-- self:SetScript("OnUpdate", self.OnUpdate)
+			self:SetAlpha(1)
+		end
+	end
+	function module:ResetModel(model)
+		model:SetAlpha(0)
+		model:SetModelScale(1)
+		model:SetPosition(0, 0, 0)
+		model:SetFacing(0)
+		model:ClearModel()
+		model.frame_counter = 0
+
+		-- model:SetScript("OnUpdate", nil)
+		model:SetScript("OnUpdateModel", on_update_model)
+	end
+end
+
 -- And set up the frame
 local popup = CreateFrame("Button", "SilverDragonPopupButton", nil, "SecureActionButtonTemplate")
 module.popup = popup
@@ -220,7 +271,7 @@ back:SetTexCoord(0, 1, 0, 0.25)
 
 -- Just a note:
 -- The anchors in this next section are incomplete. The frame isn't finished until
--- module.ShowModel is called.
+-- module.PositionModel is called.
 local title = popup:CreateFontString(nil, "OVERLAY", "GameFontHighlightMedium");
 popup.title = title
 title:SetPoint("TOPLEFT", popup, "TOPLEFT", 6, -6)
@@ -314,10 +365,6 @@ end
 local on_leave = function() popup:SetBackdropBorderColor(0.7, 0.15, 0.05) end
 local on_show = function()
 	animation:Play()
-	local model = popup.model
-	model:ClearModel()
-	model:SetPosition(0, 0, 0)
-	model:SetFacing(0)
 end
 local on_hide = function()
 	animation:Stop()
