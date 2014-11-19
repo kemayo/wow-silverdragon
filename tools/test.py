@@ -36,6 +36,12 @@ class TestWowhead(TestNPC, unittest.TestCase):
     def getNPC(self, id):
         return npc.wowhead.WowheadNPC(id)
 
+    def test_quests(self):
+        TestNPC.test_quests(self)
+
+        npc = self.getNPC(85264)  # Rolkor
+        self.assertEqual(npc.data['quest'], 36393)
+
 
 class TestWowdb(TestNPC, unittest.TestCase):
     def getNPC(self, id):

@@ -98,7 +98,7 @@ if __name__ == '__main__':
         from npc.wowhead import WowheadNPC
         for categoryid, c in npctypes.items():
             print("ACQUIRING rares for category", categoryid, c)
-            for expansion in range(1, 6):
+            for expansion in range(1, 7):
                 print("EXPANSION", expansion)
                 # run per-expansion to avoid caps on results-displayed
                 wowhead.update(WowheadNPC.query(categoryid, expansion, ptr=ns.ptr))
