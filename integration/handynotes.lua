@@ -50,10 +50,10 @@ do
 				tCoordRight = right - 0.015,
 				tCoordTop = top + 0.015,
 				tCoordBottom = bottom - 0.015,
-				r = 1,
-				g = 0.33,
-				b = 0,
-				a = 0.9,
+				-- r = 1,
+				-- g = 0.33,
+				-- b = 0,
+				-- a = 0.9,
 			}
 		end
 		local mod_announce = core:GetModule("Announce", true)
