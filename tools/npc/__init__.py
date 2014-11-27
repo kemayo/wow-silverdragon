@@ -47,7 +47,7 @@ class NPC:
         self.data['elite'] = self._elite()
         self.data['level'] = self._level()
         self.data['tameable'] = self._tameable()
-        self.data['locations'] = self._locations()
+        self.data['locations'] = self._filter_locations(self._locations())
         self.data['vignette'] = self._vignette()
         self.data['quest'] = self._quest()
 
@@ -108,6 +108,12 @@ class NPC:
 
     def html_decode(self, text):
         return text.replace('&#39;', "'").replace('&#x27;', "'").replace('&quot;', '"')
+
+    def _filter_locations(self, locations):
+        if self.id == 32491:
+            # Time-lost needs to get cleaned up a little
+            del(locations[950])
+        return locations
 
 def pack_coords(x, y):
     return math.floor(x * 10000 + 0.5) * 10000 + math.floor(y * 10000 + 0.5)
