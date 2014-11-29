@@ -10,6 +10,7 @@ function module:OnInitialize()
 	})
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	core.RegisterCallback(self, "ZoneChanged")
+	core.RegisterCallback(self, "Seen", "ZoneChanged")
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -43,6 +44,7 @@ end
 
 function module:Update()
 	if not self.db.profile.enabled then return end
+	Debug("Updating Macro")
 	-- first, create the macro text on the button:
 	local zone = core:GetPlayerZone()
 	local mobs = core.db.global.mobs_byzoneid[zone]
@@ -78,7 +80,6 @@ function module:CreateMacro()
 end
 
 function module:ZoneChanged(...)
-	Debug("ZoneChanged", ...)
 	if InCombatLockdown() then
 		self.waiting = true
 	else
