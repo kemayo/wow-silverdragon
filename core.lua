@@ -142,27 +142,6 @@ function addon:OnEnable()
 	end
 end
 
-local alliance_ignore_mobs = { --Mobs alliance cannot kill
-	[51071] = true,--Captain Florence (Vashjir)
-	[68318] = true,--Dalan Nightbreaker (Krasarang)
-	[68319] = true,--Disha Fearwarden (Krasarang)
-	[68317] = true,--Mavis Harms (Krasarang)
-	-- draenor quartermasters...
-	[82876] = true,--Grand Marshal Tremblade (Ashran)
-	[82878] = true,--Marshal Gabriel (Ashran)
-	[82880] = true,--Marshal Karsh Stormforge (Ashran)
-}
-local horde_ignore_mobs = { --Mobs horde cannot kill
-	[51079] = true,--Captain Foulwind (Vashjir)
-	[68321] = true,--Kar Warmaker (Krasarang)
-	[68322] = true,--Muerta (Krasarang)
-	[68320] = true,--Ubunti the Shade (Krasarang)
-	-- draenor quartermasters...
-	[82877] = true,--High Warlord Volrath (Ashran)
-	[82883] = true,--Warlord Noktyn (Ashran)
-	[82882] = true,--General Aved (Ashran)
-}
-
 local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip")
 cache_tooltip:AddFontStrings(
 	cache_tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"),
@@ -196,7 +175,6 @@ function addon:UnitID(unit)
 	return npc_id_from_guid(UnitGUID(unit))
 end
 
-local lastseen = {}
 function addon:ShouldSave(id)
 	local last_saved = globaldb.mob_seen[id]
 	if not last_saved then
@@ -271,33 +249,71 @@ function addon:GetMobLabel(id)
 	return globaldb.mob_name[id] .. (globaldb.mob_notes[id] and (" (" .. globaldb.mob_notes[id] .. ")") or "")
 end
 
-local faction = UnitFactionGroup("player")
-function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit, silent, force)
-	self.events:Fire("Seen_Raw", id, name, zone, x, y, is_dead, is_new_location, source, unit)
+do
+	local lastseen = {}
+	function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit, silent, force)
+		self.events:Fire("Seen_Raw", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 
-	if silent then
-		Debug("Skipping notification: silent call", id, name)
-		return
+		if silent then
+			Debug("Skipping notification: silent call", id, name)
+			return
+		end
+		if self:ShouldIgnoreMob(id, zone) then
+			Debug("Skipping notification: ignored", id, name)
+			return
+		end
+		if not force and lastseen[id..zone] and time() < lastseen[id..zone] + self.db.profile.delay then
+			Debug("Skipping notification: seen", id, name, lastseen[id..zone], time() - self.db.profile.delay)
+			return
+		end
+		if (not self.db.profile.taxi) and UnitOnTaxi('player') then
+			Debug("Skipping notification: taxi", id, name)
+			return
+		end
+		globaldb.mob_count[id] = globaldb.mob_count[id] + 1
+		lastseen[id..zone] = time()
+		self.events:Fire("Seen", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 	end
-	--Maybe add an option for this later. This checks unit faction and ignores mobs your faction cannot do anything with.
-	if faction == "Alliance" and alliance_ignore_mobs[id] or faction == "Horde" and horde_ignore_mobs[id] then
-		return
+end
+do
+	local alliance_ignore_mobs = { --Mobs alliance cannot kill
+		[51071] = true,--Captain Florence (Vashjir)
+		[68318] = true,--Dalan Nightbreaker (Krasarang)
+		[68319] = true,--Disha Fearwarden (Krasarang)
+		[68317] = true,--Mavis Harms (Krasarang)
+		-- draenor quartermasters...
+		[82876] = true,--Grand Marshal Tremblade (Ashran)
+		[82878] = true,--Marshal Gabriel (Ashran)
+		[82880] = true,--Marshal Karsh Stormforge (Ashran)
+	}
+	local horde_ignore_mobs = { --Mobs horde cannot kill
+		[51079] = true,--Captain Foulwind (Vashjir)
+		[68321] = true,--Kar Warmaker (Krasarang)
+		[68322] = true,--Muerta (Krasarang)
+		[68320] = true,--Ubunti the Shade (Krasarang)
+		-- draenor quartermasters...
+		[82877] = true,--High Warlord Volrath (Ashran)
+		[82883] = true,--Warlord Noktyn (Ashran)
+		[82882] = true,--General Aved (Ashran)
+	}
+	local zone_ignores = {
+		[950] = {
+			[32491] = true, -- Time-Lost
+		},
+	}
+	local faction = UnitFactionGroup("player")
+	function addon:ShouldIgnoreMob(id, zone)
+		--Maybe add an option for this later. This checks unit faction and ignores mobs your faction cannot do anything with.
+		if faction == "Alliance" and alliance_ignore_mobs[id] or faction == "Horde" and horde_ignore_mobs[id] then
+			return true
+		end
+		if globaldb.ignore[id] then
+			return true
+		end
+		if zone and zone_ignores[zone] and zone_ignores[zone][id] then
+			return true
+		end
 	end
-	if globaldb.ignore[id] then
-		Debug("Skipping notification: ignored", id, name)
-		return
-	end
-	if not force and lastseen[id..zone] and time() < lastseen[id..zone] + self.db.profile.delay then
-		Debug("Skipping notification: seen", id, name, lastseen[id..zone], time() - self.db.profile.delay)
-		return
-	end
-	if (not self.db.profile.taxi) and UnitOnTaxi('player') then
-		Debug("Skipping notification: taxi", id, name)
-		return
-	end
-	globaldb.mob_count[id] = globaldb.mob_count[id] + 1
-	lastseen[id..zone] = time()
-	self.events:Fire("Seen", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 end
 
 function addon:ZoneContainsMobs(zone)
