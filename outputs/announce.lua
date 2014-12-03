@@ -42,7 +42,7 @@ local mount_mobs = {
 	[73167] = true, -- Huolon
 	-- Draenor goes wild here:
 	[81001] = true, -- Nok-Karosh
-	[87308] = true, -- Gorok the Cleaver
+	[50992] = true, -- Gorok
 	[50990] = true, -- Nakk the Thunderer
 	[50981] = true, -- Luk'hok
 	[50985] = true, -- Poundfist
