@@ -47,7 +47,7 @@ function module:Update()
 	Debug("Updating Macro")
 	-- first, create the macro text on the button:
 	local zone = core:GetPlayerZone()
-	local mobs = core.db.global.mobs_byzoneid[zone]
+	local mobs = zone and core.db.global.mobs_byzoneid[zone]
 	if not mobs then return end
 	local macro = {}
 	for id in pairs(mobs) do
