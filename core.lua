@@ -437,8 +437,9 @@ function addon:ZONE_CHANGED_NEW_AREA()
 	end
 
 	currentZone = self:CanonicalZoneId(currentZone)
-
-	self.events:Fire("ZoneChanged", currentZone)
+	if currentZone then
+		self.events:Fire("ZoneChanged", currentZone)
+	end
 end
 
 --Zone functions split into 2, location, and coords. There is no reason to spam check player coords and do complex map checks when we only need zone.
