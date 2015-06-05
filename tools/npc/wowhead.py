@@ -8,7 +8,7 @@ from . import NPC, types, pack_coords
 from .zones import zoneid_to_mapid
 
 WOWHEAD_URL = 'http://www.wowhead.com'
-WOWHEAD_URL_PTR = 'http://wod.wowhead.com'
+WOWHEAD_URL_PTR = 'http://ptr.wowhead.com'
 
 fetch = Fetch("wowhead.db")
 
