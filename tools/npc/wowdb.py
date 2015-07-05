@@ -25,7 +25,7 @@ class WowdbNPC(NPC):
             return self.html_decode(name.group(1))
 
     def _creature_type(self):
-        ctype = re.search(r'<td class="right">([^<]+?)</td>', self.__page())
+        ctype = re.search(r'%s</dt>\s*<dd class="db-right">([^<]+?)</dd>' % self._name(), self.__page())
         if ctype:
             # for now get rid of the extra info on "Beast (Serpent)"
             return re.sub('\s+\(.+\)$', '', ctype.group(1))
@@ -45,7 +45,7 @@ class WowdbNPC(NPC):
         for zone, zonedata in data.get('Maps').items():
             zone = int(zone)
             if "Name" not in zonedata or not zoneid_to_mapid.get(zone, False):
-                print("Got location for unknown zone", zonedata.get("Name", False), self.id)
+                print("Got location for unknown zone", zonedata.get("Name", False), zone, self.id)
                 continue
             zcoords = []
             selected_floor = zonedata["SelectedFloor"]

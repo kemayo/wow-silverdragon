@@ -257,6 +257,7 @@ zoneid_to_mapid = {
     6720: 941,  # Frostfire Ridge
     6721: 949,  # Gorgrond
     6722: 948,  # Spires of Arak
+    6723: 945,  # Tanaan Jungle
     6731: 938,  # The Secrets of Ragefire
     6733: 937,  # Dark Heart of Pandaria
     6738: 953,  # Siege of Orgrimmar
@@ -356,7 +357,6 @@ zoneid_to_mapid = {
     6677: False,  # Fall of Shan Bu
     6681: False,  # Lightning Vein Mine
     6716: False,  # Troves of the Thunder King
-    6723: False,  # Tanaan Jungle
     6732: False,  # The Tiger's Peak
     6745: False,  # Grulloc's Grotto
     6756: False,  # Faralohn
