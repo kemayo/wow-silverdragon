@@ -75,7 +75,7 @@ if __name__ == '__main__':
     parser.add_argument('--no-wowhead', action='store_false', dest='wowhead')
     parser.add_argument('--wowdb', action='store_true', default=True)
     parser.add_argument('--no-wowdb', action='store_false', dest='wowdb')
-    parser.add_argument('--no-strip-empties', action='store_false', dest='strip_empties')
+    parser.add_argument('--strip-empties', action='store_true', dest='strip_empties')
     parser.add_argument('--ptr', action='store_true')
     ns = parser.parse_args()
 
