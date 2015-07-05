@@ -281,7 +281,7 @@ zoneid_to_mapid = {
     7307: 995,  # Upper Blackrock Spire
     7332: 1009,  # Stormshield
     7333: 1011,  # Warspear
-    # Missing
+    # Missing:
     25: False,  # Blackrock Mountain
     34: False,  # Echo Ridge Mine
     54: False,  # Jasperlode Mine
@@ -292,14 +292,12 @@ zoneid_to_mapid = {
     135: False,  # Frostmane Hold
     136: False,  # The Grizzled Den
     155: False,  # Night Web's Hollow
-    254: False,  # Blackrock Mountain
     257: False,  # Shadowthread Cave
     258: False,  # Fel Rock
     262: False,  # Ban'ethil Barrow Den
     360: False,  # The Venture Co. Mine
     365: False,  # Burning Blade Coven
     371: False,  # Dustwind Cave
-    372: False,  # Tiragarde Keep
     457: False,  # The Veiled Sea
     540: False,  # The Slithering Scar
     800: False,  # Coldridge Pass
@@ -308,7 +306,6 @@ zoneid_to_mapid = {
     876: False,  # GM Island
     981: False,  # The Gaping Chasm
     982: False,  # The Noxious Lair
-    1445: False,  # Blackrock Mountain
     1477: False,  # Sunken Temple
     2257: False,  # Deeprun Tram
     2300: False,  # Caverns of Time
@@ -336,15 +333,16 @@ zoneid_to_mapid = {
     6099: False,  # Pranksters' Hollow
     6137: False,  # Frostmane Hovel
     6201: False,  # Tomb of Conquerors
-    6213: False,  # Niuzao Temple
     6296: False,  # Tol'viron Arena
     6298: False,  # Brawl'gar Arena
+    6311: False,  # Niuzao Catacombs
     6376: False,  # The Ancient Passage
     6389: False,  # Howlingwind Cavern
     6419: False,  # Peak of Serenity
     6466: False,  # Cavern of Endless Echoes
     6512: False,  # The Widow's Wail
     6513: False,  # Oona Kagu
+    6553: False,  # Shrine of Seven Stars
     6589: False,  # Lightning Vein Mine
     6592: False,  # The Swollen Vault
     6609: False,  # Ruins of Ogudei
@@ -358,15 +356,49 @@ zoneid_to_mapid = {
     6677: False,  # Fall of Shan Bu
     6681: False,  # Lightning Vein Mine
     6716: False,  # Troves of the Thunder King
+    6723: False,  # Tanaan Jungle
     6732: False,  # The Tiger's Peak
+    6745: False,  # Grulloc's Grotto
     6756: False,  # Faralohn
     6780: False,  # Cavern of Lost Spirits
+    6848: False,  # Turgall's Den
+    6849: False,  # Sootstained Mines
     6851: False,  # The Purge of Grommar
+    6861: False,  # Grulloc's Lair
     6863: False,  # The Secret Ingredient
+    6864: False,  # Bladespire Citadel
+    6868: False,  # Hall of the Great Hunt
+    6875: False,  # Bladespire Throne
+    6885: False,  # Cragplume Cauldron
+    6939: False,  # Butcher's Rise
     6960: False,  # The Battle of Thunder Pass
+    6976: False,  # Bloodthorn Cave
+    6979: False,  # Tomb of Souls
+    7005: False,  # Snowfall Alcove
+    7042: False,  # Umbral Halls
     7083: False,  # Defense of Karabor
+    7089: False,  # Tomb of Lights
     7107: False,  # Tarren Mill vs Southshore
+    7124: False,  # The Masters' Cavern
+    7160: False,  # Fissure of Fury
+    7185: False,  # Moira's Reach
+    7203: False,  # The Underpale
+    7204: False,  # Sanctum of the Naaru
+    7209: False,  # Bladespire Span
+    7267: False,  # Vault of the Titan
+    7324: False,  # Lunarfall Excavation
+    7325: False,  # Lunarfall Excavation
+    7326: False,  # Lunarfall Excavation
+    7327: False,  # Frostwall Mine
+    7328: False,  # Frostwall Mine
+    7329: False,  # Frostwall Mine
     7381: False,  # The Trial of Faith
+    7460: False,  # Den of Secrets
     7462: False,  # The Coliseum
-    7490: False,  # Garrison
+    7510: False,  # The Burning Nether
+    7519: False,  # Edge of Reality
+    7545: False,  # Hellfire Citadel
+    7548: False,  # Ashran Mine
+    7622: False,  # The Breached Ossuary
+    7771: False,  # Tanaan Invasion
 }
