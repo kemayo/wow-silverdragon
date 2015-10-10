@@ -18,7 +18,8 @@ local achievements = {
 	[9655] = {}, -- Fight the Power (Gorgrond)
 	[9678] = {}, -- Ancient No More (Gorgrond)
 	[9216] = {}, -- High-value targets (Ashran)
-	[10070] = {}, -- Jungle Stalker (Tenaan)
+	[10061] = {}, -- Hellbane (Tanaan)
+	[10070] = {}, -- Jungle Stalker (Tanaan)
 }
 local mobs_to_achievement = {
 	-- [43819] = 2257,
