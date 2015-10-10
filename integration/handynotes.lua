@@ -21,7 +21,7 @@ do
 		end
 		local mod_tooltip = core:GetModule("Tooltip", true)
 		if not mod_tooltip then
-			return true
+			return module.db.profile.achievementless
 		end
 		local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
 		if achievement then
@@ -111,6 +111,14 @@ function handler:OnEnter(mapFile, coord)
 				completed and 0 or 1, completed and 1 or 0, 0
 			)
 		end
+	end
+	if core.db.global.mob_quests[id] then
+		tooltip:AddDoubleLine(
+			QUESTS_COLON,
+			IsQuestFlaggedCompleted(core.db.global.mob_quests[id]) and COMPLETE or INCOMPLETE,
+			1, 1, 0,
+			completed and 0 or 1, completed and 1 or 0, 0
+		)
 	end
 	tooltip:Show()
 end

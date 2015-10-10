@@ -121,6 +121,14 @@ function module:UpdateTooltip(id)
 				completed and 0 or 1, completed and 1 or 0, 0
 			)
 		end
+		if core.db.global.mob_quests[id] then
+			tooltip:AddDoubleLine(
+				QUESTS_COLON,
+				IsQuestFlaggedCompleted(core.db.global.mob_quests[id]) and COMPLETE or INCOMPLETE,
+				1, 1, 0,
+				completed and 0 or 1, completed and 1 or 0, 0
+			)
+		end
 	end
 
 	GameTooltip:Show()
