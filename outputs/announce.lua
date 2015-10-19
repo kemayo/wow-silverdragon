@@ -49,10 +49,10 @@ local mount_mobs = {
 	[51015] = true, -- Silthide
 	[50883] = true, -- Pathrunner
 	-- Tenaan special 4
-	[95044] = true, -- Terrorfist
-	[95053] = true, -- Deathtalon
-	[95054] = true, -- Vengeance
-	[95056] = true, -- Doomroller
+	-- [95044] = true, -- Terrorfist
+	-- [95053] = true, -- Deathtalon
+	-- [95054] = true, -- Vengeance
+	-- [95056] = true, -- Doomroller
 }
 local boss_mobs = {
 	[50009] = true, -- Mobus
