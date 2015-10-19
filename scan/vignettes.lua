@@ -69,18 +69,18 @@ function module:WORLD_MAP_UPDATE(event)
 	if not self.db.profile.pointsofinterest then return end
 	-- local poiCount = GetNumMapLandmarks()
 	for i=1, NUM_WORLDMAP_POIS do
-		local name, _, _, x, y = GetMapLandmarkInfo(i);
+		local name, _, _, x, y = GetMapLandmarkInfo(i)
 		if name then
 			local mob_id = globaldb.mob_id[name] or globaldb.mob_vignettes[name]
 			if mob_id then
 				-- it's a rare that we know about!
-				self:NotifyIfNeeded(mob_id, nil, x, y)
+				self:NotifyIfNeeded(mob_id, nil, x, y, "point-of-interest")
 			end
 		end
 	end
 end
 
-function module:NotifyIfNeeded(id, instanceid, x, y)
+function module:NotifyIfNeeded(id, instanceid, x, y, variant)
 	local current_zone
 	local force = true
 	if x and y then
@@ -100,5 +100,5 @@ function module:NotifyIfNeeded(id, instanceid, x, y)
 		local name = globaldb.mob_name[id]
 		newloc = core:SaveMob(id, name, current_zone, x, y, level, elite, creature_type)
 	end
-	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, newloc, "vignette", false, nil, force)
+	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, newloc, variant or "vignette", false, nil, force)
 end
