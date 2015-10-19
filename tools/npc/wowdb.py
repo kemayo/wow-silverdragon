@@ -102,14 +102,14 @@ class WowdbNPC(NPC):
             return False
 
     @staticmethod
-    def query(creature_type, ptr = False):
+    def query(creature_type, ptr = False, **kw):
         url = "%s/npcs/%s?filter-classification=20" % (ptr and WOWDB_URL_PTR or WOWDB_URL, creature_type.lower())
 
         npcs = {}
         pages_remaining = True
         while pages_remaining:
             print("Loading page", url)
-            page = fetch(url)
+            page = fetch(url, **kw)
 
             if not page:
                 break

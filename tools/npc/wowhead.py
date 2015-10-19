@@ -79,10 +79,10 @@ class WowheadNPC(NPC):
             return int(info.group(1))
 
     @staticmethod
-    def query(categoryid, expansion, ptr = False):
+    def query(categoryid, expansion, ptr = False, **kw):
         url = "%s/npcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (ptr and WOWHEAD_URL_PTR or WOWHEAD_URL, categoryid, expansion)
 
-        page = fetch(url)
+        page = fetch(url, **kw)
         match = re.search(r'new Listview\({[^{]+?data: \[(.+?)\]}\);\n', page)
         if not match:
             return {}
