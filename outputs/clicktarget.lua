@@ -17,6 +17,7 @@ function module:OnInitialize()
 				mouseover = true,
 				nameplate = true,
 				vignette = true,
+				['point-of-interest'] = true,
 				groupsync = true,
 				guildsync = false,
 				fake = true,
@@ -52,6 +53,7 @@ function module:OnInitialize()
 							mouseover = "Mouseover",
 							nameplate = "Nameplates",
 							vignette = "Vignettes",
+							['point-of-interest'] = "Map Points of Interest",
 							groupsync = "Group Sync",
 							guildsync = "Guild Sync",
 						},
@@ -79,7 +81,7 @@ function module:ShowFrame()
 	local id, zone, name, unit = current.id, current.zone, current.name, current.unit
 	if not (zone and name) then return end
 
-	local _, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
+	local name, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
 	local popup = self.popup
 	local macrotext = "/cleartarget\n/targetexact "..name
 	local level_text = (level and level > 0) and level or (level and level == -1) and 'Boss' or '?'
