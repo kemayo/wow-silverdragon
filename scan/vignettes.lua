@@ -69,8 +69,8 @@ function module:WORLD_MAP_UPDATE(event)
 	if not self.db.profile.pointsofinterest then return end
 	-- local poiCount = GetNumMapLandmarks()
 	for i=1, NUM_WORLDMAP_POIS do
-		local name, _, _, x, y = GetMapLandmarkInfo(i)
-		if name then
+		local name, description, texture_index, x, y = GetMapLandmarkInfo(i)
+		if name and texture_index ~= 197 then
 			local mob_id = globaldb.mob_id[name] or globaldb.mob_vignettes[name]
 			if mob_id then
 				-- it's a rare that we know about!
