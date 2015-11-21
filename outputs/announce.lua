@@ -91,6 +91,7 @@ function module:OnInitialize()
 				wrath = true,
 				cataclysm = true,
 				pandaria = true,
+				draenor = true,
 				cities = true,
 				unknown = true,
 			},
@@ -147,8 +148,9 @@ function module:OnInitialize()
 					wrath = toggle("Wrath of the Lich King", "Emo Arthas. 71-80.", 30, false),
 					cataclysm = toggle("Cataclysm", "Play it off, keyboard cataclysm! 81-85.", 40, false),
 					pandaria = toggle("Mists of Pandaria", "Everybody was kung fu fighting. 86-90.", 50, false),
-					cities = toggle("Capitol Cities", "Expansion indifferent and ever evolving.", 60, false),
-					unknown = toggle(UNKNOWN, "Not sure where they fit.", 70, false),
+					draenor = toggle("Warlords of Draenor", "Why did we go here, again? 91-100.", 60, false),
+					cities = toggle("Capitol Cities", "Expansion indifferent and ever evolving.", 70, false),
+					unknown = toggle(UNKNOWN, "Not sure where they fit.", 80, false),
 				},
 			},
 			message = {
@@ -460,6 +462,22 @@ do
 		-- starting zones
 		[889] = "ValleyofTrialsStart",
 	}
+	local wod_zones = {
+		[962] = "Draenor",
+		[978] = "Ashran",
+		[941] = "FrostfireRidge",
+		[976] = "Frostwall", -- Actually a bunch of different possible mapfiles
+		[949] = "Gorgrond",
+		[971] = "Lunarfall", -- Actually a bunch of different possible mapfiles
+		[950] = "NagrandDraenor",
+		[947] = "ShadowmoonValleyDR",
+		[948] = "SpiresOfArak",
+		[1009] = "AshranAllianceFactionHub",
+		[946] = "Talador",
+		[945] = "TanaanJungle",
+		[970] = "TanaanJungleIntro",
+		[1011] = "AshranHordeFactionHub",
+	}
 	local main_cities = {
 		[301] = "StormwindCity",
 		[321] = "Orgrimmar",
@@ -492,6 +510,9 @@ do
 		end
 		if mop_zones[zone] then
 			return 'pandaria'
+		end
+		if wod_zones[zone] then
+			return 'draenor'
 		end
 		if main_cities[zone] then
 			return 'cities'
