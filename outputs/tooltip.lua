@@ -91,7 +91,11 @@ function module:LoadAchievementMobs(achievement)
 			mobs_to_achievement[id] = achievement
 			-- and grab the names/ids, for the heck of it
 			globaldb.mob_id[description] = id
-			globaldb.mob_name[id] = description
+			-- note, can't use the raw name from the description, as it's not necessarily correct
+			local name = core:RequestCacheForMob(id)
+			if name then
+				globaldb.mob_name[id] = name
+			end
 
 			achievements_loaded = true
 		end
