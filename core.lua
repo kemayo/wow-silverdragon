@@ -131,6 +131,23 @@ function addon:OnInitialize()
 		self:Print("Upgraded rare mob database; you may have to reload your UI before everything is 100% there.")
 	end
 
+	-- By switching to HereBeDragons-1.0, some of our canonicalized zoneids need to get flipped
+	-- (rawget because defaults)
+	local remap = {
+		[683] = 606, -- twilight highlands
+		[748] = 720, -- uldum
+		[770] = 700, -- twilight highlands
+	}
+	for oldid, newid in pairs(remap) do
+		if rawget(globaldb.mobs_byzoneid, oldid) then
+			for mobid, coords in pairs(globaldb.mobs_byzoneid[oldid]) do
+				self:SaveMobLocations(mobid, newid, unpack(coords))
+			end
+			globaldb.mobs_byzoneid[oldid] = nil
+			Debug("Migrated mobs", oldid, newid)
+		end
+	end
+
 	-- Total hack. I'm very disappointed in myself. Blood Seeker is flagged as tamemable, but really isn't.
 	-- (It despawns in 10-ish seconds, and shows up high in the sky.)
 	globaldb.mob_tameable[3868] = nil

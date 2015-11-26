@@ -50,7 +50,7 @@ zoneid_to_mapid = {
     491: 761,  # Razorfen Kraul
     493: 241,  # Moonglade
     495: 491,  # Howling Fjord
-    616: 683,  # Mount Hyjal
+    616: 606,  # Mount Hyjal
     618: 281,  # Winterspring
     717: 690,  # The Stockade
     718: 749,  # Wailing Caverns
@@ -162,14 +162,14 @@ zoneid_to_mapid = {
     4813: 602,  # Pit of Saron
     4815: 610,  # Kelp'thar Forest
     4820: 603,  # Halls of Reflection
-    4922: 770,  # Twilight Highlands
+    4922: 700,  # Twilight Highlands
     4926: 753,  # Blackrock Caverns
     4945: 759,  # Halls of Origination
     4950: 757,  # Grim Batol
     4987: 609,  # The Ruby Sanctum
     5004: 767,  # Throne of the Tides
     5031: 626,  # Twin Peaks
-    5034: 748,  # Uldum
+    5034: 720,  # Uldum
     5035: 769,  # The Vortex Pinnacle
     5042: 640,  # Deepholm
     5088: 768,  # The Stonecore
@@ -218,8 +218,8 @@ zoneid_to_mapid = {
     6126: 860,  # Silvershard Mines
     6134: 857,  # Krasarang Wilds
     6138: 858,  # Dread Wastes
-    6141: 903,  # Shrine of Two Moons
-    6142: 905,  # Shrine of Seven Stars
+    6141: 811,  # Shrine of Two Moons
+    6142: 811,  # Shrine of Seven Stars
     6170: 864,  # Northshire
     6176: 866,  # Coldridge Valley
     6182: 885,  # Mogu'shan Palace
