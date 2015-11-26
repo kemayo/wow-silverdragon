@@ -2,6 +2,8 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Macro", "AceEvent-3.0", "AceConsole-3.0")
 local Debug = core.Debug
 
+local HBD = LibStub("HereBeDragons-1.0")
+
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Macro", {
 		profile = {
@@ -9,8 +11,8 @@ function module:OnInitialize()
 		},
 	})
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
-	core.RegisterCallback(self, "ZoneChanged")
-	core.RegisterCallback(self, "Seen", "ZoneChanged")
+	HBD.RegisterCallback(self, "PlayerZoneChanged")
+	core.RegisterCallback(self, "Seen", "PlayerZoneChanged")
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -39,14 +41,14 @@ function module:OnInitialize()
 		}
 	end
 
-	self:ZoneChanged()
+	self:PlayerZoneChanged()
 end
 
 function module:Update()
 	if not self.db.profile.enabled then return end
 	Debug("Updating Macro")
 	-- first, create the macro text on the button:
-	local zone = core:GetPlayerZone()
+	local zone = HBD:GetPlayerZone()
 	local mobs = zone and core.db.global.mobs_byzoneid[zone]
 	if not mobs then return end
 	local macro = {}
@@ -79,7 +81,7 @@ function module:CreateMacro()
 	end
 end
 
-function module:ZoneChanged(...)
+function module:PlayerZoneChanged(...)
 	if InCombatLockdown() then
 		self.waiting = true
 	else
@@ -99,3 +101,4 @@ button:SetAttribute("type", "macro")
 button:SetAttribute("macrotext", "/script DEFAULT_CHAT_FRAME:AddMessage('SilverDragon Macro: Not initialized yet.', 1, 0, 0)")
 module.button = button
 
+-- /spew SilverDragonMacroButton:GetAttribute("macrotext")

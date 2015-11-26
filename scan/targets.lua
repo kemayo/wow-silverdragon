@@ -2,6 +2,8 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Scan_Targets", "AceEvent-3.0")
 local Debug = core.Debug
 
+local HBD = LibStub("HereBeDragons-1.0")
+
 local globaldb
 local UnitExists, UnitIsVisible, UnitPlayerControled, UnitName, UnitLevel, UnitCreatureType, UnitGUID = UnitExists, UnitIsVisible, UnitPlayerControled, UnitName, UnitLevel, UnitCreatureType, UnitGUID
 function module:OnInitialize()
@@ -77,7 +79,7 @@ function module:ProcessUnit(unit, source)
 	local id = core:UnitID(unit)
 	if id and (globaldb.always[id] or globaldb.mob_name[id] or rare_nonflags[id] or (unittype == 'rare' or unittype == 'rareelite')) then
 		-- from this point on, it's a rare
-		local zone, x, y = core:GetPlayerLocation()
+		local x, y, zone = HBD:GetPlayerZonePosition()
 		if not zone then return end -- there are only a few places where this will happen
 
 		local name = UnitName(unit)

@@ -3,6 +3,7 @@ local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 local icon = LibStub("LibDBIcon-1.0", true)
 
 local LibQTip = LibStub("LibQTip-1.0")
+local HBD = LibStub("HereBeDragons-1.0")
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("LDB")
@@ -84,7 +85,7 @@ function module:SetupDataObject()
 	local rares_seen = {}
 	local tooltip
 	function dataobject:OnEnter()
-		local zone = core:GetPlayerZone()
+		local zone = HBD:GetPlayerZone()
 
 		if not (core.db and core.db.global.mobs_byzoneid[zone]) then
 			return

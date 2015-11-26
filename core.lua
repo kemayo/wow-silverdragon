@@ -1,5 +1,6 @@
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
+local HBD = LibStub("HereBeDragons-1.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0")
 SilverDragon = addon
@@ -119,7 +120,7 @@ function addon:OnInitialize()
 				if id then
 					globaldb.mob_name[id] = name
 					globaldb.mob_seen[id] = last
-					local zoneid = addon.zoneid_from_mapfile(zone)
+					local zoneid = HBD:GetMapIDFromFile(zone)
 					if zoneid then
 						globaldb.mobs_byzoneid[zoneid][id] = current_mob_locations[name] or {}
 					end
@@ -136,7 +137,6 @@ function addon:OnInitialize()
 end
 
 function addon:OnEnable()
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	if self.db.profile.scan > 0 then
 		self:ScheduleRepeatingTimer("CheckNearby", self.db.profile.scan)
 	end
@@ -379,7 +379,7 @@ end
 
 function addon:CheckNearby()
 	if (not self.db.profile.instances) and IsInInstance() then return end
-	local zone = self:GetPlayerZone()
+	local zone = HBD:GetPlayerZone()
 	if not zone then return end
 
 	self.events:Fire("Scan", zone)
@@ -410,99 +410,10 @@ end
 
 -- Location
 
-local currentZone
-
---fix terrain phased zones with multiple IDs
-local zone_overrides = {
-	[606] = 683, -- hyjal_terrain1
-	[720] = 748, -- uldum_terrain1
-	[700] = 770, -- twilight highlands
-	[905] = 811, -- vale of eternal blossoms
-}
-function addon:CanonicalZoneId(zoneid)
-	return zone_overrides[zoneid] or zoneid
-end
-
-function addon:ZONE_CHANGED_NEW_AREA()
-	if WorldMapFrame:IsVisible() then--World Map is open
-		local Z = GetCurrentMapAreaID()
-		SetMapToCurrentZone()
-		currentZone = GetCurrentMapAreaID()
-		if currentZone ~= Z then
-			SetMapByID(Z)--Restore old map settings if they differed to what they were prior to forcing mapchange and user has map open.
-		end
-	else--Map is not open, no reason to go extra miles, just force map to right zone and get right info.
-		SetMapToCurrentZone()
-		currentZone = GetCurrentMapAreaID()--Get right info after we set map to right place.
-	end
-
-	currentZone = self:CanonicalZoneId(currentZone)
-	if currentZone then
-		self.events:Fire("ZoneChanged", currentZone)
-	end
-end
-
---Zone functions split into 2, location, and coords. There is no reason to spam check player coords and do complex map checks when we only need zone.
---So this should save a lot of wasted calls.
-
---First, a simpler function that just uses cached zone from last actual zone change to return current zone we are in and scanning.
-function addon:GetPlayerZone()
-	-- We load AFTER first ZONE_CHANGED_NEW_AREA on login, so we need a hack for initial lack of ZONE_CHANGED_NEW_AREA.
-	if currentZone == nil then
-		self:ZONE_CHANGED_NEW_AREA()
-	end
-	return currentZone
-end
-
-function addon:GetPlayerLocation()--Advanced function that actually gets the player coords for when we actually find/save a rare. No reason to run this function every second though.
-	local set_Z = GetCurrentMapAreaID()
-	SetMapToCurrentZone()
-	local true_Z = GetCurrentMapAreaID()
-	local x, y = GetPlayerMapPosition('player')
-	if true_Z ~= set_Z and WorldMapFrame:IsVisible() then
-		--Restore old map settings if they differed to what they were prior to forcing mapchange and user has map open.
-		SetMapByID(set_Z)
-	end
-	if x <= 0 and y <= 0 then
-		-- I don't *think* this should be possible any more. But just in case...
-		x, y = 0, 0
-	end
-	return self:GetPlayerZone(), x, y
-end
-
 function addon:GetCoord(x, y)
 	return floor(x * 10000 + 0.5) * 10000 + floor(y * 10000 + 0.5)
 end
 
 function addon:GetXY(coord)
 	return floor(coord / 10000) / 10000, (coord % 10000) / 10000
-end
-
-do
-	-- need to set up a mapfile-to-mapid mapping
-	-- for: imports, and map notes addons
-	local MAX_MAPFILE = 1100
-	local mapfile_to_zoneid = {}
-	local zoneid_to_mapfile = {}
-	for zoneid = 1, MAX_MAPFILE do
-		local name = GetMapNameByID(zoneid)
-		if name then
-			SetMapByID(zoneid)
-			local mapfile = (GetMapInfo()):gsub("_terrain%d+$", "")
-			if mapfile_to_zoneid[mapfile] then
-				Debug("Duplicate mapfile", mapfile, zoneid_to_mapfile[zoneid])
-			else
-				mapfile_to_zoneid[mapfile] = zoneid
-			end
-			zoneid_to_mapfile[zoneid] = mapfile
-		end
-	end
-
-	addon.zoneid_from_mapfile = function(mapfile)
-		return addon:CanonicalZoneId(mapfile_to_zoneid[mapfile:gsub("_terrain%d+$", "")])
-	end
-	addon.mapfile_from_zoneid = function(zoneid)
-		return zoneid_to_mapfile[zoneid]
-	end
-	-- addon.mapfile_to_zoneid = mapfile_to_zoneid
 end

@@ -2,6 +2,8 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Scan_Vignettes", "AceEvent-3.0", "AceConsole-3.0")
 local Debug = core.Debug
 
+local HBD = LibStub("HereBeDragons-1.0")
+
 local globaldb
 function module:OnInitialize()
 	globaldb = core.db.global
@@ -85,10 +87,10 @@ function module:NotifyIfNeeded(id, instanceid, x, y, variant)
 	local force = true
 	if x and y then
 		--Triggered by map update, vignette has exact location that does not match player, so update x, y
-		current_zone = core:GetPlayerZone()
+		current_zone = HBD:GetPlayerZone()
 		force = false
 	else
-		current_zone, x, y = core:GetPlayerLocation()
+		x, y, current_zone = HBD:GetPlayerZonePosition()
 	end
 	local newloc = false
 	if self.db.profile.location and not globaldb.mob_tameable[id] then

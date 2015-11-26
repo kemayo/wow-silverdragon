@@ -1,6 +1,8 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Scan_Nameplates", "AceEvent-3.0")
 
+local HBD = LibStub("HereBeDragons-1.0")
+
 local globaldb
 function module:OnInitialize()
 	globaldb = core.db.global
@@ -96,7 +98,7 @@ function module:Scan(callback, zone)
 		local id = globaldb.mob_id[name]
 		if nameplate:IsVisible() and id and zone_mobs[id] then
 			local name = globaldb.mob_name[id] or regions.name:GetText()
-			local current_zone, x, y = core:GetPlayerLocation()
+			local x, y, current_zone = HBD:GetPlayerZonePosition()
 			core:NotifyMob(id, name, current_zone, x, y, false, false, "nameplate", false)
 			break -- it's pretty unlikely there'll be two rares on screen at once
 		end

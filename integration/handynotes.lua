@@ -5,6 +5,8 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("HandyNotes", "AceEvent-3.0")
 local Debug = core.Debug
 
+local HBD = LibStub("HereBeDragons-1.0")
+
 local db
 -- local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
 local icon, icon_mount
@@ -76,7 +78,7 @@ do
 		return nil, nil, nil, nil, nil
 	end
 	function handler:GetNodes(mapFile)
-		return iter, nodes[core.zoneid_from_mapfile(mapFile)], nil
+		return iter, nodes[HBD:GetMapIDFromFile(mapFile)], nil
 	end
 end
 
@@ -87,7 +89,7 @@ function handler:OnEnter(mapFile, coord)
 	else
 		tooltip:SetOwner(self, "ANCHOR_RIGHT")
 	end
-	local zoneid = core.zoneid_from_mapfile(mapFile)
+	local zoneid = HBD:GetMapIDFromFile(mapFile)
 	local id, name, _, level, elite, creature_type, lastseen = core:GetMobByCoord(zoneid, coord)
 	tooltip:AddLine(name)
 	if core.db.global.mob_notes[id] then
@@ -135,7 +137,7 @@ local clicked_zone, clicked_coord
 local info = {}
 
 local function deletePin(button, mapFile, coord)
-	local zoneid = core.zoneid_from_mapfile(mapFile)
+	local zoneid = HBD:GetMapIDFromFile(mapFile)
 	local id = core:GetMobByCoord(zoneid, coord)
 	if id then
 		core:DeleteMobCoord(zoneid, id, coord)
@@ -145,7 +147,7 @@ local function deletePin(button, mapFile, coord)
 end
 
 local function deleteWholeMob(button, mapFile, coord)
-	local zoneid = core.zoneid_from_mapfile(mapFile)
+	local zoneid = HBD:GetMapIDFromFile(mapFile)
 	local id = core:GetMobByCoord(zoneid, coord)
 	if id then
 		core:DeleteMob(id)
@@ -335,7 +337,7 @@ core.RegisterCallback(module, "Seen")
 function module:UpdateNodes()
 	wipe(nodes)
 	for zone, mobs in pairs(core.db.global.mobs_byzoneid) do
-		local mapFile = core.mapfile_from_zoneid(zone)
+		local mapFile = HBD:GetMapFileFromID(zone)
 		if mapFile then
 			nodes[zone] = {}
 			for id, locs in pairs(mobs) do
