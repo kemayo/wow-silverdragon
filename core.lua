@@ -217,21 +217,33 @@ function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
 	if not (zone and x and y and x > 0 and y > 0) then
 		return
 	end
-	if not globaldb.mobs_byzoneid[zone][id] then globaldb.mobs_byzoneid[zone][id] = {} end
 
-	local newloc = true
-	for _, coord in ipairs(globaldb.mobs_byzoneid[zone][id]) do
-		local loc_x, loc_y = self:GetXY(coord)
-		if (mabs(loc_x - x) < 0.03) and (mabs(loc_y - y) < 0.03) then
-			-- We've seen it close to here before. (within 3% of the zone)
-			newloc = false
-			break
+	return self:SaveMobLocations(id, zone, self:GetCoord(x, y))
+end
+
+function addon:SaveMobLocations(id, zone, ...)
+	if not globaldb.mobs_byzoneid[zone][id] then
+		globaldb.mobs_byzoneid[zone][id] = {} -- never seen
+	end
+
+	local any_newloc
+	for i=1, select('#', ...) do
+		local loc = select(i, ...)
+		local new_x, new_y = self:GetXY(loc)
+		local newloc = true
+		for _, oldloc in pairs(globaldb.mobs_byzoneid[zone][id]) do
+			local old_x, old_y = self:GetXY(oldloc)
+			if math.abs(new_x - old_x) < 0.05 and math.abs(new_y - old_y) < 0.05 then
+				newloc = false
+				break
+			end
+		end
+		if newloc then
+			any_newloc = true
+			table.insert(globaldb.mobs_byzoneid[zone][id], loc)
 		end
 	end
-	if newloc then
-		tinsert(globaldb.mobs_byzoneid[zone][id], self:GetCoord(x, y))
-	end
-	return newloc
+	return any_newloc
 end
 
 -- Returns name, num_locs, level, is_elite, creature_type, last_seen, times_seen, is_tameable, questid
