@@ -572,7 +572,7 @@ function module:GetDefaults()
 		[50364] = {name="Nal'lak the Ripper",["creature_type"]="Humanoid",level=86,locations={[807]={8005920,9005120,7404780,7805900,11205340,12604820},},},
 		[50370] = {name="Karapax",["creature_type"]="Beast",level=56,locations={[261]={57001440,56601400},},tameable=true,},
 		[50388] = {name="Torik-Ethis",["creature_type"]="Humanoid",level=87,locations={[807]={10408600},[857]={14403540,14003400},},},
-		[50409] = {name="Mysterious Camel Figurine",["creature_type"]="Uncategorized",},
+		[50409] = {name="Mysterious Camel Figurine",["creature_type"]="Uncategorized",locations={[720]={25745120,25914768,32704821,31944542,33193822,30012877,29232162,33893340,34602974,34702518,33222266,34382122,45431415,50553214,52172820,63652284,63301679,66271895,65772266,66862545,63982829,66503182,72244444,72435651,70015869,73457364,66526884,58458337,56378539,50928533,51268015,47587884,47707648,49287573,50527366,50497206,58396155,51955036,47924690,46364481,45354200,40253895,40134397,41025029,38265507,38416056,36986384,33537206,31736947,31496633,32776522,33326276,33075973,30646083,30576257,28726328,25856583,22066415,24756033,},},},
 		[50410] = {name="Mysterious Camel Figurine",["creature_type"]="Uncategorized",notes="Crumbled Statue Remnants",},
 		[50724] = {name="Spinecrawl",["creature_type"]="Beast",locations={[182]={60402220,60202180},},tameable=true,},
 		[50725] = {name="Azelisk",["creature_type"]="Beast",level=51,locations={[29]={72402320,72002380},},tameable=true,},
