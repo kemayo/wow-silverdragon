@@ -51,7 +51,7 @@ function module:Update()
 	local zone = HBD:GetPlayerZone()
 	local mobs = zone and core.db.global.mobs_byzoneid[zone]
 	if not mobs then return end
-	local macro = {}
+	local macro = {"/print \"Scanning for nearby mobs...\""}
 	for id in pairs(mobs) do
 		if core.db.global.mob_name[id] and not core.db.global.ignore[id] then
 			table.insert(macro, "/targetexact "..core.db.global.mob_name[id])

@@ -16,6 +16,10 @@ local ipairs, pairs = ipairs, pairs
 local IsInInstance, GetCurrentMapAreaID, SetMapByID, SetMapToCurrentZone = IsInInstance, GetCurrentMapAreaID, SetMapByID, SetMapToCurrentZone
 local wowVersion, buildRevision, _, buildTOC = GetBuildInfo()
 
+BINDING_HEADER_SILVERDRAGON = "SilverDragon"
+_G["BINDING_NAME_CLICK SilverDragonPopupButton:LeftButton"] = "Target last found mob"
+_G["BINDING_NAME_CLICK SilverDragonMacroButton:LeftButton"] = "Scan for nearby mobs"
+
 local globaldb
 function addon:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("SilverDragon2DB", {

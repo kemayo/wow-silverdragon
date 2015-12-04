@@ -214,9 +214,11 @@ function module:PLAYER_REGEN_ENABLED()
 end
 
 function module:MODIFIER_STATE_CHANGED(event, modifier, state)
-	if modifier:sub(2) == "ALT" then
-		self:ToggleDrag(state == 1)
-	end
+	self:ToggleDrag(self:ShouldBeDraggable())
+end
+
+function module:ShouldBeDraggable()
+	return (not self.db.profile.locked) or IsModifierKeyDown()
 end
 
 function module:ToggleDrag(state)
@@ -355,31 +357,24 @@ end)
 
 popup:SetAttribute("type", "macro")
 
-local on_enter = function()
-	popup:SetBackdropBorderColor(1, 1, 0.15)
-	if module.db.profile.locked and not IsAltKeyDown() then
-		-- alt-tabbing screws this up, so play it safe
-		module:ToggleDrag(false)
-	else
-		module:ToggleDrag(true)
-	end
-end
-local on_leave = function() popup:SetBackdropBorderColor(0.7, 0.15, 0.05) end
-local on_show = function()
+popup:SetScript("OnEnter", function(self)
+	self:SetBackdropBorderColor(1, 1, 0.15)
+	module:ToggleDrag(module:ShouldBeDraggable())
+end)
+popup:SetScript("OnLeave", function(self)
+	self:SetBackdropBorderColor(0.7, 0.15, 0.05)
+	module:ToggleDrag(false)
+end)
+popup:SetScript("OnShow", function(self)
 	animation:Play()
-end
-local on_hide = function()
+end)
+popup:SetScript("OnHide", function(self)
 	animation:Stop()
-	on_leave()
-end
-
-popup:SetScript("OnEnter", on_enter)
-popup:SetScript("OnLeave", on_leave)
-popup:SetScript("OnShow", on_show)
-popup:SetScript("OnHide", on_hide)
+	self:GetScript("OnLeave")(self)
+end)
 
 -- a few setup things:
 popup:Hide()
-on_leave() -- border colors
+popup:GetScript("OnLeave")(popup)
 module:ToggleDrag(false)
 

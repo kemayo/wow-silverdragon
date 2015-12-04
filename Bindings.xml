@@ -1,0 +1,6 @@
+<Bindings>
+	<Binding name="CLICK SilverDragonPopupButton:LeftButton" header="SILVERDRAGON" category="ADDONS">
+	</Binding>
+	<Binding name="CLICK SilverDragonMacroButton:LeftButton" category="ADDONS">
+	</Binding>
+</Bindings>
