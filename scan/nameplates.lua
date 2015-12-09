@@ -99,6 +99,9 @@ function module:Scan(callback, zone)
 		if nameplate:IsVisible() and id and zone_mobs[id] then
 			local name = globaldb.mob_name[id] or regions.name:GetText()
 			local x, y, current_zone = HBD:GetPlayerZonePosition()
+			if not (zone and x and y) then
+				return
+			end
 			core:NotifyMob(id, name, current_zone, x, y, false, false, "nameplate", false)
 			break -- it's pretty unlikely there'll be two rares on screen at once
 		end

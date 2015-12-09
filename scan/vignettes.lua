@@ -92,6 +92,9 @@ function module:NotifyIfNeeded(id, instanceid, x, y, variant)
 	else
 		x, y, current_zone = HBD:GetPlayerZonePosition()
 	end
+	if not (current_zone and x and y) then
+		return
+	end
 	local newloc = false
 	if self.db.profile.location and not globaldb.mob_tameable[id] then
 		--Pull some info from global database since it's not sent from syncs, and we don't want

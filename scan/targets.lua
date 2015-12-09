@@ -80,7 +80,10 @@ function module:ProcessUnit(unit, source)
 	if id and (globaldb.always[id] or globaldb.mob_name[id] or rare_nonflags[id] or (unittype == 'rare' or unittype == 'rareelite')) then
 		-- from this point on, it's a rare
 		local x, y, zone = HBD:GetPlayerZonePosition()
-		if not zone then return end -- there are only a few places where this will happen
+		if not (zone and x and y) then
+			-- there are only a few places where this will happen
+			return
+		end
 
 		local name = UnitName(unit)
 		local level = (UnitLevel(unit) or -1)
