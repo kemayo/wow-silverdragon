@@ -99,11 +99,9 @@ function module:NotifyIfNeeded(id, instanceid, x, y, variant)
 	if self.db.profile.location and not globaldb.mob_tameable[id] then
 		--Pull some info from global database since it's not sent from syncs, and we don't want
 		-- to erase that info with savemob function just copy it over.
-		local creature_type = globaldb.mob_type[id]
-		local elite = globaldb.mob_elite[id]
-		local level = globaldb.mob_level[id]
-		local name = globaldb.mob_name[id]
-		newloc = core:SaveMob(id, name, current_zone, x, y, level, elite, creature_type)
+		if globaldb.mob_name[id] then
+			newloc = core:SaveMob(id, globaldb.mob_name[id], current_zone, x, y, globaldb.mob_level[id], globaldb.mob_elite[id], globaldb.mob_type[id])
+		end
 	end
 	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, newloc, variant or "vignette", false, nil, force)
 end
