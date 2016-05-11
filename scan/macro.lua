@@ -77,7 +77,7 @@ function module:Update()
 		end
 	end
 	if count == 0 then
-		table.insert(macro, "/print No mobs known to scan for")
+		table.insert(macro, "/print \"No mobs known to scan for\"")
 	end
 	if self.db.profile.verbose then
 		table.insert(macro, 1, ("/print \"Scanning for %d nearby mobs...\""):format(count))
