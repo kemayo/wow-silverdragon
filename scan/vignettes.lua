@@ -52,7 +52,7 @@ function module:VIGNETTE_ADDED(event, instanceid, mysterious_number)
 	end
 	already_notified[instanceid] = true
 	local x, y, name, iconid = C_Vignettes.GetVignetteInfoFromInstanceID(instanceid)
-	-- iconid seems to be 40:chests, 41:mobs
+	-- iconid seems to be 40:chests, 41:mobs, 4733:star (most Legion stuff)
 	if not name then
 		Debug("Vignette instanceid bug hit", instanceid)
 		return
@@ -62,6 +62,12 @@ function module:VIGNETTE_ADDED(event, instanceid, mysterious_number)
 		-- it's a rare that we know about!
 		-- note, we could instead try using just iconid==41, but I don't know if that's going to actually be all rares yet
 		self:NotifyIfNeeded(mob_id)
+	end
+	-- Legion mobs/events generic alert and print for now since no data yet
+	-- TODO: get data, and remove this
+	if iconid == 4733 then
+		core:Print("Vignette Nearby: "..name)
+		PlaySoundFile("Sound\\Doodad\\PortcullisActive_Closed.ogg", "Master")
 	end
 end
 
