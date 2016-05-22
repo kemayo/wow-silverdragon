@@ -132,7 +132,7 @@ function module:SetupDataObject()
 			tooltip:AddHeader("Name", "Zone", "Coords", "When", "Source")
 			for i,rare in ipairs(rares_seen) do
 				tooltip:AddLine(
-					core:GetMobLabel(rare.id) or UNKNOWN,
+					core:GetMobLabel(rare.id) or rare.name or UNKNOWN,
 					GetMapNameByID(rare.zone),
 					(rare.x and rare.y) and (core.round(rare.x * 100, 1) .. ', ' .. core.round(rare.y * 100, 1)) or UNKNOWN,
 					core:FormatLastSeen(rare.when),
