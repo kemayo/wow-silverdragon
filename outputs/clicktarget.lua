@@ -81,7 +81,10 @@ function module:ShowFrame()
 	local id, zone, name, unit = current.id, current.zone, current.name, current.unit
 	if not (zone and name) then return end
 
-	local name, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
+	local storedName, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
+	if storedName and storedName ~= 0 then
+		name = storedName
+	end
 	local popup = self.popup
 	local macrotext = "/cleartarget\n/targetexact "..name
 	local level_text = (level and level > 0) and level or (level and level == -1) and 'Boss' or '?'
