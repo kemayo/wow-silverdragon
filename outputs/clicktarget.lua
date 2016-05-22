@@ -206,6 +206,7 @@ function module:Announce(callback, id, name, zone, x, y, dead, newloc, source, u
 	else
 		self:ShowFrame()
 	end
+	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 	current.unit = nil -- can't be trusted to remain the same
 end
 
