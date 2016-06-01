@@ -1,0 +1,8 @@
+decorator==4.0.9
+dict==0.0.5
+get==0.0.7
+post==0.0.5
+public==0.0.0
+query-string==0.0.5
+request==0.0.5
+self==0.0.5
