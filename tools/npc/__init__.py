@@ -18,10 +18,20 @@ types = {
     15: 'Aberration'
 }
 
+
 class NPC:
-    def __init__(self, id, fetch = True, ptr = False):
+    @classmethod
+    def url(cls, ptr=False, beta=False):
+        if beta:
+            return cls.URL_BETA
+        if ptr:
+            return cls.URL_PTR
+        return cls.URL
+
+    def __init__(self, id, fetch=True, ptr=False, beta=False):
         self.id = int(id)
         self.ptr = ptr
+        self.beta = beta
         self.data = {}
         if fetch:
             self.load()

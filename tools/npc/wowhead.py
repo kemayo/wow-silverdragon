@@ -7,18 +7,21 @@ from .fetch import Fetch
 from . import NPC, types, pack_coords
 from .zones import zoneid_to_mapid
 
-WOWHEAD_URL = 'http://www.wowhead.com'
-WOWHEAD_URL_PTR = 'http://ptr.wowhead.com'
-
 fetch = Fetch("wowhead.db")
 
 zone_map = False
 
+
 class WowheadNPC(NPC):
+    URL = 'http://www.wowhead.com'
+    URL_PTR = 'http://ptr.wowhead.com'
+    URL_BETA = 'http://legion.wowhead.com'
+
     def __page(self):
-        page = fetch('%s/npc=%d' % (self.ptr and WOWHEAD_URL_PTR or WOWHEAD_URL, self.id))
+        url = '%s/npc=%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id)
+        page = fetch(url)
         if not page:
-            print("Couldn't fetch", '%s/npc=%d' % (self.ptr and WOWHEAD_URL_PTR or WOWHEAD_URL, self.id))
+            print("Couldn't fetch", url)
             return ''
         return page
 
@@ -78,9 +81,9 @@ class WowheadNPC(NPC):
         if info:
             return int(info.group(1))
 
-    @staticmethod
-    def query(categoryid, expansion, ptr = False, **kw):
-        url = "%s/npcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (ptr and WOWHEAD_URL_PTR or WOWHEAD_URL, categoryid, expansion)
+    @classmethod
+    def query(cls, categoryid, expansion, ptr=False, beta=False, **kw):
+        url = "%s/npcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (cls.url(ptr=ptr, beta=beta), categoryid, expansion)
 
         page = fetch(url, **kw)
         match = re.search(r'new Listview\({[^{]+?data: \[(.+?)\]}\);\n', page)

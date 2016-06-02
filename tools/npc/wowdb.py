@@ -7,17 +7,20 @@ from .fetch import Fetch
 from . import NPC, types, pack_coords
 from .zones import zoneid_to_mapid
 
-WOWDB_URL = 'http://www.wowdb.com'
-WOWDB_URL_PTR = 'http://ptr.wowdb.com'
-
 fetch = Fetch("wowdb.db")
 
 zone_map = False
 
+
 class WowdbNPC(NPC):
+    URL = 'http://www.wowdb.com'
+    URL_PTR = 'http://ptr.wowdb.com'
+    URL_BETA = 'http://beta.wowdb.com'
+
     soup = False
+
     def __page(self):
-        return fetch('%s/npcs/%d' % (self.ptr and WOWDB_URL_PTR or WOWDB_URL, self.id))
+        return fetch('%s/npcs/%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id))
 
     def _name(self):
         name = re.search(r'<h2 class="header">([^<]+?)</h2>', self.__page())
@@ -101,9 +104,9 @@ class WowdbNPC(NPC):
                 return int(level.group(1))
             return False
 
-    @staticmethod
-    def query(creature_type, ptr = False, **kw):
-        url = "%s/npcs/%s?filter-classification=20" % (ptr and WOWDB_URL_PTR or WOWDB_URL, creature_type.lower())
+    @classmethod
+    def query(cls, creature_type, ptr=False, beta=False, **kw):
+        url = "%s/npcs/%s?filter-classification=20" % (cls.url(ptr=ptr, beta=beta), creature_type.lower())
 
         npcs = {}
         pages_remaining = True
@@ -120,7 +123,7 @@ class WowdbNPC(NPC):
 
             next = re.search(r'<a href="([^"]+)" rel="next">', page)
             if next:
-                url = (ptr and WOWDB_URL_PTR or WOWDB_URL) + next.group(1).replace('&amp;', '&').replace('cookieTest=1&', '')
+                url = cls.url(ptr=ptr, beta=beta) + next.group(1).replace('&amp;', '&').replace('cookieTest=1&', '')
             else:
                 pages_remaining = False
         return npcs

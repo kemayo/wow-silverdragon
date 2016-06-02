@@ -77,6 +77,7 @@ if __name__ == '__main__':
     parser.add_argument('--no-wowdb', action='store_false', dest='wowdb')
     parser.add_argument('--strip-empties', action='store_true', dest='strip_empties')
     parser.add_argument('--ptr', action='store_true')
+    parser.add_argument('--beta', action='store_true')
     parser.add_argument('--no-cache-list', action='store_false', dest="cache_list")
     ns = parser.parse_args()
 
@@ -88,25 +89,25 @@ if __name__ == '__main__':
         from npc.wowdb import WowdbNPC
         for creature_type in npctypes.values():
             print("ACQUIRING rares for category", creature_type)
-            wowdb.update(WowdbNPC.query(creature_type, ptr=ns.ptr, cached=ns.cache_list))
+            wowdb.update(WowdbNPC.query(creature_type, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
 
         for id in force_include:
             if id not in wowdb:
-                wowdb[id] = WowdbNPC(id, ptr=ns.ptr)
+                wowdb[id] = WowdbNPC(id, ptr=ns.ptr, beta=ns.beta)
 
     if ns.wowhead:
         print("LOADING FROM wowhead")
         from npc.wowhead import WowheadNPC
         for categoryid, c in npctypes.items():
             print("ACQUIRING rares for category", categoryid, c)
-            for expansion in range(1, 7):
+            for expansion in range(1, 8):
                 print("EXPANSION", expansion)
                 # run per-expansion to avoid caps on results-displayed
-                wowhead.update(WowheadNPC.query(categoryid, expansion, ptr=ns.ptr, cached=ns.cache_list))
+                wowhead.update(WowheadNPC.query(categoryid, expansion, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
 
         for id in force_include:
             if id not in wowhead:
-                wowhead[id] = WowheadNPC(id, ptr=ns.ptr)
+                wowhead[id] = WowheadNPC(id, ptr=ns.ptr, beta=ns.beta)
 
     defaults = wowhead
     for id, mob in wowdb.items():
