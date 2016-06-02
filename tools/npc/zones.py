@@ -282,9 +282,21 @@ zoneid_to_mapid = {
     7307: 995,  # Upper Blackrock Spire
     7332: 1009,  # Stormshield
     7333: 1011,  # Warspear
+    7334: 1015,  # Azsuna
+    7502: 1014,  # Dalaran
+    7503: 1024,  # Highmountain
+    7541: 1017,  # Stormheim
+    7543: 1021,  # Broken Shore
+    7558: 1018,  # Val'sharah
+    7578: 1096,  # Eye of Azshara
+    7637: 1033,  # Suramar
+    7731: 1080,  # Thunder Totem
+    8000: 1015,  # Azsuna
     # Missing:
+    5: False,  # - QA and DVD GLOBAL -
     25: False,  # Blackrock Mountain
     34: False,  # Echo Ridge Mine
+    36: False,  # Alterac Mountains
     54: False,  # Jasperlode Mine
     57: False,  # Fargodeep Mine
     111: False,  # Jangolode Mine
@@ -323,6 +335,7 @@ zoneid_to_mapid = {
     4766: False,  # Kaja'mine
     4778: False,  # Kaja'mite Cavern
     4817: False,  # Greymane Manor
+    4821: False,  # Bilgewater Harbor
     4911: False,  # Volcanoth's Lair
     4913: False,  # Spitescale Cavern
     4924: False,  # Gallywix Labor Mine
@@ -392,13 +405,129 @@ zoneid_to_mapid = {
     7327: False,  # Frostwall Mine
     7328: False,  # Frostwall Mine
     7329: False,  # Frostwall Mine
+    7343: False,  # [UNUSED]
     7381: False,  # The Trial of Faith
     7460: False,  # Den of Secrets
     7462: False,  # The Coliseum
     7510: False,  # The Burning Nether
     7519: False,  # Edge of Reality
+    7534: False,  # Broken Shore
     7545: False,  # Hellfire Citadel
+    7546: False,  # Neltharion's Lair
     7548: False,  # Ashran Mine
+    7576: False,  # Twisting Nether
+    7588: False,  # Helheim
     7622: False,  # The Breached Ossuary
+    7634: False,  # Feralas (copy)
+    7638: False,  # Sanctum of Light
+    7656: False,  # The Great Sea
+    7658: False,  # The Cove of Nashal
+    7672: False,  # Halls of Valor
+    7673: False,  # Darkheart Thicket
+    7674: False,  # Legion Dungeon
+    7679: False,  # Acherus: The Ebon Hold
+    7690: False,  # The Skyfire
+    7691: False,  # Small Battleground D
+    7695: False,  # Icecrown Citadel
+    7705: False,  # Mardum, the Shattered Abyss
+    7737: False,  # Niskara
+    7744: False,  # Shield's Rest
+    7745: False,  # The Maelstrom
+    7767: False,  # Suramar
     7771: False,  # Tanaan Invasion
+    7777: False,  # The Violet Hold
+    7787: False,  # Vault of the Wardens
+    7796: False,  # Broken Shore
+    7805: False,  # Black Rook Hold
+    7811: False,  # The Naglfar
+    7812: False,  # Helmouth Cliffs
+    7813: False,  # Skyhold
+    7814: False,  # Vault of the Wardens
+    7816: False,  # Black Rook Hold Arena
+    7822: False,  # Nagrand Arena
+    7827: False,  # Southshore vs. Tarren Mill
+    7830: False,  # Helmouth Shallows
+    7834: False,  # Netherlight Temple
+    7838: False,  # Azshara
+    7846: False,  # The Dreamgrove
+    7855: False,  # The Arcway
+    7856: False,  # Tanaan Jungle Flight Bounds
+    7875: False,  # Dreadscar Rift
+    7877: False,  # Trueshot Lodge
+    7879: False,  # Hall of the Guardian
+    7881: False,  # Dalaran
+    7902: False,  # The Wandering Isle
+    7903: False,  # Temple of Five Dawns
+    7918: False,  # Dreadscar Rift
+    7921: False,  # Stormheim
+    7945: False,  # Mardum, the Shattered Abyss
+    7952: False,  # Kun-Lai Summit
+    7955: False,  # Deepholm
+    7960: False,  # Skywall
+    7967: False,  # Boost Experience [TEMP NAME]
+    7969: False,  # Karazhan
+    7974: False,  # Ursoc's Lair
+    7976: False,  # Tirisfal Glades
+    7979: False,  # Emerald Dreamway
+    7996: False,  # Violet Hold
+    8005: False,  # Terrace of Endless Spring
+    8006: False,  # [TEMP] Tech Test - Seamless World Transition A (JT)
+    8007: False,  # [TEMP] Tech Test - Seamless World Transition B (JT)
+    8008: False,  # Ashamane's Fall
+    8012: False,  # Chamber of Shadows
+    8013: False,  # [PH]Mardum Treasures
+    8017: False,  # Gloaming Reef
+    8022: False,  # Mardum, the Shattered Abyss
+    8023: False,  # The Fel Hammer
+    8025: False,  # The Nighthold
+    8026: False,  # The Emerald Nightmare
+    8040: False,  # Eye of Azshara
+    8044: False,  # Tirisfal Glades
+    8046: False,  # The Maelstrom
+    8053: False,  # The Greater Sea (Don't Use)
+    8054: False,  # Thal'dranath
+    8057: False,  # [TEMP] Dummy Area - Dev Test (JT)
+    8058: False,  # Dev Area - A
+    8059: False,  # Dev Area - B
+    8060: False,  # Dev Area - C
+    8061: False,  # Dev Area - D
+    8062: False,  # Dev Area - E
+    8063: False,  # Dev Area - F
+    8064: False,  # Dev Area - G
+    8079: False,  # Court of Stars
+    8091: False,  # Nordrassil
+    8093: False,  # The Vortex Pinnacle
+    8094: False,  # The Beyond
+    8098: False,  # Test Dungeon
+    8105: False,  # Niskara
+    8106: False,  # Abyssal Maw
+    8124: False,  # Sword of Dawn
+    8125: False,  # Firelands
+    8142: False,  # Shadowgore Citadel
+    8161: False,  # Ulduar
+    8180: False,  # Malorne's Nightmare
+    8205: False,  # Realm of the Mage Hunter
+    8239: False,  # Black Temple
+    8250: False,  # Rescue Koltira
+    8252: False,  # The Oculus
+    8262: False,  # Temple of the Jade Serpent
+    8265: False,  # Karazhan
+    8275: False,  # Azuremyst Isle
+    8276: False,  # The Veiled Sea
+    8277: False,  # The Exodar
+    8285: False,  # Scarlet Monastery
+    8309: False,  # Tol Barad
+    8319: False,  # Baradin Hold
+    8330: False,  # [TEMP] Placeholder Area - Level Design Land - Wind Test
+    8344: False,  # The Crystal Hall
+    8347: False,  # Sanctum of Light
+    8354: False,  # Eastern Plaguelands
+    8390: False,  # Suramar
+    8392: False,  # Dalaran Sewers
+    8406: False,  # Black Rook Hold
+    8422: False,  # Tempest's Roar
+    8423: False,  # The Arcway
+    8433: False,  # Ashran
+    8439: False,  # Great Dark Beyond
+    8445: False,  # The Great Sea
 }
