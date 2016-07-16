@@ -65,7 +65,7 @@ function module:VIGNETTE_ADDED(event, instanceid, mysterious_number)
 	end
 	-- Legion mobs/events generic alert and print for now since no data yet
 	-- TODO: get data, and remove this
-	if iconid == 4733 then
+	if not mobid and iconid == 4733 then
 		core:Print("Vignette Nearby: "..name)
 		PlaySoundFile("Sound\\Doodad\\PortcullisActive_Closed.ogg", "Master")
 	end
