@@ -13,6 +13,7 @@ function module:OnInitialize()
 		profile = {
 			mouseover = true,
 			targets = true,
+			nameplate = true,
 		},
 	})
 
@@ -27,6 +28,7 @@ function module:OnInitialize()
 				args = {
 					mouseover = config.toggle("Mouseover", "Check mobs that you mouse over.", 10),
 					targets = config.toggle("Targets", "Check the targets of people in your group.", 20),
+					nameplate = config.toggle("Nameplates", "Check units whose nameplates appear.", 30),
 				},
 			},
 		}
@@ -38,6 +40,7 @@ function module:OnEnable()
 
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+	self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
 end
 
 function module:PLAYER_TARGET_CHANGED()
@@ -46,6 +49,10 @@ end
 
 function module:UPDATE_MOUSEOVER_UNIT()
 	self:ProcessUnit('mouseover', 'mouseover')
+end
+
+function module:NAME_PLATE_UNIT_ADDED(event, unit)
+	self:ProcessUnit(unit, 'nameplate')
 end
 
 local units_to_scan = {'targettarget', 'party1target', 'party2target', 'party3target', 'party4target', 'party5target'}
@@ -95,7 +102,9 @@ function module:ProcessUnit(unit, source)
 			newloc = core:SaveMob(id, name, zone, x, y, level, unittype, creature_type)
 		end
 
-		local silent = (source == 'target' and not self.db.profile.targets) or (source == 'mouseover' and not self.db.profile.mouseover)
+		local silent = (source == 'target' and not self.db.profile.targets) or
+		               (source == 'mouseover' and not self.db.profile.mouseover) or
+		               (source == 'nameplate' and not self.db.profile.nameplate)
 
 		core:NotifyMob(id, name, zone, x, y, UnitIsDead(unit), newloc, source or 'target', unit, silent)
 		return true
