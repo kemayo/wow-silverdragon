@@ -320,14 +320,61 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, na
 	module:PlaySound{soundfile = soundfile, loops = loops}
 end)
 
-core.RegisterCallback("SD Announce Flash", "Announce", function(callback)
-	if not module.db.profile.flash then
-		return
-	end
+do
+	local flashframe
+	core.RegisterCallback("SD Announce Flash", "Announce", function(callback)
+		if not module.db.profile.flash then
+			return
+		end
+		if not flashframe then
+			flashframe = CreateFrame("Frame", nil, WorldFrame)
+			flashframe:SetClampedToScreen(true)
+			flashframe:SetFrameStrata("FULLSCREEN_DIALOG")
+			flashframe:SetToplevel(true)
+			flashframe:SetAllPoints(UIParent)
+			flashframe:Hide()
 
-	Debug("Flashing")
-	LowHealthFrame_StartFlashing(0.5, 0.5, 6, false, 0.5)
-end)
+			-- Use the OutOfControl (blue) and LowHealth (red) textures to get a purple flash
+			local texture = flashframe:CreateTexture(nil, "BACKGROUND")
+			texture:SetTexture([[Interface\FullScreenTextures\OutOfControl]])
+			texture:SetBlendMode("ADD")
+			texture:SetAllPoints()
+
+			texture = flashframe:CreateTexture(nil, "BACKGROUND")
+			texture:SetTexture([[Interface\FullScreenTextures\LowHealth]])
+			texture:SetBlendMode("ADD")
+			texture:SetAllPoints()
+
+			local group = flashframe:CreateAnimationGroup()
+			group:SetLooping("BOUNCE")
+			local pulse = group:CreateAnimation("Alpha")
+			pulse:SetFromAlpha(0.3)
+			pulse:SetToAlpha(0.75)
+			pulse:SetDuration(0.5236)
+
+			local loops = 0
+			group:SetScript("OnLoop", function(frame, state)
+				loops = loops + 1
+				if loops == 9 then
+					group:Finish()
+				end
+			end)
+			group:SetScript("OnFinished", function(self)
+				loops = 0
+				flashframe:Hide()
+			end)
+
+			flashframe:SetScript("OnShow", function(self)
+				group:Play()
+			end)
+
+			sdf = flashframe
+		end
+
+		Debug("Flashing")
+		flashframe:Show()
+	end)
+end
 
 -- Expansion checking
 -- It's possible I should library-ise this...
