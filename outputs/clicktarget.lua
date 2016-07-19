@@ -81,7 +81,10 @@ function module:ShowFrame()
 	local id, zone, name, unit = current.id, current.zone, current.name, current.unit
 	if not (zone and name) then return end
 
-	local name, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
+	local storedName, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
+	if storedName and storedName ~= 0 then
+		name = storedName
+	end
 	local popup = self.popup
 	local macrotext = "/cleartarget\n/targetexact "..name
 	local level_text = (level and level > 0) and level or (level and level == -1) and 'Boss' or '?'
@@ -203,6 +206,7 @@ function module:Announce(callback, id, name, zone, x, y, dead, newloc, source, u
 	else
 		self:ShowFrame()
 	end
+	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 	current.unit = nil -- can't be trusted to remain the same
 end
 
@@ -336,13 +340,15 @@ local animation = texture:CreateAnimationGroup()
 animation:SetLooping("REPEAT")
 
 local pulse_in = animation:CreateAnimation("Alpha")
-pulse_in:SetChange(0.3)
+pulse_in:SetFromAlpha(0)
+pulse_in:SetToAlpha(0.3)
 pulse_in:SetDuration(0.5)
 pulse_in:SetSmoothing("IN")
 pulse_in:SetEndDelay(0.1)
 pulse_in:SetOrder(1)
 local pulse_out = animation:CreateAnimation("Alpha")
-pulse_out:SetChange(-0.3)
+pulse_in:SetFromAlpha(0.3)
+pulse_in:SetToAlpha(0)
 pulse_out:SetDuration(1)
 pulse_out:SetSmoothing("NONE")
 pulse_out:SetOrder(2)

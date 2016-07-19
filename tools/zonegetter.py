@@ -8,10 +8,10 @@ from npc.fetch import Fetch
 fetch = Fetch("wowhead.db")
 
 def build_zone_map():
-    page = fetch("http://wowjs.zamimg.com/js/locale_enus.js?14162698144")
+    page = fetch("http://wow.zamimg.com/js/locale_beta.js?1464811165")
     if not page:
         return
-    match = re.search(r"g_zones\s*=\s*({[^}]+});", page)
+    match = re.search(r"g_zones\s*=\s*({[^}]+});", page.decode('utf-8'))
     if not match:
         return
     zone_map = {}

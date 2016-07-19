@@ -288,19 +288,19 @@ do
 		self.events:Fire("Seen_Raw", id, name, zone, x, y, is_dead, is_new_location, source, unit)
 
 		if silent then
-			Debug("Skipping notification: silent call", id, name)
+			Debug("Skipping notification: silent call", id, name, source)
 			return
 		end
 		if self:ShouldIgnoreMob(id, zone) then
-			Debug("Skipping notification: ignored", id, name)
+			Debug("Skipping notification: ignored", id, name, source)
 			return
 		end
 		if not force and lastseen[id..zone] and time() < lastseen[id..zone] + self.db.profile.delay then
-			Debug("Skipping notification: seen", id, name, lastseen[id..zone], time() - self.db.profile.delay)
+			Debug("Skipping notification: seen", id, name, lastseen[id..zone], time() - self.db.profile.delay, source)
 			return
 		end
 		if (not self.db.profile.taxi) and UnitOnTaxi('player') then
-			Debug("Skipping notification: taxi", id, name)
+			Debug("Skipping notification: taxi", id, name, source)
 			return
 		end
 		globaldb.mob_count[id] = globaldb.mob_count[id] + 1
