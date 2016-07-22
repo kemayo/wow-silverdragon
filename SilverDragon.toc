@@ -44,7 +44,6 @@ core.lua
 config.lua
 
 scan\targets.lua
-scan\nameplates.lua
 scan\macro.lua
 scan\vignettes.lua
 
