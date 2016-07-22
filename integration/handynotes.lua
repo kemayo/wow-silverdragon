@@ -33,25 +33,25 @@ do
 	end
 	local function icon_for_mob(id)
 		if not icon then
-			local left, right, top, bottom = GetObjectIconTextureCoords(41)
+			local left, right, top, bottom = GetObjectIconTextureCoords(4707)
 			icon = {
-				icon = [[Interface\MINIMAP\OBJECTICONS]],
-				tCoordLeft = left + 0.015,
-				tCoordRight = right - 0.015,
-				tCoordTop = top + 0.015,
-				tCoordBottom = bottom - 0.015,
+				icon = [[Interface\Minimap\ObjectIconsAtlas]],
+				tCoordLeft = left + 0.008,
+				tCoordRight = right - 0.008,
+				tCoordTop = top + 0.005,
+				tCoordBottom = bottom - 0.008,
 				r = 1,
 				g = 0.33,
 				b = 0,
 				a = 0.9,
 			}
-			local left, right, top, bottom = GetObjectIconTextureCoords(44)
+			local left, right, top, bottom = GetObjectIconTextureCoords(4737)
 			icon_mount = {
-				icon = [[Interface\MINIMAP\OBJECTICONS]],
-				tCoordLeft = left + 0.015,
-				tCoordRight = right - 0.015,
-				tCoordTop = top + 0.015,
-				tCoordBottom = bottom - 0.015,
+				icon = [[Interface\Minimap\ObjectIconsAtlas]],
+				tCoordLeft = left + 0.008,
+				tCoordRight = right - 0.008,
+				tCoordTop = top + 0.005,
+				tCoordBottom = bottom - 0.005,
 				-- r = 1,
 				-- g = 0.33,
 				-- b = 0,
@@ -68,6 +68,7 @@ do
 		if not t then return nil end
 		local state, value = next(t, prestate)
 		while state do
+			-- Debug("HandyNotes node", state, value, should_show_mob(value))
 			if value then
 				if should_show_mob(value) then
 					return state, nil, icon_for_mob(value), db.icon_scale, db.icon_alpha
@@ -78,6 +79,7 @@ do
 		return nil, nil, nil, nil, nil
 	end
 	function handler:GetNodes(mapFile)
+		-- Debug("HandyNotes GetNodes", mapFile, HBD:GetMapIDFromFile(mapFile), nodes[HBD:GetMapIDFromFile(mapFile)])
 		return iter, nodes[HBD:GetMapIDFromFile(mapFile)], nil
 	end
 end
@@ -336,6 +338,7 @@ core.RegisterCallback(module, "Seen")
 
 function module:UpdateNodes()
 	wipe(nodes)
+	-- Debug("UpdateNodes")
 	for zone, mobs in pairs(core.db.global.mobs_byzoneid) do
 		local mapFile = HBD:GetMapFileFromID(zone)
 		if mapFile then
