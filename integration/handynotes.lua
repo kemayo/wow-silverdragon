@@ -33,29 +33,25 @@ do
 	end
 	local function icon_for_mob(id)
 		if not icon then
-			local left, right, top, bottom = GetObjectIconTextureCoords(4707)
+			local texture, _, _, left, right, top, bottom = GetAtlasInfo("DungeonSkull")
 			icon = {
-				icon = [[Interface\Minimap\ObjectIconsAtlas]],
-				tCoordLeft = left + 0.008,
-				tCoordRight = right - 0.008,
-				tCoordTop = top + 0.005,
-				tCoordBottom = bottom - 0.008,
+				icon = texture,
+				tCoordLeft = left,
+				tCoordRight = right,
+				tCoordTop = top,
+				tCoordBottom = bottom,
 				r = 1,
 				g = 0.33,
-				b = 0,
+				b = 0.33,
 				a = 0.9,
 			}
-			local left, right, top, bottom = GetObjectIconTextureCoords(4737)
+			local texture, _, _, left, right, top, bottom = GetAtlasInfo("VignetteKillElite")
 			icon_mount = {
-				icon = [[Interface\Minimap\ObjectIconsAtlas]],
-				tCoordLeft = left + 0.008,
-				tCoordRight = right - 0.008,
-				tCoordTop = top + 0.005,
-				tCoordBottom = bottom - 0.005,
-				-- r = 1,
-				-- g = 0.33,
-				-- b = 0,
-				-- a = 0.9,
+				icon = texture,
+				tCoordLeft = left,
+				tCoordRight = right,
+				tCoordTop = top,
+				tCoordBottom = bottom,
 			}
 		end
 		local mod_announce = core:GetModule("Announce", true)
