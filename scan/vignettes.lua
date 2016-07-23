@@ -63,12 +63,6 @@ function module:VIGNETTE_ADDED(event, instanceid, mysterious_number)
 		-- note, we could instead try using just iconid==41, but I don't know if that's going to actually be all rares yet
 		self:NotifyIfNeeded(mob_id)
 	end
-	-- Legion mobs/events generic alert and print for now since no data yet
-	-- TODO: get data, and remove this
-	if not mobid and iconid == 4733 then
-		core:Print("Vignette Nearby: "..name)
-		PlaySoundFile("Sound\\Doodad\\PortcullisActive_Closed.ogg", "Master")
-	end
 end
 
 local GetNumMapLandmarks = GetNumMapLandmarks
