@@ -3,11 +3,8 @@
 import json
 import re
 
-from .fetch import Fetch
 from . import NPC, types, pack_coords
 from .zones import zoneid_to_mapid
-
-fetch = Fetch("wowdb.db")
 
 zone_map = False
 
@@ -20,7 +17,7 @@ class WowdbNPC(NPC):
     soup = False
 
     def __page(self):
-        return fetch('%s/npcs/%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id))
+        return self.session.get('%s/npcs/%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id)).text
 
     def _name(self):
         name = re.search(r'<h2 class="header">([^<]+?)</h2>', self.__page())
@@ -105,25 +102,26 @@ class WowdbNPC(NPC):
             return False
 
     @classmethod
-    def query(cls, creature_type, ptr=False, beta=False, **kw):
+    def query(cls, creature_type, session, ptr=False, beta=False, cached=True, **kw):
         url = "%s/npcs/%s?filter-classification=20" % (cls.url(ptr=ptr, beta=beta), creature_type.lower())
 
         npcs = {}
         pages_remaining = True
         while pages_remaining:
             print("Loading page", url)
-            page = fetch(url, **kw)
+            if cached:
+                page = session.get(url, **kw)
+            else:
+                with session.cache_disabled():
+                    page = session.get(url, **kw)
 
-            if not page:
-                break
-
-            for npc in (WowdbNPC(id, ptr=ptr) for id in re.findall(r'href="http://[^\.]+\.wowdb\.com/npcs/(\d+)-', page)):
+            for npc in (WowdbNPC(id, ptr=ptr, session=session) for id in re.findall(r'href="http://[^\.]+\.wowdb\.com/npcs/(\d+)-', page.text)):
                 print(npc)
                 npcs[npc.id] = npc
 
-            next = re.search(r'<a href="([^"]+)" rel="next">', page)
-            if next:
-                url = cls.url(ptr=ptr, beta=beta) + next.group(1).replace('&amp;', '&').replace('cookieTest=1&', '')
+            nextpage = re.search(r'<a href="([^"]+?)" rel="next">', page.text)
+            if nextpage:
+                url = cls.url(ptr=ptr, beta=beta) + nextpage.group(1).replace('&amp;', '&').replace('cookieTest=1&', '')
             else:
                 pages_remaining = False
         return npcs

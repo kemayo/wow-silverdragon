@@ -28,11 +28,13 @@ class NPC:
             return cls.URL_PTR
         return cls.URL
 
-    def __init__(self, id, fetch=True, ptr=False, beta=False):
+    def __init__(self, id, fetch=True, ptr=False, beta=False, session=None):
         self.id = int(id)
         self.ptr = ptr
         self.beta = beta
         self.data = {}
+        self.session = session
+
         if fetch:
             self.load()
 

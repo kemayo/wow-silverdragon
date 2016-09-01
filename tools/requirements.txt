@@ -3,6 +3,8 @@ dict==0.0.5
 get==0.0.7
 post==0.0.5
 public==0.0.0
+PyYAML==3.12
 query-string==0.0.5
-request==0.0.5
+requests==2.11.1
+requests-cache==0.4.12
 self==0.0.5

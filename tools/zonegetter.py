@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 
 import re
+import requests
 
 from npc.zones import zoneid_to_mapid
 
-from npc.fetch import Fetch
-fetch = Fetch("wowhead.db")
 
 def build_zone_map():
-    page = fetch("http://wow.zamimg.com/js/locale_beta.js?1464811165")
+    page = requests.get("http://wow.zamimg.com/js/locale_enus.js?1472515060")
     if not page:
         return
-    match = re.search(r"g_zones\s*=\s*({[^}]+});", page.decode('utf-8'))
+    match = re.search(r"g_zones\s*=\s*({[^}]+});", page.text)
     if not match:
         return
     zone_map = {}

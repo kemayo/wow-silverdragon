@@ -2,12 +2,10 @@
 
 import json
 import re
+import yaml
 
-from .fetch import Fetch
 from . import NPC, types, pack_coords
 from .zones import zoneid_to_mapid
-
-fetch = Fetch("wowhead.db")
 
 zone_map = False
 
@@ -19,11 +17,11 @@ class WowheadNPC(NPC):
 
     def __page(self):
         url = '%s/npc=%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id)
-        page = fetch(url)
+        page = self.session.get(url)
         if not page:
             print("Couldn't fetch", url)
             return ''
-        return page
+        return page.text
 
     def _name(self):
         info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: '(.+?)'};", self.__page())
@@ -49,13 +47,16 @@ class WowheadNPC(NPC):
                 print("Got location for unknown zone", zone, self.id)
                 continue
             zcoords = []
-            for x, y in ((c[0]/100, c[1]/100) for c in json.loads(data)):
+            data = json.loads(data)
+            if type(data[0]) == float:
+                data = [data]
+            for x, y in ((c[0] / 100, c[1] / 100) for c in data):
                 for oldx, oldy in zcoords:
                     if abs(oldx - x) < 0.05 and abs(oldy - y) < 0.05:
                         break
                 else:
                     # list fully looped through, not broken.
-                    zcoords.append((x,y))
+                    zcoords.append((x, y))
             coords[zoneid_to_mapid[zone]] = [pack_coords(c[0], c[1]) for c in zcoords]
         return coords
 
@@ -80,17 +81,40 @@ class WowheadNPC(NPC):
         info = re.search(r'<pre id="questtracking">/run print\(IsQuestFlaggedCompleted\((\d+)\)\)</pre>', self.__page())
         if info:
             return int(info.group(1))
+        return questSearch(self._name(), self.session)
 
     @classmethod
-    def query(cls, categoryid, expansion, ptr=False, beta=False, **kw):
+    def query(cls, categoryid, expansion, session, ptr=False, beta=False, cached=True, **kw):
         url = "%s/npcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (cls.url(ptr=ptr, beta=beta), categoryid, expansion)
 
-        page = fetch(url, **kw)
-        match = re.search(r'new Listview\({[^{]+?data: \[(.+?)\]}\);\n', page)
+        if cached:
+            page = session.get(url, **kw)
+        else:
+            with session.cache_disabled():
+                page = session.get(url, **kw)
+
+        match = re.search(r'new Listview\({[^{]+?data: \[(.+?)\]}\);\n', page.text)
         if not match:
             return {}
         npcs = {}
-        for npc in (WowheadNPC(id, ptr=ptr) for id in re.findall(r'"id":(\d+)', match.group(1))):
+        for npc in (WowheadNPC(id, ptr=ptr, session=session) for id in re.findall(r'"id":(\d+)', match.group(1))):
             print(npc)
             npcs[npc.id] = npc
         return npcs
+
+
+class WowHeadQuestSearch:
+    def __init__(self):
+        self.quests = False
+
+    def __call__(self, name, session):
+        if not self.quests:
+            questpage = session.get('http://www.wowhead.com/quests/name:vignette').text
+            match = re.search(r"^new Listview\({.+?id: ?'quests', ?data: ?(.+)}\);$", questpage, re.MULTILINE)
+            self.quests = [(q['id'], q['name'].replace('Vignette: ', '')) for q in yaml.load(match.group(1))]
+        matcher = re.compile(r'\b%s\b' % name)
+        for quest in self.quests:
+            if matcher.search(quest[1]):
+                return quest[0]
+
+questSearch = WowHeadQuestSearch()
