@@ -1,3 +1,5 @@
 cache.sqlite
 cache.sqlite-journal
 venv
+parser.out
+parsetab.py

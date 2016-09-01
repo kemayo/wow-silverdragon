@@ -1,7 +1,10 @@
 #!/usr/bin/python
 
+from . import luaparse
+
+
 def serialize(v):
-    if v == None:
+    if v is None:
         return 'nil'
     t = type(v)
     if t == str:
@@ -27,7 +30,12 @@ def serialize(v):
         return v and 'true' or 'false'
     return str(v)
 
+
 def __sort(k):
     if k == 'name':
         return 'aaaaaaaaa'
     return k
+
+
+def loadtable(s):
+    return luaparse.parse(s.strip())

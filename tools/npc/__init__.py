@@ -59,7 +59,7 @@ class NPC:
         self.data['elite'] = self._elite()
         self.data['level'] = self._level()
         self.data['tameable'] = self._tameable()
-        self.data['locations'] = self._filter_locations(self._locations())
+        self.data['locations'] = self._filter_locations(self._locations()) or {}
         self.data['vignette'] = self._vignette()
         self.data['quest'] = self._quest()
 
@@ -87,36 +87,39 @@ class NPC:
         """Take the data from another NPC"""
         if npc.id != self.id:
             return
-        self.data['creature_type'] = npc.data['creature_type'] or self.data['creature_type']
-        self.data['elite'] = npc.data['elite'] or self.data['elite']
-        self.data['level'] = npc.data['level'] or self.data['level']
-        self.data['tameable'] = npc.data['tameable'] or self.data['tameable']
-        self.data['vignette'] = npc.data['vignette'] or self.data['vignette']
-        self.data['quest'] = npc.data['quest'] or self.data['quest']
-        if self.data['locations']:
-            if npc.data['locations']:
-                for zone, coords in npc.data['locations'].items():
-                    if zone in self.data['locations']:
+
+        oldlocations = self.data.get('locations', {})
+        newlocations = npc.data.get('locations', {})
+
+        self.data.update(npc.clean_data())
+
+        if oldlocations:
+            if newlocations:
+                for zone, coords in newlocations.items():
+                    if zone in oldlocations:
                         for xy in coords:
                             x, y = unpack_coords(xy)
-                            for oldxy in self.data['locations']:
+                            for oldxy in oldlocations[zone]:
                                 oldx, oldy = unpack_coords(oldxy)
                                 if abs(oldx - x) < 0.05 and abs(oldy - y) < 0.05:
                                     break
                             else:
                                 # list fully looped through, not broken.
-                                self.data['locations'][zone].append(xy)
+                                oldlocations[zone].append(xy)
                     else:
-                        self.data['locations'][zone] = coords
-        else:
-            self.data['locations'] = npc.data['locations']
+                        oldlocations[zone] = coords
+            self.data['locations'] = oldlocations
+        elif newlocations:
+            self.data['locations'] = newlocations
 
     def add_notes(self, notes):
         self.data['notes'] = notes
 
+    def clean_data(self):
+        return dict((k, v) for k, v in self.data.items() if v)
+
     def to_lua(self):
-        clean_data = dict((k, v) for k, v in self.data.items() if v)
-        return lua.serialize(clean_data)
+        return lua.serialize(self.clean_data())
 
     def html_decode(self, text):
         return text.replace('&#39;', "'").replace('&#x27;', "'").replace('&quot;', '"')

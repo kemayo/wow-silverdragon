@@ -78,10 +78,14 @@ class WowheadNPC(NPC):
                 return False
 
     def _quest(self):
+        search = questSearch(self._name(), self.session)
+        if search:
+            return search
         info = re.search(r'<pre id="questtracking">/run print\(IsQuestFlaggedCompleted\((\d+)\)\)</pre>', self.__page())
         if info:
-            return int(info.group(1))
-        return questSearch(self._name(), self.session)
+            if info.group(1) is not '5':
+                # There's a lot of corrupt data on there...
+                return int(info.group(1))
 
     @classmethod
     def query(cls, categoryid, expansion, session, ptr=False, beta=False, cached=True, **kw):
@@ -111,7 +115,8 @@ class WowHeadQuestSearch:
         if not self.quests:
             questpage = session.get('http://www.wowhead.com/quests/name:vignette').text
             match = re.search(r"^new Listview\({.+?id: ?'quests', ?data: ?(.+)}\);$", questpage, re.MULTILINE)
-            self.quests = [(q['id'], q['name'].replace('Vignette: ', '')) for q in yaml.load(match.group(1))]
+            self.quests = [(int(q['id']), q['name']) for q in yaml.load(match.group(1))]
+            self.quests.sort()
         matcher = re.compile(r'\b%s\b' % name)
         for quest in self.quests:
             if matcher.search(quest[1]):

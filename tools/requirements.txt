@@ -1,6 +1,8 @@
+appdirs==1.4.0
 decorator==4.0.9
 dict==0.0.5
 get==0.0.7
+ply==3.9
 post==0.0.5
 public==0.0.0
 PyYAML==3.12
