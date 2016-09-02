@@ -83,7 +83,7 @@ class WowheadNPC(NPC):
             return search
         info = re.search(r'<pre id="questtracking">/run print\(IsQuestFlaggedCompleted\((\d+)\)\)</pre>', self.__page())
         if info:
-            if info.group(1) is not '5':
+            if len(info.group(1)) > 3:
                 # There's a lot of corrupt data on there...
                 return int(info.group(1))
 
