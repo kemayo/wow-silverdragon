@@ -16,6 +16,7 @@ module.nodes = nodes
 
 local handler = {}
 do
+	local currentLevel, currentZone
 	local function should_show_mob(id)
 		local questid = core.db.global.mob_quests[id]
 		if questid then
@@ -74,9 +75,11 @@ do
 		end
 		return nil, nil, nil, nil, nil
 	end
-	function handler:GetNodes(mapFile)
+	function handler:GetNodes(mapFile, minimap, level)
 		-- Debug("HandyNotes GetNodes", mapFile, HBD:GetMapIDFromFile(mapFile), nodes[HBD:GetMapIDFromFile(mapFile)])
-		return iter, nodes[HBD:GetMapIDFromFile(mapFile)], nil
+		currentZone = mapFile
+		currentLevel = level
+		return iter, nodes[mapFile], nil
 	end
 end
 
@@ -164,7 +167,7 @@ local function createWaypoint(button, mapFile, coord)
 			persistent = nil,
 			minimap = true,
 			world = true
-			})
+		})
 	end
 end
 
@@ -338,10 +341,10 @@ function module:UpdateNodes()
 	for zone, mobs in pairs(core.db.global.mobs_byzoneid) do
 		local mapFile = HBD:GetMapFileFromID(zone)
 		if mapFile then
-			nodes[zone] = {}
+			nodes[mapFile] = {}
 			for id, locs in pairs(mobs) do
 				for _, loc in ipairs(locs) do
-					nodes[zone][loc] = id
+					nodes[mapFile][loc] = id
 				end
 			end
 		else
