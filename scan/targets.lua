@@ -100,6 +100,8 @@ function module:ProcessUnit(unit, source)
 		local newloc
 		if CheckInteractDistance(unit, 4) then
 			newloc = core:SaveMob(id, name, zone, x, y, level, unittype, creature_type)
+		else
+			core:SaveMob(id, name, nil, nil, nil, level, unittype, creature_type)
 		end
 
 		local silent = (source == 'target' and not self.db.profile.targets) or
