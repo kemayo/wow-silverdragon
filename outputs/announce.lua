@@ -85,6 +85,7 @@ function module:OnInitialize()
 			flash = true,
 			instances = false,
 			dead = true,
+			already = false,
 			expansions = {
 				classic = true,
 				bc = true,
@@ -131,6 +132,7 @@ function module:OnInitialize()
 				order = 10,
 				get = get, set = set,
 				args = {
+					already = toggle("Already found", "Announce when we see rares we've already killed / achieved (if known)"),
 					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not, so this isn't entirely reliable."),
 					flash = toggle("Flash", "Flash the edges of the screen."),
 					instances = toggle("Instances", "Show announcements while in an instance"),
@@ -235,6 +237,23 @@ function module:Seen(callback, id, name, zone, x, y, is_dead, ...)
 	if not self:CareAboutZone(zone) then
 		Debug("Skipping due to expansion", exp)
 		return
+	end
+
+	if not self.db.profile.already then
+		local mod_tooltip = core:GetModule("Tooltip", true)
+		local questid = core.db.global.mob_quests[id]
+		local completed, completion_knowable, achievement, achievement_name
+		if questid then
+			completed = IsQuestFlaggedCompleted(questid)
+			completion_knowable = true
+		elseif mod_tooltip then
+			achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
+			completion_knowable = achievement
+		end
+		if completion_knowable and not completed then
+			Debug("Skipping because already killed", questid, achievement, achievement_name)
+			return
+		end
 	end
 
 	core.events:Fire("Announce", id, name, zone, x, y, is_dead, ...)
@@ -524,6 +543,9 @@ do
 		[945] = "TanaanJungle",
 		[970] = "TanaanJungleIntro",
 		[1011] = "AshranHordeFactionHub",
+	}
+	local legion_zones = {
+
 	}
 	local main_cities = {
 		[301] = "StormwindCity",
