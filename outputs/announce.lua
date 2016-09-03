@@ -250,7 +250,7 @@ function module:Seen(callback, id, name, zone, x, y, is_dead, ...)
 			achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
 			completion_knowable = achievement
 		end
-		if completion_knowable and not completed then
+		if completion_knowable and completed then
 			Debug("Skipping because already killed", questid, achievement, achievement_name)
 			return
 		end

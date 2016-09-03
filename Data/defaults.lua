@@ -1087,7 +1087,7 @@ function module:GetDefaults()
 		[88672] = {name="Hunter Bal'ra",["creature_type"]="Humanoid",level=100,locations={[949]={55004620,54804620},},quest=37377,},
 		[88951] = {name="Vileclaw",["creature_type"]="Beast",elite=true,level=100,locations={[950]={37403900,36203840},},tameable=true,},
 		[89016] = {name="Ravyn-Drath",["creature_type"]="Beast",locations={[1015]={41004120},},},
-		[89650] = {name="Valiyaka the Stormbringer",["creature_type"]="Humanoid",locations={[1015]={47203400},},},
+		[89650] = {name="Valiyaka the Stormbringer",["creature_type"]="Humanoid",locations={[1015]={47203400},},quest=37726,},
 		[89675] = {name="Commander Org'mok",["creature_type"]="Humanoid",level=100,locations={[945]={50004780,49804480},},quest=38749,},
 		[89816] = {name="Golza the Iron Fin",["creature_type"]="Humanoid",locations={[1015]={65004000},},quest=37820,vignette="Horn of the Siren"},
 		[89846] = {name="Captain Volo'ren",["creature_type"]="Humanoid",locations={[1015]={52604540},[1021]={-37799500},},},
