@@ -93,6 +93,7 @@ function module:OnInitialize()
 				cataclysm = true,
 				pandaria = true,
 				draenor = true,
+				legion = true,
 				cities = true,
 				unknown = true,
 			},

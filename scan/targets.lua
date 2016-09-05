@@ -14,6 +14,7 @@ function module:OnInitialize()
 			mouseover = true,
 			targets = true,
 			nameplate = true,
+			rare_only = true,
 		},
 	})
 
@@ -29,6 +30,7 @@ function module:OnInitialize()
 					mouseover = config.toggle("Mouseover", "Check mobs that you mouse over.", 10),
 					targets = config.toggle("Targets", "Check the targets of people in your group.", 20),
 					nameplate = config.toggle("Nameplates", "Check units whose nameplates appear.", 30),
+					rare_only = config.toggle("Rare only", "Only look for mobs that are still flagged as rare", 40),
 				},
 			},
 		}
@@ -82,9 +84,20 @@ function module:ProcessUnit(unit, source)
 	if not UnitExists(unit) then return end
 	if not UnitIsVisible(unit) then return end
 	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
-	local unittype = UnitClassification(unit)
 	local id = core:UnitID(unit)
-	if id and (globaldb.always[id] or globaldb.mob_name[id] or rare_nonflags[id] or (unittype == 'rare' or unittype == 'rareelite')) then
+	local unittype = UnitClassification(unit)
+	local is_rare = (id and rare_nonflags[id]) or (unittype == 'rare' or unittype == 'rareelite')
+	local should_process = false
+	if id then
+		if globaldb.always[id] then
+			should_process = true
+		elseif is_rare then
+			should_process = true
+		elseif globaldb.mob_name[id] and not self.db.profile.rare_only then
+			should_process = true
+		end
+	end
+	if should_process then
 		-- from this point on, it's a rare
 		local x, y, zone = HBD:GetPlayerZonePosition()
 		if not (zone and x and y) then
