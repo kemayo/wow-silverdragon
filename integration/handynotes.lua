@@ -76,7 +76,7 @@ do
 		return nil, nil, nil, nil, nil
 	end
 	function handler:GetNodes(mapFile, minimap, level)
-		-- Debug("HandyNotes GetNodes", mapFile, HBD:GetMapIDFromFile(mapFile), nodes[HBD:GetMapIDFromFile(mapFile)])
+		-- Debug("HandyNotes GetNodes", mapFile, HBD:GetMapIDFromFile(mapFile), nodes[mapFile])
 		currentZone = mapFile
 		currentLevel = level
 		return iter, nodes[mapFile], nil

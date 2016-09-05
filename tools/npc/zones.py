@@ -416,7 +416,7 @@ zoneid_to_mapid = {
     7546: False,  # Neltharion's Lair
     7548: False,  # Ashran Mine
     7576: False,  # Twisting Nether
-    7588: False,  # Helheim
+    7588: 1022,  # Helheim
     7622: False,  # The Breached Ossuary
     7634: False,  # Feralas (copy)
     7638: False,  # Sanctum of Light
