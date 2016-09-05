@@ -116,9 +116,10 @@ function handler:OnEnter(mapFile, coord)
 		end
 	end
 	if core.db.global.mob_quests[id] then
+		local completed = IsQuestFlaggedCompleted(core.db.global.mob_quests[id])
 		tooltip:AddDoubleLine(
 			QUESTS_COLON,
-			IsQuestFlaggedCompleted(core.db.global.mob_quests[id]) and COMPLETE or INCOMPLETE,
+			completed and COMPLETE or INCOMPLETE,
 			1, 1, 0,
 			completed and 0 or 1, completed and 1 or 0, 0
 		)
