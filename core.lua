@@ -318,6 +318,8 @@ do
 		[82876] = true,--Grand Marshal Tremblade (Ashran)
 		[82878] = true,--Marshal Gabriel (Ashran)
 		[82880] = true,--Marshal Karsh Stormforge (Ashran)
+		-- legion
+		[92951] = true, --Houndmaster Ely
 	}
 	local horde_ignore_mobs = { --Mobs horde cannot kill
 		[51079] = true,--Captain Foulwind (Vashjir)
@@ -328,6 +330,12 @@ do
 		[82877] = true,--High Warlord Volrath (Ashran)
 		[82883] = true,--Warlord Noktyn (Ashran)
 		[82882] = true,--General Aved (Ashran)
+		-- legion
+		[92611] = true,--deathsquad: daggerfang
+		[92626] = true,--deathsquad: adams
+		[92631] = true,--deathsquad: jess
+		[92633] = true,--deathsquad: huwe
+		[92634] = true,--deathsquad: perez
 	}
 	local zone_ignores = {
 		[950] = {
