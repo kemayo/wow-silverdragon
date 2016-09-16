@@ -320,6 +320,7 @@ do
 		[82880] = true,--Marshal Karsh Stormforge (Ashran)
 		-- legion
 		[92951] = true, --Houndmaster Ely
+		[94313] = true, -- Daniel "Boomer" Vorick
 	}
 	local horde_ignore_mobs = { --Mobs horde cannot kill
 		[51079] = true,--Captain Foulwind (Vashjir)

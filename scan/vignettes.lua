@@ -40,7 +40,8 @@ function module:OnEnable()
 end
 
 local already_notified = {}
-function module:VIGNETTE_ADDED(event, instanceid, mysterious_number)
+function module:VIGNETTE_ADDED(event, instanceid, mysterious_number, ...)
+	Debug("VIGNETTE_ADDED", instanceid, mysterious_number, ...)
 	if not instanceid then
 		-- ...just in case
 		Debug("No Vignette instanceid")
