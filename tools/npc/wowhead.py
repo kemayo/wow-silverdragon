@@ -15,13 +15,15 @@ class WowheadNPC(NPC):
     URL_PTR = 'http://ptr.wowhead.com'
     URL_BETA = 'http://legion.wowhead.com'
 
+    page = False
+
     def __page(self):
-        url = '%s/npc=%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id)
-        page = self.session.get(url)
-        if not page:
-            print("Couldn't fetch", url)
-            return ''
-        return page.text
+        if self.page is False:
+            url = '%s/npc=%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id)
+            self.page = self.session.get(url).text
+            if not self.page:
+                print("Couldn't fetch", url)
+        return self.page
 
     def _name(self):
         info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: '(.+?)'};", self.__page())

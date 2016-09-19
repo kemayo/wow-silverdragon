@@ -14,10 +14,15 @@ class WowdbNPC(NPC):
     URL_PTR = 'http://ptr.wowdb.com'
     URL_BETA = 'http://beta.wowdb.com'
 
-    soup = False
+    page = False
 
     def __page(self):
-        return self.session.get('%s/npcs/%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id)).text
+        if self.page is False:
+            url = '%s/npcs/%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id)
+            self.page = self.session.get(url).text
+            if not self.page:
+                print("Couldn't fetch", url)
+        return self.page
 
     def _name(self):
         name = re.search(r'<h2 class="header">([^<]+?)</h2>', self.__page())
