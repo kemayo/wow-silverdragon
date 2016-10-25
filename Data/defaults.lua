@@ -1123,7 +1123,7 @@ function module:GetDefaults()
 		[91087] = {name="Zeter'el",["creature_type"]="Demon",level=100,locations={[945]={48202840,48202840},},quest=38207,},
 		[91093] = {name="Bramblefell",["creature_type"]="Elemental",elite=true,level=100,locations={[945]={39006840,38606800},},quest=38209,},
 		[91098] = {name="Felspark",["creature_type"]="Elemental",elite=true,level=100,locations={[945]={52202400,51802740},},quest=38211,},
-		[91100] = {name="Brogozog",["creature_type"]="Demon",level=110,locations={[1015]={59004660},},},
+		[91100] = {name="Brogozog",["creature_type"]="Demon",level=110,locations={[1015]={59004660},},quest=38212,vignette="Marius & Tehd",},
 		[91113] = {name="Tide Behemoth",["creature_type"]="Humanoid",locations={[1015]={61206180},},quest=38217,},
 		[91114] = {name="Tide Behemoth",["creature_type"]="Humanoid",locations={[1015]={61206180},},quest=38217,},
 		[91115] = {name="Tide Behemoth",["creature_type"]="Humanoid",locations={[1015]={61206200},},quest=38217,},
