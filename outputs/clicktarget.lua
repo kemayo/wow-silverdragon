@@ -26,7 +26,6 @@ function module:OnInitialize()
 	})
 	core.RegisterCallback(self, "Announce")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
-	self:RegisterEvent("MODIFIER_STATE_CHANGED")
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -217,22 +216,8 @@ function module:PLAYER_REGEN_ENABLED()
 	end
 end
 
-function module:MODIFIER_STATE_CHANGED(event, modifier, state)
-	self:ToggleDrag(self:ShouldBeDraggable())
-end
-
 function module:ShouldBeDraggable()
 	return (not self.db.profile.locked) or IsModifierKeyDown()
-end
-
-function module:ToggleDrag(state)
-	local dragger = self.popup.drag
-	dragger:ClearAllPoints()
-	if state then
-		dragger:SetAllPoints()
-	else
-		dragger:SetPoint("TOP", UIParent, "TOP", math.huge)
-	end
 end
 
 do
@@ -269,6 +254,7 @@ popup:SetUserPlaced(true)
 popup:SetClampedToScreen(true)
 popup:SetFrameStrata("FULLSCREEN_DIALOG")
 popup:SetNormalTexture("Interface\\AchievementFrame\\UI-Achievement-Parchment-Horizontal")
+popup:RegisterForDrag("LeftButton")
 
 local back = popup:GetNormalTexture()
 back:SetDrawLayer("BACKGROUND")
@@ -305,9 +291,6 @@ popup:SetBackdrop({
 	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
 })
 popup:SetBackdropBorderColor( 0.7, 0.15, 0.05 )
-
--- Drag frame
-popup.drag = popup:CreateTitleRegion()
 
 -- Close button
 local close = CreateFrame("Button", nil, popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
@@ -365,11 +348,9 @@ popup:SetAttribute("type", "macro")
 
 popup:SetScript("OnEnter", function(self)
 	self:SetBackdropBorderColor(1, 1, 0.15)
-	module:ToggleDrag(module:ShouldBeDraggable())
 end)
 popup:SetScript("OnLeave", function(self)
 	self:SetBackdropBorderColor(0.7, 0.15, 0.05)
-	module:ToggleDrag(false)
 end)
 popup:SetScript("OnShow", function(self)
 	animation:Play()
@@ -378,9 +359,16 @@ popup:SetScript("OnHide", function(self)
 	animation:Stop()
 	self:GetScript("OnLeave")(self)
 end)
+popup:SetScript("OnDragStart", function(self)
+	if module:ShouldBeDraggable() then
+		self:StartMoving()
+	end
+end)
+popup:SetScript("OnDragStop", function(self)
+	self:StopMovingOrSizing()
+end)
 
 -- a few setup things:
 popup:Hide()
 popup:GetScript("OnLeave")(popup)
-module:ToggleDrag(false)
 
