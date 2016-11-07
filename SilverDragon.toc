@@ -59,7 +59,6 @@ mobs.lua
 
 # map plugins
 integration\handynotes.lua
-integration\npcscan.lua
 
 #@debug@
 # data imports
