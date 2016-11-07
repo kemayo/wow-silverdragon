@@ -10,7 +10,6 @@ function module:OnInitialize()
 			guild = true,
 			nearby = false,
 			quiet = false,
-			record = false,
 		},
 	})
 
@@ -33,7 +32,6 @@ function module:OnInitialize()
 					raid = config.toggle("Raid", "Accept syncs from raid members", 30),
 					guild = config.toggle("Guild Sync", "Accept syncs from guild members", 40),
 					nearby = config.toggle("Nearby only", "Only accept syncs from people who are nearby. Information about guild members isn't available, so they'll only count as nearby if they're in your group.", 50),
-					record = config.toggle("Record", "Record the locations of sync'd mobs, instead of just notifying about them", 60)
 				},
 			},
 		}
@@ -56,7 +54,7 @@ local function deSAM(val)
 	return val
 end
 
-function module:Seen(callback, id, name, zone, x, y, dead, newloc, source, unit)
+function module:Seen(callback, id, zone, x, y, dead, source, unit)
 	if source and (source:match("^sync") or source == "fake") then
 		-- No feedback loops, kthxbai
 		return
@@ -64,18 +62,18 @@ function module:Seen(callback, id, name, zone, x, y, dead, newloc, source, unit)
 	if self.db.profile.quiet then
 		return
 	end
-	local level = core.db.global.mob_level[id]
+	local name = core:NameForMob(id)
 	if IsInGuild() and not IsInInstance() then
-		SAM("GUILD", "seen", id, name, zone, level, x, y)
+		SAM("GUILD", "seen", id, name, zone, nil, x, y)
 	end
 	if IsInGroup(LE_PARTY_CATEGORY_HOME) then--Don't send syncs to INSTANCE_CHAT party/raids (ie LFR/LFG)
 		if IsInRaid() then
-			SAM("RAID", "seen", id, name, zone, level, x, y)
+			SAM("RAID", "seen", id, name, zone, nil, x, y)
 		else
-			SAM("PARTY", "seen", id, name, zone, level, x, y)
+			SAM("PARTY", "seen", id, name, zone, nil, x, y)
 		end
 	elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and IsInInstance() then
-		SAM("INSTANCE_CHAT", "seen", id, name, zone, level, x, y)
+		SAM("INSTANCE_CHAT", "seen", id, name, zone, nil, x, y)
 	end
 end
 
@@ -130,16 +128,6 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	-- We had one version which would include the " (Jade)" stuff in the syncs. Let's just strip that out.
 	name = name:gsub("%s+%(.-%)$", "")
 
-	local newloc = false
-	
-	if self.db.profile.record and not core.db.global.mob_tameable[id] then
-		-- two bits that aren't in the sync, so preserve existing values
-		local elite = core.db.global.mob_elite[id]
-		local creature_type = core.db.global.mob_type[id]
-		level = level or core.db.global.mob_level[id]
-		newloc = core:SaveMob(id, name, zone, x, y, level, elite, creature_type)
-	end
-
-	-- id, name, zone, x, y, dead, new_location, source, unit
-	core:NotifyMob(id, name, zone, x, y, false, newloc, "sync:"..channel..":"..sender, false)
+	-- id, zone, x, y, dead, source, unit
+	core:NotifyForMob(id, zone, x, y, false, "sync:"..channel..":"..sender, false)
 end

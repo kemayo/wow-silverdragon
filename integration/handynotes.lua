@@ -18,17 +18,16 @@ local handler = {}
 do
 	local currentLevel, currentZone
 	local function should_show_mob(id)
-		local questid = core.db.global.mob_quests[id]
+		local _, questid = core:GetMobInfo(id)
 		if questid then
 			return module.db.profile.questcomplete or not IsQuestFlaggedCompleted(questid)
 		end
 		local mod_tooltip = core:GetModule("Tooltip", true)
-		if not mod_tooltip then
-			return module.db.profile.achievementless
-		end
-		local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
-		if achievement then
-			return not completed or module.db.profile.achieved
+		if mod_tooltip then
+			local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
+			if achievement then
+				return not completed or module.db.profile.achieved
+			end
 		end
 		return module.db.profile.achievementless
 	end
@@ -91,20 +90,19 @@ function handler:OnEnter(mapFile, coord)
 		tooltip:SetOwner(self, "ANCHOR_RIGHT")
 	end
 	local zoneid = HBD:GetMapIDFromFile(mapFile)
-	local id, name, _, level, elite, creature_type, lastseen = core:GetMobByCoord(zoneid, coord)
+	local id, name, questid, _, _, lastseen = core:GetMobByCoord(zoneid, coord)
+	if not name then
+		tooltip:AddLine(UNKNOWN)
+		return tooltip:Show()
+	end
 	tooltip:AddLine(name)
-	if core.db.global.mob_notes[id] then
-		tooltip:AddDoubleLine("Note", core.db.global.mob_notes[id])
+	if core.mobdb[id].note then
+		tooltip:AddDoubleLine("Note", core.mobdb[id].note)
 	end
-	local display_level = level or '?'
-	if display_level == -1 then
-		display_level = 'Boss'
-	end
-	local display_level = ("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or '')
-	tooltip:AddDoubleLine(display_level, creature_type or UNKNOWN)
 
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
 	tooltip:AddDoubleLine("ID", id)
+
 	local mod_tooltip = core:GetModule("Tooltip", true)
 	if mod_tooltip then
 		local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
@@ -115,8 +113,8 @@ function handler:OnEnter(mapFile, coord)
 			)
 		end
 	end
-	if core.db.global.mob_quests[id] then
-		local completed = IsQuestFlaggedCompleted(core.db.global.mob_quests[id])
+	if questid then
+		local completed = IsQuestFlaggedCompleted(questid)
 		tooltip:AddDoubleLine(
 			QUESTS_COLON,
 			completed and COMPLETE or INCOMPLETE,
@@ -137,16 +135,6 @@ end
 
 local clicked_zone, clicked_coord
 local info = {}
-
-local function deletePin(button, mapFile, coord)
-	local zoneid = HBD:GetMapIDFromFile(mapFile)
-	local id = core:GetMobByCoord(zoneid, coord)
-	if id then
-		core:DeleteMobCoord(zoneid, id, coord)
-		module:UpdateNodes()
-		module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
-	end
-end
 
 local function deleteWholeMob(button, mapFile, coord)
 	local zoneid = HBD:GetMapIDFromFile(mapFile)
@@ -199,18 +187,7 @@ local function generateMenu(button, level)
 		info.disabled     = nil
 		info.isTitle      = nil
 		info.notCheckable = nil
-		info.text = "Delete location"
-		info.icon = icon
-		info.func = deletePin
-		info.arg1 = clicked_zone
-		info.arg2 = clicked_coord
-		UIDropDownMenu_AddButton(info, level);
-
-		-- Delete menu item
-		info.disabled     = nil
-		info.isTitle      = nil
-		info.notCheckable = nil
-		info.text = "Delete entire mob"
+		info.text = "Hide mob"
 		info.icon = icon
 		info.func = deleteWholeMob
 		info.arg1 = clicked_zone
@@ -319,28 +296,19 @@ function module:OnInitialize()
 	end
 
 	HandyNotes:RegisterPluginDB("SilverDragon", handler, options)
-	self:UpdateNodes()
 
 	self:RegisterEvent("LOOT_CLOSED")
 end
 
-function module:Seen(callback, id, name, zone, x, y, dead, new_location)
-	if not nodes[zone] then return end
-	if new_location then
-		local coord = core:GetCoord(x, y)
-		if coord then
-			nodes[zone][coord] = name
-			self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
-		end
-	end
+function module:OnEnable()
+	self:UpdateNodes()
 end
-core.RegisterCallback(module, "Seen")
 
 function module:UpdateNodes()
 	wipe(nodes)
-	-- Debug("UpdateNodes")
-	for zone, mobs in pairs(core.db.global.mobs_byzoneid) do
+	for zone, mobs in pairs(core.mobsByZone) do
 		local mapFile = HBD:GetMapFileFromID(zone)
+		Debug("UpdateNodes", zone, mapFile)
 		if mapFile then
 			nodes[mapFile] = {}
 			for id, locs in pairs(mobs) do
@@ -360,6 +328,3 @@ end
 function module:LOOT_CLOSED()
 	self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
 end
-
-core.RegisterCallback(module, "Import", "UpdateNodes")
-core.RegisterCallback(module, "DeleteAll", "UpdateNodes")

@@ -89,14 +89,6 @@ function module:LoadAchievementMobs(achievement)
 		if ctype == 0 then
 			achievements[achievement][id] = i
 			mobs_to_achievement[id] = achievement
-			-- and grab the names/ids, for the heck of it
-			globaldb.mob_id[description] = id
-			-- note, can't use the raw name from the description, as it's not necessarily correct
-			local name = core:RequestCacheForMob(id)
-			if name then
-				globaldb.mob_name[id] = name
-			end
-
 			achievements_loaded = true
 		end
 	end
@@ -125,8 +117,9 @@ function module:UpdateTooltip(id)
 				completed and 0 or 1, completed and 1 or 0, 0
 			)
 		end
-		if core.db.global.mob_quests[id] then
-			completed = IsQuestFlaggedCompleted(core.db.global.mob_quests[id])
+		local _, questid = core:GetMobInfo(id)
+		if questid then
+			completed = IsQuestFlaggedCompleted(questid)
 			GameTooltip:AddDoubleLine(
 				QUESTS_COLON,
 				completed and COMPLETE or INCOMPLETE,

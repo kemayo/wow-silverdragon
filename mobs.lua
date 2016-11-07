@@ -5,7 +5,6 @@ local Debug = core.Debug
 local desc, toggle
 
 local function removable_mob(id)
-	core:RequestCacheForMob(id)
 	local name = core:GetMobLabel(id)
 	return {
 		type = "execute",
@@ -76,68 +75,6 @@ function module:OnInitialize()
 				name = "Mobs",
 				order = 15,
 				args = {
-					import = {
-						type = "group",
-						name = "Import Mobs",
-						order = 10,
-						inline = true,
-						hidden = function()
-							return not ( core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")) )
-						end,
-						args = {
-							about = desc("SilverDragon comes with a pre-built database of known locations of rare mobs. Click the button below to import them all.", 0),
-							load = {
-								order = 10,
-								type = "execute",
-								name = "Import Mobs",
-								func = function()
-									LoadAddOn("SilverDragon_Data")
-									local Data = core:GetModule("Data", true)
-									if not Data then
-										module:Print("Database not found. Aborting import.") -- safety check, just in case.
-										return
-									end
-									local count = Data:Import()
-									core.events:Fire("Import")
-									module:Print(("Imported %d rares."):format(count))
-								end,
-							},
-						},
-					},
-					import_achievement = {
-						type = "group",
-						name = "Import Achievement Mobs",
-						order = 11,
-						inline = true,
-						hidden = function()
-							return not ( core:GetModule("Data", true) or select(5, GetAddOnInfo("SilverDragon_Data")) )
-						end,
-						args = {
-							about = desc("Alternatively, maybe you only care about the cool achievement-related mobs. This includes all the mount and pet related ones. Click the button below to import them all.", 0),
-							load = {
-								order = 10,
-								type = "execute",
-								name = "Import Mobs",
-								desc = "Import just the mobs which are tied to an achievement.",
-								func = function()
-									LoadAddOn("SilverDragon_Data")
-									local Data = core:GetModule("Data", true)
-									if not Data then
-										module:Print("Database not found. Aborting import.") -- safety check, just in case.
-										return
-									end
-									local count = Data:ImportAchievementMobs(
-										1312, -- bloody rare
-										2257, -- frostbitten
-										7439, -- glorious
-										8103 -- champions
-									)
-									core.events:Fire("Import")
-									module:Print(("Imported %d rares."):format(count))
-								end,
-							},
-						},
-					},
 					list = {
 						type = "group",
 						name = "List",
@@ -148,22 +85,6 @@ function module:OnInitialize()
 								type = "execute",
 								name = "Show list",
 								func = function() module:ShowFullList(config.options.plugins.mobs) end,
-							},
-						},
-					},
-					clear = {
-						type = "group",
-						name = "Clear Data",
-						order = 20,
-						inline = true,
-						args = {
-							about = desc("This will forget all the rare mobs that SilverDragon knows about. You might want to do this if you want to import fresh data from a more recent version of SilverDragon.", 0),
-							all = {
-								type = "execute",
-								name = "Clear all rares",
-								desc = "Forget all seen rares.",
-								order = 10,
-								func = function() core:DeleteAllMobs() end,
 							},
 						},
 					},
@@ -187,12 +108,12 @@ function module:ShowFullList(options)
 		about = desc("A full list of mobs we know about, by zone. Click them to delete them.", 0),
 	}
 
-	for zoneid, mobs in pairs(core.db.global.mobs_byzoneid) do
+	for zoneid, mobs in pairs(core.mobsByZone) do
 		local arg = {
 			type = "group",
 			-- order = zoneid, -- heh
 			name = GetMapNameByID(zoneid) or UNKNOWN,
-			args = {}
+			args = {},
 		}
 		for id in pairs(mobs) do
 			arg.args[tostring(id)] = removable_mob(id)

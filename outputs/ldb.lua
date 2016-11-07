@@ -87,24 +87,22 @@ function module:SetupDataObject()
 	function dataobject:OnEnter()
 		local zone = HBD:GetPlayerZone()
 
-		if not (core.db and core.db.global.mobs_byzoneid[zone]) then
+		if not (core.db and core.mobsByZone[zone]) then
 			return
 		end
 
 		local mod_tooltip = core:GetModule("Tooltip", true)
 
 		tooltip = LibQTip:Acquire("SilverDragonTooltip", 6, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT")
-		tooltip:AddHeader("Name", "Level", "Type", "Count", "Last Seen")
+		tooltip:AddHeader("Name", "Count", "Last Seen")
 		
 		local n = 0
-		for id in pairs(core.db.global.mobs_byzoneid[zone]) do
+		for id in pairs(core.mobsByZone[zone]) do
 			n = n + 1
-			local name, num_locations, level, elite, creature_type, lastseen, count, tameable, questid = core:GetMob(zone, id)
+			local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
 			local index = tooltip:AddLine(core:GetMobLabel(id) or UNKNOWN,
-				("%s%s"):format((level and level > 0) and level or (level and level == -1) and 'Boss' or '?', elite and '+' or ''),
-				BCT[creature_type],
-				count,
-				core:FormatLastSeen(lastseen),
+				times_seen,
+				core:FormatLastSeen(last_seen),
 				(tameable and 'Tameable' or '')
 			)
 			local completed, completion_knowable, achievement, achievement_name
@@ -133,7 +131,7 @@ function module:SetupDataObject()
 			for i,rare in ipairs(rares_seen) do
 				tooltip:AddLine(
 					core:GetMobLabel(rare.id) or rare.name or UNKNOWN,
-					GetMapNameByID(rare.zone),
+					GetMapNameByID(rare.zone) or UNKNOWN,
 					(rare.x and rare.y) and (core.round(rare.x * 100, 1) .. ', ' .. core.round(rare.y * 100, 1)) or UNKNOWN,
 					core:FormatLastSeen(rare.when),
 					rare.source or UNKNOWN

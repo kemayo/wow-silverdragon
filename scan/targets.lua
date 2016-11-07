@@ -93,7 +93,7 @@ function module:ProcessUnit(unit, source)
 			should_process = true
 		elseif is_rare then
 			should_process = true
-		elseif globaldb.mob_name[id] and not self.db.profile.rare_only then
+		elseif core.mobdb[id] and not self.db.profile.rare_only then
 			should_process = true
 		end
 	end
@@ -106,22 +106,15 @@ function module:ProcessUnit(unit, source)
 		end
 
 		local name = UnitName(unit)
-		local level = (UnitLevel(unit) or -1)
-		local creature_type = UnitCreatureType(unit)
-		local guid = UnitGUID(unit) or 0
 
-		local newloc
-		if CheckInteractDistance(unit, 4) then
-			newloc = core:SaveMob(id, name, zone, x, y, level, unittype, creature_type)
-		else
-			core:SaveMob(id, name, nil, nil, nil, level, unittype, creature_type)
+		if
+			(source == 'target' and not self.db.profile.targets)
+			or (source == 'mouseover' and not self.db.profile.mouseover)
+			or (source == 'nameplate' and not self.db.profile.nameplate)
+		then
+			return
 		end
 
-		local silent = (source == 'target' and not self.db.profile.targets) or
-		               (source == 'mouseover' and not self.db.profile.mouseover) or
-		               (source == 'nameplate' and not self.db.profile.nameplate)
-
-		core:NotifyMob(id, name, zone, x, y, UnitIsDead(unit), newloc, source or 'target', unit, silent)
-		return true
+		core:NotifyForMob(id, zone, x, y, UnitIsDead(unit), source or 'target', unit, silent)
 	end
 end

@@ -39,6 +39,25 @@ function module:OnEnable()
 	self:RegisterEvent("WORLD_MAP_UPDATE")
 end
 
+function module:WorkOutMobFromVignette(name, ...)
+	if core.vignetteMobLookup[name] then
+		return self:NotifyForMobs(core.vignetteMobLookup[name], ...)
+	end
+	local questid = core:IdForQuest(name)
+	if questid and core.questMobLookup[questid] then
+		return self:NotifyForMobs(core.questMobLookup[questid], ...)
+	end
+	local mobid = core:IdForMob(name)
+	if mobid then
+		return self:NotifyIfNeeded(mobid, ...)
+	end
+end
+function module:NotifyForMobs(mobs, ...)
+	for mobid in pairs(mobs) do
+		self:NotifyIfNeeded(mobid, ...)
+	end
+end
+
 local already_notified = {}
 function module:VIGNETTE_ADDED(event, instanceid, mysterious_number, ...)
 	Debug("VIGNETTE_ADDED", instanceid, mysterious_number, ...)
@@ -58,12 +77,7 @@ function module:VIGNETTE_ADDED(event, instanceid, mysterious_number, ...)
 		Debug("Vignette instanceid bug hit", instanceid)
 		return
 	end
-	local mob_id = globaldb.mob_id[name] or globaldb.mob_vignettes[name]
-	if mob_id then
-		-- it's a rare that we know about!
-		-- note, we could instead try using just iconid==41, but I don't know if that's going to actually be all rares yet
-		self:NotifyIfNeeded(mob_id)
-	end
+	self:WorkOutMobFromVignette(name)
 end
 
 local GetNumMapLandmarks = GetNumMapLandmarks
@@ -74,16 +88,12 @@ function module:WORLD_MAP_UPDATE(event)
 	for i=1, NUM_WORLDMAP_POIS do
 		local name, description, texture_index, x, y = GetMapLandmarkInfo(i)
 		if name and texture_index ~= 197 then
-			local mob_id = globaldb.mob_id[name] or globaldb.mob_vignettes[name]
-			if mob_id then
-				-- it's a rare that we know about!
-				self:NotifyIfNeeded(mob_id, nil, x, y, "point-of-interest")
-			end
+			self:WorkOutMobFromVignette(name, x, y, "point-of-interest")
 		end
 	end
 end
 
-function module:NotifyIfNeeded(id, instanceid, x, y, variant)
+function module:NotifyIfNeeded(id, x, y, variant)
 	local current_zone
 	local force = true
 	if x and y then
@@ -96,13 +106,5 @@ function module:NotifyIfNeeded(id, instanceid, x, y, variant)
 	if not (current_zone and x and y) then
 		return
 	end
-	local newloc = false
-	if self.db.profile.location and not globaldb.mob_tameable[id] then
-		--Pull some info from global database since it's not sent from syncs, and we don't want
-		-- to erase that info with savemob function just copy it over.
-		if globaldb.mob_name[id] then
-			newloc = core:SaveMob(id, globaldb.mob_name[id], current_zone, x, y, globaldb.mob_level[id], globaldb.mob_elite[id], globaldb.mob_type[id])
-		end
-	end
-	core:NotifyMob(id, globaldb.mob_name[id], current_zone, x, y, false, newloc, variant or "vignette", false, nil, force)
+	core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, force)
 end

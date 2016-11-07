@@ -20,47 +20,88 @@ BINDING_HEADER_SILVERDRAGON = "SilverDragon"
 _G["BINDING_NAME_CLICK SilverDragonPopupButton:LeftButton"] = "Target last found mob"
 _G["BINDING_NAME_CLICK SilverDragonMacroButton:LeftButton"] = "Scan for nearby mobs"
 
+addon.datasources = {
+	-- ["source name"] = mobs...
+}
+local mobdb = {
+	--[[
+	[54321] = {
+		name = "Bob",
+		vignette = "something that isn't the name",
+		quest = 12345,
+		elite = isElite,
+		tameable = isTameable,
+		notes = "notes",
+	},
+	...
+	--]]
+}
+addon.mobdb = mobdb
+local mobsByZone = {
+	-- [zoneid] = { [mobid] = {coord, ...}
+}
+addon.mobsByZone = mobsByZone
+local questMobLookup = {
+	-- [questid] = { [mobid] = true, ... }
+}
+addon.questMobLookup = questMobLookup
+local vignetteMobLookup = {
+	-- [name] = { [mobid] = true, ... }
+}
+addon.vignetteMobLookup = vignetteMobLookup
+function addon:RegisterMobData(source, data)
+	addon.datasources[source] = data
+end
+function addon:BuildLookupTables()
+	for source, data in pairs(addon.datasources) do
+		for mobid, mobdata in pairs(data) do
+			self:NameForMob(mobid) -- prime cache
+
+			mobdb[mobid] = mobdata
+			mobdata.id = mobid
+
+			if mobdata.locations then
+				for zoneid, coords in pairs(mobdata.locations) do
+					if not mobsByZone[zoneid] then
+						mobsByZone[zoneid] = {}
+					end
+					mobsByZone[zoneid][mobid] = coords
+				end
+			end
+			-- In the olden days, we had one mob per quest and/or vignette. Alas...
+			if mobdata.quest then
+				local questMobs = questMobLookup[mobdata.quest]
+				if not questMobs then
+					questMobs = {}
+					questMobLookup[mobdata.quest] = questMobs
+				end
+				questMobs[mobid] = true
+			end
+			if mobdata.vignette then
+				local vignetteMobs = vignetteMobLookup[mobdata.vignette]
+				if not vignetteMobs then
+					vignetteMobs = {}
+					vignetteMobLookup[mobdata.vignette] = vignetteMobs
+				end
+				vignetteMobs[mobid] = true
+			end
+		end
+	end
+end
+
 local globaldb
 function addon:OnInitialize()
-	self.db = LibStub("AceDB-3.0"):New("SilverDragon2DB", {
+	self.db = LibStub("AceDB-3.0"):New("SilverDragon3DB", {
 		global = {
-			mobs_byzoneid = {
-				['*'] = { -- zones
-					-- 132132 = {encoded_loc, encoded_loc2, etc}
-				},
-			},
 			mob_seen = {
 				-- 132132 = time()
 			},
-			mob_id = {
-				-- "Bob the Rare" = 132132
-			},
-			mob_name = {
-				-- 132132 = "Bob the Rare"
-			},
-			mob_type = {
-				-- 132132 = "Critter"
-			},
-			mob_level = {
-				-- 132132 = 73
-			},
-			mob_elite = {
-				-- 132132 = true
-			},
-			mob_tameable = {
-				-- 132132 = nil
-			},
-			mob_notes = {
-				-- 132132 = "Jade"
-			},
-			mob_vignettes = {
-				-- "Something Descriptive That Isn't The Mob Name" = id
-			},
-			mob_quests = {
-				-- mobid = questid
-			},
 			mob_count = {
 				['*'] = 0,
+			},
+			custom_mobs = {
+				-- custom mobs to watch for
+				-- [id] = "name"
 			},
 			always = {
 			},
@@ -80,6 +121,16 @@ function addon:OnInitialize()
 				[69843] = true,--Zao'cho the Wicked (Zao'cho)
 			},
 		},
+		locale = {
+			quest_name = {
+				-- store localized quest names
+				-- [id] = "name"
+			},
+			mob_name = {
+				-- store localized mob names
+				-- [id] = "name"
+			},
+		},
 		profile = {
 			scan = 1, -- scan interval, 0 for never
 			delay = 1200, -- number of seconds to wait between recording the same mob
@@ -89,151 +140,127 @@ function addon:OnInitialize()
 	}, true)
 	globaldb = self.db.global
 
+	if SilverDragon2DB then
+		-- Migrating some data from v2
+
+		for mobid, when in pairs(SilverDragon2DB.global.mob_seen) do
+			if when > 0 then
+				globaldb.mob_seen[mobid] = when
+			end
+		end
+		for mobid, count in pairs(SilverDragon2DB.global.mob_count) do
+			globaldb.mob_count[mobid] = count
+		end
+
+		-- _G["SilverDragon2DB"] = nil
+	end
+
+	-- TODO: move to miner, remove at the source
 	-- Total hack. I'm very disappointed in myself. Blood Seeker is flagged as tamemable, but really isn't.
 	-- (It despawns in 10-ish seconds, and shows up high in the sky.)
-	globaldb.mob_tameable[3868] = nil
+	-- globaldb.mob_tameable[3868] = nil
 end
 
 function addon:OnEnable()
+	self:BuildLookupTables()
 	if self.db.profile.scan > 0 then
 		self:ScheduleRepeatingTimer("CheckNearby", self.db.profile.scan)
 	end
 end
 
-local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip")
-cache_tooltip:AddFontStrings(
-	cache_tooltip:CreateFontString("$parentTextLeft1", nil, "GameTooltipText"),
-	cache_tooltip:CreateFontString("$parentTextRight1", nil, "GameTooltipText")
-)
-function addon:RequestCacheForMob(id)
-	-- this doesn't work with just clearlines and the setowner outside of this, and I'm not sure why
-	cache_tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
-	cache_tooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
-	if cache_tooltip:IsShown() then
-		local name = SDCacheTooltipTextLeft1:GetText()
-		globaldb.mob_id[name] = id
-		globaldb.mob_name[id] = name
-		return name
+do
+	local mobNameToId = {}
+	local questNameToId = {}
+
+	local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip", _G.UIParent, "GameTooltipTemplate")
+	cache_tooltip:SetOwner(_G.WorldFrame, "ANCHOR_NONE")
+	local function TextFromHyperlink(link)
+		cache_tooltip:SetHyperlink(link)
+		local text = SDCacheTooltipTextLeft1:GetText()
+		if text and text ~= "" then
+			return text
+		end
 	end
-end
-
-local valid_unit_types = {
-	Creature = true, -- npcs
-	Vehicle = true, -- vehicles
-}
-local function npc_id_from_guid(guid)
-	if not guid then return end
-	local unit_type, id = guid:match("(%a+)-%d+-%d+-%d+-%d+-(%d+)-.+")
-	if not (unit_type and valid_unit_types[unit_type]) then
- 		return
- 	end
-	return tonumber(id)
-end
-function addon:UnitID(unit)
-	return npc_id_from_guid(UnitGUID(unit))
-end
-
-function addon:ShouldSave(id)
-	local last_saved = globaldb.mob_seen[id]
-	if not last_saved then
-		return true
-	end
-	if time() > (last_saved + self.db.profile.delay) then
-		return true
-	end
-	return false
-end
-
-local elite_types = {
-	elite = true,
-	rareelite = true,
-	worldboss = true,
-}
-
-function addon:SaveMob(id, name, zone, x, y, level, elite, creature_type)
-	Debug("SaveMob", id, name, zone, x, y, level, elite, creature_type)
-	if not id then return end
-	-- saves a mob's information, returns true if this is the first time a mob has been seen at this location
-	if not self:ShouldSave(id) then
-		Debug("Shouldn't save")
-		return
-	end
-
-	if type(elite) == 'string' then
-		elite = elite_types[elite] or false
-	end
-
-	globaldb.mob_seen[id] = time()
-	globaldb.mob_level[id] = level
-	if elite ~= nil then
-		globaldb.mob_elite[id] = elite
-	end
-	globaldb.mob_type[id] = BCTR[creature_type]
-	globaldb.mob_name[id] = name
-	globaldb.mob_id[name] = id
-	
-	if not (zone and x and y and x > 0 and y > 0) then
-		return
-	end
-
-	return self:SaveMobLocations(id, zone, self:GetCoord(x, y))
-end
-
-function addon:SaveMobLocations(id, zone, ...)
-	if not globaldb.mobs_byzoneid[zone][id] then
-		globaldb.mobs_byzoneid[zone][id] = {} -- never seen
-	end
-
-	local any_newloc
-	for i=1, select('#', ...) do
-		local loc = select(i, ...)
-		local new_x, new_y = self:GetXY(loc)
-		local newloc = true
-		for _, oldloc in pairs(globaldb.mobs_byzoneid[zone][id]) do
-			local old_x, old_y = self:GetXY(oldloc)
-			if math.abs(new_x - old_x) < 0.05 and math.abs(new_y - old_y) < 0.05 then
-				newloc = false
-				break
+	function addon:NameForMob(id)
+		if not self.db.locale.mob_name[id] then
+			local name = TextFromHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
+			if name then
+				self.db.locale.mob_name[id] = name
+				mobNameToId[name] = id
 			end
 		end
-		if newloc then
-			any_newloc = true
-			table.insert(globaldb.mobs_byzoneid[zone][id], loc)
-		end
+		return self.db.locale.mob_name[id]
 	end
-	return any_newloc
+	function addon:IdForMob(name)
+		return mobNameToId[name]
+	end
+	function addon:NameForQuest(id)
+		if not self.db.locale.quest_name[id] then
+			local name = TextFromHyperlink(("quest:%d"):format(id))
+			if name then
+				name = name:gsub("Vignette: ", "")
+				self.db.locale.quest_name[id] = name
+				questNameToId[name] = id
+			end
+		end
+		return self.db.locale.quest_name[id]
+	end
+	function addon:IdForQuest(name)
+		return questNameToId[name]
+	end
 end
 
--- Returns name, num_locs, level, is_elite, creature_type, last_seen, times_seen, is_tameable, questid
-function addon:GetMob(zone, id)
-	if not (zone and id and globaldb.mobs_byzoneid[zone][id]) then
-		return 0, 0, false, UNKNOWN, nil, 0, nil, nil
+-- returns name, questid, vignette, tameable, last_seen, times_seen
+function addon:GetMobInfo(id)
+	if mobdb[id] then
+		local m = mobdb[id]
+		local name = addon:NameForMob(id)
+		return name, m.quest, m.vignette or name, m.tameable, globaldb.mob_seen[id], globaldb.mob_count[id]
 	end
-	return globaldb.mob_name[id], #globaldb.mobs_byzoneid[zone][id], globaldb.mob_level[id], globaldb.mob_elite[id], BCT[globaldb.mob_type[id]], globaldb.mob_seen[id], globaldb.mob_count[id], globaldb.mob_tameable[name], globaldb.mob_quests[id]
+end
+function addon:IsMobInZone(id, zone)
+	if mobsByZone[zone] then
+		return mobsByZone[zone][id]
+	end
+end
+-- Returns id, addon:GetMobInfo(id)
+function addon:GetMobByCoord(zone, coord)
+	if not mobsByZone[zone] then return end
+	for id, locations in pairs(mobsByZone[zone]) do
+		for _, mob_coord in ipairs(locations) do
+			if coord == mob_coord then
+				return id, self:GetMobInfo(id)
+			end
+		end
+	end
 end
 
 function addon:GetMobLabel(id)
-	if not globaldb.mob_name[id] then
+	local name = self:NameForMob(id)
+	if not name then
 		return
 	end
-	return globaldb.mob_name[id] .. (globaldb.mob_notes[id] and (" (" .. globaldb.mob_notes[id] .. ")") or "")
+	if not mobdb[id] then
+		return name
+	end
+	return name .. (mobdb[id].note and (" (" .. mobdb[id].note .. ")") or "")
 end
 
 do
 	local lastseen = {}
-	function addon:NotifyMob(id, name, zone, x, y, is_dead, is_new_location, source, unit, silent, force)
-		self.events:Fire("Seen_Raw", id, name, zone, x, y, is_dead, is_new_location, source, unit)
+	function addon:NotifyForMob(id, zone, x, y, is_dead, source, unit, silent, force)
+		self.events:Fire("Seen_Raw", id, zone, x, y, is_dead, source, unit)
 
 		if silent then
-			Debug("Skipping notification: silent call", id, name, source)
+			Debug("Skipping notification: silent call", id, source)
 			return
 		end
 		if self:ShouldIgnoreMob(id, zone) then
-			Debug("Skipping notification: ignored", id, name, source)
+			Debug("Skipping notification: ignored", id, source)
 			return
 		end
 		if not force and lastseen[id..zone] and time() < lastseen[id..zone] + self.db.profile.delay then
-			Debug("Skipping notification: seen", id, name, lastseen[id..zone], time() - self.db.profile.delay, source)
+			Debug("Skipping notification: seen", id, lastseen[id..zone], time() - self.db.profile.delay, source)
 			return
 		end
 		if (not self.db.profile.taxi) and UnitOnTaxi('player') then
@@ -242,7 +269,7 @@ do
 		end
 		globaldb.mob_count[id] = globaldb.mob_count[id] + 1
 		lastseen[id..zone] = time()
-		self.events:Fire("Seen", id, name, zone, x, y, is_dead, is_new_location, source, unit)
+		self.events:Fire("Seen", id, zone, x, y, is_dead, source, unit)
 	end
 end
 do
@@ -295,65 +322,6 @@ do
 	end
 end
 
-function addon:ZoneContainsMobs(zone)
-	if not globaldb.mobs_byzoneid[zone] then
-		return
-	end
-	for id, locations in pairs(globaldb.mobs_byzoneid[zone]) do
-		return true
-	end
-end
-
--- Returns id, addon:GetMob(zone, id)
-function addon:GetMobByCoord(zone, coord)
-	if not globaldb.mobs_byzoneid[zone] then return end
-	for id, locations in pairs(globaldb.mobs_byzoneid[zone]) do
-		for _, mob_coord in ipairs(locations) do
-			if coord == mob_coord then
-				return id, self:GetMob(zone, id)
-			end
-		end
-	end
-end
-
-function addon:DeleteMobCoord(zone, id, coord)
-	if not globaldb.mobs_byzoneid[zone] and globaldb.mobs_byzoneid[zone][id] then return end
-	for i, mob_coord in ipairs(globaldb.mobs_byzoneid[zone][id]) do
-		if coord == mob_coord then
-			tremove(globaldb.mobs_byzoneid[zone][id], i)
-			return
-		end
-	end
-end
-
-function addon:DeleteMob(id)
-	if not (id and globaldb.mob_name[id]) then return end
-	for zone, mobs in pairs(globaldb.mobs_byzoneid) do
-		mobs[id] = nil
-	end
-	globaldb.mob_level[id] = nil
-	globaldb.mob_elite[id] = nil
-	globaldb.mob_type[id] = nil
-	globaldb.mob_count[id] = nil
-	globaldb.mob_seen[id] = nil
-	globaldb.mob_tameable[id] = nil
-	local name = globaldb.mob_name[id]
-	globaldb.mob_name[id] = nil
-	globaldb.mob_id[name] = nil
-end
-
-function addon:DeleteAllMobs()
-	local n = 0
-	for id in pairs(globaldb.mob_name) do
-		self:DeleteMob(id)
-		n = n + 1
-	end
-	globaldb.mob_name = {}
-	globaldb.mob_id = {}
-	DEFAULT_CHAT_FRAME:AddMessage("SilverDragon: Removed "..n.." rare mobs from database.")
-	self.events:Fire("DeleteAll", n)
-end
-
 -- Scanning:
 
 function addon:CheckNearby()
@@ -365,6 +333,24 @@ function addon:CheckNearby()
 end
 
 -- Utility:
+
+do
+	local valid_unit_types = {
+		Creature = true, -- npcs
+		Vehicle = true, -- vehicles
+	}
+	local function npcIdFromGuid(guid)
+		if not guid then return end
+		local unit_type, id = guid:match("(%a+)-%d+-%d+-%d+-%d+-(%d+)-.+")
+		if not (unit_type and valid_unit_types[unit_type]) then
+	 		return
+	 	end
+		return tonumber(id)
+	end
+	function addon:UnitID(unit)
+		return npcIdFromGuid(UnitGUID(unit))
+	end
+end
 
 addon.round = function(num, precision)
 	return mfloor(num * mpow(10, precision) + 0.5) / mpow(10, precision)

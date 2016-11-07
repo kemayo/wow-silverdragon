@@ -65,13 +65,14 @@ function module:Update()
 	Debug("Updating Macro")
 	-- first, create the macro text on the button:
 	local zone = HBD:GetPlayerZone()
-	local mobs = zone and core.db.global.mobs_byzoneid[zone]
+	local mobs = zone and core.mobsByZone[zone]
 	local macro = {}
 	local count = 0
 	if mobs then
 		for id in pairs(mobs) do
-			if core.db.global.mob_name[id] and not core.db.global.ignore[id] then
-				table.insert(macro, "/targetexact "..core.db.global.mob_name[id])
+			local name = core:NameForMob(id)
+			if name and not core.db.global.ignore[id] then
+				table.insert(macro, "/targetexact " .. name)
 				count = count + 1
 			end
 		end
