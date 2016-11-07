@@ -29,9 +29,9 @@ local mobdb = {
 		name = "Bob",
 		vignette = "something that isn't the name",
 		quest = 12345,
-		elite = isElite,
 		tameable = isTameable,
 		notes = "notes",
+		locations = {[zoneid] = {coord,...}}
 	},
 	...
 	--]]
@@ -243,7 +243,7 @@ function addon:GetMobLabel(id)
 	if not mobdb[id] then
 		return name
 	end
-	return name .. (mobdb[id].note and (" (" .. mobdb[id].note .. ")") or "")
+	return name .. (mobdb[id].notes and (" (" .. mobdb[id].notes .. ")") or "")
 end
 
 do

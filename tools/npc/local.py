@@ -37,6 +37,9 @@ class LocalNPC(NPC):
     def _quest(self):
         return self.data.get('quest')
 
+    def _expansion(self):
+        return self.data.get('expansion')
+
 
 def load(filename):
     npcdata = {}

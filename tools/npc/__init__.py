@@ -62,6 +62,7 @@ class NPC:
         self.data['locations'] = self._filter_locations(self._locations()) or {}
         self.data['vignette'] = self._vignette()
         self.data['quest'] = self._quest()
+        self.data['expansion'] = self._expansion()
 
         if self.data['vignette'] == self.data['name']:
             self.data['vignette'] = None
@@ -81,6 +82,8 @@ class NPC:
     def _vignette(self):
         pass
     def _quest(self):
+        pass
+    def _expansion(self):
         pass
 
     def extend(self, npc):
@@ -115,11 +118,11 @@ class NPC:
     def add_notes(self, notes):
         self.data['notes'] = notes
 
-    def clean_data(self):
-        return dict((k, v) for k, v in self.data.items() if v)
+    def clean_data(self, *keys):
+        return dict((k, v) for k, v in self.data.items() if (v and len(keys) == 0 or k in keys))
 
-    def to_lua(self):
-        return lua.serialize(self.clean_data())
+    def to_lua(self, *args, **kwargs):
+        return lua.serialize(self.clean_data(*args, **kwargs))
 
     def html_decode(self, text):
         return text.replace('&#39;', "'").replace('&#x27;', "'").replace('&quot;', '"')

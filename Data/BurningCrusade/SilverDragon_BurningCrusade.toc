@@ -1,6 +1,6 @@
-﻿## Interface: 70100
-## Title: SilverDragon (Data)
-## Notes: Default set of rares for SilverDragon
+## Interface: 70100
+## Title: SilverDragon (BurningCrusade)
+## Notes: Mobs for BurningCrusade
 ## Version: @project-version@
 ## Author: Kemayo
 ## eMail: kemayo at gmail dot com
@@ -9,4 +9,4 @@
 ## Dependencies: SilverDragon
 ## LoadOnDemand: 1
 
-module.xml
+module.lua

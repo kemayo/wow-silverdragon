@@ -3,7 +3,7 @@
 import json
 import re
 
-from . import NPC, types, pack_coords
+from . import NPC, pack_coords
 from .zones import zoneid_to_mapid
 
 zone_map = False
@@ -67,7 +67,7 @@ class WowdbNPC(NPC):
                             break
                     else:
                         # list fully looped through, not broken.
-                        zcoords.append((x,y))
+                        zcoords.append((x, y))
             coords[zoneid_to_mapid[zone]] = [pack_coords(c[0], c[1]) for c in zcoords]
         return coords
 
@@ -75,7 +75,7 @@ class WowdbNPC(NPC):
         return "<li>Tamable</li>" in self.__page()
 
     def _vignette(self):
-        page = self.__page();
+        page = self.__page()
         if not page:
             return
         # this is making a bit of an assumption about the quest names matching up, of course
@@ -85,7 +85,7 @@ class WowdbNPC(NPC):
         return self.html_decode(match.group(1))
 
     def _quest(self):
-        page = self.__page();
+        page = self.__page()
         if not page:
             return
         match = re.search(r'<a href="[^"]+/quests/(\d+)-[^"]+">[^<]*Vignette[^<]*</a>', page)
@@ -105,6 +105,11 @@ class WowdbNPC(NPC):
             if level:
                 return int(level.group(1))
             return False
+
+    def _expansion(self):
+        patch = re.search(r'<li>Added in Patch (\d+)', self.__page())
+        if patch:
+            return int(patch.group(1))
 
     @classmethod
     def query(cls, creature_type, session, ptr=False, beta=False, cached=True, **kw):

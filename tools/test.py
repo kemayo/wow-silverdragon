@@ -1,10 +1,13 @@
 import unittest
+import requests_cache
 
-import npc.wowhead, npc.wowdb
+import npc.wowdb
+import npc.wowhead
+
 
 class TestNPC:
     def setUp(self):
-        pass
+        self.session = requests_cache.CachedSession(expire_after=10 * 24 * 3600)
 
     def test_basics(self):
         npc = self.getNPC(69842)
@@ -13,6 +16,10 @@ class TestNPC:
         self.assertTrue(npc.data['elite'])
         self.assertEqual(npc.data['creature_type'], "Humanoid")
         self.assertFalse(npc.data['tameable'])
+
+    def test_cleandata(self):
+        npc = self.getNPC(69842)
+        self.assertEqual(npc.clean_data('name'), {"name": "Zandalari Warbringer"})
 
     def test_locations(self):
         npc = self.getNPC(69842)
@@ -34,7 +41,7 @@ class TestNPC:
 
 class TestWowhead(TestNPC, unittest.TestCase):
     def getNPC(self, id):
-        return npc.wowhead.WowheadNPC(id)
+        return npc.wowhead.WowheadNPC(id, session=self.session)
 
     def test_quests(self):
         TestNPC.test_quests(self)
@@ -45,7 +52,7 @@ class TestWowhead(TestNPC, unittest.TestCase):
 
 class TestWowdb(TestNPC, unittest.TestCase):
     def getNPC(self, id):
-        return npc.wowdb.WowdbNPC(id)
+        return npc.wowdb.WowdbNPC(id, session=self.session)
 
     def test_vignettes(self):
         npc = self.getNPC(77085)  # Dark Emanation
@@ -54,8 +61,8 @@ class TestWowdb(TestNPC, unittest.TestCase):
 
 class TestInteractions(unittest.TestCase):
     def test_extend(self):
-        kalos_wowdb = npc.wowdb.WowdbNPC(84810)
-        kalos_wowhead = npc.wowhead.WowheadNPC(84810)
+        kalos_wowdb = npc.wowdb.WowdbNPC(84810, session=self.session)
+        kalos_wowhead = npc.wowhead.WowheadNPC(84810, session=self.session)
         kalos_wowhead.extend(kalos_wowdb)
         self.assertEqual(kalos_wowhead.data['quest'], 36268)
 

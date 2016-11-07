@@ -25,7 +25,13 @@ externals:
    lib/HereBeDragons-1.0: git://git.wowace.com/wow/herebedragons/mainline.git
 
 move-folders:
-   SilverDragon/Data: SilverDragon_Data
+   SilverDragon/Data/Vanilla: SilverDragon_Vanilla
+   SilverDragon/Data/BurningCrusade: SilverDragon_BurningCrusade
+   SilverDragon/Data/Wrath: SilverDragon_Wrath
+   SilverDragon/Data/Cataclysm: SilverDragon_Cataclysm
+   SilverDragon/Data/Mists: SilverDragon_Mists
+   SilverDragon/Data/Warlords: SilverDragon_Warlords
+   SilverDragon/Data/Legion: SilverDragon_Legion
 
 ignore:
    - tools

@@ -89,6 +89,11 @@ class WowheadNPC(NPC):
                 # There's a lot of corrupt data on there...
                 return int(info.group(1))
 
+    def _expansion(self):
+        patch = re.search(r'Added\\x20in\\x20patch\\x20(\d+)', self.__page())
+        if patch:
+            return int(patch.group(1))
+
     @classmethod
     def query(cls, categoryid, expansion, session, ptr=False, beta=False, cached=True, **kw):
         url = "%s/npcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (cls.url(ptr=ptr, beta=beta), categoryid, expansion)
