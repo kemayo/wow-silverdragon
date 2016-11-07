@@ -130,7 +130,7 @@ function module:SetupDataObject()
 			tooltip:AddHeader("Name", "Zone", "Coords", "When", "Source")
 			for i,rare in ipairs(rares_seen) do
 				tooltip:AddLine(
-					core:GetMobLabel(rare.id) or rare.name or UNKNOWN,
+					core:GetMobLabel(rare.id) or core:NameForMob(rare.id) or UNKNOWN,
 					GetMapNameByID(rare.zone) or UNKNOWN,
 					(rare.x and rare.y) and (core.round(rare.x * 100, 1) .. ', ' .. core.round(rare.y * 100, 1)) or UNKNOWN,
 					core:FormatLastSeen(rare.when),
@@ -161,14 +161,13 @@ function module:SetupDataObject()
 	end
 
 	local last_seen
-	core.RegisterCallback("LDB", "Seen", function(callback, id, name, zone, x, y, dead, newloc, source)
-		last_seen = name
+	core.RegisterCallback("LDB", "Seen", function(callback, id, zone, x, y, dead, source)
+		last_seen = id
 		if db.profile.show_lastseen then
 			dataobject.text = name
 		end
 		table.insert(rares_seen, {
 			id = id,
-			name = name,
 			zone = zone,
 			x = x,
 			y = y,

@@ -121,8 +121,8 @@ function module:OnInitialize()
 				type = "execute", name = name,
 				desc = "Fake seeing " .. name,
 				func = function()
-					-- id, name, zone, x, y, is_dead, is_new_location, source, unit
-					core.events:Fire("Seen", id, name, zone, x, y, false, false, "fake", false)
+					-- id, zone, x, y, is_dead, source, unit
+					core.events:Fire("Seen", id, zone, x, y, false, "fake", false)
 				end,
 			}
 		end
@@ -224,8 +224,8 @@ function module:OnInitialize()
 	end
 end
 
-function module:Seen(callback, id, name, zone, x, y, is_dead, ...)
-	Debug("Announce:Seen", id, name, zone, x, y, is_dead, ...)
+function module:Seen(callback, id, zone, x, y, is_dead, ...)
+	Debug("Announce:Seen", id, zone, x, y, is_dead, ...)
 
 	if not self.db.profile.instances and IsInInstance() then
 		return
