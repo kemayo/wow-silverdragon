@@ -91,7 +91,7 @@ end
 """
 
 
-def write_output(expansion, data, strip=False):
+def write_output(expansion, data):
     with open("../Data/{exp}/SilverDragon_{exp}.toc".format(exp=expansion), 'w') as f:
         f.write(TOC_TEMPLATE.format(exp=expansion))
     with open("../Data/{exp}/module.lua".format(exp=expansion), 'w') as f:
@@ -101,8 +101,7 @@ def write_output(expansion, data, strip=False):
                 continue
             if id in notes:
                 mob.add_notes(notes[id])
-            if (not strip) or len(mob.data.get('locations', {})) > 0:
-                f.write('\t\t[%d] = %s,\n' % (id, mob.to_lua('name', 'quest', 'vignette', 'tameable', 'notes', 'locations')))
+            f.write('\t\t[%d] = %s,\n' % (id, mob.to_lua('name', 'quest', 'vignette', 'tameable', 'notes', 'locations')))
         f.write(MODULE_END_TEMPLATE)
 
 if __name__ == '__main__':
@@ -167,6 +166,8 @@ if __name__ == '__main__':
 
     expansionmobs = {}
     for id, mob in local.items():
+        if ns.strip_empties or len(mob.data.get('locations', {})) == 0:
+            continue
         expansion = mob.data.get('expansion')
         if expansion:
             if expansion not in expansionmobs:
@@ -176,5 +177,5 @@ if __name__ == '__main__':
             print("Missing expansion", mob)
 
     for expansion, mobs in expansionmobs.items():
-        write_output(expansions.get(expansion), mobs, strip=ns.strip_empties)
+        write_output(expansions.get(expansion), mobs)
         print("Data written", expansions.get(expansion))
