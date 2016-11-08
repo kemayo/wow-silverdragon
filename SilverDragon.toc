@@ -41,6 +41,7 @@ lib\HereBeDragons-1.0\HereBeDragons-1.0.lua
 
 # the core
 core.lua
+achievements.lua
 config.lua
 
 scan\targets.lua

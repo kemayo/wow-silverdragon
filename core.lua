@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 local HBD = LibStub("HereBeDragons-1.0")
@@ -36,19 +38,19 @@ local mobdb = {
 	...
 	--]]
 }
-addon.mobdb = mobdb
+ns.mobdb = mobdb
 local mobsByZone = {
 	-- [zoneid] = { [mobid] = {coord, ...}
 }
-addon.mobsByZone = mobsByZone
+ns.mobsByZone = mobsByZone
 local questMobLookup = {
 	-- [questid] = { [mobid] = true, ... }
 }
-addon.questMobLookup = questMobLookup
+ns.questMobLookup = questMobLookup
 local vignetteMobLookup = {
 	-- [name] = { [mobid] = true, ... }
 }
-addon.vignetteMobLookup = vignetteMobLookup
+ns.vignetteMobLookup = vignetteMobLookup
 function addon:RegisterMobData(source, data)
 	addon.datasources[source] = data
 end

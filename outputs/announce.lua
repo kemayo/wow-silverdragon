@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Announce", "AceTimer-3.0", "LibSink-2.0", "LibToast-1.0")
 local Debug = core.Debug
@@ -241,18 +243,9 @@ function module:Seen(callback, id, zone, x, y, is_dead, ...)
 	end
 
 	if not self.db.profile.already then
-		local mod_tooltip = core:GetModule("Tooltip", true)
-		local questid = core.db.global.mob_quests[id]
-		local completed, completion_knowable, achievement, achievement_name
-		if questid then
-			completed = IsQuestFlaggedCompleted(questid)
-			completion_knowable = true
-		elseif mod_tooltip then
-			achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
-			completion_knowable = achievement
-		end
+		local completed, completion_knowable = ns:IsMobComplete(id)
 		if completion_knowable and completed then
-			Debug("Skipping because already killed", questid, achievement, achievement_name)
+			Debug("Skipping because already killed", id)
 			return
 		end
 	end

@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 local HandyNotes = LibStub("AceAddon-3.0"):GetAddon("HandyNotes", true)
 if not HandyNotes then return end
 
@@ -22,12 +24,9 @@ do
 		if questid then
 			return module.db.profile.questcomplete or not IsQuestFlaggedCompleted(questid)
 		end
-		local mod_tooltip = core:GetModule("Tooltip", true)
-		if mod_tooltip then
-			local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
-			if achievement then
-				return not completed or module.db.profile.achieved
-			end
+		local achievement, achievement_name, completed = ns:AchievementMobStatus(id)
+		if achievement then
+			return not completed or module.db.profile.achieved
 		end
 		return module.db.profile.achievementless
 	end
@@ -96,22 +95,19 @@ function handler:OnEnter(mapFile, coord)
 		return tooltip:Show()
 	end
 	tooltip:AddLine(name)
-	if core.mobdb[id].note then
-		tooltip:AddDoubleLine("Note", core.mobdb[id].note)
+	if ns.mobdb[id].note then
+		tooltip:AddDoubleLine("Note", ns.mobdb[id].note)
 	end
 
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
 	tooltip:AddDoubleLine("ID", id)
 
-	local mod_tooltip = core:GetModule("Tooltip", true)
-	if mod_tooltip then
-		local achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
-		if achievement then
-			tooltip:AddDoubleLine(achievement_name, completed and ACTION_PARTY_KILL or NEED,
-				1, 1, 0,
-				completed and 0 or 1, completed and 1 or 0, 0
-			)
-		end
+	local achievement, achievement_name, completed = ns:AchievementMobStatus(id)
+	if achievement then
+		tooltip:AddDoubleLine(achievement_name, completed and ACTION_PARTY_KILL or NEED,
+			1, 1, 0,
+			completed and 0 or 1, completed and 1 or 0, 0
+		)
 	end
 	if questid then
 		local completed = IsQuestFlaggedCompleted(questid)
@@ -306,7 +302,7 @@ end
 
 function module:UpdateNodes()
 	wipe(nodes)
-	for zone, mobs in pairs(core.mobsByZone) do
+	for zone, mobs in pairs(ns.mobsByZone) do
 		local mapFile = HBD:GetMapFileFromID(zone)
 		Debug("UpdateNodes", zone, mapFile)
 		if mapFile then

@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Mobs", "AceConsole-3.0")
 local Debug = core.Debug
@@ -108,7 +110,7 @@ function module:ShowFullList(options)
 		about = desc("A full list of mobs we know about, by zone. Click them to delete them.", 0),
 	}
 
-	for zoneid, mobs in pairs(core.mobsByZone) do
+	for zoneid, mobs in pairs(ns.mobsByZone) do
 		local arg = {
 			type = "group",
 			-- order = zoneid, -- heh

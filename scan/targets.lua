@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Scan_Targets", "AceEvent-3.0")
 local Debug = core.Debug
@@ -93,7 +95,7 @@ function module:ProcessUnit(unit, source)
 			should_process = true
 		elseif is_rare then
 			should_process = true
-		elseif core.mobdb[id] and not self.db.profile.rare_only then
+		elseif ns.mobdb[id] and not self.db.profile.rare_only then
 			should_process = true
 		end
 	end

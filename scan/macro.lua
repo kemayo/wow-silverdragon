@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Macro", "AceEvent-3.0", "AceConsole-3.0")
 local Debug = core.Debug
@@ -65,7 +67,7 @@ function module:Update()
 	Debug("Updating Macro")
 	-- first, create the macro text on the button:
 	local zone = HBD:GetPlayerZone()
-	local mobs = zone and core.mobsByZone[zone]
+	local mobs = zone and ns.mobsByZone[zone]
 	local macro = {}
 	local count = 0
 	if mobs then

@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Scan_Vignettes", "AceEvent-3.0", "AceConsole-3.0")
 local Debug = core.Debug
@@ -40,12 +42,12 @@ function module:OnEnable()
 end
 
 function module:WorkOutMobFromVignette(name, ...)
-	if core.vignetteMobLookup[name] then
-		return self:NotifyForMobs(core.vignetteMobLookup[name], ...)
+	if ns.vignetteMobLookup[name] then
+		return self:NotifyForMobs(ns.vignetteMobLookup[name], ...)
 	end
 	local questid = core:IdForQuest(name)
-	if questid and core.questMobLookup[questid] then
-		return self:NotifyForMobs(core.questMobLookup[questid], ...)
+	if questid and ns.questMobLookup[questid] then
+		return self:NotifyForMobs(ns.questMobLookup[questid], ...)
 	end
 	local mobid = core:IdForMob(name)
 	if mobid then

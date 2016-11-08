@@ -1,32 +1,8 @@
+local myname, ns = ...
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Tooltip", "AceEvent-3.0")
 local Debug = core.Debug
-
-local achievements = {
-	[1312] = {}, -- Bloody Rare (BC mobs)
-	[2257] = {}, -- Frostbitten (Wrath mobs)
-	[7439] = {}, -- Glorious! (Pandaria mobs)
-	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
-	[8714] = {}, -- Timeless Champion (Timeless Isle)
-	[7317] = {}, -- One Many Army (Vale)
-	[9400] = {}, -- Gorgrond Monster Hunter
-	[9541] = {}, -- The Song of Silence
-	[9571] = {}, -- Broke Back Precipice
-	[9617] = {}, -- Making the Cut
-	[9633] = {}, -- Cut off the Head (Shatt)
-	[9638] = {}, -- Heralds of the Legion (Shatt)
-	[9655] = {}, -- Fight the Power (Gorgrond)
-	[9678] = {}, -- Ancient No More (Gorgrond)
-	[9216] = {}, -- High-value targets (Ashran)
-	[10061] = {}, -- Hellbane (Tanaan)
-	[10070] = {}, -- Jungle Stalker (Tanaan)
-}
-local mobs_to_achievement = {
-	-- [43819] = 2257,
-}
-local achievements_loaded = false
-
-module.mobs_to_achievement = mobs_to_achievement
 
 local globaldb
 function module:OnInitialize()
@@ -57,41 +33,8 @@ function module:OnInitialize()
 	end
 end
 
-function module:AchievementMobStatus(id)
-	if not achievements_loaded then
-		self:LoadAllAchievementMobs()
-	end
-	local achievement = mobs_to_achievement[id]
-	if not achievement then
-		return
-	end
-	local criteria = achievements[achievement][id]
-	local _, name = GetAchievementInfo(achievement)
-	local _, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
-	return achievement, name, completed
-end
-
 function module:OnEnable()
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-end
-
-function module:LoadAllAchievementMobs()
-	for achievement in pairs(achievements) do
-		self:LoadAchievementMobs(achievement)
-	end
-end
-
-function module:LoadAchievementMobs(achievement)
-	Debug("LoadAchievementMobs", achievement)
-	local num_criteria = GetAchievementNumCriteria(achievement)
-	for i = 1, num_criteria do
-		local description, ctype, completed, _, _, _, _, id = GetAchievementCriteriaInfo(achievement, i)
-		if ctype == 0 then
-			achievements[achievement][id] = i
-			mobs_to_achievement[id] = achievement
-			achievements_loaded = true
-		end
-	end
 end
 
 function module:UPDATE_MOUSEOVER_UNIT()
@@ -110,7 +53,7 @@ function module:UpdateTooltip(id)
 	end
 
 	if self.db.profile.achievement then
-		local achievement, name, completed = self:AchievementMobStatus(id)
+		local achievement, name, completed = ns:AchievementMobStatus(id)
 		if achievement then
 			GameTooltip:AddDoubleLine(name, completed and ACTION_PARTY_KILL or NEED,
 				1, 1, 0,

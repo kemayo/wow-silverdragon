@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
 local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 local icon = LibStub("LibDBIcon-1.0", true)
@@ -87,17 +89,15 @@ function module:SetupDataObject()
 	function dataobject:OnEnter()
 		local zone = HBD:GetPlayerZone()
 
-		if not (core.db and core.mobsByZone[zone]) then
+		if not (core.db and ns.mobsByZone[zone]) then
 			return
 		end
-
-		local mod_tooltip = core:GetModule("Tooltip", true)
 
 		tooltip = LibQTip:Acquire("SilverDragonTooltip", 6, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT")
 		tooltip:AddHeader("Name", "Count", "Last Seen")
 		
 		local n = 0
-		for id in pairs(core.mobsByZone[zone]) do
+		for id in pairs(ns.mobsByZone[zone]) do
 			n = n + 1
 			local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
 			local index = tooltip:AddLine(core:GetMobLabel(id) or UNKNOWN,
@@ -105,14 +105,7 @@ function module:SetupDataObject()
 				core:FormatLastSeen(last_seen),
 				(tameable and 'Tameable' or '')
 			)
-			local completed, completion_knowable, achievement, achievement_name
-			if questid then
-				completion_knowable = true
-				completed = IsQuestFlaggedCompleted(questid)
-			elseif mod_tooltip then
-				achievement, achievement_name, completed = mod_tooltip:AchievementMobStatus(id)
-				completion_knowable = achievement
-			end
+			local completed, completion_knowable = ns:IsMobComplete(id)
 			if completion_knowable then
 				if completed then
 					tooltip:SetLineColor(index, 0, 1, 0)
