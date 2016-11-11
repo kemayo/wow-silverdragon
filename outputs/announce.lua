@@ -205,6 +205,14 @@ function module:Seen(callback, id, zone, x, y, is_dead, ...)
 		return
 	end
 
+	if not self:ShouldAnnounce(id, zone, x, y, is_dead, ...) then
+		return
+	end
+
+	core.events:Fire("Announce", id, zone, x, y, is_dead, ...)
+end
+
+function module:ShouldAnnounce(id, zone, x, y, is_dead)
 	if is_dead and not self.db.profile.dead then
 		return
 	end
@@ -212,12 +220,11 @@ function module:Seen(callback, id, zone, x, y, is_dead, ...)
 	if not self.db.profile.already then
 		local completed, completion_knowable = ns:IsMobComplete(id)
 		if completion_knowable and completed then
-			Debug("Skipping because already killed", id)
 			return
 		end
 	end
 
-	core.events:Fire("Announce", id, zone, x, y, is_dead, ...)
+	return true
 end
 
 function module:HasMount(id)

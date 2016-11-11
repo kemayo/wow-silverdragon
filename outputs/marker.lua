@@ -1,6 +1,10 @@
+local myname, ns = ...
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Marker")
 local Debug = core.Debug
+
+local mod_announce
 
 local globaldb
 function module:OnInitialize()
@@ -44,13 +48,15 @@ function module:OnInitialize()
 			},
 		}
 	end
+
+	mod_announce = core:GetModule("Announce", true)
 end
 
 function module:OnEnable()
 	core.RegisterCallback(self, "Seen_Raw")
 end
 
-function module:Seen_Raw(callback, id, name, zone, x, y, dead, newloc, source, unit)
+function module:Seen_Raw(callback, id, zone, x, y, dead, source, unit)
 	if not unit then
 		return
 	end
@@ -60,10 +66,13 @@ function module:Seen_Raw(callback, id, name, zone, x, y, dead, newloc, source, u
 	if IsInGroup() and self.db.profile.safely then
 		return
 	end
-	if GetRaidTargetIndex(unit) or UnitIsDeadOrGhost(unit) then
+	if GetRaidTargetIndex(unit) then
 		return
 	end
 	if id and core:ShouldIgnoreMob(id, GetCurrentMapAreaID()) then
+		return
+	end
+	if mod_announce and not mod_announce:ShouldAnnounce(id, zone, x, y, dead, source, unit) then
 		return
 	end
 	SetRaidTarget(unit, self.db.profile.marker)
