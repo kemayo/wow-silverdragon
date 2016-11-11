@@ -23,6 +23,7 @@ function module:OnInitialize()
 			sync = {
 				type = "group",
 				name = "Sync",
+				order = 92,
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {

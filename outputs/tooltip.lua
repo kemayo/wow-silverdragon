@@ -21,6 +21,7 @@ function module:OnInitialize()
 			tooltip = {
 				type = "group",
 				name = "Tooltips",
+				order = 93,
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {

@@ -29,6 +29,7 @@ function module:OnInitialize()
 			broker = {
 				type = "group",
 				name = "Icon",
+				order = 91,
 				args = {
 					show_lastseen = {
 						type = "toggle",

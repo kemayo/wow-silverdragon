@@ -52,6 +52,7 @@ function module:OnInitialize()
 					end
 					oldpopup:Hide()
 				end,
+				order = 25,
 				args = {
 					about = config.desc("Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it. It can show a 3d model of that rare, but only if we already know the ID of the rare (though a data import), or if it was found by being targetted. Nameplates are right out.", 0),
 					show = config.toggle("Show", "Show the click-target frame.", 10),

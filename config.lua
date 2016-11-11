@@ -38,16 +38,14 @@ local options = {
 						"If you want to change how it does that, go to the \"Scanning\" section "..
 						"of the config. You can enable or disable the different methods used, and "..
 						"adjust how some of them behave.\n\n"..
-						"If you want to change how it tells you about seeing a rare, check out the "..
+						"If you want to adjust the way the targeting popup appears, go to the \"ClickTarget\" "..
+						"section.\n\n"..
+						"If you want to change how you're told about seeing a rare, check out the "..
 						"\"Outputs\" section.\n\n"..
-						"If you want to add a custom mob to scan for, look at \"Always\" in the \"Mobs\" "..
+						"If you want to add a custom mob to scan for, look at \"Custom\" in the \"Mobs\" "..
 						"section.\n\n"..
 						"If you want SilverDragon to please, please stop telling you about a certain "..
-						"mob, look at \"Ignore\" in the \"Mobs\" section.\n\n"..
-						"If you think SilverDragon hasn't told you about a rare that it should have, "..
-						"make sure that you've imported the bundled rares in the \"Mobs\" section."..
-						"Check the website you downloaded SilverDragon from "..
-						"for more detailed instructions if you need help with that."),
+						"mob, look at \"Ignore\" in the \"Mobs\" section."),
 			},
 			order = 0,
 		},
@@ -88,7 +86,7 @@ local options = {
 		addons = {
 			type = "group",
 			name = "Addons",
-			order = 30,
+			order = 99,
 			args = {
 				about = desc("SilverDragon can integrate with some other addons. If you don't see anything here, you don't have any of these addons installed. I'm very sad. ;_;", 0),
 			},
