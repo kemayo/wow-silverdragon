@@ -250,7 +250,7 @@ function module:Seen(callback, id, zone, x, y, is_dead, ...)
 		end
 	end
 
-	core.events:Fire("Announce", id, name, zone, x, y, is_dead, ...)
+	core.events:Fire("Announce", id, zone, x, y, is_dead, ...)
 end
 
 function module:HasMount(id)
@@ -265,7 +265,7 @@ function module:CareAboutZone(zone)
 	return true
 end
 
-core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, name, zone, x, y, dead, newloc, source)
+core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zone, x, y, dead, source)
 	if not module.db.profile.sink then
 		return
 	end
@@ -285,7 +285,7 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, nam
 	if module.db.profile.sink_opts.sink20OutputSink == "LibToast-1.0" then
 		prefix = ""
 	end
-	module:Pour((prefix .. "%s%s (%s)"):format(core:GetMobLabel(id) or name or UNKNOWN, dead and "... but it's dead" or '', source or ''))
+	module:Pour((prefix .. "%s%s (%s)"):format(core:GetMobLabel(id) or UNKNOWN, dead and "... but it's dead" or '', source or ''))
 end)
 
 function module:PlaySound(s)
@@ -311,7 +311,7 @@ function module:PlaySound(s)
 		self:ScheduleTimer("PlaySound", 4.5, s)
 	end
 end
-core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, name, zone, x, y, dead, newloc, source)
+core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zone, x, y, dead, source)
 	if not (module.db.profile.sound and LSM) then
 		return
 	end
