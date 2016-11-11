@@ -240,7 +240,7 @@ end
 function addon:GetMobLabel(id)
 	local name = self:NameForMob(id)
 	if not name then
-		return
+		return UNKNOWN
 	end
 	if not mobdb[id] then
 		return name
