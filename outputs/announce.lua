@@ -88,17 +88,6 @@ function module:OnInitialize()
 			instances = false,
 			dead = true,
 			already = false,
-			expansions = {
-				classic = true,
-				bc = true,
-				wrath = true,
-				cataclysm = true,
-				pandaria = true,
-				draenor = true,
-				legion = true,
-				cities = true,
-				unknown = true,
-			},
 			sink_opts = {},
 		},
 	})
@@ -141,23 +130,23 @@ function module:OnInitialize()
 					instances = toggle("Instances", "Show announcements while in an instance"),
 				},
 			},
-			expansions = {
-				type = "group", name = "Expansions", inline = true,
-				order = 15,
-				get = function(info) return self.db.profile.expansions[info[#info]] end,
-				set = function(info, v) self.db.profile.expansions[info[#info]] = v end,
-				args = {
-					about = config.desc("Whether to announce rares in zones from this expansion", 0, false),
-					classic = toggle("Classic", "Vanilla. Basic. 1-60. Whatevs.", 10, false),
-					bc = toggle("Burning Crusade", "Illidan McGrumpypants. 61-70.", 20, false),
-					wrath = toggle("Wrath of the Lich King", "Emo Arthas. 71-80.", 30, false),
-					cataclysm = toggle("Cataclysm", "Play it off, keyboard cataclysm! 81-85.", 40, false),
-					pandaria = toggle("Mists of Pandaria", "Everybody was kung fu fighting. 86-90.", 50, false),
-					draenor = toggle("Warlords of Draenor", "Why did we go here, again? 91-100.", 60, false),
-					cities = toggle("Capitol Cities", "Expansion indifferent and ever evolving.", 70, false),
-					unknown = toggle(UNKNOWN, "Not sure where they fit.", 80, false),
-				},
-			},
+			-- expansions = {
+			-- 	type = "group", name = "Expansions", inline = true,
+			-- 	order = 15,
+			-- 	get = function(info) return self.db.profile.expansions[info[#info]] end,
+			-- 	set = function(info, v) self.db.profile.expansions[info[#info]] = v end,
+			-- 	args = {
+			-- 		about = config.desc("Whether to announce rares in zones from this expansion", 0, false),
+			-- 		classic = toggle("Classic", "Vanilla. Basic. 1-60. Whatevs.", 10, false),
+			-- 		bc = toggle("Burning Crusade", "Illidan McGrumpypants. 61-70.", 20, false),
+			-- 		wrath = toggle("Wrath of the Lich King", "Emo Arthas. 71-80.", 30, false),
+			-- 		cataclysm = toggle("Cataclysm", "Play it off, keyboard cataclysm! 81-85.", 40, false),
+			-- 		pandaria = toggle("Mists of Pandaria", "Everybody was kung fu fighting. 86-90.", 50, false),
+			-- 		draenor = toggle("Warlords of Draenor", "Why did we go here, again? 91-100.", 60, false),
+			-- 		cities = toggle("Capitol Cities", "Expansion indifferent and ever evolving.", 70, false),
+			-- 		unknown = toggle(UNKNOWN, "Not sure where they fit.", 80, false),
+			-- 	},
+			-- },
 			message = {
 				type = "group", name = "Messages",
 				order = 20,
@@ -237,11 +226,6 @@ function module:Seen(callback, id, zone, x, y, is_dead, ...)
 		return
 	end
 
-	if not self:CareAboutZone(zone) then
-		Debug("Skipping due to expansion", exp)
-		return
-	end
-
 	if not self.db.profile.already then
 		local completed, completion_knowable = ns:IsMobComplete(id)
 		if completion_knowable and completed then
@@ -255,14 +239,6 @@ end
 
 function module:HasMount(id)
 	return mount_mobs[id]
-end
-
-function module:CareAboutZone(zone)
-	local exp = core.guess_expansion(zone)
-	if exp and not self.db.profile.expansions[exp] then
-		return
-	end
-	return true
 end
 
 core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zone, x, y, dead, source)
@@ -387,200 +363,4 @@ do
 		Debug("Flashing")
 		flashframe:Show()
 	end)
-end
-
--- Expansion checking
--- It's possible I should library-ise this...
-
-do
-	local classic_zones = {
-		[101] = "Desolace",
-		[11] = "Barrens",
-		[121] = "Feralas",
-		[13] = "Kalimdor",
-		[14] = "Azeroth",
-		[141] = "Dustwallow",
-		[907] = "Dustwallow", -- _terrain1
-		[16] = "Arathi",
-		[161] = "Tanaris",
-		[17] = "Badlands",
-		[181] = "Aszhara",
-		[182] = "Felwood",
-		[19] = "BlastedLands",
-		[20] = "Tirisfal",
-		[201] = "UngoroCrater",
-		[21] = "Silverpine",
-		[22] = "WesternPlaguelands",
-		[23] = "EasternPlaguelands",
-		[24] = "HillsbradFoothills",
-		[241] = "Moonglade",
-		[26] = "Hinterlands",
-		[261] = "Silithus",
-		[27] = "DunMorogh",
-		[28] = "SearingGorge",
-		[281] = "Winterspring",
-		[29] = "BurningSteppes",
-		[30] = "Elwynn",
-		[32] = "DeadwindPass",
-		[34] = "Duskwood",
-		[35] = "LochModan",
-		[36] = "Redridge",
-		[37] = "StranglethornJungle",
-		[38] = "SwampOfSorrows",
-		[39] = "Westfall",
-		[4] = "Durotar",
-		[40] = "Wetlands",
-		[41] = "Teldrassil",
-		[42] = "Darkshore",
-		[43] = "Ashenvale",
-		[607] = "SouthernBarrens",
-		[61] = "ThousandNeedles",
-		[673] = "TheCapeOfStranglethorn",
-		[689] = "StranglethornVale",
-		[772] = "AhnQirajTheFallenKingdom",
-		[81] = "StonetalonMountains",
-		[9] = "Mulgore",
-		-- starting zones
-		[864] = "Northshire",
-		[866] = "ColdridgeValley",
-		[888] = "ShadowglenStart",
-		[890] = "CampNaracheStart",
-		[892] = "DeathknellStart",
-		[895] = "NewTinkertownStart",
-	}
-	local bc_zones = {
-		[465] = "Hellfire",
-		[466] = "Expansion01",
-		[467] = "Zangarmarsh",
-		[473] = "ShadowmoonValley",
-		[475] = "BladesEdgeMountains",
-		[477] = "Nagrand",
-		[478] = "TerokkarForest",
-		[479] = "Netherstorm",
-		[499] = "Sunwell",
-		-- starting zones
-		[462] = "EversongWoods",
-		[463] = "Ghostlands",
-		[464] = "AzuremystIsle",
-		[476] = "BloodmystIsle",
-		[893] = "SunstriderIsleStart",
-		[894] = "AmmenValeStart",
-	}
-	local wrath_zones = {
-		[485] = "Northrend",
-		[486] = "BoreanTundra",
-		[488] = "Dragonblight",
-		[490] = "GrizzlyHills",
-		[491] = "HowlingFjord",
-		[492] = "IcecrownGlacier",
-		[493] = "SholazarBasin",
-		[495] = "TheStormPeaks",
-		[496] = "ZulDrak",
-		[501] = "LakeWintergrasp",
-		[510] = "CrystalsongForest",
-		[541] = "HrothgarsLanding",
-	}
-	local cata_zones = {
-		[606] = "Hyjal",
-		[683] = "Hyjal", -- _terrain1
-		[610] = "VashjirKelpForest",
-		[613] = "Vashjir",
-		[614] = "VashjirDepths",
-		[615] = "VashjirRuins",
-		[640] = "Deepholm",
-		[700] = "TwilightHighlands",
-		[770] = "TwilightHighlands", -- _terrain1
-		[708] = "TolBarad",
-		[709] = "TolBaradDailyArea",
-		[720] = "Uldum",
-		[748] = "Uldum", -- _terrain1
-		[737] = "TheMaelstrom",
-		[751] = "TheMaelstromContinent",
-		[795] = "MoltenFront",
-		-- starting zones
-		[544] = "TheLostIsles",
-		[605] = "Kezan",
-		[684] = "RuinsofGilneas",
-		[685] = "RuinsofGilneasCity",
-		[891] = "EchoIslesStart",
-	}
-	local mop_zones = {
-		[806] = "TheJadeForest",
-		[807] = "ValleyoftheFourWinds",
-		[809] = "KunLaiSummit",
-		[810] = "TownlongWastes",
-		[811] = "ValeofEternalBlossoms",
-		[857] = "Krasarang",
-		[858] = "DreadWastes",
-		[862] = "Pandaria",
-		[873] = "TheHiddenPass",
-		[903] = "ShrineofTwoMoons",
-		[905] = "ShrineofSevenStars",
-		[928] = "IsleoftheThunderKing",
-		[929] = "IsleOfGiants",
-		[951] = "TimelessIsle",
-		-- starting zones
-		[889] = "ValleyofTrialsStart",
-	}
-	local wod_zones = {
-		[962] = "Draenor",
-		[978] = "Ashran",
-		[941] = "FrostfireRidge",
-		[976] = "Frostwall", -- Actually a bunch of different possible mapfiles
-		[949] = "Gorgrond",
-		[971] = "Lunarfall", -- Actually a bunch of different possible mapfiles
-		[950] = "NagrandDraenor",
-		[947] = "ShadowmoonValleyDR",
-		[948] = "SpiresOfArak",
-		[1009] = "AshranAllianceFactionHub",
-		[946] = "Talador",
-		[945] = "TanaanJungle",
-		[970] = "TanaanJungleIntro",
-		[1011] = "AshranHordeFactionHub",
-	}
-	local legion_zones = {
-
-	}
-	local main_cities = {
-		[301] = "StormwindCity",
-		[321] = "Orgrimmar",
-		[341] = "Ironforge",
-		[362] = "ThunderBluff",
-		[381] = "Darnassus",
-		[382] = "Undercity",
-		[471] = "TheExodar",
-		[480] = "SilvermoonCity",
-		[481] = "ShattrathCity",
-		[504] = "Dalaran",
-		[823] = "DarkmoonFaireIsland",
-	}
-
-	local function guess_expansion(zone)
-		if not zone then
-			return 'unknown'
-		end
-		if classic_zones[zone] then
-			return 'classic'
-		end
-		if bc_zones[zone] then
-			return 'bc'
-		end
-		if wrath_zones[zone] then
-			return 'wrath'
-		end
-		if cata_zones[zone] then
-			return 'cataclysm'
-		end
-		if mop_zones[zone] then
-			return 'pandaria'
-		end
-		if wod_zones[zone] then
-			return 'draenor'
-		end
-		if main_cities[zone] then
-			return 'cities'
-		end
-		return 'unknown'
-	end
-	core.guess_expansion = guess_expansion
 end

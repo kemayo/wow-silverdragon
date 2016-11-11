@@ -6,66 +6,19 @@ local Debug = core.Debug
 
 local desc, toggle
 
-local function removable_mob(id)
-	local name = core:GetMobLabel(id)
+local function toggle_mob(id)
 	return {
-		type = "execute",
-		name = (name or UNKNOWN) .. ' (id:'..tostring(id)..')',
-		desc = not name and "Don't know the name" or nil,
 		arg = id,
+		name = core:GetMobLabel(id),
+		desc = "ID: " .. id,
+		type = "toggle",
+		width = "full",
+		descStyle = "inline",
+		order = id,
 	}
 end
 
-local function mob_list_group(name, order, description, db_table)
-	local group = {
-		type = "group",
-		name = name,
-		order = order,
-		args = {},
-	}
-	group.args.about = desc(description, 0)
-	group.args.add = {
-		type = "input",
-		name = "Add",
-		desc = "Add a mob by entering its id. (Check wowhead.)",
-		get = function(info) return '' end,
-		set = function(info, v)
-			local id = tonumber(v)
-			db_table[id] = true
-			group.args.remove.args[tostring(id)] = removable_mob(id)
-		end,
-		validate = function(info, v)
-			if v:match("^%d+$") then
-				return true
-			end
-		end,
-		order = 10,
-	}
-	group.args.remove = {
-		type = "group",
-		inline = true,
-		name = "Remove",
-		order = 20,
-		func = function(info)
-			db_table[info.arg] = false
-			group.args.remove.args[info[#info]] = nil
-			core:DeleteMob(info.arg)
-		end,
-		args = {
-			about = desc("Remove a mob.", 0),
-		},
-	}
-	for id, ignored in pairs(db_table) do
-		if ignored then
-			group.args.remove.args[tostring(id)] = removable_mob(id)
-		end
-	end
-	return group
-end
-
-function module:OnInitialize()
-	-- core.RegisterCallback(self, "Seen")
-
+function module:OnEnable()
 	local config = core:GetModule("Config", true)
 	if config then
 		desc = config.desc
@@ -75,51 +28,130 @@ function module:OnInitialize()
 			mobs = {
 				type = "group",
 				name = "Mobs",
+				childGroups = "tab",
 				order = 15,
 				args = {
-					list = {
+					custom = {
 						type = "group",
-						name = "List",
-						order = 15,
+						name = "Custom",
+						order = 1,
 						args = {
-							about = desc("If you want to see a full list o' rare mobs that we know about, click the button below to pop it up. It's behind this button just for the sake of saving a little memory, since I think viewing it is a pretty rare activity.", 0),
-							show = {
-								type = "execute",
-								name = "Show list",
-								func = function() module:ShowFullList(config.options.plugins.mobs) end,
+							add = {
+								type = "input",
+								name = ADD,
+								desc = "Add a mob by entering its id.",
+								get = function() return "" end,
+								set = function(info, value)
+									core.db.global.always[tonumber(value)] = true
+									self:BuildCustomList(config.options)
+								end,
+								validate = function(info, v)
+									if v:match("^%d+$") then
+										return true
+									end
+								end,
+								order = 1,
+							},
+							mobs = {
+								type = "group",
+								name = REMOVE,
+								inline = true,
+								get = function() return true end,
+								set = function(info, value)
+									core.db.global.always[info.arg] = value or nil
+									config.options.plugins.mobs.mobs.args.custom.args.mobs.args[info[#info]] = nil
+								end,
+								args = {},
 							},
 						},
 					},
-					always = mob_list_group("Always", 30, "Mobs you always want to scan for", core.db.global.always),
-					ignore = mob_list_group("Ignore", 40, "Mobs you just want to ignore, already", core.db.global.ignore),
+					ignore = {
+						type = "group",
+						name = "Ignore",
+						desc = "Mobs you just want to ignore, already",
+						get = function(info) return core.db.global.ignore[info.arg] end,
+						set = function(info, value)
+							core.db.global.ignore[info.arg] = value
+						end,
+						args = {},
+						order = 2,
+					},
 				},
 			},
 		}
+
+		self:BuildIgnoreList(config.options)
+		self:BuildCustomList(config.options)
+		self:BuildMobList(config.options)
 	end
 end
 
-function module:ShowFullList(options)
-	local list = options.mobs.args.list
-
-	list.childGroups = "select"
-	list.func = function(info)
-		list.args[info[#info - 1]].args[info[#info]] = nil
-		core:DeleteMob(info.arg)
-	end
-	list.args = {
-		about = desc("A full list of mobs we know about, by zone. Click them to delete them.", 0),
-	}
-
-	for zoneid, mobs in pairs(ns.mobsByZone) do
-		local arg = {
-			type = "group",
-			-- order = zoneid, -- heh
-			name = GetMapNameByID(zoneid) or UNKNOWN,
-			args = {},
-		}
-		for id in pairs(mobs) do
-			arg.args[tostring(id)] = removable_mob(id)
+function module:BuildIgnoreList(options)
+	wipe(options.plugins.mobs.mobs.args.ignore.args)
+	for id, ignored in pairs(core.db.global.ignore) do
+		if ignored then
+			options.plugins.mobs.mobs.args.ignore.args["mob"..id] = toggle_mob(id)
 		end
-		list.args[tostring(zoneid)] = arg
+	end
+end
+
+function module:BuildCustomList(options)
+	wipe(options.plugins.mobs.mobs.args.custom.args.mobs.args)
+	for id, active in pairs(core.db.global.always) do
+		if active then
+			options.plugins.mobs.mobs.args.custom.args.mobs.args["mob"..id] = toggle_mob(id)
+		end
+	end
+end
+
+function module:BuildMobList(options)
+	for source, data in pairs(core.datasources) do
+		local group = {
+			type = "group",
+			name = source,
+			get = function(info)
+				return not core.db.global.ignore[info.arg]
+			end,
+			set = function(info, value)
+				core.db.global.ignore[info.arg] = not value
+				self:BuildIgnoreList(info.options)
+			end,
+			args = {
+				enabled = {
+					type = "toggle",
+					name = "Enabled",
+					arg = source,
+					get = function(info) return core.db.global.datasources[info.arg] end,
+					set = function(info, value) core.db.global.datasources[info.arg] = value end,
+					disabled = false,
+				},
+				zones = {
+					type = "group",
+					name = "Zones",
+					inline = false,
+					childGroups = "tree",
+					args = {},
+				},
+			},
+		}
+		for id, mob in pairs(data) do
+			for zone in pairs(mob.locations) do
+				if not group.args.zones.args["map"..zone] then
+					group.args.zones.args["map"..zone] = {
+						type = "group",
+						inline = false,
+						name = GetMapNameByID(zone),
+						desc = "ID: " .. zone,
+						args = {},
+					}
+				end
+				local toggle = toggle_mob(id)
+				toggle.disabled = function(info)
+					return not core.db.global.datasources[info[#info - 3]]
+				end
+				group.args.zones.args["map"..zone].args["mob"..id] = toggle
+			end
+		end
+		options.plugins.mobs.mobs.args[source] = group
 	end
 end

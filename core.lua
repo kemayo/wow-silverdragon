@@ -101,9 +101,9 @@ function addon:OnInitialize()
 			mob_count = {
 				['*'] = 0,
 			},
-			custom_mobs = {
-				-- custom mobs to watch for
-				-- [id] = "name"
+			-- TODO: respect this
+			datasources = {
+				['*'] = true,
 			},
 			always = {
 			},
