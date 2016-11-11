@@ -75,7 +75,8 @@ TOC_TEMPLATE = """## Interface: 70100
 ## X-Category: Interface Enhancements
 ## X-Donate: PayPal:kemayo AT gmail DOT com
 ## Dependencies: SilverDragon
-## LoadOnDemand: 1
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
 
 module.lua
 """
