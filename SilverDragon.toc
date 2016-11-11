@@ -9,11 +9,11 @@
 ## eMail: kemayo at gmail dot com
 ## X-Category: Interface Enhancements
 ## X-Donate: PayPal:kemayo AT gmail DOT com
-## OptionalDependencies: Ace3, LibBabble-CreatureType-3.0, LibSharedMedia-3.0, HandyNotes, _NPCScan.Overlay, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, LibToast-1.0, tekDebug, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons-1.0
+## OptionalDependencies: Ace3, LibSharedMedia-3.0, HandyNotes, _NPCScan.Overlay, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, LibToast-1.0, tekDebug, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons-1.0
 ## SavedVariables: SilverDragon3DB,SilverDragon2DB
 ## LoadOnDemand: 0
 
-## X-Embeds: Ace3, LibSink-2.0, LibBabble-CreatureType-3.0, LibSharedMedia-3.0, LibToast-1.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons-1.0
+## X-Embeds: Ace3, LibSink-2.0, LibSharedMedia-3.0, LibToast-1.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons-1.0
 
 #@no-lib-strip@
 lib\LibStub\LibStub.lua
@@ -28,7 +28,6 @@ lib\AceDBOptions-3.0\AceDBOptions-3.0.xml
 lib\AceGUI-3.0\AceGUI-3.0.xml
 lib\AceLocale-3.0\AceLocale-3.0.xml
 lib\AceConfig-3.0\AceConfig-3.0.xml
-lib\LibBabble-CreatureType-3.0\lib.xml
 lib\LibSink-2.0\lib.xml
 lib\LibToast-1.0\lib.xml
 lib\LibDataBroker-1.1\LibDataBroker-1.1.lua

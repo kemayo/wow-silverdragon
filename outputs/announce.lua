@@ -130,23 +130,6 @@ function module:OnInitialize()
 					instances = toggle("Instances", "Show announcements while in an instance"),
 				},
 			},
-			-- expansions = {
-			-- 	type = "group", name = "Expansions", inline = true,
-			-- 	order = 15,
-			-- 	get = function(info) return self.db.profile.expansions[info[#info]] end,
-			-- 	set = function(info, v) self.db.profile.expansions[info[#info]] = v end,
-			-- 	args = {
-			-- 		about = config.desc("Whether to announce rares in zones from this expansion", 0, false),
-			-- 		classic = toggle("Classic", "Vanilla. Basic. 1-60. Whatevs.", 10, false),
-			-- 		bc = toggle("Burning Crusade", "Illidan McGrumpypants. 61-70.", 20, false),
-			-- 		wrath = toggle("Wrath of the Lich King", "Emo Arthas. 71-80.", 30, false),
-			-- 		cataclysm = toggle("Cataclysm", "Play it off, keyboard cataclysm! 81-85.", 40, false),
-			-- 		pandaria = toggle("Mists of Pandaria", "Everybody was kung fu fighting. 86-90.", 50, false),
-			-- 		draenor = toggle("Warlords of Draenor", "Why did we go here, again? 91-100.", 60, false),
-			-- 		cities = toggle("Capitol Cities", "Expansion indifferent and ever evolving.", 70, false),
-			-- 		unknown = toggle(UNKNOWN, "Not sure where they fit.", 80, false),
-			-- 	},
-			-- },
 			message = {
 				type = "group", name = "Messages",
 				order = 20,

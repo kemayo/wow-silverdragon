@@ -1,7 +1,5 @@
 local myname, ns = ...
 
-local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
-local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 local HBD = LibStub("HereBeDragons-1.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0")
