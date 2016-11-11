@@ -189,12 +189,15 @@ end
 module.Looks = {}
 function module.Looks:SilverDragon(popup)
 	-- The "zomg legendary, but a bit more silver" look
+	module.Looks.Legendary(self, popup)
+	popup.background:SetDesaturated(true)
+end
+function module.Looks:Legendary(popup)
 	popup:SetSize(302, 119)
 
 	popup.background:SetSize(276, 96)
 	popup.background:SetAtlas("LegendaryToast-background", true)
 	popup.background:SetPoint("CENTER")
-	popup.background:SetDesaturated(true)
 
 	popup.close:SetPoint("TOPRIGHT", -18, -24)
 
