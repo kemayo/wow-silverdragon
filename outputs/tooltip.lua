@@ -54,23 +54,7 @@ function module:UpdateTooltip(id)
 	end
 
 	if self.db.profile.achievement then
-		local achievement, name, completed = ns:AchievementMobStatus(id)
-		if achievement then
-			GameTooltip:AddDoubleLine(name, completed and ACTION_PARTY_KILL or NEED,
-				1, 1, 0,
-				completed and 0 or 1, completed and 1 or 0, 0
-			)
-		end
-		local _, questid = core:GetMobInfo(id)
-		if questid then
-			completed = IsQuestFlaggedCompleted(questid)
-			GameTooltip:AddDoubleLine(
-				QUESTS_COLON,
-				completed and COMPLETE or INCOMPLETE,
-				1, 1, 0,
-				completed and 0 or 1, completed and 1 or 0, 0
-			)
-		end
+		ns:UpdateTooltipWithCompletion(GameTooltip, id)
 	end
 
 	GameTooltip:Show()

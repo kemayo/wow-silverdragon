@@ -102,22 +102,8 @@ function handler:OnEnter(mapFile, coord)
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
 	tooltip:AddDoubleLine("ID", id)
 
-	local achievement, achievement_name, completed = ns:AchievementMobStatus(id)
-	if achievement then
-		tooltip:AddDoubleLine(achievement_name, completed and ACTION_PARTY_KILL or NEED,
-			1, 1, 0,
-			completed and 0 or 1, completed and 1 or 0, 0
-		)
-	end
-	if questid then
-		local completed = IsQuestFlaggedCompleted(questid)
-		tooltip:AddDoubleLine(
-			QUESTS_COLON,
-			completed and COMPLETE or INCOMPLETE,
-			1, 1, 0,
-			completed and 0 or 1, completed and 1 or 0, 0
-		)
-	end
+	ns:UpdateTooltipWithCompletion(tooltip, id)
+
 	tooltip:Show()
 end
 

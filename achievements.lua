@@ -78,3 +78,27 @@ function ns:IsMobComplete(id)
 		return complete, achievement
 	end
 end
+
+function ns:UpdateTooltipWithCompletion(tooltip, id)
+	if not id then
+		return
+	end
+
+	local achievement, name, completed = ns:AchievementMobStatus(id)
+	if achievement then
+		tooltip:AddDoubleLine(name, completed and ACTION_PARTY_KILL or NEED,
+			1, 1, 0,
+			completed and 0 or 1, completed and 1 or 0, 0
+		)
+	end
+	local _, questid = core:GetMobInfo(id)
+	if questid then
+		completed = IsQuestFlaggedCompleted(questid)
+		tooltip:AddDoubleLine(
+			QUESTS_COLON:gsub(":", ""),
+			completed and COMPLETE or INCOMPLETE,
+			1, 1, 0,
+			completed and 0 or 1, completed and 1 or 0, 0
+		)
+	end
+end
