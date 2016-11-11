@@ -38,7 +38,7 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
-		config.options.args.outputs.plugins.clicktarget = {
+		config.options.plugins.clicktarget = {
 			clicktarget = {
 				type = "group",
 				name = "ClickTarget",
@@ -83,7 +83,7 @@ function module:OnInitialize()
 			},
 		}
 		for key in pairs(self.Looks) do
-			config.options.args.outputs.plugins.clicktarget.clicktarget.args.style.values[key] = key
+			config.options.plugins.clicktarget.clicktarget.args.style.values[key] = key
 		end
 	end
 
