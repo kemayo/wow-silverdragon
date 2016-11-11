@@ -1,4 +1,4 @@
-local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
+local myname, ns = ...
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("ClickTarget", "AceEvent-3.0")
@@ -9,8 +9,7 @@ function module:OnInitialize()
 		profile = {
 			show = true,
 			locked = true,
-			model = true,
-			camera = 0,
+			style = "SilverDragon",
 			sources = {
 				target = false,
 				grouptarget = true,
@@ -34,12 +33,19 @@ function module:OnInitialize()
 				type = "group",
 				name = "ClickTarget",
 				get = function(info) return self.db.profile[info[#info]] end,
-				set = function(info, v) self.db.profile[info[#info]] = v; self:PositionModel() end,
+				set = function(info, v)
+					self.db.profile[info[#info]] = v
+					local oldpopup = self.popup
+					self.popup = self:CreatePopup()
+					if oldpopup:IsVisible() then
+						self:ShowFrame()
+					end
+					oldpopup:Hide()
+				end,
 				args = {
 					about = config.desc("Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it. It can show a 3d model of that rare, but only if we already know the ID of the rare (though a data import), or if it was found by being targetted. Nameplates are right out.", 0),
 					show = config.toggle("Show", "Show the click-target frame.", 10),
 					locked = config.toggle("Locked", "Lock the click-target frame in place unless ALT is held down", 15),
-					model = config.toggle("Model", "Show a 3d model of the rare, if possible.", 20),
 					sources = {
 						type="multiselect",
 						name = "Rare Sources",
@@ -57,115 +63,71 @@ function module:OnInitialize()
 							guildsync = "Guild Sync",
 						},
 					},
-					camera = {
+					style = {
 						type = "select",
-						name = "Model style",
-						desc = "How to display the model",
-						values = {
-							[0] = "Portrait",
-							[1] = "Full body",
-						},
+						name = "Style",
+						desc = "Appearance of the frame",
+						values = {},
 					},
 				},
 			},
 		}
+		for key in pairs(self.Looks) do
+			config.options.args.outputs.plugins.clicktarget.clicktarget.args.style.values[key] = key
+		end
 	end
 
-	self:PositionModel()
+	self.popup = self:CreatePopup()
 end
 
 local current = {}
 function module:ShowFrame()
 	if not self.db.profile.show then return end
-	local id, zone, name, unit = current.id, current.zone, current.name, current.unit
-	if not (zone and name) then return end
-
-	local storedName, num_locations, level, elite, creature_type, lastseen, count, tameable = core:GetMob(zone, id)
-	if storedName and storedName ~= 0 then
-		name = storedName
-	end
+	if not current.id then return end
 	local popup = self.popup
-	local macrotext = "/cleartarget\n/targetexact "..name
-	local level_text = (level and level > 0) and level or (level and level == -1) and 'Boss' or '?'
-	popup:SetAttribute("macrotext", macrotext)
+
+	local name = core:NameForMob(current.id)
+	if name then
+		local macrotext = "/cleartarget\n/targetexact "..name
+		popup:SetAttribute("macrotext", macrotext)
+	else
+		name = UNKNOWN
+	end
 
 	if popup:IsVisible() then
 		popup:Hide()
 	end
 
-	popup:Enable()
 	popup:Show()
 
-	self:ShowModel()
+	popup.title:SetText(core:GetMobLabel(current.id) or UNKNOWN)
+	popup.source:SetText(current.source or "")
 
-	popup:SetText(core:GetMobLabel(id) or name or UNKNOWN)
-	popup.details:SetText(("%s%s %s"):format(level_text, elite and '+' or '', creature_type and BCT[creature_type] or ''))
-
-	local model = popup.model
-end
-
-function module:ShowModel()
-	local popup = self.popup
-	local model, title, details = popup.model, popup.title, popup.details
-	if not self.db.profile.model then
-		return
+	local achievement, achievement_name, completed = ns:AchievementMobStatus(current.id)
+	if achievement then
+		popup.status:SetFormattedText("%s%s|r", completed and GREEN_FONT_COLOR_CODE or RED_FONT_COLOR_CODE, achievement_name)
+	else
+		popup.status:SetText("")
 	end
 
-	self:ResetModel(model)
-	local id, unit = current.id, current.unit
+	-- reset the model
+	popup.model:ClearModel()
+	popup.model:SetModelScale(1)
+	popup.model:SetPosition(0, 0, 0)
+	popup.model:SetFacing(0)
 
-	if not self:IsModelBlacklisted(id, unit) and (id or unit) then
-		if id then
-			model:SetCreature(id)
+	if (current.id or current.unit) and not self:IsModelBlacklisted(current.id, current.unit) then
+		if current.id then
+			popup.model:SetCreature(current.id)
 		else
-			model:SetUnit(unit)
+			popup.model:SetUnit(current.unit)
 		end
 
-		if self.db.profile.camera == 1 then
-			-- full body
-			model:SetPortraitZoom(0)
-			model:SetModelScale(0.7)
-			model:SetFacing(-math.pi / 4)
-			model:SetPosition(0, 0, -0.15) -- move it down slightly
-		else
-			-- portrait!
-			model:SetPortraitZoom(1)
-		end
+		popup.model:SetPortraitZoom(1)
 	else
-		-- This is, indeed, an exact copy of the settings used in PitBull
-		-- That's fine, since I wrote those settings myself. :D
-		model:SetModelScale(4.25)
-		model:SetPosition(0, 0, -0.7)
-		model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
-	end
-end
-
-function module:PositionModel()
-	local popup = self.popup
-	local model = popup.model
-	model:ClearAllPoints()
-	if self.db.profile.model and self.db.profile.camera == 0 then
-		-- portrait
-		model:SetHeight(popup:GetHeight() - 20)
-		model:SetWidth(popup:GetHeight() - 20)
-		model:SetPoint("TOPLEFT", popup.title, "BOTTOMLEFT", 0, -2)
-		model:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 6, 6)
-		popup.details:SetPoint("TOPLEFT", model, "TOPRIGHT", 2, -2)
-	else
-		-- full-body or hidden-model (works for both because the model is totally out of
-		-- the way for the full-body case.)
-		model:SetHeight(popup:GetHeight() * 3)
-		model:SetWidth(popup:GetWidth())
-		model:SetPoint("BOTTOMLEFT", popup, "TOPLEFT", 0, -4)
-		popup.details:SetPoint("TOPLEFT", popup.title, "BOTTOMLEFT", 0, -2)
-	end
-	if self.db.profile.model then
-		model:Show()
-	else
-		model:Hide()
-	end
-	if self.popup:IsVisible() then
-		self:ShowModel()
+		popup.model:SetModelScale(4.25)
+		popup.model:SetPosition(4, 0, 1.5)
+		popup.model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
 	end
 end
 
@@ -184,7 +146,7 @@ do
 	end
 end
 
-function module:Announce(callback, id, name, zone, x, y, dead, newloc, source, unit)
+function module:Announce(callback, id, zone, x, y, dead, source, unit)
 	if source:match("^sync") then
 		local channel, player = source:match("sync:(.+):(.+)")
 		if channel == "GUILD" then
@@ -196,10 +158,10 @@ function module:Announce(callback, id, name, zone, x, y, dead, newloc, source, u
 	if not self.db.profile.sources[source] then
 		return
 	end
-	current.zone = zone
-	current.name = name
 	current.id = id
 	current.unit = unit
+	current.source = source
+	current.dead = dead
 	if InCombatLockdown() then
 		current.pending = true
 	else
@@ -220,155 +182,243 @@ function module:ShouldBeDraggable()
 	return (not self.db.profile.locked) or IsModifierKeyDown()
 end
 
-do
-	local function on_update_model(self)
-		self.frame_counter = self.frame_counter + 1
-		if self.frame_counter > 10 then
-			self:SetScript("OnUpdateModel", nil)
-			-- self:SetScript("OnUpdate", self.OnUpdate)
-			self:SetAlpha(1)
-		end
-	end
-	function module:ResetModel(model)
-		model:SetAlpha(0)
-		model:SetModelScale(1)
-		model:SetPosition(0, 0, 0)
-		model:SetFacing(0)
-		model:ClearModel()
-		model.frame_counter = 0
+function module:ApplyLook(popup, look)
+	-- Many values cribbed from AlertFrameSystem.xml
+	(self.Looks[look] or self.Looks.LessAwesome)(self, popup)
+end
+module.Looks = {}
+function module.Looks:SilverDragon(popup)
+	-- The "zomg legendary, but a bit more silver" look
+	popup:SetSize(302, 119)
 
-		-- model:SetScript("OnUpdate", nil)
-		model:SetScript("OnUpdateModel", on_update_model)
-	end
+	popup.background:SetSize(276, 96)
+	popup.background:SetAtlas("LegendaryToast-background", true)
+	popup.background:SetPoint("CENTER")
+	popup.background:SetDesaturated(true)
+
+	popup.close:SetPoint("TOPRIGHT", -18, -24)
+
+	popup.modelbg:SetPoint("TOPLEFT", 48, -32)
+	self:SizeModel(popup, 4)
+
+	popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 11, -16)
+	popup.source:SetPoint("BOTTOMRIGHT", -20, 26)
+
+	popup.status:SetSize(160, 22)
+	popup.status:SetPoint("TOPLEFT", 107, -26)
+
+	popup.glow:SetSize(298, 109)
+	popup.glow:SetPoint("CENTER", 10, 1)
+
+	popup.shine:SetSize(171, 75)
+	popup.shine:SetPoint("BOTTOMLEFT", 10, 24)
+end
+function module.Looks:LessAwesome(popup)
+	-- The "loot, not an upgrade" look
+	popup:SetSize(276, 96)
+
+	popup.background:SetSize(276, 96)
+	popup.background:SetAtlas("LootToast-LessAwesome", true)
+	popup.background:SetPoint("CENTER")
+
+	popup.close:SetPoint("TOPRIGHT", -12, -18)
+
+	popup.modelbg:SetPoint("LEFT", 20, 0)
+	self:SizeModel(popup, 7)
+
+	popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 10, -7)
+	popup.source:SetPoint("BOTTOMRIGHT", -20, 20) -- (-14, 4) is a better outside position
+
+	popup.status:SetFontObject("GameFontNormalSmallLeft")
+	popup.status:SetSize(157, 10)
+	popup.status:SetPoint("TOPLEFT", popup.title, "TOPLEFT", 0, 3)
+
+	popup.glow:SetSize(266, 109)
+	popup.glow:SetPoint("TOPLEFT", -10)
+	popup.glow:SetPoint("BOTTOMRIGHT", 10)
+
+	popup.shine:SetSize(171, 60)
+	popup.shine:SetPoint("BOTTOMLEFT", -10, 12)
+end
+function module.Looks:Transmog(popup)
+	popup:SetSize(253, 75)
+
+	popup.background:SetSize(253, 75)
+	popup.background:SetAtlas("transmog-toast-bg", true)
+	popup.background:SetPoint("CENTER")
+
+	popup.close:SetPoint("TOPRIGHT", -12, -12)
+
+	popup.modelbg:SetPoint("LEFT", 10, 0)
+	self:SizeModel(popup, 7)
+
+	popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 10, -10)
+	popup.source:SetPoint("BOTTOMRIGHT", -18, 18)
+
+	popup.status:SetFontObject("GameFontNormalSmallLeft")
+	popup.status:SetSize(157, 10)
+	popup.status:SetPoint("TOPLEFT", popup.title, "TOPLEFT", 0, 3)
+
+	popup.glow:SetSize(253, 75)
+	popup.glow:SetPoint("TOPLEFT", -10)
+	popup.glow:SetPoint("BOTTOMRIGHT", 10)
+
+	popup.shine:SetSize(120, 45)
+	popup.shine:SetPoint("BOTTOMLEFT", -10, 12)
 end
 
--- And set up the frame
-local popup = CreateFrame("Button", "SilverDragonPopupButton", nil, "SecureActionButtonTemplate")
-module.popup = popup
+function module:SizeModel(popup, offset, borders)
+	local modelSize = popup.modelbg:GetWidth() - (borders or 10)
+	local model = popup.model
+	model:SetSize(modelSize, modelSize)
+	model:SetPoint("TOPLEFT", popup.modelbg, offset, -offset)
+	model:SetPoint("BOTTOMRIGHT", popup.modelbg, -offset, offset)
+end
 
-popup:SetWidth(190)
-popup:SetHeight(70)
-popup:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -260, 270)
-popup:SetMovable(true)
-popup:SetUserPlaced(true)
-popup:SetClampedToScreen(true)
-popup:SetFrameStrata("FULLSCREEN_DIALOG")
-popup:SetNormalTexture("Interface\\AchievementFrame\\UI-Achievement-Parchment-Horizontal")
-popup:RegisterForDrag("LeftButton")
+local CreateAnimationAlpha
 
-local back = popup:GetNormalTexture()
-back:SetDrawLayer("BACKGROUND")
-back:ClearAllPoints()
-back:SetPoint("BOTTOMLEFT", 3, 3)
-back:SetPoint("TOPRIGHT", -3, -3)
-back:SetTexCoord(0, 1, 0, 0.25)
+function module:CreatePopup()
+	-- Set up the frame
+	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate")
+	module.popup = popup
 
--- Just a note:
--- The anchors in this next section are incomplete. The frame isn't finished until
--- module.PositionModel is called.
-local title = popup:CreateFontString(nil, "OVERLAY", "GameFontHighlightMedium");
-popup.title = title
-title:SetPoint("TOPLEFT", popup, "TOPLEFT", 6, -6)
-title:SetPoint("RIGHT", popup, "RIGHT", -30, 0)
-popup:SetFontString(title)
+	popup:SetSize(276, 96)
+	popup:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -260, 270)
+	popup:SetMovable(true)
+	popup:SetUserPlaced(true)
+	popup:SetClampedToScreen(true)
+	popup:SetFrameStrata("DIALOG")
+	popup:RegisterForDrag("LeftButton")
 
-local model = CreateFrame("PlayerModel", nil, popup)
-popup.model = model
+	popup:SetAttribute("type1", "macro")
+	popup:SetAttribute("_onshow", "self:Enable()")
+	popup:SetAttribute("_onhide", "self:Disable()")
 
-local details = popup:CreateFontString(nil, "OVERLAY", "GameFontBlackTiny")
-popup.details = details
-details:SetPoint("RIGHT", title)
+	popup:Hide()
 
-local subtitle = popup:CreateFontString(nil, "OVERLAY", "GameFontBlackTiny")
-popup.subtitle = subtitle
-subtitle:SetPoint("TOPLEFT", details, "BOTTOMLEFT", 0, -4)
-subtitle:SetPoint("RIGHT", details)
-subtitle:SetText("Click to Target")
+	-- art
+	local background = popup:CreateTexture(nil, "BORDER", nil, 1)
+	popup.background = background
+	background:SetBlendMode("BLEND")
 
--- Border
-popup:SetBackdrop({
-	tile = true, edgeSize = 16,
-	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-})
-popup:SetBackdropBorderColor( 0.7, 0.15, 0.05 )
+	local modelbg = popup:CreateTexture(nil, "BORDER")
+	popup.modelbg = modelbg
+	modelbg:SetTexture([[Interface\FrameGeneral\UI-Background-Marble]])
+	modelbg:SetSize(52, 52)
 
--- Close button
-local close = CreateFrame("Button", nil, popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
-popup.close = close
-close:SetPoint("TOPRIGHT", popup, "TOPRIGHT", 0, 0)
-close:SetWidth(26)
-close:SetHeight(26)
-close:SetHitRectInsets(8, 8, 8, 8)
-close:SetAttribute("_onclick", [[
-	local button = self:GetParent()
-	button:Disable()
-	button:Hide()
-]])
+	local model = CreateFrame("PlayerModel", nil, popup)
+	popup.model = model
 
--- Flash frame
-local glow = CreateFrame("Frame", "$parentGlow", popup)
-popup.glow = glow
-glow:SetPoint("CENTER")
-glow:SetWidth(400 / 300 * popup:GetWidth())
-glow:SetHeight(171 / 88 * popup:GetHeight())
-local texture = glow:CreateTexture(nil, "OVERLAY")
-texture:SetAllPoints()
-texture:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Alert-glow")
-texture:SetBlendMode("ADD")
-texture:SetTexCoord(0, 0.78125, 0, 0.66796875)
-texture:SetAlpha(0)
+	-- text
+	local title = popup:CreateFontString(nil, "ARTWORK", "GameFontNormalMed3");
+	popup.title = title
+	title:SetSize(167, 33)
+	title:SetJustifyH("MIDDLE")
+	title:SetJustifyV("MIDDLE")
 
-local loops = 0
-local animation = texture:CreateAnimationGroup()
-animation:SetLooping("REPEAT")
+	local source = popup:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+	popup.source = source
+	source:SetJustifyH("RIGHT")
+	source:SetJustifyV("MIDDLE")
 
-local pulse_in = animation:CreateAnimation("Alpha")
-pulse_in:SetFromAlpha(0)
-pulse_in:SetToAlpha(0.3)
-pulse_in:SetDuration(0.5)
-pulse_in:SetSmoothing("IN")
-pulse_in:SetEndDelay(0.1)
-pulse_in:SetOrder(1)
-local pulse_out = animation:CreateAnimation("Alpha")
-pulse_in:SetFromAlpha(0.3)
-pulse_in:SetToAlpha(0)
-pulse_out:SetDuration(1)
-pulse_out:SetSmoothing("NONE")
-pulse_out:SetOrder(2)
+	local status = popup:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+	popup.status = status
+	status:SetJustifyH("RIGHT")
+	status:SetJustifyV("MIDDLE")
 
-animation:SetScript("OnLoop", function(frame, state)
-	loops = loops + 1
-	if loops == 3 then
-		loops = 0
-		animation:Finish()
+	-- Close button
+	local close = CreateFrame("Button", nil, popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
+	popup.close = close
+	close:SetSize(16, 16)
+	close:GetDisabledTexture():SetTexture("")
+	close:GetHighlightTexture():SetTexture([[Interface\FriendsFrame\UI-Toast-CloseButton-Highlight]])
+	close:GetNormalTexture():SetTexture([[Interface\FriendsFrame\UI-Toast-CloseButton-Up]])
+	close:GetPushedTexture():SetTexture([[Interface\FriendsFrame\UI-Toast-CloseButton-Down]])
+	close:SetAttribute("_onclick", [[
+		local button = self:GetParent()
+		button:Disable()
+		button:Hide()
+	]])
+
+	-- Flashy effects
+	local glow = popup:CreateTexture(nil, "OVERLAY")
+	popup.glow = glow
+	glow:SetBlendMode("ADD")
+	glow:SetAtlas("loottoast-glow")
+
+	local shine = popup:CreateTexture(nil, "OVERLAY")
+	popup.shine = shine
+	shine:SetBlendMode("ADD")
+	shine:SetAtlas("loottoast-sheen")
+
+	-- animations for same
+	-- CreateAnimationAlpha(from, to, duration, delay, order)
+	popup.animIn = popup:CreateAnimationGroup()
+	popup.animIn:SetToFinalAlpha(true)
+	for i, child in ipairs({'background', 'model', 'modelbg', 'close'}) do
+		local animIn = CreateAnimationAlpha(popup.animIn, 0, 1, 0.4, nil, 1)
+		animIn:SetTarget(popup)
+		animIn:SetChildKey(child)
+		popup[child]:SetAlpha(0)
 	end
-end)
 
-popup:SetAttribute("type", "macro")
+	glow.animIn = glow:CreateAnimationGroup()
+	glow.animIn:SetScript("OnFinished", function(self) self:GetParent():Hide() end)
+	CreateAnimationAlpha(glow.animIn, 0, 1, 0.2, nil, 1)
+	CreateAnimationAlpha(glow.animIn, 1, 0, 0.5, nil, 2)
 
-popup:SetScript("OnEnter", function(self)
-	self:SetBackdropBorderColor(1, 1, 0.15)
-end)
-popup:SetScript("OnLeave", function(self)
-	self:SetBackdropBorderColor(0.7, 0.15, 0.05)
-end)
-popup:SetScript("OnShow", function(self)
-	animation:Play()
-end)
-popup:SetScript("OnHide", function(self)
-	animation:Stop()
-	self:GetScript("OnLeave")(self)
-end)
-popup:SetScript("OnDragStart", function(self)
-	if module:ShouldBeDraggable() then
-		self:StartMoving()
+	shine.animIn = shine:CreateAnimationGroup()
+	shine.animIn:SetScript("OnFinished", function(self) self:GetParent():Hide() end)
+
+	CreateAnimationAlpha(shine.animIn, 0, 1, 0.1, nil, 1)
+	CreateAnimationAlpha(shine.animIn, 1, 0, 0.25, 0.175, 2)
+	local shineTranslate = shine.animIn:CreateAnimation("Translation")
+	shineTranslate:SetOffset(165, 0)
+	shineTranslate:SetDuration(0.425)
+	shineTranslate:SetOrder(2)
+
+	-- handlers
+	popup:SetScript("OnShow", function(self)
+		self.glow:Show()
+		self.glow.animIn:Play()
+		self.shine:Show()
+		self.shine.animIn:Play()
+
+		self.animIn:Play()
+	end)
+	popup:SetScript("OnHide", function(self)
+		self.glow.animIn:Stop()
+		self.shine.animIn:Stop()
+		self.animIn:Stop()
+
+		self.model:ClearModel()
+	end)
+	popup:SetScript("OnDragStart", function(self)
+		if module:ShouldBeDraggable() then
+			self:StartMoving()
+		end
+	end)
+	popup:SetScript("OnDragStop", function(self)
+		self:StopMovingOrSizing()
+	end)
+
+	self:ApplyLook(popup, self.db.profile.style)
+
+	return popup
+end
+
+function CreateAnimationAlpha(animationGroup, fromAlpha, toAlpha, duration, startDelay, order)
+	local animation = animationGroup:CreateAnimation("Alpha")
+	animation:SetFromAlpha(fromAlpha)
+	animation:SetToAlpha(toAlpha)
+	animation:SetDuration(duration)
+
+	if startDelay then
+		animation:SetStartDelay(startDelay)
 	end
-end)
-popup:SetScript("OnDragStop", function(self)
-	self:StopMovingOrSizing()
-end)
+	if order then
+		animation:SetOrder(order)
+	end
 
--- a few setup things:
-popup:Hide()
-popup:GetScript("OnLeave")(popup)
-
+	return animation
+end
