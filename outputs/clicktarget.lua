@@ -268,12 +268,17 @@ function module.Looks:Transmog(popup)
 	popup.modelbg:SetPoint("LEFT", 10, 0)
 	self:SizeModel(popup, 7)
 
-	popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 10, -10)
 	popup.source:SetPoint("BOTTOMRIGHT", -18, 18)
 
+	popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 4, -10)
+	popup.title:SetPoint("BOTTOM", popup.source, "TOP", 0, 0)
+	popup.title:SetJustifyV("MIDDLE")
+
 	popup.status:SetFontObject("GameFontNormalSmallLeft")
+	popup.status:SetJustifyH("LEFT")
 	popup.status:SetSize(157, 10)
-	popup.status:SetPoint("TOPLEFT", popup.title, "TOPLEFT", 0, 3)
+	popup.status:SetPoint("LEFT", popup.modelbg, "RIGHT", 4, 0)
+	popup.status:SetPoint("BOTTOMRIGHT", popup.source, "BOTTOMLEFT", -4, 0)
 
 	popup.glow:SetSize(253, 75)
 	popup.glow:SetPoint("TOPLEFT", -10)
