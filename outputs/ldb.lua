@@ -1,7 +1,5 @@
 local myname, ns = ...
 
-local BCT = LibStub("LibBabble-CreatureType-3.0"):GetUnstrictLookupTable()
-local BCTR = LibStub("LibBabble-CreatureType-3.0"):GetReverseLookupTable()
 local icon = LibStub("LibDBIcon-1.0", true)
 
 local LibQTip = LibStub("LibQTip-1.0")
