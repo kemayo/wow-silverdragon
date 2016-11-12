@@ -93,7 +93,7 @@ function module:OnInitialize()
 		[80614] = {name="Blade-Dancer Aeryx",locations={[948]={46802300,46402220},},quest=35599,},
 		[80725] = {name="Sulfurious",locations={[949]={39406040,39406040},},quest=36394,},
 		[80868] = {name="Glut",locations={[949]={46005080,45605060},},quest=36204,vignette="Gorger the Hungry",},
-		[81001] = {name="Nok-Karosh",locations={[941]={12405140,13805140},},tameable=true,},
+		[81001] = {name="Nok-Karosh",locations={[941]={12405140,13805140},},mount=true,tameable=true,},
 		[81038] = {name="Gelgor of the Blue Flame",locations={[949]={41804540,41804540,29003880,34203800},},quest=36391,},
 		[81406] = {name="Bahameye",locations={[947]={29000540,28400540},},quest=35281,},
 		[81639] = {name="Brambleking Fili",locations={[947]={44807720,44407720},},quest=33383,},

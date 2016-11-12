@@ -250,7 +250,7 @@ function module:OnInitialize()
 		[112497] = {name="Maia the White",locations={[1033]={24403480},},quest=44071,tameable=true,},
 		[112636] = {name="Sinister Leyrunner",locations={[1015]={50405200},},},
 		[112637] = {name="Devious Sunrunner",locations={[1015]={50405200},},},
-		[112705] = {name="Achronos",locations={[1033]={55807400},},quest=nil,tameable=false,vignette=nil,},
+		[112705] = {name="Achronos",locations={[1033]={55807400},},},
 		[112756] = {name="Sorallus",locations={[1033]={28608920},},},
 		[112757] = {name="Magistrix Vilessa",locations={[1033]={48807840},},},
 		[112758] = {name="Auditor Esiel",locations={[1033]={57006740},},},
