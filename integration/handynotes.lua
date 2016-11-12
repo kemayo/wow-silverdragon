@@ -53,11 +53,7 @@ do
 				tCoordBottom = bottom,
 			}
 		end
-		local mod_announce = core:GetModule("Announce", true)
-		if not mod_announce then
-			return icon
-		end
-		return mod_announce:HasMount(id) and icon_mount or icon
+		return (ns.mobdb[id] and ns.mobdb[id].mount) and icon_mount or icon
 	end
 	local function iter(t, prestate)
 		if not t then return nil end

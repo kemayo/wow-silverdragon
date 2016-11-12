@@ -31,43 +31,6 @@ if LSM then
 	LSM:Register("sound", "NPCScan", [[Sound\Event Sounds\Event_wardrum_ogre.ogg]])--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
 end
 
-local mount_mobs = {
-	[32491] = true, -- Time-Lost
-	[50005] = true, -- Poseidus
-	[50062] = true, -- Aeonaxx
-	[50409] = true, -- Mysterious Camel
-	[64403] = true, -- Alani
-	[69769] = true, -- Zandalari Warbringer (Slate)
-	[69841] = true, -- Zandalari Warbringer (Amber)
-	[69842] = true, -- Zandalari Warbringer (Jade)
-	[70096] = true, -- War-God Dokah (Can drop any of the 3 above warbringer mounts)
-	[73167] = true, -- Huolon
-	-- Draenor goes wild here:
-	[81001] = true, -- Nok-Karosh
-	[50992] = true, -- Gorok
-	[50990] = true, -- Nakk the Thunderer
-	[50981] = true, -- Luk'hok
-	[50985] = true, -- Poundfist
-	[51015] = true, -- Silthide
-	[50883] = true, -- Pathrunner
-	-- Tenaan special 4
-	-- [95044] = true, -- Terrorfist
-	-- [95053] = true, -- Deathtalon
-	-- [95054] = true, -- Vengeance
-	-- [95056] = true, -- Doomroller
-}
-local boss_mobs = {
-	[50009] = true, -- Mobus
-	[50056] = true, -- Garr
-	[50061] = true, -- Xariona
-	[50063] = true, -- Akma'hat
-	[50089] = true, -- Julak-Doom
-	[60491] = true, -- Sha of Anger
-	[62346] = true, -- Galleon
-	[69099] = true, -- Nalak
-	[69161] = true, -- Oondasta
-}
-
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Announce", {
 		profile = {
@@ -227,10 +190,6 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead)
 	return true
 end
 
-function module:HasMount(id)
-	return mount_mobs[id]
-end
-
 core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zone, x, y, dead, source)
 	if not module.db.profile.sink then
 		return
@@ -286,10 +245,10 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zo
 		if channel == "GUILD" and not module.db.profile.soundguild or (channel == "PARTY" or channel == "RAID") and not module.db.profile.soundgroup then return end
 	end
 	local soundfile, loops
-	if module.db.profile.sound_mount and mount_mobs[id] then
+	if module.db.profile.sound_mount and ns.mobdb[id] and ns.mobdb[id].mount then
 		soundfile = module.db.profile.soundfile_mount
 		loops = module.db.profile.sound_mount_loop
-	elseif module.db.profile.sound_boss and boss_mobs[id] then
+	elseif module.db.profile.sound_boss and ns.mobdb[id] and ns.mobdb[id].boss then
 		soundfile = module.db.profile.soundfile_boss
 		loops = module.db.profile.sound_boss_loop
 	else
