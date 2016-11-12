@@ -13,7 +13,6 @@ function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Scan_Vignettes", {
 		profile = {
 			enabled = true,
-			location = false,
 			pointsofinterest = true,
 		},
 	})
@@ -28,7 +27,6 @@ function module:OnInitialize()
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
 					enabled = config.toggle("Enabled", "Scan minimap vignettes (it's what Blizzard calls them, okay?)", 10),
-					location = config.toggle("Record location on vignette appearance", "Record the mob's location when the vignette triggers for it. If this isn't set, it'll wait until you target it and are within interaction range to store the location.", 30),
 					pointsofinterest = config.toggle("Show alerts for point of interest vignettes added to world map itself")
 				},
 			},
