@@ -83,15 +83,6 @@ local options = {
 			},
 			plugins = {},
 		},
-		addons = {
-			type = "group",
-			name = "Addons",
-			order = 99,
-			args = {
-				about = desc("SilverDragon can integrate with some other addons. If you don't see anything here, you don't have any of these addons installed. I'm very sad. ;_;", 0),
-			},
-			plugins = {},
-		},
 	},
 	plugins = {
 	},

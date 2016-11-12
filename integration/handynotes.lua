@@ -20,6 +20,9 @@ local handler = {}
 do
 	local currentLevel, currentZone
 	local function should_show_mob(id)
+		if db.hidden[id] then
+			return false
+		end
 		local _, questid = core:GetMobInfo(id)
 		if questid then
 			return module.db.profile.questcomplete or not IsQuestFlaggedCompleted(questid)
@@ -114,12 +117,11 @@ end
 local clicked_zone, clicked_coord
 local info = {}
 
-local function deleteWholeMob(button, mapFile, coord)
+local function hideMob(button, mapFile, coord)
 	local zoneid = HBD:GetMapIDFromFile(mapFile)
 	local id = core:GetMobByCoord(zoneid, coord)
 	if id then
-		core:DeleteMob(id)
-		module:UpdateNodes()
+		db.hidden[id] = true
 		module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
 	end
 end
@@ -161,13 +163,13 @@ local function generateMenu(button, level)
 			UIDropDownMenu_AddButton(info, level);
 		end
 
-		-- Delete menu item
+		-- Hide menu item
 		info.disabled     = nil
 		info.isTitle      = nil
 		info.notCheckable = nil
 		info.text = "Hide mob"
 		info.icon = icon
-		info.func = deleteWholeMob
+		info.func = hideMob
 		info.arg1 = clicked_zone
 		info.arg2 = clicked_coord
 		UIDropDownMenu_AddButton(info, level);
@@ -201,6 +203,7 @@ function module:OnInitialize()
 			achieved = true,
 			questcomplete = false,
 			achievementless = true,
+			hidden = {},
 		},
 	})
 	db = self.db.profile
@@ -215,54 +218,79 @@ function module:OnInitialize()
 			module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
 		end,
 		args = {
-			desc = {
-				name = "These settings control the look and feel of the icon.",
-				type = "description",
-				order = 0,
+			icon = {
+				type = "group",
+				name = "Icon settings",
+				inline = true,
+				args = {
+					desc = {
+						name = "These settings control the look and feel of the icon.",
+						type = "description",
+						order = 0,
+					},
+					icon_scale = {
+						type = "range",
+						name = "Icon Scale",
+						desc = "The scale of the icons",
+						min = 0.25, max = 2, step = 0.01,
+						arg = "icon_scale",
+						order = 20,
+					},
+					icon_alpha = {
+						type = "range",
+						name = "Icon Alpha",
+						desc = "The alpha transparency of the icons",
+						min = 0, max = 1, step = 0.01,
+						arg = "icon_alpha",
+						order = 30,
+					},
+				},
 			},
-			achieved = {
-				type = "toggle",
-				name = "Show achieved",
-				desc = "Whether to show icons for mobs you have already killed (tested by whether you've got their achievement progress)",
-				arg = "achieved",
-				order = 10,
-			},
-			questcomplete = {
-				type = "toggle",
-				name = "Show quest-complete",
-				desc = "Whether to show icons for mobs you have the tracking quest complete for (which probably means they won't drop anything)",
-				arg = "questcomplete",
-				order = 15,
-			},
-			achievementless = {
-				type = "toggle",
-				name = "Show non-achievement mobs",
-				desc = "Whether to show icons for mobs which aren't part of the criteria for any known achievement",
-				arg = "achievementless",
-				order = 20,
-			},
-			icon_scale = {
-				type = "range",
-				name = "Icon Scale",
-				desc = "The scale of the icons",
-				min = 0.25, max = 2, step = 0.01,
-				arg = "icon_scale",
-				order = 25,
-			},
-			icon_alpha = {
-				type = "range",
-				name = "Icon Alpha",
-				desc = "The alpha transparency of the icons",
-				min = 0, max = 1, step = 0.01,
-				arg = "icon_alpha",
-				order = 30,
+			display = {
+				type = "group",
+				name = "What to display",
+				inline = true,
+				args = {
+					achieved = {
+						type = "toggle",
+						name = "Show achieved",
+						desc = "Whether to show icons for mobs you have already killed (tested by whether you've got their achievement progress)",
+						arg = "achieved",
+						order = 10,
+					},
+					questcomplete = {
+						type = "toggle",
+						name = "Show quest-complete",
+						desc = "Whether to show icons for mobs you have the tracking quest complete for (which probably means they won't drop anything)",
+						arg = "questcomplete",
+						order = 15,
+					},
+					achievementless = {
+						type = "toggle",
+						name = "Show non-achievement mobs",
+						desc = "Whether to show icons for mobs which aren't part of the criteria for any known achievement",
+						arg = "achievementless",
+						width = "full",
+						order = 20,
+					},
+					unhide = {
+						type = "execute",
+						name = "Reset hidden mobs",
+						desc = "Show all nodes that you manually hid by right-clicking on them and choosing \"hide\".",
+						func = function()
+							wipe(db.hidden)
+							module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
+						end,
+						order = 50,
+					},
+				},
 			},
 		},
 	}
 
 	local config = core:GetModule("Config", true)
 	if config then
-		config.options.args.addons.plugins.handynotes = {
+		config.options.plugins.handynotes = {
 			handynotes = {
 				type = "group",
 				name = "HandyNotes",
