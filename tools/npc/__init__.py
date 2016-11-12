@@ -119,7 +119,7 @@ class NPC:
         self.data['notes'] = notes
 
     def clean_data(self, *keys):
-        return dict((k, v) for k, v in self.data.items() if (v and len(keys) == 0 or k in keys))
+        return dict((k, v) for k, v in self.data.items() if (v and (len(keys) == 0 or k in keys)))
 
     def to_lua(self, *args, **kwargs):
         return lua.serialize(self.clean_data(*args, **kwargs))

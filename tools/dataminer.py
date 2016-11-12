@@ -30,6 +30,7 @@ force_include = (
     64227, # Frozen Trail Packer
     #In 5.2, world bosses are no longer flagged as rare, even if they are.
     #Granted, 3 of 4 probably won't be rare. We include anyways because we always have.
+    64403, # Alani
     60491, # Sha of Anger
     62346, # Galleon
     69099, # Nalak
@@ -102,7 +103,7 @@ def write_output(expansion, data):
                 continue
             if id in notes:
                 mob.add_notes(notes[id])
-            f.write('\t\t[%d] = %s,\n' % (id, mob.to_lua('name', 'quest', 'vignette', 'tameable', 'notes', 'locations')))
+            f.write('\t\t[%d] = %s,\n' % (id, mob.to_lua('name', 'quest', 'vignette', 'tameable', 'notes', 'locations', 'mount', 'boss')))
         f.write(MODULE_END_TEMPLATE)
 
 if __name__ == '__main__':
@@ -167,7 +168,7 @@ if __name__ == '__main__':
 
     expansionmobs = {}
     for id, mob in local.items():
-        if ns.strip_empties or len(mob.data.get('locations', {})) == 0:
+        if not ns.strip_empties or len(mob.data.get('locations', {})) == 0:
             continue
         expansion = mob.data.get('expansion')
         if expansion:

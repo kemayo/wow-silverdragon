@@ -13,33 +13,6 @@ class LocalNPC(NPC):
     def load(self):
         pass
 
-    def _name(self):
-        return self.data['name']
-
-    def _creature_type(self):
-        return self.data.get('creature_type')
-
-    def _level(self):
-        return self.data.get('level')
-
-    def _elite(self):
-        return self.data.get('elite')
-
-    def _tameable(self):
-        return self.data.get('tameable')
-
-    def _locations(self):
-        return self.data.get('locations', [])
-
-    def _vignette(self):
-        return self.data.get('vignette')
-
-    def _quest(self):
-        return self.data.get('quest')
-
-    def _expansion(self):
-        return self.data.get('expansion')
-
 
 def load(filename):
     npcdata = {}
