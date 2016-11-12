@@ -152,7 +152,7 @@ function addon:OnInitialize()
 			globaldb.mob_count[mobid] = count
 		end
 
-		-- _G["SilverDragon2DB"] = nil
+		_G["SilverDragon2DB"] = nil
 	end
 
 	-- TODO: move to miner, remove at the source
