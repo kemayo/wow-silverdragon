@@ -122,7 +122,10 @@ function module:BuildMobList(options)
 					name = "Enabled",
 					arg = source,
 					get = function(info) return core.db.global.datasources[info.arg] end,
-					set = function(info, value) core.db.global.datasources[info.arg] = value end,
+					set = function(info, value)
+						core.db.global.datasources[info.arg] = value
+						core:BuildLookupTables()
+					end,
 					disabled = false,
 				},
 				zones = {

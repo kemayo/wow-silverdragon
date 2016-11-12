@@ -275,11 +275,9 @@ function module:OnInitialize()
 
 	HandyNotes:RegisterPluginDB("SilverDragon", handler, options)
 
-	self:RegisterEvent("LOOT_CLOSED")
-end
+	core.RegisterCallback(self, "Ready", "UpdateNodes")
 
-function module:OnEnable()
-	self:UpdateNodes()
+	self:RegisterEvent("LOOT_CLOSED")
 end
 
 function module:UpdateNodes()

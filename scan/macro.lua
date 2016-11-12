@@ -16,6 +16,7 @@ function module:OnInitialize()
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	HBD.RegisterCallback(self, "PlayerZoneChanged", "Update")
 	core.RegisterCallback(self, "Seen", "Update")
+	core.RegisterCallback(self, "Ready", "Update")
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -51,8 +52,6 @@ function module:OnInitialize()
 			},
 		}
 	end
-
-	self:Update()
 end
 
 function module:Update()

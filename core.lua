@@ -21,21 +21,34 @@ _G["BINDING_NAME_CLICK SilverDragonPopupButton:LeftButton"] = "Target last found
 _G["BINDING_NAME_CLICK SilverDragonMacroButton:LeftButton"] = "Scan for nearby mobs"
 
 addon.datasources = {
-	-- ["source name"] = mobs...
-}
-local mobdb = {
 	--[[
-	[54321] = {
-		name = "Bob",
-		vignette = "something that isn't the name",
-		quest = 12345,
-		tameable = isTameable,
-		notes = "notes",
-		locations = {[zoneid] = {coord,...}}
-	},
-	...
+	["source name"] = {
+		[54321] = {
+			name = "Bob",
+			vignette = "something that isn't the name",
+			quest = 12345,
+			tameable = isTameable,
+			notes = "notes",
+			mount = hasMount,
+			boss = isBoss,
+			locations = {[zoneid] = {coord,...}}
+		},
+		...
+	}
 	--]]
 }
+local mobdb = setmetatable({}, {
+	__index = function(t, id)
+		for source, data in pairs(addon.datasources) do
+			if data[id] and addon.db.global.datasources[source] then
+				t[id] = data[id]
+				return data[id]
+			end
+		end
+		t[id] = false
+		return false
+	end,
+})
 ns.mobdb = mobdb
 local mobsByZone = {
 	-- [zoneid] = { [mobid] = {coord, ...}
@@ -53,40 +66,48 @@ function addon:RegisterMobData(source, data)
 	addon.datasources[source] = data
 end
 function addon:BuildLookupTables()
+	wipe(mobdb)
+	wipe(mobsByZone)
+	wipe(questMobLookup)
+	wipe(vignetteMobLookup)
 	for source, data in pairs(addon.datasources) do
-		for mobid, mobdata in pairs(data) do
-			self:NameForMob(mobid) -- prime cache
+		if addon.db.global.datasources[source] then
+			for mobid, mobdata in pairs(data) do
+				self:NameForMob(mobid) -- prime cache
 
-			mobdb[mobid] = mobdata
-			mobdata.id = mobid
+				mobdata.id = mobid
+				mobdata.source = source
 
-			if mobdata.locations then
-				for zoneid, coords in pairs(mobdata.locations) do
-					if not mobsByZone[zoneid] then
-						mobsByZone[zoneid] = {}
+				if mobdata.locations then
+					for zoneid, coords in pairs(mobdata.locations) do
+						if not mobsByZone[zoneid] then
+							mobsByZone[zoneid] = {}
+						end
+						mobsByZone[zoneid][mobid] = coords
 					end
-					mobsByZone[zoneid][mobid] = coords
 				end
-			end
-			-- In the olden days, we had one mob per quest and/or vignette. Alas...
-			if mobdata.quest then
-				local questMobs = questMobLookup[mobdata.quest]
-				if not questMobs then
-					questMobs = {}
-					questMobLookup[mobdata.quest] = questMobs
+				-- In the olden days, we had one mob per quest and/or vignette. Alas...
+				if mobdata.quest then
+					local questMobs = questMobLookup[mobdata.quest]
+					if not questMobs then
+						questMobs = {}
+						questMobLookup[mobdata.quest] = questMobs
+					end
+					questMobs[mobid] = true
 				end
-				questMobs[mobid] = true
-			end
-			if mobdata.vignette then
-				local vignetteMobs = vignetteMobLookup[mobdata.vignette]
-				if not vignetteMobs then
-					vignetteMobs = {}
-					vignetteMobLookup[mobdata.vignette] = vignetteMobs
+				if mobdata.vignette then
+					local vignetteMobs = vignetteMobLookup[mobdata.vignette]
+					if not vignetteMobs then
+						vignetteMobs = {}
+						vignetteMobLookup[mobdata.vignette] = vignetteMobs
+					end
+					vignetteMobs[mobid] = true
 				end
-				vignetteMobs[mobid] = true
 			end
 		end
 	end
+
+	self.events:Fire("Ready")
 end
 
 local globaldb
@@ -99,7 +120,6 @@ function addon:OnInitialize()
 			mob_count = {
 				['*'] = 0,
 			},
-			-- TODO: respect this
 			datasources = {
 				['*'] = true,
 			},
