@@ -51,7 +51,7 @@ function module:OnInitialize()
 		[47387] = {name="Harakiss the Infestor",locations={[161]={50407240,52406580,50407240,52206500},},tameable=true,},
 		[49822] = {name="Jadefang",locations={[640]={61202240,61202260},},tameable=true,},
 		[49913] = {name="Lady La-La",locations={[610]={56207780,60207080,56807680,57008220,59407080},},},
-		[50005] = {name="Poseidus",locations={[614]={41407440},[615]={46204880},},mount=true,},
+		[50005] = {name="Poseidus",locations={[614]={41407440},[615]={39206730,46204880,57808200,65904400},},mount=true,},
 		[50009] = {name="Mobus",boss=true,locations={[614]={73201920},},},
 		[50050] = {name="Shok'sharak",locations={[614]={41803240,48002740,48003420,41603240,47802720,47803440},},},
 		[50051] = {name="Ghostcrawler",locations={[614]={12408300,15207640,19605040,19808340,20406760,22607520,27607640,30008160,31407040,16807240,20605380,28607320},},tameable=true,},
