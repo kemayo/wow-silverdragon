@@ -206,8 +206,10 @@ do
 			local name = TextFromHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
 			if name then
 				self.db.locale.mob_name[id] = name
-				mobNameToId[name] = id
 			end
+		end
+		if self.db.locale.mob_name[id] then
+			mobNameToId[self.db.locale.mob_name[id]] = id
 		end
 		return self.db.locale.mob_name[id]
 	end
@@ -220,8 +222,10 @@ do
 			if name then
 				name = name:gsub("Vignette: ", "")
 				self.db.locale.quest_name[id] = name
-				questNameToId[name] = id
 			end
+		end
+		if self.db.locale.quest_name[id] then
+			questNameToId[self.db.locale.quest_name[id]] = id
 		end
 		return self.db.locale.quest_name[id]
 	end

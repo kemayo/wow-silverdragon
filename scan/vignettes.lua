@@ -41,16 +41,20 @@ end
 
 function module:WorkOutMobFromVignette(name, ...)
 	if ns.vignetteMobLookup[name] then
+		Debug("vignetteMobLookup", name, ns.vignetteMobLookup[name])
 		return self:NotifyForMobs(ns.vignetteMobLookup[name], ...)
 	end
 	local questid = core:IdForQuest(name)
 	if questid and ns.questMobLookup[questid] then
+		Debug("questMobLookup", name, ns.questMobLookup[name])
 		return self:NotifyForMobs(ns.questMobLookup[questid], ...)
 	end
 	local mobid = core:IdForMob(name)
 	if mobid then
+		Debug("name", name, mobid)
 		return self:NotifyIfNeeded(mobid, ...)
 	end
+	Debug("Couldn't work out mob from vignette", name)
 end
 function module:NotifyForMobs(mobs, ...)
 	for mobid in pairs(mobs) do
