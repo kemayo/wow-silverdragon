@@ -54,7 +54,9 @@ outputs\announce.lua
 outputs\sync.lua
 outputs\marker.lua
 
-targets\target.lua
+targets\module.lua
+targets\popup.lua
+targets\looks\looks.xml
 
 mobs.lua
 

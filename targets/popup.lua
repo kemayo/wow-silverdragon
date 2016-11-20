@@ -1,7 +1,7 @@
 local myname, ns = ...
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
-local module = core:NewModule("ClickTarget", "AceEvent-3.0")
+local module = core:GetModule("ClickTarget")
 local Debug = core.Debug
 
 local CreateAnimationAlpha
@@ -14,86 +14,15 @@ local escapes = {
 	red = _G.RED_FONT_COLOR_CODE,
 }
 
-function module:OnInitialize()
-	self.db = core.db:RegisterNamespace("ClickTarget", {
-		profile = {
-			show = true,
-			locked = true,
-			style = "SilverDragon",
-			sources = {
-				target = false,
-				grouptarget = true,
-				mouseover = true,
-				nameplate = true,
-				vignette = true,
-				['point-of-interest'] = true,
-				groupsync = true,
-				guildsync = false,
-				fake = true,
-			},
-		},
-	})
-	core.RegisterCallback(self, "Announce")
-	self:RegisterEvent("PLAYER_REGEN_ENABLED")
-
-	local config = core:GetModule("Config", true)
-	if config then
-		config.options.plugins.clicktarget = {
-			clicktarget = {
-				type = "group",
-				name = "ClickTarget",
-				get = function(info) return self.db.profile[info[#info]] end,
-				set = function(info, v)
-					self.db.profile[info[#info]] = v
-					local oldpopup = self.popup
-					self.popup = self:CreatePopup()
-					if oldpopup:IsVisible() then
-						self:ShowFrame()
-					end
-					oldpopup:Hide()
-				end,
-				order = 25,
-				args = {
-					about = config.desc("Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it. It can show a 3d model of that rare, but only if we already know the ID of the rare (though a data import), or if it was found by being targetted. Nameplates are right out.", 0),
-					show = config.toggle("Show", "Show the click-target frame.", 10),
-					locked = config.toggle("Locked", "Lock the click-target frame in place unless ALT is held down", 15),
-					sources = {
-						type="multiselect",
-						name = "Rare Sources",
-						desc = "Which ways of finding a rare should cause this frame to appear?",
-						get = function(info, key) return self.db.profile.sources[key] end,
-						set = function(info, key, v) self.db.profile.sources[key] = v end,
-						values = {
-							target = "Targets",
-							grouptarget = "Group targets",
-							mouseover = "Mouseover",
-							nameplate = "Nameplates",
-							vignette = "Vignettes",
-							['point-of-interest'] = "Map Points of Interest",
-							groupsync = "Group Sync",
-							guildsync = "Guild Sync",
-						},
-					},
-					style = {
-						type = "select",
-						name = "Style",
-						desc = "Appearance of the frame",
-						values = {},
-					},
-				},
-			},
-		}
-		for key in pairs(self.Looks) do
-			config.options.plugins.clicktarget.clicktarget.args.style.values[key] = key
-		end
-	end
-
-	self.popup = self:CreatePopup()
+function module:ApplyLook(popup, look)
+	-- Many values cribbed from AlertFrameSystem.xml
+	(self.Looks[look] or self.Looks.LessAwesome)(self, popup)
 end
+module.Looks = {}
 
-local current = {}
 function module:ShowFrame()
 	if not self.db.profile.show then return end
+	local current = self.current
 	if not current.id then return end
 	local popup = self.popup
 
@@ -128,10 +57,10 @@ function module:ShowFrame()
 	popup.model:SetFacing(0)
 
 	if (current.id or current.unit) and not self:IsModelBlacklisted(current.id, current.unit) then
-		if current.id then
-			popup.model:SetCreature(current.id)
-		else
+		if current.unit then
 			popup.model:SetUnit(current.unit)
+		else
+			popup.model:SetCreature(current.id)
 		end
 
 		popup.model:SetPortraitZoom(1)
@@ -140,6 +69,10 @@ function module:ShowFrame()
 		popup.model:SetPosition(4, 0, 1.5)
 		popup.model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
 	end
+end
+
+function module:ShouldBeDraggable()
+	return (not self.db.profile.locked) or IsModifierKeyDown()
 end
 
 do
@@ -155,187 +88,6 @@ do
 		end
 		return bad_ids[id]
 	end
-end
-
-function module:Announce(callback, id, zone, x, y, dead, source, unit)
-	if source:match("^sync") then
-		local channel, player = source:match("sync:(.+):(.+)")
-		if channel == "GUILD" then
-			source = "guildsync"
-		else
-			source = "groupsync"
-		end
-	end
-	if not self.db.profile.sources[source] then
-		return
-	end
-	current.id = id
-	current.unit = unit
-	current.source = source
-	current.dead = dead
-	if InCombatLockdown() then
-		current.pending = true
-	else
-		self:ShowFrame()
-	end
-	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
-	current.unit = nil -- can't be trusted to remain the same
-end
-
-function module:PLAYER_REGEN_ENABLED()
-	if current.pending then
-		current.pending = nil
-		self:ShowFrame()
-	end
-end
-
-function module:ShouldBeDraggable()
-	return (not self.db.profile.locked) or IsModifierKeyDown()
-end
-
-function module:ApplyLook(popup, look)
-	-- Many values cribbed from AlertFrameSystem.xml
-	(self.Looks[look] or self.Looks.LessAwesome)(self, popup)
-end
-module.Looks = {}
-function module.Looks:SilverDragon(popup)
-	-- The "zomg legendary, but a bit more silver" look
-	module.Looks.Legendary(self, popup)
-	popup.background:SetDesaturated(true)
-end
-function module.Looks:Legendary(popup)
-	popup:SetSize(302, 119)
-
-	-- left, right, top, bottom
-	popup:SetHitRectInsets(20, 0, 15, 15)
-
-	popup.background:SetSize(276, 96)
-	popup.background:SetAtlas("LegendaryToast-background", true)
-	popup.background:SetPoint("CENTER")
-
-	popup.close:SetPoint("TOPRIGHT", -18, -24)
-
-	popup.modelbg:SetPoint("TOPLEFT", 48, -32)
-	self:SizeModel(popup, 4)
-
-	popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 11, -16)
-	popup.source:SetPoint("BOTTOMRIGHT", -20, 26)
-
-	popup.status:SetSize(160, 22)
-	popup.status:SetPoint("TOPLEFT", 107, -26)
-
-	popup.glow:SetSize(298, 109)
-	popup.glow:SetPoint("CENTER", 10, 1)
-
-	popup.shine:SetSize(171, 75)
-	popup.shine:SetPoint("BOTTOMLEFT", 10, 24)
-end
-function module.Looks:LessAwesome(popup)
-	-- The "loot, not an upgrade" look
-	popup:SetSize(276, 96)
-
-	popup.background:SetSize(276, 96)
-	popup.background:SetAtlas("LootToast-LessAwesome", true)
-	popup.background:SetPoint("CENTER")
-
-	popup.close:SetPoint("TOPRIGHT", -12, -18)
-
-	popup.modelbg:SetPoint("LEFT", 20, 0)
-	self:SizeModel(popup, 7)
-
-	popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 10, -7)
-	popup.source:SetPoint("BOTTOMRIGHT", -20, 20) -- (-14, 4) is a better outside position
-
-	popup.status:SetFontObject("GameFontNormalSmallLeft")
-	popup.status:SetSize(157, 10)
-	popup.status:SetPoint("TOPLEFT", popup.title, "TOPLEFT", 0, 3)
-
-	popup.glow:SetSize(266, 109)
-	popup.glow:SetPoint("TOPLEFT", -10)
-	popup.glow:SetPoint("BOTTOMRIGHT", 10)
-
-	popup.shine:SetSize(171, 60)
-	popup.shine:SetPoint("BOTTOMLEFT", -10, 12)
-end
-function module.Looks:Transmog(popup)
-	popup:SetSize(253, 75)
-
-	popup.background:SetSize(253, 75)
-	popup.background:SetAtlas("transmog-toast-bg", true)
-	popup.background:SetPoint("CENTER")
-
-	popup.close:SetPoint("TOPRIGHT", -12, -12)
-
-	popup.modelbg:SetPoint("LEFT", 10, 0)
-	self:SizeModel(popup, 7)
-
-	popup.source:SetPoint("BOTTOMRIGHT", -18, 18)
-
-	popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 4, -10)
-	popup.title:SetPoint("BOTTOM", popup.source, "TOP", 0, 0)
-	popup.title:SetJustifyV("MIDDLE")
-
-	popup.status:SetFontObject("GameFontNormalSmallLeft")
-	popup.status:SetJustifyH("LEFT")
-	popup.status:SetSize(157, 10)
-	popup.status:SetPoint("LEFT", popup.modelbg, "RIGHT", 4, 0)
-	popup.status:SetPoint("BOTTOMRIGHT", popup.source, "BOTTOMLEFT", -4, 0)
-
-	popup.glow:SetSize(253, 75)
-	popup.glow:SetPoint("TOPLEFT", -10)
-	popup.glow:SetPoint("BOTTOMRIGHT", 10)
-
-	popup.shine:SetSize(120, 45)
-	popup.shine:SetPoint("BOTTOMLEFT", -10, 12)
-end
-function module.Looks:Classic(popup)
-	-- The <v4 SilverDragon look
-	popup:SetSize(190, 70)
-
-	-- popup.background:SetSize(190, 70)
-	popup.background:SetTexture([[Interface\AchievementFrame\UI-Achievement-Parchment-Horizontal]])
-	popup.background:ClearAllPoints()
-	popup.background:SetPoint("BOTTOMLEFT", 3, 3)
-	popup.background:SetPoint("TOPRIGHT", -3, -3)
-	popup.background:SetTexCoord(0, 1, 0, 0.25)
-
-	popup:SetBackdrop({
-		tile = true, edgeSize = 16,
-		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-	})
-	popup:SetBackdropBorderColor(0.7, 0.15, 0.05)
-
-	popup.close:SetPoint("TOPRIGHT", -3, -3)
-
-	-- popup.modelbg:SetPoint("BOTTOMLEFT", 3, 3)
-	popup.modelbg:SetSize(popup:GetHeight() - 20, popup:GetHeight() - 20)
-	popup.modelbg:SetPoint("TOPLEFT", popup.title, "BOTTOMLEFT", 0, -2)
-	popup.modelbg:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 4, 4)
-	self:SizeModel(popup, 0, 0)
-
-	popup.title:SetFontObject("GameFontHighlightMedium")
-	popup.title:SetHeight(18)
-	popup.title:SetPoint("TOPLEFT", popup, "TOPLEFT", 6, -6)
-	popup.title:SetPoint("RIGHT", popup, "RIGHT", -20, 0)
-
-	popup.source:SetFontObject("GameFontWhite")
-	popup.source:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 3, -3)
-	popup.source:SetPoint("RIGHT", 0, 0)
-	popup.source:SetJustifyH("CENTER")
-
-	popup.status:SetFontObject("GameFontWhite")
-	popup.status:SetPoint("TOPLEFT", popup.source, 0, -12)
-	popup.status:SetPoint("RIGHT", 0, 0)
-	popup.status:SetJustifyH("CENTER")
-
-	-- popup.glow:SetSize(190, 110)
-	popup.glow:SetPoint("TOPLEFT", -20)
-	popup.glow:SetPoint("BOTTOMRIGHT", 20)
-
-	popup.shine:SetSize(120, 60)
-	popup.shine:SetPoint("TOPLEFT", -10, -3)
-	
-	select(3, popup.shine.animIn:GetAnimations()):SetOffset(70, 0)
 end
 
 function module:SizeModel(popup, offset, borders)
