@@ -276,7 +276,7 @@ function module:OnInitialize()
 		[70440] = {name="Monara",locations={[930]={58407940,59207420,76407940,58607860,77408060},},},
 		[70530] = {name="Ra'sha",locations={[928]={39408140,39408140},},},
 		[71864] = {name="Spelurk",locations={[951]={58004860,58004860},},},
-		[71919] = {name="Zhu-Gon the Sour",locations={[951]={37207700,37207720},},},
+		[71919] = {name="Zhu-Gon the Sour",locations={[951]={37207700,37207720},},vignette="Really Skunky Beer"},
 		[71992] = {name="Moonfang",locations={[823]={39204340,39004660},},},
 		[72045] = {name="Chelon",locations={[951]={25203540,25003560},},},
 		[72048] = {name="Rattleskew",locations={[951]={60208740,59808740},},},
