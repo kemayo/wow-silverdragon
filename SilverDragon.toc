@@ -51,9 +51,10 @@ scan\vignettes.lua
 outputs\tooltip.lua
 outputs\ldb.lua
 outputs\announce.lua
-outputs\clicktarget.lua
 outputs\sync.lua
 outputs\marker.lua
+
+targets\target.lua
 
 mobs.lua
 
