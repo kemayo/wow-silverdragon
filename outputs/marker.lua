@@ -76,4 +76,5 @@ function module:Seen_Raw(callback, id, zone, x, y, dead, source, unit)
 		return
 	end
 	SetRaidTarget(unit, self.db.profile.marker)
+	core.events:Fire("Marked", id, self.db.profile.marker, unit)
 end

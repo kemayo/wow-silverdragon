@@ -24,6 +24,7 @@ function module:OnInitialize()
 		},
 	})
 	core.RegisterCallback(self, "Announce")
+	core.RegisterCallback(self, "Marked")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 
 	local config = core:GetModule("Config", true)
@@ -105,6 +106,12 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 	end
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 	self.current.unit = nil -- can't be trusted to remain the same
+end
+
+function module:Marked(callback, id, marker, unit)
+	if self.current.id == id then
+		self:SetRaidIcon(self.popup, marker)
+	end
 end
 
 function module:PLAYER_REGEN_ENABLED()

@@ -30,4 +30,6 @@ function module.Looks:Legendary(popup)
 
 	popup.shine:SetSize(171, 75)
 	popup.shine:SetPoint("BOTTOMLEFT", 10, 24)
+
+	popup.raidIcon:SetPoint("BOTTOM", popup.modelbg, "TOP", 0, -8)
 end

@@ -50,6 +50,19 @@ function module:ShowFrame()
 		popup.status:SetText("")
 	end
 
+	self:ShowModel(popup, current)
+
+	if current.unit and GetRaidTargetIndex(current.unit) then
+		self:SetRaidIcon(popup, GetRaidTargetIndex(current.unit))
+	end
+end
+
+function module:SetRaidIcon(popup, icon)
+	SetRaidTargetIconTexture(popup.raidIcon, icon)
+	popup.raidIcon:Show()
+end
+
+function module:ShowModel(popup, current)
 	-- reset the model
 	popup.model:ClearModel()
 	popup.model:SetModelScale(1)
@@ -129,6 +142,12 @@ function module:CreatePopup()
 
 	local model = CreateFrame("PlayerModel", nil, popup)
 	popup.model = model
+
+	local raidIcon = model:CreateTexture(nil, "OVERLAY")
+	popup.raidIcon = raidIcon
+	raidIcon:SetSize(16, 16)
+	raidIcon:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]])
+	raidIcon:Hide()
 
 	-- text
 	local title = popup:CreateFontString(nil, "ARTWORK", "GameFontNormalMed3");
@@ -218,7 +237,7 @@ function module:CreatePopup()
 		self.shine.animIn:Stop()
 		self.animIn:Stop()
 
-		self.model:ClearModel()
+		self.raidIcon:Hide()
 	end)
 	popup:SetScript("OnEnter", function(self)
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
@@ -249,6 +268,14 @@ function module:CreatePopup()
 	end)
 	popup:SetScript("OnDragStop", function(self)
 		self:StopMovingOrSizing()
+	end)
+
+	popup.model:SetScript("OnHide", function(self)
+		self.loaded = nil
+		self:ClearModel()
+	end)
+	popup.model:SetScript("OnUpdateModel", function(self)
+		self.loaded = true
 	end)
 
 	popup.close:SetScript("OnEnter", function(self)

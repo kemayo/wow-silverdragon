@@ -34,4 +34,6 @@ function module.Looks:Transmog(popup)
 
 	popup.shine:SetSize(120, 45)
 	popup.shine:SetPoint("BOTTOMLEFT", -10, 12)
+
+	popup.raidIcon:SetPoint("BOTTOMRIGHT", popup.modelbg, "TOPLEFT", 12, -12)
 end
