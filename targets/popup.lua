@@ -231,6 +231,8 @@ function module:CreatePopup()
 		self.shine.animIn:Play()
 
 		self.animIn:Play()
+
+		self.elapsed = 0
 	end)
 	popup:HookScript("OnHide", function(self)
 		self.glow.animIn:Stop()
@@ -261,6 +263,17 @@ function module:CreatePopup()
 
 		self.glow.animEnter:Finish()
 	end)
+
+	popup:SetScript("OnUpdate", function(self, elapsed)
+		self.elapsed = self.elapsed + elapsed
+		if self.elapsed > 0.5 then
+			if not self.model.loaded then
+				module:ShowModel(self, module.current)
+			end
+			self.elapsed = 0
+		end
+	end)
+
 	popup:SetScript("OnDragStart", function(self)
 		if module:ShouldBeDraggable() then
 			self:StartMoving()
