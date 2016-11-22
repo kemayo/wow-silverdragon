@@ -268,6 +268,10 @@ function module:CreatePopup()
 		self.elapsed = self.elapsed + elapsed
 		if self.elapsed > 0.5 then
 			if not self.model:GetModelFileID() then
+				-- Sometimes models don't load the first time you request them for some reason. In this case,
+				-- re-requesting it seems to be needed. This might be a client bug, so testing whether it's still
+				-- necessary would be wise. (Added in 70100, reproducing by flying around Pandaria works pretty well.)
+				Debug("Poll for model reload")
 				module:ShowModel(self, module.current)
 			end
 			self.elapsed = 0
