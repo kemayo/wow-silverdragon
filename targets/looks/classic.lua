@@ -54,4 +54,5 @@ function module.Looks:Classic(popup)
 	select(3, popup.shine.animIn:GetAnimations()):SetOffset(70, 0)
 
 	popup.raidIcon:SetPoint("BOTTOMRIGHT", popup.background, "TOPLEFT", 12, -12)
+	popup.dead:SetAllPoints(popup.modelbg)
 end

@@ -39,7 +39,7 @@ function module:OnInitialize()
 					local oldpopup = self.popup
 					self.popup = self:CreatePopup()
 					if oldpopup:IsVisible() then
-						self:ShowFrame()
+						self:ShowFrame(oldpopup.data)
 					end
 					oldpopup:Hide()
 				end,
@@ -79,10 +79,10 @@ function module:OnInitialize()
 		end
 	end
 
-	self.current = {}
 	self.popup = self:CreatePopup()
 end
 
+local pending
 function module:Announce(callback, id, zone, x, y, dead, source, unit)
 	if source:match("^sync") then
 		local channel, player = source:match("sync:(.+):(.+)")
@@ -95,28 +95,30 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 	if not self.db.profile.sources[source] then
 		return
 	end
-	self.current.id = id
-	self.current.unit = unit
-	self.current.source = source
-	self.current.dead = dead
+	local data = {
+		id = id,
+		unit = unit,
+		source = source,
+		dead = dead,
+	}
 	if InCombatLockdown() then
-		self.current.pending = true
+		pending = data
 	else
-		self:ShowFrame()
+		self:ShowFrame(data)
 	end
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
-	self.current.unit = nil -- can't be trusted to remain the same
+	data.unit = nil -- can't be trusted to remain the same
 end
 
 function module:Marked(callback, id, marker, unit)
-	if self.current.id == id then
-		self:SetRaidIcon(self.popup, marker)
+	if self.popup.data and self.popup.data.id == id then
+		self.popup:SetRaidIcon(marker)
 	end
 end
 
 function module:PLAYER_REGEN_ENABLED()
-	if self.current.pending then
-		self.current.pending = nil
-		self:ShowFrame()
+	if pending then
+		pending = nil
+		self:ShowFrame(pending)
 	end
 end

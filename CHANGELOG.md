@@ -4,6 +4,7 @@
 * Major rewrite to remove the "import data" paradigm
 * Known mobs are now in per-expansion datasets, which you can disable entirely
 * Various skins for the click-target popup (mostly based on the various loot toasts, admittedly)
+* Show on popup whether the mob is dead, and try to pick this up during combat via combat-log events
 * Rearranged the options a lot
 * Marker will now respect other announcement settings
 

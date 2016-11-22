@@ -20,13 +20,13 @@ function module:ApplyLook(popup, look)
 end
 module.Looks = {}
 
-function module:ShowFrame()
+function module:ShowFrame(data)
 	if not self.db.profile.show then return end
-	local current = self.current
-	if not current.id then return end
+	if not (data and data.id) then return end
 	local popup = self.popup
+	popup.data = data
 
-	local name = core:NameForMob(current.id)
+	local name = core:NameForMob(data.id)
 	if name then
 		local macrotext = "/cleartarget\n/targetexact "..name
 		popup:SetAttribute("macrotext", macrotext)
@@ -40,40 +40,36 @@ function module:ShowFrame()
 
 	popup:Show()
 
-	popup.title:SetText(core:GetMobLabel(current.id) or UNKNOWN)
-	popup.source:SetText(current.source or "")
+	popup.title:SetText(core:GetMobLabel(data.id) or UNKNOWN)
+	popup.source:SetText(data.source or "")
 
-	local achievement, achievement_name, completed = ns:AchievementMobStatus(current.id)
+	local achievement, achievement_name, completed = ns:AchievementMobStatus(data.id)
 	if achievement then
 		popup.status:SetFormattedText("%s%s|r", completed and escapes.green or escapes.red, achievement_name)
 	else
 		popup.status:SetText("")
 	end
 
-	self:ShowModel(popup, current)
+	self:ShowModel(popup)
 
-	if current.unit and GetRaidTargetIndex(current.unit) then
-		self:SetRaidIcon(popup, GetRaidTargetIndex(current.unit))
+	if data.unit and GetRaidTargetIndex(data.unit) then
+		popup:SetRaidIcon(GetRaidTargetIndex(data.unit))
 	end
 end
 
-function module:SetRaidIcon(popup, icon)
-	SetRaidTargetIconTexture(popup.raidIcon, icon)
-	popup.raidIcon:Show()
-end
-
-function module:ShowModel(popup, current)
+function module:ShowModel(popup)
 	-- reset the model
 	popup.model:ClearModel()
 	popup.model:SetModelScale(1)
 	popup.model:SetPosition(0, 0, 0)
 	popup.model:SetFacing(0)
 
-	if (current.id or current.unit) and not self:IsModelBlacklisted(current.id, current.unit) then
-		if current.unit then
-			popup.model:SetUnit(current.unit)
+	local data = popup.data
+	if (data.id or data.unit) and not self:IsModelBlacklisted(data.id, data.unit) then
+		if data.unit then
+			popup.model:SetUnit(data.unit)
 		else
-			popup.model:SetCreature(current.id)
+			popup.model:SetCreature(data.id)
 		end
 
 		popup.model:SetPortraitZoom(1)
@@ -82,10 +78,6 @@ function module:ShowModel(popup, current)
 		popup.model:SetPosition(4, 0, 1.5)
 		popup.model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
 	end
-end
-
-function module:ShouldBeDraggable()
-	return (not self.db.profile.locked) or IsModifierKeyDown()
 end
 
 do
@@ -111,10 +103,15 @@ function module:SizeModel(popup, offset, borders)
 	model:SetPoint("BOTTOMRIGHT", popup.modelbg, -offset, offset)
 end
 
+-- copy the Button metatable on to this, because otherwise we lose all regular frame methods
+local PopupClass = setmetatable({}, getmetatable(CreateFrame("Button")))
+local PopupClassMetatable = {__index = PopupClass}
+
 function module:CreatePopup()
 	-- Set up the frame
 	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate")
 	module.popup = popup
+	setmetatable(popup, PopupClassMetatable)
 
 	popup:SetSize(276, 96)
 	popup:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -260, 270)
@@ -148,6 +145,11 @@ function module:CreatePopup()
 	raidIcon:SetSize(16, 16)
 	raidIcon:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]])
 	raidIcon:Hide()
+
+	local dead = model:CreateTexture(nil, "OVERLAY")
+	popup.dead = dead
+	dead:SetAtlas([[XMarksTheSpot]])
+	dead:SetAlpha(0)
 
 	-- text
 	local title = popup:CreateFontString(nil, "ARTWORK", "GameFontNormalMed3");
@@ -202,20 +204,26 @@ function module:CreatePopup()
 		popup[child]:SetAlpha(0)
 	end
 
+	dead.animIn = dead:CreateAnimationGroup()
+	dead.animIn:SetToFinalAlpha(true)
+	CreateAnimationAlpha(dead.animIn, 0, 0.8, 0.6, nil, 1)
+	CreateAnimationAlpha(dead.animIn, 1, 0.2, 0.4, nil, 2)
+	CreateAnimationAlpha(dead.animIn, 0.2, 0.6, 0.3, nil, 3)
+	CreateAnimationAlpha(dead.animIn, 0.6, 0.4, 0.3, nil, 4)
+
 	glow.animIn = glow:CreateAnimationGroup()
-	glow.animIn:SetScript("OnFinished", function(self) self:GetParent():Hide() end)
+	glow.animIn:SetScript("OnFinished", popup.scripts.AnimationHideParent)
 	CreateAnimationAlpha(glow.animIn, 0, 1, 0.2, nil, 1)
 	CreateAnimationAlpha(glow.animIn, 1, 0, 0.5, nil, 2)
 
 	glow.animEnter = glow:CreateAnimationGroup()
 	glow.animEnter:SetLooping("BOUNCE")
-	glow.animEnter:SetScript("OnFinished", function(self) self:GetParent():Hide() end)
+	glow.animEnter:SetScript("OnFinished", popup.scripts.AnimationHideParent)
 	CreateAnimationAlpha(glow.animEnter, 0, 0.3, 0.8, nil, 1)
 	CreateAnimationAlpha(glow.animEnter, 0.3, 0, 0.8, nil, 2)
 
 	shine.animIn = shine:CreateAnimationGroup()
-	shine.animIn:SetScript("OnFinished", function(self) self:GetParent():Hide() end)
-
+	shine.animIn:SetScript("OnFinished", popup.scripts.AnimationHideParent)
 	CreateAnimationAlpha(shine.animIn, 0, 1, 0.1, nil, 1)
 	CreateAnimationAlpha(shine.animIn, 1, 0, 0.25, 0.175, 2)
 	local shineTranslate = shine.animIn:CreateAnimation("Translation")
@@ -224,81 +232,17 @@ function module:CreatePopup()
 	shineTranslate:SetOrder(2)
 
 	-- handlers
-	popup:HookScript("OnShow", function(self)
-		self.glow:Show()
-		self.glow.animIn:Play()
-		self.shine:Show()
-		self.shine.animIn:Play()
+	popup:HookScript("OnShow", popup.scripts.OnShow)
+	popup:HookScript("OnHide", popup.scripts.OnHide)
+	popup:SetScript("OnEvent", popup.scripts.OnEvent)
+	popup:SetScript("OnEnter", popup.scripts.OnEnter)
+	popup:SetScript("OnLeave", popup.scripts.OnLeave)
+	popup:SetScript("OnUpdate", popup.scripts.OnUpdate)
+	popup:SetScript("OnDragStart", popup.scripts.OnDragStart)
+	popup:SetScript("OnDragStop", popup.scripts.OnDragStop)
 
-		self.animIn:Play()
-
-		self.elapsed = 0
-	end)
-	popup:HookScript("OnHide", function(self)
-		self.glow.animIn:Stop()
-		self.shine.animIn:Stop()
-		self.animIn:Stop()
-
-		self.raidIcon:Hide()
-	end)
-	popup:SetScript("OnEnter", function(self)
-		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
-		GameTooltip:SetOwner(self, anchor, 0, -60)
-		GameTooltip:AddLine(escapes.leftClick .. " " .. TARGET)
-		if module.db.profile.locked then
-			GameTooltip:AddLine(escapes.keyDown .. "ALT + " .. escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
-		else
-			GameTooltip:AddLine(escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
-		end
-		GameTooltip:Show()
-
-		self.glow.animIn:Stop() -- in case
-		self.glow.animEnter:Stop() -- in case
-
-		self.glow:Show()
-		self.glow.animEnter:Play()
-	end)
-	popup:SetScript("OnLeave", function(self)
-		GameTooltip:Hide()
-
-		self.glow.animEnter:Finish()
-	end)
-
-	popup:SetScript("OnUpdate", function(self, elapsed)
-		self.elapsed = self.elapsed + elapsed
-		if self.elapsed > 0.5 then
-			if not self.model:GetModelFileID() then
-				-- Sometimes models don't load the first time you request them for some reason. In this case,
-				-- re-requesting it seems to be needed. This might be a client bug, so testing whether it's still
-				-- necessary would be wise. (Added in 70100, reproducing by flying around Pandaria works pretty well.)
-				Debug("Poll for model reload")
-				module:ShowModel(self, module.current)
-			end
-			self.elapsed = 0
-		end
-	end)
-
-	popup:SetScript("OnDragStart", function(self)
-		if module:ShouldBeDraggable() then
-			self:StartMoving()
-		end
-	end)
-	popup:SetScript("OnDragStop", function(self)
-		self:StopMovingOrSizing()
-	end)
-
-	popup.model:SetScript("OnHide", function(self)
-		self:ClearModel()
-	end)
-
-	popup.close:SetScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
-		GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
-		GameTooltip:Show()
-	end)
-	popup.close:SetScript("OnLeave", function(self)
-		GameTooltip:Hide()
-	end)
+	popup.close:SetScript("OnEnter", popup.scripts.CloseOnEnter)
+	popup.close:SetScript("OnLeave", popup.scripts.CloseOnLeave)
 
 	self:ApplyLook(popup, self.db.profile.style)
 
@@ -319,4 +263,113 @@ function CreateAnimationAlpha(animationGroup, fromAlpha, toAlpha, duration, star
 	end
 
 	return animation
+end
+
+function PopupClass:SetRaidIcon(icon)
+	SetRaidTargetIconTexture(self.raidIcon, icon)
+	self.raidIcon:Show()
+end
+
+function PopupClass:ShouldBeDraggable()
+	return (not module.db.profile.locked) or IsModifierKeyDown()
+end
+
+PopupClass.scripts = {
+	OnEvent = function(self, event, ...)
+		self[event](self, event, ...)
+	end,
+	OnEnter = function(self)
+		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
+		GameTooltip:SetOwner(self, anchor, 0, -60)
+		GameTooltip:AddLine(escapes.leftClick .. " " .. TARGET)
+		if module.db.profile.locked then
+			GameTooltip:AddLine(escapes.keyDown .. "ALT + " .. escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
+		else
+			GameTooltip:AddLine(escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
+		end
+		GameTooltip:Show()
+
+		self.glow.animIn:Stop() -- in case
+		self.glow.animEnter:Stop() -- in case
+
+		self.glow:Show()
+		self.glow.animEnter:Play()
+	end,
+	OnLeave = function(self)
+		GameTooltip:Hide()
+
+		self.glow.animEnter:Finish()
+	end,
+	OnUpdate = function(self, elapsed)
+		self.elapsed = self.elapsed + elapsed
+		if self.elapsed > 0.5 then
+			if not self.model:GetModelFileID() then
+				-- Sometimes models don't load the first time you request them for some reason. In this case,
+				-- re-requesting it seems to be needed. This might be a client bug, so testing whether it's still
+				-- necessary would be wise. (Added in 70100, reproducing by flying around Pandaria works pretty well.)
+				Debug("Poll for model reload")
+				module:ShowModel(self)
+			end
+			self.elapsed = 0
+		end
+	end,
+	OnDragStart = function(self)
+		if self:ShouldBeDraggable() then
+			self:StartMoving()
+		end
+	end,
+	OnDragStop = function(self)
+		self:StopMovingOrSizing()
+	end,
+	-- hooked:
+	OnShow = function(self)
+		self.glow:Show()
+		self.glow.animIn:Play()
+		self.shine:Show()
+		self.shine.animIn:Play()
+
+		self.animIn:Play()
+
+		self.dead:SetAlpha(0)
+		if self.data.dead then
+			self.dead.animIn:Play()
+		end
+
+		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+
+		self.elapsed = 0
+	end,
+	OnHide = function(self)
+		self.glow.animIn:Stop()
+		self.shine.animIn:Stop()
+		self.dead.animIn:Stop()
+		self.animIn:Stop()
+
+		self.raidIcon:Hide()
+		self.dead:SetAlpha(0)
+		self.model:ClearModel()
+
+		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	end,
+	-- Close button
+	CloseOnEnter = function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
+		GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
+		GameTooltip:Show()
+	end,
+	CloseOnLeave = function(self)
+		GameTooltip:Hide()
+	end,
+	-- Common animations
+	AnimationHideParent = function(self) self:GetParent():Hide() end,
+}
+-- timeStamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags
+function PopupClass:COMBAT_LOG_EVENT_UNFILTERED(_, _, combatEvent, _, _, _, _, _, destGUID)
+	if combatEvent ~= "UNIT_DIED" then
+		return
+	end
+	if destGUID and ns.IdFromGuid(destGUID) == self.data.id then
+		self.data.dead = true
+		self.dead.animIn:Play()
+	end
 end

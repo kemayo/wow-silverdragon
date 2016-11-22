@@ -32,4 +32,5 @@ function module.Looks:LessAwesome(popup)
 	popup.shine:SetPoint("BOTTOMLEFT", -10, 12)
 
 	popup.raidIcon:SetPoint("BOTTOM", popup.modelbg, "TOP", 0, -8)
+	popup.dead:SetAllPoints(popup.modelbg)
 end

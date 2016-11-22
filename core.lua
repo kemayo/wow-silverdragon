@@ -372,6 +372,7 @@ do
 	 	end
 		return tonumber(id)
 	end
+	ns.IdFromGuid = npcIdFromGuid
 	function addon:UnitID(unit)
 		return npcIdFromGuid(UnitGUID(unit))
 	end
