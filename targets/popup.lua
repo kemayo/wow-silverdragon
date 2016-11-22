@@ -267,7 +267,7 @@ function module:CreatePopup()
 	popup:SetScript("OnUpdate", function(self, elapsed)
 		self.elapsed = self.elapsed + elapsed
 		if self.elapsed > 0.5 then
-			if not self.model.loaded then
+			if not self.model:GetModelFileID() then
 				module:ShowModel(self, module.current)
 			end
 			self.elapsed = 0
@@ -284,11 +284,7 @@ function module:CreatePopup()
 	end)
 
 	popup.model:SetScript("OnHide", function(self)
-		self.loaded = nil
 		self:ClearModel()
-	end)
-	popup.model:SetScript("OnUpdateModel", function(self)
-		self.loaded = true
 	end)
 
 	popup.close:SetScript("OnEnter", function(self)
