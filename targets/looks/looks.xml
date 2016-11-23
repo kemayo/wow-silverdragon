@@ -5,4 +5,6 @@
   <Script file="silverdragon.lua"/>
   <Script file="lessawesome.lua"/>
   <Script file="transmog.lua"/>
+  <Script file="store.lua"/>
+  <Script file="storesilver.lua"/>
 </Ui>
