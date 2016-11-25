@@ -2,10 +2,15 @@ local myname, ns = ...
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 
+-- a few of these get to be hardcoded, because of bad types in the API
 local achievements = {
 	[1312] = {}, -- Bloody Rare (BC mobs)
 	[2257] = {}, -- Frostbitten (Wrath mobs)
-	[7317] = {}, -- One Many Army (Vale)
+	[7317] = {
+		[58771] = 20522, -- Quid
+		[58778] = 20521, -- Aetha
+		[63510] = 20527, -- Wulon
+	}, -- One Many Army (Vale)
 	[7439] = {}, -- Glorious! (Pandaria mobs)
 	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
 	[8714] = {}, -- Timeless Champion (Timeless Isle)
@@ -28,6 +33,7 @@ local achievements = {
 	[11264] = {}, -- AdventurerOfHighmountain
 	[11265] = {}, -- AdventurerOfSuramar
 }
+core.achievements = achievements
 local mobs_to_achievement = {
 	-- [43819] = 2257,
 }
@@ -43,7 +49,7 @@ function ns:AchievementMobStatus(id)
 	end
 	local criteria = achievements[achievement][id]
 	local _, name = GetAchievementInfo(achievement)
-	local _, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
+	local _, _, completed = GetAchievementCriteriaInfoByID(achievement, criteria)
 	return achievement, name, completed
 end
 
@@ -54,16 +60,18 @@ function ns:LoadAllAchievementMobs()
 	for achievement in pairs(achievements) do
 		local num_criteria = GetAchievementNumCriteria(achievement)
 		for i = 1, num_criteria do
-			local description, ctype, completed, _, _, _, _, id = GetAchievementCriteriaInfo(achievement, i)
+			local description, ctype, completed, _, _, _, _, id, _, criteriaid = GetAchievementCriteriaInfo(achievement, i)
 			if ctype == 0 then
 				-- "kill a mob"
-				achievements[achievement][id] = i
-				mobs_to_achievement[id] = achievement
+				achievements[achievement][id] = criteriaid
 			elseif ctype == 27 then
 				-- "complete a quest"
 
 			end
 			achievements_loaded = true
+		end
+		for mobid, criteriaid in pairs(achievements[achievement]) do
+			mobs_to_achievement[mobid] = achievement
 		end
 	end
 end
