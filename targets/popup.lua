@@ -40,6 +40,17 @@ function module:ShowFrame(data)
 
 	popup:Show()
 
+	self:RefreshMobData(popup)
+
+	self:ShowModel(popup)
+
+	if data.unit and GetRaidTargetIndex(data.unit) then
+		popup:SetRaidIcon(GetRaidTargetIndex(data.unit))
+	end
+end
+
+function module:RefreshMobData(popup)
+	local data = popup.data
 	popup.title:SetText(core:GetMobLabel(data.id) or UNKNOWN)
 	popup.source:SetText(data.source or "")
 
@@ -48,12 +59,6 @@ function module:ShowFrame(data)
 		popup.status:SetFormattedText("%s%s|r", completed and escapes.green or escapes.red, achievement_name)
 	else
 		popup.status:SetText("")
-	end
-
-	self:ShowModel(popup)
-
-	if data.unit and GetRaidTargetIndex(data.unit) then
-		popup:SetRaidIcon(GetRaidTargetIndex(data.unit))
 	end
 end
 
@@ -371,5 +376,8 @@ function PopupClass:COMBAT_LOG_EVENT_UNFILTERED(_, _, combatEvent, _, _, _, _, _
 	if destGUID and ns.IdFromGuid(destGUID) == self.data.id then
 		self.data.dead = true
 		self.dead.animIn:Play()
+
+		-- might have changed things like achievement status
+		module:RefreshMobData(self)
 	end
 end
