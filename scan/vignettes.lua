@@ -90,8 +90,8 @@ function module:WORLD_MAP_UPDATE(event)
 	if not self.db.profile.pointsofinterest then return end
 	-- local poiCount = GetNumMapLandmarks()
 	for i=1, NUM_WORLDMAP_POIS do
-		local name, description, texture_index, x, y = GetMapLandmarkInfo(i)
-		if name and texture_index ~= 197 then
+		local landmarkType, name, description, textureIndex, x, y, mapLinkID, inBattleMap, graveyardID, areaID, poiID, isObjectIcon, atlasIcon = GetMapLandmarkInfo(i)
+		if landmarkType == LE_MAP_LANDMARK_TYPE_VIGNETTE and name then
 			self:WorkOutMobFromVignette(name, x, y, "point-of-interest")
 		end
 	end
