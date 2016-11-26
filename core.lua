@@ -195,6 +195,7 @@ do
 	local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip", _G.UIParent, "GameTooltipTemplate")
 	cache_tooltip:SetOwner(_G.WorldFrame, "ANCHOR_NONE")
 	local function TextFromHyperlink(link)
+		cache_tooltip:ClearLines()
 		cache_tooltip:SetHyperlink(link)
 		local text = SDCacheTooltipTextLeft1:GetText()
 		if text and text ~= "" then
