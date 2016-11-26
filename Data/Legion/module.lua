@@ -205,7 +205,7 @@ function module:OnInitialize()
 		[109504] = {name="Ragemaw",locations={[1015]={32604860},},},
 		[109575] = {name="Valakar the Thirsty",locations={[1015]={58002120},},},
 		[109584] = {name="Fjordun",locations={[1015]={65604000},},},
-		[109594] = {name="Stormfeather",locations={[1015]={50605780},},},
+		[109594] = {name="Stormfeather",locations={[1015]={50605780},},quest=45497,},
 		[109620] = {name="The Whisperer",locations={[1015]={43200760},},},
 		[109630] = {name="Immolian",locations={[1015]={28204860},},},
 		[109641] = {name="Arcanor Prime",locations={[1015]={56401120},[1018]={64409920},},},
