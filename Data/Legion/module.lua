@@ -196,7 +196,7 @@ function module:OnInitialize()
 		[109125] = {name="Kathaw the Savage",locations={[1018]={44208400},},},
 		[109163] = {name="Captain Dargun",locations={[1022]={68402220},},},
 		[109195] = {name="Soulbinder Halldora",locations={[1017]={55202340,55801640,61201740},},},
-		[109281] = {name="Malisandra",locations={[1018]={42407640},},},
+		[109281] = {name="Malisandra",locations={[1018]={42407640},},quest=45501,},
 		[109317] = {name="Rulf Bonesnapper",locations={[1017]={45807840,47208880,49607060,51808180,52006420,52207620},},},
 		[109318] = {name="Runeseer Sigvid",locations={[1017]={76600940},},},
 		[109498] = {name="Xaander",locations={[1024]={52605840},},},
