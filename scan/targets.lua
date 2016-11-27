@@ -87,18 +87,22 @@ function module:ProcessUnit(unit, source)
 	if not UnitIsVisible(unit) then return end
 	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
 	local id = core:UnitID(unit)
+	if not id then return end
 	local unittype = UnitClassification(unit)
 	local is_rare = (id and rare_nonflags[id]) or (unittype == 'rare' or unittype == 'rareelite')
 	local should_process = false
-	if id then
-		if globaldb.always[id] then
-			should_process = true
-		elseif is_rare then
-			should_process = true
-		elseif ns.mobdb[id] and not self.db.profile.rare_only then
-			should_process = true
-		end
+
+	if globaldb.always[id] then
+		-- Manually-added mobs: always get announced
+		should_process = true
+	elseif is_rare then
+		-- It's actually rare, so it gets announced
+		should_process = true
+	elseif ns.mobdb[id] then
+		-- It's a known mob, but no longer flagged as rare, so we announce based on the setting
+		should_process = not self.db.profile.rare_only
 	end
+
 	if should_process then
 		-- from this point on, it's a rare
 		local x, y, zone = HBD:GetPlayerZonePosition()
@@ -106,8 +110,6 @@ function module:ProcessUnit(unit, source)
 			-- there are only a few places where this will happen
 			return
 		end
-
-		local name = UnitName(unit)
 
 		if
 			(source == 'target' and not self.db.profile.targets)
