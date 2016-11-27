@@ -6,11 +6,11 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local achievements = {
 	[1312] = {}, -- Bloody Rare (BC mobs)
 	[2257] = {}, -- Frostbitten (Wrath mobs)
-	[7317] = {
+	[7317] = { -- One Many Army (Vale)
 		[58771] = 20522, -- Quid
 		[58778] = 20521, -- Aetha
 		[63510] = 20527, -- Wulon
-	}, -- One Many Army (Vale)
+	},
 	[7439] = {}, -- Glorious! (Pandaria mobs)
 	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
 	[8714] = {}, -- Timeless Champion (Timeless Isle)
@@ -28,7 +28,14 @@ local achievements = {
 	[10070] = {}, -- Jungle Stalker (Tanaan)
 	[11160] = {}, -- UnleashedMonstrosities
 	[11261] = {}, -- AdventurerOfAzsuna
-	[11262] = {}, -- AdventurerOfValsharah
+	[11262] = { -- AdventurerOfValsharah
+		[94485] = 33282, -- Pollous the Fetid (Purging the River)
+		[95123] = 33284, -- Grelda the Hag
+		[95318] = 33286, -- Perrexx the Corruptor
+		[97504] = 33287, -- Wraithtalon
+		[97517] = 33288, -- Dreadbog
+		[103785] = 33285, -- Well Fed Bear (Old Bear Trap)
+	},
 	[11263] = {}, -- AdventurerOfStormheim
 	[11264] = {}, -- AdventurerOfHighmountain
 	[11265] = {}, -- AdventurerOfSuramar
