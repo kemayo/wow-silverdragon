@@ -27,8 +27,12 @@ local achievements = {
 	[10061] = {}, -- Hellbane (Tanaan)
 	[10070] = {}, -- Jungle Stalker (Tanaan)
 	[11160] = {}, -- UnleashedMonstrosities
-	[11261] = {}, -- AdventurerOfAzsuna
+	[11261] = { -- AdventurerOfAzsuna
+		[90244] = 33262, --Arcavellus
+		[91100] = 32403, -- Brogozog (Marius & Tehd versus a Fel Lord)
+	},
 	[11262] = { -- AdventurerOfValsharah
+		[94414] = 33281, -- Kiranys Duskwhisper (Haunted Manor)
 		[94485] = 33282, -- Pollous the Fetid (Purging the River)
 		[95123] = 33284, -- Grelda the Hag
 		[95318] = 33286, -- Perrexx the Corruptor
@@ -37,7 +41,12 @@ local achievements = {
 		[103785] = 33285, -- Well Fed Bear (Old Bear Trap)
 	},
 	[11263] = {}, -- AdventurerOfStormheim
-	[11264] = {}, -- AdventurerOfHighmountain
+	[11264] = { -- AdventurerOfHighmountain
+		[97593] = 33329, -- Mynta Talonscreech (Scout Harefoot)
+		[100230] = 33336, -- Ryael (Amateur Hunters)
+		[100231] = 33336, -- Dargok (Amateur Hunters)
+		[100232] = 33336, -- Sure Shot (Amateur Hunters)
+	},
 	[11265] = {}, -- AdventurerOfSuramar
 }
 core.achievements = achievements
