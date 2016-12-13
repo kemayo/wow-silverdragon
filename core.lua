@@ -299,35 +299,6 @@ do
 	end
 end
 do
-	local alliance_ignore_mobs = { --Mobs alliance cannot kill
-		[51071] = true,--Captain Florence (Vashjir)
-		[68318] = true,--Dalan Nightbreaker (Krasarang)
-		[68319] = true,--Disha Fearwarden (Krasarang)
-		[68317] = true,--Mavis Harms (Krasarang)
-		-- draenor quartermasters...
-		[82876] = true,--Grand Marshal Tremblade (Ashran)
-		[82878] = true,--Marshal Gabriel (Ashran)
-		[82880] = true,--Marshal Karsh Stormforge (Ashran)
-		-- legion
-		[92951] = true, --Houndmaster Ely
-		[94313] = true, -- Daniel "Boomer" Vorick
-	}
-	local horde_ignore_mobs = { --Mobs horde cannot kill
-		[51079] = true,--Captain Foulwind (Vashjir)
-		[68321] = true,--Kar Warmaker (Krasarang)
-		[68322] = true,--Muerta (Krasarang)
-		[68320] = true,--Ubunti the Shade (Krasarang)
-		-- draenor quartermasters...
-		[82877] = true,--High Warlord Volrath (Ashran)
-		[82883] = true,--Warlord Noktyn (Ashran)
-		[82882] = true,--General Aved (Ashran)
-		-- legion
-		[92611] = true,--deathsquad: daggerfang
-		[92626] = true,--deathsquad: adams
-		[92631] = true,--deathsquad: jess
-		[92633] = true,--deathsquad: huwe
-		[92634] = true,--deathsquad: perez
-	}
 	local zone_ignores = {
 		[950] = {
 			[32491] = true, -- Time-Lost
@@ -335,14 +306,14 @@ do
 	}
 	local faction = UnitFactionGroup("player")
 	function addon:ShouldIgnoreMob(id, zone)
-		--Maybe add an option for this later. This checks unit faction and ignores mobs your faction cannot do anything with.
-		if faction == "Alliance" and alliance_ignore_mobs[id] or faction == "Horde" and horde_ignore_mobs[id] then
-			return true
-		end
 		if globaldb.ignore[id] then
 			return true
 		end
 		if zone and zone_ignores[zone] and zone_ignores[zone][id] then
+			return true
+		end
+		--Maybe add an option for this later. This checks unit faction and ignores mobs your faction cannot do anything with.
+		if mobdb[id] and mobdb[id].faction == faction then
 			return true
 		end
 	end
