@@ -42,6 +42,7 @@ local achievements = {
 	},
 	[11263] = {}, -- AdventurerOfStormheim
 	[11264] = { -- AdventurerOfHighmountain
+		[96621] = 33321, -- Mellok, Son of Torok
 		[97593] = 33329, -- Mynta Talonscreech (Scout Harefoot)
 		[100230] = 33336, -- Ryael (Amateur Hunters)
 		[100231] = 33336, -- Dargok (Amateur Hunters)

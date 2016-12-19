@@ -198,7 +198,7 @@ do
 		cache_tooltip:ClearLines()
 		cache_tooltip:SetHyperlink(link)
 		local text = SDCacheTooltipTextLeft1:GetText()
-		if text and text ~= "" then
+		if text and text ~= "" and text ~= UNKNOWN then
 			return text
 		end
 	end
