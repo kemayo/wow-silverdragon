@@ -8,6 +8,8 @@ from . import NPC, lua
 class LocalNPC(NPC):
     def __init__(self, id, data, *args, **kw):
         NPC.__init__(self, id, *args, **kw)
+        if 'locations' in data:
+            data['locations'] = self._filter_locations(data['locations'])
         self.data.update(data)
 
     def load(self):

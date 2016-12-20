@@ -91,29 +91,14 @@ class NPC:
         if npc.id != self.id:
             return
 
-        oldlocations = self.data.get('locations', {})
-        newlocations = npc.data.get('locations', {})
+        locations = self._filter_locations(merge_locations(
+            self.data.get('locations', {}),
+            npc.data.get('locations', {})
+        ))
 
         self.data.update(npc.clean_data())
 
-        if oldlocations:
-            if newlocations:
-                for zone, coords in newlocations.items():
-                    if zone in oldlocations:
-                        for xy in coords:
-                            x, y = unpack_coords(xy)
-                            for oldxy in oldlocations[zone]:
-                                oldx, oldy = unpack_coords(oldxy)
-                                if abs(oldx - x) < 0.05 and abs(oldy - y) < 0.05:
-                                    break
-                            else:
-                                # list fully looped through, not broken.
-                                oldlocations[zone].append(xy)
-                    else:
-                        oldlocations[zone] = coords
-            self.data['locations'] = oldlocations
-        elif newlocations:
-            self.data['locations'] = newlocations
+        self.data['locations'] = locations
 
     def add_notes(self, notes):
         self.data['notes'] = notes
@@ -128,12 +113,49 @@ class NPC:
         return text.replace('&#39;', "'").replace('&#x27;', "'").replace('&quot;', '"')
 
     def _filter_locations(self, locations):
-        if self.id == 32491:
+        if self.id == 32491 and 950 in locations:
             # Time-lost needs to get cleaned up a little
             del(locations[950])
-        return locations
+        cleaned = {}
+        for zone, coords in locations.items():
+            coords = set(coords)
+            cleaned[zone] = set()
+            removed = set()
+            for xy in coords:
+                if too_close(coords - removed, xy):
+                    removed.add(xy)
+                else:
+                    cleaned[zone].add(xy)
+            if cleaned[zone]:
+                cleaned[zone] = list(cleaned[zone])
+                cleaned[zone].sort()
+            else:
+                del(cleaned[zone])
+        return cleaned
+
 
 def pack_coords(x, y):
     return math.floor(x * 10000 + 0.5) * 10000 + math.floor(y * 10000 + 0.5)
+
+
 def unpack_coords(coord):
     return math.floor(coord / 10000) / 10000, (coord % 10000) / 10000
+
+
+def too_close(coords, xy):
+    x, y = unpack_coords(xy)
+    for otherxy in coords:
+        if otherxy == xy:
+            continue
+        otherx, othery = unpack_coords(otherxy)
+        if abs(otherx - x) < 0.05 and abs(othery - y) < 0.05:
+            return True
+
+
+def merge_locations(old, new):
+    for zone, coords in new.items():
+        if zone in old:
+            old[zone].extend(coords)
+        else:
+            old[zone] = coords
+    return old
