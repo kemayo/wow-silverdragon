@@ -1,5 +1,8 @@
 # Changelog
 
+## Changed in v4.0.1
+* Properly faction-classify all remaining faction-specific rares
+
 ## Changed in v4.0.0
 * Major rewrite to remove the "import data" paradigm
 * Known mobs are now in per-expansion datasets, which you can disable entirely
