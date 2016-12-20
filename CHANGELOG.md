@@ -2,6 +2,7 @@
 
 ## Changed in v4.0.1
 * Properly faction-classify all remaining faction-specific rares
+* Lots more Legion rare questids
 
 ## Changed in v4.0.0
 * Major rewrite to remove the "import data" paradigm
