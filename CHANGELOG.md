@@ -4,6 +4,7 @@
 * New feature: automatic hiding of the popup after you've not interacted with it for a while (default: 30 seconds)
 * Properly faction-classify all remaining faction-specific rares
 * Lots more Legion rare questids
+* Cleaned up a lot of tight clusters of the same mob on the map
 
 ## Changed in v4.0.0
 * Major rewrite to remove the "import data" paradigm
