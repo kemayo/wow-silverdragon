@@ -236,6 +236,11 @@ function module:CreatePopup()
 	shineTranslate:SetDuration(0.425)
 	shineTranslate:SetOrder(2)
 
+	popup.animFade = popup:CreateAnimationGroup()
+	popup.animFade:SetScript("OnFinished", popup.scripts.AnimationRequestHideParent)
+	popup.animFade:SetToFinalAlpha(true)
+	popup.animFade.anim = CreateAnimationAlpha(popup.animFade, 1, 0, 2, self.db.profile.closeAfter, 1)
+
 	-- handlers
 	popup:HookScript("OnShow", popup.scripts.OnShow)
 	popup:HookScript("OnHide", popup.scripts.OnHide)
@@ -279,11 +284,25 @@ function PopupClass:ShouldBeDraggable()
 	return (not module.db.profile.locked) or IsModifierKeyDown()
 end
 
+function PopupClass:HideWhenPossible()
+	-- this is for animations that want to hide the popup itself, since it can't be touched in-combat
+	if InCombatLockdown() then
+		self.waitingToHide = true
+	else
+		self:Hide()
+	end
+end
+
 PopupClass.scripts = {
 	OnEvent = function(self, event, ...)
 		self[event](self, event, ...)
 	end,
 	OnEnter = function(self)
+		if self.waitingToHide then
+			-- we're "hidden" via alpha==0 now, so no tooltip
+			return
+		end
+
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, -60)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. TARGET)
@@ -299,11 +318,17 @@ PopupClass.scripts = {
 
 		self.glow:Show()
 		self.glow.animEnter:Play()
+
+		-- reset the automatic hiding
+		self.animFade:Stop()
+		self.animFade.anim:SetStartDelay(module.db.profile.closeAfter)
 	end,
 	OnLeave = function(self)
 		GameTooltip:Hide()
 
 		self.glow.animEnter:Finish()
+
+		self.animFade:Play()
 	end,
 	OnUpdate = function(self, elapsed)
 		self.elapsed = self.elapsed + elapsed
@@ -328,6 +353,8 @@ PopupClass.scripts = {
 	end,
 	-- hooked:
 	OnShow = function(self)
+		self:SetAlpha(1)
+
 		self.glow:Show()
 		self.glow.animIn:Play()
 		self.shine:Show()
@@ -335,12 +362,16 @@ PopupClass.scripts = {
 
 		self.animIn:Play()
 
+		self.animFade.anim:SetStartDelay(module.db.profile.closeAfter)
+		self.animFade:Play() -- woo delay
+
 		self.dead:SetAlpha(0)
 		if self.data.dead then
 			self.dead.animIn:Play()
 		end
 
 		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 
 		self.elapsed = 0
 	end,
@@ -349,12 +380,16 @@ PopupClass.scripts = {
 		self.shine.animIn:Stop()
 		self.dead.animIn:Stop()
 		self.animIn:Stop()
+		self.animFade:Stop()
 
 		self.raidIcon:Hide()
 		self.dead:SetAlpha(0)
 		self.model:ClearModel()
 
 		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+
+		self.waitingToHide = false
 	end,
 	-- Close button
 	CloseOnEnter = function(self)
@@ -366,7 +401,12 @@ PopupClass.scripts = {
 		GameTooltip:Hide()
 	end,
 	-- Common animations
-	AnimationHideParent = function(self) self:GetParent():Hide() end,
+	AnimationHideParent = function(self)
+		self:GetParent():Hide()
+	end,
+	AnimationRequestHideParent = function(self)
+		self:GetParent():HideWhenPossible()
+	end,
 }
 -- timeStamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags
 function PopupClass:COMBAT_LOG_EVENT_UNFILTERED(_, _, combatEvent, _, _, _, _, _, destGUID)
@@ -379,5 +419,10 @@ function PopupClass:COMBAT_LOG_EVENT_UNFILTERED(_, _, combatEvent, _, _, _, _, _
 
 		-- might have changed things like achievement status
 		module:RefreshMobData(self)
+	end
+end
+function PopupClass:PLAYER_REGEN_ENABLED()
+	if self.waitingToHide then
+		self:Hide()
 	end
 end

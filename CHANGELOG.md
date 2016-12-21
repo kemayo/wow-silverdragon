@@ -1,6 +1,7 @@
 # Changelog
 
 ## Changed in v4.0.1
+* New feature: automatic hiding of the popup after you've not interacted with it for a while (default: 30 seconds)
 * Properly faction-classify all remaining faction-specific rares
 * Lots more Legion rare questids
 

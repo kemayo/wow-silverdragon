@@ -10,6 +10,7 @@ function module:OnInitialize()
 			show = true,
 			locked = true,
 			style = "SilverDragon",
+			closeAfter = 30,
 			sources = {
 				target = false,
 				grouptarget = true,
@@ -48,6 +49,15 @@ function module:OnInitialize()
 					about = config.desc("Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it. It can show a 3d model of that rare, but only if we already know the ID of the rare (though a data import), or if it was found by being targetted. Nameplates are right out.", 0),
 					show = config.toggle("Show", "Show the click-target frame.", 10),
 					locked = config.toggle("Locked", "Lock the click-target frame in place unless ALT is held down", 15),
+					closeAfter = {
+						type = "range",
+						name = "Close after",
+						desc = "How long to leave the target frame up without you interacting with it before it'll go away, in seconds",
+						width = "full",
+						min = 5,
+						max = 600,
+						step = 1,
+					},
 					sources = {
 						type="multiselect",
 						name = "Rare Sources",
