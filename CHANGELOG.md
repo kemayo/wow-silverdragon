@@ -2,6 +2,8 @@
 
 ## Changed in v4.0.1
 * New feature: automatic hiding of the popup after you've not interacted with it for a while (default: 30 seconds)
+* Added text input to the ignore options, so you don't have to find the mob in its expansion
+* Improved the text input for ignore/custom, so you can enter "target", "mouseover", the mob's id, the mob's name (if we know about it)
 * Properly faction-classify all remaining faction-specific rares
 * Lots more Legion rare questids
 * Cleaned up a lot of tight clusters of the same mob on the map
