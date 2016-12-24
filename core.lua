@@ -212,7 +212,7 @@ do
 		if self.db.locale.mob_name[id] then
 			mobNameToId[self.db.locale.mob_name[id]] = id
 		end
-		return self.db.locale.mob_name[id]
+		return self.db.locale.mob_name[id] or (mobdb[id] and mobdb[id].name)
 	end
 	function addon:IdForMob(name)
 		return mobNameToId[name]
