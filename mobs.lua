@@ -18,6 +18,35 @@ local function toggle_mob(id)
 	}
 end
 
+local function input_to_mobid(value)
+	value = value:trim()
+	if value == "target" or value == "mouseover" then
+		return core:UnitID(value)
+	end
+	if value:match("^%d+$") then
+		return tonumber(value)
+	end
+	return core:IdForMob(value)
+end
+
+local function mob_input(name, desc, order, setter)
+	return {
+		type = "input",
+		name = name,
+		desc = desc,
+		get = function() return "" end,
+		set = function(info, value)
+			setter(info, input_to_mobid(value))
+		end,
+		validate = function(info, value)
+			if input_to_mobid(value) then
+				return true
+			end
+		end,
+		order = order,
+	}
+end
+
 function module:OnEnable()
 	local config = core:GetModule("Config", true)
 	if config then
@@ -36,22 +65,10 @@ function module:OnEnable()
 						name = "Custom",
 						order = 1,
 						args = {
-							add = {
-								type = "input",
-								name = ADD,
-								desc = "Add a mob by entering its id.",
-								get = function() return "" end,
-								set = function(info, value)
-									core.db.global.always[tonumber(value)] = true
-									self:BuildCustomList(config.options)
-								end,
-								validate = function(info, v)
-									if v:match("^%d+$") then
-										return true
-									end
-								end,
-								order = 1,
-							},
+							add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)
+								core.db.global.always[id] = true
+								self:BuildCustomList(config.options)
+							end),
 							mobs = {
 								type = "group",
 								name = REMOVE,
@@ -69,11 +86,23 @@ function module:OnEnable()
 						type = "group",
 						name = "Ignore",
 						desc = "Mobs you just want to ignore, already",
-						get = function(info) return core.db.global.ignore[info.arg] end,
-						set = function(info, value)
-							core.db.global.ignore[info.arg] = value
-						end,
-						args = {},
+						args = {
+							add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)
+								core.db.global.ignore[id] = true
+								self:BuildIgnoreList(config.options)
+							end),
+							mobs = {
+								type = "group",
+								name = REMOVE,
+								inline = true,
+								get = function() return true end,
+								set = function(info, value)
+									core.db.global.ignore[info.arg] = value
+									config.options.plugins.mobs.mobs.args.ignore.args.mobs.args[info[#info]] = nil
+								end,
+								args = {},
+							}
+						},
 						order = 2,
 					},
 				},
@@ -87,10 +116,10 @@ function module:OnEnable()
 end
 
 function module:BuildIgnoreList(options)
-	wipe(options.plugins.mobs.mobs.args.ignore.args)
+	wipe(options.plugins.mobs.mobs.args.ignore.args.mobs.args)
 	for id, ignored in pairs(core.db.global.ignore) do
 		if ignored then
-			options.plugins.mobs.mobs.args.ignore.args["mob"..id] = toggle_mob(id)
+			options.plugins.mobs.mobs.args.ignore.args.mobs.args["mob"..id] = toggle_mob(id)
 		end
 	end
 end
