@@ -4,6 +4,12 @@ local module = core:NewModule("Data_Warlords")
 
 function module:OnInitialize()
 	core:RegisterMobData("Warlords", {
+		[50883] = {name="Pathrunner",locations={[947]={38803640,42603080,44404340,45406860,52803100,55605200},},mount=true,},
+		[50981] = {name="Luk'hok",locations={[950]={65604180,71005660,76003000,76605680,77404060,83006320},},mount=true,},
+		[50985] = {name="Poundfist",locations={[949]={40602580,43205550,45404750,48405680,51404310},},mount=true,},
+		[50990] = {name="Nakk the Thunderer",locations={[950]={48803420,55203560,60803180,62201500,64402040},},mount=true,tameable=true,},
+		[50992] = {name="Gorok",locations={[941]={22406620,51205020,57401820,62407820,64005380},},mount=true,},
+		[51015] = {name="Silthide",locations={[946]={51408120,61603280,62004540,66805740,78405500},},mount=true,},
 		[71665] = {name="Giant-Slayer Kul",locations={[941]={54602220},},quest=32918,},
 		[71721] = {name="Canyon Icemother",locations={[941]={33802300},},quest=32941,tameable=true,vignette="Oasis Icemother",},
 		[72156] = {name="Borrok the Devourer",locations={[941]={62604220},},},
@@ -254,7 +260,6 @@ function module:OnInitialize()
 		[87234] = {name="Brutag Grimblade",locations={[950]={43003620},},quest=37400,},
 		[87239] = {name="Krahl Deadeye",locations={[950]={42203640},},quest=37473,vignette="Krahl Deathwind",},
 		[87241] = {name="Dreadfang",locations={[987]={47803410},},},
-		[87308] = {name="Gorok the Cleaver",locations={[976]={38607200,39207700,46206320,47204680,48405620,49603640,51406140,54407520,55005400,57202580,58204360},},},
 		[87344] = {name="Gortag Steelgrip",locations={[950]={42203660},},quest=37472,},
 		[87348] = {name="Hoarfrost",locations={[941]={68001960},},quest=37382,},
 		[87351] = {name="Mother of Goren",locations={[941]={71802300},},quest=37381,},

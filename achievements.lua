@@ -38,7 +38,7 @@ local achievements = {
 		[95318] = 33286, -- Perrexx the Corruptor
 		[97504] = 33287, -- Wraithtalon
 		[97517] = 33288, -- Dreadbog
-		[103785] = 33285, -- Well Fed Bear (Old Bear Trap)
+		-- [] = 33285, --  (Old Bear Trap)
 	},
 	[11263] = {}, -- AdventurerOfStormheim
 	[11264] = { -- AdventurerOfHighmountain

@@ -38,7 +38,7 @@ force_include = (
     # On to Draenor
     71992, # Moonfang
     81001, # Nok-Karosh
-    87308, # Gorok the Cleaver
+    50992, # Gorok
     50990, # Nakk the Thunderer
     50981, # Luk'hok
     50985, # Poundfist
