@@ -91,11 +91,12 @@ function handler:OnEnter(mapFile, coord)
 	local id, name, questid, _, _, lastseen = core:GetMobByCoord(zoneid, coord)
 	if not name then
 		tooltip:AddLine(UNKNOWN)
+		tooltip:AddDoubleLine("At", zoneid .. ':' .. coord)
 		return tooltip:Show()
 	end
 	tooltip:AddLine(name)
-	if ns.mobdb[id].note then
-		tooltip:AddDoubleLine("Note", ns.mobdb[id].note)
+	if ns.mobdb[id].notes then
+		tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
 	end
 
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
