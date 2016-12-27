@@ -7,6 +7,9 @@
 * Properly faction-classify all remaining faction-specific rares
 * Lots more Legion rare questids
 * Cleaned up a lot of tight clusters of the same mob on the map
+* Added some fallbacks for mob-names so it's less likely you'll see "Unknown"
+* The wrong Gorok had been included for ages, in Warlords. Sorry, Horde garrison havers.
+* Fixed some of the database migration code
 
 ## Changed in v4.0.0
 * Major rewrite to remove the "import data" paradigm
