@@ -160,16 +160,22 @@ function addon:OnInitialize()
 	}, true)
 	globaldb = self.db.global
 
-	if SilverDragon2DB then
+	if SilverDragon2DB and SilverDragon2DB.global then
 		-- Migrating some data from v2
 
-		for mobid, when in pairs(SilverDragon2DB.global.mob_seen) do
+		for mobid, when in pairs(SilverDragon2DB.global.mob_seen or {}) do
 			if when > 0 then
 				globaldb.mob_seen[mobid] = when
 			end
 		end
-		for mobid, count in pairs(SilverDragon2DB.global.mob_count) do
+		for mobid, count in pairs(SilverDragon2DB.global.mob_count or {}) do
 			globaldb.mob_count[mobid] = count
+		end
+		for mobid, watching in pairs(SilverDragon2DB.global.always or {}) do
+			globaldb.always[mobid] = watching
+		end
+		for mobid, ignored in pairs(SilverDragon2DB.global.ignore or {}) do
+			globaldb.ignore[mobid] = ignored
 		end
 
 		_G["SilverDragon2DB"] = nil
