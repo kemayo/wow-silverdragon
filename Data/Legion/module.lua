@@ -188,7 +188,7 @@ function module:OnInitialize()
 		[108822] = {name="Huntress Estrid",locations={[1017]={39406580},},},
 		[108823] = {name="Halfdan",locations={[1017]={39006520},},},
 		[108827] = {name="Fjorlag, the Grave's Chill",locations={[1017]={65804980},},quest=45507,},
-		[108879] = {name="Humongris",locations={[1018]={24007060},},},
+		[108879] = {name="Humongris",locations={[1018]={24007060},},quest=42819,},
 		[108885] = {name="Aegir Wavecrusher",locations={[1017]={52002360},},},
 		[109015] = {name="Lagertha",locations={[1017]={61407260},},},
 		[109054] = {name="Shal'an",locations={[1018]={79808260},[1033]={25804060},},quest=42831,},
