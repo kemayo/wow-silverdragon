@@ -215,6 +215,7 @@ function module:OnInitialize()
 		[109692] = {name="Lytheron",locations={[1018]={31605860},},quest=45490,},
 		[109702] = {name="Deepclaw",locations={[1015]={55806360},},quest=45489,},
 		[109708] = {name="Undergrell Ringleader",locations={[1018]={66806960},[1033]={15202500},},quest=43176,vignette="Undgrell Attack",},
+		[109943] = {name="Ana-Mouz",locations={[1033]={31366570}},quest=44501,},
 		[109954] = {name="Magister Phaedris",locations={[1033]={41807920},},quest=43348,},
 		[109990] = {name="Nylaathria the Forgotten",locations={[1018]={31604780},},quest=45488,},
 		[109994] = {name="Stormtalon",locations={[1017]={58002940,60202400},},},
