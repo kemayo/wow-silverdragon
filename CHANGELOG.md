@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v4.0.2
+
+* TOC for 7.2
+* Questids for Humongris and Ana-Mouz
+
 ## Changed in v4.0.1
 * New feature: automatic hiding of the popup after you've not interacted with it for a while (default: 30 seconds)
 * Added text input to the ignore options, so you don't have to find the mob in its expansion

@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 70200
 ## Title: SilverDragon (Vanilla)
 ## Notes: Mobs for Vanilla
 ## Version: @project-version@
