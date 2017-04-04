@@ -193,7 +193,7 @@ function module:OnInitialize()
 		[109015] = {name="Lagertha",locations={[1017]={61407260},},},
 		[109054] = {name="Shal'an",locations={[1018]={79808260},[1033]={25804060},},quest=42831,},
 		[109113] = {name="Boulderfall, the Eroded",locations={[1017]={30603300},},quest=40067,},
-		[109125] = {name="Kathaw the Savage",locations={[1018]={44208400},},},
+		[109125] = {name="Kathaw the Savage",locations={[1018]={44208400},},quest=42870,},
 		[109163] = {name="Captain Dargun",locations={[1022]={68402220},},},
 		[109195] = {name="Soulbinder Halldora",locations={[1017]={55202340,55801640,61201740},},},
 		[109281] = {name="Malisandra",locations={[1018]={42407640},},quest=45501,},
