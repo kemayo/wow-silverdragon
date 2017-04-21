@@ -3,7 +3,7 @@
 ## Changed in v4.0.2
 
 * TOC for 7.2
-* Questids for Humongris and Ana-Mouz
+* Questids for various world bosses
 
 ## Changed in v4.0.1
 * New feature: automatic hiding of the popup after you've not interacted with it for a while (default: 30 seconds)
