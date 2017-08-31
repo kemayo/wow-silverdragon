@@ -86,35 +86,36 @@ function module:SetupDataObject()
 	local rares_seen = {}
 	local tooltip
 	function dataobject:OnEnter()
-		local zone = HBD:GetPlayerZone()
-
-		if not (core.db and ns.mobsByZone[zone]) then
+		if not core.db then
 			return
 		end
 
 		tooltip = LibQTip:Acquire("SilverDragonTooltip", 6, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT")
-		tooltip:AddHeader("Name", "Count", "Last Seen")
-		
-		local n = 0
-		for id in pairs(ns.mobsByZone[zone]) do
-			n = n + 1
-			local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
-			local index = tooltip:AddLine(core:GetMobLabel(id) or UNKNOWN,
-				times_seen,
-				core:FormatLastSeen(last_seen),
-				(tameable and 'Tameable' or '')
-			)
-			local completed, completion_knowable = ns:IsMobComplete(id)
-			if completion_knowable then
-				if completed then
-					tooltip:SetLineColor(index, 0, 1, 0)
-				else
-					tooltip:SetLineColor(index, 1, 0, 0)
+
+		local zone = HBD:GetPlayerZone()
+		if ns.mobsByZone[zone] then
+			tooltip:AddHeader("Name", "Count", "Last Seen")
+			local n = 0
+			for id in pairs(ns.mobsByZone[zone]) do
+				n = n + 1
+				local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
+				local index = tooltip:AddLine(core:GetMobLabel(id) or UNKNOWN,
+					times_seen,
+					core:FormatLastSeen(last_seen),
+					(tameable and 'Tameable' or '')
+				)
+				local completed, completion_knowable = ns:IsMobComplete(id)
+				if completion_knowable then
+					if completed then
+						tooltip:SetLineColor(index, 0, 1, 0)
+					else
+						tooltip:SetLineColor(index, 1, 0, 0)
+					end
 				end
 			end
-		end
-		if n == 0 then
-			tooltip:AddLine("None")
+			if n == 0 then
+				tooltip:AddLine("None")
+			end
 		end
 
 		if #rares_seen > 0 then
