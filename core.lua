@@ -208,10 +208,13 @@ do
 			return text
 		end
 	end
-	function addon:NameForMob(id)
+	function addon:NameForMob(id, unit)
 		if not self.db.locale.mob_name[id] then
 			local name = TextFromHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
-			if name then
+			if unit and not name then
+				name = UnitName(unit)
+			end
+			if name and name ~= UNKNOWNOBJECT then
 				self.db.locale.mob_name[id] = name
 			end
 		end

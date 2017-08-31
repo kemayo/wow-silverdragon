@@ -26,7 +26,7 @@ function module:ShowFrame(data)
 	local popup = self.popup
 	popup.data = data
 
-	local name = core:NameForMob(data.id)
+	local name = core:NameForMob(data.id, data.unit)
 	if name then
 		local macrotext = "/cleartarget\n/targetexact "..name
 		popup:SetAttribute("macrotext", macrotext)
