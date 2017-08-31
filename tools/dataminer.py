@@ -67,7 +67,7 @@ expansions = {
     7: "Legion",
 }
 
-TOC_TEMPLATE = """## Interface: 70200
+TOC_TEMPLATE = """## Interface: 70300
 ## Title: SilverDragon ({exp})
 ## Notes: Mobs for {exp}
 ## Version: @project-version@
