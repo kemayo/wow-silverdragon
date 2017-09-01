@@ -16,6 +16,7 @@ class WowheadNPC(NPC):
     URL_BETA = 'http://legion.wowhead.com'
 
     page = False
+    _info = False
 
     def __page(self):
         if self.page is False:
@@ -25,27 +26,44 @@ class WowheadNPC(NPC):
                 print("Couldn't fetch", url)
         return self.page
 
+    def __info(self):
+        if self._info is False:
+            # $.extend(g_npcs[69842], {"classification":2,"id":69842,"location":[5842,6138,5841,-1],"maxlevel":92,"minlevel":92,"name":"Zandalari Warbringer","react":[-1,-1],"type":7});
+            info = re.search(r"\$\.extend\(g_npcs\[%d\], ({.+?})\);" % self.id, self.__page())
+            if info:
+                self._info = json.loads(info.group(1).replace('undefined', 'null'))
+            else:
+                self._info = {}
+        return self._info
+
     def _name(self):
         info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: '(.+?)'};", self.__page())
         if info:
             return self.html_decode(info.group(1).replace("\\'", "'"))
 
     def _creature_type(self):
-        info = re.search(r"PageTemplate\.set\({breadcrumb: \[0,4,(\d+),0\]}\);", self.__page())
-        if info:
-            return types.get(int(info.group(1)), None)
+        return types.get(self.__info().get('type'))
 
     def _locations(self):
         page = self.__page()
         if not page:
-            return
+            return {}
+        coords = {}
+        zones = self.__info().get('location')
+        if zones:
+            for zone in zones:
+                if zone == -1:
+                    continue
+                if not zoneid_to_mapid.get(zone):
+                    print("Got location for unknown zone", zone, self.id)
+                    continue
+                coords[zoneid_to_mapid[zone]] = []
         match = re.search(r"var g_mapperData = {([^;]+)};", page)
         if not match:
-            return
-        coords = {}
+            return {}
         for zone, data in re.findall(r'^,?(\d+): {\n\d: {[^}]*coords: (\[.+?\]) }.*?\n}$', match.group(1), re.MULTILINE):
             zone = int(zone)
-            if not zoneid_to_mapid.get(zone, False):
+            if not zoneid_to_mapid.get(zone):
                 print("Got location for unknown zone", zone, self.id)
                 continue
             zcoords = []
@@ -66,18 +84,10 @@ class WowheadNPC(NPC):
         return bool('\\x5DTameable\\x20' in self.__page())
 
     def _elite(self):
-        info = re.search(r"Markup\.printHtml\('(.+?)', .+?}\);", self.__page())
-        if info:
-            return ("Classification\\x3A\\x20Rare\\x20Elite" in info.group(1)) or ("Classification\\x3A\\x20Elite" in info.group(1))
+        return self.__info().get('classification', 0) in (1, 2)
 
     def _level(self):
-        info = re.search(r"Markup\.printHtml\('(.+?)', .+?}\);", self.__page())
-        if info:
-            level = re.search(r"Level\\x3A\\x20(.+?)\\x5B", info.group(1))
-            if level:
-                if level.group(1).isnumeric():
-                    return int(level.group(1))
-                return False
+        return self.__info().get('maxlevel')
 
     def _quest(self):
         search = questSearch(self._name(), self.session)

@@ -106,6 +106,7 @@ def write_output(expansion, data):
             f.write('\t\t[%d] = %s,\n' % (id, mob.to_lua('name', 'quest', 'vignette', 'tameable', 'notes', 'locations', 'mount', 'boss', 'faction')))
         f.write(MODULE_END_TEMPLATE)
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Suck down a lot of data about rares")
     parser.add_argument('--local', action='store_true', default=True)
@@ -119,6 +120,7 @@ if __name__ == '__main__':
     parser.add_argument('--ptr', action='store_true')
     parser.add_argument('--beta', action='store_true')
     parser.add_argument('--no-cache-list', action='store_false', dest="cache_list")
+    parser.add_argument('--expansion', type=int, default=False)
     ns = parser.parse_args()
 
     local = {}
@@ -141,7 +143,7 @@ if __name__ == '__main__':
         print("LOADING FROM wowdb")
         for creature_type in npc.types.values():
             print("ACQUIRING rares for category", creature_type)
-            wowdb.update(WowdbNPC.query(creature_type, session=session, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
+            wowdb.update(WowdbNPC.query(creature_type, expansion=ns.expansion, session=session, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
 
         for id in force_include:
             if id not in wowdb:
@@ -152,6 +154,8 @@ if __name__ == '__main__':
         for categoryid, c in npc.types.items():
             print("ACQUIRING rares for category", categoryid, c)
             for expansion in expansions:
+                if ns.expansion and expansion != ns.expansion:
+                    continue
                 print("EXPANSION", expansion)
                 # run per-expansion to avoid caps on results-displayed
                 wowhead.update(WowheadNPC.query(categoryid, expansion, session=session, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
@@ -162,7 +166,10 @@ if __name__ == '__main__':
 
     for id, mob in list(wowdb.items()) + list(wowhead.items()):
         if id in local:
+            expansion = local[id].data.get('expansion')
             local[id].extend(mob)
+            if expansion:
+                local[id].data['expansion'] = expansion
         else:
             local[id] = mob
 

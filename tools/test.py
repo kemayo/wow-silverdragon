@@ -61,8 +61,9 @@ class TestWowdb(TestNPC, unittest.TestCase):
 
 class TestInteractions(unittest.TestCase):
     def test_extend(self):
-        kalos_wowdb = npc.wowdb.WowdbNPC(84810, session=self.session)
-        kalos_wowhead = npc.wowhead.WowheadNPC(84810, session=self.session)
+        session = requests_cache.CachedSession(expire_after=10 * 24 * 3600)
+        kalos_wowdb = npc.wowdb.WowdbNPC(84810, session=session)
+        kalos_wowhead = npc.wowhead.WowheadNPC(84810, session=session)
         kalos_wowhead.extend(kalos_wowdb)
         self.assertEqual(kalos_wowhead.data['quest'], 36268)
 

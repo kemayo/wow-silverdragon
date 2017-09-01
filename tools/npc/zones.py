@@ -292,6 +292,9 @@ zoneid_to_mapid = {
     7637: 1033,  # Suramar
     7731: 1080,  # Thunder Totem
     8000: 1015,  # Azsuna
+    8574: 1135,  # Krokuun
+    8701: 1170,  # MacAree
+    8899: 1171,  # Antoran Wastes
     # Missing:
     5: False,  # - QA and DVD GLOBAL -
     25: False,  # Blackrock Mountain
@@ -422,8 +425,8 @@ zoneid_to_mapid = {
     7638: False,  # Sanctum of Light
     7656: False,  # The Great Sea
     7658: False,  # The Cove of Nashal
-    7672: False,  # Halls of Valor
-    7673: False,  # Darkheart Thicket
+    7672: 1477,  # Halls of Valor
+    7673: 1466,  # Darkheart Thicket
     7674: False,  # Legion Dungeon
     7679: False,  # Acherus: The Ebon Hold
     7690: False,  # The Skyfire
@@ -436,13 +439,13 @@ zoneid_to_mapid = {
     7767: False,  # Suramar
     7771: False,  # Tanaan Invasion
     7777: False,  # The Violet Hold
-    7787: False,  # Vault of the Wardens
+    7787: 1045,  # Vault of the Wardens
     7796: False,  # Broken Shore
-    7805: False,  # Black Rook Hold
+    7805: 1081,  # Black Rook Hold
     7811: False,  # The Naglfar
     7812: False,  # Helmouth Cliffs
     7813: False,  # Skyhold
-    7814: False,  # Vault of the Wardens
+    7814: 1045,  # Vault of the Wardens
     7816: False,  # Black Rook Hold Arena
     7822: False,  # Nagrand Arena
     7827: False,  # Southshore vs. Tarren Mill
@@ -480,8 +483,8 @@ zoneid_to_mapid = {
     8022: False,  # Mardum, the Shattered Abyss
     8023: False,  # The Fel Hammer
     8025: False,  # The Nighthold
-    8026: False,  # The Emerald Nightmare
-    8040: False,  # Eye of Azshara
+    8026: 1094,  # The Emerald Nightmare
+    8040: 1046,  # Eye of Azshara
     8044: False,  # Tirisfal Glades
     8046: False,  # The Maelstrom
     8053: False,  # The Greater Sea (Don't Use)
@@ -524,9 +527,9 @@ zoneid_to_mapid = {
     8354: False,  # Eastern Plaguelands
     8390: False,  # Suramar
     8392: False,  # Dalaran Sewers
-    8406: False,  # Black Rook Hold
+    8406: 1501,  # Black Rook Hold
     8422: False,  # Tempest's Roar
-    8423: False,  # The Arcway
+    8423: 1516,  # The Arcway
     8433: False,  # Ashran
     8439: False,  # Great Dark Beyond
     8445: False,  # The Great Sea

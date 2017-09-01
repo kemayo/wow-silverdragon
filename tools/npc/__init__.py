@@ -129,8 +129,6 @@ class NPC:
             if cleaned[zone]:
                 cleaned[zone] = list(cleaned[zone])
                 cleaned[zone].sort()
-            else:
-                del(cleaned[zone])
         return cleaned
 
 

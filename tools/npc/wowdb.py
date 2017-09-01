@@ -38,14 +38,14 @@ class WowdbNPC(NPC):
     def _locations(self):
         page = self.__page()
         if not page:
-            return
+            return {}
         # LocationMapper = new Mapper({"Text":"This npc can be found in $location.","Maps":{"394":{"Name":"Grizzly Hills","Floors":{"0":{"Name":"Grizzly Hills","Url":"//media-azeroth.cursecdn.com/attachments/26/576/grizzlyhills.jpg","Pins":[{"Type":"yellow","Url":null,"Coords":[72419,87286,87793,87796,100085,101630,102651]}],"Count":25}},"Count":25,"SelectedFloor":"0"}}});
         match = re.search(r"LocationMapper = new Mapper\(({.+?})\);", page)
         if not match:
-            return
+            return {}
         data = json.loads(match.group(1))
         if not data.get('Maps'):
-            return
+            return {}
         coords = {}
         for zone, zonedata in data.get('Maps').items():
             zone = int(zone)
@@ -112,8 +112,10 @@ class WowdbNPC(NPC):
             return int(patch.group(1))
 
     @classmethod
-    def query(cls, creature_type, session, ptr=False, beta=False, cached=True, **kw):
+    def query(cls, creature_type, session, expansion=False, ptr=False, beta=False, cached=True, **kw):
         url = "%s/npcs/%s?filter-classification=20" % (cls.url(ptr=ptr, beta=beta), creature_type.lower())
+        if expansion:
+            url += "&filter-expansion=%d" % expansion
 
         npcs = {}
         pages_remaining = True
