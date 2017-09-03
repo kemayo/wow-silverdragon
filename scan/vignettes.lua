@@ -84,13 +84,10 @@ function module:VIGNETTE_ADDED(event, instanceid, mysterious_number, ...)
 	self:WorkOutMobFromVignette(name)
 end
 
-local GetNumMapLandmarks = GetNumMapLandmarks
-local GetMapLandmarkInfo = GetMapLandmarkInfo
 function module:WORLD_MAP_UPDATE(event)
 	if not self.db.profile.pointsofinterest then return end
-	-- local poiCount = GetNumMapLandmarks()
 	for i=1, NUM_WORLDMAP_POIS do
-		local landmarkType, name, description, textureIndex, x, y, mapLinkID, inBattleMap, graveyardID, areaID, poiID, isObjectIcon, atlasIcon = GetMapLandmarkInfo(i)
+		local landmarkType, name, description, textureIndex, x, y, mapLinkID, inBattleMap, graveyardID, areaID, poiID, isObjectIcon, atlasIcon = C_WorldMap.GetMapLandmarkInfo(i)
 		if landmarkType == LE_MAP_LANDMARK_TYPE_VIGNETTE and name then
 			self:WorkOutMobFromVignette(name, x, y, "point-of-interest")
 		end
