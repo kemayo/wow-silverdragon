@@ -425,8 +425,8 @@ zoneid_to_mapid = {
     7638: False,  # Sanctum of Light
     7656: False,  # The Great Sea
     7658: False,  # The Cove of Nashal
-    7672: 1477,  # Halls of Valor
-    7673: 1466,  # Darkheart Thicket
+    7672: 1041,  # Halls of Valor
+    7673: 1067,  # Darkheart Thicket
     7674: False,  # Legion Dungeon
     7679: False,  # Acherus: The Ebon Hold
     7690: False,  # The Skyfire
