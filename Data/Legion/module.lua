@@ -169,7 +169,7 @@ function module:OnInitialize()
 		[106526] = {name="Lady Rivantas",locations={[1033]={35006680},},quest=44675,},
 		[106532] = {name="Inquisitor Volitix",locations={[1033]={38007040},},quest=44569,},
 		[106990] = {name="Chief Bitterbrine",locations={[1015]={65205640},},quest=42221,},
-		[107023] = {name="Nithogg",locations={[1017]={46203180},},},
+		[107023] = {name="Nithogg",locations={[1017]={46203180},},quest=44508,},
 		[107105] = {name="Broodmother Lizax",locations={[1015]={33204160},},quest=44670,},
 		[107113] = {name="Vorthax",locations={[1015]={37004360},},quest=42280,},
 		[107127] = {name="Brawlgoth",locations={[1015]={55204580},[1018]={61803820},},quest=42450,},
