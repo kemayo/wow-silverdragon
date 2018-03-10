@@ -346,5 +346,14 @@ function module:OnInitialize()
 		[14506] = {name="Lord Hel'nurath",locations={[699]={33205820},},},
 		[16184] = {name="Nerubian Overseer",locations={[23]={4203600},},},
 		[16379] = {name="Spirit of the Damned",locations={[765]={59402920},},},
+		[90816] = {name="Skystormer",locations={[121]={53606460},},},
+		[100000] = {name="Pit Commander Galvinoth",locations={[23]={75604900},},},
+		[107431] = {name="Weaponized Rabbot",locations={[27]={43003300},[895]={66002660,67403180},},tameable=true,},
+		[107477] = {name="N.U.T.Z.",locations={[181]={43407700},},tameable=true,},
+		[107595] = {name="Grimrot",locations={[182]={38404480},},tameable=true,},
+		[107596] = {name="Grimrot",locations={[182]={38204520},},tameable=true,},
+		[107617] = {name="Ol' Muddle",locations={[26]={43805700,45606240,49205720,54204540,63404220,64205620,69606100,71205140,76805000},},tameable=true,},
+		[111122] = {name="Large Vile Slime",locations={[22]={69004580},},notes="Paladin Corrupted Ashbringer",},
+		[118244] = {name="Lightning Paw",locations={[34]={16405400,16406040,23207660,24203960,30004140},},tameable=true,},
 	})
 end
