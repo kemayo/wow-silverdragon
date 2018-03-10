@@ -49,6 +49,8 @@ local achievements = {
 		[100232] = 33336, -- Sure Shot (Amateur Hunters)
 	},
 	[11265] = {}, -- AdventurerOfSuramar
+	[11786] = {}, -- Terrors of the Shore
+	[11841] = {}, -- Naxt Victim
 }
 core.achievements = achievements
 local mobs_to_achievement = {
