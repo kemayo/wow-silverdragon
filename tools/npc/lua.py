@@ -34,6 +34,8 @@ def serialize(v):
 def __sort(k):
     if k == 'name':
         return 'aaaaaaaaa'
+    if k == 'hidden':
+        return 'zzzzzzzzz'
     return k
 
 

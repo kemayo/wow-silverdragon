@@ -167,21 +167,23 @@ function module:BuildMobList(options)
 			},
 		}
 		for id, mob in pairs(data) do
-			for zone in pairs(mob.locations) do
-				if not group.args.zones.args["map"..zone] then
-					group.args.zones.args["map"..zone] = {
-						type = "group",
-						inline = false,
-						name = GetMapNameByID(zone),
-						desc = "ID: " .. zone,
-						args = {},
-					}
+			if not mob.hidden then
+				for zone in pairs(mob.locations) do
+					if not group.args.zones.args["map"..zone] then
+						group.args.zones.args["map"..zone] = {
+							type = "group",
+							inline = false,
+							name = GetMapNameByID(zone),
+							desc = "ID: " .. zone,
+							args = {},
+						}
+					end
+					local toggle = toggle_mob(id)
+					toggle.disabled = function(info)
+						return not core.db.global.datasources[info[#info - 3]]
+					end
+					group.args.zones.args["map"..zone].args["mob"..id] = toggle
 				end
-				local toggle = toggle_mob(id)
-				toggle.disabled = function(info)
-					return not core.db.global.datasources[info[#info - 3]]
-				end
-				group.args.zones.args["map"..zone].args["mob"..id] = toggle
 			end
 		end
 		options.plugins.mobs.mobs.args[source] = group

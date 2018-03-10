@@ -20,7 +20,7 @@ local handler = {}
 do
 	local currentLevel, currentZone
 	local function should_show_mob(id)
-		if db.hidden[id] then
+		if db.hidden[id] or (ns.mobdb[id] and ns.mobdb[id].hidden) then
 			return false
 		end
 		local _, questid = core:GetMobInfo(id)

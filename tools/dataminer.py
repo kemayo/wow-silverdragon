@@ -103,7 +103,7 @@ def write_output(expansion, data):
                 continue
             if id in notes:
                 mob.add_notes(notes[id])
-            f.write('\t\t[%d] = %s,\n' % (id, mob.to_lua('name', 'quest', 'vignette', 'tameable', 'notes', 'locations', 'mount', 'boss', 'faction')))
+            f.write('\t\t[%d] = %s,\n' % (id, mob.to_lua('name', 'quest', 'vignette', 'tameable', 'notes', 'locations', 'mount', 'boss', 'faction', 'hidden')))
         f.write(MODULE_END_TEMPLATE)
 
 

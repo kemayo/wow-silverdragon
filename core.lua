@@ -31,7 +31,8 @@ addon.datasources = {
 			notes = "notes",
 			mount = hasMount,
 			boss = isBoss,
-			locations = {[zoneid] = {coord,...}}
+			locations = {[zoneid] = {coord,...}},
+			hidden = isHidden,
 		},
 		...
 	}
@@ -40,7 +41,7 @@ addon.datasources = {
 local mobdb = setmetatable({}, {
 	__index = function(t, id)
 		for source, data in pairs(addon.datasources) do
-			if data[id] and addon.db.global.datasources[source] then
+			if data[id] and addon.db.global.datasources[source] and not data[id].hidden then
 				t[id] = data[id]
 				return data[id]
 			end
@@ -65,49 +66,57 @@ ns.vignetteMobLookup = vignetteMobLookup
 function addon:RegisterMobData(source, data)
 	addon.datasources[source] = data
 end
-function addon:BuildLookupTables()
-	wipe(mobdb)
-	wipe(mobsByZone)
-	wipe(questMobLookup)
-	wipe(vignetteMobLookup)
-	for source, data in pairs(addon.datasources) do
-		if addon.db.global.datasources[source] then
-			for mobid, mobdata in pairs(data) do
-				self:NameForMob(mobid) -- prime cache
-
-				mobdata.id = mobid
-				mobdata.source = source
-
-				if mobdata.locations then
-					for zoneid, coords in pairs(mobdata.locations) do
-						if not mobsByZone[zoneid] then
-							mobsByZone[zoneid] = {}
-						end
-						mobsByZone[zoneid][mobid] = coords
-					end
+do
+	local function addMobToLookups(mobid, mobdata)
+		if mobdata.hidden then
+			return
+		end
+		if mobdata.locations then
+			for zoneid, coords in pairs(mobdata.locations) do
+				if not mobsByZone[zoneid] then
+					mobsByZone[zoneid] = {}
 				end
-				-- In the olden days, we had one mob per quest and/or vignette. Alas...
-				if mobdata.quest then
-					local questMobs = questMobLookup[mobdata.quest]
-					if not questMobs then
-						questMobs = {}
-						questMobLookup[mobdata.quest] = questMobs
-					end
-					questMobs[mobid] = true
-				end
-				if mobdata.vignette then
-					local vignetteMobs = vignetteMobLookup[mobdata.vignette]
-					if not vignetteMobs then
-						vignetteMobs = {}
-						vignetteMobLookup[mobdata.vignette] = vignetteMobs
-					end
-					vignetteMobs[mobid] = true
+				mobsByZone[zoneid][mobid] = coords
+			end
+		end
+		-- In the olden days, we had one mob per quest and/or vignette. Alas...
+		if mobdata.quest then
+			local questMobs = questMobLookup[mobdata.quest]
+			if not questMobs then
+				questMobs = {}
+				questMobLookup[mobdata.quest] = questMobs
+			end
+			questMobs[mobid] = true
+		end
+		if mobdata.vignette then
+			local vignetteMobs = vignetteMobLookup[mobdata.vignette]
+			if not vignetteMobs then
+				vignetteMobs = {}
+				vignetteMobLookup[mobdata.vignette] = vignetteMobs
+			end
+			vignetteMobs[mobid] = true
+		end
+	end
+	function addon:BuildLookupTables()
+		wipe(mobdb)
+		wipe(mobsByZone)
+		wipe(questMobLookup)
+		wipe(vignetteMobLookup)
+		for source, data in pairs(addon.datasources) do
+			if addon.db.global.datasources[source] then
+				for mobid, mobdata in pairs(data) do
+					self:NameForMob(mobid) -- prime cache
+
+					mobdata.id = mobid
+					mobdata.source = source
+
+					addMobToLookups(mobid, mobdata)
 				end
 			end
 		end
-	end
 
-	self.events:Fire("Ready")
+		self.events:Fire("Ready")
+	end
 end
 
 local globaldb
@@ -322,8 +331,13 @@ do
 			return true
 		end
 		--Maybe add an option for this later. This checks unit faction and ignores mobs your faction cannot do anything with.
-		if mobdb[id] and mobdb[id].faction == faction then
-			return true
+		if mobdb[id] then
+			if mobdb[id].hidden then
+				return true
+			end
+			if mobdb[id].faction == faction then
+				return true
+			end
 		end
 	end
 end
