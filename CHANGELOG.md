@@ -1,13 +1,15 @@
 # Changelog
 
-## Changed in v4.0.3
+## Changed in v4.0.5
+* Filled in lots of completion data for the Legion Adventurer achievements
+* Added the Commander of Argus achievement
 
+## Changed in v4.0.3
 * Updated for 7.3
 * Argus mobs
 * Some new backend support for hiding junk rares (i.e. the Treasure Goblins, and some class-specific ones)
 
 ## Changed in v4.0.2
-
 * TOC for 7.2
 * Questids for various world bosses
 
