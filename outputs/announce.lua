@@ -1,7 +1,7 @@
 local myname, ns = ...
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
-local module = core:NewModule("Announce", "AceTimer-3.0", "LibSink-2.0", "LibToast-1.0")
+local module = core:NewModule("Announce", "AceTimer-3.0", "LibSink-2.0")
 local Debug = core.Debug
 
 local LSM = LibStub("LibSharedMedia-3.0")
@@ -56,7 +56,6 @@ function module:OnInitialize()
 	})
 
 	self:SetSinkStorage(self.db.profile.sink_opts)
-	self:DefineSinkToast("Rare seen!", [[Interface\Icons\INV_Misc_Head_Dragon_01]])
 
 	core.RegisterCallback(self, "Seen")
 
@@ -207,9 +206,6 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zon
 		source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
 	end
 	local prefix = "Rare seen: "
-	if module.db.profile.sink_opts.sink20OutputSink == "LibToast-1.0" then
-		prefix = ""
-	end
 	module:Pour((prefix .. "%s%s (%s)"):format(core:GetMobLabel(id) or UNKNOWN, dead and "... but it's dead" or '', source or ''))
 end)
 

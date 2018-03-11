@@ -19,7 +19,6 @@ externals:
    lib/AceGUI-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
    lib/AceLocale-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceLocale-3.0
    lib/LibSink-2.0: svn://svn.wowace.com/wow/libsink-2-0/mainline/trunk/LibSink-2.0
-   lib/LibToast-1.0: http://hg.curseforge.net/wow/libtoast-1-0/mainline/
    lib/LibQTip-1.0: svn://svn.wowace.com/wow/libqtip-1-0/mainline/trunk
    lib/LibDataBroker-1.1: git://github.com/tekkub/libdatabroker-1-1.git
    lib/LibDBIcon-1.0: svn://svn.wowace.com/wow/libdbicon-1-0/mainline/trunk/LibDBIcon-1.0
@@ -48,8 +47,6 @@ ignore:
    - lib/LibQTip-1.0/LibStub
    - lib/LibStub/LibStub.toc
    - lib/LibStub/tests
-   - lib/LibToast-1.0/LibToast-1.0.toc
-   - lib/LibToast-1.0/LibStub
    - lib/HereBeDragons-1.0/HereBeDragons-Pins-1.0.lua
    - lib/HereBeDragons-1.0/HereBeDragons-1.0.toc
    - lib/HereBeDragons-1.0/CallbackHandler-1.0
