@@ -1,6 +1,8 @@
 local myname, ns = ...
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
+local Debug = core.Debug
+local DebugF = core.DebugF
 
 -- a few of these get to be hardcoded, because of bad types in the API
 local achievements = {
@@ -76,22 +78,40 @@ function ns:LoadAllAchievementMobs()
 	if achievements_loaded then
 		return
 	end
+	local known = {}
 	for achievement in pairs(achievements) do
+		local missing = 0
+		for k,v in pairs(achievements[achievement]) do
+			known[v] = k
+		end
 		local num_criteria = GetAchievementNumCriteria(achievement)
 		for i = 1, num_criteria do
 			local description, ctype, completed, _, _, _, _, id, _, criteriaid = GetAchievementCriteriaInfo(achievement, i)
-			if ctype == 0 then
-				-- "kill a mob"
-				achievements[achievement][id] = criteriaid
-			elseif ctype == 27 then
-				-- "complete a quest"
-
+			if not known[criteriaid] then
+				if ctype == 0 and id then
+					-- "kill a mob"
+					achievements[achievement][id] = criteriaid
+				-- elseif ctype == 27 then
+					-- "complete a quest"
+				else
+					if missing == 0 then
+						local _, name = GetAchievementInfo(achievement)
+						Debug('Missing mobs from achievement')
+						DebugF('[%s] = { -- %s', achievement, name)
+					end
+					DebugF('    [] = %d, -- %s', criteriaid, description)
+					missing = missing + 1
+				end
 			end
 			achievements_loaded = true
 		end
 		for mobid, criteriaid in pairs(achievements[achievement]) do
 			mobs_to_achievement[mobid] = achievement
 		end
+		if missing > 0 then
+			DebugF('} -- Got %d of %d', num_criteria - missing, num_criteria)
+		end
+		wipe(known)
 	end
 end
 -- return complete, completion_knowable
