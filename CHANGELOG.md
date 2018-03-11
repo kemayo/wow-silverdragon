@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v4.0.3
+
+* Updated for 7.3
+* Argus mobs
+* Some new backend support for hiding junk rares (i.e. the Treasure Goblins, and some class-specific ones)
+
 ## Changed in v4.0.2
 
 * TOC for 7.2
