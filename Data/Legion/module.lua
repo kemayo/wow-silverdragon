@@ -337,6 +337,7 @@ function module:OnInitialize()
 		[125498] = {name="Overseer Y'Morna",locations={[1170]={60402970},},quest=48717,},
 		[125820] = {name="Imp Mother Laglath",locations={[1135]={42207000},},quest=48666,},
 		[125824] = {name="Khazaduum",locations={[1135]={44400720},},quest=48561,},
+		[125951] = {name="Obsidian Deathwarder",locations={[1024]={49108340}},},quest=48381,},
 		[126040] = {name="Puscilla",locations={[1171]={64002100},},quest=48809,},
 		[126115] = {name="Ven'orn",locations={[1171]={63205660},},quest=48811,},
 		[126199] = {name="Vrax'thul",locations={[1171]={51603580},},quest=48810,},
