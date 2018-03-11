@@ -25,6 +25,7 @@ externals:
    lib/LibSharedMedia-3.0: svn://svn.wowace.com/wow/libsharedmedia-3-0/mainline/trunk/LibSharedMedia-3.0
    lib/AceGUI-3.0-SharedMediaWidgets: svn://svn.wowace.com/wow/ace-gui-3-0-shared-media-widgets/mainline/trunk/AceGUI-3.0-SharedMediaWidgets
    lib/HereBeDragons-1.0: git://git.wowace.com/wow/herebedragons/mainline.git
+   lib/LibTextDump-1.0: git://git.wowace.com/wow/libtextdump-1-0/mainline.git
 
 move-folders:
    SilverDragon/Data/Vanilla: SilverDragon_Vanilla

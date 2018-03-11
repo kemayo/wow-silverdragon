@@ -6,9 +6,40 @@ local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "
 SilverDragon = addon
 addon.events = LibStub("CallbackHandler-1.0"):New(addon)
 
-local debugf = tekDebug and tekDebug:GetFrame("SilverDragon")
-local function Debug(...) if debugf then debugf:AddMessage(string.join(", ", tostringall(...))) end end
-addon.Debug = Debug
+do
+	local TextDump = LibStub("LibTextDump-1.0")
+	local debuggable = GetAddOnMetadata(myname, "Version") == '@project-version@'
+	local window
+	local function GetDebugWindow()
+		if not window then
+			window = TextDump:New(myname)
+		end
+		return window
+	end
+	addon.GetDebugWindow = GetDebugWindow
+	addon.Debug = function(...)
+		if not debuggable then return end
+		-- if debugf then debugf:AddMessage(string.join(", ", tostringall(...))) end
+		GetDebugWindow():AddLine(string.join(', ', tostringall(...)))
+	end
+	addon.DebugF = function(...)
+		if not debuggable then return end
+		Debug(string.format(...))
+	end
+	function addon:ShowDebugWindow()
+		local window = self.GetDebugWindow()
+		if window:Lines() == 0 then
+			window:AddLine("Nothing has happened yet")
+			window:Display()
+			window:Clear()
+			return
+		end
+		window:Display()
+	end
+	addon.debuggable = debuggable
+end
+
+Debug = addon.Debug
 
 local mfloor, mpow, mabs = math.floor, math.pow, math.abs
 local tinsert, tremove = table.insert, table.remove

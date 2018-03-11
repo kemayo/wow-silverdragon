@@ -94,6 +94,7 @@ function module:SetupDataObject()
 
 		local zone = HBD:GetPlayerZone()
 		if ns.mobsByZone[zone] then
+			tooltip:AddHeader("Nearby")
 			tooltip:AddHeader("Name", "Count", "Last Seen")
 			local n = 0
 			for id in pairs(ns.mobsByZone[zone]) do
@@ -134,6 +135,14 @@ function module:SetupDataObject()
 			tooltip:AddHeader("None seen this session")
 		end
 
+		tooltip:AddSeparator()
+		local index = tooltip:AddLine("Right-click to open settings")
+		tooltip:SetLineTextColor(index, 0, 1, 1)
+		if core.debuggable then
+			index = tooltip:AddLine("Shift-right-click to view debug information")
+			tooltip:SetLineTextColor(index, 0, 1, 1)
+		end
+
 		tooltip:SmartAnchorTo(self)
 		tooltip:Show()
 	end
@@ -147,9 +156,13 @@ function module:SetupDataObject()
 		if button ~= "RightButton" then
 			return
 		end
-		local config = core:GetModule("Config", true)
-		if config then
-			config:ShowConfig()
+		if IsShiftKeyDown() then
+			core:ShowDebugWindow()
+		else
+			local config = core:GetModule("Config", true)
+			if config then
+				config:ShowConfig()
+			end
 		end
 	end
 
