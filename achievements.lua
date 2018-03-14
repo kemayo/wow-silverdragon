@@ -176,9 +176,8 @@ function ns:AchievementMobStatus(id)
 	return achievement, name, completed
 end
 
--- This gives more granular information
 -- return quest_complete, achievement_complete
--- returns `nil` if completion not knowable, true/false if knowable
+-- `nil` if completion not knowable, true/false if knowable
 function ns:CompletionStatus(id)
 	local _, questid = core:GetMobInfo(id)
 	local _, _, achievement_complete = ns:AchievementMobStatus(id)
@@ -187,13 +186,6 @@ function ns:CompletionStatus(id)
 		quest_complete = IsQuestFlaggedCompleted(questid)
 	end
 	return quest_complete, achievement_complete
-end
-
--- This is the simple function, if you just want to know a general "will I get something for this?"
--- return complete, completion_knowable
-function ns:IsMobComplete(id)
-	local quest, achievement = self:CompletionStatus(id)
-	return quest or achievement, (quest ~= nil or achievement ~= nil)
 end
 
 function ns:LoadAllAchievementMobs()

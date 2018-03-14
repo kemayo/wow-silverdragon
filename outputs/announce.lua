@@ -180,9 +180,22 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead)
 	end
 
 	if not self.db.profile.already then
-		local completed, completion_knowable = ns:IsMobComplete(id)
-		if completion_knowable and completed then
-			return
+		-- hide already-completed mobs
+		local quest, achievement = ns:CompletionStatus(id)
+		if quest ~= nil or achievement ~= nil then
+			-- knowable
+			if achievement ~= nil then
+				-- achievement knowable
+				if quest ~= nil then
+					-- quest also knowable
+					return not quest
+				end
+				-- can just fall back on achievement
+				return not achievement
+			else
+				-- just quest knowable
+				return not quest
+			end
 		end
 	end
 
