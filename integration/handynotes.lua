@@ -25,7 +25,8 @@ do
 		end
 		local quest, achievement = ns:CompletionStatus(id)
 		if quest ~= nil and achievement ~= nil then
-			return (module.db.profile.questcomplete or not quest) or (module.db.profile.achieved or not achievement)
+			-- we have a quest *and* an achievement; we're going to treat "show achieved" as "show achieved if I can still loot them"
+			return (module.db.profile.questcomplete or not quest) and (module.db.profile.achieved or not achievement)
 		end
 		if quest ~= nil then
 			return module.db.profile.questcomplete or not quest
@@ -57,10 +58,11 @@ do
 		end
 		local quest, achievement = ns:CompletionStatus(id)
 		if quest or achievement then
-			-- partial completion?
 			if (quest and achievement) or (quest == nil or achievement == nil) then
+				-- full completion
 				return ns.mobdb[id].mount and icon_mount_done or icon_done
 			end
+			-- partial completion
 			return ns.mobdb[id].mount and icon_mount_partial or icon_partial
 		end
 		return ns.mobdb[id].mount and icon_mount or icon

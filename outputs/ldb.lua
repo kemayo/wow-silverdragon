@@ -120,14 +120,13 @@ function module:SetupDataObject()
 			for id in pairs(ns.mobsByZone[zone]) do
 				n = n + 1
 				local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
-				local quest, achievement = ns:CompletionStatus(id)
 				local index, col = tooltip:AddLine(
 					core:GetMobLabel(id) or UNKNOWN,
 					times_seen,
 					core:FormatLastSeen(last_seen),
 					(tameable and 'Tameable' or '')
-					-- (achievement ~= nil and achievement) and "|TInterface\\AchievementFrame\\UI-Achievement-TinyShield:24|t" or nil
 				)
+				local quest, achievement = ns:CompletionStatus(id)
 				if quest ~= nil or achievement ~= nil then
 					if achievement ~= nil then
 						index, col = tooltip:SetCell(index, col, achievement, ShieldCellProvider)
@@ -141,11 +140,11 @@ function module:SetupDataObject()
 					end
 					if quest or achievement then
 						if (quest and achievement) or (quest == nil or achievement == nil) then
-							-- partial completion
-							tooltip:SetLineColor(index, 1, 1, 0.33) -- yellow
-						else
 							-- full completion
 							tooltip:SetLineColor(index, 0.33, 1, 0.33) -- green
+						else
+							-- partial completion
+							tooltip:SetLineColor(index, 1, 1, 0.33) -- yellow
 						end
 					else
 						tooltip:SetLineColor(index, 1, 0.33, 0.33) -- red
