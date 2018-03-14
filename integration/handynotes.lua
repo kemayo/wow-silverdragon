@@ -11,7 +11,7 @@ local HBD = LibStub("HereBeDragons-1.0")
 
 local db
 -- local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
-local icon, icon_mount
+local icon, icon_mount, icon_partial, icon_mount_partial, icon_done, icon_mount_done
 
 local nodes = {}
 module.nodes = nodes
@@ -23,40 +23,52 @@ do
 		if db.hidden[id] or (ns.mobdb[id] and ns.mobdb[id].hidden) then
 			return false
 		end
-		local _, questid = core:GetMobInfo(id)
-		if questid then
-			return module.db.profile.questcomplete or not IsQuestFlaggedCompleted(questid)
+		local quest, achievement = ns:CompletionStatus(id)
+		if quest ~= nil and achievement ~= nil then
+			return (module.db.profile.questcomplete or not quest) or (module.db.profile.achieved or not achievement)
 		end
-		local achievement, achievement_name, completed = ns:AchievementMobStatus(id)
-		if achievement then
-			return not completed or module.db.profile.achieved
+		if quest ~= nil then
+			return module.db.profile.questcomplete or not quest
+		end
+		if achievement ~= nil then
+			return module.db.profile.achieved or not achievement
 		end
 		return module.db.profile.achievementless
 	end
 	local function icon_for_mob(id)
 		if not icon then
-			local texture, _, _, left, right, top, bottom = GetAtlasInfo("DungeonSkull")
-			icon = {
-				icon = texture,
-				tCoordLeft = left,
-				tCoordRight = right,
-				tCoordTop = top,
-				tCoordBottom = bottom,
-				r = 1,
-				g = 0.33,
-				b = 0.33,
-				a = 0.9,
-			}
-			local texture, _, _, left, right, top, bottom = GetAtlasInfo("VignetteKillElite")
-			icon_mount = {
-				icon = texture,
-				tCoordLeft = left,
-				tCoordRight = right,
-				tCoordTop = top,
-				tCoordBottom = bottom,
-			}
+			local function tex(atlas, r, g, b)
+				local texture, _, _, left, right, top, bottom = GetAtlasInfo(atlas)
+				return {
+					icon = texture,
+					tCoordLeft = left, tCoordRight = right, tCoordTop = top, tCoordBottom = bottom,
+					r = r, g = g, b = b, a = 0.9,
+				}
+			end
+			icon = tex("DungeonSkull", 1, 0.33, 0.33) -- red skull
+			icon_partial = tex("DungeonSkull", 1, 1, 0.33) -- yellow skull
+			icon_done = tex("DungeonSkull", 0.33, 1, 0.33) -- green skull
+			icon_mount = tex("VignetteKillElite", 1, 0.33, 0.33) -- red shiny skull
+			icon_mount_partial = tex("VignetteKillElite", 1, 1, 0.33) -- yellow shiny skull
+			icon_mount_done = tex("VignetteKillElite", 0.33, 1, 0.33) -- green shiny skull
 		end
-		return (ns.mobdb[id] and ns.mobdb[id].mount) and icon_mount or icon
+		if not ns.mobdb[id] then
+			return icon
+		end
+		local quest, achievement = ns:CompletionStatus(id)
+		if quest or achievement then
+			-- partial completion?
+			if (quest and achievement) or (quest == nil or achievement == nil) then
+				return ns.mobdb[id].mount and icon_mount_done or icon_done
+			end
+			return ns.mobdb[id].mount and icon_mount_partial or icon_partial
+		end
+		return ns.mobdb[id].mount and icon_mount or icon
+
+		-- local achievement, name, completed = ns:AchievementMobStatus(id)
+		-- if achievement and completed then
+		-- 	return ns.mobdb[id].mount and icon_mount_found or icon_found
+		-- end
 	end
 	local function iter(t, prestate)
 		if not t then return nil end

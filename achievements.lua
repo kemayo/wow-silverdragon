@@ -176,6 +176,26 @@ function ns:AchievementMobStatus(id)
 	return achievement, name, completed
 end
 
+-- This gives more granular information
+-- return quest_complete, achievement_complete
+-- returns `nil` if completion not knowable, true/false if knowable
+function ns:CompletionStatus(id)
+	local _, questid = core:GetMobInfo(id)
+	local _, _, achievement_complete = ns:AchievementMobStatus(id)
+	local quest_complete
+	if questid then
+		quest_complete = IsQuestFlaggedCompleted(questid)
+	end
+	return quest_complete, achievement_complete
+end
+
+-- This is the simple function, if you just want to know a general "will I get something for this?"
+-- return complete, completion_knowable
+function ns:IsMobComplete(id)
+	local quest, achievement = self:CompletionStatus(id)
+	return quest or achievement, (quest ~= nil or achievement ~= nil)
+end
+
 function ns:LoadAllAchievementMobs()
 	if achievements_loaded then
 		return
@@ -214,17 +234,6 @@ function ns:LoadAllAchievementMobs()
 			DebugF('} -- Got %d of %d', num_criteria - missing, num_criteria)
 		end
 		wipe(known)
-	end
-end
--- return complete, completion_knowable
-function ns:IsMobComplete(id)
-	local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
-	if questid then
-		return IsQuestFlaggedCompleted(questid), true
-	end
-	if mobs_to_achievement[id] then
-		achievement, achievement_name, complete = ns:AchievementMobStatus(id)
-		return complete, achievement
 	end
 end
 

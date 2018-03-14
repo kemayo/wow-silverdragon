@@ -83,6 +83,26 @@ function module:SetupDataObject()
 		text = "",
 	})
 
+	local ShieldCellProvider, ShieldCellPrototype = LibQTip:CreateCellProvider()
+	function ShieldCellPrototype:InitializeCell()
+		self.texture = self:CreateTexture(nil, 'ARTWORK')
+		self.texture:SetSize(16, 16)
+		self.texture:SetPoint("CENTER", self)
+		self.texture:Show()
+	end
+	function ShieldCellPrototype:ReleaseCell()
+	end
+	function ShieldCellPrototype:SetupCell(tooltip, value)
+		self.texture:SetTexture("Interface\\AchievementFrame\\UI-Achievement-TinyShield")
+		self.texture:SetTexCoord(0, 0.625, 0, 0.625)
+		return self.texture:GetSize()
+	end
+	local QuestCellProvider, QuestCellPrototype = LibQTip:CreateCellProvider(ShieldCellProvider)
+	function QuestCellPrototype:SetupCell(tooltip, value)
+		self.texture:SetAtlas("QuestNormal")
+		return self.texture:GetSize()
+	end
+
 	local rares_seen = {}
 	local tooltip
 	function dataobject:OnEnter()
@@ -90,7 +110,7 @@ function module:SetupDataObject()
 			return
 		end
 
-		tooltip = LibQTip:Acquire("SilverDragonTooltip", 6, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT")
+		tooltip = LibQTip:Acquire("SilverDragonTooltip", 8, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT", "RIGHT", "RIGHT")
 
 		local zone = HBD:GetPlayerZone()
 		if ns.mobsByZone[zone] then
@@ -100,17 +120,35 @@ function module:SetupDataObject()
 			for id in pairs(ns.mobsByZone[zone]) do
 				n = n + 1
 				local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
-				local index = tooltip:AddLine(core:GetMobLabel(id) or UNKNOWN,
+				local quest, achievement = ns:CompletionStatus(id)
+				local index, col = tooltip:AddLine(
+					core:GetMobLabel(id) or UNKNOWN,
 					times_seen,
 					core:FormatLastSeen(last_seen),
 					(tameable and 'Tameable' or '')
+					-- (achievement ~= nil and achievement) and "|TInterface\\AchievementFrame\\UI-Achievement-TinyShield:24|t" or nil
 				)
-				local completed, completion_knowable = ns:IsMobComplete(id)
-				if completion_knowable then
-					if completed then
-						tooltip:SetLineColor(index, 0, 1, 0)
+				if quest ~= nil or achievement ~= nil then
+					if achievement ~= nil then
+						index, col = tooltip:SetCell(index, col, achievement, ShieldCellProvider)
 					else
-						tooltip:SetLineColor(index, 1, 0, 0)
+						index, col = tooltip:SetCell(index, col, '')
+					end
+					if quest ~= nil then
+						index, col = tooltip:SetCell(index, col, quest, QuestCellProvider)
+					else
+						index, col = tooltip:SetCell(index, col, '')
+					end
+					if quest or achievement then
+						if (quest and achievement) or (quest == nil or achievement == nil) then
+							-- partial completion
+							tooltip:SetLineColor(index, 1, 1, 0.33) -- yellow
+						else
+							-- full completion
+							tooltip:SetLineColor(index, 0.33, 1, 0.33) -- green
+						end
+					else
+						tooltip:SetLineColor(index, 1, 0.33, 0.33) -- red
 					end
 				end
 			end
