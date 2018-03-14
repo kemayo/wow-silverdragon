@@ -3,6 +3,7 @@
 ## Changed in v4.0.5
 * Filled in lots of completion data for the Legion Adventurer achievements
 * Added the Commander of Argus achievement
+* Adjust colors in the dropdown and handynotes: red for not-complete, yellow for partially-complete (quest / achievement), green for fully complete
 
 ## Changed in v4.0.3
 * Updated for 7.3
