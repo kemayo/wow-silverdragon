@@ -229,7 +229,7 @@ function module:OnInitialize()
 		[110024] = {name="Mal'Dreth the Corruptor",locations={[1033]={34006040},},quest=43351,vignette="Mal'Dreth the Corrupter",},
 		[110340] = {name="Myonix",locations={[1033]={40403340},},quest=43358,tameable=true,},
 		[110342] = {name="Rabxach",locations={[1018]={69405740},},quest=45487,},
-		[110346] = {name="Aodh Witherpetal",locations={[1018]={59805040},},},
+		[110346] = {name="Aodh Witherpetal",locations={[1018]={59805040},},quest=45485,},
 		[110361] = {name="Harbinger of Screams",locations={[1018]={66203860,69805160},},quest=45484,},
 		[110363] = {name="Roteye",locations={[1017]={58203400},},quest=43342,},
 		[110367] = {name="Ealdis",locations={[1018]={62404280},},quest=45483,},
