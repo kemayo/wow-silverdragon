@@ -37,9 +37,9 @@ class WowheadNPC(NPC):
         return self._info
 
     def _name(self):
-        info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: '(.+?)'};", self.__page())
+        info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: \"(.+?)\"};", self.__page())
         if info:
-            return self.html_decode(info.group(1).replace("\\'", "'"))
+            return self.html_decode(info.group(1).replace("\\'", "'").replace('\"', '"'))
 
     def _creature_type(self):
         return types.get(self.__info().get('type'))

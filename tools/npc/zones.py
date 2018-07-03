@@ -5,296 +5,299 @@
 # wowdb and wowhead use the same numeric zoneids, which aren't in-game mapids
 zoneid_to_mapid = {
     1: 27,  # Dun Morogh
-    3: 17,  # Badlands
-    4: 19,  # Blasted Lands
-    8: 38,  # Swamp of Sorrows
-    10: 34,  # Duskwood
-    11: 40,  # Wetlands
-    12: 30,  # Elwynn Forest
-    14: 4,  # Durotar
-    15: 141,  # Dustwallow Marsh
-    16: 181,  # Azshara
-    17: 11,  # Northern Barrens
+    3: 15,  # Badlands
+    4: 17,  # Blasted Lands
+    8: 51,  # Swamp of Sorrows
+    10: 47,  # Duskwood
+    11: 56,  # Wetlands
+    12: 38,  # Elwynn Forest
+    14: 1,  # Durotar
+    15: 70,  # Dustwallow Marsh
+    16: 76,  # Azshara
+    17: 10,  # Northern Barrens
     28: 22,  # Western Plaguelands
-    33: 37,  # Northern Stranglethorn
-    38: 35,  # Loch Modan
-    40: 39,  # Westfall
-    41: 32,  # Deadwind Pass
-    44: 36,  # Redridge Mountains
-    45: 16,  # Arathi Highlands
-    46: 29,  # Burning Steppes
+    33: 50,  # Northern Stranglethorn
+    38: 48,  # Loch Modan
+    40: 52,  # Westfall
+    41: 42,  # Deadwind Pass
+    44: 49,  # Redridge Mountains
+    45: 14,  # Arathi Highlands
+    46: 36,  # Burning Steppes
     47: 26,  # The Hinterlands
-    51: 28,  # Searing Gorge
-    65: 488,  # Dragonblight
-    66: 496,  # Zul'Drak
-    67: 495,  # The Storm Peaks
-    85: 20,  # Tirisfal Glades
+    51: 32,  # Searing Gorge
+    65: 115,  # Dragonblight
+    66: 121,  # Zul'Drak
+    67: 120,  # The Storm Peaks
+    85: 18,  # Tirisfal Glades
     130: 21,  # Silverpine Forest
     139: 23,  # Eastern Plaguelands
-    141: 41,  # Teldrassil
-    148: 42,  # Darkshore
-    206: 523,  # Utgarde Keep
-    209: 764,  # Shadowfang Keep
-    210: 492,  # Icecrown
-    215: 9,  # Mulgore
-    267: 24,  # Hillsbrad Foothills
-    331: 43,  # Ashenvale
-    357: 121,  # Feralas
-    361: 182,  # Felwood
-    394: 490,  # Grizzly Hills
-    400: 61,  # Thousand Needles
-    405: 101,  # Desolace
-    406: 81,  # Stonetalon Mountains
-    440: 161,  # Tanaris
-    490: 201,  # Un'Goro Crater
-    491: 761,  # Razorfen Kraul
-    493: 241,  # Moonglade
-    495: 491,  # Howling Fjord
-    616: 606,  # Mount Hyjal
-    618: 281,  # Winterspring
-    717: 690,  # The Stockade
-    718: 749,  # Wailing Caverns
-    719: 688,  # Blackfathom Deeps
-    721: 691,  # Gnomeregan
-    722: 760,  # Razorfen Downs
-    1176: 686,  # Zul'Farrak
-    1196: 524,  # Utgarde Pinnacle
-    1337: 692,  # Uldaman
-    1377: 261,  # Silithus
-    1497: 382,  # Undercity
-    1517: 692,  # Uldaman
-    1519: 301,  # Stormwind City
-    1537: 341,  # Ironforge
-    1581: 756,  # The Deadmines
-    1583: 721,  # Blackrock Spire
-    1584: 704,  # Blackrock Depths
-    1637: 321,  # Orgrimmar
-    1638: 362,  # Thunder Bluff
-    1657: 381,  # Darnassus
-    1977: 793,  # Zul'Gurub
-    2017: 765,  # Stratholme
-    2100: 750,  # Maraudon
-    2159: 718,  # Onyxia's Lair
-    2366: 733,  # The Black Morass
-    2367: 734,  # Old Hillsbrad Foothills
-    2437: 680,  # Ragefire Chasm
-    2557: 699,  # Dire Maul
-    2597: 401,  # Alterac Valley
-    2677: 755,  # Blackwing Lair
-    2717: 696,  # Molten Core
-    2817: 510,  # Crystalsong Forest
-    3277: 443,  # Warsong Gulch
-    3358: 461,  # Arathi Basin
-    3428: 766,  # Temple of Ahn'Qiraj
-    3429: 717,  # Ruins of Ahn'Qiraj
-    3430: 462,  # Eversong Woods
-    3433: 463,  # Ghostlands
-    3456: 535,  # Naxxramas
-    3457: 799,  # Karazhan
-    3483: 465,  # Hellfire Peninsula
-    3487: 480,  # Silvermoon City
-    3518: 477,  # Nagrand
-    3519: 478,  # Terokkar Forest
-    3520: 473,  # Shadowmoon Valley
-    3521: 467,  # Zangarmarsh
-    3522: 475,  # Blade's Edge Mountains
-    3523: 479,  # Netherstorm
-    3524: 464,  # Azuremyst Isle
-    3525: 476,  # Bloodmyst Isle
-    3537: 486,  # Borean Tundra
-    3557: 471,  # The Exodar
-    3562: 797,  # Hellfire Ramparts
-    3606: 775,  # Hyjal Summit
-    3607: 780,  # Serpentshrine Cavern
-    3703: 481,  # Shattrath City
-    3711: 493,  # Sholazar Basin
-    3713: 725,  # The Blood Furnace
-    3714: 710,  # The Shattered Halls
-    3715: 727,  # The Steamvault
-    3716: 726,  # The Underbog
-    3717: 728,  # The Slave Pens
-    3789: 724,  # Shadow Labyrinth
-    3790: 722,  # Auchenai Crypts
-    3791: 723,  # Sethekk Halls
-    3792: 732,  # Mana-Tombs
-    3805: 781,  # Zul'Aman
-    3820: 813,  # Eye of the Storm
-    3836: 779,  # Magtheridon's Lair
-    3845: 782,  # The Eye
-    3847: 729,  # The Botanica
-    3848: 731,  # The Arcatraz
-    3849: 730,  # The Mechanar
-    3923: 776,  # Gruul's Lair
-    3959: 796,  # Black Temple
-    4075: 789,  # Sunwell Plateau
-    4080: 499,  # Isle of Quel'Danas
-    4100: 521,  # The Culling of Stratholme
-    4131: 798,  # Magisters' Terrace
-    4196: 534,  # Drak'Tharon Keep
-    4197: 501,  # Wintergrasp
-    4228: 528,  # The Oculus
-    4264: 526,  # Halls of Stone
-    4265: 803,  # The Nexus
-    4272: 525,  # Halls of Lightning
-    4273: 529,  # Ulduar
-    4277: 533,  # Azjol-Nerub
-    4298: 502,  # Plaguelands: The Scarlet Enclave
-    4384: 512,  # Strand of the Ancients
-    4395: 504,  # Dalaran
-    4415: 536,  # The Violet Hold
-    4416: 530,  # Gundrak
-    4493: 531,  # The Obsidian Sanctum
-    4494: 522,  # Ahn'kahet: The Old Kingdom
-    4500: 527,  # The Eye of Eternity
-    4603: 532,  # Vault of Archavon
-    4706: 684,  # Ruins of Gilneas
-    4709: 607,  # Southern Barrens
-    4710: 540,  # Isle of Conquest
-    4714: 679,  # Gilneas
-    4720: 682,  # The Lost Isles
-    4722: 543,  # Trial of the Crusader
-    4723: 542,  # Trial of the Champion
-    4737: 605,  # Kezan
-    4742: 541,  # Hrothgar's Landing
-    4755: 611,  # Gilneas City
-    4809: 601,  # The Forge of Souls
-    4812: 604,  # Icecrown Citadel
-    4813: 602,  # Pit of Saron
-    4815: 610,  # Kelp'thar Forest
-    4820: 603,  # Halls of Reflection
-    4922: 700,  # Twilight Highlands
-    4926: 753,  # Blackrock Caverns
-    4945: 759,  # Halls of Origination
-    4950: 757,  # Grim Batol
-    4987: 609,  # The Ruby Sanctum
-    5004: 767,  # Throne of the Tides
-    5031: 626,  # Twin Peaks
-    5034: 720,  # Uldum
-    5035: 769,  # The Vortex Pinnacle
-    5042: 640,  # Deepholm
-    5088: 768,  # The Stonecore
-    5094: 754,  # Blackwing Descent
-    5095: 708,  # Tol Barad
-    5144: 615,  # Shimmering Expanse
-    5145: 614,  # Abyssal Depths
-    5146: 613,  # Vashj'ir
-    5287: 673,  # The Cape of Stranglethorn
-    5334: 758,  # The Bastion of Twilight
-    5339: 689,  # Stranglethorn Vale
-    5389: 709,  # Tol Barad Peninsula
-    5396: 747,  # Lost City of the Tol'vir
-    5416: 751,  # The Maelstrom
-    5449: 736,  # The Battle for Gilneas
-    5495: 691,  # Gnomeregan
-    5600: 752,  # Baradin Hold
-    5638: 773,  # Throne of the Four Winds
-    5695: 772,  # Ahn'Qiraj: The Fallen Kingdom
-    5723: 800,  # Firelands
-    5733: 795,  # Molten Front
-    5736: 808,  # The Wandering Isle
-    5785: 806,  # The Jade Forest
-    5788: 816,  # Well of Eternity
-    5789: 820,  # End Time
-    5805: 807,  # Valley of the Four Winds
-    5840: 811,  # Vale of Eternal Blossoms
-    5841: 809,  # Kun-Lai Summit
-    5842: 810,  # Townlong Steppes
-    5844: 819,  # Hour of Twilight
-    5861: 823,  # Darkmoon Island
-    5892: 824,  # Dragon Soul
-    5918: 877,  # Shado-Pan Monastery
-    5956: 867,  # Temple of the Jade Serpent
-    5963: 876,  # Stormstout Brewery
-    5976: 875,  # Gate of the Setting Sun
-    6006: 873,  # The Veiled Stair
-    6040: 851,  # Theramore's Fall (H)
-    6051: 881,  # Temple of Kotmogu
-    6052: 871,  # Scarlet Halls
-    6066: 898,  # Scholomance
-    6067: 886,  # Terrace of Endless Spring
-    6101: 878,  # A Brewing Storm
-    6109: 874,  # Scarlet Monastery
-    6125: 896,  # Mogu'shan Vaults
-    6126: 860,  # Silvershard Mines
-    6134: 857,  # Krasarang Wilds
-    6138: 858,  # Dread Wastes
-    6141: 811,  # Shrine of Two Moons
-    6142: 811,  # Shrine of Seven Stars
-    6170: 864,  # Northshire
-    6176: 866,  # Coldridge Valley
-    6182: 885,  # Mogu'shan Palace
-    6208: 900,  # Crypt of Forgotten Kings
-    6209: 880,  # Greenstone Village
-    6214: 887,  # Siege of Niuzao Temple
-    6219: 899,  # Arena of Annihilation
-    6297: 897,  # Heart of Fear
-    6309: 882,  # Unga Ingoo
-    6328: 883,  # Assault on Zan'vess
-    6426: 884,  # Brewmoon Festival
-    6450: 888,  # Shadowglen
-    6451: 889,  # Valley of Trials
-    6452: 890,  # Camp Narache
-    6453: 891,  # Echo Isles
-    6454: 892,  # Deathknell
-    6455: 893,  # Sunstrider Isle
-    6456: 894,  # Ammen Vale
-    6457: 895,  # New Tinkertown
-    6500: 906,  # Theramore's Fall (A)
-    6507: 928,  # Isle of Thunder
-    6510: 756,  # The Deadmines
-    6511: 749,  # Wailing Caverns
-    6514: 750,  # Maraudon
-    6565: 914,  # Dagger in the Dark
-    6567: 940,  # Battle on the High Seas
-    6575: 911,  # Lion's Landing
-    6615: 920,  # Domination Point
-    6616: 912,  # A Little Patience
-    6622: 930,  # Throne of Thunder
-    6661: 929,  # Isle of Giants
-    6662: 946,  # Talador
-    6678: 939,  # Blood in the Snow
-    6719: 947,  # Shadowmoon Valley
-    6720: 941,  # Frostfire Ridge
-    6721: 949,  # Gorgrond
-    6722: 948,  # Spires of Arak
-    6723: 945,  # Tanaan Jungle
-    6731: 938,  # The Secrets of Ragefire
-    6733: 937,  # Dark Heart of Pandaria
-    6738: 953,  # Siege of Orgrimmar
-    6755: 950,  # Nagrand
-    6757: 951,  # Timeless Isle
-    6771: 955,  # Celestial Tournament
-    6852: 899,  # Proving Grounds
-    6874: 964,  # Bloodmaul Slag Mines
-    6912: 984,  # Auchindoun
-    6932: 969,  # Shadowmoon Burial Grounds
-    6941: 978,  # Ashran
-    6951: 987,  # Iron Docks
-    6967: 988,  # Blackrock Foundry
-    6980: 481,  # Shattrath City
-    6984: 993,  # Grimrail Depot
-    6988: 989,  # Skyreach
-    6996: 994,  # Highmaul
-    7004: 976,  # Frostwall
-    7025: 945,  # Tanaan Jungle
-    7078: 971,  # Lunarfall
-    7109: 1008,  # The Everbloom
-    7307: 995,  # Upper Blackrock Spire
-    7332: 1009,  # Stormshield
-    7333: 1011,  # Warspear
-    7334: 1015,  # Azsuna
-    7502: 1014,  # Dalaran
-    7503: 1024,  # Highmountain
-    7541: 1017,  # Stormheim
-    7543: 1021,  # Broken Shore
-    7558: 1018,  # Val'sharah
-    7578: 1096,  # Eye of Azshara
-    7637: 1033,  # Suramar
-    7731: 1080,  # Thunder Totem
-    8000: 1015,  # Azsuna
-    8574: 1135,  # Krokuun
-    8701: 1170,  # MacAree
-    8899: 1171,  # Antoran Wastes
+    141: 57,  # Teldrassil
+    148: 62,  # Darkshore
+    206: 133,  # Utgarde Keep
+    209: 310,  # Shadowfang Keep
+    210: 118,  # Icecrown
+    215: 7,  # Mulgore
+    267: 25,  # Hillsbrad Foothills
+    331: 63,  # Ashenvale
+    357: 69,  # Feralas
+    361: 77,  # Felwood
+    394: 116,  # Grizzly Hills
+    400: 64,  # Thousand Needles
+    405: 66,  # Desolace
+    406: 65,  # Stonetalon Mountains
+    440: 71,  # Tanaris
+    490: 78,  # Un'Goro Crater
+    491: 301,  # Razorfen Kraul
+    493: 80,  # Moonglade
+    495: 117,  # Howling Fjord
+    616: 198,  # Mount Hyjal
+    618: 83,  # Winterspring
+    717: 225,  # The Stockade
+    718: 279,  # Wailing Caverns
+    719: 221,  # Blackfathom Deeps
+    721: 226,  # Gnomeregan
+    722: 300,  # Razorfen Downs
+    1176: 219,  # Zul'Farrak
+    1196: 136,  # Utgarde Pinnacle
+    1337: 230,  # Uldaman
+    1377: 81,  # Silithus
+    1497: 998,  # Undercity
+    1517: 230,  # Uldaman
+    1519: 84,  # Stormwind City
+    1537: 87,  # Ironforge
+    1581: 291,  # The Deadmines
+    1583: 250,  # Blackrock Spire
+    1584: 242,  # Blackrock Depths
+    1637: 86,  # Orgrimmar
+    1638: 88,  # Thunder Bluff
+    1657: 89,  # Darnassus
+    1977: 337,  # Zul'Gurub
+    2017: 317,  # Stratholme
+    2100: 280,  # Maraudon
+    2159: 248,  # Onyxia's Lair
+    2366: 273,  # The Black Morass
+    2367: 274,  # Old Hillsbrad Foothills
+    2437: 213,  # Ragefire Chasm
+    2557: 235,  # Dire Maul
+    2597: 91,  # Alterac Valley
+    2677: 287,  # Blackwing Lair
+    2717: 232,  # Molten Core
+    2817: 127,  # Crystalsong Forest
+    3277: 92,  # Warsong Gulch
+    3358: 93,  # Arathi Basin
+    3428: 319,  # Temple of Ahn'Qiraj
+    3429: 247,  # Ruins of Ahn'Qiraj
+    3430: 94,  # Eversong Woods
+    3433: 96,  # Ghostlands
+    3456: 162,  # Naxxramas
+    3457: 350,  # Karazhan
+    3483: 100,  # Hellfire Peninsula
+    3487: 110,  # Silvermoon City
+    3518: 107,  # Nagrand
+    3519: 108,  # Terokkar Forest
+    3520: 104,  # Shadowmoon Valley
+    3521: 102,  # Zangarmarsh
+    3522: 105,  # Blade's Edge Mountains
+    3523: 109,  # Netherstorm
+    3524: 97,  # Azuremyst Isle
+    3525: 106,  # Bloodmyst Isle
+    3537: 114,  # Borean Tundra
+    3557: 103,  # The Exodar
+    3562: 347,  # Hellfire Ramparts
+    3606: 329,  # Hyjal Summit
+    3607: 332,  # Serpentshrine Cavern
+    3703: 111,  # Shattrath City
+    3711: 119,  # Sholazar Basin
+    3713: 261,  # The Blood Furnace
+    3714: 246,  # The Shattered Halls
+    3715: 263,  # The Steamvault
+    3716: 262,  # The Underbog
+    3717: 265,  # The Slave Pens
+    3789: 260,  # Shadow Labyrinth
+    3790: 256,  # Auchenai Crypts
+    3791: 258,  # Sethekk Halls
+    3792: 272,  # Mana-Tombs
+    3805: 333,  # Zul'Aman
+    3820: 397,  # Eye of the Storm
+    3836: 331,  # Magtheridon's Lair
+    3845: 334,  # The Eye
+    3847: 266,  # The Botanica
+    3848: 269,  # The Arcatraz
+    3849: 267,  # The Mechanar
+    3923: 330,  # Gruul's Lair
+    3959: 340,  # Black Temple
+    4075: 336,  # Sunwell Plateau
+    4080: 122,  # Isle of Quel'Danas
+    4100: 131,  # The Culling of Stratholme
+    4131: 348,  # Magisters' Terrace
+    4196: 160,  # Drak'Tharon Keep
+    4197: 123,  # Wintergrasp
+    4228: 143,  # The Oculus
+    4264: 140,  # Halls of Stone
+    4265: 370,  # The Nexus
+    4272: 138,  # Halls of Lightning
+    4273: 148,  # Ulduar
+    4277: 157,  # Azjol-Nerub
+    4298: 124,  # Plaguelands: The Scarlet Enclave
+    4384: 128,  # Strand of the Ancients
+    4395: 125,  # Dalaran
+    4415: 168,  # The Violet Hold
+    4416: 154,  # Gundrak
+    4493: 155,  # The Obsidian Sanctum
+    4494: 132,  # Ahn'kahet: The Old Kingdom
+    4500: 141,  # The Eye of Eternity
+    4603: 156,  # Vault of Archavon
+    4706: 217,  # Ruins of Gilneas
+    4709: 199,  # Southern Barrens
+    4710: 169,  # Isle of Conquest
+    4722: 172,  # Trial of the Crusader
+    4723: 171,  # Trial of the Champion
+    4737: 194,  # Kezan
+    4742: 170,  # Hrothgar's Landing
+    4755: 202,  # Gilneas City
+    4809: 183,  # The Forge of Souls
+    4812: 186,  # Icecrown Citadel
+    4813: 184,  # Pit of Saron
+    4815: 201,  # Kelp'thar Forest
+    4820: 185,  # Halls of Reflection
+    4922: 241,  # Twilight Highlands
+    4926: 283,  # Blackrock Caverns
+    4945: 297,  # Halls of Origination
+    4950: 293,  # Grim Batol
+    4987: 200,  # The Ruby Sanctum
+    5004: 322,  # Throne of the Tides
+    5031: 206,  # Twin Peaks
+    5034: 249,  # Uldum
+    5035: 325,  # The Vortex Pinnacle
+    5042: 208,  # Deepholm
+    5088: 324,  # The Stonecore
+    5094: 285,  # Blackwing Descent
+    5095: 244,  # Tol Barad
+    5144: 205,  # Shimmering Expanse
+    5145: 204,  # Abyssal Depths
+    5146: 203,  # Vashj'ir
+    5287: 210,  # The Cape of Stranglethorn
+    5334: 294,  # The Bastion of Twilight
+    5339: 224,  # Stranglethorn Vale
+    5389: 245,  # Tol Barad Peninsula
+    5396: 277,  # Lost City of the Tol'vir
+    5449: 275,  # The Battle for Gilneas
+    5495: 226,  # Gnomeregan
+    5600: 282,  # Baradin Hold
+    5638: 328,  # Throne of the Four Winds
+    5695: 327,  # Ahn'Qiraj: The Fallen Kingdom
+    5723: 368,  # Firelands
+    5733: 338,  # Molten Front
+    5736: 378,  # The Wandering Isle
+    5785: 371,  # The Jade Forest
+    5788: 398,  # Well of Eternity
+    5789: 402,  # End Time
+    5805: 376,  # Valley of the Four Winds
+    5840: 391,  # Vale of Eternal Blossoms
+    5841: 379,  # Kun-Lai Summit
+    5842: 388,  # Townlong Steppes
+    5844: 400,  # Hour of Twilight
+    5861: 408,  # Darkmoon Island
+    5892: 410,  # Dragon Soul
+    5918: 444,  # Shado-Pan Monastery
+    5956: 429,  # Temple of the Jade Serpent
+    5963: 439,  # Stormstout Brewery
+    5976: 437,  # Gate of the Setting Sun
+    6006: 433,  # The Veiled Stair
+    6040: 416,  # Theramore's Fall (H)
+    6051: 449,  # Temple of Kotmogu
+    6052: 431,  # Scarlet Halls
+    6066: 476,  # Scholomance
+    6067: 456,  # Terrace of Endless Spring
+    6101: 447,  # A Brewing Storm
+    6109: 435,  # Scarlet Monastery
+    6125: 471,  # Mogu'shan Vaults
+    6126: 423,  # Silvershard Mines
+    6134: 419,  # Krasarang Wilds
+    6138: 422,  # Dread Wastes
+    6141: 391,  # Shrine of Two Moons
+    6142: 391,  # Shrine of Seven Stars
+    6170: 425,  # Northshire
+    6176: 427,  # Coldridge Valley
+    6182: 453,  # Mogu'shan Palace
+    6208: 481,  # Crypt of Forgotten Kings
+    6209: 448,  # Greenstone Village
+    6214: 458,  # Siege of Niuzao Temple
+    6219: 480,  # Arena of Annihilation
+    6297: 474,  # Heart of Fear
+    6309: 450,  # Unga Ingoo
+    6328: 451,  # Assault on Zan'vess
+    6426: 452,  # Brewmoon Festival
+    6450: 460,  # Shadowglen
+    6451: 461,  # Valley of Trials
+    6452: 462,  # Camp Narache
+    6453: 463,  # Echo Isles
+    6454: 465,  # Deathknell
+    6455: 467,  # Sunstrider Isle
+    6456: 468,  # Ammen Vale
+    6457: 469,  # New Tinkertown
+    6500: 483,  # Theramore's Fall (A)
+    6507: 505,  # Isle of Thunder
+    6510: 291,  # The Deadmines
+    6511: 279,  # Wailing Caverns
+    6514: 280,  # Maraudon
+    6565: 489,  # Dagger in the Dark
+    6567: 524,  # Battle on the High Seas
+    6575: 486,  # Lion's Landing
+    6615: 498,  # Domination Point
+    6616: 487,  # A Little Patience
+    6622: 508,  # Throne of Thunder
+    6661: 507,  # Isle of Giants
+    6662: 535,  # Talador
+    6678: 523,  # Blood in the Snow
+    6719: 539,  # Shadowmoon Valley
+    6720: 526,  # Frostfire Ridge
+    6721: 543,  # Gorgrond
+    6722: 542,  # Spires of Arak
+    6723: 534,  # Tanaan Jungle
+    6731: 522,  # The Secrets of Ragefire
+    6733: 521,  # Dark Heart of Pandaria
+    6738: 557,  # Siege of Orgrimmar
+    6755: 550,  # Nagrand
+    6757: 554,  # Timeless Isle
+    6771: 571,  # Celestial Tournament
+    6852: 480,  # Proving Grounds
+    6874: 573,  # Bloodmaul Slag Mines
+    6912: 593,  # Auchindoun
+    6932: 574,  # Shadowmoon Burial Grounds
+    6941: 588,  # Ashran
+    6951: 595,  # Iron Docks
+    6967: 596,  # Blackrock Foundry
+    6980: 111,  # Shattrath City
+    6984: 606,  # Grimrail Depot
+    6988: 601,  # Skyreach
+    6996: 611,  # Highmaul
+    7025: 534,  # Tanaan Jungle
+    7109: 621,  # The Everbloom
+    7307: 616,  # Upper Blackrock Spire
+    7332: 622,  # Stormshield
+    7333: 624,  # Warspear
+    7334: 630,  # Azsuna
+    7502: 625,  # Dalaran
+    7503: 650,  # Highmountain
+    7541: 635,  # Stormheim
+    7543: 647,  # Broken Shore
+    7558: 641,  # Val'sharah
+    7578: 790,  # Eye of Azshara
+    7588: 649,  # Helheim
+    7637: 680,  # Suramar
+    7672: 704,  # Halls of Valor
+    7673: 733,  # Darkheart Thicket
+    7731: 750,  # Thunder Totem
+    7787: 710,  # Vault of the Wardens
+    7805: 751,  # Black Rook Hold
+    7814: 710,  # Vault of the Wardens
+    8000: 630,  # Azsuna
+    8026: 777,  # The Emerald Nightmare
+    8040: 713,  # Eye of Azshara
+    8574: 831,  # Krokuun
+    8701: 882,  # Mac'Aree
+    8899: 885,  # Antoran Wastes
     # Missing:
     5: False,  # - QA and DVD GLOBAL -
     25: False,  # Blackrock Mountain
@@ -334,6 +337,8 @@ zoneid_to_mapid = {
     3968: False,  # Ruins of Lordaeron
     4378: False,  # Dalaran Arena
     4406: False,  # The Ring of Valor
+    4714: False,  # Gilneas
+    4720: False,  # The Lost Isles
     4732: False,  # Emberstone Mine
     4766: False,  # Kaja'mine
     4778: False,  # Kaja'mite Cavern
@@ -342,6 +347,7 @@ zoneid_to_mapid = {
     4911: False,  # Volcanoth's Lair
     4913: False,  # Spitescale Cavern
     4924: False,  # Gallywix Labor Mine
+    5416: False,  # The Maelstrom
     5511: False,  # Scarlet Monastery Entrance
     5955: False,  # Greenstone Quarry
     6074: False,  # Guo-Lai Halls
@@ -390,8 +396,10 @@ zoneid_to_mapid = {
     6960: False,  # The Battle of Thunder Pass
     6976: False,  # Bloodthorn Cave
     6979: False,  # Tomb of Souls
+    7004: False,  # Frostwall
     7005: False,  # Snowfall Alcove
     7042: False,  # Umbral Halls
+    7078: False,  # Lunarfall
     7083: False,  # Defense of Karabor
     7089: False,  # Tomb of Lights
     7107: False,  # Tarren Mill vs Southshore
@@ -419,33 +427,28 @@ zoneid_to_mapid = {
     7546: False,  # Neltharion's Lair
     7548: False,  # Ashran Mine
     7576: False,  # Twisting Nether
-    7588: 1022,  # Helheim
     7622: False,  # The Breached Ossuary
     7634: False,  # Feralas (copy)
     7638: False,  # Sanctum of Light
     7656: False,  # The Great Sea
     7658: False,  # The Cove of Nashal
-    7672: 1041,  # Halls of Valor
-    7673: 1067,  # Darkheart Thicket
     7674: False,  # Legion Dungeon
     7679: False,  # Acherus: The Ebon Hold
     7690: False,  # The Skyfire
     7691: False,  # Small Battleground D
     7695: False,  # Icecrown Citadel
     7705: False,  # Mardum, the Shattered Abyss
+    7734: False,  # Icecrown Citadel
     7737: False,  # Niskara
     7744: False,  # Shield's Rest
     7745: False,  # The Maelstrom
     7767: False,  # Suramar
     7771: False,  # Tanaan Invasion
     7777: False,  # The Violet Hold
-    7787: 1045,  # Vault of the Wardens
     7796: False,  # Broken Shore
-    7805: 1081,  # Black Rook Hold
     7811: False,  # The Naglfar
-    7812: False,  # Helmouth Cliffs
+    7812: False,  # Maw of Souls
     7813: False,  # Skyhold
-    7814: 1045,  # Vault of the Wardens
     7816: False,  # Black Rook Hold Arena
     7822: False,  # Nagrand Arena
     7827: False,  # Southshore vs. Tarren Mill
@@ -458,7 +461,24 @@ zoneid_to_mapid = {
     7875: False,  # Dreadscar Rift
     7877: False,  # Trueshot Lodge
     7879: False,  # Hall of the Guardian
-    7881: False,  # Dalaran
+    7884: False,  # The Silver Enclave
+    7885: False,  # Antonidas Memorial
+    7886: False,  # Dalaran City
+    7887: False,  # Circle of Wills
+    7888: False,  # The Violet Citadel
+    7889: False,  # The Violet Citadel Spire
+    7890: False,  # Sewer Exit Pipe
+    7891: False,  # Sewer Exit Pipe
+    7892: False,  # Dalaran Floating Rocks
+    7893: False,  # Sunreaver's Sanctuary
+    7894: False,  # Dalaran Island
+    7895: False,  # The Violet Hold
+    7896: False,  # Runeweaver Square
+    7897: False,  # The Underbelly
+    7898: False,  # The Eventide
+    7899: False,  # Magus Commerce Exchange
+    7900: False,  # Vargoth's Retreat
+    7901: False,  # Violet Citadel Balcony
     7902: False,  # The Wandering Isle
     7903: False,  # Temple of Five Dawns
     7918: False,  # Dreadscar Rift
@@ -483,8 +503,6 @@ zoneid_to_mapid = {
     8022: False,  # Mardum, the Shattered Abyss
     8023: False,  # The Fel Hammer
     8025: False,  # The Nighthold
-    8026: 1094,  # The Emerald Nightmare
-    8040: 1046,  # Eye of Azshara
     8044: False,  # Tirisfal Glades
     8046: False,  # The Maelstrom
     8053: False,  # The Greater Sea (Don't Use)
@@ -496,7 +514,7 @@ zoneid_to_mapid = {
     8061: False,  # Dev Area - D
     8062: False,  # Dev Area - E
     8063: False,  # Dev Area - F
-    8064: False,  # Dev Area - G
+    8064: False,  # The MOTHERLODE!!
     8079: False,  # Court of Stars
     8091: False,  # Nordrassil
     8093: False,  # The Vortex Pinnacle
@@ -520,17 +538,220 @@ zoneid_to_mapid = {
     8277: False,  # The Exodar
     8285: False,  # Scarlet Monastery
     8309: False,  # Tol Barad
-    8319: False,  # Baradin Hold
     8330: False,  # [TEMP] Placeholder Area - Level Design Land - Wind Test
     8344: False,  # The Crystal Hall
     8347: False,  # Sanctum of Light
-    8354: False,  # Eastern Plaguelands
-    8390: False,  # Suramar
     8392: False,  # Dalaran Sewers
-    8406: 1501,  # Black Rook Hold
+    8406: False,  # Black Rook Hold
     8422: False,  # Tempest's Roar
-    8423: 1516,  # The Arcway
-    8433: False,  # Ashran
+    8423: False,  # The Arcway
     8439: False,  # Great Dark Beyond
+    8440: False,  # Trial of Valor
+    8443: False,  # Return to Karazhan
     8445: False,  # The Great Sea
+    8448: False,  # [TEMP] JT Zandalar Swamp
+    8449: False,  # xxOLD - Zuldazar City
+    8451: False,  # Temple of the White Tiger Flight Bounds
+    8457: False,  # Escape from the Vault
+    8460: False,  # Death Knight Campaign Flight Bounds
+    8469: False,  # The Maelstrom
+    8470: False,  # VictorCortisLand
+    8473: False,  # Dungeon Blockout
+    8474: False,  # Dalaran (Northrend)
+    8476: False,  # Viperville
+    8479: False,  # Broken Shore DO NOT USE
+    8480: False,  # 8DesertCanyonTest
+    8482: False,  # Blade's Edge Arena
+    8483: False,  # The Eye of Eternity
+    8485: False,  # Ashran
+    8488: False,  # Underrot
+    8489: False,  # Islands
+    8490: False,  # Winter AB
+    8491: False,  # [TEMP] CV Kul Tiras Island
+    8499: False,  # Zuldazar
+    8500: False,  # Nazmir
+    8501: False,  # Vol'dun
+    8502: False,  # South Seas
+    8508: False,  # Arathi Blizzard
+    8514: False,  # Gnomeregan
+    8518: False,  # The Eye of Eternity
+    8520: False,  # [TEMP] Cooking Impossible
+    8524: False,  # Tomb of Sargeras
+    8525: False,  # Underrot
+    8526: False,  # Arathi Basin
+    8527: False,  # Cathedral of Eternal Night
+    8528: False,  # Wailing Caverns
+    8529: False,  # Pit of Saron
+    8531: False,  # Stormstout Brewery
+    8535: False,  # Dalaran (Deadwind Pass)
+    8538: False,  # Twisting Nether
+    8546: False,  # Cave of the Bloodtotem
+    8549: False,  # The Maelstrom
+    8556: False,  # Stratholme
+    8561: False,  # The Twisting Nether
+    8566: False,  # The Great Sea
+    8567: False,  # Tiragarde Sound
+    8570: False,  # Val'sharah
+    8573: False,  # MSandersTest2016
+    8579: False,  # Isle of Blizzcon
+    8581: False,  # Assault on Broken Shore
+    8582: False,  # AI Test Map 8 - Arathi Basin
+    8583: False,  # Black Rook Hold
+    8591: False,  # Hearthstone Tavern
+    8594: False,  # Halls of Valor
+    8596: False,  # Stormheim
+    8597: False,  # Battle for Blackrock Mountain
+    8598: False,  # Warden Tower TEMP
+    8600: False,  # The Great Sea
+    8601: False,  # Animation Playground
+    8624: False,  # Shado-Pan Showdown
+    8625: False,  # Azsuna
+    8630: False,  # The Deadmines
+    8634: False,  # [TEMP] Hackaton CV
+    8635: False,  # The Frozen Throne
+    8636: False,  # [TEMP] Hackaton Race
+    8637: False,  # [TEMP] Hackaton Race
+    8638: False,  # Antorus, the Burning Throne
+    8639: False,  # Test Dungeon
+    8640: False,  # Coldridge Valley
+    8641: False,  # Fields of the Eternal Hunt
+    8645: False,  # Halls of Valor
+    8646: False,  # Highmountain
+    8647: False,  # Gnomeregan
+    8651: False,  # Mardum, the Shattered Abyss
+    8656: False,  # CharacterTestSpaceArea_ECannon
+    8657: False,  # Hall of Communion
+    8660: False,  # Throne of the Four Winds
+    8661: False,  # [PH] JT Test World
+    8672: False,  # The Ruby Sanctum
+    8676: False,  # The Lost Glacier
+    8684: False,  # AI Test Map - Arathi Basin (Debug Version)
+    8685: False,  # Warsong Gulch
+    8699: False,  # Nazmir [DEVLAND COPY]
+    8700: False,  # The Exodar
+    8709: False,  # Akazamzarak's Hat
+    8712: False,  # The Trial of Style
+    8713: False,  # Animation Playground
+    8721: False,  # Drustvar
+    8801: False,  # Dustwallow Marsh UNUSED
+    8840: False,  # Azuremyst Isle
+    8842: False,  # The Exodar
+    8910: False,  # The Seat of the Triumvirate
+    8911: False,  # Arcatraz
+    8950: False,  # Ruins of Lordaeron
+    8955: False,  # Dev Area - H (copy)
+    8957: False,  # Dev Area - I
+    8978: False,  # Tol Dagor
+    8979: False,  # Warfronts Prototype Main
+    8980: False,  # Endless Halls
+    9010: False,  # Shadow of Azeroth
+    9012: False,  # Forge of Aeons
+    9023: False,  # [Test] Environment Art - Tina 01
+    9024: False,  # Invasion Point
+    9028: False,  # Atal'Dazar
+    9029: False,  # Hozen Island
+    9042: False,  # Stormsong Valley
+    9043: False,  # Silithus Brawl
+    9051: False,  # The Deaths of Chromie
+    9099: False,  # [TEMP] CV JulienTest
+    9100: False,  # Invasion Point: Aurinor
+    9101: False,  # Tropical Isle 8.0
+    9102: False,  # Invasion Point: Naigtal
+    9105: False,  # Vale of Eternal Blossoms
+    9126: False,  # Invasion Point: Cen'gar
+    9127: False,  # Invasion Point: Val
+    9128: False,  # Invasion Point: Sangua
+    9136: False,  # Seething Shore
+    9163: False,  # Julien Test Land
+    9164: False,  # Freehold
+    9168: False,  # Arathi Highlands
+    9180: False,  # Invasion Point: Bonich
+    9183: False,  # RiverZone_Art
+    9188: False,  # Telogrus Rift
+    9278: False,  # Kul Tiras Arena
+    9279: False,  # Hook Point
+    9295: False,  # Greater Invasion Point: Matron Folnuna
+    9296: False,  # Greater Invasion Point: Pit Lord Vilemus
+    9297: False,  # Greater Invasion Point: Inquisitor Meto
+    9298: False,  # Greater Invasion Point: Occularus
+    9299: False,  # Greater Invasion Point: Sotanathor
+    9300: False,  # Greater Invasion Point: Mistress Alluradel
+    9313: False,  # Silvermoon City
+    9318: False,  # The Sunwell
+    9327: False,  # Tol Dagor
+    9331: False,  # Gilneas Island
+    9354: False,  # Siege of Boralus
+    9359: False,  # The Vindicaar
+    9383: False,  # BlizzCon 2017
+    9386: False,  # Allied - Highmountain Tauren Unlock
+    9387: False,  # Allied - Lightforged Draenei Unlock
+    9388: False,  # Hero Stage LD Demo Area
+    9389: False,  # Uldir
+    9391: False,  # The Underrot
+    9394: False,  # Allied - Orgrimmar
+    9395: False,  # Allied - Stormwind
+    9396: False,  # Allied - Void Elf Unlock
+    9397: False,  # Allied - Nightborne Unlock
+    9415: False,  # Telogrus Rift
+    9424: False,  # Waycrest Manor
+    9439: False,  # Arathi Highlands
+    9440: False,  # Verdant Wilds
+    9443: False,  # Titan Island
+    9462: False,  # IsleCVTest
+    9463: False,  # A Dark Place
+    9466: False,  # The Rotting Mire
+    9467: False,  # White Mesa Isles
+    9468: False,  # IsleCVTest2
+    9469: False,  # Un'gol Ruins
+    9481: False,  # CursedPrototype
+    9483: False,  # Katalina Island
+    9485: False,  # Wonderland
+    9486: False,  # lost world [ph]
+    9488: False,  # Swamp Island
+    9489: False,  # Rock Spire
+    9496: False,  # Molten Cay
+    9497: False,  # Skittering Hollow
+    9525: False,  # Shrine of the Storm
+    9526: False,  # Kings' Rest
+    9527: False,  # Temple of Sethraliss
+    9529: False,  # Alliance Airship
+    9535: False,  # Francesco test - internal only
+    9540: False,  # Snowblossom Villiage
+    9541: False,  # Pandaren Farm Dev
+    9548: False,  # Havenswood
+    9552: False,  # Quest Training
+    9553: False,  # Stormwind City
+    9564: False,  # The Maiden's Virtue
+    9570: False,  # Zuldazar
+    9576: False,  # The Dread Chain
+    9591: False,  # Whispering Reef
+    9616: False,  # Jorundall
+    9651: False,  # Model Size Land
+    9653: False,  # Hall of Communion
+    9663: False,  # War Campaign - Alliance
+    9664: False,  # War Campaign - Horde
+    9666: False,  # Blackrock Depths
+    9667: False,  # Chamber of Heart
+    9669: False,  # South Seas
+    9679: False,  # Arathi Highlands
+    9692: False,  # Damarcus_World
+    9703: False,  # Allied - Dark Iron Dwarf Unlock
+    9704: False,  # Allied - Mag'har Orc Unlock
+    9734: False,  # Arathi Highlands
+    9764: False,  # Thros, the Blighted Lands
+    9778: False,  # Uncharted Island
+    9786: False,  # Gorgrond
+    9800: False,  # The Great Sea
+    9808: False,  # Eastern Kingdoms
+    9826: False,  # Sword of Dawn
+    9830: False,  # Tempest's Roar
+    9937: False,  # The Great Sea
+    9960: False,  # 8.0 Islands - Ship - Player Alliance - Kul'Tiras Medium 01 With Gangplank
+    9992: False,  # Mugambala
+    10015: False,  # Tol Dagor
+    10022: False,  # Firelands
+    10028: False,  # Blackrock Depths
+    10041: False,  # The Battle for Stromgarde
+    10043: False,  # Tol Dagor
+    10047: False,  # Siege of Orgrimmar
 }
