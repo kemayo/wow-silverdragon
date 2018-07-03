@@ -113,9 +113,9 @@ class NPC:
         return text.replace('&#39;', "'").replace('&#x27;', "'").replace('&quot;', '"')
 
     def _filter_locations(self, locations):
-        if self.id == 32491 and 950 in locations:
-            # Time-lost needs to get cleaned up a little
-            del(locations[950])
+        if self.id == 32491 and 550 in locations:
+            # Time-lost needs to get cleaned up a little, removed from Nagrand
+            del(locations[550])
         cleaned = {}
         for zone, coords in locations.items():
             coords = set(coords)
