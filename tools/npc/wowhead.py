@@ -100,7 +100,7 @@ class WowheadNPC(NPC):
                 return int(info.group(1))
 
     def _expansion(self):
-        patch = re.search(r'Added\\x20in\\x20patch\\x20(\d+)', self.__page())
+        patch = re.search(r'Added(?:\s|\\x20)in(?:\s|\\x20)patch(?:\s|\\x20)(\d+)', self.__page())
         if patch:
             return int(patch.group(1))
 

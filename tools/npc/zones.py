@@ -295,9 +295,15 @@ zoneid_to_mapid = {
     8000: 630,  # Azsuna
     8026: 777,  # The Emerald Nightmare
     8040: 790,  # Eye of Azshara
+    8499: 862,  # Zuldazar
+    8500: 863,  # Nazmir
+    8501: 864,  # Vol'dun
+    8567: 895,  # Tiragarde Sound
     8574: 830,  # Krokuun
     8701: 882,  # Mac'Aree
+    8721: 896,  # Drustvar
     8899: 885,  # Antoran Wastes
+    9042: 942,  # Stormsong Valley
     # Missing:
     5: False,  # - QA and DVD GLOBAL -
     25: False,  # Blackrock Mountain
@@ -568,9 +574,6 @@ zoneid_to_mapid = {
     8489: False,  # Islands
     8490: False,  # Winter AB
     8491: False,  # [TEMP] CV Kul Tiras Island
-    8499: False,  # Zuldazar
-    8500: False,  # Nazmir
-    8501: False,  # Vol'dun
     8502: False,  # South Seas
     8508: False,  # Arathi Blizzard
     8514: False,  # Gnomeregan
@@ -590,7 +593,6 @@ zoneid_to_mapid = {
     8556: False,  # Stratholme
     8561: False,  # The Twisting Nether
     8566: False,  # The Great Sea
-    8567: False,  # Tiragarde Sound
     8570: False,  # Val'sharah
     8573: False,  # MSandersTest2016
     8579: False,  # Isle of Blizzcon
@@ -632,7 +634,6 @@ zoneid_to_mapid = {
     8709: False,  # Akazamzarak's Hat
     8712: False,  # The Trial of Style
     8713: False,  # Animation Playground
-    8721: False,  # Drustvar
     8801: False,  # Dustwallow Marsh UNUSED
     8840: False,  # Azuremyst Isle
     8842: False,  # The Exodar
@@ -650,7 +651,6 @@ zoneid_to_mapid = {
     9024: False,  # Invasion Point
     9028: False,  # Atal'Dazar
     9029: False,  # Hozen Island
-    9042: False,  # Stormsong Valley
     9043: False,  # Silithus Brawl
     9051: False,  # The Deaths of Chromie
     9099: False,  # [TEMP] CV JulienTest

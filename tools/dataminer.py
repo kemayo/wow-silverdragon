@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
-import sys
-import requests
+import os
+import pathlib
 import requests_cache
 
 import npc
@@ -95,9 +95,11 @@ end
 
 
 def write_output(expansion, data):
-    with open("../Data/{exp}/SilverDragon_{exp}.toc".format(exp=expansion), 'w') as f:
+    path = pathlib.Path.cwd().parent / 'Data' / expansion
+    path.mkdir(exist_ok=True)
+    with open(path / "SilverDragon_{exp}.toc".format(exp=expansion), 'w') as f:
         f.write(TOC_TEMPLATE.format(exp=expansion))
-    with open("../Data/{exp}/module.lua".format(exp=expansion), 'w') as f:
+    with open(path / "module.lua", 'w') as f:
         f.write(MODULE_START_TEMPLATE.format(exp=expansion))
         for id, mob in sorted(data.items()):
             if id in blacklist:
@@ -134,11 +136,16 @@ if __name__ == '__main__':
     if ns.local:
         print("LOADING FROM local")
         for patch, expansion in expansions.items():
-            mobs = npc.local.load("../Data/{}/module.lua".format(expansion))
-            for mob in mobs:
-                mobs[mob].data["expansion"] = patch
-            local.update(mobs)
-            print("LOADED: {} ({})".format(expansion, len(mobs)))
+            if ns.expansion and expansion != expansions.get(ns.expansion):
+                continue
+            try:
+                mobs = npc.local.load("../Data/{}/module.lua".format(expansion))
+                for mob in mobs:
+                    mobs[mob].data["expansion"] = patch
+                local.update(mobs)
+                print("LOADED: {} ({})".format(expansion, len(mobs)))
+            except Exception as e:
+                print("COULDN'T LOAD: {}".format(expansion))
 
     if ns.wowdb:
         print("LOADING FROM wowdb")
@@ -146,9 +153,10 @@ if __name__ == '__main__':
             print("ACQUIRING rares for category", creature_type)
             wowdb.update(WowdbNPC.query(creature_type, expansion=ns.expansion, session=session, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
 
-        for id in force_include:
-            if id not in wowdb:
-                wowdb[id] = WowdbNPC(id, ptr=ns.ptr, beta=ns.beta, session=session)
+        if not ns.expansion:
+            for id in force_include:
+                if id not in wowdb:
+                    wowdb[id] = WowdbNPC(id, ptr=ns.ptr, beta=ns.beta, session=session)
 
     if ns.wowhead:
         print("LOADING FROM wowhead")
@@ -161,9 +169,10 @@ if __name__ == '__main__':
                 # run per-expansion to avoid caps on results-displayed
                 wowhead.update(WowheadNPC.query(categoryid, expansion, session=session, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
 
-        for id in force_include:
-            if id not in wowhead:
-                wowhead[id] = WowheadNPC(id, ptr=ns.ptr, beta=ns.beta, session=session)
+        if not ns.expansion:
+            for id in force_include:
+                if id not in wowhead:
+                    wowhead[id] = WowheadNPC(id, ptr=ns.ptr, beta=ns.beta, session=session)
 
     for id, mob in list(wowdb.items()) + list(wowhead.items()):
         if id in local:
