@@ -34,7 +34,7 @@ function module:OnInitialize()
 		[77081] = {name="The Lanticore",locations={[616]={29404100,35603740},},},
 		[77085] = {name="Dark Emanation",locations={[539]={48404300},},quest=33064,vignette="Shadowmoon Cultist Ritual",},
 		[77140] = {name="Amaukwa",locations={[539]={29203100,34803460,35202900,40203000},},quest=33061,tameable=true,},
-		[77310] = {name="Mad \\"King\\" Sporeon",locations={[539]={44602100},},quest=35906,},
+		[77310] = {name="Mad \"King\" Sporeon",locations={[539]={44602100},},quest=35906,},
 		[77513] = {name="Coldstomp the Griever",locations={[526]={25405440},},quest=34129,tameable=true,vignette="Coldstomp",},
 		[77519] = {name="Giantbane",locations={[526]={57003800,58603240},},tameable=true,},
 		[77526] = {name="Scout Goreseeker",locations={[526]={76406340},[543]={27407160},},quest=34132,},

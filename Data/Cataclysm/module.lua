@@ -9,7 +9,7 @@ function module:OnInitialize()
 		[39186] = {name="Hellgazer",locations={[71]={40804100},},tameable=true,},
 		[43488] = {name="Mordei the Earthrender",locations={[69]={49203020},},},
 		[43613] = {name="Doomsayer Wiserunner",locations={[7]={33803700},},},
-		[43720] = {name="\\"Pokey\\" Thornmantle",locations={[462]={20407060},},},
+		[43720] = {name="\"Pokey\" Thornmantle",locations={[462]={20407060},},},
 		[44224] = {name="Two-Toes",locations={[56]={13404140},},},
 		[44225] = {name="Rufus Darkshot",locations={[56]={42603220},},},
 		[44226] = {name="Sarltooth",locations={[56]={32405080},},},
