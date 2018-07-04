@@ -7,8 +7,6 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("HandyNotes", "AceEvent-3.0")
 local Debug = core.Debug
 
-local HBD = LibStub("HereBeDragons-2.0")
-
 local db
 -- local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
 local icon, icon_mount, icon_partial, icon_mount_partial, icon_done, icon_mount_done
@@ -18,7 +16,6 @@ module.nodes = nodes
 
 local handler = {}
 do
-	local currentLevel, currentZone
 	local function should_show_mob(id)
 		if db.hidden[id] or (ns.mobdb[id] and ns.mobdb[id].hidden) then
 			return false
@@ -86,26 +83,22 @@ do
 		end
 		return nil, nil, nil, nil, nil
 	end
-	function handler:GetNodes(mapFile, minimap, level)
-		-- Debug("HandyNotes GetNodes", mapFile, HBD:GetMapIDFromFile(mapFile), nodes[mapFile])
-		currentZone = mapFile
-		currentLevel = level
-		return iter, nodes[mapFile], nil
+	function handler:GetNodes2(uiMapID, minimap)
+		return iter, nodes[uiMapID], nil
 	end
 end
 
-function handler:OnEnter(mapFile, coord)
+function handler:OnEnter(uiMapID, coord)
 	local tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip
 	if self:GetCenter() > UIParent:GetCenter() then -- compare X coordinate
 		tooltip:SetOwner(self, "ANCHOR_LEFT")
 	else
 		tooltip:SetOwner(self, "ANCHOR_RIGHT")
 	end
-	local zoneid = HBD:GetMapIDFromFile(mapFile)
-	local id, name, questid, _, _, lastseen = core:GetMobByCoord(zoneid, coord)
+	local id, name, questid, _, _, lastseen = core:GetMobByCoord(uiMapID, coord)
 	if not name then
 		tooltip:AddLine(UNKNOWN)
-		tooltip:AddDoubleLine("At", zoneid .. ':' .. coord)
+		tooltip:AddDoubleLine("At", uiMapID .. ':' .. coord)
 		return tooltip:Show()
 	end
 	tooltip:AddLine(name)
@@ -132,21 +125,19 @@ end
 local clicked_zone, clicked_coord
 local info = {}
 
-local function hideMob(button, mapFile, coord)
-	local zoneid = HBD:GetMapIDFromFile(mapFile)
-	local id = core:GetMobByCoord(zoneid, coord)
+local function hideMob(button, uiMapID, coord)
+	local id = core:GetMobByCoord(uiMapID, coord)
 	if id then
 		db.hidden[id] = true
 		module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
 	end
 end
 
-local function createWaypoint(button, mapFile, coord)
+local function createWaypoint(button, uiMapID, coord)
 	if TomTom then
-		local mapId = HandyNotes:GetMapFiletoMapID(mapFile)
 		local x, y = HandyNotes:getXY(coord)
-		local id, name = core:GetMobByCoord(mapId, coord)
-		TomTom:AddMFWaypoint(mapId, nil, x, y, {
+		local id, name = core:GetMobByCoord(uiMapID, coord)
+		TomTom:AddMFWaypoint(uiMapID, nil, x, y, {
 			title = name,
 			persistent = nil,
 			minimap = true,
@@ -202,9 +193,9 @@ end
 local dropdown = CreateFrame("Frame")
 dropdown.displayMode = "MENU"
 dropdown.initialize = generateMenu
-function handler:OnClick(button, down, mapFile, coord)
+function handler:OnClick(button, down, uiMapID, coord)
 	if button == "RightButton" and not down then
-		clicked_zone = mapFile
+		clicked_zone = uiMapID
 		clicked_coord = coord
 		ToggleDropDownMenu(1, nil, dropdown, self, 0, 0)
 	end
@@ -326,17 +317,11 @@ end
 function module:UpdateNodes()
 	wipe(nodes)
 	for zone, mobs in pairs(ns.mobsByZone) do
-		local mapFile = HBD:GetMapFileFromID(zone)
-		Debug("UpdateNodes", zone, mapFile)
-		if mapFile then
-			nodes[mapFile] = {}
-			for id, locs in pairs(mobs) do
-				for _, loc in ipairs(locs) do
-					nodes[mapFile][loc] = id
-				end
+		nodes[zone] = {}
+		for id, locs in pairs(mobs) do
+			for _, loc in ipairs(locs) do
+				nodes[zone][loc] = id
 			end
-		else
-			Debug("No mapfile for zone!", zone)
 		end
 	end
 	self.nodes = nodes
