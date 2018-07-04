@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: SilverDragon (Cataclysm)
 ## Notes: Mobs for Cataclysm
 ## Version: @project-version@
