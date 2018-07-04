@@ -65,9 +65,10 @@ expansions = {
     5: "Mists",
     6: "Warlords",
     7: "Legion",
+    8: "BattleForAzeroth",
 }
 
-TOC_TEMPLATE = """## Interface: 70300
+TOC_TEMPLATE = """## Interface: 80000
 ## Title: SilverDragon ({exp})
 ## Notes: Mobs for {exp}
 ## Version: @project-version@
