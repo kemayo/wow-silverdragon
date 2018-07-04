@@ -7,7 +7,7 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("HandyNotes", "AceEvent-3.0")
 local Debug = core.Debug
 
-local HBD = LibStub("HereBeDragons-1.0")
+local HBD = LibStub("HereBeDragons-2.0")
 
 local db
 -- local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
