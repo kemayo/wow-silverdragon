@@ -280,8 +280,8 @@ zoneid_to_mapid = {
     7334: 630,  # Azsuna
     7502: 625,  # Dalaran
     7503: 650,  # Highmountain
-    7541: 635,  # Stormheim
-    7543: 647,  # Broken Shore
+    7541: 634,  # Stormheim
+    7543: 646,  # Broken Shore
     7558: 641,  # Val'sharah
     7578: 790,  # Eye of Azshara
     7588: 649,  # Helheim
@@ -294,8 +294,8 @@ zoneid_to_mapid = {
     7814: 710,  # Vault of the Wardens
     8000: 630,  # Azsuna
     8026: 777,  # The Emerald Nightmare
-    8040: 713,  # Eye of Azshara
-    8574: 831,  # Krokuun
+    8040: 790,  # Eye of Azshara
+    8574: 830,  # Krokuun
     8701: 882,  # Mac'Aree
     8899: 885,  # Antoran Wastes
     # Missing:
