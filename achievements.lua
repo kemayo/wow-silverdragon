@@ -154,7 +154,9 @@ local achievements = {
 	},
 	[11786] = {}, -- Terrors of the Shore
 	[11841] = {}, -- Naxt Victim
-	[12078] = {}, -- Commander of Argus
+	[12078] = {
+		[127323] = 37629, -- Ataxon
+	}, -- Commander of Argus
 }
 core.achievements = achievements
 local mobs_to_achievement = {
