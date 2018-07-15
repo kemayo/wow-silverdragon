@@ -381,6 +381,7 @@ function module:OnInitialize()
 		[127703] = {name="Doomcaster Suprax",locations={[1171]={58801160},},quest=48968,},
 		[127705] = {name="Mother Rosula",locations={[1171]={66801740},},quest=48970,},
 		[127706] = {name="Rezira the Seer",locations={[1171]={65408140},},},
+		[132580] = {name="Ssinkrix",locations={[261]={54837930},},quest=50223,},
 		[132591] = {name="Ogmot the Mad",locations={[261]={29107440},},quest=50334,},
 	})
 end
