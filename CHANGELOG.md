@@ -1,6 +1,8 @@
 # Changelog
 
 ## Changed in v4.0.5
+* Updated for Battle for Azeroth
+* New option: ignore all mobs in a given module. (E.g. "please shut up about every single Legion rare".)
 * Filled in lots of completion data for the Legion Adventurer achievements
 * Added the Commander of Argus achievement
 * Adjust colors in the dropdown and handynotes: red for not-complete, yellow for partially-complete (quest / achievement), green for fully complete
