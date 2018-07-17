@@ -5,6 +5,7 @@ local module = core:NewModule("Announce", "AceTimer-3.0", "LibSink-2.0")
 local Debug = core.Debug
 
 local LSM = LibStub("LibSharedMedia-3.0")
+local HBD = LibStub("HereBeDragons-2.0")
 
 if LSM then
 	-- Register some media
@@ -211,7 +212,7 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zon
 	if source:match("^sync") then
 		local channel, player = source:match("sync:(.+):(.+)")
 		if channel and player then
-			local localized_zone = GetMapNameByID(zone) or UNKNOWN
+			local localized_zone = HBD:GetLocalizedMap(zone) or UNKNOWN
 			source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. localized_zone
 		end
 	end

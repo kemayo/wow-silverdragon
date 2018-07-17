@@ -4,6 +4,8 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Marker")
 local Debug = core.Debug
 
+local HBD = LibStub("HereBeDragons-2.0")
+
 local mod_announce
 
 local globaldb
@@ -69,7 +71,7 @@ function module:Seen_Raw(callback, id, zone, x, y, dead, source, unit)
 	if GetRaidTargetIndex(unit) then
 		return
 	end
-	if id and core:ShouldIgnoreMob(id, GetCurrentMapAreaID()) then
+	if id and core:ShouldIgnoreMob(id, HBD:GetPlayerZone()) then
 		return
 	end
 	if mod_announce and not mod_announce:ShouldAnnounce(id, zone, x, y, dead, source, unit) then
