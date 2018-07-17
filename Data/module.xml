@@ -7,4 +7,5 @@
   <Script file="Mists/module.lua"/>
   <Script file="Warlords/module.lua"/>
   <Script file="Legion/module.lua"/>
+  <Script file="BattleForAzeroth/module.lua"/>
 </Ui>

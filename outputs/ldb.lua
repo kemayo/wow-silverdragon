@@ -3,7 +3,7 @@ local myname, ns = ...
 local icon = LibStub("LibDBIcon-1.0", true)
 
 local LibQTip = LibStub("LibQTip-1.0")
-local HBD = LibStub("HereBeDragons-1.0")
+local HBD = LibStub("HereBeDragons-2.0")
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("LDB")

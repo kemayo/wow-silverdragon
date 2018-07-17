@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: SilverDragon (Warlords)
 ## Notes: Mobs for Warlords
 ## Version: @project-version@

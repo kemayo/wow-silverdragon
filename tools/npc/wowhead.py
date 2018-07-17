@@ -13,7 +13,7 @@ zone_map = False
 class WowheadNPC(NPC):
     URL = 'http://www.wowhead.com'
     URL_PTR = 'http://ptr.wowhead.com'
-    URL_BETA = 'http://legion.wowhead.com'
+    URL_BETA = 'http://bfa.wowhead.com'
 
     page = False
     _info = False
@@ -37,9 +37,9 @@ class WowheadNPC(NPC):
         return self._info
 
     def _name(self):
-        info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: '(.+?)'};", self.__page())
+        info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: \"(.+?)\"};", self.__page())
         if info:
-            return self.html_decode(info.group(1).replace("\\'", "'"))
+            return self.html_decode(info.group(1).replace("\\'", "'").replace('\"', '"'))
 
     def _creature_type(self):
         return types.get(self.__info().get('type'))
@@ -100,7 +100,7 @@ class WowheadNPC(NPC):
                 return int(info.group(1))
 
     def _expansion(self):
-        patch = re.search(r'Added\\x20in\\x20patch\\x20(\d+)', self.__page())
+        patch = re.search(r'Added(?:\s|\\x20)in(?:\s|\\x20)patch(?:\s|\\x20)(\d+)', self.__page())
         if patch:
             return int(patch.group(1))
 

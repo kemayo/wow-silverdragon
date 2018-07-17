@@ -1,6 +1,6 @@
 ## Interface: 80000
-## Title: SilverDragon (Mists)
-## Notes: Mobs for Mists
+## Title: SilverDragon (BattleForAzeroth)
+## Notes: Mobs for BattleForAzeroth
 ## Version: @project-version@
 ## Author: Kemayo
 ## eMail: kemayo at gmail dot com

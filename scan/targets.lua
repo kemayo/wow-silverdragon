@@ -4,7 +4,7 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Scan_Targets", "AceEvent-3.0")
 local Debug = core.Debug
 
-local HBD = LibStub("HereBeDragons-1.0")
+local HBD = LibStub("HereBeDragons-2.0")
 
 local globaldb
 local UnitExists, UnitIsVisible, UnitPlayerControled, UnitName, UnitLevel, UnitCreatureType, UnitGUID = UnitExists, UnitIsVisible, UnitPlayerControled, UnitName, UnitLevel, UnitCreatureType, UnitGUID

@@ -1,4 +1,4 @@
-﻿## Interface: 70300
+﻿## Interface: 80000
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
@@ -11,11 +11,11 @@
 ## X-Donate: PayPal:kemayo AT gmail DOT com
 ## X-Curse-Project-ID: 14647
 ## X-WoWI-ID: 6606
-## OptionalDependencies: Ace3, LibSharedMedia-3.0, HandyNotes, _NPCScan.Overlay, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons-1.0, LibTextDump-1.0
+## OptionalDependencies: Ace3, LibSharedMedia-3.0, HandyNotes, _NPCScan.Overlay, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons, LibTextDump-1.0
 ## SavedVariables: SilverDragon3DB,SilverDragon2DB
 ## LoadOnDemand: 0
 
-## X-Embeds: Ace3, LibSink-2.0, LibSharedMedia-3.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons-1.0, LibTextDump-1.0
+## X-Embeds: Ace3, LibSink-2.0, LibSharedMedia-3.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons-2.0, LibTextDump-1.0
 
 #@no-lib-strip@
 lib\LibStub\LibStub.lua
@@ -36,7 +36,7 @@ lib\LibDBIcon-1.0\LibDBIcon-1.0.lua
 lib\LibQTip-1.0\LibQTip-1.0.lua
 lib\LibSharedMedia-3.0\lib.xml
 lib\AceGUI-3.0-SharedMediaWidgets\widget.xml
-lib\HereBeDragons-1.0\HereBeDragons-1.0.lua
+lib\HereBeDragons\HereBeDragons-2.0.lua
 lib\LibTextDump-1.0\lib.xml
 #@end-no-lib-strip@
 

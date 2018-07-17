@@ -1,6 +1,6 @@
 local myname, ns = ...
 
-local HBD = LibStub("HereBeDragons-1.0")
+local HBD = LibStub("HereBeDragons-2.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0")
 SilverDragon = addon
@@ -353,7 +353,7 @@ do
 end
 do
 	local zone_ignores = {
-		[950] = {
+		[550] = {
 			[32491] = true, -- Time-Lost
 		},
 	}

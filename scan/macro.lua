@@ -4,7 +4,7 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Macro", "AceEvent-3.0", "AceConsole-3.0")
 local Debug = core.Debug
 
-local HBD = LibStub("HereBeDragons-1.0")
+local HBD = LibStub("HereBeDragons-2.0")
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Macro", {
