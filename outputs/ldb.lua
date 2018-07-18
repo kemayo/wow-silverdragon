@@ -162,7 +162,7 @@ function module:SetupDataObject()
 			for i,rare in ipairs(rares_seen) do
 				tooltip:AddLine(
 					core:GetMobLabel(rare.id) or core:NameForMob(rare.id) or UNKNOWN,
-					GetMapNameByID(rare.zone) or UNKNOWN,
+					HBD:GetLocalizedMap(rare.zone) or UNKNOWN,
 					(rare.x and rare.y) and (core.round(rare.x * 100, 1) .. ', ' .. core.round(rare.y * 100, 1)) or UNKNOWN,
 					core:FormatLastSeen(rare.when),
 					rare.source or UNKNOWN
