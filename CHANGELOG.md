@@ -1,5 +1,8 @@
 # Changelog
 
+## Changed in v4.0.7
+* ...stupid typo in the TOC broke everything.
+
 ## Changed in v4.0.6
 * Some map function related issues in BfA.
 
