@@ -1,5 +1,8 @@
 # Changelog
 
+## Changed in v4.0.6
+* Some map function related issues in BfA.
+
 ## Changed in v4.0.5
 * Updated for Battle for Azeroth
 * New option: ignore all mobs in a given module. (E.g. "please shut up about every single Legion rare".)
