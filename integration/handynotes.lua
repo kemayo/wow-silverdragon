@@ -7,6 +7,8 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("HandyNotes", "AceEvent-3.0")
 local Debug = core.Debug
 
+local HBDMigrate = LibStub("HereBeDragons-Migrate", true)
+
 local db
 -- local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
 local icon, icon_mount, icon_partial, icon_mount_partial, icon_done, icon_mount_done
@@ -84,6 +86,7 @@ do
 		return nil, nil, nil, nil, nil
 	end
 	function handler:GetNodes2(uiMapID, minimap)
+		Debug("HandyNotes GetNodes2", uiMapID, minimap)
 		return iter, nodes[uiMapID], nil
 	end
 end
@@ -94,6 +97,10 @@ function handler:OnEnter(uiMapID, coord)
 		tooltip:SetOwner(self, "ANCHOR_LEFT")
 	else
 		tooltip:SetOwner(self, "ANCHOR_RIGHT")
+	end
+	if HBDMigrate and type(uiMapID) == "string" then
+		-- ...HandyNotes seems to be giving old mapfile stuff to minimap pins. So, compatibility layer.
+		uiMapID = HBDMigrate:GetUIMapIDFromMapFile(uiMapID)
 	end
 	local id, name, questid, _, _, lastseen = core:GetMobByCoord(uiMapID, coord)
 	if not name then
@@ -114,7 +121,7 @@ function handler:OnEnter(uiMapID, coord)
 	tooltip:Show()
 end
 
-function handler:OnLeave(mapFile, coord)
+function handler:OnLeave(uiMapID, coord)
 	if self:GetParent() == WorldMapButton then
 		WorldMapTooltip:Hide()
 	else

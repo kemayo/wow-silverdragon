@@ -1,4 +1,4 @@
-﻿## Interface: 80000
+﻿\## Interface: 80000
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
@@ -37,6 +37,7 @@ lib\LibQTip-1.0\LibQTip-1.0.lua
 lib\LibSharedMedia-3.0\lib.xml
 lib\AceGUI-3.0-SharedMediaWidgets\widget.xml
 lib\HereBeDragons\HereBeDragons-2.0.lua
+lib\HereBeDragons\HereBeDragons-Migrate.lua
 lib\LibTextDump-1.0\lib.xml
 #@end-no-lib-strip@
 
