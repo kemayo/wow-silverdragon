@@ -39,20 +39,37 @@ function module:OnEnable()
 	self:RegisterEvent("VIGNETTES_UPDATED")
 end
 
-function module:WorkOutMobFromVignette(name, ...)
-	if ns.vignetteMobLookup[name] then
-		Debug("vignetteMobLookup", name, ns.vignetteMobLookup[name])
-		return self:NotifyForMobs(ns.vignetteMobLookup[name], ...)
+function module:WorkOutMobFromVignette(vignetteInfo, source)
+	if not vignetteInfo then
+		return Debug("vignette had no info")
 	end
-	local questid = core:IdForQuest(name)
+	local x, y, current_zone = HBD:GetPlayerZonePosition()
+	local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, current_zone)
+	if position then
+		x, y = position:GetXY()
+	end
+	if vignetteInfo.objectGUID then
+		-- this *may* be a mob, but it also may be something which you interact with to summon the mob
+		local mobid = ns.IdFromGuid(vignetteInfo.objectGUID)
+		if mobid and ns.mobdb[mobid] then
+			Debug("mob from guid", vignetteInfo.objectGUID, mobid)
+			return self:NotifyIfNeeded(mobid, x, y, source)
+		end
+	end
+	-- And now, comparatively uncommon fallbacks:
+	if ns.vignetteMobLookup[vignetteInfo.name] then
+		Debug("vignetteMobLookup", vignetteInfo.name, ns.vignetteMobLookup[name])
+		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.name], x, y, source)
+	end
+	local questid = core:IdForQuest(vignetteInfo.name)
 	if questid and ns.questMobLookup[questid] then
-		Debug("questMobLookup", name, ns.questMobLookup[name])
-		return self:NotifyForMobs(ns.questMobLookup[questid], ...)
+		Debug("questMobLookup", vignetteInfo.name, ns.questMobLookup[questid])
+		return self:NotifyForMobs(ns.questMobLookup[questid], x, y, source)
 	end
-	local mobid = core:IdForMob(name)
+	local mobid = core:IdForMob(vignetteInfo.name)
 	if mobid then
-		Debug("name", name, mobid)
-		return self:NotifyIfNeeded(mobid, ...)
+		Debug("name", vignetteInfo.name, mobid)
+		return self:NotifyIfNeeded(mobid, x, y, source)
 	end
 	Debug("Couldn't work out mob from vignette", name)
 end
@@ -64,38 +81,32 @@ end
 
 local already_notified = {}
 function module:VIGNETTE_MINIMAP_UPDATED(event, instanceid, onMinimap, ...)
-	Debug("VIGNETTE_ADDED", instanceid, onMinimap, ...)
+	Debug("VIGNETTE_MINIMAP_UPDATED", instanceid, onMinimap, ...)
 	if not instanceid then
 		-- ...just in case
 		Debug("No Vignette instanceid")
 		return
 	end
 	if already_notified[instanceid] then
-		Debug("Skipping notify", "already done", id)
+		Debug("Skipping notify", "already done", instanceid)
 		return
 	end
+	self:WorkOutMobFromVignette(C_VignetteInfo.GetVignetteInfo(instanceid), "vignette")
 	already_notified[instanceid] = true
-	local current_zone = HBD:GetPlayerZone()
-	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-	local position = C_VignetteInfo.GetVignettePosition(instanceid, current_zone)
-
-	if not (vignetteInfo and vignetteInfo.name)  then
-		Debug("Vignette instanceid bug hit", instanceid, vignetteInfo)
-		return
-	end
-	self:WorkOutMobFromVignette(vignetteInfo.name, position.x, position.y, "vignette")
 end
 function module:VIGNETTES_UPDATED()
+	-- Debug("VIGNETTES_UPDATED")
 	local vignetteids = C_VignetteInfo.GetVignettes()
 	local current_zone = HBD:GetPlayerZone()
 
+	-- Interesting point: these show up here before they're on the minimap. This means that VIGNETTE_MINIMAP_UPDATED is actually almost never going to trip this notification now...
+
 	for i=1, #vignetteids do
 		local instanceid = vignetteids[i]
-		local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-
-		if vignetteInfo and vignetteInfo.onWorldMap and not already_notified[instanceid] then
-			local position = C_VignetteInfo.GetVignettePosition(instanceid, current_zone)
-			self:WorkOutMobFromVignette(vignetteInfo.name, position.x, position.y, "point-of-interest")
+		if not already_notified[instanceid] then
+			local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
+			Debug("vignette", instanceid, vignetteInfo.name, vignetteInfo.onWorldMap)
+			self:WorkOutMobFromVignette(vignetteInfo, vignetteInfo.onWorldMap and "point-of-interest" or "vignette")
 			already_notified[instanceid] = true
 		end
 	end

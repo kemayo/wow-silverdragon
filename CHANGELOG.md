@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v4.0.8
+* You Won't Believe This One Simple Trick To Increase Vignette Detection Range!
+* Also, fix for lua error in combat related to vignette positions
+
 ## Changed in v4.0.7
 * ...stupid typo in the TOC broke everything.
 

@@ -401,8 +401,8 @@ do
 		if not guid then return end
 		local unit_type, id = guid:match("(%a+)-%d+-%d+-%d+-%d+-(%d+)-.+")
 		if not (unit_type and valid_unit_types[unit_type]) then
-	 		return
-	 	end
+			return
+		end
 		return tonumber(id)
 	end
 	ns.IdFromGuid = npcIdFromGuid
