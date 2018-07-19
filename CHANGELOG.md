@@ -1,5 +1,8 @@
 # Changelog
 
+## Changed in v4.0.9
+* Vignettes with different names from their associated mob should now be detected on non-English locales.
+
 ## Changed in v4.0.8
 * You Won't Believe This One Simple Trick To Increase Vignette Detection Range!
 * Also, fix for lua error in combat related to vignette positions

@@ -39,10 +39,12 @@ function module:OnEnable()
 	self:RegisterEvent("VIGNETTES_UPDATED")
 end
 
-function module:WorkOutMobFromVignette(vignetteInfo, source)
+function module:WorkOutMobFromVignette(instanceid)
+	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
 	if not vignetteInfo then
 		return Debug("vignette had no info")
 	end
+	local source = vignetteInfo.onWorldMap and "point-of-interest" or "vignette"
 	local x, y, current_zone = HBD:GetPlayerZonePosition()
 	local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, current_zone)
 	if position then
@@ -57,9 +59,10 @@ function module:WorkOutMobFromVignette(vignetteInfo, source)
 		end
 	end
 	-- And now, comparatively uncommon fallbacks:
-	if ns.vignetteMobLookup[vignetteInfo.name] then
-		Debug("vignetteMobLookup", vignetteInfo.name, ns.vignetteMobLookup[name])
-		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.name], x, y, source)
+	if ns.vignetteMobLookup[vignetteInfo.vignetteID] or ns.vignetteMobLookup[vignetteInfo.name] then
+		-- IDs are based on https://bnet.marlam.in/dbc.php?dbc=vignette.db2
+		Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.vignetteID])
+		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.vignetteID] or ns.vignetteMobLookup[vignetteInfo.name], x, y, source)
 	end
 	local questid = core:IdForQuest(vignetteInfo.name)
 	if questid and ns.questMobLookup[questid] then
@@ -71,7 +74,7 @@ function module:WorkOutMobFromVignette(vignetteInfo, source)
 		Debug("name", vignetteInfo.name, mobid)
 		return self:NotifyIfNeeded(mobid, x, y, source)
 	end
-	Debug("Couldn't work out mob from vignette", name)
+	Debug("Couldn't work out mob from vignette", vignetteInfo.name)
 end
 function module:NotifyForMobs(mobs, ...)
 	for mobid in pairs(mobs) do
@@ -91,7 +94,7 @@ function module:VIGNETTE_MINIMAP_UPDATED(event, instanceid, onMinimap, ...)
 		Debug("Skipping notify", "already done", instanceid)
 		return
 	end
-	self:WorkOutMobFromVignette(C_VignetteInfo.GetVignetteInfo(instanceid), "vignette")
+	self:WorkOutMobFromVignette(instanceid)
 	already_notified[instanceid] = true
 end
 function module:VIGNETTES_UPDATED()
@@ -104,9 +107,7 @@ function module:VIGNETTES_UPDATED()
 	for i=1, #vignetteids do
 		local instanceid = vignetteids[i]
 		if not already_notified[instanceid] then
-			local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-			Debug("vignette", instanceid, vignetteInfo.name, vignetteInfo.onWorldMap)
-			self:WorkOutMobFromVignette(vignetteInfo, vignetteInfo.onWorldMap and "point-of-interest" or "vignette")
+			self:WorkOutMobFromVignette(instanceid)
 			already_notified[instanceid] = true
 		end
 	end
