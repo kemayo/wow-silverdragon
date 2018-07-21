@@ -10,7 +10,7 @@ zoneid_to_mapid = {
     8: 51,  # Swamp of Sorrows
     10: 47,  # Duskwood
     11: 56,  # Wetlands
-    12: 38,  # Elwynn Forest
+    12: 37,  # Elwynn Forest
     14: 1,  # Durotar
     15: 70,  # Dustwallow Marsh
     16: 76,  # Azshara
@@ -25,6 +25,8 @@ zoneid_to_mapid = {
     46: 36,  # Burning Steppes
     47: 26,  # The Hinterlands
     51: 32,  # Searing Gorge
+    54: 40,  # Jasperlode Mine
+    57: 38,  # Fargodeep Mine
     65: 115,  # Dragonblight
     66: 121,  # Zul'Drak
     67: 120,  # The Storm Peaks
@@ -309,8 +311,6 @@ zoneid_to_mapid = {
     25: False,  # Blackrock Mountain
     34: False,  # Echo Ridge Mine
     36: False,  # Alterac Mountains
-    54: False,  # Jasperlode Mine
-    57: False,  # Fargodeep Mine
     111: False,  # Jangolode Mine
     113: False,  # Gold Coast Quarry
     134: False,  # Gol'Bolar Quarry
