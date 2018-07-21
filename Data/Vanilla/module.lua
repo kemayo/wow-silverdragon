@@ -4,14 +4,14 @@ local module = core:NewModule("Data_Vanilla")
 
 function module:OnInitialize()
 	core:RegisterMobData("Vanilla", {
-		[61] = {name="Thuros Lightfingers",locations={[38]={50408320},},},
-		[62] = {name="Gug Fatcandle",locations={[38]={47603180},[425]={31401740},},},
-		[79] = {name="Narg the Taskmaster",locations={[38]={38008140},},},
-		[99] = {name="Morgaine the Sly",locations={[38]={30806500},},},
-		[100] = {name="Gruff Swiftbite",locations={[38]={25409100},},},
+		[61] = {name="Thuros Lightfingers",locations={[37]={50408320},},},
+		[62] = {name="Gug Fatcandle",locations={[37]={47603180},[425]={31401740},},},
+		[79] = {name="Narg the Taskmaster",locations={[37]={38008140},},},
+		[99] = {name="Morgaine the Sly",locations={[37]={30806500},},},
+		[100] = {name="Gruff Swiftbite",locations={[37]={25409100},},},
 		[462] = {name="Vultros",locations={[52]={48403260,53402420,56203580,58001800},},tameable=true,},
-		[471] = {name="Mother Fang",locations={[38]={31204420,36401880,39804780,41802160,45004200,46403180,47002420,52202700,53603260,60804700},},tameable=true,},
-		[472] = {name="Fedfennel",locations={[38]={66204100},},},
+		[471] = {name="Mother Fang",locations={[37]={60804700},[40]={31204420,36401880,39804780,41802160,45004200,46403180,47002420,52202700,53603260},},tameable=true,},
+		[472] = {name="Fedfennel",locations={[37]={66204100},},},
 		[506] = {name="Sergeant Brashclaw",locations={[52]={60407420},},},
 		[507] = {name="Fenros",locations={[47]={57802900,60604060,61204680,61403440},},},
 		[519] = {name="Slark",locations={[52]={49201140,55800860},},},
