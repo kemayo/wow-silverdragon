@@ -2,6 +2,7 @@
 
 ## Changed in v4.0.9
 * Vignettes with different names from their associated mob should now be detected on non-English locales.
+* Elwynn Forest rares were in the wrong zone
 
 ## Changed in v4.0.8
 * You Won't Believe This One Simple Trick To Increase Vignette Detection Range!
