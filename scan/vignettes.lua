@@ -41,38 +41,44 @@ end
 
 function module:WorkOutMobFromVignette(instanceid)
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-	if not vignetteInfo then
+	if not vignetteInfo and vignetteInfo.vignetteGUID then
 		return Debug("vignette had no info")
 	end
+	if vignetteInfo.atlasName == "VignetteLoot" then
+		return Debug("skipping loot vignette")
+	end
 	local source = vignetteInfo.onWorldMap and "point-of-interest" or "vignette"
-	local x, y, current_zone = HBD:GetPlayerZonePosition()
-	local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, current_zone)
-	if position then
-		x, y = position:GetXY()
+	local current_zone = HBD:GetPlayerZone()
+	local x, y
+	if current_zone then
+		local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, current_zone)
+		if position then
+			x, y = position:GetXY()
+		end
 	end
 	if vignetteInfo.objectGUID then
 		-- this *may* be a mob, but it also may be something which you interact with to summon the mob
 		local mobid = ns.IdFromGuid(vignetteInfo.objectGUID)
 		if mobid and ns.mobdb[mobid] then
 			Debug("mob from guid", vignetteInfo.objectGUID, mobid)
-			return self:NotifyIfNeeded(mobid, x, y, source)
+			return self:NotifyIfNeeded(mobid, current_zone, x, y, source)
 		end
 	end
 	-- And now, comparatively uncommon fallbacks:
 	if ns.vignetteMobLookup[vignetteInfo.vignetteID] or ns.vignetteMobLookup[vignetteInfo.name] then
 		-- IDs are based on https://bnet.marlam.in/dbc.php?dbc=vignette.db2
 		Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.vignetteID])
-		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.vignetteID] or ns.vignetteMobLookup[vignetteInfo.name], x, y, source)
+		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.vignetteID] or ns.vignetteMobLookup[vignetteInfo.name], current_zone, x, y, source)
 	end
 	local questid = core:IdForQuest(vignetteInfo.name)
 	if questid and ns.questMobLookup[questid] then
 		Debug("questMobLookup", vignetteInfo.name, ns.questMobLookup[questid])
-		return self:NotifyForMobs(ns.questMobLookup[questid], x, y, source)
+		return self:NotifyForMobs(ns.questMobLookup[questid], current_zone, x, y, source)
 	end
 	local mobid = core:IdForMob(vignetteInfo.name)
 	if mobid then
 		Debug("name", vignetteInfo.name, mobid)
-		return self:NotifyIfNeeded(mobid, x, y, source)
+		return self:NotifyIfNeeded(mobid, current_zone, x, y, source)
 	end
 	Debug("Couldn't work out mob from vignette", vignetteInfo.name)
 end
@@ -100,7 +106,6 @@ end
 function module:VIGNETTES_UPDATED()
 	-- Debug("VIGNETTES_UPDATED")
 	local vignetteids = C_VignetteInfo.GetVignettes()
-	local current_zone = HBD:GetPlayerZone()
 
 	-- Interesting point: these show up here before they're on the minimap. This means that VIGNETTE_MINIMAP_UPDATED is actually almost never going to trip this notification now...
 
@@ -113,15 +118,13 @@ function module:VIGNETTES_UPDATED()
 	end
 end
 
-function module:NotifyIfNeeded(id, x, y, variant)
-	local current_zone
+function module:NotifyIfNeeded(id, current_zone, x, y, variant)
 	local force = true
 	if x and y then
 		--Triggered by map update, vignette has exact location that does not match player, so update x, y
-		current_zone = HBD:GetPlayerZone()
 		force = false
 	else
-		x, y, current_zone = HBD:GetPlayerZonePosition()
+		x, y = HBD:GetPlayerZonePosition()
 	end
 	if not (current_zone and x and y) then
 		return
