@@ -144,7 +144,7 @@ local function createWaypoint(button, uiMapID, coord)
 	if TomTom then
 		local x, y = HandyNotes:getXY(coord)
 		local id, name = core:GetMobByCoord(uiMapID, coord)
-		TomTom:AddMFWaypoint(uiMapID, nil, x, y, {
+		TomTom:AddWaypoint(uiMapID, x, y, {
 			title = name,
 			persistent = nil,
 			minimap = true,
