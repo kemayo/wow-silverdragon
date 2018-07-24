@@ -90,7 +90,7 @@ zoneid_to_mapid = {
     3428: 319,  # Temple of Ahn'Qiraj
     3429: 247,  # Ruins of Ahn'Qiraj
     3430: 94,  # Eversong Woods
-    3433: 96,  # Ghostlands
+    3433: 95,  # Ghostlands
     3456: 162,  # Naxxramas
     3457: 350,  # Karazhan
     3483: 100,  # Hellfire Peninsula

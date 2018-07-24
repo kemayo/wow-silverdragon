@@ -34,6 +34,6 @@ function module:OnInitialize()
 		[20932] = {name="Nuramoc",locations={[109]={25008020,32603100,34607860,35201960,43607100,43807600,53605960,59205800,65605820},},tameable=true,},
 		[21724] = {name="Hawkbane",locations={[108]={76208100},},tameable=true,},
 		[22060] = {name="Fenissa the Assassin",locations={[106]={14605500,17404880,20806240,21805580,24205040,35606280},},},
-		[22062] = {name="Dr. Whitherlimb",locations={[96]={29408840,34404700,35408860,40004960},},},
+		[22062] = {name="Dr. Whitherlimb",locations={[95]={29408840,34404700,35408860,40004960},},},
 	})
 end
