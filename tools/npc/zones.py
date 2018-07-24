@@ -195,7 +195,7 @@ zoneid_to_mapid = {
     5788: 398,  # Well of Eternity
     5789: 402,  # End Time
     5805: 376,  # Valley of the Four Winds
-    5840: 391,  # Vale of Eternal Blossoms
+    5840: 390,  # Vale of Eternal Blossoms
     5841: 379,  # Kun-Lai Summit
     5842: 388,  # Townlong Steppes
     5844: 400,  # Hour of Twilight
