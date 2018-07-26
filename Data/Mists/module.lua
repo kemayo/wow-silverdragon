@@ -122,7 +122,6 @@ function module:OnInitialize()
 		[50836] = {name="Ik-Ik the Nimble",locations={[422]={55206380},},},
 		[50837] = {name="Kash",locations={[51]={78202660},},tameable=true,},
 		[50838] = {name="Tabbs",locations={[15]={57606020},},tameable=true,},
-		[50839] = {name="Chromehound",locations={[36]={17803120,22802540,23003240,35005800,38204300,38206840,41807520,42403740,45808580,47007700,48603520,54203500,56807560,57801520,58404000,61006880,62404680,63406200,64805580,75001160},},tameable=true,},
 		[50840] = {name="Major Nanners",locations={[390]={30409140},},},
 		[50842] = {name="Magmagan",locations={[36]={28803300},},tameable=true,},
 		[50846] = {name="Slavermaw",locations={[32]={57002460},},tameable=true,},

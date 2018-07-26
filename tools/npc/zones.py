@@ -15,6 +15,7 @@ zoneid_to_mapid = {
     15: 70,  # Dustwallow Marsh
     16: 76,  # Azshara
     17: 10,  # Northern Barrens
+    25: 33,  # Blackrock Mountain
     28: 22,  # Western Plaguelands
     33: 50,  # Northern Stranglethorn
     38: 48,  # Loch Modan
@@ -39,6 +40,7 @@ zoneid_to_mapid = {
     209: 310,  # Shadowfang Keep
     210: 118,  # Icecrown
     215: 7,  # Mulgore
+    258: 59,  # Fel Rock
     267: 25,  # Hillsbrad Foothills
     331: 63,  # Ashenvale
     357: 69,  # Feralas
@@ -68,8 +70,8 @@ zoneid_to_mapid = {
     1519: 84,  # Stormwind City
     1537: 87,  # Ironforge
     1581: 291,  # The Deadmines
-    1583: 250,  # Blackrock Spire
-    1584: 242,  # Blackrock Depths
+    1583: 34,  # Blackrock Spire
+    1584: 35,  # Blackrock Depths
     1637: 86,  # Orgrimmar
     1638: 88,  # Thunder Bluff
     1657: 89,  # Darnassus
@@ -308,7 +310,6 @@ zoneid_to_mapid = {
     9042: 942,  # Stormsong Valley
     # Missing:
     5: False,  # - QA and DVD GLOBAL -
-    25: False,  # Blackrock Mountain
     34: False,  # Echo Ridge Mine
     36: False,  # Alterac Mountains
     111: False,  # Jangolode Mine
@@ -318,7 +319,6 @@ zoneid_to_mapid = {
     136: False,  # The Grizzled Den
     155: False,  # Night Web's Hollow
     257: False,  # Shadowthread Cave
-    258: False,  # Fel Rock
     262: False,  # Ban'ethil Barrow Den
     360: False,  # The Venture Co. Mine
     365: False,  # Burning Blade Coven
