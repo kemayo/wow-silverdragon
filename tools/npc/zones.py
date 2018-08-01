@@ -296,6 +296,7 @@ zoneid_to_mapid = {
     7787: 710,  # Vault of the Wardens
     7805: 751,  # Black Rook Hold
     7814: 710,  # Vault of the Wardens
+    7897: 628,  # The Underbelly
     8000: 630,  # Azsuna
     8026: 777,  # The Emerald Nightmare
     8040: 790,  # Eye of Azshara
@@ -480,7 +481,6 @@ zoneid_to_mapid = {
     7894: False,  # Dalaran Island
     7895: False,  # The Violet Hold
     7896: False,  # Runeweaver Square
-    7897: False,  # The Underbelly
     7898: False,  # The Eventide
     7899: False,  # Magus Commerce Exchange
     7900: False,  # Vargoth's Retreat
