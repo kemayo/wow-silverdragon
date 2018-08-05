@@ -15,7 +15,10 @@ local achievements = {
 	},
 	[7439] = {}, -- Glorious! (Pandaria mobs)
 	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
-	[8714] = {}, -- Timeless Champion (Timeless Isle)
+	[8714] = {
+		[73174] = 31,
+		[73666] = 31,
+	}, -- Timeless Champion (Timeless Isle)
 	[9216] = {}, -- High-value targets (Ashran)
 	[9216] = {}, -- HighValueTargets
 	[9400] = {}, -- Gorgrond Monster Hunter
@@ -174,7 +177,12 @@ function ns:AchievementMobStatus(id)
 	end
 	local criteria = achievements[achievement][id]
 	local _, name = GetAchievementInfo(achievement)
-	local _, _, completed = GetAchievementCriteriaInfoByID(achievement, criteria)
+	local completed
+	if criteria < 32 then
+		_, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
+	else
+		_, _, completed = GetAchievementCriteriaInfoByID(achievement, criteria)
+	end
 	return achievement, name, completed
 end
 
