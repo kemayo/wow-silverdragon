@@ -32,6 +32,7 @@ zoneid_to_mapid = {
     66: 121,  # Zul'Drak
     67: 120,  # The Storm Peaks
     85: 18,  # Tirisfal Glades
+    111: 54,  # Jangolode Mine
     130: 21,  # Silverpine Forest
     139: 23,  # Eastern Plaguelands
     141: 57,  # Teldrassil
@@ -69,7 +70,7 @@ zoneid_to_mapid = {
     1517: 230,  # Uldaman
     1519: 84,  # Stormwind City
     1537: 87,  # Ironforge
-    1581: 291,  # The Deadmines
+    1581: 55,  # The Deadmines
     1583: 34,  # Blackrock Spire
     1584: 35,  # Blackrock Depths
     1637: 86,  # Orgrimmar
@@ -313,7 +314,6 @@ zoneid_to_mapid = {
     5: False,  # - QA and DVD GLOBAL -
     34: False,  # Echo Ridge Mine
     36: False,  # Alterac Mountains
-    111: False,  # Jangolode Mine
     113: False,  # Gold Coast Quarry
     134: False,  # Gol'Bolar Quarry
     135: False,  # Frostmane Hold
