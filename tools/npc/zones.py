@@ -218,7 +218,7 @@ zoneid_to_mapid = {
     6109: 435,  # Scarlet Monastery
     6125: 471,  # Mogu'shan Vaults
     6126: 423,  # Silvershard Mines
-    6134: 419,  # Krasarang Wilds
+    6134: 418,  # Krasarang Wilds
     6138: 422,  # Dread Wastes
     6141: 391,  # Shrine of Two Moons
     6142: 391,  # Shrine of Seven Stars
