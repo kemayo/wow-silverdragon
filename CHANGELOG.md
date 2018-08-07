@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v4.0.10
+* Broker tooltip sorts mobs alphabetically
+* Add questid tracking to (most) Timeless Isle mobs
+* Various bad map ids: Vale of Eternal Blossoms, Krasarang Wilds, Ghostlands, Underbelly, Westlands, Blackrock Mountain
+* TomTom integration via HandyNotes was broken
+
 ## Changed in v4.0.9
 * Vignettes with different names from their associated mob should now be detected on non-English locales.
 * Elwynn Forest rares were in the wrong zone
