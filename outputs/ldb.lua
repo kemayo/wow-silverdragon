@@ -103,7 +103,17 @@ function module:SetupDataObject()
 		return self.texture:GetSize()
 	end
 
+	local function mob_sorter(aid, bid)
+		local aname = core:NameForMob(aid)
+		local bname = core:NameForMob(bid)
+		if not aname or not bname then
+			return false
+		end
+		return tostring(aname):lower() < tostring(bname):lower()
+	end
+
 	local rares_seen = {}
+	local sorted_mobs = {}
 	local tooltip
 	function dataobject:OnEnter()
 		if not core.db then
@@ -116,9 +126,14 @@ function module:SetupDataObject()
 		if ns.mobsByZone[zone] then
 			tooltip:AddHeader("Nearby")
 			tooltip:AddHeader("Name", "Count", "Last Seen")
-			local n = 0
+
+			wipe(sorted_mobs)
 			for id in pairs(ns.mobsByZone[zone]) do
-				n = n + 1
+				table.insert(sorted_mobs, id)
+			end
+			table.sort(sorted_mobs, mob_sorter)
+
+			for _, id in ipairs(sorted_mobs) do
 				local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
 				local index, col = tooltip:AddLine(
 					core:GetMobLabel(id) or UNKNOWN,
@@ -151,7 +166,7 @@ function module:SetupDataObject()
 					end
 				end
 			end
-			if n == 0 then
+			if #sorted_mobs == 0 then
 				tooltip:AddLine("None")
 			end
 		end
