@@ -256,7 +256,7 @@ zoneid_to_mapid = {
     6662: 535,  # Talador
     6678: 523,  # Blood in the Snow
     6719: 539,  # Shadowmoon Valley
-    6720: 526,  # Frostfire Ridge
+    6720: 525,  # Frostfire Ridge
     6721: 543,  # Gorgrond
     6722: 542,  # Spires of Arak
     6723: 534,  # Tanaan Jungle
