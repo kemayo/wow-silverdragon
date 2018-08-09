@@ -41,7 +41,7 @@ end
 
 function module:WorkOutMobFromVignette(instanceid)
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-	if not (vignetteInfo and vignetteInfo.vignetteGUID) then
+	if not vignetteInfo then
 		return Debug("vignette had no info")
 	end
 	if vignetteInfo.atlasName == "VignetteLoot" then
@@ -50,7 +50,7 @@ function module:WorkOutMobFromVignette(instanceid)
 	local source = vignetteInfo.onWorldMap and "point-of-interest" or "vignette"
 	local current_zone = HBD:GetPlayerZone()
 	local x, y
-	if current_zone then
+	if current_zone and vignetteInfo.vignetteGUID then
 		local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, current_zone)
 		if position then
 			x, y = position:GetXY()
@@ -65,20 +65,26 @@ function module:WorkOutMobFromVignette(instanceid)
 		end
 	end
 	-- And now, comparatively uncommon fallbacks:
-	if ns.vignetteMobLookup[vignetteInfo.vignetteID] or ns.vignetteMobLookup[vignetteInfo.name] then
+	if vignetteInfo.vignetteID and ns.vignetteMobLookup[vignetteInfo.vignetteID] then
 		-- IDs are based on https://bnet.marlam.in/dbc.php?dbc=vignette.db2
 		Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.vignetteID])
-		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.vignetteID] or ns.vignetteMobLookup[vignetteInfo.name], current_zone, x, y, source)
+		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.vignetteID], current_zone, x, y, source)
 	end
-	local questid = core:IdForQuest(vignetteInfo.name)
-	if questid and ns.questMobLookup[questid] then
-		Debug("questMobLookup", vignetteInfo.name, ns.questMobLookup[questid])
-		return self:NotifyForMobs(ns.questMobLookup[questid], current_zone, x, y, source)
-	end
-	local mobid = core:IdForMob(vignetteInfo.name)
-	if mobid then
-		Debug("name", vignetteInfo.name, mobid)
-		return self:NotifyIfNeeded(mobid, current_zone, x, y, source)
+	if vignetteInfo.name then
+		if ns.vignetteMobLookup[vignetteInfo.name] then
+			Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.name])
+			return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.name], current_zone, x, y, source)
+		end
+		local questid = core:IdForQuest(vignetteInfo.name)
+		if questid and ns.questMobLookup[questid] then
+			Debug("questMobLookup", vignetteInfo.name, ns.questMobLookup[questid])
+			return self:NotifyForMobs(ns.questMobLookup[questid], current_zone, x, y, source)
+		end
+		local mobid = core:IdForMob(vignetteInfo.name)
+		if mobid then
+			Debug("name", vignetteInfo.name, mobid)
+			return self:NotifyIfNeeded(mobid, current_zone, x, y, source)
+		end
 	end
 	Debug("Couldn't work out mob from vignette", vignetteInfo.name)
 end
