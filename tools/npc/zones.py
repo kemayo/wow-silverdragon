@@ -174,7 +174,7 @@ zoneid_to_mapid = {
     5031: 206,  # Twin Peaks
     5034: 249,  # Uldum
     5035: 325,  # The Vortex Pinnacle
-    5042: 208,  # Deepholm
+    5042: 207,  # Deepholm
     5088: 324,  # The Stonecore
     5094: 285,  # Blackwing Descent
     5095: 244,  # Tol Barad
