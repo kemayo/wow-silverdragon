@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v4.0.11
+* Bug in a few areas where vignettes exist but don't provide information
+* More Timeless Isle questids
+* Bad map ids in Frostfire Ridge
+* Update embedded version of LibStub-2.0 to fix an error with chat channels
+
 ## Changed in v4.0.10
 * Broker tooltip sorts mobs alphabetically
 * Add questid tracking to (most) Timeless Isle mobs
