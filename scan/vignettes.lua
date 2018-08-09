@@ -41,7 +41,7 @@ end
 
 function module:WorkOutMobFromVignette(instanceid)
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-	if not vignetteInfo and vignetteInfo.vignetteGUID then
+	if not (vignetteInfo and vignetteInfo.vignetteGUID) then
 		return Debug("vignette had no info")
 	end
 	if vignetteInfo.atlasName == "VignetteLoot" then
