@@ -51,3 +51,10 @@ ignore:
    - lib/LibStub/tests
    - lib/HereBeDragons/CallbackHandler-1.0
    - lib/HereBeDragons/LibStub
+   - lib/HereBeDragons/1.0-compat
+   - lib/HereBeDragons/HereBeDragons.toc
+   - lib/HereBeDragons/HereBeDragons-1.0.lua
+   - lib/HereBeDragons/HereBeDragons-Pins-1.0.lua
+   - lib/HereBeDragons/HereBeDragons-Pins-2.0.lua
+   - lib/LibTextDump-1.0/LibTextDump-1.0.toc
+   - lib/LibTextDump-1.0/LibStub

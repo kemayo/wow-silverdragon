@@ -18,27 +18,7 @@
 ## X-Embeds: Ace3, LibSink-2.0, LibSharedMedia-3.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons-2.0, LibTextDump-1.0
 
 #@no-lib-strip@
-lib\LibStub\LibStub.lua
-lib\CallbackHandler-1.0\CallbackHandler-1.0.xml
-lib\ChatThrottleLib\ChatThrottleLib.xml
-lib\AceAddon-3.0\AceAddon-3.0.xml
-lib\AceConsole-3.0\AceConsole-3.0.xml
-lib\AceEvent-3.0\AceEvent-3.0.xml
-lib\AceTimer-3.0\AceTimer-3.0.xml
-lib\AceDB-3.0\AceDB-3.0.xml
-lib\AceDBOptions-3.0\AceDBOptions-3.0.xml
-lib\AceGUI-3.0\AceGUI-3.0.xml
-lib\AceLocale-3.0\AceLocale-3.0.xml
-lib\AceConfig-3.0\AceConfig-3.0.xml
-lib\LibSink-2.0\lib.xml
-lib\LibDataBroker-1.1\LibDataBroker-1.1.lua
-lib\LibDBIcon-1.0\LibDBIcon-1.0.lua
-lib\LibQTip-1.0\LibQTip-1.0.lua
-lib\LibSharedMedia-3.0\lib.xml
-lib\AceGUI-3.0-SharedMediaWidgets\widget.xml
-lib\HereBeDragons\HereBeDragons-2.0.lua
-lib\HereBeDragons\HereBeDragons-Migrate.lua
-lib\LibTextDump-1.0\lib.xml
+embeds.xml
 #@end-no-lib-strip@
 
 # the core
