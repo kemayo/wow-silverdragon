@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v4.0.12
+* Adventurer achievements for BfA, to track whether you've killed those mobs already
+* Bad mapids: Isle of Thunder, Deepholm
+
 ## Changed in v4.0.11
 * Bug in a few areas where vignettes exist but don't provide information
 * More Timeless Isle questids
