@@ -153,7 +153,7 @@ function module:OnInitialize()
 		[136346] = {name="Captain Stef \"Marrow\" Quin",locations={[864]={41202400},},},
 		[136413] = {name="Syrawon the Dominus",locations={[862]={53404460},},},
 		[136428] = {name="Dark Chronicler",locations={[862]={44007640},},},
-		[137025] = {name="Broodmother",locations={[942]={29206940},},quest=33843,},
+		[137025] = {name="Broodmother",locations={[942]={29206940},},},
 		[137183] = {name="Honey-Coated Slitherer",locations={[895]={64201920},},},
 		[137529] = {name="Arvon the Betrayed",locations={[896]={35206900},},},
 		[137553] = {name="General Krathax",locations={[864]={60606260},},},
