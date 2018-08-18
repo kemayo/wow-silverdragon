@@ -355,6 +355,7 @@ local achievements = {
 		[139980] = 41847, -- Taja the Tidehowler
 		-- [141043] = nil, -- Jakala the Cruel
 	},
+	[12587] = {}, -- Unbound Monstrosities
 }
 core.achievements = achievements
 local mobs_to_achievement = {
