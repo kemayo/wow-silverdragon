@@ -37,6 +37,9 @@ outputs\announce.lua
 outputs\sync.lua
 outputs\marker.lua
 
+outputs\vignettes.lua
+outputs\vignettes.xml
+
 targets\module.lua
 targets\popup.lua
 targets\looks\looks.xml

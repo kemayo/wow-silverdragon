@@ -1,5 +1,8 @@
 # Changelog
 
+## Changed in v4.0.13
+* Extend the range of vignettes on your minimap, so we don't keep on alerting for things without giving you any clue as to where they are.
+
 ## Changed in v4.0.12
 * Adventurer achievements for BfA, to track whether you've killed those mobs already
 * Bad mapids: Isle of Thunder, Deepholm
