@@ -86,6 +86,9 @@ function module:VIGNETTES_UPDATED()
 end
 
 function module:UpdateVignetteOnMinimap(instanceid)
+	if not self.db.profile.enabled then
+		return
+	end
 	local uiMapID = HBD:GetPlayerZone()
 	if not uiMapID then
 		return Debug("can't determine current zone")
