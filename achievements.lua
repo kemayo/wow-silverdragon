@@ -270,6 +270,7 @@ local achievements = {
 		[131262] = 41826, -- Pack Leader Asenya
 		[132179] = 41827, -- Raging Swell
 		[139278] = 41828, -- Ranja
+		[127289] = 41829, -- Saurolisk Tamer Mugg (Mugg)
 		[127290] = 41829, -- Saurolisk Tamer Mugg (Mugg)
 		[139287] = 41830, -- Sawtooth
 		[139285] = 41831, -- Shiverscale the Toxic
