@@ -7,6 +7,8 @@ local Debug = core.Debug
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 
+local compat_disabled
+
 local globaldb
 function module:OnInitialize()
 	globaldb = core.db.global
@@ -16,6 +18,8 @@ function module:OnInitialize()
 			enabled = true,
 		},
 	})
+
+	compat_disabled = IsAddOnLoaded("MinimapRangeExtender")
 
 	self.pool = CreateFramePool("FRAME", Minimap, "SilverDragonVignetteStretchPinTemplate")
 
@@ -28,10 +32,15 @@ function module:OnInitialize()
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
+					about = config.desc("Extend the range at which minimap vignettes will appear on the minimap.", 0),
 					enabled = config.toggle("Enabled", "Extend the range at which minimap vignettes will appear on the minimap.", 10),
 				},
 			},
 		}
+		if compat_disabled then
+			config.options.args.outputs.plugins.vignettes.vignettes.args.enabled.disabled = true
+			config.options.args.outputs.plugins.vignettes.vignettes.args.disabled = config.desc("Disabled because MinimapRangeExtender is installed and loaded, which does the same thing", 15)
+		end
 	end
 end
 
@@ -86,7 +95,7 @@ function module:VIGNETTES_UPDATED()
 end
 
 function module:UpdateVignetteOnMinimap(instanceid)
-	if not self.db.profile.enabled then
+	if compat_disabled or not self.db.profile.enabled then
 		return
 	end
 	local uiMapID = HBD:GetPlayerZone()
