@@ -130,7 +130,19 @@ function module:UpdateVignetteOnMinimap(instanceid)
 	else
 		icon.texture:Show()
 	end
+
+	self:UpdateEdge(icon)
 end
+
+function module:UpdateEdge(icon)
+	icon:SetAlpha(HBDPins:IsMinimapIconOnEdge(icon) and 0.6 or 1)
+end
+
+C_Timer.NewTicker(1, function(...)
+	for instanceid, icon in pairs(vignetteIcons) do
+		module:UpdateEdge(icon)
+	end
+end)
 
 SilverDragonVignetteStretchPinMixin = {}
 function SilverDragonVignetteStretchPinMixin:OnLoad()
