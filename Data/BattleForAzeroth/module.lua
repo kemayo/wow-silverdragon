@@ -7,7 +7,7 @@ function module:OnInitialize()
 		[120899] = {name="Kul'krazahn",locations={[862]={59605640},},quest=48333,},
 		[121242] = {name="Glompmaw",locations={[863]={68405700},},quest=50361,},
 		[122004] = {name="Umbra'jin",locations={[862]={71003240},},},
-		[122639] = {name="Old R'gal",locations={[862]={57804880},},},
+		[122639] = {name="Old R'gal",locations={[862]={57804880},},}, -- Alliance Only
 		[124185] = {name="Golrakahn",locations={[862]={74002820},},quest=47792,},
 		[124375] = {name="Overstuffed Saurolisk",locations={[863]={62206460},},},
 		[124397] = {name="Kal'Draxa",locations={[863]={52901340},},quest=47843,},
@@ -132,7 +132,7 @@ function module:OnInitialize()
 		[134625] = {name="Warmother Captive",locations={[864]={50803080},},},
 		[134637] = {name="Headhunter Lee'za",locations={[862]={62601360},},},
 		[134638] = {name="Warlord Zothix",locations={[864]={30205240},},},
-		[134643] = {name="Brgl-Lrgl the Basher",locations={[864]={29804640},},},
+		[134643] = {name="Brgl-Lrgl the Basher",locations={[864]={29804640},},}, -- WQ?
 		[134706] = {name="Deathcap",locations={[896]={18606080},},quest=50669,},
 		[134717] = {name="Umbra'rix",locations={[862]={48802920},},},
 		[134738] = {name="Hakbi the Risen",locations={[862]={42003620},},quest=50677,},
@@ -163,7 +163,7 @@ function module:OnInitialize()
 		[137025] = {name="Broodmother",locations={[942]={29206940},},quest=51298,},
 		[137183] = {name="Honey-Coated Slitherer",locations={[895]={64201920},},quest=51321,vignette=2942,},
 		[137529] = {name="Arvon the Betrayed",locations={[896]={35206900},},quest=51383,},
-		[137553] = {name="General Krathax",locations={[864]={60606260},},},
+		[137553] = {name="General Krathax",locations={[864]={60606260},},}, -- WQ?
 		[137649] = {name="Pest Remover Mk. II",locations={[942]={36003740,40404520,43205120},},},
 		[137665] = {name="Soul Goliath",locations={[896]={20405700,23404940},},},
 		[137681] = {name="King Clickyclack",locations={[864]={37404040},},},
