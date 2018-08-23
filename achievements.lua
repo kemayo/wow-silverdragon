@@ -20,7 +20,6 @@ local achievements = {
 		[73666] = 31,
 	}, -- Timeless Champion (Timeless Isle)
 	[9216] = {}, -- High-value targets (Ashran)
-	[9216] = {}, -- HighValueTargets
 	[9400] = {}, -- Gorgrond Monster Hunter
 	[9541] = {}, -- The Song of Silence
 	[9571] = {}, -- Broke Back Precipice
@@ -113,7 +112,7 @@ local achievements = {
 		[100231] = 33336, -- Dargok (Amateur Hunters)
 		[100232] = 33336, -- Sure Shot (Amateur Hunters)
 		[100302] = 33340, -- Puck (Unethical Adventurers)
-		[100302] = 33340, -- Zenobia (Unethical Adventurers)
+		[100303] = 33340, -- Zenobia (Unethical Adventurers)
 		[100495] = 33337, -- Devouring Darkness
 		[101077] = 33338, -- Sekhan
 		[109498] = 33340, -- Xaander (Unethical Adventurers)
