@@ -365,12 +365,13 @@ do
 		if zone and zone_ignores[zone] and zone_ignores[zone][id] then
 			return true
 		end
-		--Maybe add an option for this later. This checks unit faction and ignores mobs your faction cannot do anything with.
 		if mobdb[id] then
 			if mobdb[id].hidden then
 				return true
 			end
 			if mobdb[id].faction == faction then
+				--This checks unit faction and ignores mobs your faction cannot do anything with.
+				--TODO: add an option for this?
 				return true
 			end
 			if mobdb[id].source and globaldb.ignore_datasource[mobdb[id].source] then
