@@ -1,5 +1,8 @@
 # Changelog
 
+## Changed in v4.0.14
+* HandyNotes integration properly ignores rares you can't interact with because of your faction
+
 ## Changed in v4.0.13
 * Extend the range of vignettes on your minimap, so we don't keep on alerting for things without giving you any clue as to where they are.
 * Questids added for (almost) all the BfA Adventurer mobs

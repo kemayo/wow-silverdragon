@@ -19,7 +19,7 @@ module.nodes = nodes
 local handler = {}
 do
 	local function should_show_mob(id)
-		if db.hidden[id] or (ns.mobdb[id] and ns.mobdb[id].hidden) then
+		if db.hidden[id] or core:ShouldIgnoreMob(id) then
 			return false
 		end
 		local quest, achievement = ns:CompletionStatus(id)
