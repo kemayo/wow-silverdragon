@@ -104,7 +104,7 @@ function module:OnInitialize()
 		[132182] = {name="Auditor Dolp",locations={[895]={75007880},},quest=50156,},
 		[132211] = {name="Fowlmouth",locations={[895]={90007700},},quest=50155,},
 		[132244] = {name="Kiboku",locations={[862]={75603600},},quest=50159,},
-		[132253] = {name="Ji'arak",locations={[862]={69603400},},},
+		[132253] = {name="Ji'arak",locations={[862]={69603400},},note="World Boss",},
 		[132280] = {name="Squacks",locations={[895]={80808260},},quest=50160,},
 		[132319] = {name="Bilefang Mother",locations={[896]={35003320},},quest=50163,},
 		[132701] = {name="T'zane",locations={[863]={35403300},},},
