@@ -7,7 +7,7 @@ function module:OnInitialize()
 		[120899] = {name="Kul'krazahn",locations={[862]={59605640},},quest=48333,},
 		[121242] = {name="Glompmaw",locations={[863]={68405700},},quest=50361,},
 		[122004] = {name="Umbra'jin",locations={[862]={71003240},},},
-		[122639] = {name="Old R'gal",locations={[862]={57804880},},}, -- Alliance Only
+		[122639] = {name="Old R'gal",faction="Alliance",locations={[862]={57804880},},},
 		[124185] = {name="Golrakahn",locations={[862]={74002820},},quest=47792,},
 		[124375] = {name="Overstuffed Saurolisk",locations={[863]={62206460},},},
 		[124397] = {name="Kal'Draxa",locations={[863]={52901340},},quest=47843,},
@@ -232,6 +232,6 @@ function module:OnInitialize()
 		[142725] = {name="Horrific Apparition",locations={[14]={19406120},},},
 		[142739] = {name="Knight-Captain Aldrin",locations={[14]={48404080},},},
 		[143311] = {name="Toadcruel",locations={[863]={73204960},},},
-		[143536] = {name="High Warlord Volrath",locations={[862]={51605820},},},
+		[143536] = {name="High Warlord Volrath",faction="Alliance",locations={[862]={51605820},},},
 	})
 end
