@@ -7,7 +7,7 @@ function module:OnInitialize()
 		[120899] = {name="Kul'krazahn",locations={[862]={59605640},},quest=48333,},
 		[121242] = {name="Glompmaw",locations={[863]={68405700},},quest=50361,},
 		[122004] = {name="Umbra'jin",locations={[862]={71003240},},},
-		[122639] = {name="Old R'gal",faction="Alliance",locations={[862]={57804880},},},
+		[122639] = {name="Old R'gal",faction="Horde",locations={[862]={57804880},},},
 		[124185] = {name="Golrakahn",locations={[862]={74002820},},quest=47792,},
 		[124375] = {name="Overstuffed Saurolisk",locations={[863]={62206460},},},
 		[124397] = {name="Kal'Draxa",locations={[863]={52901340},},quest=47843,},
@@ -163,7 +163,7 @@ function module:OnInitialize()
 		[137025] = {name="Broodmother",locations={[942]={29206940},},quest=51298,},
 		[137183] = {name="Honey-Coated Slitherer",locations={[895]={64201920},},quest=51321,vignette=2942,},
 		[137529] = {name="Arvon the Betrayed",locations={[896]={35206900},},quest=51383,},
-		[137553] = {name="General Krathax",locations={[864]={60606260},},}, -- WQ?
+		[137553] = {name="General Krathax",locations={[864]={60606260},},}, -- WQ
 		[137649] = {name="Pest Remover Mk. II",locations={[942]={36003740,40404520,43205120},},},
 		[137665] = {name="Soul Goliath",locations={[896]={20405700,23404940},},},
 		[137681] = {name="King Clickyclack",locations={[864]={37404040},},},
@@ -232,6 +232,6 @@ function module:OnInitialize()
 		[142725] = {name="Horrific Apparition",locations={[14]={19406120},},},
 		[142739] = {name="Knight-Captain Aldrin",locations={[14]={48404080},},},
 		[143311] = {name="Toadcruel",locations={[863]={73204960},},},
-		[143536] = {name="High Warlord Volrath",faction="Alliance",locations={[862]={51605820},},},
+		[143536] = {name="High Warlord Volrath",faction="Horde",locations={[862]={51605820},},},
 	})
 end
