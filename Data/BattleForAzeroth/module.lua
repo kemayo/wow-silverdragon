@@ -79,7 +79,7 @@ function module:OnInitialize()
 		[130439] = {name="Ashmane",locations={[864]={54701530},},quest=47532,},
 		[130443] = {name="Hivemother Kraxi",locations={[864]={53605340},},},
 		[130508] = {name="Broodmother Razora",locations={[895]={83004440},},quest=49999,},
-		[130643] = {name="Twisted Child of Rezan",locations={[862]={76602740},},},
+		[130643] = {name="Twisted Child of Rezan",locations={[862]={76602740},},notes="World Quest"},
 		[130897] = {name="Captain Razorspine",locations={[942]={47206580},},quest=50170,},
 		[131233] = {name="Lei-zhi",locations={[862]={58807420},},quest=49911,},
 		[131252] = {name="Merianae",locations={[895]={43201680},},quest=49921,},
