@@ -324,6 +324,7 @@ local achievements = {
 		[140997] = 41754, -- Severus the Outcast
 		[138938] = 41755, -- Seabreaker Skoloth
 		[139328] = 41756, -- Sabertron
+		[139356] = 41756, -- Sabertron
 		[136189] = 41757, -- The Lichen King
 		[134884] = 41758, -- Ragna
 		[139319] = 41759, -- Slickspill
