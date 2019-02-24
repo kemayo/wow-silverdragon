@@ -15,10 +15,7 @@ local achievements = {
 	},
 	[7439] = {}, -- Glorious! (Pandaria mobs)
 	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
-	[8714] = {
-		[73174] = 31,
-		[73666] = 31,
-	}, -- Timeless Champion (Timeless Isle)
+	[8714] = {}, -- Timeless Champion (Timeless Isle)
 	[9216] = {}, -- High-value targets (Ashran)
 	[9400] = {}, -- Gorgrond Monster Hunter
 	[9541] = {}, -- The Song of Silence
