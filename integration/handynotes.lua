@@ -92,7 +92,7 @@ do
 end
 
 function handler:OnEnter(uiMapID, coord)
-	local tooltip = self:GetParent() == WorldMapFrame:GetCanvas() and WorldMapTooltip or GameTooltip
+	local tooltip = GameTooltip
 	if self:GetCenter() > UIParent:GetCenter() then -- compare X coordinate
 		tooltip:SetOwner(self, "ANCHOR_LEFT")
 	else
@@ -122,11 +122,7 @@ function handler:OnEnter(uiMapID, coord)
 end
 
 function handler:OnLeave(uiMapID, coord)
-	if self:GetParent() == WorldMapFrame:GetCanvas() then
-		WorldMapTooltip:Hide()
-	else
-		GameTooltip:Hide()
-	end
+	GameTooltip:Hide()
 end
 
 local clicked_zone, clicked_coord
