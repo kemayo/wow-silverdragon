@@ -433,6 +433,17 @@ function addon:FormatLastSeen(t)
 	end
 end
 
+addon.zone_names = setmetatable({}, {__index = function(self, mapid)
+	if not mapid then
+		return
+	end
+	local mapdata = C_Map.GetMapInfo(mapid)
+	if mapdata then
+		self[mapid] = mapdata.name
+		return mapdata.name
+	end
+end,})
+
 -- Location
 
 function addon:GetCoord(x, y)

@@ -4,8 +4,6 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Mobs", "AceConsole-3.0")
 local Debug = core.Debug
 
-local HBD = LibStub("HereBeDragons-2.0")
-
 local desc, toggle
 
 local function toggle_mob(id)
@@ -193,7 +191,7 @@ function module:BuildMobList(options)
 						group.args.zones.args["map"..zone] = {
 							type = "group",
 							inline = false,
-							name = HBD:GetLocalizedMap(zone),
+							name = core.zone_names[zone] or ("map"..zone),
 							desc = "ID: " .. zone,
 							args = {},
 						}

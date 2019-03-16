@@ -1,5 +1,8 @@
 # Changelog
 
+## Changed in v4.0.15
+* Config wasn't opening because localization for some zone names was broken
+
 ## Changed in v4.0.14
 * HandyNotes integration properly ignores rares you can't interact with because of your faction
 * Range-extended vignettes: shrink the clickable size a bit so you can click through them more easily
