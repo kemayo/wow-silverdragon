@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v4.0.16
+* Rearrange some mobs that were added in later expansions (Cataclysm and Mists) into the categories for the expansion whose zone they're in, because that makes more sense
+* Other missing questids
+
 ## Changed in v4.0.15
 * Config wasn't opening because localization for some zone names was broken
 
