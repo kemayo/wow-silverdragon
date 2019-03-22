@@ -214,6 +214,7 @@ local achievements = {
 		[133531] = 41475, -- Xu'ba
 		[133812] = 41477, -- Zanxib
 		[128930] = 41479, -- Mala'kili and Rohnkor
+		[128935] = 41479, -- Mala'kili and Rohnkor
 	},
 	[12943] = { -- Adventurer of Vol'Dun
 		[135852] = 41606, -- Ak'tar
