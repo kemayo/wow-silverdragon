@@ -305,11 +305,26 @@ zoneid_to_mapid = {
     8500: 863,  # Nazmir
     8501: 864,  # Vol'dun
     8567: 895,  # Tiragarde Sound
+    8568: 1161,  # Boralus
     8574: 830,  # Krokuun
     8701: 882,  # Mac'Aree
     8721: 896,  # Drustvar
     8899: 885,  # Antoran Wastes
     9042: 942,  # Stormsong Valley
+    10052: 1355,  # Nazjatar
+    10290: 1462,  # Mechagon
+    # 9424: 1016,  # Waycrest Manor (upstairs)
+    # 9440: 1034,  # Verdant Wilds
+    # 9466: 1033,  # The Rotting Mire
+    # 9469: 981,  # Un'gol Ruins
+    # 9496: 1035,  # Molten Cay
+    # 9497: 1032,  # Skittering Hollow
+    # 9548: 1336,  # Havenswood
+    # 9576: 1036,  # The Dread Chain
+    # 9591: 1037,  # Whispering Reef
+    # 9616: 1337,  # Jorundall
+    9670: 1163,  # Dazar'alor (The Great Seal)
+    # 9698: 1182,  # Saltstone Mine
     # Missing:
     5: False,  # - QA and DVD GLOBAL -
     34: False,  # Echo Ridge Mine
@@ -693,24 +708,18 @@ zoneid_to_mapid = {
     9396: False,  # Allied - Void Elf Unlock
     9397: False,  # Allied - Nightborne Unlock
     9415: False,  # Telogrus Rift
-    9424: False,  # Waycrest Manor
     9439: False,  # Arathi Highlands
-    9440: False,  # Verdant Wilds
     9443: False,  # Titan Island
     9462: False,  # IsleCVTest
     9463: False,  # A Dark Place
-    9466: False,  # The Rotting Mire
     9467: False,  # White Mesa Isles
     9468: False,  # IsleCVTest2
-    9469: False,  # Un'gol Ruins
     9481: False,  # CursedPrototype
     9483: False,  # Katalina Island
     9485: False,  # Wonderland
     9486: False,  # lost world [ph]
     9488: False,  # Swamp Island
     9489: False,  # Rock Spire
-    9496: False,  # Molten Cay
-    9497: False,  # Skittering Hollow
     9525: False,  # Shrine of the Storm
     9526: False,  # Kings' Rest
     9527: False,  # Temple of Sethraliss
@@ -718,14 +727,10 @@ zoneid_to_mapid = {
     9535: False,  # Francesco test - internal only
     9540: False,  # Snowblossom Villiage
     9541: False,  # Pandaren Farm Dev
-    9548: False,  # Havenswood
     9552: False,  # Quest Training
     9553: False,  # Stormwind City
     9564: False,  # The Maiden's Virtue
     9570: False,  # Zuldazar
-    9576: False,  # The Dread Chain
-    9591: False,  # Whispering Reef
-    9616: False,  # Jorundall
     9651: False,  # Model Size Land
     9653: False,  # Hall of Communion
     9663: False,  # War Campaign - Alliance

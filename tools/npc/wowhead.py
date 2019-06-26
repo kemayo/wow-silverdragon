@@ -39,7 +39,7 @@ class WowheadNPC(NPC):
     def _name(self):
         info = re.search(r"g_pageInfo = {type: 1, typeId: \d+, name: \"(.+?)\"};", self.__page())
         if info:
-            return self.html_decode(info.group(1).replace("\\'", "'").replace('\"', '"'))
+            return self.html_decode(info.group(1).replace("\\'", "'").replace('\\"', '"'))
 
     def _creature_type(self):
         return types.get(self.__info().get('type'))
@@ -58,26 +58,25 @@ class WowheadNPC(NPC):
                     print("Got location for unknown zone", zone, self.id)
                     continue
                 coords[zoneid_to_mapid[zone]] = []
-        match = re.search(r"var g_mapperData = {([^;]+)};", page)
+        match = re.search(r"var g_mapperData = ({[^;]+});", page)
         if not match:
             return {}
-        for zone, data in re.findall(r'^,?(\d+): {\n\d: {[^}]*coords: (\[.+?\]) }.*?\n}$', match.group(1), re.MULTILINE):
+        alldata = json.loads(match.group(1))
+        for zone, data in alldata.items():
             zone = int(zone)
             if not zoneid_to_mapid.get(zone):
                 print("Got location for unknown zone", zone, self.id)
                 continue
-            zcoords = []
-            data = json.loads(data)
-            if type(data[0]) == float:
-                data = [data]
-            for x, y in ((c[0] / 100, c[1] / 100) for c in data):
-                for oldx, oldy in zcoords:
+            processed_coords = []
+            raw_coords = data[0].get('coords', [])
+            for x, y in ((c[0] / 100, c[1] / 100) for c in raw_coords):
+                for oldx, oldy in processed_coords:
                     if abs(oldx - x) < 0.05 and abs(oldy - y) < 0.05:
                         break
                 else:
                     # list fully looped through, not broken.
-                    zcoords.append((x, y))
-            coords[zoneid_to_mapid[zone]] = [pack_coords(c[0], c[1]) for c in zcoords]
+                    processed_coords.append((x, y))
+            coords[zoneid_to_mapid[zone]] = [pack_coords(c[0], c[1]) for c in processed_coords]
         return coords
 
     def _tameable(self):
@@ -114,8 +113,9 @@ class WowheadNPC(NPC):
             with session.cache_disabled():
                 page = session.get(url, **kw)
 
-        match = re.search(r'new Listview\({[^{]+?data: \[(.+?)\]}\);\n', page.text)
+        match = re.search(r'new Listview\({[^{]+?data:\s*\[(.+?)\]}\);\n', page.text)
         if not match:
+            print("None found")
             return {}
         npcs = {}
         for npc in (WowheadNPC(id, ptr=ptr, session=session) for id in re.findall(r'"id":(\d+)', match.group(1))):
@@ -131,8 +131,8 @@ class WowHeadQuestSearch:
     def __call__(self, name, session):
         if not self.quests:
             questpage = session.get('http://www.wowhead.com/quests/name:vignette').text
-            match = re.search(r"^new Listview\({.+?id: ?'quests', ?data: ?(.+)}\);$", questpage, re.MULTILINE)
-            self.quests = [(int(q['id']), q['name']) for q in yaml.load(match.group(1))]
+            match = re.search(r"^new Listview\({.+?id:\s*'quests',.*?data:\s*(.+)}\);$", questpage, re.MULTILINE)
+            self.quests = [(int(q['id']), q['name']) for q in yaml.safe_load(match.group(1))]
             self.quests.sort()
         matcher = re.compile(r'\b%s\b' % name)
         for quest in self.quests:

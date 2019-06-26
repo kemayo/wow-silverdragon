@@ -44,7 +44,7 @@ t_ignore = r' '
 # a string is quotes around a sequence of anything that's not-quotes-or-backslashes, or backslash+char
 def t_STRING(t):
     r'"(?:[^"\\]|\\.)*?"|\'(?:[^\'\\]|\\.)*?\''
-    t.value = t.value[1:-1]
+    t.value = t.value[1:-1].replace(r'\"', '"')
     return t
 
 
@@ -180,7 +180,7 @@ def parse(s):
 
 if __name__ == '__main__':
     # s = '{23.4, "pony express\\" ri\'de", \'Test\\\'s fun\', 4, "apple", fred=400, ["foo"]=999, [90]="beauty", {1,2}, p={2},}'
-    s = '{[61] = {name="Thuros Lightfingers",["creature_type"]="Humanoid",level=9,locations={[30]={50408320,50408280},},},}'
+    s = r'{[61] = {name="Thuros \"Fred\" Lightfingers",["creature_type"]="Humanoid",level=9,locations={[30]={50408320,50408280},},},}'
     print(s)
 
     lexer.input(s)
