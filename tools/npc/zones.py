@@ -2,6 +2,20 @@
 
 # This is here because wowhead doesn't expose zoneids anywhere, that I could see.
 
+zoneid_ignore = {
+    9424: 1016,  # Waycrest Manor (upstairs)
+    # Various island scenarions
+    9440: 1034,  # Verdant Wilds
+    9466: 1033,  # The Rotting Mire
+    9469: 981,  # Un'gol Ruins
+    9496: 1035,  # Molten Cay
+    9497: 1032,  # Skittering Hollow
+    9548: 1336,  # Havenswood
+    9576: 1036,  # The Dread Chain
+    9591: 1037,  # Whispering Reef
+    9616: 1337,  # Jorundall
+}
+
 # wowdb and wowhead use the same numeric zoneids, which aren't in-game mapids
 zoneid_to_mapid = {
     1: 27,  # Dun Morogh
@@ -311,19 +325,9 @@ zoneid_to_mapid = {
     8721: 896,  # Drustvar
     8899: 885,  # Antoran Wastes
     9042: 942,  # Stormsong Valley
+    9670: 1163,  # Dazar'alor (The Great Seal)
     10052: 1355,  # Nazjatar
     10290: 1462,  # Mechagon
-    # 9424: 1016,  # Waycrest Manor (upstairs)
-    # 9440: 1034,  # Verdant Wilds
-    # 9466: 1033,  # The Rotting Mire
-    # 9469: 981,  # Un'gol Ruins
-    # 9496: 1035,  # Molten Cay
-    # 9497: 1032,  # Skittering Hollow
-    # 9548: 1336,  # Havenswood
-    # 9576: 1036,  # The Dread Chain
-    # 9591: 1037,  # Whispering Reef
-    # 9616: 1337,  # Jorundall
-    9670: 1163,  # Dazar'alor (The Great Seal)
     # 9698: 1182,  # Saltstone Mine
     # Missing:
     5: False,  # - QA and DVD GLOBAL -

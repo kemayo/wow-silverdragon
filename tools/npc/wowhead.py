@@ -5,7 +5,7 @@ import re
 import yaml
 
 from . import NPC, types, pack_coords
-from .zones import zoneid_to_mapid
+from .zones import zoneid_to_mapid, zoneid_ignore
 
 zone_map = False
 
@@ -54,6 +54,8 @@ class WowheadNPC(NPC):
             for zone in zones:
                 if zone == -1:
                     continue
+                if zone in zoneid_ignore:
+                    continue
                 if not zoneid_to_mapid.get(zone):
                     print("Got location for unknown zone", zone, self.id)
                     continue
@@ -64,6 +66,8 @@ class WowheadNPC(NPC):
         alldata = json.loads(match.group(1))
         for zone, data in alldata.items():
             zone = int(zone)
+            if zone in zoneid_ignore:
+                continue
             if not zoneid_to_mapid.get(zone):
                 print("Got location for unknown zone", zone, self.id)
                 continue
