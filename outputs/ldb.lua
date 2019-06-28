@@ -129,7 +129,7 @@ function module:SetupDataObject()
 
 			wipe(sorted_mobs)
 			for id in pairs(ns.mobsByZone[zone]) do
-				if core:IsMobInPhase(id, zone) then
+				if core:IsMobInPhase(id, zone) and not core:ShouldIgnoreMob(id, zone) then
 					table.insert(sorted_mobs, id)
 				end
 			end
