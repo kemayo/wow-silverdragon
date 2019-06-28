@@ -8,27 +8,27 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 if LSM then
 	-- Register some media
-	LSM:Register("sound", "Rubber Ducky", [[Sound\Doodad\Goblin_Lottery_Open01.ogg]])
-	LSM:Register("sound", "Cartoon FX", [[Sound\Doodad\Goblin_Lottery_Open03.ogg]])
-	LSM:Register("sound", "Explosion", [[Sound\Doodad\Hellfire_Raid_FX_Explosion05.ogg]])
-	LSM:Register("sound", "Shing!", [[Sound\Doodad\PortcullisActive_Closed.ogg]])
-	LSM:Register("sound", "Wham!", [[Sound\Doodad\PVP_Lordaeron_Door_Open.ogg]])
-	LSM:Register("sound", "Simon Chime", [[Sound\Doodad\SimonGame_LargeBlueTree.ogg]])
-	LSM:Register("sound", "War Drums", [[Sound\Event Sounds\Event_wardrum_ogre.ogg]])--NPC Scan default
-	LSM:Register("sound", "Scourge Horn", [[Sound\Events\scourge_horn.ogg]])--NPC Scan default
-	LSM:Register("sound", "Pygmy Drums", [[Sound\Doodad\GO_PygmyDrumsStage_Custom0_Loop.ogg]])
-	LSM:Register("sound", "Cheer", [[Sound\Event Sounds\OgreEventCheerUnique.ogg]])
-	LSM:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.ogg]])
-	LSM:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.ogg]])
-	LSM:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.ogg]])
-	LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.ogg]])
-	LSM:Register("sound", "PVP Flag", [[Sound\Spells\PVPFlagTaken.ogg]])
-	LSM:Register("sound", "Algalon: Beware!", [[Sound\Creature\AlgalonTheObserver\UR_Algalon_BHole01.ogg]])
-	LSM:Register("sound", "Yogg Saron: Laugh", [[Sound\Creature\YoggSaron\UR_YoggSaron_Slay01.ogg]])
-	LSM:Register("sound", "Illidan: Not Prepared", [[Sound\Creature\Illidan\BLACK_Illidan_04.ogg]])
-	LSM:Register("sound", "Magtheridon: I am Unleashed", [[Sound\Creature\Magtheridon\HELL_Mag_Free01.ogg]])
-	LSM:Register("sound", "Loatheb: I see you", [[Sound\Creature\Loathstare\Loa_Naxx_Aggro02.ogg]])
-	LSM:Register("sound", "NPCScan", [[Sound\Event Sounds\Event_wardrum_ogre.ogg]])--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
+	LSM:Register("sound", "Rubber Ducky", 566121)
+	LSM:Register("sound", "Cartoon FX", 566543)
+	LSM:Register("sound", "Explosion", 566982)
+	LSM:Register("sound", "Shing!", 566240)
+	LSM:Register("sound", "Wham!", 566946)
+	LSM:Register("sound", "Simon Chime", 566076)
+	LSM:Register("sound", "War Drums", 567275)--NPC Scan default
+	LSM:Register("sound", "Scourge Horn", 567386)--NPC Scan default
+	LSM:Register("sound", "Pygmy Drums", 566508)
+	LSM:Register("sound", "Cheer", 567283)
+	LSM:Register("sound", "Humm", 569518)
+	LSM:Register("sound", "Short Circuit", 568975)
+	LSM:Register("sound", "Fel Portal", 569215)
+	LSM:Register("sound", "Fel Nova", 568582)
+	LSM:Register("sound", "PVP Flag", 569200)
+	LSM:Register("sound", "Algalon: Beware!", 543587)
+	LSM:Register("sound", "Yogg Saron: Laugh", 564859)
+	LSM:Register("sound", "Illidan: Not Prepared", 552503)
+	LSM:Register("sound", "Magtheridon: I am Unleashed", 554554)
+	LSM:Register("sound", "Loatheb: I see you", 554236)
+	LSM:Register("sound", "NPCScan", 567275)--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
 end
 
 function module:OnInitialize()
