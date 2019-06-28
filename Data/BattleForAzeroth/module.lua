@@ -177,7 +177,7 @@ function module:OnInitialize()
 		[137708] = {name="Stone Golem",locations={[896]={49804340},},},
 		[137824] = {name="Arclight",locations={[896]={29206880},},quest=51470,},
 		[137825] = {name="Avalanche",locations={[896]={43808820},},quest=37410,},
-		[137906] = {name="Infused Bedrock",locations={[81]={44403460,48805140},},},
+		[137906] = {name="Infused Bedrock",locations={[81]={44403460,48805140},},phase=962,},
 		[137983] = {name="Rear Admiral Hainsworth",locations={[895]={65003520},},},
 		[138039] = {name="Dark Ranger Clea",locations={[895]={65003520},},},
 		[138244] = {name="Briarwood Bulwark",locations={[896]={41203800},},},
