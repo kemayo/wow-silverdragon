@@ -322,8 +322,10 @@ function module:UpdateNodes()
 	for zone, mobs in pairs(ns.mobsByZone) do
 		nodes[zone] = {}
 		for id, locs in pairs(mobs) do
-			for _, loc in ipairs(locs) do
-				nodes[zone][loc] = id
+			if core:IsMobInPhase(id, zone) then
+				for _, loc in ipairs(locs) do
+					nodes[zone][loc] = id
+				end
 			end
 		end
 	end

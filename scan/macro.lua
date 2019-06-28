@@ -72,7 +72,11 @@ function module:Update()
 	if mobs then
 		for id in pairs(mobs) do
 			local name = core:NameForMob(id)
-			if name and not core.db.global.ignore[id] then
+			if
+				name and
+				not core.db.global.ignore[id] and
+				core:IsMobInPhase(id, zone)
+			then
 				table.insert(macro, "/targetexact " .. name)
 				count = count + 1
 			end

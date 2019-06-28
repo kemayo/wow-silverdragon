@@ -63,6 +63,8 @@ addon.datasources = {
 			mount = hasMount,
 			boss = isBoss,
 			locations = {[zoneid] = {coord,...}},
+			-- TODO, phase should really be per-zone in locations, but that's more of a data-model change than I want to make right now.
+			phase = artID,
 			hidden = isHidden,
 		},
 		...
@@ -299,6 +301,17 @@ end
 function addon:IsMobInZone(id, zone)
 	if mobsByZone[zone] then
 		return mobsByZone[zone][id]
+	end
+end
+function addon:IsMobInPhase(id, zone)
+	if mobdb[id] then
+		if not mobdb[id].phase then
+			return true
+		end
+		if not mobdb[id].locations[zone] then
+			return false
+		end
+		return mobdb[id].phase == C_Map.GetMapArtID(zone)
 	end
 end
 -- Returns id, addon:GetMobInfo(id)
