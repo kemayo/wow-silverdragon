@@ -160,21 +160,21 @@ function module:OnInitialize()
 	end
 end
 
-function module:Seen(callback, id, zone, x, y, is_dead, ...)
+function module:Seen(callback, id, zone, x, y, is_dead, source, ...)
 	Debug("Announce:Seen", id, zone, x, y, is_dead, ...)
 
 	if not self.db.profile.instances and IsInInstance() then
 		return
 	end
 
-	if not self:ShouldAnnounce(id, zone, x, y, is_dead, ...) then
+	if not self:ShouldAnnounce(id, zone, x, y, is_dead, source, ...) then
 		return
 	end
 
-	core.events:Fire("Announce", id, zone, x, y, is_dead, ...)
+	core.events:Fire("Announce", id, zone, x, y, is_dead, source, ...)
 end
 
-function module:ShouldAnnounce(id, zone, x, y, is_dead)
+function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 	if is_dead and not self.db.profile.dead then
 		return
 	end
@@ -189,6 +189,10 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead)
 				if quest ~= nil then
 					-- quest also knowable
 					return not quest
+				end
+				if source == 'vignette' then
+					-- No quest known, but the vignette wouldn't be present if the quest was complete, so...
+					return true
 				end
 				-- can just fall back on achievement
 				return not achievement
