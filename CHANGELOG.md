@@ -1,8 +1,12 @@
 # Changelog
 
 ## Changed in v4.0.16
+* Updated for 8.2
+* Added Mechagon and Nazjatar rares (questids to come)
+* Added I Thought You Said They'd Be Rare and Rest In Pistons achievements
 * Rearrange some mobs that were added in later expansions (Cataclysm and Mists) into the categories for the expansion whose zone they're in, because that makes more sense
-* Other missing questids
+* Ignored mobs are no longer shown in the broker plugin
+* Other missing questids added
 
 ## Changed in v4.0.15
 * Config wasn't opening because localization for some zone names was broken
