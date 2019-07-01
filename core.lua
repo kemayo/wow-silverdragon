@@ -74,7 +74,7 @@ addon.datasources = {
 local mobdb = setmetatable({}, {
 	__index = function(t, id)
 		for source, data in pairs(addon.datasources) do
-			if data[id] and addon.db.global.datasources[source] and not data[id].hidden then
+			if data[id] and addon.db.global.datasources[source] then
 				t[id] = data[id]
 				return data[id]
 			end
