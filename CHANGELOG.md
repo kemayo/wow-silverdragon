@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v4.0.17
+* Added questids for most Mechagon and Nazjatar rares
+* Added some missing Nazjatar rares
+* If we don't know questids, treat a vignette as the source as equivalent to an incomplete quest. This should help with future no-quest-known-yet situations over-alerting
+* Properly suppress mobs that were flagged as hidden from mouseover and targeting alerts
+
 ## Changed in v4.0.16
 * Updated for 8.2
 * Added Mechagon and Nazjatar rares (questids to come)
