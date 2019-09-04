@@ -1,6 +1,6 @@
-## Interface: 80200
-## Title: SilverDragon (Warlords)
-## Notes: Mobs for Warlords
+## Interface: 11302
+## Title: SilverDragon (Classic)
+## Notes: Mobs for Classic
 ## Version: @project-version@
 ## Author: Kemayo
 ## eMail: kemayo at gmail dot com

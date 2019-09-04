@@ -11,7 +11,7 @@ zone_map = False
 
 
 class WowheadNPC(NPC):
-    URL = 'http://www.wowhead.com'
+    URL = 'http://classic.wowhead.com'
     URL_PTR = 'http://ptr.wowhead.com'
     URL_BETA = 'http://bfa.wowhead.com'
 

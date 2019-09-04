@@ -1,11 +1,4 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-  <Script file="Vanilla/module.lua"/>
-  <Script file="BurningCrusade/module.lua"/>
-  <Script file="Wrath/module.lua"/>
-  <Script file="Cataclysm/module.lua"/>
-  <Script file="Mists/module.lua"/>
-  <Script file="Warlords/module.lua"/>
-  <Script file="Legion/module.lua"/>
-  <Script file="BattleForAzeroth/module.lua"/>
+  <Script file="Classic/module.lua"/>
 </Ui>

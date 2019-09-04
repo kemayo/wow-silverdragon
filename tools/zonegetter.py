@@ -10,7 +10,7 @@ from npc.zones import zoneid_to_mapid
 
 def fetch_zone_map():
     # page = requests.get("http://wow.zamimg.com/js/locale/enus.js?1530549634")
-    page = requests.get("http://wow.zamimg.com/js/locale/built/beta.js?1530549631")
+    page = requests.get("https://wow.zamimg.com/js/locale/classic.enus.js?47e7adf60d")
     if not page:
         return
     match = re.search(r"g_zones\s*=\s*({[^}]+});", page.text)

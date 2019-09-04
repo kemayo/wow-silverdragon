@@ -12,63 +12,16 @@ from npc.wowhead import WowheadNPC
 
 
 blacklist = (
-    50091, # untargetable Julak-Doom component
-    77795, # duplicate Echo of Murmur
 )
 force_include = (
-    17591, # Blood Elf Bandit
-    50409, # Mysterious Camel Figurine
-    50410, # Mysterious Camel Figurine (remnants)
-    3868, # Blood Seeker (thought to share Aeonaxx's spawn timer)
-    51236, # Aeonaxx (engaged)
-    58336, # Darkmoon Rabbit
-    # Lost and Found!
-    64004, # Ghostly Pandaren Fisherman
-    64191, # Ghostly Pandaren Craftsman
-    65552, # Glinting Rapana Whelk
-    64272, # Jade Warrior Statue
-    64227, # Frozen Trail Packer
-    #In 5.2, world bosses are no longer flagged as rare, even if they are.
-    #Granted, 3 of 4 probably won't be rare. We include anyways because we always have.
-    64403, # Alani
-    60491, # Sha of Anger
-    62346, # Galleon
-    69099, # Nalak
-    69161, # Oondasta
-    # On to Draenor
-    71992, # Moonfang
-    81001, # Nok-Karosh
-    50992, # Gorok
-    50990, # Nakk the Thunderer
-    50981, # Luk'hok
-    50985, # Poundfist
-    51015, # Silthide
-    50883, # Pathrunner
 )
 notes = {
-    50410: "Crumbled Statue Remnants", # Mysterious Camel Figurine
-    51401: "Red", # Madexx
-    51402: "Green", # Madexx
-    51403: "Black", # Madexx
-    51404: "Blue", # Madexx
-    50154: "Brown", # Madexx
-    51236: "Engaged", # Aeonaxx
-    69769: "Slate", # Zandalari Warbringer
-    69841: "Amber", # Zandalari Warbringer
-    69842: "Jade", # Zandalari Warbringer
 }
 expansions = {
-    1: "Vanilla",
-    2: "BurningCrusade",
-    3: "Wrath",
-    4: "Cataclysm",
-    5: "Mists",
-    6: "Warlords",
-    7: "Legion",
-    8: "BattleForAzeroth",
+    1: "Classic",
 }
 
-TOC_TEMPLATE = """## Interface: 80000
+TOC_TEMPLATE = """## Interface: 11302
 ## Title: SilverDragon ({exp})
 ## Notes: Mobs for {exp}
 ## Version: @project-version@
@@ -97,9 +50,9 @@ end
 def write_output(expansion, data):
     path = pathlib.Path.cwd().parent / 'Data' / expansion
     path.mkdir(exist_ok=True)
-    with open(path / "SilverDragon_{exp}.toc".format(exp=expansion), 'w') as f:
+    with open(str(path / "SilverDragon_{exp}.toc".format(exp=expansion)), 'w') as f:
         f.write(TOC_TEMPLATE.format(exp=expansion))
-    with open(path / "module.lua", 'w') as f:
+    with open(str(path / "module.lua"), 'w') as f:
         f.write(MODULE_START_TEMPLATE.format(exp=expansion))
         for id, mob in sorted(data.items()):
             if id in blacklist:

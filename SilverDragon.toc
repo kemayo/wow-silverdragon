@@ -1,4 +1,4 @@
-﻿## Interface: 80200
+﻿## Interface: 11302
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
@@ -23,12 +23,10 @@ embeds.xml
 
 # the core
 core.lua
-achievements.lua
 config.lua
 
 scan\targets.lua
 scan\macro.lua
-scan\vignettes.lua
 
 # optional bits
 outputs\tooltip.lua
@@ -36,9 +34,6 @@ outputs\ldb.lua
 outputs\announce.lua
 outputs\sync.lua
 outputs\marker.lua
-
-outputs\vignettes.lua
-outputs\vignettes.xml
 
 targets\module.lua
 targets\popup.lua

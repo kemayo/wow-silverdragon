@@ -28,14 +28,7 @@ externals:
    lib/LibTextDump-1.0: https://repos.wowace.com/wow/libtextdump-1-0
 
 move-folders:
-   SilverDragon/Data/Vanilla: SilverDragon_Vanilla
-   SilverDragon/Data/BurningCrusade: SilverDragon_BurningCrusade
-   SilverDragon/Data/Wrath: SilverDragon_Wrath
-   SilverDragon/Data/Cataclysm: SilverDragon_Cataclysm
-   SilverDragon/Data/Mists: SilverDragon_Mists
-   SilverDragon/Data/Warlords: SilverDragon_Warlords
-   SilverDragon/Data/Legion: SilverDragon_Legion
-   SilverDragon/Data/BattleForAzeroth: SilverDragon_BattleForAzeroth
+   SilverDragon/Data/Classic: SilverDragon_Classic
 
 ignore:
    - tools
