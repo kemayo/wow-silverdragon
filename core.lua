@@ -6,15 +6,16 @@ local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "
 SilverDragon = addon
 addon.events = LibStub("CallbackHandler-1.0"):New(addon)
 
+local Debug
 do
 	local TextDump = LibStub("LibTextDump-1.0")
 	local debuggable = GetAddOnMetadata(myname, "Version") == '@project-version@'
-	local window
+	local _window
 	local function GetDebugWindow()
-		if not window then
-			window = TextDump:New(myname)
+		if not _window then
+			_window = TextDump:New(myname)
 		end
-		return window
+		return _window
 	end
 	addon.GetDebugWindow = GetDebugWindow
 	addon.Debug = function(...)
@@ -37,9 +38,8 @@ do
 		window:Display()
 	end
 	addon.debuggable = debuggable
+	Debug = addon.Debug
 end
-
-Debug = addon.Debug
 
 local mfloor, mpow, mabs = math.floor, math.pow, math.abs
 local tinsert, tremove = table.insert, table.remove
@@ -355,7 +355,7 @@ do
 			return
 		end
 		if (not self.db.profile.taxi) and UnitOnTaxi('player') then
-			Debug("Skipping notification: taxi", id, name, source)
+			Debug("Skipping notification: taxi", id, source)
 			return
 		end
 		globaldb.mob_count[id] = globaldb.mob_count[id] + 1

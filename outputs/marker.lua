@@ -8,10 +8,7 @@ local HBD = LibStub("HereBeDragons-2.0")
 
 local mod_announce
 
-local globaldb
 function module:OnInitialize()
-	globaldb = core.db.global
-
 	self.db = core.db:RegisterNamespace("Marker", {
 		profile = {
 			enabled = true,

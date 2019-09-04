@@ -6,10 +6,7 @@ local Debug = core.Debug
 
 local HBD = LibStub("HereBeDragons-2.0")
 
-local globaldb
 function module:OnInitialize()
-	globaldb = core.db.global
-
 	self.db = core.db:RegisterNamespace("Scan_Vignettes", {
 		profile = {
 			enabled = true,

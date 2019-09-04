@@ -6,8 +6,6 @@ local Debug = core.Debug
 
 local globaldb
 function module:OnInitialize()
-	globaldb = core.db.global
-
 	self.db = core.db:RegisterNamespace("Tooltip", {
 		profile = {
 			achievement = true,

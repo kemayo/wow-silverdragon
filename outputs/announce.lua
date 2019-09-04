@@ -318,8 +318,6 @@ do
 			flashframe:SetScript("OnShow", function(self)
 				group:Play()
 			end)
-
-			sdf = flashframe
 		end
 
 		Debug("Flashing")

@@ -37,8 +37,8 @@ function module:OnInitialize()
 						set = function(info, v)
 							db.profile.show_lastseen = v
 							if v then
-								if last_seen then
-									dataobject.text = last_seen
+								if module.last_seen then
+									dataobject.text = core:GetMobLabel(module.last_seen)
 								else
 									dataobject.text = "None"
 								end
@@ -220,11 +220,10 @@ function module:SetupDataObject()
 		end
 	end
 
-	local last_seen
 	core.RegisterCallback("LDB", "Seen", function(callback, id, zone, x, y, dead, source)
-		last_seen = id
+		module.last_seen = id
 		if db.profile.show_lastseen then
-			dataobject.text = name
+			dataobject.text = core:GetMobLabel(id)
 		end
 		table.insert(rares_seen, {
 			id = id,

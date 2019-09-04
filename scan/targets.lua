@@ -7,7 +7,7 @@ local Debug = core.Debug
 local HBD = LibStub("HereBeDragons-2.0")
 
 local globaldb
-local UnitExists, UnitIsVisible, UnitPlayerControled, UnitName, UnitLevel, UnitCreatureType, UnitGUID = UnitExists, UnitIsVisible, UnitPlayerControled, UnitName, UnitLevel, UnitCreatureType, UnitGUID
+local UnitExists, UnitIsVisible, UnitPlayerControlled, UnitName, UnitLevel, UnitCreatureType, UnitGUID = UnitExists, UnitIsVisible, UnitPlayerControlled, UnitName, UnitLevel, UnitCreatureType, UnitGUID
 function module:OnInitialize()
 	globaldb = core.db.global
 
@@ -119,6 +119,6 @@ function module:ProcessUnit(unit, source)
 			return
 		end
 
-		core:NotifyForMob(id, zone, x, y, UnitIsDead(unit), source or 'target', unit, silent)
+		core:NotifyForMob(id, zone, x, y, UnitIsDead(unit), source or 'target', unit)
 	end
 end

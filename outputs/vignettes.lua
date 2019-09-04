@@ -9,10 +9,7 @@ local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 
 local compat_disabled
 
-local globaldb
 function module:OnInitialize()
-	globaldb = core.db.global
-
 	self.db = core.db:RegisterNamespace("VignetteStretch", {
 		profile = {
 			enabled = true,

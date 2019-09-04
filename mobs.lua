@@ -4,8 +4,6 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Mobs", "AceConsole-3.0")
 local Debug = core.Debug
 
-local desc, toggle
-
 local function toggle_mob(id)
 	return {
 		arg = id,
@@ -50,9 +48,6 @@ end
 function module:OnEnable()
 	local config = core:GetModule("Config", true)
 	if config then
-		desc = config.desc
-		toggle = config.toggle
-
 		config.options.plugins.mobs = {
 			mobs = {
 				type = "group",

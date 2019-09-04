@@ -126,7 +126,6 @@ function handler:OnLeave(uiMapID, coord)
 end
 
 local clicked_zone, clicked_coord
-local info = {}
 
 local function hideMob(button, uiMapID, coord)
 	local id = core:GetMobByCoord(uiMapID, coord)
@@ -149,53 +148,57 @@ local function createWaypoint(button, uiMapID, coord)
 	end
 end
 
-local function generateMenu(button, level)
-	if (not level) then return end
-	table.wipe(info)
-	if (level == 1) then
-		-- Create the title of the menu
-		info.isTitle      = 1
-		info.text         = "HandyNotes - SilverDragon"
-		info.notCheckable = 1
-		UIDropDownMenu_AddButton(info, level)
+local dropdown = CreateFrame("Frame")
+dropdown.displayMode = "MENU"
 
-		if TomTom then
-			-- Waypoint menu item
+do
+	local info = {}
+	local function generateMenu(button, level)
+		if (not level) then return end
+		table.wipe(info)
+		if (level == 1) then
+			-- Create the title of the menu
+			info.isTitle      = 1
+			info.text         = "HandyNotes - SilverDragon"
+			info.notCheckable = 1
+			UIDropDownMenu_AddButton(info, level)
+
+			if TomTom then
+				-- Waypoint menu item
+				info.disabled     = nil
+				info.isTitle      = nil
+				info.notCheckable = nil
+				info.text = "Create waypoint"
+				info.icon = nil
+				info.func = createWaypoint
+				info.arg1 = clicked_zone
+				info.arg2 = clicked_coord
+				UIDropDownMenu_AddButton(info, level);
+			end
+
+			-- Hide menu item
 			info.disabled     = nil
 			info.isTitle      = nil
 			info.notCheckable = nil
-			info.text = "Create waypoint"
-			info.icon = nil
-			info.func = createWaypoint
+			info.text = "Hide mob"
+			info.icon = icon
+			info.func = hideMob
 			info.arg1 = clicked_zone
 			info.arg2 = clicked_coord
 			UIDropDownMenu_AddButton(info, level);
+
+			-- Close menu item
+			info.text         = "Close"
+			info.icon         = nil
+			info.func         = function() CloseDropDownMenus() end
+			info.arg1         = nil
+			info.notCheckable = 1
+			UIDropDownMenu_AddButton(info, level);
 		end
-
-		-- Hide menu item
-		info.disabled     = nil
-		info.isTitle      = nil
-		info.notCheckable = nil
-		info.text = "Hide mob"
-		info.icon = icon
-		info.func = hideMob
-		info.arg1 = clicked_zone
-		info.arg2 = clicked_coord
-		UIDropDownMenu_AddButton(info, level);
-
-		-- Close menu item
-		info.text         = "Close"
-		info.icon         = nil
-		info.func         = function() CloseDropDownMenus() end
-		info.arg1         = nil
-		info.notCheckable = 1
-		UIDropDownMenu_AddButton(info, level);
 	end
+	dropdown.initialize = generateMenu
 end
 
-local dropdown = CreateFrame("Frame")
-dropdown.displayMode = "MENU"
-dropdown.initialize = generateMenu
 function handler:OnClick(button, down, uiMapID, coord)
 	if button == "RightButton" and not down then
 		clicked_zone = uiMapID
