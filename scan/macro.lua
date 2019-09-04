@@ -102,7 +102,7 @@ function module:CreateMacro()
 		local numglobal,numperchar = GetNumMacros()
 		if numglobal < MAX_ACCOUNT_MACROS then
 			--/script for i=1,GetNumMacroIcons() do if GetMacroIconInfo(i):match("SniperTraining$") then DEFAULT_CHAT_FRAME:AddMessage(i) end end
-			CreateMacro("SilverDragon", [[ABILITY_HUNTER_SNIPERTRAINING]], "/click SilverDragonMacroButton", nil, nil)
+			CreateMacro("SilverDragon", 132222, "/click SilverDragonMacroButton", nil, nil)
 			self:Print("Created the SilverDragon macro. Open the macro editor with /macro and drag it onto your actionbar to use it.")
 		else
 			self:Print("|cffff0000Couldn't create rare-scanning macro, too many macros already created.|r")
