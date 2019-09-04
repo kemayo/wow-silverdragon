@@ -1,13 +1,19 @@
-sudo: false
-language: c
+language: minimal
 
 addons:
   apt:
     packages:
-    - pandoc
+      - luarocks
 
-script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
+install: luarocks install --local luacheck
 
-branches:
-  only:
-  - /^v?\d+\.\d+(\.\d+)?(-\S*)?$/
+before_script:
+  - /home/travis/.luarocks/bin/luacheck . --no-color -q
+
+script:
+  - curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
