@@ -1,5 +1,8 @@
 # Changelog
 
+## Changed in v4.0.18c
+* Classic-compatible version released. Somewhat incomplete set of rares, because a lot of the higher level zones had poor data available on wowhead at the moment.
+
 ## Changed in v4.0.17
 * Added questids for most Mechagon and Nazjatar rares
 * Added some missing Nazjatar rares
