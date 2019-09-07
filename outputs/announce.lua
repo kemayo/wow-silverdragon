@@ -8,19 +8,17 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 if LSM then
 	-- Register some media
-	LSM:Register("sound", "Fireworks", 8569) -- G_FireworkBoomGenera
-	LSM:Register("sound", "Shing!", 8739) -- Nox_Door_portcullisClose
-	LSM:Register("sound", "Beast Call", 3319) -- BeastCall
-	LSM:Register("sound", "Cheer", 8574) -- CrowdCheerHorde2
-	LSM:Register("sound", "PVP Flag (Alliance)", 8174)
-	LSM:Register("sound", "PVP Flag (Horde)", 8212)
-	LSM:Register("sound", "PVP Warning (Alliance)", 8232)
-	LSM:Register("sound", "PVP Warning (Horde)", 8333) -- PVPWarningHorde
-	LSM:Register("sound", "PVP Long Warning (Alliance)", 8456)
-	LSM:Register("sound", "PVP Long Warning (Horde)", 8457) -- PVPWarningHordeLONG
-	LSM:Register("sound", "Loatheb: You are mine now", 8825) -- A_LOA_NAXX_AGGRO01
-	LSM:Register("sound", "Loatheb: I see you", 8826) -- A_LOA_NAXX_AGGRO02
-	LSM:Register("sound", "Loatheb: You are next", 8827) -- A_LOA_NAXX_AGGRO03
+	LSM:Register("sound", "Fireworks", "sound/doodad/g_fireworkboomgeneral4.ogg")
+	LSM:Register("sound", "Shing!", "sound/doodad/nox_door_portcullisclose.ogg")
+	LSM:Register("sound", "Beast Call", "sound/spells/beastcall.ogg")
+	LSM:Register("sound", "Cheer", "sound/spells/crowdcheerhorde2.ogg")
+	LSM:Register("sound", "PVP Flag (Alliance)", "sound/spells/pvpflagtaken.ogg")
+	LSM:Register("sound", "PVP Flag (Horde)", "sound/spells/pvpflagtakenhorde.ogg")
+	LSM:Register("sound", "PVP Long Warning (Alliance)", "sound/spells/pvpwarningalliance.ogg")
+	LSM:Register("sound", "PVP Long Warning (Horde)", "sound/spells/pvpwarninghorde.ogg")
+	LSM:Register("sound", "Loatheb: You are mine now", "sound/creature/loathstare/loa_naxx_aggro01.ogg")
+	LSM:Register("sound", "Loatheb: I see you", "sound/creature/loathstare/loa_naxx_aggro02.ogg")
+	LSM:Register("sound", "Loatheb: You are next", "sound/creature/loathstare/loa_naxx_aggro03.ogg")
 end
 
 function module:OnInitialize()
@@ -223,12 +221,13 @@ function module:PlaySound(s)
 	--Play whatever sound is set
 	local sound = LSM:Fetch("sound", s.soundfile)
 	if not sound then return end
-	(type(sound) == "string" and PlaySoundFile or PlaySound)(sound, "Master")
+	PlaySoundFile(sound, "Master")
 	if self.db.profile.drums and not s.drumsplaying then
 		-- TrollDrumLoop
-		local willPlay, soundHandle = PlaySound(7294, "Master", true, true)
+		local willPlay, soundHandle = PlaySoundFile("sound/doodad/trolldrumloop1.ogg", "Master")
 		s.drumsplaying = willPlay
 		if willPlay then
+			-- drums are ~10s long, so stop them lingering
 			self:ScheduleTimer(StopSound, s.loops * 4.5, soundHandle)
 		end
 	end
