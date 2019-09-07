@@ -10,7 +10,7 @@
 ## X-Category: Interface Enhancements
 ## X-Donate: PayPal:kemayo AT gmail DOT com
 ## X-Curse-Project-ID: 14647
-## X-WoWI-ID: 6606
+## X-WoWI-ID: 25259
 ## OptionalDependencies: Ace3, LibSharedMedia-3.0, HandyNotes, _NPCScan.Overlay, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons, LibTextDump-1.0
 ## SavedVariables: SilverDragon3DB,SilverDragon2DB
 ## LoadOnDemand: 0
