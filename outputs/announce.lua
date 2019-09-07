@@ -8,27 +8,19 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 if LSM then
 	-- Register some media
-	LSM:Register("sound", "Rubber Ducky", 566121)
-	LSM:Register("sound", "Cartoon FX", 566543)
-	LSM:Register("sound", "Explosion", 566982)
-	LSM:Register("sound", "Shing!", 566240)
-	LSM:Register("sound", "Wham!", 566946)
-	LSM:Register("sound", "Simon Chime", 566076)
-	LSM:Register("sound", "War Drums", 567275)--NPC Scan default
-	LSM:Register("sound", "Scourge Horn", 567386)--NPC Scan default
-	LSM:Register("sound", "Pygmy Drums", 566508)
-	LSM:Register("sound", "Cheer", 567283)
-	LSM:Register("sound", "Humm", 569518)
-	LSM:Register("sound", "Short Circuit", 568975)
-	LSM:Register("sound", "Fel Portal", 569215)
-	LSM:Register("sound", "Fel Nova", 568582)
-	LSM:Register("sound", "PVP Flag", 569200)
-	LSM:Register("sound", "Algalon: Beware!", 543587)
-	LSM:Register("sound", "Yogg Saron: Laugh", 564859)
-	LSM:Register("sound", "Illidan: Not Prepared", 552503)
-	LSM:Register("sound", "Magtheridon: I am Unleashed", 554554)
-	LSM:Register("sound", "Loatheb: I see you", 554236)
-	LSM:Register("sound", "NPCScan", 567275)--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
+	LSM:Register("sound", "Fireworks", 8569) -- G_FireworkBoomGenera
+	LSM:Register("sound", "Shing!", 8739) -- Nox_Door_portcullisClose
+	LSM:Register("sound", "Beast Call", 3319) -- BeastCall
+	LSM:Register("sound", "Cheer", 8574) -- CrowdCheerHorde2
+	LSM:Register("sound", "PVP Flag (Alliance)", 8174)
+	LSM:Register("sound", "PVP Flag (Horde)", 8212)
+	LSM:Register("sound", "PVP Warning (Alliance)", 8232)
+	LSM:Register("sound", "PVP Warning (Horde)", 8333) -- PVPWarningHorde
+	LSM:Register("sound", "PVP Long Warning (Alliance)", 8456)
+	LSM:Register("sound", "PVP Long Warning (Horde)", 8457) -- PVPWarningHordeLONG
+	LSM:Register("sound", "Loatheb: You are mine now", 8825) -- A_LOA_NAXX_AGGRO01
+	LSM:Register("sound", "Loatheb: I see you", 8826) -- A_LOA_NAXX_AGGRO02
+	LSM:Register("sound", "Loatheb: You are next", 8827) -- A_LOA_NAXX_AGGRO03
 end
 
 function module:OnInitialize()
@@ -42,8 +34,8 @@ function module:OnInitialize()
 			sound_mount = true,
 			sound_boss = true,
 			soundfile = "Loatheb: I see you",
-			soundfile_mount = "Illidan: Not Prepared",
-			soundfile_boss = "Magtheridon: I am Unleashed",
+			soundfile_mount = "PVP Long Warning (Horde)",
+			soundfile_boss = "PVP Long Warning (Alliance)",
 			sound_loop = 1,
 			sound_mount_loop = 3,
 			sound_boss_loop = 1,
@@ -106,11 +98,7 @@ function module:OnInitialize()
 				inline =  true,
 				args = {
 					-- id, name, zone, x, y, is_dead, is_new_location, source, unit
-					time = faker(32491, "Time-Lost Proto Drake (Mount!)", 495, 0.490, 0.362),
-					anger = faker(60491, "Sha of Anger (Boss!)", 809, 0.5, 0.5),
-					vyragosa = faker(32630, "Vyragosa (Boring)", 495, 0.5, 0.5),
-					deathmaw = faker(10077, "Deathmaw (Pet!)", 29, 0.5, 0.5),
-					haakun = faker(83008, "Haakun", 946, 0.5, 0.5),
+					thuros = faker(61, "Thuros Lightfingers", 1429, 0.2840, 0.5960),
 				},
 			},
 		}
@@ -119,7 +107,7 @@ function module:OnInitialize()
 				return {
 					type = "select", dialogControl = "LSM30_Sound",
 					name = "Sound to Play", desc = "Choose a sound file to play",
-					values = AceGUIWidgetLSMlists.sound,
+					values = LSM:HashTable("sound"),
 					disabled = function() return not self.db.profile[enabled_key] end,
 					order = order,
 				}
@@ -232,17 +220,17 @@ function module:PlaySound(s)
 	-- boring check:
 	if not s.loops or s.loops == 0 then return end
 	-- now, noise!
-	local drums = self.db.profile.drums
-	if s.soundfile == "NPCScan" then
-		--Override default behavior and force npcscan behavior of two sounds at once
-		drums = true
-		PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), "Master")
-	else
-		--Play whatever sound is set
-		PlaySoundFile(LSM:Fetch("sound", s.soundfile), "Master")
-	end
-	if drums then
-		PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
+	--Play whatever sound is set
+	local sound = LSM:Fetch("sound", s.soundfile)
+	if not sound then return end
+	(type(sound) == "string" and PlaySoundFile or PlaySound)(sound, "Master")
+	if self.db.profile.drums and not s.drumsplaying then
+		-- TrollDrumLoop
+		local willPlay, soundHandle = PlaySound(7294, "Master", true, true)
+		s.drumsplaying = willPlay
+		if willPlay then
+			self:ScheduleTimer(StopSound, s.loops * 4.5, soundHandle)
+		end
 	end
 	s.loops = s.loops - 1
 	if s.loops > 0 then
