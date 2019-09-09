@@ -1,6 +1,7 @@
 # Changelog
 
 ## Changed in v11302.0
+* Fixed absent sounds
 * Classic rare list is vastly more complete now
 * Giving this a sensible version label to tell it apart from retail WoW
 
