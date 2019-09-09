@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v11302.0
+* Classic rare list is vastly more complete now
+* Giving this a sensible version label to tell it apart from retail WoW
+
 ## Changed in v4.0.18c
 * Classic-compatible version released. Somewhat incomplete set of rares, because a lot of the higher level zones had poor data available on wowhead at the moment.
 
