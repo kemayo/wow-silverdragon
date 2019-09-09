@@ -185,7 +185,7 @@ if __name__ == '__main__':
 
     expansionmobs = {}
     for id, mob in local.items():
-        if not ns.strip_empties or len(mob.data.get('locations', {})) == 0:
+        if len(mob.data.get('locations', {})) == 0 and ns.strip_empties:
             continue
         expansion = mob.data.get('expansion')
         if expansion:
