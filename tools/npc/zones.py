@@ -20,6 +20,7 @@ zoneid_to_mapid = {
     17: 1413,  # The Barrens
     28: 1422,  # Western Plaguelands
     33: 1434,  # Stranglethorn Vale
+    36: 1416,  # Alterac Mountains
     38: 1432,  # Loch Modan
     40: 1436,  # Westfall
     41: 1430,  # Deadwind Pass
@@ -58,7 +59,6 @@ zoneid_to_mapid = {
     # Missing:
     25: False,  # Blackrock Mountain
     34: False,  # Echo Ridge Mine
-    36: False,  # Alterac Mountains
     54: False,  # Jasperlode Mine
     57: False,  # Fargodeep Mine
     111: False,  # Jangolode Mine
