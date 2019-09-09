@@ -180,7 +180,7 @@ function module:BuildMobList(options)
 			return not core.db.global.datasources[info[#info - 3]]
 		end
 		for id, mob in pairs(data) do
-			if not mob.hidden then
+			if not mob.hidden and mob.locations then
 				for zone in pairs(mob.locations) do
 					if not group.args.zones.args["map"..zone] then
 						group.args.zones.args["map"..zone] = {
