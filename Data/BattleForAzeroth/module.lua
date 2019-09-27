@@ -481,6 +481,7 @@ function module:OnInitialize()
 		[153928] = {name="Tidelord Dispersius",locations={[1355]={57602600},},},
 		[154148] = {name="Tidemistress Leth'sindra",locations={[1355]={67152325},},quest=56106,},
 		[154153] = {name="Enforcer KX-T57",locations={[1462]={53806180},},quest=56207,},
+		[154154] = {name="Honey Smasher",locations={[942]={62201530},},quest=57674,},
 		[154225] = {name="The Rusty Prince",locations={[1462]={58305690},},notes="Time displaced",quest=56182,},
 		[154701] = {name="Gorged Gear-Cruncher",locations={[1462]={69205340},},quest=56367,},
 		[154739] = {name="Caustic Mechaslime",locations={[1462]={66505870},},quest=56368,},
