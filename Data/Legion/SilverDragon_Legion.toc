@@ -1,4 +1,4 @@
-## Interface: 80205
+## Interface: 80300
 ## Title: SilverDragon (Legion)
 ## Notes: Mobs for Legion
 ## Version: @project-version@

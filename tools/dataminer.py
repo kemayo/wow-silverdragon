@@ -68,7 +68,7 @@ expansions = {
     8: "BattleForAzeroth",
 }
 
-TOC_TEMPLATE = """## Interface: 80205
+TOC_TEMPLATE = """## Interface: 80300
 ## Title: SilverDragon ({exp})
 ## Notes: Mobs for {exp}
 ## Version: @project-version@
