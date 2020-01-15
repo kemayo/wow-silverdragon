@@ -415,7 +415,7 @@ function module:OnInitialize()
 		[150937] = {name="Seaspit",locations={[1462]={19407940},},quest=55545,},
 		[151124] = {name="Mechagonian Nullifier",locations={[1462]={56805460},},quest=55207,},
 		[151202] = {name="Foul Manifestation",locations={[1462]={65605100},},quest=55513,},
-		[151296] = {name="OOX-Avenger\/MG",locations={[1462]={56803990},},},
+		[151296] = {name="OOX-Avenger MG",locations={[1462]={56803990},},},
 		[151308] = {name="Boggac Skullbash",locations={[1462]={53003300,54202720},},quest=55539,},
 		[151569] = {name="Deepwater Maw",locations={[1462]={35804300},},quest=55514,},
 		[151623] = {name="The Scrap King",locations={[1462]={71404920},},quest=55364,},
