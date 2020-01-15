@@ -321,6 +321,7 @@ zoneid_to_mapid = {
     8567: 895,  # Tiragarde Sound
     8568: 1161,  # Boralus
     8574: 830,  # Krokuun
+    8670: 1165, # Dazar'alor
     8701: 882,  # Mac'Aree
     8721: 896,  # Drustvar
     8899: 885,  # Antoran Wastes

@@ -123,8 +123,11 @@ class WowheadNPC(NPC):
             return {}
         npcs = {}
         for npc in (WowheadNPC(id, ptr=ptr, session=session) for id in re.findall(r'"id":(\d+)', match.group(1))):
-            print(npc)
-            npcs[npc.id] = npc
+            try:
+                print(npc)
+                npcs[npc.id] = npc
+            except Exception as e:
+                print("couldn't load npc", npc.id)
         return npcs
 
 
