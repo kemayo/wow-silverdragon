@@ -85,7 +85,7 @@ function module:OnInitialize()
 		[64004] = {name="Ghostly Pandaren Fisherman",locations={[376]={46802440},},},
 		[64191] = {name="Ghostly Pandaren Craftsman",locations={[376]={45403840},},},
 		[64227] = {name="Frozen Trail Packer",locations={[379]={35207640},},},
-		[64272] = {name="Jade Warrior Statue",locations={[371]={39204660},},},
+		[64272] = {name="Jade Warrior Statue",locations={[371]={39204660},},quest=31307,},
 		[64403] = {name="Alani",locations={[390]={16603400,16603960,17202740,18804520,20001740,23805040,23805720,24406700,25604480,25607340,28203840,29202080,29405340,32007280,32203220,34602520,35004960,36804320,37603800,40006620,40603080,41406040,42604540,43207240,45003820,45005220,48607040,48802600,52603760,54002440,54003180,54204360,55204880,58206400,60403140,61604660,63005500,63406120},},mount=true,},
 		[65552] = {name="Glinting Rapana Whelk",locations={[422]={40806340},},},
 		[68317] = {name="Mavis Harms",faction="Alliance",locations={[418]={84403100},},},
