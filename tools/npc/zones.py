@@ -329,6 +329,9 @@ zoneid_to_mapid = {
     9670: 1163,  # Dazar'alor (The Great Seal)
     10052: 1355,  # Nazjatar
     10290: 1462,  # Mechagon
+    10833: 1527,  # Uldum (corrupted)
+    12623: False,  # Vale of Eternal Twilight
+    12766: False,  # Vision of the Twisting Sands
     # 9698: 1182,  # Saltstone Mine
     # Missing:
     5: False,  # - QA and DVD GLOBAL -
