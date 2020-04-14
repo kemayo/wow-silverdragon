@@ -326,6 +326,7 @@ zoneid_to_mapid = {
     8721: 896,  # Drustvar
     8899: 885,  # Antoran Wastes
     9042: 942,  # Stormsong Valley
+    9105: 1530,  # Vale of Eternal Blossoms (corrupted)
     9670: 1163,  # Dazar'alor (The Great Seal)
     10052: 1355,  # Nazjatar
     10290: 1462,  # Mechagon
@@ -680,7 +681,6 @@ zoneid_to_mapid = {
     9100: False,  # Invasion Point: Aurinor
     9101: False,  # Tropical Isle 8.0
     9102: False,  # Invasion Point: Naigtal
-    9105: False,  # Vale of Eternal Blossoms
     9126: False,  # Invasion Point: Cen'gar
     9127: False,  # Invasion Point: Val
     9128: False,  # Invasion Point: Sangua
