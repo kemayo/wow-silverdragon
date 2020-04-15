@@ -36,7 +36,11 @@ class NPC:
         self.session = session
 
         if fetch:
-            self.load()
+            try:
+                self.load()
+            except Exception as e:
+                print("error fetching", self.id, self.data)
+                raise e
 
     def __str__(self):
         return self.data.get('name', self.id)
