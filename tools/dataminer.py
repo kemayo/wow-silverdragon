@@ -113,14 +113,14 @@ if __name__ == '__main__':
 
     if ns.wowhead:
         print("LOADING FROM wowhead")
-        for categoryid, c in npc.types.items():
-            print("ACQUIRING rares for category", categoryid, c)
+        for category in npc.types.values():
+            print("ACQUIRING rares for category", category)
             for expansion in expansions:
                 if ns.expansion and expansion != ns.expansion:
                     continue
                 print("EXPANSION", expansion)
                 # run per-expansion to avoid caps on results-displayed
-                wowhead.update(WowheadNPC.query(categoryid, expansion, session=session, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
+                wowhead.update(WowheadNPC.query(category.lower(), expansion, session=session, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
 
         if not ns.expansion:
             for id in force_include:
