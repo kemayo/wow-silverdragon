@@ -72,7 +72,13 @@ class WowheadNPC(NPC):
                 print("Got location for unknown zone", zone, self.id)
                 continue
             processed_coords = []
-            raw_coords = data[0].get('coords', [])
+            # if we're in a floors situation:
+            if type(data) == dict:
+                print("FLOORS", data.keys())
+                data = data.get("0", {})
+            else:
+                data = data[0]
+            raw_coords = data.get('coords', [])
             for x, y in ((c[0] / 100, c[1] / 100) for c in raw_coords):
                 for oldx, oldy in processed_coords:
                     if abs(oldx - x) < 0.05 and abs(oldy - y) < 0.05:
