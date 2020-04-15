@@ -1,8 +1,9 @@
 # Changelog
 
-## Changed in v80205.0
+## Changed in v80300.0
 
-* Updated for 8.2.5
+* Updated for 8.3
+* Added new rares for Uldum and Vale of Eternal Blossoms (missing many questids)
 * Added Honey Smasher to Stormsong Valley
 * Fixed the creation of the macro
 * Changed to a new version number scheme that makes more sense now Classic is a thing
