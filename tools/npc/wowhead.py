@@ -114,8 +114,9 @@ class WowheadNPC(NPC):
             return int(patch.group(1))
 
     @classmethod
-    def query(cls, categoryid, expansion, session, ptr=False, beta=False, cached=True, **kw):
-        url = "%s/npcs=%d&filter=cl=4:2;cr=39;crs=%d;crv=0" % (cls.url(ptr=ptr, beta=beta), categoryid, expansion)
+    def query(cls, category, expansion, session, ptr=False, beta=False, cached=True, **kw):
+        url = "%s/%s-npcs/classification:4:2?filter=39;%d;0" % (cls.url(ptr=ptr, beta=beta), category, expansion)
+        print(url)
 
         if cached:
             page = session.get(url, **kw)
@@ -123,7 +124,7 @@ class WowheadNPC(NPC):
             with session.cache_disabled():
                 page = session.get(url, **kw)
 
-        match = re.search(r'new Listview\({[^{]+?data:\s*\[(.+?)\]}\);\n', page.text)
+        match = re.search(r'new Listview\({[^{]+?"?data"?:\s*\[(.+?)\]}\);\n', page.text)
         if not match:
             print("None found")
             return {}
