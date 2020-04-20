@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v80300.1
+
+* Made it so the new assault rares only appear while their assault is happening
+* Added many questids for new rares
+
 ## Changed in v80300.0
 
 * Updated for 8.3

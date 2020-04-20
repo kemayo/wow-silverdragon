@@ -303,15 +303,48 @@ function addon:IsMobInZone(id, zone)
 		return mobsByZone[zone][id]
 	end
 end
-function addon:IsMobInPhase(id, zone)
-	if mobdb[id] then
-		if not mobdb[id].phase then
-			return true
+do
+	local poi_expirations = {}
+	local poi_zone_expirations = {}
+	local pois_byzone = {}
+	local function refreshPois(zone)
+		local now = time()
+		if not poi_zone_expirations[zone] or now > poi_zone_expirations[zone] then
+			Debug("Refreshing zone POIs", zone)
+			pois_byzone[zone] = wipe(pois_byzone[zone] or {})
+			for _, poi in ipairs(C_AreaPoiInfo.GetAreaPOIForMap(zone)) do
+				pois_byzone[zone][poi] = true
+				poi_expirations[poi] = now + (C_AreaPoiInfo.GetAreaPOISecondsLeft(poi) or 60)
+			end
+			poi_zone_expirations[zone] = now + 1
 		end
+	end
+	local function checkPois(...)
+		for i=1, select("#", ...), 2 do
+			local zone, poi = select(i, ...)
+			local now = time()
+			if now > (poi_expirations[poi] or 0) then
+				refreshPois(zone)
+				poi_expirations[poi] = poi_expirations[poi] or (now + 60)
+			end
+			if pois_byzone[zone][poi] then
+				return true
+			end
+		end
+	end
+	function addon:IsMobInPhase(id, zone)
+		local phased, poi = true, true
+		if not mobdb[id] then return end
 		if not mobdb[id].locations[zone] then
 			return false
 		end
-		return mobdb[id].phase == C_Map.GetMapArtID(zone)
+		if mobdb[id].phase then
+			phased = mobdb[id].phase == C_Map.GetMapArtID(zone)
+		end
+		if mobdb[id].poi then
+			poi = checkPois(unpack(mobdb[id].poi))
+		end
+		return phased and poi
 	end
 end
 -- Returns id, addon:GetMobInfo(id)
