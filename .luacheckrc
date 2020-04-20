@@ -45,6 +45,7 @@ read_globals = {
     "TomTom",
 
     -- API functions
+    "C_AreaPoiInfo",
     "C_ChatInfo",
     "C_Map",
     "C_Timer",
