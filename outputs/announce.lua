@@ -57,6 +57,11 @@ function module:OnInitialize()
 
 	self:SetSinkStorage(self.db.profile.sink_opts)
 
+	if self.db.profile.sink_opts.sink20OutputSink == "Channel" then
+		-- 8.2.5 / Classic removed the ability to output to channels, outside of hardware-driven events
+		self.db.profile.sink_opts.sink20OutputSink = "Default"
+	end
+
 	core.RegisterCallback(self, "Seen")
 
 	local config = core:GetModule("Config", true)
@@ -68,6 +73,7 @@ function module:OnInitialize()
 		local sink_config = self:GetSinkAce3OptionsDataTable()
 		sink_config.inline = true
 		sink_config.order = 15
+		sink_config.args.Channel = nil
 
 		local faker = function(id, name, zone, x, y)
 			return {
