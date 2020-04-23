@@ -357,6 +357,7 @@ local achievements = {
 		-- [141043] = nil, -- Jakala the Cruel
 	},
 	[12587] = {}, -- Unbound Monstrosities
+	[13027] = {}, -- Mushroom Harvest
 	[13470] = { -- Rest In Pistons (Mechagon)
 		[151124] = 45117, -- Mechagonian Nullifier
 		[151623] = 45118, -- The Scrap King
