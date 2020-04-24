@@ -181,7 +181,6 @@ function module:OnInitialize()
 		[137906] = {name="Infused Bedrock",locations={[81]={44403460,48805140},},phase=962,},
 		[137983] = {name="Rear Admiral Hainsworth",locations={[895]={65003520},[1161]={24406480,29807020,30406380},},},
 		[138039] = {name="Dark Ranger Clea",locations={[895]={65003520},[1161]={28406200,31206700},},},
-		[138244] = {name="Briarwood Bulwark",locations={[896]={41203800},},},
 		[138279] = {name="Adhara White",locations={[895]={85204340},},quest=54953,},
 		[138288] = {name="Ghost of the Deep",locations={[895]={69404700},},quest=51611,},
 		[138299] = {name="Bloodmaw",locations={[895]={58803300},},},
