@@ -278,7 +278,7 @@ function module:OnInitialize()
 		[144644] = {name="Mirecrawler",locations={[1355]={24003540,26404260,27002700,29604840,31604300,32403400,34402660,35404940,35408100,35605480,36208740,37401680,37603980,41206240,42008080,42801280,42804200,44005380,45402440,45403240,46406000,46604720,50606520,52403860,55205180,55402860,57401340,57603520,60405080,60605920,61401920,64001040,65204140,67002660,71404640,71803600,73402620},},},
 		[144722] = {name="Togoth Cruelarm",faction="Horde",locations={[895]={79203740},},poi={876,5896},},
 		[144855] = {name="Apothecary Jerrod",faction="Horde",locations={[896]={35004140},},},
-		[144915] = {name="Firewarden Viton Darkflare",locations={[942]={49404900},},},
+		[144915] = {name="Firewarden Viton Darkflare",faction="Horde",locations={[942]={49404900},},poi={876,5966},},
 		[144946] = {name="Ivus the Forest Lord",faction="Alliance",locations={[62]={41403600},},phase=1176,quest=54896,},
 		[144987] = {name="Shadow Hunter Mutumba",locations={[942]={36405140},},},
 		[144997] = {name="Gurin Stonebinder",faction="Horde",locations={[942]={46804600},},poi={876,5966},},
