@@ -5,17 +5,17 @@ import math
 from . import lua
 
 types = {
-    1: 'Beast',
-    2: 'Dragonkin',
-    3: 'Demon',
-    4: 'Elemental',
-    5: 'Giant',
-    6: 'Undead',
-    7: 'Humanoid',
-    8: 'Critter',
-    9: 'Mechanical',
-    10: 'Uncategorized',
-    15: 'Aberration'
+    1: "Beast",
+    2: "Dragonkin",
+    3: "Demon",
+    4: "Elemental",
+    5: "Giant",
+    6: "Undead",
+    7: "Humanoid",
+    8: "Critter",
+    9: "Mechanical",
+    10: "Uncategorized",
+    15: "Aberration",
 }
 
 
@@ -43,10 +43,10 @@ class NPC:
                 raise e
 
     def __str__(self):
-        return self.data.get('name', self.id)
+        return self.data.get("name", self.id)
 
     def __repr__(self):
-        return '<NPC:%d:%s>' % (self.id, self.data.get('name', '???'))
+        return "<NPC:%d:%s>" % (self.id, self.data.get("name", "???"))
 
     def __eq__(self, other):
         try:
@@ -58,35 +58,43 @@ class NPC:
         return self.id
 
     def load(self):
-        self.data['name'] = self._name()
-        self.data['creature_type'] = self._creature_type()
-        self.data['elite'] = self._elite()
-        self.data['level'] = self._level()
-        self.data['tameable'] = self._tameable()
-        self.data['locations'] = self._filter_locations(self._locations()) or {}
-        self.data['vignette'] = self._vignette()
-        self.data['quest'] = self._quest()
-        self.data['expansion'] = self._expansion()
+        self.data["name"] = self._name()
+        self.data["creature_type"] = self._creature_type()
+        self.data["elite"] = self._elite()
+        self.data["level"] = self._level()
+        self.data["tameable"] = self._tameable()
+        self.data["locations"] = self._filter_locations(self._locations()) or {}
+        self.data["vignette"] = self._vignette()
+        self.data["quest"] = self._quest()
+        self.data["expansion"] = self._expansion()
 
-        if self.data['vignette'] == self.data['name']:
-            self.data['vignette'] = None
+        if self.data["vignette"] == self.data["name"]:
+            self.data["vignette"] = None
 
     def _name(self):
         pass
+
     def _creature_type(self):
         pass
+
     def _level(self):
         pass
+
     def _elite(self):
         pass
+
     def _tameable(self):
         pass
+
     def _locations(self):
         pass
+
     def _vignette(self):
         pass
+
     def _quest(self):
         pass
+
     def _expansion(self):
         pass
 
@@ -95,31 +103,36 @@ class NPC:
         if npc.id != self.id:
             return
 
-        locations = self._filter_locations(merge_locations(
-            self.data.get('locations', {}),
-            npc.data.get('locations', {})
-        ))
+        locations = self._filter_locations(
+            merge_locations(
+                self.data.get("locations", {}), npc.data.get("locations", {})
+            )
+        )
 
         self.data.update(npc.clean_data())
 
-        self.data['locations'] = locations
+        self.data["locations"] = locations
 
     def add_notes(self, notes):
-        self.data['notes'] = notes
+        self.data["notes"] = notes
 
     def clean_data(self, *keys):
-        return dict((k, v) for k, v in self.data.items() if (v and (len(keys) == 0 or k in keys)))
+        return dict(
+            (k, v)
+            for k, v in self.data.items()
+            if (v and (len(keys) == 0 or k in keys))
+        )
 
     def to_lua(self, *args, **kwargs):
         return lua.serialize(self.clean_data(*args, **kwargs))
 
     def html_decode(self, text):
-        return text.replace('&#39;', "'").replace('&#x27;', "'").replace('&quot;', '"')
+        return text.replace("&#39;", "'").replace("&#x27;", "'").replace("&quot;", '"')
 
     def _filter_locations(self, locations):
         if self.id == 32491 and 550 in locations:
             # Time-lost needs to get cleaned up a little, removed from Nagrand
-            del(locations[550])
+            del locations[550]
         cleaned = {}
         for zone, coords in locations.items():
             coords = set(coords)

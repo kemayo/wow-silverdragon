@@ -10,15 +10,15 @@ zone_map = False
 
 
 class WowdbNPC(NPC):
-    URL = 'http://www.wowdb.com'
-    URL_PTR = 'http://ptr.wowdb.com'
-    URL_BETA = 'http://beta.wowdb.com'
+    URL = "http://www.wowdb.com"
+    URL_PTR = "http://ptr.wowdb.com"
+    URL_BETA = "http://beta.wowdb.com"
 
     page = False
 
     def __page(self):
         if self.page is False:
-            url = '%s/npcs/%d' % (self.url(ptr=self.ptr, beta=self.beta), self.id)
+            url = "%s/npcs/%d" % (self.url(ptr=self.ptr, beta=self.beta), self.id)
             self.page = self.session.get(url).text
             if not self.page:
                 print("Couldn't fetch", url)
@@ -30,10 +30,13 @@ class WowdbNPC(NPC):
             return self.html_decode(name.group(1))
 
     def _creature_type(self):
-        ctype = re.search(r'%s</dt>\s*<dd class="db-right">([^<]+?)</dd>' % self._name(), self.__page())
+        ctype = re.search(
+            r'%s</dt>\s*<dd class="db-right">([^<]+?)</dd>' % self._name(),
+            self.__page(),
+        )
         if ctype:
             # for now get rid of the extra info on "Beast (Serpent)"
-            return re.sub('\s+\(.+\)$', '', ctype.group(1))
+            return re.sub("\s+\(.+\)$", "", ctype.group(1))
 
     def _locations(self):
         page = self.__page()
@@ -44,13 +47,18 @@ class WowdbNPC(NPC):
         if not match:
             return {}
         data = json.loads(match.group(1))
-        if not data.get('Maps'):
+        if not data.get("Maps"):
             return {}
         coords = {}
-        for zone, zonedata in data.get('Maps').items():
+        for zone, zonedata in data.get("Maps").items():
             zone = int(zone)
             if "Name" not in zonedata or not zoneid_to_mapid.get(zone, False):
-                print("Got location for unknown zone", zonedata.get("Name", False), zone, self.id)
+                print(
+                    "Got location for unknown zone",
+                    zonedata.get("Name", False),
+                    zone,
+                    self.id,
+                )
                 continue
             zcoords = []
             selected_floor = zonedata["SelectedFloor"]
@@ -88,18 +96,24 @@ class WowdbNPC(NPC):
         page = self.__page()
         if not page:
             return
-        match = re.search(r'<a href="[^"]+/quests/(\d+)-[^"]+">[^<]*Vignette[^<]*</a>', page)
+        match = re.search(
+            r'<a href="[^"]+/quests/(\d+)-[^"]+">[^<]*Vignette[^<]*</a>', page
+        )
         if not match:
             return
         return int(match.group(1))
 
     def _elite(self):
-        tooltip = re.search(r'<table class="tooltip-table">(.+?)</table>', self.__page())
+        tooltip = re.search(
+            r'<table class="tooltip-table">(.+?)</table>', self.__page()
+        )
         if tooltip:
             return "Elite)" in tooltip.group(1)
 
     def _level(self):
-        tooltip = re.search(r'<table class="tooltip-table">(.+?)</table>', self.__page())
+        tooltip = re.search(
+            r'<table class="tooltip-table">(.+?)</table>', self.__page()
+        )
         if tooltip:
             level = re.search(r'<td colspan="2">Level (\d+)', tooltip.group(1))
             if level:
@@ -107,13 +121,25 @@ class WowdbNPC(NPC):
             return False
 
     def _expansion(self):
-        patch = re.search(r'<li>Added in Patch (\d+)', self.__page())
+        patch = re.search(r"<li>Added in Patch (\d+)", self.__page())
         if patch:
             return int(patch.group(1))
 
     @classmethod
-    def query(cls, creature_type, session, expansion=False, ptr=False, beta=False, cached=True, **kw):
-        url = "%s/npcs/%s?filter-classification=20" % (cls.url(ptr=ptr, beta=beta), creature_type.lower())
+    def query(
+        cls,
+        creature_type,
+        session,
+        expansion=False,
+        ptr=False,
+        beta=False,
+        cached=True,
+        **kw
+    ):
+        url = "%s/npcs/%s?filter-classification=20" % (
+            cls.url(ptr=ptr, beta=beta),
+            creature_type.lower(),
+        )
         if expansion:
             url += "&filter-expansion=%d" % expansion
 
@@ -127,13 +153,20 @@ class WowdbNPC(NPC):
                 with session.cache_disabled():
                     page = session.get(url, **kw)
 
-            for npc in (WowdbNPC(id, ptr=ptr, session=session) for id in re.findall(r'href="http://[^\.]+\.wowdb\.com/npcs/(\d+)-', page.text)):
+            for npc in (
+                WowdbNPC(id, ptr=ptr, session=session)
+                for id in re.findall(
+                    r'href="http://[^\.]+\.wowdb\.com/npcs/(\d+)-', page.text
+                )
+            ):
                 print(npc)
                 npcs[npc.id] = npc
 
             nextpage = re.search(r'<a href="([^"]+?)" rel="next">', page.text)
             if nextpage:
-                url = cls.url(ptr=ptr, beta=beta) + nextpage.group(1).replace('&amp;', '&').replace('cookieTest=1&', '')
+                url = cls.url(ptr=ptr, beta=beta) + nextpage.group(1).replace(
+                    "&amp;", "&"
+                ).replace("cookieTest=1&", "")
             else:
                 pages_remaining = False
         return npcs

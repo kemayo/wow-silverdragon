@@ -12,50 +12,50 @@ from npc.wowhead import WowheadNPC
 
 
 blacklist = (
-    50091, # untargetable Julak-Doom component
-    77795, # duplicate Echo of Murmur
+    50091,  # untargetable Julak-Doom component
+    77795,  # duplicate Echo of Murmur
 )
 force_include = (
-    17591, # Blood Elf Bandit
-    50409, # Mysterious Camel Figurine
-    50410, # Mysterious Camel Figurine (remnants)
-    3868, # Blood Seeker (thought to share Aeonaxx's spawn timer)
-    51236, # Aeonaxx (engaged)
-    58336, # Darkmoon Rabbit
+    17591,  # Blood Elf Bandit
+    50409,  # Mysterious Camel Figurine
+    50410,  # Mysterious Camel Figurine (remnants)
+    3868,  # Blood Seeker (thought to share Aeonaxx's spawn timer)
+    51236,  # Aeonaxx (engaged)
+    58336,  # Darkmoon Rabbit
     # Lost and Found!
-    64004, # Ghostly Pandaren Fisherman
-    64191, # Ghostly Pandaren Craftsman
-    65552, # Glinting Rapana Whelk
-    64272, # Jade Warrior Statue
-    64227, # Frozen Trail Packer
-    #In 5.2, world bosses are no longer flagged as rare, even if they are.
-    #Granted, 3 of 4 probably won't be rare. We include anyways because we always have.
-    64403, # Alani
-    60491, # Sha of Anger
-    62346, # Galleon
-    69099, # Nalak
-    69161, # Oondasta
+    64004,  # Ghostly Pandaren Fisherman
+    64191,  # Ghostly Pandaren Craftsman
+    65552,  # Glinting Rapana Whelk
+    64272,  # Jade Warrior Statue
+    64227,  # Frozen Trail Packer
+    # In 5.2, world bosses are no longer flagged as rare, even if they are.
+    # Granted, 3 of 4 probably won't be rare. We include anyways because we always have.
+    64403,  # Alani
+    60491,  # Sha of Anger
+    62346,  # Galleon
+    69099,  # Nalak
+    69161,  # Oondasta
     # On to Draenor
-    71992, # Moonfang
-    81001, # Nok-Karosh
-    50992, # Gorok
-    50990, # Nakk the Thunderer
-    50981, # Luk'hok
-    50985, # Poundfist
-    51015, # Silthide
-    50883, # Pathrunner
+    71992,  # Moonfang
+    81001,  # Nok-Karosh
+    50992,  # Gorok
+    50990,  # Nakk the Thunderer
+    50981,  # Luk'hok
+    50985,  # Poundfist
+    51015,  # Silthide
+    50883,  # Pathrunner
 )
 notes = {
-    50410: "Crumbled Statue Remnants", # Mysterious Camel Figurine
-    51401: "Red", # Madexx
-    51402: "Green", # Madexx
-    51403: "Black", # Madexx
-    51404: "Blue", # Madexx
-    50154: "Brown", # Madexx
-    51236: "Engaged", # Aeonaxx
-    69769: "Slate", # Zandalari Warbringer
-    69841: "Amber", # Zandalari Warbringer
-    69842: "Jade", # Zandalari Warbringer
+    50410: "Crumbled Statue Remnants",  # Mysterious Camel Figurine
+    51401: "Red",  # Madexx
+    51402: "Green",  # Madexx
+    51403: "Black",  # Madexx
+    51404: "Blue",  # Madexx
+    50154: "Brown",  # Madexx
+    51236: "Engaged",  # Aeonaxx
+    69769: "Slate",  # Zandalari Warbringer
+    69841: "Amber",  # Zandalari Warbringer
+    69842: "Jade",  # Zandalari Warbringer
 }
 expansions = {
     1: "Vanilla",
@@ -95,35 +95,57 @@ end
 
 
 def write_output(expansion, data):
-    path = pathlib.Path.cwd().parent / 'Data' / expansion
+    path = pathlib.Path.cwd().parent / "Data" / expansion
     path.mkdir(exist_ok=True)
-    with open(path / "SilverDragon_{exp}.toc".format(exp=expansion), 'w') as f:
+    with open(path / "SilverDragon_{exp}.toc".format(exp=expansion), "w") as f:
         f.write(TOC_TEMPLATE.format(exp=expansion))
-    with open(path / "module.lua", 'w') as f:
+    with open(path / "module.lua", "w") as f:
         f.write(MODULE_START_TEMPLATE.format(exp=expansion))
         for id, mob in sorted(data.items()):
             if id in blacklist:
                 continue
             if id in notes:
                 mob.add_notes(notes[id])
-            f.write('\t\t[%d] = %s,\n' % (id, mob.to_lua('name', 'quest', 'vignette', 'tameable', 'notes', 'locations', 'mount', 'boss', 'faction', 'phase', 'hidden')))
+            f.write(
+                "\t\t[%d] = %s,\n"
+                % (
+                    id,
+                    mob.to_lua(
+                        "name",
+                        "quest",
+                        "vignette",
+                        "tameable",
+                        "notes",
+                        "locations",
+                        "mount",
+                        "boss",
+                        "faction",
+                        "phase",
+                        "hidden",
+                    ),
+                )
+            )
         f.write(MODULE_END_TEMPLATE)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Suck down a lot of data about rares")
-    parser.add_argument('--local', action='store_true', default=True)
-    parser.add_argument('--no-local', action='store_false', dest='local')
-    parser.add_argument('--wowhead', action='store_true', default=True)
-    parser.add_argument('--no-wowhead', action='store_false', dest='wowhead')
-    parser.add_argument('--wowdb', action='store_true', default=True)
-    parser.add_argument('--no-wowdb', action='store_false', dest='wowdb')
-    parser.add_argument('--strip-empties', action='store_true', dest='strip_empties', default=True)
-    parser.add_argument('--no-strip-empties', action='store_false', dest='strip_empties')
-    parser.add_argument('--ptr', action='store_true')
-    parser.add_argument('--beta', action='store_true')
-    parser.add_argument('--no-cache-list', action='store_false', dest="cache_list")
-    parser.add_argument('--expansion', type=int, default=False)
+    parser.add_argument("--local", action="store_true", default=True)
+    parser.add_argument("--no-local", action="store_false", dest="local")
+    parser.add_argument("--wowhead", action="store_true", default=True)
+    parser.add_argument("--no-wowhead", action="store_false", dest="wowhead")
+    parser.add_argument("--wowdb", action="store_true", default=True)
+    parser.add_argument("--no-wowdb", action="store_false", dest="wowdb")
+    parser.add_argument(
+        "--strip-empties", action="store_true", dest="strip_empties", default=True
+    )
+    parser.add_argument(
+        "--no-strip-empties", action="store_false", dest="strip_empties"
+    )
+    parser.add_argument("--ptr", action="store_true")
+    parser.add_argument("--beta", action="store_true")
+    parser.add_argument("--no-cache-list", action="store_false", dest="cache_list")
+    parser.add_argument("--expansion", type=int, default=False)
     ns = parser.parse_args()
 
     local = {}
@@ -151,7 +173,16 @@ if __name__ == '__main__':
         print("LOADING FROM wowdb")
         for creature_type in npc.types.values():
             print("ACQUIRING rares for category", creature_type)
-            wowdb.update(WowdbNPC.query(creature_type, expansion=ns.expansion, session=session, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
+            wowdb.update(
+                WowdbNPC.query(
+                    creature_type,
+                    expansion=ns.expansion,
+                    session=session,
+                    ptr=ns.ptr,
+                    beta=ns.beta,
+                    cached=ns.cache_list,
+                )
+            )
 
         if not ns.expansion:
             for id in force_include:
@@ -167,27 +198,38 @@ if __name__ == '__main__':
                     continue
                 print("EXPANSION", expansion)
                 # run per-expansion to avoid caps on results-displayed
-                wowhead.update(WowheadNPC.query(category.lower(), expansion, session=session, ptr=ns.ptr, beta=ns.beta, cached=ns.cache_list))
+                wowhead.update(
+                    WowheadNPC.query(
+                        category.lower(),
+                        expansion,
+                        session=session,
+                        ptr=ns.ptr,
+                        beta=ns.beta,
+                        cached=ns.cache_list,
+                    )
+                )
 
         if not ns.expansion:
             for id in force_include:
                 if id not in wowhead:
-                    wowhead[id] = WowheadNPC(id, ptr=ns.ptr, beta=ns.beta, session=session)
+                    wowhead[id] = WowheadNPC(
+                        id, ptr=ns.ptr, beta=ns.beta, session=session
+                    )
 
     for id, mob in list(wowdb.items()) + list(wowhead.items()):
         if id in local:
-            expansion = local[id].data.get('expansion')
+            expansion = local[id].data.get("expansion")
             local[id].extend(mob)
             if expansion:
-                local[id].data['expansion'] = expansion
+                local[id].data["expansion"] = expansion
         else:
             local[id] = mob
 
     expansionmobs = {}
     for id, mob in local.items():
-        if len(mob.data.get('locations', {})) == 0 and ns.strip_empties:
+        if len(mob.data.get("locations", {})) == 0 and ns.strip_empties:
             continue
-        expansion = mob.data.get('expansion')
+        expansion = mob.data.get("expansion")
         if expansion:
             if expansion not in expansionmobs:
                 expansionmobs[expansion] = {}

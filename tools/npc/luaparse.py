@@ -15,42 +15,42 @@ expressions as table values. (e.g. `t[var]` will just error.)
 # Lexer
 
 tokens = (
-    'OPBRACE',
-    'CLBRACE',
-    'OPBRAK',
-    'CLBRAK',
-    'STRING',
-    'NAME',
-    'NUMBER',
-    'EQUALS',
-    'COMMA',
-    'SEMICOLON',
-    'BOOL',
-    'NIL',
-    'NEWLINE',
+    "OPBRACE",
+    "CLBRACE",
+    "OPBRAK",
+    "CLBRAK",
+    "STRING",
+    "NAME",
+    "NUMBER",
+    "EQUALS",
+    "COMMA",
+    "SEMICOLON",
+    "BOOL",
+    "NIL",
+    "NEWLINE",
 )
-t_OPBRACE = r'{'
-t_CLBRACE = r'}'
-t_OPBRAK = r'\['
-t_CLBRAK = r'\]'
-t_NAME = r'[A-Za-z_][A-Za-z_0-9]*'
-t_EQUALS = r'='
-t_COMMA = r','
-t_SEMICOLON = r';'
+t_OPBRACE = r"{"
+t_CLBRACE = r"}"
+t_OPBRAK = r"\["
+t_CLBRAK = r"\]"
+t_NAME = r"[A-Za-z_][A-Za-z_0-9]*"
+t_EQUALS = r"="
+t_COMMA = r","
+t_SEMICOLON = r";"
 
-t_ignore = r' '
+t_ignore = r" "
 
 
 # a string is quotes around a sequence of anything that's not-quotes-or-backslashes, or backslash+char
 def t_STRING(t):
     r'"(?:[^"\\]|\\.)*?"|\'(?:[^\'\\]|\\.)*?\''
-    t.value = t.value[1:-1].replace(r'\"', '"')
+    t.value = t.value[1:-1].replace(r"\"", '"')
     return t
 
 
 def t_NUMBER(t):
-    r'\-?\d+(?:\.\d+)?'
-    if '.' in t.value:
+    r"\-?\d+(?:\.\d+)?"
+    if "." in t.value:
         t.value = float(t.value)
     else:
         t.value = int(t.value)
@@ -58,26 +58,29 @@ def t_NUMBER(t):
 
 
 def t_BOOL(t):
-    r'true|false'
-    t.value = t.value == 'true'
+    r"true|false"
+    t.value = t.value == "true"
     return t
 
 
 def t_NIL(t):
-    r'nil'
+    r"nil"
     t.value = None
     return t
 
 
 def t_NEWLINE(t):
-    r'\n+'
+    r"\n+"
     t.lexer.lineno += t.value.count("\n")
     return t
 
 
 def t_error(t):
-    raise SyntaxError("Error parsing, illegal character '%s' @ line %d" % (t.value[0], t.lineno))
+    raise SyntaxError(
+        "Error parsing, illegal character '%s' @ line %d" % (t.value[0], t.lineno)
+    )
     # t.lexer.skip(1)
+
 
 lexer = lex.lex()
 
@@ -86,8 +89,8 @@ lexer = lex.lex()
 
 
 def p_tableconstructor(p):
-    '''tableconstructor : OPBRACE fieldlist CLBRACE
-    '''
+    """tableconstructor : OPBRACE fieldlist CLBRACE
+    """
     p[0] = p[2]
     # If this is a pure numeric-keys table, turn it into a python list
     # Could argue this shouldn't be done, since it changes the index start
@@ -100,16 +103,16 @@ def p_tableconstructor(p):
 
 
 def p_fieldlist(p):
-    '''fieldlist : fieldlist_internal fieldsep
+    """fieldlist : fieldlist_internal fieldsep
                  | fieldlist_internal
-    '''
+    """
     p[0] = p[1]
 
 
 def p_fieldlist_internal(p):
-    '''fieldlist_internal : fieldlist_internal fieldsep field
+    """fieldlist_internal : fieldlist_internal fieldsep field
                           | field
-    '''
+    """
     # Exists to work around allowing multiple trailing commas
     if len(p) == 3:
         p[0] = p[1]
@@ -131,17 +134,17 @@ def p_fieldlist_internal(p):
 
 
 def p_fieldsep(p):
-    '''fieldsep : COMMA
+    """fieldsep : COMMA
                 | SEMICOLON
-    '''
+    """
     pass
 
 
 def p_field(p):
-    '''field : OPBRAK exp CLBRAK EQUALS exp
+    """field : OPBRAK exp CLBRAK EQUALS exp
              | NAME EQUALS exp
              | exp
-    '''
+    """
     # print(len(p), p[:])
     if len(p) == 6:
         p[0] = (p[2], p[5])
@@ -152,12 +155,12 @@ def p_field(p):
 
 
 def p_exp(p):
-    '''exp : NIL
+    """exp : NIL
            | BOOL
            | NUMBER
            | STRING
            | tableconstructor
-    '''
+    """
     # Note: incomplete, both in accepted values and in handling-of-values
     # Most importantly: NAME isn't handled, so this deals solely with literals
     p[0] = p[1]
@@ -166,6 +169,7 @@ def p_exp(p):
 def p_error(p):
     if not p:
         print("SYNTAX ERROR")
+
 
 parser = yacc.yacc()
 
@@ -178,7 +182,7 @@ def parse(s):
     return p
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # s = '{23.4, "pony express\\" ri\'de", \'Test\\\'s fun\', 4, "apple", fred=400, ["foo"]=999, [90]="beauty", {1,2}, p={2},}'
     s = r'{[61] = {name="Thuros \"Fred\" Lightfingers",["creature_type"]="Humanoid",level=9,locations={[30]={50408320,50408280},},},}'
     print(s)

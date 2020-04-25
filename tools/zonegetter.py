@@ -41,12 +41,12 @@ def output_zone_map(zone_map, current_data):
 
 def update_zone_map_from_csv(current_data, filename):
     """Assumes the CSV file from Blizzard_Deprecated"""
-    with open(filename, newline='') as csvfile:
+    with open(filename, newline="") as csvfile:
         reader = csv.DictReader(csvfile)
         zonemap = {}
         for row in reader:
-            if not row['DungeonMapID'] or row['DungeonFloor'] == '1':
-                zonemap[int(row['WorldMapAreaID'])] = int(row['UiMapID'])
+            if not row["DungeonMapID"] or row["DungeonFloor"] == "1":
+                zonemap[int(row["WorldMapAreaID"])] = int(row["UiMapID"])
 
     new_data = {}
     for zoneid, mapid in current_data.items():
@@ -56,7 +56,7 @@ def update_zone_map_from_csv(current_data, filename):
     return new_data
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) > 1:
         current_data = update_zone_map_from_csv(zoneid_to_mapid, sys.argv[1])
     else:

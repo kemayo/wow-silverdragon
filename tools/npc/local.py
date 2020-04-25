@@ -4,12 +4,13 @@ import re
 
 from . import NPC, lua
 
+
 class LocalNPC(NPC):
     def __init__(self, id, data, *args, **kw):
         NPC.__init__(self, id, *args, **kw)
-        if 'locations' in data:
+        if "locations" in data:
             try:
-                data['locations'] = self._filter_locations(data['locations'])
+                data["locations"] = self._filter_locations(data["locations"])
             except Exception as e:
                 print("FAILED", id, data)
                 raise e
@@ -37,21 +38,21 @@ class LocalNPC(NPC):
 
 def load(filename):
     npcdata = {}
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         for line in f:
-            m = re.match(r'^\s+\[(\d+)\]\s*=\s*(\{.+\}),$', line)
+            m = re.match(r"^\s+\[(\d+)\]\s*=\s*(\{.+\}),$", line)
             if m:
                 npcid = int(m.group(1))
                 # print(m.groups())
                 data = lua.loadtable(m.group(2))
                 if data:
-                    data['name'] = data['name'].replace('\\', '')
-                    if 'locations' in data and type(data['locations']) == list:
+                    data["name"] = data["name"].replace("\\", "")
+                    if "locations" in data and type(data["locations"]) == list:
                         # lua table parser treats {[1]='a',[2]='b'} as equivalent to {'a','b'}
                         # In this case we know that's wrong, so:
                         locations = {}
-                        for i, v in enumerate(data['locations'], 1):
+                        for i, v in enumerate(data["locations"], 1):
                             locations[i] = v
-                        data['locations'] = locations
+                        data["locations"] = locations
                     npcdata[npcid] = LocalNPC(npcid, data)
     return npcdata
