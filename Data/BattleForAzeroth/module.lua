@@ -19,7 +19,7 @@ function module:OnInitialize()
 		[125232] = {name="Captain Mu'kala",locations={[863]={81803040},},quest=48057,vignette=2029,},
 		[125250] = {name="Ancient Jawbreaker",locations={[863]={67402940},},quest=48063,},
 		[125453] = {name="Quillrat Matriarch",locations={[896]={66404240},},quest=48178,},
-		[125816] = {name="Sky Queen",locations={[1165]={49408460},},},
+		[125816] = {name="Sky Queen",faction="Horde",locations={[1165]={49408460},},},
 		[126056] = {name="Totem Maker Jash'ga",locations={[863]={49403740},},quest=48406,},
 		[126142] = {name="Bajiatha",locations={[863]={42006060},},quest=48439,},
 		[126187] = {name="Corpse Bringer Yal'kar",locations={[863]={41205340},},quest=48462,},
