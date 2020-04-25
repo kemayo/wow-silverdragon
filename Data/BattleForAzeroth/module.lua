@@ -336,7 +336,7 @@ function module:OnInitialize()
 		[148092] = {name="Nalaess Featherseeker",faction="Alliance",locations={[942]={44204900},},poi={876,5966},},
 		[148103] = {name="Sapper Odette",faction="Alliance",locations={[62]={33008380},},phase=1176,quest=54452,},
 		[148146] = {name="Zul'aki the Headhunter",faction="Horde",locations={[896]={30803540},},poi={876,5964},},
-		[148155] = {name="Muk'luk",faction="Horde",locations={[896]={33403720},},poi={876,5964},poi={876,5964},},
+		[148155] = {name="Muk'luk",faction="Horde",locations={[896]={33403720},},poi={876,5964},},
 		[148198] = {name="Scout Captain Grizzleknob",faction="Horde",locations={[862]={77204180},},poi={875,5973},},
 		[148231] = {name="Siegebreaker Vol'gar",faction="Horde",locations={[862]={76203540},},poi={875,5973},},
 		[148253] = {name="Death Captain Detheca",faction="Horde",locations={[862]={78405540},},poi={875,5973},},
