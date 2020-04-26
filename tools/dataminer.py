@@ -121,6 +121,7 @@ def write_output(expansion, data):
                         "boss",
                         "faction",
                         "phase",
+                        "poi",
                         "hidden",
                     ),
                 )
