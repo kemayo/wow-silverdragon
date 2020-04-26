@@ -45,7 +45,7 @@ function module:OnInitialize()
 			soundfile_mount = "Illidan: Not Prepared",
 			soundfile_boss = "Magtheridon: I am Unleashed",
 			sound_loop = 1,
-			sound_mount_loop = 3,
+			sound_mount_loop = 1,
 			sound_boss_loop = 1,
 			flash = true,
 			instances = false,
