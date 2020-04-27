@@ -354,7 +354,8 @@ local achievements = {
 		[141239] = 41845, -- Osca the Bloodied
 		[139988] = 41846, -- Sandfang
 		[139980] = 41847, -- Taja the Tidehowler
-		-- [141043] = nil, -- Jakala the Cruel
+		[140925] = 34, -- Doc Marrtens
+		[141043] = 34, -- Jakala the Cruel
 	},
 	[12587] = {}, -- Unbound Monstrosities
 	[13027] = {}, -- Mushroom Harvest
@@ -416,7 +417,7 @@ function ns:AchievementMobStatus(id)
 	local criteria = achievements[achievement][id]
 	local _, name = GetAchievementInfo(achievement)
 	local completed
-	if criteria < 32 then
+	if criteria < 40 then
 		_, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
 	else
 		_, _, completed = GetAchievementCriteriaInfoByID(achievement, criteria)
