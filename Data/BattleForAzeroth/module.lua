@@ -601,7 +601,7 @@ function module:OnInitialize()
 		[160825] = {name="Amber-Shaper Esh'ri",locations={[1530]={19407340},},poi={947,6491},quest=58300,},
 		[160826] = {name="Hive-Guard Naz'ruzek",locations={[1530]={20206140},},poi={947,6491},quest=58301,},
 		[160867] = {name="Kzit'kovok",locations={[1530]={20403960,23803360,24404500,26403920,29804540},},poi={947,6491},quest=58302,},
-		[160868] = {name="Harrier Nir'verash",locations={[1530]={13005140},},poi={947,6491},quest=50303,},
+		[160868] = {name="Harrier Nir'verash",locations={[1530]={13005140},},poi={947,6491},quest=58303,},
 		[160872] = {name="Destroyer Krox'tazar",locations={[1530]={9803060,11603920,17203900,17404620,20205180,22604380,23006560,25407140},},poi={947,6491},quest=58304,},
 		[160874] = {name="Drone Keeper Ak'thet",locations={[1530]={10404040},},poi={947,6491},quest=58305,},
 		[160876] = {name="Enraged Amber Elemental",locations={[1530]={8003840,11404400,13403620},},poi={947,6491},quest=58306,},
