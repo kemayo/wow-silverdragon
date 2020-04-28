@@ -583,7 +583,7 @@ function module:OnInitialize()
 		[157472] = {name="Aphrom the Guise of Madness",locations={[1527]={49207840,49408680,54407940},},poi={947,6486},quest=57437,},
 		[157473] = {name="Yiphrim the Will Ravager",locations={[1527]={50007860,50408800,55207940},},poi={947,6486},quest=57438,},
 		[157476] = {name="Shugshul the Flesh Gorger",locations={[1527]={49407900,50608720,54407960},},poi={947,6486},quest=57439,},
-		[157593] = {name="Amalgamation of Flesh",locations={[1527]={59807240},},poi={947,6486},quest=57667,},
+		[157593] = {name="Amalgamation of Flesh",locations={[1527]={59807240},},poi={947,6486},quest=58330,},
 		[158491] = {name="Falconer Amenophis",locations={[1527]={44407820,46407320,51806880},},poi={947,6486},quest=57662,},
 		[158528] = {name="High Guard Reshef",locations={[1527]={47407720,49008240},},poi={947,6486},quest=57664,},
 		[158531] = {name="Corrupted Neferset Guard",locations={[1527]={50208180,50807320},},poi={947,6486},quest=57665,},
