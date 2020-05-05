@@ -335,9 +335,6 @@ do
 	function addon:IsMobInPhase(id, zone)
 		local phased, poi = true, true
 		if not mobdb[id] then return end
-		if not mobdb[id].locations[zone] then
-			return false
-		end
 		if mobdb[id].phase then
 			phased = mobdb[id].phase == C_Map.GetMapArtID(zone)
 		end
