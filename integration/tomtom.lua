@@ -9,6 +9,7 @@ function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("TomTom", {
 		profile = {
 			enabled = true,
+			duration = 120,
 		},
 	})
 	db = self.db.profile
@@ -24,6 +25,13 @@ function module:OnInitialize()
 				args = {
 					about = config.desc("When we see a mob via its minimap icon, we can ask TomTom to point us to it", 0),
 					enabled = config.toggle("Point to it", "Tell TomTom about the mob", 30),
+					duration = {
+						type = "range",
+						name = "Duration",
+						desc = "How long to wait before clearing the waypoint if you don't reach it",
+						min = 0, max = (10 * 60), step = 10,
+						order = 40,
+					}
 				},
 			},
 		}
@@ -50,5 +58,13 @@ do
 			world = false,
 			cleardistance = 25
 		})
+		waypoint.mobid = id
+		if db.duration and db.duration > 0 then
+			C_Timer.After(db.duration, function()
+				if waypoint and waypoint.mobid == id then
+					TomTom:RemoveWaypoint(waypoint)
+				end
+			end)
+		end
 	end
 end
