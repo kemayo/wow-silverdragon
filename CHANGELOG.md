@@ -1,5 +1,13 @@
 # Changelog
 
+## Changed in v80300.2
+
+* TomTom integration: option to add a TomTom waypoint pointing to a just-seen rare
+* Update the database to mark mount-dropping rares from BfA
+* Lower the number of sound loops for the "I've seen a mount-dropping rare!" alert defaults
+* Fix a weird bug some people were seeing on login
+* Fix a few quest ids
+
 ## Changed in v80300.1
 
 * Made it so the 8.3 assault rares only appear while their assault is happening
