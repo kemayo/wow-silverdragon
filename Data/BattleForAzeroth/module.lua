@@ -404,6 +404,7 @@ function module:OnInitialize()
 		[149663] = {name="Shadowclaw",faction="Alliance",locations={[62]={39803240},},phase=1176,},
 		[149664] = {name="Orwell Stevenson",faction="Horde",locations={[62]={39803280},},phase=1176,quest=54889,},
 		[149665] = {name="Scalefiend",locations={[62]={47404460},},phase=1176,quest=54893,},
+		[149746] = {name="Rusty Mechaspider",locations={[1462]={},},hidden=true,},
 		[149847] = {name="Crazed Trogg",locations={[1462]={81402140},},},
 		[150191] = {name="Avarius",locations={[1355]={37131119},},quest=55584,},
 		[150342] = {name="Earthbreaker Gulroc",locations={[1462]={62402640},},quest=55814,},
