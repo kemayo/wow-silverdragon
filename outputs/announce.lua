@@ -71,6 +71,13 @@ function module:OnInitialize()
 		local set = function(info, v) self.db.profile[info[#info]] = v end
 
 		local sink_config = self:GetSinkAce3OptionsDataTable()
+		local sink_args = {}
+		for k,v in pairs(sink_config.args) do
+			if k ~= "Channel" then
+				sink_args[k] = v
+			end
+		end
+		sink_config.args = sink_args
 		sink_config.inline = true
 		sink_config.order = 15
 		sink_config.args.Channel = nil
