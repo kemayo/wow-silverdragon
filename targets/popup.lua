@@ -250,6 +250,7 @@ function module:CreatePopup()
 	popup:SetScript("OnUpdate", popup.scripts.OnUpdate)
 	popup:SetScript("OnDragStart", popup.scripts.OnDragStart)
 	popup:SetScript("OnDragStop", popup.scripts.OnDragStop)
+	popup:SetScript("OnMouseDown", popup.scripts.OnMouseDown)
 
 	popup.close:SetScript("OnEnter", popup.scripts.CloseOnEnter)
 	popup.close:SetScript("OnLeave", popup.scripts.CloseOnLeave)
@@ -311,6 +312,7 @@ PopupClass.scripts = {
 		else
 			GameTooltip:AddLine(escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
 		end
+		GameTooltip:AddLine(escapes.rightClick .. " " .. CLOSE)
 		GameTooltip:Show()
 
 		self.glow.animIn:Stop() -- in case
@@ -350,6 +352,11 @@ PopupClass.scripts = {
 	end,
 	OnDragStop = function(self)
 		self:StopMovingOrSizing()
+	end,
+	OnMouseDown = function(self, button)
+		if button == "RightButton" then
+			self:HideWhenPossible()
+		end
 	end,
 	-- hooked:
 	OnShow = function(self)
