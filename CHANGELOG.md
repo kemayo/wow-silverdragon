@@ -1,5 +1,12 @@
 # Changelog
 
+## Changed in v80300.3
+
+* Improved sound options: you can choose the channel the sound plays on (Master, Music, SFX, etc), and you can ask it to play while the game isn't focused / the channel is muted
+* Stopped hiding chat-channel output from the config for other addons using LibSink
+* Fixed various quest ids
+* Background Shadowlands work
+
 ## Changed in v80300.2
 
 * TomTom integration: option to add a TomTom waypoint pointing to a just-seen rare
