@@ -18,7 +18,7 @@ function module.Looks:Store(popup)
     self:SizeModel(popup, 7)
 
     -- /script SilverDragonPopupButton.modelhighlight
-    popup.modelhighlight = popup.model:CreateTexture(nil, "OVERLAY")
+    popup.modelhighlight = popup.model:CreateTexture(nil, "OVERLAY", nil, -1)
     popup.modelhighlight:SetSize(70, 70) -- slightly oversize it
     popup.modelhighlight:SetTexture([[Interface\Store\store-item-highlight]])
     popup.modelhighlight:SetPoint("CENTER")

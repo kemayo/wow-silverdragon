@@ -51,6 +51,19 @@ BINDING_HEADER_SILVERDRAGON = "SilverDragon"
 _G["BINDING_NAME_CLICK SilverDragonPopupButton:LeftButton"] = "Target last found mob"
 _G["BINDING_NAME_CLICK SilverDragonMacroButton:LeftButton"] = "Scan for nearby mobs"
 
+addon.escapes = {
+	-- |TTexturePath:size1:size2:xoffset:yoffset:dimx:dimy:coordx1:coordx2:coordy1:coordy2|t
+	-- |A:atlas:height:width[:offsetX:offsetY]|a
+	-- leftClick = [[|A:NPE_LeftClick:19:18:1:|a]],
+	-- rightClick = [[|A:NPE_RightClick:20:20:1:|a]],
+	leftClick = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:19:11:-1:0:512:512:9:67:227:306|t]],
+	rightClick = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:20:12:0:-1:512:512:9:66:332:411|t]],
+	keyDown = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:0:0:0:-1:512:512:9:66:437:490|t]],
+	green = _G.GREEN_FONT_COLOR_CODE,
+	red = _G.RED_FONT_COLOR_CODE,
+}
+
+
 addon.datasources = {
 	--[[
 	["source name"] = {
@@ -413,6 +426,28 @@ do
 	ns.IdFromGuid = npcIdFromGuid
 	function addon:UnitID(unit)
 		return npcIdFromGuid(UnitGUID(unit))
+	end
+	function addon:FindUnitWithID(id)
+		if self:UnitID('target') == id then
+			return 'target'
+		end
+		if self:UnitID('mouseover') == id then
+			return 'mouseover'
+		end
+		for _, nameplate in ipairs(C_NamePlate.GetNamePlates()) do
+			if self:UnitID(nameplate.namePlateUnitToken) == id then
+				return nameplate.namePlateUnitToken
+			end
+		end
+		if IsInGroup() then
+			local prefix = IsInRaid() and 'raid' or 'party'
+			for i=1, GetNumGroupMembers() do
+				local unit = prefix .. i .. 'target'
+				if self:UnitID(unit) == id then
+					return unit
+				end
+			end
+		end
 	end
 end
 

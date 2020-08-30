@@ -1,37 +1,38 @@
 local myname, ns = ...
 
+local HBD = LibStub("HereBeDragons-2.0")
+local LibWindow = LibStub("LibWindow-1.1")
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:GetModule("ClickTarget")
 local Debug = core.Debug
 
 local CreateAnimationAlpha
-local escapes = {
-	-- |TTexturePath:size1:size2:xoffset:yoffset:dimx:dimy:coordx1:coordx2:coordy1:coordy2|t
-	leftClick = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:19:11:-1:0:512:512:9:67:227:306|t]],
-	rightClick = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:20:12:0:-1:512:512:9:66:332:411|t]],
-	keyDown = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:0:0:0:-1:512:512:9:66:437:490|t]],
-	green = _G.GREEN_FONT_COLOR_CODE,
-	red = _G.RED_FONT_COLOR_CODE,
-}
+local escapes = core.escapes
 
 function module:ApplyLook(popup, look)
 	-- Many values cribbed from AlertFrameSystem.xml
-	(self.Looks[look] or self.Looks.LessAwesome)(self, popup)
+	(self.Looks[look] or self.Looks.SilverDragon)(self, popup, self.db.profile.style_options[look])
+	popup.look = look
 end
-module.Looks = {}
+function module:ResetLook(popup)
+	if not (popup.look and self.LookReset[popup.look]) then return end
+	self.LookReset[popup.look](self, popup, self.db.profile.style_options[popup.look])
+end
 
 function module:ShowFrame(data)
 	if not self.db.profile.show then return end
 	if not (data and data.id) then return end
+	if not self.popup then
+		self.popup = self:CreatePopup()
+	end
 	local popup = self.popup
 	popup.data = data
 
 	local name = core:NameForMob(data.id, data.unit)
 	if name then
-		local macrotext = "/cleartarget\n/targetexact "..name
-		popup:SetAttribute("macrotext", macrotext)
-	else
-		name = UNKNOWN
+		local macrotext = "/cleartarget \n/targetexact "..name
+		popup:SetAttribute("macrotext1", macrotext)
 	end
 
 	if popup:IsVisible() then
@@ -109,26 +110,35 @@ function module:SizeModel(popup, offset, borders)
 end
 
 -- copy the Button metatable on to this, because otherwise we lose all regular frame methods
-local PopupClass = setmetatable({}, getmetatable(CreateFrame("Button")))
-local PopupClassMetatable = {__index = PopupClass}
+local PopupMixin = {}
 
 function module:CreatePopup()
 	-- Set up the frame
-	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate")
+	local name = "SilverDragonPopupButton"
+	do
+		local i = 1
+		while _G[name] do
+			name = name .. i
+			i = i + 1
+		end
+	end
+	local popup = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
+	Mixin(popup, PopupMixin)
 	module.popup = popup
-	setmetatable(popup, PopupClassMetatable)
 
 	popup:SetSize(276, 96)
-	popup:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -260, 270)
+	-- TODO: a stack
+	popup:SetPoint("CENTER", self.anchor, "CENTER")
+	popup:SetScale(self.db.profile.anchor.scale)
 	popup:SetMovable(true)
-	popup:SetUserPlaced(true)
 	popup:SetClampedToScreen(true)
-	popup:SetFrameStrata("DIALOG")
-	popup:RegisterForDrag("LeftButton")
+	popup:RegisterForClicks("AnyUp")
 
-	popup:SetAttribute("type1", "macro")
+	popup:SetAttribute("type", "macro")
 	popup:SetAttribute("_onshow", "self:Enable()")
 	popup:SetAttribute("_onhide", "self:Disable()")
+	-- Can't do type=click + clickbutton=close because then it'd be right-clicking the close button which also ignores the mob
+	popup:SetAttribute("macrotext2", "/click " .. popup:GetName() .. "CloseButton")
 
 	popup:Hide()
 
@@ -174,24 +184,28 @@ function module:CreatePopup()
 	status:SetJustifyV("MIDDLE")
 
 	-- Close button
-	local close = CreateFrame("Button", nil, popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
+	local close = CreateFrame("Button", popup:GetName() .. "CloseButton", popup, "UIPanelCloseButtonNoScripts,SecureHandlerClickTemplate")
 	popup.close = close
 	close:SetSize(16, 16)
 	close:GetDisabledTexture():SetTexture("")
 	close:GetHighlightTexture():SetTexture([[Interface\FriendsFrame\UI-Toast-CloseButton-Highlight]])
 	close:GetNormalTexture():SetTexture([[Interface\FriendsFrame\UI-Toast-CloseButton-Up]])
 	close:GetPushedTexture():SetTexture([[Interface\FriendsFrame\UI-Toast-CloseButton-Down]])
+	close:RegisterForClicks("AnyUp")
+	-- called as onclick(self, button, down):
 	close:SetAttribute("_onclick", [[
-		local button = self:GetParent()
-		button:Disable()
-		button:Hide()
+		local popup = self:GetParent()
+		if button == "RightButton" then
+			popup:CallMethod("DoIgnore")
+		end
+		popup:Hide()
 	]])
 
 	-- Flashy effects
 	local glow = popup:CreateTexture(nil, "OVERLAY")
 	popup.glow = glow
 	glow:SetBlendMode("ADD")
-	glow:SetAtlas("loottoast-glow")
+	glow:SetAtlas("loottoast-glow") -- Garr_NotificationGlow?
 
 	local shine = popup:CreateTexture(nil, "OVERLAY")
 	popup.shine = shine
@@ -202,10 +216,11 @@ function module:CreatePopup()
 	-- CreateAnimationAlpha(from, to, duration, delay, order)
 	popup.animIn = popup:CreateAnimationGroup()
 	popup.animIn:SetToFinalAlpha(true)
-	for i, child in ipairs({'background', 'model', 'modelbg', 'close'}) do
+	for _, child in ipairs({'background', 'model', 'modelbg', 'close'}) do
 		local animIn = CreateAnimationAlpha(popup.animIn, 0, 1, 0.4, nil, 1)
 		animIn:SetTarget(popup)
 		animIn:SetChildKey(child)
+		popup[child].animIn = animIn
 		popup[child]:SetAlpha(0)
 	end
 
@@ -248,8 +263,8 @@ function module:CreatePopup()
 	popup:SetScript("OnEnter", popup.scripts.OnEnter)
 	popup:SetScript("OnLeave", popup.scripts.OnLeave)
 	popup:SetScript("OnUpdate", popup.scripts.OnUpdate)
-	popup:SetScript("OnDragStart", popup.scripts.OnDragStart)
-	popup:SetScript("OnDragStop", popup.scripts.OnDragStop)
+	popup:SetScript("OnMouseDown", popup.scripts.OnMouseDown)
+	popup:SetScript("OnMouseUp", popup.scripts.OnMouseUp)
 
 	popup.close:SetScript("OnEnter", popup.scripts.CloseOnEnter)
 	popup.close:SetScript("OnLeave", popup.scripts.CloseOnLeave)
@@ -275,17 +290,20 @@ function CreateAnimationAlpha(animationGroup, fromAlpha, toAlpha, duration, star
 	return animation
 end
 
-function PopupClass:SetRaidIcon(icon)
+function PopupMixin:SetRaidIcon(icon)
 	SetRaidTargetIconTexture(self.raidIcon, icon)
 	self.raidIcon:Show()
 end
 
-function PopupClass:ShouldBeDraggable()
-	return (not module.db.profile.locked) or IsModifierKeyDown()
+function PopupMixin:DoIgnore()
+	if self.data and self.data.id then
+		core:SetIgnore(self.data.id, true)
+	end
 end
 
-function PopupClass:HideWhenPossible()
+function PopupMixin:HideWhenPossible(automatic)
 	-- this is for animations that want to hide the popup itself, since it can't be touched in-combat
+	self.automaticClose = automatic
 	if InCombatLockdown() then
 		self.waitingToHide = true
 	else
@@ -293,7 +311,28 @@ function PopupClass:HideWhenPossible()
 	end
 end
 
-PopupClass.scripts = {
+function PopupMixin:Reset()
+	-- note to self: this gets called as part of a chain from OnHide, so we
+	-- can't do anything which might trip in-combat lockdowns here.
+	-- In particular, this means that anything which needs to use this post-
+	-- reset will have to ClearAllPoints manually
+	self.data = nil
+
+	self.glow.animIn:Stop()
+	self.shine.animIn:Stop()
+	self.dead.animIn:Stop()
+	self.animIn:Stop()
+	self.animFade:Stop()
+
+	self.raidIcon:Hide()
+	self.dead:SetAlpha(0)
+	self.model:ClearModel()
+
+	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+end
+
+PopupMixin.scripts = {
 	OnEvent = function(self, event, ...)
 		self[event](self, event, ...)
 	end,
@@ -306,11 +345,12 @@ PopupClass.scripts = {
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, -60)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. TARGET)
-		if module.db.profile.locked then
-			GameTooltip:AddLine(escapes.keyDown .. "ALT + " .. escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
-		else
-			GameTooltip:AddLine(escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
-		end
+		GameTooltip:AddLine(escapes.keyDown .. ALT_KEY_TEXT .. " + " .. escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
+		--GameTooltip:AddLine(escapes.keyDown .. CTRL_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
+		--if C_Map.CanSetUserWaypointOnMap(self.data.zone) and self.data.x > 0 and self.data.y > 0 then
+		--	GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
+		--end
+		GameTooltip:AddLine(escapes.rightClick .. " " .. CLOSE)
 		GameTooltip:Show()
 
 		self.glow.animIn:Stop() -- in case
@@ -343,16 +383,38 @@ PopupClass.scripts = {
 			self.elapsed = 0
 		end
 	end,
-	OnDragStart = function(self)
-		if self:ShouldBeDraggable() then
-			self:StartMoving()
+	OnMouseDown = function(self, button)
+		if button == "RightButton" then
+			-- handled in the secure click handler
+			return
+		--elseif IsControlKeyDown() then
+		--	module:Point()
+		elseif IsShiftKeyDown() then
+			-- worldmap:uiMapId:x:y
+			local data = self.data
+			local x, y = data.x, data.y
+			if not (x > 0 and y > 0) then
+				x, y = HBD:GetPlayerZonePosition()
+			end
+			module:SendLinkToMob(data.id, data.zone, x, y)
+		elseif IsAltKeyDown() then
+			module.anchor:StartMoving()
 		end
 	end,
-	OnDragStop = function(self)
-		self:StopMovingOrSizing()
+	OnMouseUp = function(self, button)
+		module.anchor:StopMovingOrSizing()
+		if not InCombatLockdown() then
+			LibWindow.SavePosition(module.anchor)
+		end
 	end,
 	-- hooked:
 	OnShow = function(self)
+		if not self.data then
+			-- Things which show/hide UIParent (cinematics) *might* get us here without data
+			return self:Hide()
+		end
+		module:ResetLook(self)
+
 		self:SetAlpha(1)
 
 		self.glow:Show()
@@ -376,25 +438,23 @@ PopupClass.scripts = {
 		self.elapsed = 0
 	end,
 	OnHide = function(self)
-		self.glow.animIn:Stop()
-		self.shine.animIn:Stop()
-		self.dead.animIn:Stop()
-		self.animIn:Stop()
-		self.animFade:Stop()
+		if self.data then
+			-- Things which show/hide UIParent (cinematics) *might* get us here without data
+			core.events:Fire("PopupHide", self.data.id, self.data.zone, self.data.x, self.data.y, self.automaticClose)
+		end
 
-		self.raidIcon:Hide()
-		self.dead:SetAlpha(0)
-		self.model:ClearModel()
-
-		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		if not InCombatLockdown() then
+			LibWindow.SavePosition(module.anchor)
+		end
 
 		self.waitingToHide = false
 	end,
 	-- Close button
 	CloseOnEnter = function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
+		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
+		GameTooltip:SetOwner(self, anchor, 0, 0)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
+		GameTooltip:AddLine(escapes.rightClick .. " " .. IGNORE)
 		GameTooltip:Show()
 	end,
 	CloseOnLeave = function(self)
@@ -408,20 +468,26 @@ PopupClass.scripts = {
 		self:GetParent():HideWhenPossible()
 	end,
 }
--- timeStamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags
-function PopupClass:COMBAT_LOG_EVENT_UNFILTERED(_, _, combatEvent, _, _, _, _, _, destGUID)
-	if combatEvent ~= "UNIT_DIED" then
+function PopupMixin:COMBAT_LOG_EVENT_UNFILTERED()
+	-- timeStamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags
+	local _, subevent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
+	if subevent ~= "UNIT_DIED" then
 		return
 	end
+
 	if destGUID and ns.IdFromGuid(destGUID) == self.data.id then
 		self.data.dead = true
 		self.dead.animIn:Play()
 
 		-- might have changed things like achievement status
 		module:RefreshMobData(self)
+
+		if module.db.profile.closeDead then
+			self:HideWhenPossible()
+		end
 	end
 end
-function PopupClass:PLAYER_REGEN_ENABLED()
+function PopupMixin:PLAYER_REGEN_ENABLED()
 	if self.waitingToHide then
 		self:Hide()
 	end
