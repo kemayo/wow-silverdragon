@@ -52,6 +52,9 @@ function module:OnInitialize()
 			dead = true,
 			already = false,
 			sink_opts = {},
+			channel = "Master",
+			unmute = false,
+			background = false,
 		},
 	})
 
@@ -119,9 +122,9 @@ function module:OnInitialize()
 				inline =  true,
 				args = {
 					-- id, name, zone, x, y, is_dead, is_new_location, source, unit
-					time = faker(32491, "Time-Lost Proto Drake (Mount!)", 495, 0.490, 0.362),
+					time = faker(32491, "Time-Lost Proto Drake (Mount!)", 120, 0.490, 0.362),
 					anger = faker(60491, "Sha of Anger (Boss!)", 809, 0.5, 0.5),
-					vyragosa = faker(32630, "Vyragosa (Boring)", 495, 0.5, 0.5),
+					vyragosa = faker(32630, "Vyragosa (Boring)", 120, 0.5, 0.5),
 					deathmaw = faker(10077, "Deathmaw (Pet!)", 29, 0.5, 0.5),
 					haakun = faker(83008, "Haakun", 946, 0.5, 0.5),
 				},
@@ -153,9 +156,24 @@ function module:OnInitialize()
 				args = {
 					about = config.desc("Play sounds to announce rare mobs? Can do special things for special mobs. You *really* don't want to miss, say, the Time-Lost Proto Drake, after all...", 0),
 					sound = toggle("Enabled", "Play sounds at all!", 10),
-					drums = toggle("The Sound of Drums", "Underneath it all, the constant drumming", 12),
-					soundgroup = toggle("Group Sync Sounds", "Play sounds from synced mobs from party/raid members", 13),
-					soundguild = toggle("Guild Sync Sounds", "Play sounds from synced mobs from guild members not in group", 14),
+					channel = {
+						type = "select",
+						name = _G.SOUND_CHANNELS,
+						descStyle = "inline",
+						values = {
+							Ambience = _G.AMBIENCE_VOLUME,
+							Master = _G.MASTER,
+							Music = _G.MUSIC_VOLUME,
+							SFX = _G.SOUND_VOLUME,
+							Dialog = _G.DIALOG_VOLUME,
+						},
+						order = 11,
+					},
+					unmute = toggle("Ignore mute", "Play sounds even when muted", 12),
+					background = toggle(_G.ENABLE_BGSOUND, _G.OPTION_TOOLTIP_ENABLE_BGSOUND, 13),
+					drums = toggle("The Sound of Drums", "Underneath it all, the constant drumming", 14),
+					soundgroup = toggle("Group Sync Sounds", "Play sounds from synced mobs from party/raid members", 15),
+					soundguild = toggle("Guild Sync Sounds", "Play sounds from synced mobs from guild members not in group", 16),
 					soundfile = soundfile("sound", 15),
 					sound_loop = soundrange(17),
 					mount = {type="header", name="", order=20,},
@@ -239,28 +257,57 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zon
 	module:Pour((prefix .. "%s%s (%s)"):format(core:GetMobLabel(id) or UNKNOWN, dead and "... but it's dead" or '', source or ''))
 end)
 
+local cvar_overrides
+local channel_cvars = {
+	Ambience = "Sound_EnableAmbience",
+	Master = "Sound_EnableAllSound",
+	Music = "Sound_EnableMusic",
+	SFX = "Sound_EnableSFX",
+	Dialog = "Sound_EnableDialog",
+}
 function module:PlaySound(s)
 	-- Arg is a table, to make scheduling the loops easier. I am lazy.
 	Debug("Playing sound", s.soundfile, s.loops)
 	-- boring check:
-	if not s.loops or s.loops == 0 then return end
+	if not s.loops or s.loops == 0 then
+		if cvar_overrides and s.cvars then
+			for cvar, value in pairs(s.cvars) do
+				SetCVar(cvar, value)
+			end
+			cvar_overrides = false
+		end
+		return
+	end
+	if not cvar_overrides then
+		if self.db.profile.background and GetCVar("Sound_EnableSoundWhenGameIsInBG") == "0" then
+			cvar_overrides = true
+			s.cvars = s.cvars or {}
+			s.cvars["Sound_EnableSoundWhenGameIsInBG"] = GetCVar("Sound_EnableSoundWhenGameIsInBG")
+			SetCVar("Sound_EnableSoundWhenGameIsInBG", "1")
+		end
+		if self.db.profile.unmute and GetCVar(channel_cvars[self.db.profile.channel]) == "0" then
+			cvar_overrides = true
+			s.cvars = s.cvars or {}
+			s.cvars[channel_cvars[self.db.profile.channel]] = GetCVar(channel_cvars[self.db.profile.channel])
+			SetCVar(channel_cvars[self.db.profile.channel], "1")
+		end
+	end
 	-- now, noise!
 	local drums = self.db.profile.drums
 	if s.soundfile == "NPCScan" then
 		--Override default behavior and force npcscan behavior of two sounds at once
 		drums = true
-		PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), "Master")
+		PlaySoundFile(LSM:Fetch("sound", "Scourge Horn"), self.db.profile.channel)
 	else
 		--Play whatever sound is set
-		PlaySoundFile(LSM:Fetch("sound", s.soundfile), "Master")
+		PlaySoundFile(LSM:Fetch("sound", s.soundfile), self.db.profile.channel)
 	end
 	if drums then
-		PlaySoundFile(LSM:Fetch("sound", "War Drums"), "Master")
+		PlaySoundFile(LSM:Fetch("sound", "War Drums"), self.db.profile.channel)
 	end
 	s.loops = s.loops - 1
-	if s.loops > 0 then
-		self:ScheduleTimer("PlaySound", 4.5, s)
-	end
+	-- we guarantee one callback, in case we need to do cleanup
+	self:ScheduleTimer("PlaySound", 4.5, s)
 end
 core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zone, x, y, dead, source)
 	if not (module.db.profile.sound and LSM) then
