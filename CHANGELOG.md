@@ -6,6 +6,7 @@
 * Stopped hiding chat-channel output from the config for other addons using LibSink
 * Allow right-clicking on the target popup to close it
 * Add an option to not announce for mobs that another character has the achievement for, regardless of whether the current character has also completed it
+* Add bulk ignore all/none buttons to the expansion mob lists
 * Fixed various quest ids
 * Background Shadowlands work
 
