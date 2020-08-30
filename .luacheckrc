@@ -159,6 +159,7 @@ read_globals = {
     -- FrameXML Constants
     "ACTION_PARTY_KILL",
     "ADD",
+    "ALL",
     "BACKPACK_CONTAINER",
     "BACKPACK_TOOLTIP",
     "BAG_CLEANUP_BAGS",
@@ -205,6 +206,7 @@ read_globals = {
     "NEVER",
     "NEW_ITEM_ATLAS_BY_QUALITY",
     "NO",
+    "NONE",
     "NUM_BAG_SLOTS",
     "NUM_BANKBAGSLOTS",
     "NUM_CONTAINER_FRAMES",

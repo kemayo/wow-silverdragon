@@ -195,7 +195,7 @@ function module:BuildMobList(options)
 									desc = "Select every mob in the list",
 									func = function(info)
 										if not ns.mobsByZone[zone] then return end
-										for id, locations in pairs(ns.mobsByZone[zone]) do
+										for mobid, locations in pairs(ns.mobsByZone[zone]) do
 											core.db.global.ignore[id] = false
 										end
 										self:BuildIgnoreList(info.options)
@@ -209,7 +209,7 @@ function module:BuildMobList(options)
 									desc = "Deselect every mob in the list",
 									func = function(info)
 										if not ns.mobsByZone[zone] then return end
-										for id, locations in pairs(ns.mobsByZone[zone]) do
+										for mobid, locations in pairs(ns.mobsByZone[zone]) do
 											core.db.global.ignore[id] = true
 										end
 										self:BuildIgnoreList(info.options)
