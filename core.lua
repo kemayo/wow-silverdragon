@@ -226,11 +226,6 @@ function addon:OnInitialize()
 
 		_G["SilverDragon2DB"] = nil
 	end
-
-	-- TODO: move to miner, remove at the source
-	-- Total hack. I'm very disappointed in myself. Blood Seeker is flagged as tamemable, but really isn't.
-	-- (It despawns in 10-ish seconds, and shows up high in the sky.)
-	-- globaldb.mob_tameable[3868] = nil
 end
 
 function addon:OnEnable()
