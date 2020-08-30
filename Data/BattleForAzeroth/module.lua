@@ -187,7 +187,7 @@ function module:OnInitialize()
 		[138618] = {name="Haywire Golem",locations={[896]={23603060},},quest=51698,},
 		[138667] = {name="Blighted Monstrosity",locations={[896]={35801120},},quest=52001,},
 		[138675] = {name="Gorged Boar",locations={[896]={28002580},},quest=51700,},
-		[138794] = {name="Dunegorger Kraulok",locations={[864]={44005540},[894]={44005580},},mount=true,quest=52196,},
+		[138794] = {name="Dunegorger Kraulok",locations={[894]={44005580},},mount=true,quest=52196,},
 		[138863] = {name="Sister Martha",locations={[896]={33005700},},quest=51748,},
 		[138866] = {name="Mack",locations={[896]={24402200},},quest=51749,vignette=2979,},
 		[138870] = {name="Mick",locations={[896]={24402200},},quest=51749,vignette=2979,},
