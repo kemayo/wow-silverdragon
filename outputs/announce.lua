@@ -51,6 +51,7 @@ function module:OnInitialize()
 			instances = false,
 			dead = true,
 			already = false,
+			already_alt = true,
 			sink_opts = {},
 			channel = "Master",
 			unmute = false,
@@ -103,6 +104,7 @@ function module:OnInitialize()
 				get = get, set = set,
 				args = {
 					already = toggle("Already found", "Announce when we see rares we've already killed / achieved (if known)"),
+					already_alt = toggle("Completed by an alt", "Announce when we see rares for an achievement that the current character doesn't have, but an alt has completed already"),
 					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not, so this isn't entirely reliable."),
 					flash = toggle("Flash", "Flash the edges of the screen."),
 					instances = toggle("Instances", "Show announcements while in an instance"),
@@ -210,9 +212,12 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		return
 	end
 
+	local quest, achievement, by_alt = ns:CompletionStatus(id)
+	if by_alt and not self.db.profile.already_alt then
+		return false
+	end
 	if not self.db.profile.already then
 		-- hide already-completed mobs
-		local quest, achievement = ns:CompletionStatus(id)
 		if quest ~= nil or achievement ~= nil then
 			-- knowable
 			if achievement ~= nil then

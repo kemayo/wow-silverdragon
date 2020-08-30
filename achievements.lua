@@ -415,26 +415,26 @@ function ns:AchievementMobStatus(id)
 		return
 	end
 	local criteria = achievements[achievement][id]
-	local _, name = GetAchievementInfo(achievement)
+	local _, name, _, achievement_completed, _, _, _, _, _, _, _, _, completedByMe = GetAchievementInfo(achievement)
 	local completed
 	if criteria < 40 then
 		_, _, completed = GetAchievementCriteriaInfo(achievement, criteria)
 	else
 		_, _, completed = GetAchievementCriteriaInfoByID(achievement, criteria)
 	end
-	return achievement, name, completed
+	return achievement, name, completed, achievement_completed and not completedByMe
 end
 
--- return quest_complete, achievement_complete
+-- return quest_complete, criteria_complete, achievement_completed_by_alt
 -- `nil` if completion not knowable, true/false if knowable
 function ns:CompletionStatus(id)
 	local _, questid = core:GetMobInfo(id)
-	local _, _, achievement_complete = ns:AchievementMobStatus(id)
+	local _, _, criteria_complete, achievement_completed_by_alt = ns:AchievementMobStatus(id)
 	local quest_complete
 	if questid then
 		quest_complete = IsQuestFlaggedCompleted(questid)
 	end
-	return quest_complete, achievement_complete
+	return quest_complete, criteria_complete, achievement_completed_by_alt
 end
 
 function ns:LoadAllAchievementMobs()
