@@ -196,7 +196,7 @@ function module:BuildMobList(options)
 									func = function(info)
 										if not ns.mobsByZone[zone] then return end
 										for mobid, locations in pairs(ns.mobsByZone[zone]) do
-											core.db.global.ignore[id] = false
+											core.db.global.ignore[mobid] = false
 										end
 										self:BuildIgnoreList(info.options)
 									end,
@@ -210,7 +210,7 @@ function module:BuildMobList(options)
 									func = function(info)
 										if not ns.mobsByZone[zone] then return end
 										for mobid, locations in pairs(ns.mobsByZone[zone]) do
-											core.db.global.ignore[id] = true
+											core.db.global.ignore[mobid] = true
 										end
 										self:BuildIgnoreList(info.options)
 									end,
