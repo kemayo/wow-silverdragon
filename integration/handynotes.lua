@@ -38,7 +38,7 @@ do
 	local function icon_for_mob(id)
 		if not icon then
 			local function tex(atlas, r, g, b)
-				local atlas = C_Texture.GetAtlasInfo(atlas)
+				atlas = C_Texture.GetAtlasInfo(atlas)
 				return {
 					icon = atlas.file,
 					tCoordLeft = atlas.leftTexCoord, tCoordRight = atlas.rightTexCoord, tCoordTop = atlas.topTexCoord, tCoordBottom = atlas.bottomTexCoord,

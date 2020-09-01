@@ -48,6 +48,8 @@ read_globals = {
     "C_AreaPoiInfo",
     "C_ChatInfo",
     "C_Map",
+    "C_QuestLog",
+    "C_Texture",
     "C_Timer",
     "C_VignetteInfo",
     "Debug",
