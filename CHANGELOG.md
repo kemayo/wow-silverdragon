@@ -3,6 +3,7 @@
 ## Changed in v80300.3
 
 * Improved sound options: you can choose the channel the sound plays on (Master, Music, SFX, etc), and you can ask it to play while the game isn't focused / the channel is muted
+* Improved map icons in HandyNotes: you can choose between circles and skulls, and you can tell it to color the icons uniquely per-mob or by completion
 * Stopped hiding chat-channel output from the config for other addons using LibSink
 * Allow right-clicking on the target popup to close it
 * Add an option to not announce for mobs that another character has the achievement for, regardless of whether the current character has also completed it
