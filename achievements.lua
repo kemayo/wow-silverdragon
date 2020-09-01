@@ -432,7 +432,7 @@ function ns:CompletionStatus(id)
 	local _, _, criteria_complete, achievement_completed_by_alt = ns:AchievementMobStatus(id)
 	local quest_complete
 	if questid then
-		quest_complete = IsQuestFlaggedCompleted(questid)
+		quest_complete = C_QuestLog.IsQuestFlaggedCompleted(questid)
 	end
 	return quest_complete, criteria_complete, achievement_completed_by_alt
 end
@@ -492,7 +492,7 @@ function ns:UpdateTooltipWithCompletion(tooltip, id)
 	end
 	local _, questid = core:GetMobInfo(id)
 	if questid then
-		completed = IsQuestFlaggedCompleted(questid)
+		completed = C_QuestLog.IsQuestFlaggedCompleted(questid)
 		tooltip:AddDoubleLine(
 			QUESTS_COLON:gsub(":", ""),
 			completed and COMPLETE or INCOMPLETE,
