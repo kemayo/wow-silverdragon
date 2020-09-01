@@ -28,10 +28,11 @@ globals = {
 
 read_globals = {
     "bit",
+    "math",
     "ceil", "floor",
-    "mod",
-    "max",
-    "table", "tinsert", "tContains", "wipe", "copy",
+    "abs", "mod", "max",
+    "sin", "cos", "tan",
+    "table", "tinsert", "tContains", "wipe",
     "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower",
     "time",
 

@@ -10,76 +10,133 @@ local Debug = core.Debug
 local HBDMigrate = LibStub("HereBeDragons-Migrate", true)
 
 local db
--- local icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
-local icon, icon_mount, icon_partial, icon_mount_partial, icon_done, icon_mount_done
 
 local nodes = {}
 module.nodes = nodes
 
 local handler = {}
 do
+	local function tex(atlas, r, g, b, scale)
+		atlas = C_Texture.GetAtlasInfo(atlas)
+		return {
+			icon = atlas.file,
+			tCoordLeft = atlas.leftTexCoord, tCoordRight = atlas.rightTexCoord, tCoordTop = atlas.topTexCoord, tCoordBottom = atlas.bottomTexCoord,
+			r = r, g = g, b = b, a = 0.9,
+			scale = scale or 1,
+		}
+	end
+	-- DungeonSkull = skull
+	-- VignetteKillElite = Skull with star around it
+	-- Islands-AzeriteBoss = more detailed skull
+	-- WhiteCircle-RaidBlips / PlayerPartyBlip = white circle
+	-- WhiteDotCircle-RaidBlips / PlayerRaidBlip = white circle with dot
+	-- PlayerDeadBlip = black circle with white X
+	-- QuestSkull = gold glowy circle
+	-- Warfront-NeutralHero-Silver = silver dragon on gold circle
+	local icons = {
+		circles = {
+			default = tex("PlayerPartyBlip", 1, 0.33, 0.33, 1.1),
+			partial = tex("PlayerPartyBlip", 1, 1, 0.33, 1.1),
+			done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1.1),
+			mount = tex("PlayerRaidBlip", 1, 0.33, 0.33, 1.1),
+			mount_partial = tex("PlayerRaidBlip", 1, 1, 0.33, 1.1),
+			mount_done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1.1),
+		},
+		skulls = {
+			default = tex("DungeonSkull", 1, 0.33, 0.33, 0.8), -- red skull
+			partial = tex("DungeonSkull", 1, 1, 0.33, 0.8), -- yellow skull
+			done = tex("DungeonSkull", 0.33, 1, 0.33, 0.8), -- green skull
+			mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1), -- red shiny skull
+			mount_partial = tex("VignetteKillElite", 1, 1, 0.33, 1), -- yellow shiny skull
+			mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1), -- green shiny skull
+		},
+		stars = {
+			default = tex("VignetteKill", 1, 0.33, 1, 1.3), -- red star
+			partial = tex("VignetteKill", 1, 1, 1, 1.3), -- gold star
+			done = tex("VignetteKill", 0, 1, 1), -- green star
+			mount = tex("VignetteKillElite", 1, 0.33, 1),
+			mount_partial = tex("VignetteKillElite", 0, 1, 1), -- yellow shiny skull
+			mount_done = tex("VignetteKillElite", 0, 1, 0), -- green shiny skull
+		}
+	}
 	local function should_show_mob(id)
 		if db.hidden[id] or core:ShouldIgnoreMob(id) then
 			return false
 		end
-		local quest, achievement = ns:CompletionStatus(id)
-		if quest ~= nil and achievement ~= nil then
-			-- we have a quest *and* an achievement; we're going to treat "show achieved" as "show achieved if I can still loot them"
-			return (module.db.profile.questcomplete or not quest) and (module.db.profile.achieved or not achievement)
-		end
-		if quest ~= nil then
-			return module.db.profile.questcomplete or not quest
-		end
+		local quest, achievement, achievement_completed_by_alt = ns:CompletionStatus(id)
 		if achievement ~= nil then
-			return module.db.profile.achieved or not achievement
+			if quest ~= nil then
+				-- we have a quest *and* an achievement; we're going to treat "show achieved" as "show achieved if I can still loot them"
+				return (db.questcomplete or not quest) and (db.achieved or not achievement)
+			end
+			-- no quest, but achievement
+			return db.achieved or not achievement
 		end
-		return module.db.profile.achievementless
+		if db.achievementless then
+			-- no achievement, but quest
+			return db.questcomplete or not quest
+		end
+		return false
 	end
 	local function icon_for_mob(id)
-		if not icon then
-			local function tex(atlas, r, g, b)
-				local texture, _, _, left, right, top, bottom = GetAtlasInfo(atlas)
-				return {
-					icon = texture,
-					tCoordLeft = left, tCoordRight = right, tCoordTop = top, tCoordBottom = bottom,
-					r = r, g = g, b = b, a = 0.9,
-				}
-			end
-			icon = tex("DungeonSkull", 1, 0.33, 0.33) -- red skull
-			icon_partial = tex("DungeonSkull", 1, 1, 0.33) -- yellow skull
-			icon_done = tex("DungeonSkull", 0.33, 1, 0.33) -- green skull
-			icon_mount = tex("VignetteKillElite", 1, 0.33, 0.33) -- red shiny skull
-			icon_mount_partial = tex("VignetteKillElite", 1, 1, 0.33) -- yellow shiny skull
-			icon_mount_done = tex("VignetteKillElite", 0.33, 1, 0.33) -- green shiny skull
-		end
+		local set = icons[db.icon_theme]
 		if not ns.mobdb[id] then
-			return icon
+			return set.default
 		end
 		local quest, achievement = ns:CompletionStatus(id)
 		if quest or achievement then
 			if (quest and achievement) or (quest == nil or achievement == nil) then
 				-- full completion
-				return ns.mobdb[id].mount and icon_mount_done or icon_done
+				return ns.mobdb[id].mount and set.mount_done or set.done
 			end
 			-- partial completion
-			return ns.mobdb[id].mount and icon_mount_partial or icon_partial
+			return ns.mobdb[id].mount and set.mount_partial or set.partial
 		end
-		return ns.mobdb[id].mount and icon_mount or icon
+		return ns.mobdb[id].mount and set.mount or set.default
 
 		-- local achievement, name, completed = ns:AchievementMobStatus(id)
 		-- if achievement and completed then
 		-- 	return ns.mobdb[id].mount and icon_mount_found or icon_found
 		-- end
 	end
+	local function scale(value, currmin, currmax, min, max)
+		-- take a value between currmin and currmax and scale it to be between min and max
+		return ((value - currmin) / (currmax - currmin)) * (max - min) + min
+	end
+	local function hasher(value)
+		return scale(select(2, math.modf(math.abs(math.tan(value)) * 10000, 1)), 0, 1, 0.3, 1)
+	end
+	local function id_to_color(id)
+		return hasher(id + 1), hasher(id + 2), hasher(id + 3)
+	end
+	local icon_cache = {}
+	local function distinct_icon_for_mob(id)
+		local icon = icon_for_mob(id)
+		if not icon_cache[id] then
+			icon_cache[id] = {}
+		end
+		for k,v in pairs(icon) do
+			icon_cache[id][k] = v
+		end
+		local r, g, b = id_to_color(id)
+		icon_cache[id].r = r
+		icon_cache[id].g = g
+		icon_cache[id].b = b
+		return icon_cache[id]
+	end
 	local function iter(t, prestate)
 		if not t then return nil end
 		local state, value = next(t, prestate)
 		while state do
 			-- Debug("HandyNotes node", state, value, should_show_mob(value))
-			if value then
-				if should_show_mob(value) then
-					return state, nil, icon_for_mob(value), db.icon_scale, db.icon_alpha
+			if value and should_show_mob(value) then
+				local icon
+				if db.icon_color == 'distinct' then
+					icon = distinct_icon_for_mob(value)
+				else
+					icon = icon_for_mob(value)
 				end
+				return state, nil, icon, db.icon_scale * icon.scale, db.icon_alpha
 			end
 			state, value = next(t, state)
 		end
@@ -87,6 +144,9 @@ do
 	end
 	function handler:GetNodes2(uiMapID, minimap)
 		Debug("HandyNotes GetNodes2", uiMapID, minimap)
+		if minimap and not db.minimap then
+			return iter, {}, nil
+		end
 		return iter, nodes[uiMapID], nil
 	end
 end
@@ -108,7 +168,7 @@ function handler:OnEnter(uiMapID, coord)
 		tooltip:AddDoubleLine("At", uiMapID .. ':' .. coord)
 		return tooltip:Show()
 	end
-	tooltip:AddLine(name)
+	tooltip:AddLine(core:GetMobLabel(id))
 	if ns.mobdb[id].notes then
 		tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
 	end
@@ -148,6 +208,21 @@ local function createWaypoint(button, uiMapID, coord)
 	end
 end
 
+local function createWaypointForAll(button, uiMapID, coord)
+	if not TomTom then return end
+	local id, name = core:GetMobByCoord(uiMapID, coord)
+	if not (id and ns.mobsByZone[uiMapID] and ns.mobsByZone[uiMapID][id]) then return end
+	for _, mob_coord in ipairs(ns.mobsByZone[uiMapID][id]) do
+		local x, y = HandyNotes:getXY(mob_coord)
+		TomTom:AddWaypoint(uiMapID, x, y, {
+			title = name,
+			persistent = nil,
+			minimap = true,
+			world = true
+		})
+	end
+end
+
 local dropdown = CreateFrame("Frame")
 dropdown.displayMode = "MENU"
 
@@ -173,7 +248,17 @@ do
 				info.func = createWaypoint
 				info.arg1 = clicked_zone
 				info.arg2 = clicked_coord
-				UIDropDownMenu_AddButton(info, level);
+				UIDropDownMenu_AddButton(info, level)
+
+				info.disabled = nil
+				info.isTitle = nil
+				info.notCheckable = nil
+				info.text = "Create waypoint for all locations"
+				info.icon = nil
+				info.func = createWaypointForAll
+				info.arg1 = clicked_zone
+				info.arg2 = clicked_coord
+				UIDropDownMenu_AddButton(info, level)
 			end
 
 			-- Hide menu item
@@ -181,11 +266,11 @@ do
 			info.isTitle      = nil
 			info.notCheckable = nil
 			info.text = "Hide mob"
-			info.icon = icon
+			info.icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
 			info.func = hideMob
 			info.arg1 = clicked_zone
 			info.arg2 = clicked_coord
-			UIDropDownMenu_AddButton(info, level);
+			UIDropDownMenu_AddButton(info, level)
 
 			-- Close menu item
 			info.text         = "Close"
@@ -193,7 +278,7 @@ do
 			info.func         = function() CloseDropDownMenus() end
 			info.arg1         = nil
 			info.notCheckable = 1
-			UIDropDownMenu_AddButton(info, level);
+			UIDropDownMenu_AddButton(info, level)
 		end
 	end
 	dropdown.initialize = generateMenu
@@ -212,10 +297,13 @@ function module:OnInitialize()
 		profile = {
 			icon_scale = 1.0,
 			icon_alpha = 1.0,
+			icon_theme = 'skulls', -- circles / skulls
+			icon_color = 'distinct', -- completion / distinct
 			achieved = true,
 			questcomplete = false,
 			achievementless = true,
 			hidden = {},
+			minimap = true,
 		},
 	})
 	db = self.db.profile
@@ -256,6 +344,29 @@ function module:OnInitialize()
 						arg = "icon_alpha",
 						order = 30,
 					},
+					icon_theme = {
+						type = "select",
+						name = "Theme",
+						desc = "Which icon set to use",
+						values = {
+							["skulls"] = "Skulls",
+							["circles"] = "Circles",
+							["stars"] = "Stars",
+						},
+						arg = "icon_theme",
+						order = 40,
+					},
+					icon_color = {
+						type = "select",
+						name = "Color",
+						desc = "How to color the icons",
+						values = {
+							["distinct"] = "Unique per-mob",
+							["completion"] = "Completion status",
+						},
+						arg = "icon_color",
+						order = 50,
+					},
 				},
 			},
 			display = {
@@ -285,6 +396,13 @@ function module:OnInitialize()
 					-- 	width = "full",
 					-- 	order = 20,
 					-- },
+					minimap = {
+						type = "toggle",
+						name = "Minimap",
+						desc = "Whether to show icons on the minimap as well as the zone map",
+						arg = "minimap",
+						order = 30,
+					},
 					unhide = {
 						type = "execute",
 						name = "Reset hidden mobs",
@@ -325,7 +443,7 @@ function module:UpdateNodes()
 	for zone, mobs in pairs(ns.mobsByZone) do
 		nodes[zone] = {}
 		for id, locs in pairs(mobs) do
-			if core:IsMobInPhase(id, zone) then
+			if core:IsMobInPhase(id, zone) and not core:ShouldIgnoreMob(id, zone) then
 				for _, loc in ipairs(locs) do
 					nodes[zone][loc] = id
 				end
