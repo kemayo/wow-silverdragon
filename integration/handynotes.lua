@@ -228,7 +228,7 @@ do
 			info.isTitle      = nil
 			info.notCheckable = nil
 			info.text = "Hide mob"
-			info.icon = icon
+			info.icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
 			info.func = hideMob
 			info.arg1 = clicked_zone
 			info.arg2 = clicked_coord
