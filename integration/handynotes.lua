@@ -43,12 +43,12 @@ do
 			mount_done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1.1),
 		},
 		skulls = {
-			default = tex("DungeonSkull", 1, 0.33, 0.33, 0.8), -- red skull
-			partial = tex("DungeonSkull", 1, 1, 0.33, 0.8), -- yellow skull
-			done = tex("DungeonSkull", 0.33, 1, 0.33, 0.8), -- green skull
-			mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1), -- red shiny skull
-			mount_partial = tex("VignetteKillElite", 1, 1, 0.33, 1), -- yellow shiny skull
-			mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1), -- green shiny skull
+			default = tex("Islands-AzeriteBoss", 1, 0.33, 0.33, 1.8), -- red skull
+			partial = tex("Islands-AzeriteBoss", 1, 1, 0.33, 1.8), -- yellow skull
+			done = tex("Islands-AzeriteBoss", 0.33, 1, 0.33, 1.8), -- green skull
+			mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.3), -- red shiny skull
+			mount_partial = tex("VignetteKillElite", 1, 1, 0.33, 1.3), -- yellow shiny skull
+			mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1.3), -- green shiny skull
 		},
 	}
 	local function should_show_mob(id)
@@ -259,7 +259,7 @@ function module:OnInitialize()
 		profile = {
 			icon_scale = 1.0,
 			icon_alpha = 1.0,
-			icon_theme = 'circles', -- circles / skulls
+			icon_theme = 'skulls', -- circles / skulls
 			icon_color = 'distinct', -- completion / distinct
 			achieved = true,
 			questcomplete = false,
