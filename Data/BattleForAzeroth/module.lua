@@ -628,5 +628,6 @@ function module:OnInitialize()
 		[162352] = {name="Spirit of Dark Ritualist Zakahn",locations={[1527]={50004000},},poi={947,6488,947,6487},quest=58716,},
 		[162370] = {name="Armagedillo",locations={[1527]={43804140},},poi={947,6488,947,6487},quest=58718,},
 		[162372] = {name="Spirit of Cyrus the Black",locations={[1527]={58006160,58008240,66406800,70807460},},poi={947,6488,947,6487},quest=58715,},
+		[163042] = {name="Ivory Cloud Serpent",locations=[1530]={26805510},mount=true,note="You need a Zan-Tien Lasso; it spawns fairly high up",},
 	})
 end
