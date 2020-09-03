@@ -48,6 +48,7 @@ zoneid_to_mapid = {
     85: 18,  # Tirisfal Glades
     111: 54,  # Jangolode Mine
     130: 21,  # Silverpine Forest
+    135: 470,  # Frostmane Hold
     139: 23,  # Eastern Plaguelands
     141: 57,  # Teldrassil
     148: 62,  # Darkshore
@@ -340,7 +341,6 @@ zoneid_to_mapid = {
     36: False,  # Alterac Mountains
     113: False,  # Gold Coast Quarry
     134: False,  # Gol'Bolar Quarry
-    135: False,  # Frostmane Hold
     136: False,  # The Grizzled Den
     155: False,  # Night Web's Hollow
     257: False,  # Shadowthread Cave
