@@ -98,7 +98,7 @@ function module:OnInitialize()
 		[3398] = {name="Gesharahan",locations={[10]={39207540},},tameable=true,},
 		[3470] = {name="Rathorian",locations={[10]={40803900},},},
 		[3535] = {name="Blackmoss the Fetid",locations={[57]={52006380},},},
-		[3581] = {name="Sewer Beast",locations={[84]={45607180,48006140,53206460,54207280,57607800,58204280,61803340,63407120,67205300,68406580},},tameable=true,},
+		[3581] = {name="Sewer Beast",locations={[84]={45607180,48006140,53206460,54207280,57607800,58204280,67205300,68406580},},tameable=true,},
 		[3652] = {name="Trigore the Lasher",locations={[10]={42606400,60804020,61004760},},tameable=true,},
 		[3672] = {name="Boahn",locations={[10]={43406580,73002620,78403900},},},
 		[3735] = {name="Apothecary Falthis",faction="Horde",locations={[63]={30802260},},},
