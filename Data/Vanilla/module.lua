@@ -213,7 +213,7 @@ function module:OnInitialize()
 		[8503] = {name="Gibblewilt",locations={[469]={40004580},},},
 		[8660] = {name="The Evalcharr",locations={[76]={14005020,15005820},},tameable=true,},
 		[8923] = {name="Panzor the Invincible",locations={[242]={47003720,48003200,49804240},},},
-		[8924] = {name="The Behemoth",locations={[32]={34406360,34806880,37605760,43005920,46605300,48605820,48806340,53605760},[36]={34606640,37406080,42806100,47205200,48605820,53605680,54606320},},},
+		[8924] = {name="The Behemoth",locations={[32]={35608710},[35]={34606640,37406080,42806100,47205200,48605820,53605680,54606320},[36]={22503620},},},
 		[8976] = {name="Hematos",locations={[36]={27405900},},},
 		[8978] = {name="Thauris Balgarr",locations={[36]={43803980},},},
 		[8979] = {name="Gruklash",locations={[36]={33403680},},},
