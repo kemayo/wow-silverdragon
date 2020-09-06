@@ -55,18 +55,20 @@ do
 		if db.hidden[id] or core:ShouldIgnoreMob(id) then
 			return false
 		end
-		local quest, achievement = ns:CompletionStatus(id)
-		if quest ~= nil and achievement ~= nil then
-			-- we have a quest *and* an achievement; we're going to treat "show achieved" as "show achieved if I can still loot them"
-			return (module.db.profile.questcomplete or not quest) and (module.db.profile.achieved or not achievement)
-		end
-		if quest ~= nil then
-			return module.db.profile.questcomplete or not quest
-		end
+		local quest, achievement, achievement_completed_by_alt = ns:CompletionStatus(id)
 		if achievement ~= nil then
-			return module.db.profile.achieved or not achievement
+			if quest ~= nil then
+				-- we have a quest *and* an achievement; we're going to treat "show achieved" as "show achieved if I can still loot them"
+				return (db.questcomplete or not quest) and (db.achieved or not achievement)
+			end
+			-- no quest, but achievement
+			return db.achieved or not achievement
 		end
-		return module.db.profile.achievementless
+		if db.achievementless then
+			-- no achievement, but quest
+			return db.questcomplete or not quest
+		end
+		return false
 	end
 	local function icon_for_mob(id)
 		local set = icons[db.icon_theme]
