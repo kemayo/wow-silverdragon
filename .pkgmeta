@@ -36,6 +36,7 @@ move-folders:
    SilverDragon/Data/Warlords: SilverDragon_Warlords
    SilverDragon/Data/Legion: SilverDragon_Legion
    SilverDragon/Data/BattleForAzeroth: SilverDragon_BattleForAzeroth
+   SilverDragon/Data/Shadowlands: SilverDragon_Shadowlands
 
 ignore:
    - tools
