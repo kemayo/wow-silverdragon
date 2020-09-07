@@ -534,7 +534,7 @@ function module:OnInitialize()
 		[51061] = {name="Roth-Salam",locations={[70]={50008460},},tameable=true,},
 		[51062] = {name="Khep-Re",locations={[65]={74607320},},tameable=true,},
 		[51063] = {name="Phalanax",locations={[14]={47808220},},phase=15,tameable=true,},
-		[51066] = {name="Crystalfang",locations={[32]={24807260,32801860},[36]={13200940},},tameable=true,},
+		[51066] = {name="Crystalfang",locations={[32]={32708710},[35]={33401940},[36]={21103290},},tameable=true,},
 		[51067] = {name="Glint",locations={[14]={30006100},},phase=15,tameable=true,},
 		[51069] = {name="Scintillex",locations={[70]={55608580},},tameable=true,},
 		[51076] = {name="Lopex",locations={[25]={68605600},},tameable=true,},
