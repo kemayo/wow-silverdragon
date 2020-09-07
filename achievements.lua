@@ -402,6 +402,10 @@ local achievements = {
 	[13690] = {}, -- Nazjatarget Eliminated (Nazjatar)
 	[13691] = {}, -- I Thought You Said They'd Be Rare (Nazjatar)
 	[14159] = {}, -- Combating the Corruption (Assaults)
+	[14307] = {}, -- Adventurer of Bastion
+	[14308] = {}, -- Adventurer of Maldraxxus
+	[14309] = {}, -- Adventurer of Ardenweald
+	[14310] = {}, -- Adventurer of Revendreth
 }
 core.achievements = achievements
 local mobs_to_achievement = {
