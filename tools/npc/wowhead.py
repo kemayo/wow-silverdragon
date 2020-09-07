@@ -13,7 +13,7 @@ zone_map = False
 class WowheadNPC(NPC):
     URL = "http://www.wowhead.com"
     URL_PTR = "http://ptr.wowhead.com"
-    URL_BETA = "http://bfa.wowhead.com"
+    URL_BETA = "http://shadowlands.wowhead.com"
 
     page = False
     _info = False
@@ -68,7 +68,7 @@ class WowheadNPC(NPC):
                 coords[zoneid_to_mapid[zone]] = []
         match = re.search(r"var g_mapperData = ({[^;]+});", page)
         if not match:
-            return {}
+            return coords
         alldata = json.loads(match.group(1))
         for zone, data in alldata.items():
             zone = int(zone)

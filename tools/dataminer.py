@@ -66,9 +66,10 @@ expansions = {
     6: "Warlords",
     7: "Legion",
     8: "BattleForAzeroth",
+    9: "Shadowlands",
 }
 
-TOC_TEMPLATE = """## Interface: 80300
+TOC_TEMPLATE = """## Interface: 90001
 ## Title: SilverDragon ({exp})
 ## Notes: Mobs for {exp}
 ## Version: @project-version@
@@ -228,7 +229,7 @@ if __name__ == "__main__":
 
     expansionmobs = {}
     for id, mob in local.items():
-        if len(mob.data.get("locations", {})) == 0 and ns.strip_empties:
+        if ns.strip_empties and len(mob.data.get("locations", {})) == 0:
             continue
         expansion = mob.data.get("expansion")
         if expansion:
