@@ -72,8 +72,7 @@ do
 			end
 		else
 			local uiMapPoint = UiMapPoint.CreateFromCoordinates(zone, x, y)
-			local current = C_Map.GetUserWaypoint()
-			if (not current) or db.replace then
+			if (not C_Map.GetUserWaypoint()) or db.replace then
 				C_Map.SetUserWaypoint(uiMapPoint)
 				C_SuperTrack.SetSuperTrackedUserWaypoint(true)
 				waypoint = uiMapPoint
