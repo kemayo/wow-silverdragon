@@ -113,6 +113,9 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 		unit = unit,
 		source = source,
 		dead = dead,
+		zone = zone,
+		x = x,
+		y = y,
 	}
 	if InCombatLockdown() then
 		Debug("Queueing popup for out-of-combat")
@@ -122,6 +125,14 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 	end
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 	data.unit = nil -- can't be trusted to remain the same
+end
+
+function module:Point()
+	local data = self.popup.data
+	if data and data.zone and data.x and data.y then
+		-- point to it, without a timeout, and ignoring whether it'll be replacing an existing waypoint
+		core:GetModule("TomTom"):PointTo(data.id, data.zone, data.x, data.y, 0, true)
+	end
 end
 
 function module:Marked(callback, id, marker, unit)

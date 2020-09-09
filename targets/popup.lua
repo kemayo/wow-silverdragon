@@ -7,6 +7,9 @@ local Debug = core.Debug
 local CreateAnimationAlpha
 local escapes = {
 	-- |TTexturePath:size1:size2:xoffset:yoffset:dimx:dimy:coordx1:coordx2:coordy1:coordy2|t
+	-- |A:atlas:height:width[:offsetX:offsetY]|a
+	-- leftClick = [[|A:NPE_LeftClick:19:18:1:|a]],
+	-- rightClick = [[|A:NPE_RightClick:20:20:1:|a]],
 	leftClick = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:19:11:-1:0:512:512:9:67:227:306|t]],
 	rightClick = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:20:12:0:-1:512:512:9:66:332:411|t]],
 	keyDown = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:0:0:0:-1:512:512:9:66:437:490|t]],
@@ -312,7 +315,7 @@ function PopupClass:SetRaidIcon(icon)
 end
 
 function PopupClass:ShouldBeDraggable()
-	return (not module.db.profile.locked) or IsModifierKeyDown()
+	return (not module.db.profile.locked) or IsAltKeyDown()
 end
 
 function PopupClass:DoIgnore()
@@ -344,10 +347,11 @@ PopupClass.scripts = {
 		GameTooltip:SetOwner(self, anchor, 0, -60)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. TARGET)
 		if module.db.profile.locked then
-			GameTooltip:AddLine(escapes.keyDown .. "ALT + " .. escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
+			GameTooltip:AddLine(escapes.keyDown .. ALT_KEY_TEXT .. " + " .. escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
 		else
 			GameTooltip:AddLine(escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
 		end
+		GameTooltip:AddLine(escapes.keyDown .. CTRL_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
 		GameTooltip:AddLine(escapes.rightClick .. " " .. CLOSE)
 		GameTooltip:Show()
 
@@ -392,6 +396,8 @@ PopupClass.scripts = {
 	OnMouseDown = function(self, button)
 		if button == "RightButton" then
 			self:HideWhenPossible()
+		elseif IsControlKeyDown() then
+			module:Point()
 		end
 	end,
 	-- hooked:
