@@ -71,20 +71,28 @@ do
 				C_Timer.After(duration, function()
 					if waypoint and waypoint.mobid == id then
 						TomTom:RemoveWaypoint(waypoint)
+						-- tomtom doesn't need to restore a waypoint, because it has a stack
 					end
 				end)
 			end
 		else
+			local current = C_Map.GetUserWaypoint()
+			local wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
 			local uiMapPoint = UiMapPoint.CreateFromCoordinates(zone, x, y)
-			if (not C_Map.GetUserWaypoint()) or db.replace or force then
+			if (not current) or db.replace or force then
 				C_Map.SetUserWaypoint(uiMapPoint)
 				C_SuperTrack.SetSuperTrackedUserWaypoint(true)
 				waypoint = uiMapPoint
 				if duration and duration > 0 then
 					C_Timer.After(duration, function()
-						local current = C_Map.GetUserWaypoint()
-						if current and waypoint and waypoint.position and waypoint.position:IsEqualTo(current.position) then
+						local stillCurrent = C_Map.GetUserWaypoint()
+						if stillCurrent and waypoint and waypoint.position and waypoint.position:IsEqualTo(stillCurrent.position) then
 							C_Map.ClearUserWaypoint()
+							if current then
+								-- restore the one we replaced
+								C_Map.SetUserWaypoint(current)
+								C_SuperTrack.SetSuperTrackedUserWaypoint(wasTracked)
+							end
 						end
 					end)
 				end
