@@ -352,6 +352,7 @@ PopupClass.scripts = {
 			GameTooltip:AddLine(escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
 		end
 		GameTooltip:AddLine(escapes.keyDown .. CTRL_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
+		GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
 		GameTooltip:AddLine(escapes.rightClick .. " " .. CLOSE)
 		GameTooltip:Show()
 
@@ -398,6 +399,18 @@ PopupClass.scripts = {
 			self:HideWhenPossible()
 		elseif IsControlKeyDown() then
 			module:Point()
+		elseif IsShiftKeyDown() then
+			-- worldmap:uiMapId:x:y
+			ChatEdit_InsertLink(("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+				self.data.zone,
+				self.data.x * 10000,
+				self.data.y * 10000,
+				-- Can't do this:
+				-- core:GetMobLabel(self.data.id) or UNKNOWN
+				-- WoW seems to filter out anything which isn't the standard MAP_PIN_HYPERLINK
+				MAP_PIN_HYPERLINK
+			))
+			PlaySound(SOUNDKIT.UI_MAP_WAYPOINT_CHAT_SHARE)
 		end
 	end,
 	-- hooked:
