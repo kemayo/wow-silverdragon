@@ -117,6 +117,7 @@ read_globals = {
     "IsReagentBankUnlocked",
     "IsShiftKeyDown",
     "LoadAddOn",
+    "PlaySound",
     "PlaySoundFile",
     "PlayerHasToy",
     "PickupContainerItem",
@@ -155,6 +156,7 @@ read_globals = {
     "GameFontHighlightSmall",
 
     -- FrameXML API
+    "ChatEdit_InsertLink",
     "CreateAtlasMarkup",
     "CreateFrame",
     "CreateFramePool",
