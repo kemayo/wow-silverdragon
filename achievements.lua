@@ -538,7 +538,7 @@ function ns:UpdateTooltipWithDrops(tooltip, id)
 				TOY,
 				"|T" .. icon .. ":0|t " .. name,
 				1, 1, 0,
-				owned == limit and 0 or 1, owned == limit and 1 or 0, 0
+				owned and 0 or 1, owned and 1 or 0, 0
 			)
 		end
 	end
