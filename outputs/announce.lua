@@ -51,6 +51,7 @@ function module:OnInitialize()
 			instances = false,
 			dead = true,
 			already = false,
+			already_drop = true,
 			already_alt = true,
 			sink_opts = {},
 			channel = "Master",
@@ -103,11 +104,12 @@ function module:OnInitialize()
 				order = 10,
 				get = get, set = set,
 				args = {
-					already = toggle("Already found", "Announce when we see rares we've already killed / achieved (if known)"),
-					already_alt = toggle("Completed by an alt", "Announce when we see rares for an achievement that the current character doesn't have, but an alt has completed already"),
-					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not, so this isn't entirely reliable."),
-					flash = toggle("Flash", "Flash the edges of the screen."),
-					instances = toggle("Instances", "Show announcements while in an instance"),
+					already = toggle("Already found", "Announce when we see rares we've already killed / achieved (if known)", 0),
+					already_drop = toggle("Got the loot", "Announce when we see rares which drop a mount / toy / pet you already have", 10),
+					already_alt = toggle("Completed by an alt", "Announce when we see rares for an achievement that the current character doesn't have, but an alt has completed already", 20),
+					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not, so this isn't entirely reliable.", 30),
+					flash = toggle("Flash", "Flash the edges of the screen.", 40),
+					instances = toggle("Instances", "Show announcements while in an instance", 50),
 				},
 			},
 			message = {
@@ -215,6 +217,24 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 	local quest, achievement, by_alt = ns:CompletionStatus(id)
 	if by_alt and not self.db.profile.already_alt then
 		return false
+	end
+	if not self.db.profile.already_drop then
+		-- hide mobs which have a mount/pet/toy which you already own
+		if ns.mobdb[id] and ns.mobdb[id].mount and type(ns.mobdb[id].mount) == "number" then
+			if select(11, C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)) then -- isCollected
+				return false
+			end
+		end
+		if ns.mobdb[id] and ns.mobdb[id].pet and type(ns.mobdb[id].pet) == "number" then
+			if C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet) > 0 then
+				return false
+			end
+		end
+		if ns.mobdb[id] and ns.mobdb[id].toy and type(ns.mobdb[id].toy) == "number" then
+			if PlayerHasToy(ns.mobdb[id].toy) then
+				return false
+			end
+		end
 	end
 	if not self.db.profile.already then
 		-- hide already-completed mobs

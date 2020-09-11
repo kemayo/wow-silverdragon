@@ -501,3 +501,46 @@ function ns:UpdateTooltipWithCompletion(tooltip, id)
 		)
 	end
 end
+
+function ns:UpdateTooltipWithDrops(tooltip, id)
+	if not id then
+		return
+	end
+
+	if ns.mobdb[id] and ns.mobdb[id].mount and type(ns.mobdb[id].mount) == "number" then
+		local name, _, icon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
+		if name then
+			tooltip:AddDoubleLine(
+				MOUNT,
+				"|T" .. icon .. ":0|t " .. name,
+				1, 1, 0,
+				isCollected and 0 or 1, isCollected and 1 or 0, 0
+			)
+		end
+	end
+	if ns.mobdb[id] and ns.mobdb[id].pet and type(ns.mobdb[id].pet) == "number" then
+		local name, icon = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
+		local owned, limit = C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet)
+		if name then
+			tooltip:AddDoubleLine(
+				TOOLTIP_BATTLE_PET,
+				"|T" .. icon .. ":0|t " .. name,
+				1, 1, 0,
+				owned == limit and 0 or 1, owned == limit and 1 or 0, 0
+			)
+		end
+	end
+	if ns.mobdb[id] and ns.mobdb[id].toy and type(ns.mobdb[id].toy) == "number" then
+		local _, name, icon = C_ToyBox.GetToyInfo(ns.mobdb[id].toy)
+		local owned = PlayerHasToy(ns.mobdb[id].toy)
+		if name then
+			tooltip:AddDoubleLine(
+				TOY,
+				"|T" .. icon .. ":0|t " .. name,
+				1, 1, 0,
+				owned == limit and 0 or 1, owned == limit and 1 or 0, 0
+			)
+		end
+	end
+
+end

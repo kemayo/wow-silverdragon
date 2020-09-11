@@ -161,11 +161,8 @@ function handler:OnEnter(uiMapID, coord)
 	if ns.mobdb[id].notes then
 		tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
 	end
-
 	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
-	tooltip:AddDoubleLine("ID", id)
-
-	ns:UpdateTooltipWithCompletion(tooltip, id)
+	core:GetModule("Tooltip"):UpdateTooltip(id)
 
 	tooltip:Show()
 end
