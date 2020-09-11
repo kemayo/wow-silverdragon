@@ -75,7 +75,7 @@ do
 					end
 				end)
 			end
-		else
+		elseif C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
 			local current = C_Map.GetUserWaypoint()
 			local wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
 			local uiMapPoint = UiMapPoint.CreateFromCoordinates(zone, x, y)

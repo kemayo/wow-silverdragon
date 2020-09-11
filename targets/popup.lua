@@ -352,7 +352,9 @@ PopupClass.scripts = {
 			GameTooltip:AddLine(escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
 		end
 		GameTooltip:AddLine(escapes.keyDown .. CTRL_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
-		GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
+		if C_Map.CanSetUserWaypointOnMap(self.data.zone) and self.data.x > 0 and self.data.y > 0 then
+			GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
+		end
 		GameTooltip:AddLine(escapes.rightClick .. " " .. CLOSE)
 		GameTooltip:Show()
 

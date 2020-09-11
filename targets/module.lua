@@ -114,8 +114,8 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 		source = source,
 		dead = dead,
 		zone = zone,
-		x = x,
-		y = y,
+		x = x or 0,
+		y = y or 0,
 	}
 	if InCombatLockdown() then
 		Debug("Queueing popup for out-of-combat")
