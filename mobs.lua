@@ -17,6 +17,7 @@ local function toggle_mob(id)
 end
 
 local function input_to_mobid(value)
+	if not value then return end
 	value = value:trim()
 	if value == "target" or value == "mouseover" then
 		return core:UnitID(value)
@@ -26,6 +27,7 @@ local function input_to_mobid(value)
 	end
 	return core:IdForMob(value)
 end
+ns.input_to_mobid = input_to_mobid
 
 local function mob_input(name, desc, order, setter)
 	return {

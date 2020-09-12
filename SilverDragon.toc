@@ -23,6 +23,7 @@ embeds.xml
 
 # the core
 core.lua
+slash.lua
 config.lua
 
 scan\targets.lua
