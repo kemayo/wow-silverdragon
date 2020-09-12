@@ -99,19 +99,6 @@ function module:OnInitialize()
 
 	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("SilverDragon", options)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("SilverDragon", "SilverDragon")
-	self:RegisterChatCommand("silverdragon", "OnChatCommand")
-end
-
-function module:OnChatCommand(input)
-	local command, args = self:GetArgs(input, 2)
-	if command then
-		command = command:lower()
-		if command == 'debug' then
-			core:ShowDebugWindow()
-		end
-	else
-		self:ShowConfig()
-	end
 end
 
 function module:ShowConfig()

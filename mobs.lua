@@ -26,6 +26,7 @@ local function input_to_mobid(value)
 	end
 	return core:IdForMob(value)
 end
+ns.input_to_mobid = input_to_mobid
 
 local function mob_input(name, desc, order, setter)
 	return {
