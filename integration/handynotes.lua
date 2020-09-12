@@ -194,6 +194,21 @@ local function createWaypoint(button, uiMapID, coord)
 	end
 end
 
+local function createWaypointForAll(button, uiMapID, coord)
+	if not TomTom then return end
+	local id, name = core:GetMobByCoord(uiMapID, coord)
+	if not (id and ns.mobsByZone[uiMapID] and ns.mobsByZone[uiMapID][id]) then return end
+	for _, mob_coord in ipairs(ns.mobsByZone[uiMapID][id]) do
+		local x, y = HandyNotes:getXY(mob_coord)
+		TomTom:AddWaypoint(uiMapID, x, y, {
+			title = name,
+			persistent = nil,
+			minimap = true,
+			world = true
+		})
+	end
+end
+
 local dropdown = CreateFrame("Frame")
 dropdown.displayMode = "MENU"
 
@@ -219,7 +234,17 @@ do
 				info.func = createWaypoint
 				info.arg1 = clicked_zone
 				info.arg2 = clicked_coord
-				UIDropDownMenu_AddButton(info, level);
+				UIDropDownMenu_AddButton(info, level)
+
+				info.disabled = nil
+				info.isTitle = nil
+				info.notCheckable = nil
+				info.text = "Create waypoint for all locations"
+				info.icon = nil
+				info.func = createWaypointForAll
+				info.arg1 = clicked_zone
+				info.arg2 = clicked_coord
+				UIDropDownMenu_AddButton(info, level)
 			end
 
 			-- Hide menu item
@@ -231,7 +256,7 @@ do
 			info.func = hideMob
 			info.arg1 = clicked_zone
 			info.arg2 = clicked_coord
-			UIDropDownMenu_AddButton(info, level);
+			UIDropDownMenu_AddButton(info, level)
 
 			-- Close menu item
 			info.text         = "Close"
@@ -239,7 +264,7 @@ do
 			info.func         = function() CloseDropDownMenus() end
 			info.arg1         = nil
 			info.notCheckable = 1
-			UIDropDownMenu_AddButton(info, level);
+			UIDropDownMenu_AddButton(info, level)
 		end
 	end
 	dropdown.initialize = generateMenu
