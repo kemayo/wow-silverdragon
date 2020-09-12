@@ -2,6 +2,7 @@
 
 ## Changed in v80300.3
 
+* Include some data about drops from rares, so you can know whether you've gotten the mount / toy / pet that something drops. Data's present for everything in BFA, and spottily before that.
 * Improved sound options: you can choose the channel the sound plays on (Master, Music, SFX, etc), and you can ask it to play while the game isn't focused / the channel is muted
 * Improved map icons in HandyNotes: you can choose between circles and skulls, and you can tell it to color the icons uniquely per-mob or by completion
 * Added a slash command so you can do things like `/silverdragon add 123456` or `/silverdragon remove target`
