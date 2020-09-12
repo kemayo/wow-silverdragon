@@ -67,6 +67,7 @@ read_globals = {
     "CursorHasItem",
     "DeleteCursorItem",
     "FlashClientIcon",
+    "GetAddOnInfo",
     "GetAddOnMetadata",
     "GetAchievementCriteriaInfo",
     "GetAchievementCriteriaInfoByID",
