@@ -522,11 +522,17 @@ function ns:UpdateTooltipWithDrops(tooltip, id)
 		local name, icon = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
 		local owned, limit = C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet)
 		if name then
+			local r, g, b = 1, 0, 0
+			if owned == limit then
+				r, g, b = 0, 1, 0
+			elseif owned > 0 then
+				r, g, b = 1, 1, 0
+			end
 			tooltip:AddDoubleLine(
 				TOOLTIP_BATTLE_PET,
-				"|T" .. icon .. ":0|t " .. name,
+				"|T" .. icon .. ":0|t " .. (ITEM_SET_NAME):format(name, owned, limit),
 				1, 1, 0,
-				owned == limit and 0 or 1, owned == limit and 1 or 0, 0
+				r, g, b
 			)
 		end
 	end
