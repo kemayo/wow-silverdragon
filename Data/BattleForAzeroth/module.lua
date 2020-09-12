@@ -629,6 +629,8 @@ function module:OnInitialize()
 		[162352] = {name="Spirit of Dark Ritualist Zakahn",locations={[1527]={50004000},},poi={947,6488,947,6487},quest=58716,},
 		[162370] = {name="Armagedillo",locations={[1527]={43804140},},poi={947,6488,947,6487},quest=58718,},
 		[162372] = {name="Spirit of Cyrus the Black",locations={[1527]={58006160,58008240,66406800,70807460},},poi={947,6488,947,6487},quest=58715,},
+		[162681] = {name="Elusive Quickhoof",locations={[864]={26405250,28006500,31106730,42006000,43006900,51108590,52508900,54008300,54605320,55007300},},mount=1324,notes="Feed it Seaside Leafy Greens Mix",},
+		[162765] = {name="Friendly Alpaca",locations={[1527]={15006200,24000900,28004900,30002900,39001000,42007000,46004800,53001900,55006900,63005300,63001400,70003900,76006800},},mount=1329,quest=58879,notes="Feed it Gersahl Greens for 7 days",},
 		[163042] = {name="Ivory Cloud Serpent",locations={[1530]={26805510},},mount=1311,notes="You need a Zan-Tien Lasso to catch it. It spawns fairly high up",},
 	})
 end
