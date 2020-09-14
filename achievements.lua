@@ -399,6 +399,7 @@ local achievements = {
 		[155060] = 45433, -- The Doppel Gang
 	},
 	[13691] = {}, -- I Thought You Said They'd Be Rare (Nazjatar)
+	[14159] = {}, -- Combating the Corruption (Assaults)
 }
 core.achievements = achievements
 local mobs_to_achievement = {
