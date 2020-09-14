@@ -269,7 +269,8 @@ do
 	end
 	function addon:NameForQuest(id)
 		if not self.db.locale.quest_name[id] then
-			local name = TextFromHyperlink(("quest:%d"):format(id))
+			-- TODO: after 9.0.1 this check can be removed
+			local name = C_QuestLog.GetTitleForQuestID and C_QuestLog.GetTitleForQuestID(id) or C_QuestLog.GetQuestInfo(id)
 			if name then
 				name = name:gsub("Vignette: ", "")
 				self.db.locale.quest_name[id] = name
