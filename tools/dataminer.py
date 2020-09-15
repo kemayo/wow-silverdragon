@@ -119,6 +119,8 @@ def write_output(expansion, data):
                         "notes",
                         "locations",
                         "mount",
+                        "pet",
+                        "toy",
                         "boss",
                         "faction",
                         "phase",
