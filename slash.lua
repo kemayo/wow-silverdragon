@@ -46,6 +46,21 @@ local commands = {
         end
         self:Print("Couldn't work out the mob id from your input")
     end,
+    ignore = function(self, arg)
+        local npcid = ns.input_to_mobid(arg)
+        if npcid then
+            if core.db.global.ignore[npcid] then
+                return self:Printf("%s (%d) was already on the ignore list", core:NameForMob(npcid) or UNKNOWN, npcid)
+            end
+            core.db.global.ignore[npcid] = true
+            if config then
+                local mobs = core:GetModule("Mobs")
+                mobs:BuildIgnoreList(config.options)
+            end
+            return self:Printf("Added %s (%d) to the ignore list", core:NameForMob(npcid) or UNKNOWN, npcid)
+        end
+        self:Print("Couldn't work out the mob id from your input")
+    end,
     debug = function(self, args)
         core:ShowDebugWindow()
     end,
