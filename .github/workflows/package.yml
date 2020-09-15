@@ -1,0 +1,26 @@
+name: Package Addon
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ '*' ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Jayrgo/luacheck-action@0.1.0
+  build:
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Create Package
+        run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
+        env:
+           CF_API_KEY: ${{ secrets.CF_API_KEY }}
+           WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
