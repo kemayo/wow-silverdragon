@@ -15,6 +15,7 @@ function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("LDB", {
 		profile = {
 			minimap = {},
+			loot = true,
 		},
 	})
 	db = self.db
@@ -69,6 +70,14 @@ function module:OnInitialize()
 						descStyle = "inline",
 						hidden = function() return not icon or not dataobject or not icon:IsRegistered("SilverDragon") end,
 					},
+					loot = {
+						type = "toggle",
+						name = "Show loot",
+						desc = "Toggle showing important loot in the popup",
+						get = function() return db.profile.loot end,
+						set = function(info, v) db.profile.loot = v end,
+						order = 40,
+					}
 				},
 			},
 		}
@@ -114,6 +123,8 @@ function module:SetupDataObject()
 
 	local rares_seen = {}
 	local sorted_mobs = {}
+	local loot = {}
+	local checkmark = CreateAtlasMarkup("Tracker-Check")
 	local tooltip
 	function dataobject:OnEnter()
 		if not core.db then
@@ -125,7 +136,7 @@ function module:SetupDataObject()
 		local zone = HBD:GetPlayerZone()
 		if ns.mobsByZone[zone] then
 			tooltip:AddHeader("Nearby")
-			tooltip:AddHeader("Name", "Count", "Last Seen")
+			tooltip:AddHeader("Name", "Count", "Last Seen", db.profile.loot and LOOT or nil)
 
 			wipe(sorted_mobs)
 			for id in pairs(ns.mobsByZone[zone]) do
@@ -143,6 +154,50 @@ function module:SetupDataObject()
 					core:FormatLastSeen(last_seen),
 					(tameable and 'Tameable' or '')
 				)
+				if db.profile.loot then
+					wipe(loot)
+					if ns.mobdb[id] and ns.mobdb[id].mount then
+						if type(ns.mobdb[id].mount) == 'number' then
+							local name, _, icon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
+							if name then
+								table.insert(loot, MOUNT .. " (|T" .. icon .. ":0|t " .. name .. ')' .. (isCollected and checkmark or ''))
+							else
+								table.insert(loot, MOUNT .. (isCollected and checkmark or ''))
+							end
+						else
+							table.insert(loot, MOUNT)
+						end
+					end
+					if ns.mobdb[id] and ns.mobdb[id].pet then
+						if type(ns.mobdb[id].pet) == 'number' then
+							local name, icon = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
+							local isCollected = C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet) > 0
+							if name then
+								table.insert(loot, TOOLTIP_BATTLE_PET .. " (|T" .. icon .. ":0|t " .. name .. ')' .. (isCollected and checkmark or ''))
+							else
+								table.insert(loot, TOOLTIP_BATTLE_PET .. (isCollected and checkmark or ''))
+							end
+						else
+							table.insert(loot, TOOLTIP_BATTLE_PET)
+						end
+					end
+					if ns.mobdb[id] and ns.mobdb[id].toy then
+						if type(ns.mobdb[id].toy) == 'number' then
+							local _, name, icon = C_ToyBox.GetToyInfo(ns.mobdb[id].toy)
+							local isCollected = PlayerHasToy(ns.mobdb[id].toy)
+							if name then
+								table.insert(loot, TOY .. " (|T" .. icon .. ":0|t " .. name .. ')' .. (isCollected and checkmark or ''))
+							else
+								table.insert(loot, TOY .. (isCollected and checkmark or ''))
+							end
+						else
+							table.insert(loot, TOY)
+						end
+					end
+					if #loot then
+						index, col = tooltip:SetCell(index, col, strjoin(', ', unpack(loot)))
+					end
+				end
 				local quest, achievement = ns:CompletionStatus(id)
 				if quest ~= nil or achievement ~= nil then
 					if achievement ~= nil then
