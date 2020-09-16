@@ -4,7 +4,7 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:GetModule("ClickTarget")
 local Debug = core.Debug
 
-function Loot(self, popup)
+local function Loot(self, popup)
     popup:SetSize(302, 119)
 
     -- left, right, top, bottom

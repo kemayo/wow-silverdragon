@@ -151,6 +151,7 @@ read_globals = {
     "GameFontHighlightSmall",
 
     -- FrameXML API
+    "CreateAtlasMarkup",
     "CreateFrame",
     "CreateFramePool",
     "InterfaceOptionsFrame_OpenToCategory",
@@ -206,6 +207,7 @@ read_globals = {
     "LE_ITEM_QUALITY_POOR",
     "LE_PARTY_CATEGORY_HOME",
     "LE_PARTY_CATEGORY_INSTANCE",
+    "LOOT",
     "MAX_ACCOUNT_MACROS",
     "MAX_CONTAINER_ITEMS",
     "MOUNT",

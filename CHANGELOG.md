@@ -6,7 +6,7 @@
 * Improved sound options: you can choose the channel the sound plays on (Master, Music, SFX, etc), and you can ask it to play while the game isn't focused / the channel is muted
 * Improved map icons in HandyNotes: you can choose between circles and skulls, and you can tell it to color the icons uniquely per-mob or by completion
 * You can right-click on a map icon to add a TomTom waypoint for every location that mob has
-* A bunch of new popup themes
+* Added a bunch of new popup themes
 * Added a slash command so you can do things like `/silverdragon add 123456` or `/silverdragon remove target`
 * Stopped hiding chat-channel output from the config for other addons using LibSink
 * Allow right-clicking on the target popup to close it

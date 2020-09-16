@@ -158,9 +158,9 @@ function module:SetupDataObject()
 					wipe(loot)
 					if ns.mobdb[id] and ns.mobdb[id].mount then
 						if type(ns.mobdb[id].mount) == 'number' then
-							local name, _, icon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
-							if name then
-								table.insert(loot, MOUNT .. " (|T" .. icon .. ":0|t " .. name .. ')' .. (isCollected and checkmark or ''))
+							local lname, _, licon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
+							if lname then
+								table.insert(loot, MOUNT .. " (|T" .. licon .. ":0|t " .. lname .. ')' .. (isCollected and checkmark or ''))
 							else
 								table.insert(loot, MOUNT .. (isCollected and checkmark or ''))
 							end
@@ -170,10 +170,10 @@ function module:SetupDataObject()
 					end
 					if ns.mobdb[id] and ns.mobdb[id].pet then
 						if type(ns.mobdb[id].pet) == 'number' then
-							local name, icon = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
+							local lname, licon = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
 							local isCollected = C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet) > 0
-							if name then
-								table.insert(loot, TOOLTIP_BATTLE_PET .. " (|T" .. icon .. ":0|t " .. name .. ')' .. (isCollected and checkmark or ''))
+							if lname then
+								table.insert(loot, TOOLTIP_BATTLE_PET .. " (|T" .. licon .. ":0|t " .. lname .. ')' .. (isCollected and checkmark or ''))
 							else
 								table.insert(loot, TOOLTIP_BATTLE_PET .. (isCollected and checkmark or ''))
 							end
@@ -183,10 +183,10 @@ function module:SetupDataObject()
 					end
 					if ns.mobdb[id] and ns.mobdb[id].toy then
 						if type(ns.mobdb[id].toy) == 'number' then
-							local _, name, icon = C_ToyBox.GetToyInfo(ns.mobdb[id].toy)
+							local _, lname, licon = C_ToyBox.GetToyInfo(ns.mobdb[id].toy)
 							local isCollected = PlayerHasToy(ns.mobdb[id].toy)
-							if name then
-								table.insert(loot, TOY .. " (|T" .. icon .. ":0|t " .. name .. ')' .. (isCollected and checkmark or ''))
+							if lname then
+								table.insert(loot, TOY .. " (|T" .. licon .. ":0|t " .. lname .. ')' .. (isCollected and checkmark or ''))
 							else
 								table.insert(loot, TOY .. (isCollected and checkmark or ''))
 							end
