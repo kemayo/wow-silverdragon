@@ -52,7 +52,7 @@ end
 
 function module:RefreshMobData(popup)
 	local data = popup.data
-	popup.title:SetText(core:GetMobLabel(data.id) or UNKNOWN)
+	popup.title:SetText(core:GetMobLabel(data.id))
 	popup.source:SetText(data.source or "")
 
 	local achievement, achievement_name, completed = ns:AchievementMobStatus(data.id)
