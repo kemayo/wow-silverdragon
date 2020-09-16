@@ -353,14 +353,7 @@ function addon:GetMobByCoord(zone, coord)
 end
 
 function addon:GetMobLabel(id)
-	local name = self:NameForMob(id)
-	if not name then
-		return UNKNOWN
-	end
-	if not mobdb[id] then
-		return name
-	end
-	return name .. (mobdb[id].notes and (" (" .. mobdb[id].notes .. ")") or "")
+	return self:NameForMob(id) or UNKNOWN
 end
 
 do

@@ -138,7 +138,7 @@ function module:SetupDataObject()
 			for _, id in ipairs(sorted_mobs) do
 				local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
 				local index, col = tooltip:AddLine(
-					core:GetMobLabel(id) or UNKNOWN,
+					core:GetMobLabel(id),
 					times_seen,
 					core:FormatLastSeen(last_seen),
 					(tameable and 'Tameable' or '')

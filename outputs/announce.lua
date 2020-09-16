@@ -279,7 +279,7 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zon
 		source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
 	end
 	local prefix = "Rare seen: "
-	module:Pour((prefix .. "%s%s (%s)"):format(core:GetMobLabel(id) or UNKNOWN, dead and "... but it's dead" or '', source or ''))
+	module:Pour((prefix .. "%s%s (%s)"):format(core:GetMobLabel(id), dead and "... but it's dead" or '', source or ''))
 end)
 
 local cvar_overrides
