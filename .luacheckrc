@@ -99,6 +99,7 @@ read_globals = {
     "GetItemInfoInstant",
     "GetItemQualityColor",
     "GetMacroIndexByName",
+    "GetNumGroupMembers",
     "GetNumMacros",
     "GetRaidTargetIndex",
     "GetTime",

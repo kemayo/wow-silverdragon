@@ -14,6 +14,7 @@
 * Add bulk ignore all/none buttons to the expansion mob lists
 * Cleaned up some of the Assault / Nazjatar mobs which are replacement-spawns for common mobs
 * Cleaned up various rares which are only ever present for world quests
+* Changed really long-standing behavior: raid member targets are now checked, not just party member targets
 * Fixed various quest ids
 * Background Shadowlands work
 
