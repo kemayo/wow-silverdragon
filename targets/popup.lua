@@ -60,6 +60,12 @@ function module:RefreshMobData(popup)
 	else
 		popup.status:SetText("")
 	end
+
+	if ns.mobdb[data.id] and (ns.mobdb[data.id].mount or ns.mobdb[data.id].pet or ns.mobdb[data.id].toy) then
+		popup.lootIcon:Show()
+	else
+		popup.lootIcon:Hide()
+	end
 end
 
 function module:ShowModel(popup)
@@ -150,6 +156,14 @@ function module:CreatePopup()
 	raidIcon:SetSize(16, 16)
 	raidIcon:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]])
 	raidIcon:Hide()
+
+	local lootIcon = CreateFrame("Frame", nil, popup)
+	popup.lootIcon = lootIcon
+	lootIcon:SetSize(40, 40)
+	lootIcon.texture = lootIcon:CreateTexture(nil, "OVERLAY")
+	lootIcon.texture:SetAllPoints(lootIcon)
+	lootIcon.texture:SetAtlas("ShipMissionIcon-Treasure-MapBadge")
+	lootIcon:Hide()
 
 	local dead = model:CreateTexture(nil, "OVERLAY")
 	popup.dead = dead
@@ -254,6 +268,9 @@ function module:CreatePopup()
 
 	popup.close:SetScript("OnEnter", popup.scripts.CloseOnEnter)
 	popup.close:SetScript("OnLeave", popup.scripts.CloseOnLeave)
+
+	popup.lootIcon:SetScript("OnEnter", popup.scripts.LootOnEnter)
+	popup.lootIcon:SetScript("OnLeave", popup.scripts.LootOnLeave)
 
 	self:ApplyLook(popup, self.db.profile.style)
 
@@ -390,6 +407,7 @@ PopupClass.scripts = {
 		self.animFade:Stop()
 
 		self.raidIcon:Hide()
+		self.lootIcon:Hide()
 		self.dead:SetAlpha(0)
 		self.model:ClearModel()
 
@@ -405,6 +423,51 @@ PopupClass.scripts = {
 		GameTooltip:Show()
 	end,
 	CloseOnLeave = function(self)
+		GameTooltip:Hide()
+	end,
+	-- Loot icon
+	LootOnEnter = function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
+
+		local id = self:GetParent().data.id
+		if ns.mobdb[id] then
+			if ns.mobdb[id].mount then
+				GameTooltip:AddLine(MOUNT)
+				if type(ns.mobdb[id].mount) == 'number' then
+					local lname, _, licon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
+					if lname then
+						GameTooltip:AddLine(lname, isCollected and 0 or 1, isCollected and 1 or 0, 0)
+						GameTooltip:AddTexture(licon)
+					end
+				end
+			end
+			if ns.mobdb[id].pet then
+				GameTooltip:AddLine(TOOLTIP_BATTLE_PET)
+				if type(ns.mobdb[id].pet) == 'number' then
+					local lname, licon = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
+					local isCollected = C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet) > 0
+					if lname then
+						GameTooltip:AddLine(lname, isCollected and 0 or 1, isCollected and 1 or 0, 0)
+						GameTooltip:AddTexture(licon)
+					end
+				end
+			end
+			if ns.mobdb[id].toy then
+				GameTooltip:AddLine(TOY)
+				if type(ns.mobdb[id].toy) == 'number' then
+					local _, lname, licon = C_ToyBox.GetToyInfo(ns.mobdb[id].toy)
+					local isCollected = PlayerHasToy(ns.mobdb[id].toy)
+					if lname then
+						GameTooltip:AddLine(lname, isCollected and 0 or 1, isCollected and 1 or 0, 0)
+						GameTooltip:AddTexture(licon)
+					end
+				end
+			end
+		end
+		-- GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
+		GameTooltip:Show()
+	end,
+	LootOnLeave = function(self)
 		GameTooltip:Hide()
 	end,
 	-- Common animations

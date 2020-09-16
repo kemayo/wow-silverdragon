@@ -36,5 +36,7 @@ function module.Looks:Transmog(popup)
 	popup.shine:SetPoint("BOTTOMLEFT", -10, 12)
 
 	popup.raidIcon:SetPoint("BOTTOMRIGHT", popup.modelbg, "TOPLEFT", 12, -12)
+	popup.lootIcon:SetSize(24, 24)
+	popup.lootIcon:SetPoint("CENTER", popup.modelbg, "BOTTOMLEFT", 0, 0)
 	popup.dead:SetAllPoints(popup.modelbg)
 end

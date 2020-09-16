@@ -32,6 +32,7 @@ function module.Looks:Legendary(popup)
 	popup.shine:SetPoint("BOTTOMLEFT", 10, 24)
 
 	popup.raidIcon:SetPoint("BOTTOM", popup.modelbg, "TOP", 0, -8)
+	popup.lootIcon:SetPoint("CENTER", popup.modelbg, "BOTTOMLEFT", 0, 0)
 
 	popup.dead:SetAllPoints(popup.modelbg)
 end

@@ -627,6 +627,7 @@ function module:OnInitialize()
 		[162172] = {name="Aqir Warcaster",locations={[1527]={},},quest=58694,},
 		[162173] = {name="R'krox the Runt",locations={[1527]={24200700,27001260,29002060,29802620,30203340,32401040,37800920},},poi={947,6488},quest=58864,},
 		[162196] = {name="Obsidian Annihilator",locations={[1527]={35001740},},quest=58681,},
+		[162254] = {name="Corrupted Observer",locations={[1527]={},},quest=58691,},
 		[162352] = {name="Spirit of Dark Ritualist Zakahn",locations={[1527]={50004000},},poi={947,6488,947,6487},quest=58716,},
 		[162370] = {name="Armagedillo",locations={[1527]={43804140},},poi={947,6488,947,6487},quest=58718,},
 		[162372] = {name="Spirit of Cyrus the Black",locations={[1527]={58006160,58008240,66406800,70807460},},poi={947,6488,947,6487},quest=58715,},
