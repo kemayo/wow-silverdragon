@@ -7,4 +7,5 @@
   <Script file="transmog.lua"/>
   <Script file="store.lua"/>
   <Script file="storesilver.lua"/>
+  <Script file="loot.lua"/>
 </Ui>

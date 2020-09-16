@@ -85,7 +85,7 @@ function module:OnInitialize()
 			},
 		}
 		for key in pairs(self.Looks) do
-			config.options.plugins.clicktarget.clicktarget.args.style.values[key] = key
+			config.options.plugins.clicktarget.clicktarget.args.style.values[key] = key:gsub("_", ": ")
 		end
 	end
 

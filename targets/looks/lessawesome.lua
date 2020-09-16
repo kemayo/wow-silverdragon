@@ -4,7 +4,7 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:GetModule("ClickTarget")
 local Debug = core.Debug
 
-function module.Looks:LessAwesome(popup)
+function module.Looks:Loot_LessAwesome(popup)
 	-- The "loot, not an upgrade" look
 	popup:SetSize(276, 96)
 
