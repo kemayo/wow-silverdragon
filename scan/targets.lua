@@ -59,13 +59,14 @@ function module:NAME_PLATE_UNIT_ADDED(event, unit)
 	self:ProcessUnit(unit, 'nameplate')
 end
 
-local units_to_scan = {'targettarget', 'party1target', 'party2target', 'party3target', 'party4target', 'party5target'}
 function module:Scan(callback, zone)
 	if not (self.db.profile.targets and IsInGroup()) then
 		return
 	end
-	for _, unit in ipairs(units_to_scan) do
-		self:ProcessUnit(unit, 'grouptarget')
+	self:ProcessUnit('targettarget', 'grouptarget')
+	local prefix = IsInRaid() and 'raid' or 'party'
+	for i=1, GetNumGroupMembers() do
+		self:ProcessUnit(prefix .. i .. 'target', 'grouptarget')
 	end
 end
 
