@@ -106,6 +106,10 @@ function module:SetupDataObject()
 		self.texture:SetTexCoord(0, 0.625, 0, 0.625)
 		return self.texture:GetSize()
 	end
+	function ShieldCellPrototype:getContentHeight()
+		return 16
+	end
+
 	local QuestCellProvider, QuestCellPrototype = LibQTip:CreateCellProvider(ShieldCellProvider)
 	function QuestCellPrototype:SetupCell(tooltip, value)
 		self.texture:SetAtlas("QuestNormal")
@@ -126,12 +130,21 @@ function module:SetupDataObject()
 	local loot = {}
 	local checkmark = CreateAtlasMarkup("Tracker-Check")
 	local tooltip
-	function dataobject:OnEnter()
+	local function draw_tooltip(self)
 		if not core.db then
 			return
 		end
 
-		tooltip = LibQTip:Acquire("SilverDragonTooltip", 8, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT", "RIGHT", "RIGHT")
+		if not tooltip then
+			tooltip = LibQTip:Acquire("SilverDragonTooltip", 8, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT", "RIGHT", "RIGHT")
+			tooltip:SetAutoHideDelay(0.25, self)
+			tooltip:SmartAnchorTo(self)
+			tooltip.OnRelease = function(self)
+				tooltip = nil
+			end
+		end
+
+		tooltip:Clear()
 
 		local zone = HBD:GetPlayerZone()
 		if ns.mobsByZone[zone] then
@@ -252,13 +265,18 @@ function module:SetupDataObject()
 			tooltip:SetLineTextColor(index, 0, 1, 1)
 		end
 
-		tooltip:SmartAnchorTo(self)
+		tooltip:UpdateScrolling()
 		tooltip:Show()
 	end
 
+	function dataobject:OnEnter()
+		if not tooltip or not tooltip:IsShown() then
+			draw_tooltip(self)
+		end
+	end
+
 	function dataobject:OnLeave()
-		LibQTip:Release(tooltip)
-		tooltip = nil
+		-- we rely on libqtip's autohide
 	end
 
 	function dataobject:OnClick(button)
