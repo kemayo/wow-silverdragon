@@ -147,6 +147,9 @@ do
 		if minimap and not db.minimap then
 			return iter, {}, nil
 		end
+		if not minimap and not db.worldmap then
+			return iter, {}, nil
+		end
 		return iter, nodes[uiMapID], nil
 	end
 end
@@ -304,6 +307,7 @@ function module:OnInitialize()
 			achievementless = true,
 			hidden = {},
 			minimap = true,
+			worldmap = true,
 		},
 	})
 	db = self.db.profile
@@ -396,12 +400,19 @@ function module:OnInitialize()
 					-- 	width = "full",
 					-- 	order = 20,
 					-- },
+					worldmap = {
+						type = "toggle",
+						name = "World Map",
+						desc = "Whether to show icons on the zone map",
+						arg = "worldmap",
+						order = 30,
+					},
 					minimap = {
 						type = "toggle",
 						name = "Minimap",
 						desc = "Whether to show icons on the minimap as well as the zone map",
 						arg = "minimap",
-						order = 30,
+						order = 40,
 					},
 					unhide = {
 						type = "execute",
@@ -451,6 +462,10 @@ function module:UpdateNodes()
 		end
 	end
 	self.nodes = nodes
+	self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
+end
+
+function module:UpdateWorldMapIcons()
 	self:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon")
 end
 
