@@ -163,6 +163,7 @@ read_globals = {
     "ScrollingEdit_OnCursorChanged",
     "ScrollingEdit_OnUpdate",
     "GameTooltip_SetTitle",
+    "GameTooltip_SetDefaultAnchor",
 
     -- FrameXML Constants
     "ACTION_PARTY_KILL",
