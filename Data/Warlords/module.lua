@@ -362,13 +362,13 @@ function module:OnInitialize()
 		[95054] = {name="Vengeance",locations={[534]={32407380},},quest=39290,},
 		[95056] = {name="Doomroller",locations={[534]={46805260},},quest=39289,},
 		[96235] = {name="Xemirkol",locations={[534]={69003820},},},
-		[96323] = {name="Arachnis",locations={[579]={61203580,67603900,68406360,73803500},[585]={55408840,57008080},},quest=39617,},
+		[96323] = {name="Arachnis",locations={[579]={61203580,67603900,68406360,73803500},[585]={55408840,57008080},},quest=39617,toy=128794,},
 		[98198] = {name="Rukdug",locations={[550]={26203420},},pet=1764,quest=40075,},
 		[98199] = {name="Pugg",locations={[550]={28503030},},pet=1766,quest=40073,},
 		[98200] = {name="Guk",locations={[550]={23803790},},pet=1765,quest=40074,},
-		[98283] = {name="Drakum",locations={[534]={83404340},},quest=40105,},
-		[98284] = {name="Gondar",locations={[534]={80405660},},quest=40106,},
-		[98285] = {name="Smashum Grabb",locations={[534]={87605580},},quest=40104,},
+		[98283] = {name="Drakum",locations={[534]={83404340},},quest=40105,toy=108631,},
+		[98284] = {name="Gondar",locations={[534]={80405660},},quest=40106,toy=108633,},
+		[98285] = {name="Smashum Grabb",locations={[534]={87605580},},quest=40104,toy=108634,},
 		[98408] = {name="Fel Overseer Mudlump",locations={[534]={40605640,87505610},},quest=40107,},
 	})
 end
