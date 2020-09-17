@@ -4,7 +4,7 @@ local module = core:NewModule("Data_Cataclysm")
 
 function module:OnInitialize()
 	core:RegisterMobData("Cataclysm", {
-		[49822] = {name="Jadefang",locations={[207]={61202260},},tameable=true,},
+		[49822] = {name="Jadefang",locations={[207]={61202260},},pet=279,tameable=true,},
 		[49913] = {name="Lady La-La",locations={[201]={57008220,60207080},},},
 		[50005] = {name="Poseidus",locations={[204]={41207660},[205]={38006780,44804880,56408220,66004440},},mount=420,},
 		[50009] = {name="Mobus",boss=true,locations={[204]={63003000,65603740,67001920,73201920,75803580,77602820},},},
