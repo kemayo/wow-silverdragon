@@ -48,6 +48,12 @@ function module:OnInitialize()
 			flash = true,
 			flash_texture = "Blizzard Low Health",
 			flash_color = {r=1,g=0,b=1,a=1,},
+			flash_mount = true,
+			flash_texture_mount = "Blizzard Low Health",
+			flash_color_mount = {r=0,g=1,b=0,a=1,},
+			flash_boss = false,
+			flash_texture_boss = "Blizzard Low Health",
+			flash_color_boss = {r=1,g=0,b=1,a=1,},
 			instances = false,
 			dead = true,
 			already = false,
@@ -114,6 +120,14 @@ function module:OnInitialize()
 				min = 1, max = 10, step = 1,
 				order = order,
 			}
+		end
+		local colorget = function(info)
+			local color = self.db.profile[info[#info]]
+			return color.r, color.g, color.b, color.a
+		end
+		local colorset = function(info, r, g, b, a)
+			local color = self.db.profile[info[#info]]
+			color.r, color.g, color.b, color.a = r, g, b, a
 		end
 
 		local options = {
@@ -196,21 +210,15 @@ function module:OnInitialize()
 				order = 15,
 				args = {
 					about = config.desc("Flash the screen when a rare is seen.", 0),
-					flash = toggle("Enabled", "Flash the screen?", 10),
+					flash = toggle("Enabled", "Flash the screen?", 1),
 					flash_color = {
 						name = COLOR,
 						type = "color",
 						hasAlpha = true,
 						descStyle = "inline",
-						get = function()
-							local color = self.db.profile.flash_color
-							return color.r, color.g, color.b, color.a
-						end,
-						set = function(info, r, g, b, a)
-							local color = self.db.profile.flash_color
-							color.r, color.g, color.b, color.a = r, g, b, a
-						end,
-						order = 20,
+						get = colorget,
+						set = colorset,
+						order = 2,
 					},
 					flash_texture = {
 						name = TEXTURES_SUBHEADER,
@@ -218,15 +226,69 @@ function module:OnInitialize()
 						descStyle = "inline",
 						dialogControl = "LSM30_Background",
 						values = AceGUIWidgetLSMlists.background,
-						order = 30,
+						order = 3,
 					},
 					preview = {
 						name = PREVIEW,
 						type = "execute",
 						func = function()
-							module:Flash()
+							module:Flash(50065) -- Armagedillo
 						end,
-						order = 40,
+						order = 4,
+					},
+					mount = {type="header", name="", order=10,},
+					flash_mount = toggle("Mount flash", "Flash the screen differently when we see a mob with a mount?", 11),
+					flash_color_mount = {
+						name = COLOR,
+						type = "color",
+						hasAlpha = true,
+						descStyle = "inline",
+						get = colorget,
+						set = colorset,
+						order = 12,
+					},
+					flash_texture_mount = {
+						name = TEXTURES_SUBHEADER,
+						type = "select",
+						descStyle = "inline",
+						dialogControl = "LSM30_Background",
+						values = AceGUIWidgetLSMlists.background,
+						order = 13,
+					},
+					preview_mount = {
+						name = PREVIEW,
+						type = "execute",
+						func = function()
+							module:Flash(32491) -- time lost
+						end,
+						order = 14,
+					},
+					boss = {type="header", name="", order=20,},
+					flash_boss = toggle("Boss flash", "Flash the screen differently when we see a boss rare?", 21),
+					flash_color_boss = {
+						name = COLOR,
+						type = "color",
+						hasAlpha = true,
+						descStyle = "inline",
+						get = colorget,
+						set = colorset,
+						order = 22,
+					},
+					flash_texture_boss = {
+						name = TEXTURES_SUBHEADER,
+						type = "select",
+						descStyle = "inline",
+						dialogControl = "LSM30_Background",
+						values = AceGUIWidgetLSMlists.background,
+						order = 23,
+					},
+					preview_boss = {
+						name = PREVIEW,
+						type = "execute",
+						func = function()
+							module:Flash(70096) -- War-God Dokah
+						end,
+						order = 24,
 					},
 				},
 			}
@@ -399,7 +461,7 @@ end)
 
 do
 	local flashframe
-	function module:Flash()
+	function module:Flash(id)
 		if not module.db.profile.flash then
 			return
 		end
@@ -437,20 +499,31 @@ do
 			end)
 
 			flashframe:SetScript("OnShow", function(self)
+				local background = module.db.profile.flash_texture
 				local color = module.db.profile.flash_color
-				texture:SetTexture(LSM:Fetch("background", module.db.profile.flash_texture))
+				if self.id and ns.mobdb[self.id] then
+					if ns.mobdb[self.id].mount and module.db.profile.flash_mount then
+						background = module.db.profile.flash_texture_mount
+						color = module.db.profile.flash_color_mount
+					elseif ns.mobdb[self.id].boss and module.db.profile.flash_boss then
+						background = module.db.profile.flash_texture_boss
+						color = module.db.profile.flash_color_boss
+					end
+				end
+				texture:SetTexture(LSM:Fetch("background", background))
 				texture:SetVertexColor(color.r, color.g, color.b, color.a)
 
-				group:Pause()
 				group:Play()
 			end)
 		end
 
 		Debug("Flashing")
+		flashframe.id = id
+		flashframe:Hide()
 		flashframe:Show()
 	end
 
-	core.RegisterCallback("SD Announce Flash", "Announce", function(callback)
-		module:Flash()
+	core.RegisterCallback("SD Announce Flash", "Announce", function(callback, id)
+		module:Flash(id)
 	end)
 end
