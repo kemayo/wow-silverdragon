@@ -6,30 +6,28 @@ local Debug = core.Debug
 
 local LSM = LibStub("LibSharedMedia-3.0")
 
-if LSM then
-	-- Register some media
-	LSM:Register("sound", "Rubber Ducky", 566121)
-	LSM:Register("sound", "Cartoon FX", 566543)
-	LSM:Register("sound", "Explosion", 566982)
-	LSM:Register("sound", "Shing!", 566240)
-	LSM:Register("sound", "Wham!", 566946)
-	LSM:Register("sound", "Simon Chime", 566076)
-	LSM:Register("sound", "War Drums", 567275)--NPC Scan default
-	LSM:Register("sound", "Scourge Horn", 567386)--NPC Scan default
-	LSM:Register("sound", "Pygmy Drums", 566508)
-	LSM:Register("sound", "Cheer", 567283)
-	LSM:Register("sound", "Humm", 569518)
-	LSM:Register("sound", "Short Circuit", 568975)
-	LSM:Register("sound", "Fel Portal", 569215)
-	LSM:Register("sound", "Fel Nova", 568582)
-	LSM:Register("sound", "PVP Flag", 569200)
-	LSM:Register("sound", "Algalon: Beware!", 543587)
-	LSM:Register("sound", "Yogg Saron: Laugh", 564859)
-	LSM:Register("sound", "Illidan: Not Prepared", 552503)
-	LSM:Register("sound", "Magtheridon: I am Unleashed", 554554)
-	LSM:Register("sound", "Loatheb: I see you", 554236)
-	LSM:Register("sound", "NPCScan", 567275)--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
-end
+-- Register some media
+LSM:Register("sound", "Rubber Ducky", 566121)
+LSM:Register("sound", "Cartoon FX", 566543)
+LSM:Register("sound", "Explosion", 566982)
+LSM:Register("sound", "Shing!", 566240)
+LSM:Register("sound", "Wham!", 566946)
+LSM:Register("sound", "Simon Chime", 566076)
+LSM:Register("sound", "War Drums", 567275)--NPC Scan default
+LSM:Register("sound", "Scourge Horn", 567386)--NPC Scan default
+LSM:Register("sound", "Pygmy Drums", 566508)
+LSM:Register("sound", "Cheer", 567283)
+LSM:Register("sound", "Humm", 569518)
+LSM:Register("sound", "Short Circuit", 568975)
+LSM:Register("sound", "Fel Portal", 569215)
+LSM:Register("sound", "Fel Nova", 568582)
+LSM:Register("sound", "PVP Flag", 569200)
+LSM:Register("sound", "Algalon: Beware!", 543587)
+LSM:Register("sound", "Yogg Saron: Laugh", 564859)
+LSM:Register("sound", "Illidan: Not Prepared", 552503)
+LSM:Register("sound", "Magtheridon: I am Unleashed", 554554)
+LSM:Register("sound", "Loatheb: I see you", 554236)
+LSM:Register("sound", "NPCScan", 567275)--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Announce", {
@@ -48,6 +46,8 @@ function module:OnInitialize()
 			sound_mount_loop = 1,
 			sound_boss_loop = 1,
 			flash = true,
+			flash_texture = "Blizzard Low Health",
+			flash_color = {r=1,g=0,b=1,a=1,},
 			instances = false,
 			dead = true,
 			already = false,
@@ -97,6 +97,24 @@ function module:OnInitialize()
 				end,
 			}
 		end
+		local soundfile = function(enabled_key, order)
+			return {
+				type = "select", dialogControl = "LSM30_Sound",
+				name = "Sound to Play", desc = "Choose a sound file to play",
+				values = AceGUIWidgetLSMlists.sound,
+				disabled = function() return not self.db.profile[enabled_key] end,
+				order = order,
+			}
+		end
+		local soundrange = function(order)
+			return {
+				type = "range",
+				name = "Repeat...",
+				desc = "How many times to repeat the sound",
+				min = 1, max = 10, step = 1,
+				order = order,
+			}
+		end
 
 		local options = {
 			general = {
@@ -108,7 +126,6 @@ function module:OnInitialize()
 					already_drop = toggle("Got the loot", "Announce when we see rares which drop a mount / toy / pet you already have", 10),
 					already_alt = toggle("Completed by an alt", "Announce when we see rares for an achievement that the current character doesn't have, but an alt has completed already", 20),
 					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not, so this isn't entirely reliable.", 30),
-					flash = toggle("Flash", "Flash the edges of the screen.", 40),
 					instances = toggle("Instances", "Show announcements while in an instance", 50),
 				},
 			},
@@ -136,27 +153,7 @@ function module:OnInitialize()
 					amalgamation = faker(157593, "Amalgamation of Flesh (Pet!)", 1527, 0.598, 0.724),
 				},
 			},
-		}
-		if LSM then
-			local soundfile = function(enabled_key, order)
-				return {
-					type = "select", dialogControl = "LSM30_Sound",
-					name = "Sound to Play", desc = "Choose a sound file to play",
-					values = AceGUIWidgetLSMlists.sound,
-					disabled = function() return not self.db.profile[enabled_key] end,
-					order = order,
-				}
-			end
-			local soundrange = function(order)
-				return {
-					type = "range",
-					name = "Repeat...",
-					desc = "How many times to repeat the sound",
-					min = 1, max = 10, step = 1,
-					order = order,
-				}
-			end
-			options.sound = {
+			sound = {
 				type = "group", name = "Sounds",
 				get = get, set = set,
 				order = 10,
@@ -192,8 +189,49 @@ function module:OnInitialize()
 					soundfile_boss = soundfile("sound_boss", 35),
 					sound_boss_loop = soundrange(37),
 				},
+			},
+			flash = {
+				type = "group", name = "Flash",
+				get = get, set = set,
+				order = 15,
+				args = {
+					about = config.desc("Flash the screen when a rare is seen.", 0),
+					flash = toggle("Enabled", "Flash the screen?", 10),
+					flash_color = {
+						name = COLOR,
+						type = "color",
+						hasAlpha = true,
+						descStyle = "inline",
+						get = function()
+							local color = self.db.profile.flash_color
+							return color.r, color.g, color.b, color.a
+						end,
+						set = function(info, r, g, b, a)
+							local color = self.db.profile.flash_color
+							color.r, color.g, color.b, color.a = r, g, b, a
+						end,
+						order = 20,
+					},
+					flash_texture = {
+						name = TEXTURES_SUBHEADER,
+						type = "select",
+						descStyle = "inline",
+						dialogControl = "LSM30_Background",
+						values = AceGUIWidgetLSMlists.background,
+						order = 30,
+					},
+					preview = {
+						name = PREVIEW,
+						type = "execute",
+						func = function()
+							module:Flash()
+						end,
+						order = 40,
+					},
+				},
 			}
-		end
+		}
+
 		config.options.args.outputs.plugins.announce = options
 	end
 end
@@ -361,7 +399,7 @@ end)
 
 do
 	local flashframe
-	core.RegisterCallback("SD Announce Flash", "Announce", function(callback)
+	function module:Flash()
 		if not module.db.profile.flash then
 			return
 		end
@@ -375,13 +413,8 @@ do
 
 			-- Use the OutOfControl (blue) and LowHealth (red) textures to get a purple flash
 			local texture = flashframe:CreateTexture(nil, "BACKGROUND")
-			texture:SetTexture([[Interface\FullScreenTextures\OutOfControl]])
 			texture:SetBlendMode("ADD")
-			texture:SetAllPoints()
-
-			texture = flashframe:CreateTexture(nil, "BACKGROUND")
-			texture:SetTexture([[Interface\FullScreenTextures\LowHealth]])
-			texture:SetBlendMode("ADD")
+			texture:SetDesaturated(true)
 			texture:SetAllPoints()
 
 			local group = flashframe:CreateAnimationGroup()
@@ -404,11 +437,20 @@ do
 			end)
 
 			flashframe:SetScript("OnShow", function(self)
+				local color = module.db.profile.flash_color
+				texture:SetTexture(LSM:Fetch("background", module.db.profile.flash_texture))
+				texture:SetVertexColor(color.r, color.g, color.b, color.a)
+
+				group:Pause()
 				group:Play()
 			end)
 		end
 
 		Debug("Flashing")
 		flashframe:Show()
+	end
+
+	core.RegisterCallback("SD Announce Flash", "Announce", function(callback)
+		module:Flash()
 	end)
 end
