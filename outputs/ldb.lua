@@ -152,33 +152,10 @@ function module:SetupDataObject()
 
 	local tooltip
 
-	local function show_mount_tooltip(cell, mountid)
-		local name, spellid, texture = C_MountJournal.GetMountInfoByID(mountid)
-		local _, description, source = C_MountJournal.GetMountInfoExtraByID(mountid)
-
+	local function show_loot_tooltip(cell, mobid)
 		tooltip:SetFrameStrata("DIALOG")
 		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
-		GameTooltip:AddLine(name)
-		GameTooltip:AddTexture(texture)
-		GameTooltip:AddLine(description, 1, 1, 1, true)
-		GameTooltip:AddLine(source)
-		GameTooltip:Show()
-	end
-	local function show_toy_tooltip(cell, toyid)
-		tooltip:SetFrameStrata("DIALOG")
-		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
-		GameTooltip:SetHyperlink(("item:%d"):format(toyid))
-		GameTooltip:Show()
-	end
-	local function show_pet_tooltip(cell, petid)
-		local name, texture, _, mobid, source, description = C_PetJournal.GetPetInfoBySpeciesID(petid)
-
-		tooltip:SetFrameStrata("DIALOG")
-		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
-		GameTooltip:AddLine(name)
-		GameTooltip:AddTexture(texture)
-		GameTooltip:AddLine(description, 1, 1, 1, true)
-		GameTooltip:AddLine(source)
+		ns:UpdateTooltipWithLootDetails(GameTooltip, mobid)
 		GameTooltip:Show()
 	end
 	local function show_achievement_tooltip(cell, mobid)
@@ -245,21 +222,21 @@ function module:SetupDataObject()
 				)
 				if ns.mobdb[id] and ns.mobdb[id].mount then
 					index, col = tooltip:SetCell(index, col, ns.mobdb[id].mount, MountCellProvider)
-					tooltip:SetCellScript(index, col - 1, "OnEnter", show_mount_tooltip, ns.mobdb[id].mount)
+					tooltip:SetCellScript(index, col - 1, "OnEnter", show_loot_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end
 				if ns.mobdb[id] and ns.mobdb[id].toy then
 					index, col = tooltip:SetCell(index, col, ns.mobdb[id].toy, ToyCellProvider)
-					tooltip:SetCellScript(index, col -1, "OnEnter", show_toy_tooltip, ns.mobdb[id].toy)
+					tooltip:SetCellScript(index, col -1, "OnEnter", show_loot_tooltip, id)
 					tooltip:SetCellScript(index, col -1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end
 				if ns.mobdb[id] and ns.mobdb[id].pet then
 					index, col = tooltip:SetCell(index, col, ns.mobdb[id].pet, PetCellProvider)
-					tooltip:SetCellScript(index, col - 1, "OnEnter", show_pet_tooltip, ns.mobdb[id].pet)
+					tooltip:SetCellScript(index, col - 1, "OnEnter", show_loot_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')

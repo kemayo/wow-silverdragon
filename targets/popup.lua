@@ -427,44 +427,12 @@ PopupClass.scripts = {
 	end,
 	-- Loot icon
 	LootOnEnter = function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
-
 		local id = self:GetParent().data.id
-		if ns.mobdb[id] then
-			if ns.mobdb[id].mount then
-				GameTooltip:AddLine(MOUNT)
-				if type(ns.mobdb[id].mount) == 'number' then
-					local lname, _, licon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
-					if lname then
-						GameTooltip:AddLine(lname, isCollected and 0 or 1, isCollected and 1 or 0, 0)
-						GameTooltip:AddTexture(licon)
-					end
-				end
-			end
-			if ns.mobdb[id].pet then
-				GameTooltip:AddLine(TOOLTIP_BATTLE_PET)
-				if type(ns.mobdb[id].pet) == 'number' then
-					local lname, licon = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
-					local isCollected = C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet) > 0
-					if lname then
-						GameTooltip:AddLine(lname, isCollected and 0 or 1, isCollected and 1 or 0, 0)
-						GameTooltip:AddTexture(licon)
-					end
-				end
-			end
-			if ns.mobdb[id].toy then
-				GameTooltip:AddLine(TOY)
-				if type(ns.mobdb[id].toy) == 'number' then
-					local _, lname, licon = C_ToyBox.GetToyInfo(ns.mobdb[id].toy)
-					local isCollected = PlayerHasToy(ns.mobdb[id].toy)
-					if lname then
-						GameTooltip:AddLine(lname, isCollected and 0 or 1, isCollected and 1 or 0, 0)
-						GameTooltip:AddTexture(licon)
-					end
-				end
-			end
+		if not ns.mobdb[id] then
+			return
 		end
-		-- GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
+		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
+		ns:UpdateTooltipWithLootDetails(GameTooltip, id)
 		GameTooltip:Show()
 	end,
 	LootOnLeave = function(self)

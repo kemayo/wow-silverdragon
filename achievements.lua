@@ -503,12 +503,37 @@ function ns:UpdateTooltipWithCompletion(tooltip, id)
 	end
 end
 
-function ns:UpdateTooltipWithDrops(tooltip, id)
-	if not id then
+function ns:UpdateTooltipWithLootDetails(tooltip, id)
+	if not (id and ns.mobdb[id]) then
 		return
 	end
 
-	if ns.mobdb[id] and ns.mobdb[id].mount and type(ns.mobdb[id].mount) == "number" then
+	if ns.mobdb[id].toy then
+		tooltip:SetHyperlink(("item:%d"):format(ns.mobdb[id].toy))
+	end
+	if ns.mobdb[id].mount then
+		local name, spellid, texture = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
+		local _, description, source = C_MountJournal.GetMountInfoExtraByID(ns.mobdb[id].mount)
+
+		tooltip:AddLine(name)
+		tooltip:AddTexture(texture)
+		tooltip:AddLine(description, 1, 1, 1, true)
+		tooltip:AddLine(source)
+	end
+	if ns.mobdb[id].pet then
+		local name, texture, _, mobid, source, description = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
+		tooltip:AddLine(name)
+		tooltip:AddTexture(texture)
+		tooltip:AddLine(description, 1, 1, 1, true)
+		tooltip:AddLine(source)
+	end
+end
+function ns:UpdateTooltipWithLootSummary(tooltip, id)
+	if not (id and ns.mobdb[id]) then
+		return
+	end
+
+	if ns.mobdb[id].mount then
 		local name, _, icon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
 		if name then
 			tooltip:AddDoubleLine(
@@ -519,7 +544,7 @@ function ns:UpdateTooltipWithDrops(tooltip, id)
 			)
 		end
 	end
-	if ns.mobdb[id] and ns.mobdb[id].pet and type(ns.mobdb[id].pet) == "number" then
+	if ns.mobdb[id].pet then
 		local name, icon = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
 		local owned, limit = C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet)
 		if name then
@@ -537,7 +562,7 @@ function ns:UpdateTooltipWithDrops(tooltip, id)
 			)
 		end
 	end
-	if ns.mobdb[id] and ns.mobdb[id].toy and type(ns.mobdb[id].toy) == "number" then
+	if ns.mobdb[id].toy then
 		local _, name, icon = C_ToyBox.GetToyInfo(ns.mobdb[id].toy)
 		local owned = PlayerHasToy(ns.mobdb[id].toy)
 		if name then
@@ -549,5 +574,4 @@ function ns:UpdateTooltipWithDrops(tooltip, id)
 			)
 		end
 	end
-
 end

@@ -55,7 +55,7 @@ function module:UpdateTooltip(id)
 	end
 
 	if self.db.profile.drop then
-		ns:UpdateTooltipWithDrops(GameTooltip, id)
+		ns:UpdateTooltipWithLootSummary(GameTooltip, id)
 	end
 
 	if self.db.profile.id then
