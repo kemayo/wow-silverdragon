@@ -304,7 +304,7 @@ function module:OnInitialize()
 		[146942] = {name="Grand Marshal Fury",faction="Alliance",locations={[864]={39403740},},poi={875,5970},},
 		[146979] = {name="Ormin Rocketbop",faction="Alliance",locations={[864]={35804940},},poi={875,5970},},
 		[147061] = {name="Grubb",faction="Horde",locations={[895]={84203520},},poi={876,5896},},
-		[147222] = {name="Gnollfeaster",locations={[49]={24407040},},quest=54214,},
+		[147222] = {name="Gnollfeaster",locations={[49]={24407040},},pet=2525,quest=54214,},
 		[147240] = {name="Hydrath",locations={[62]={52403200},},phase=1176,quest=54227,},
 		[147241] = {name="Cyclarus",locations={[62]={43805340},},phase=1176,quest=54229,},
 		[147260] = {name="Conflagros",locations={[62]={39206180},},phase=1176,quest=54232,},
