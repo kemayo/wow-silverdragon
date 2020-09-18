@@ -360,7 +360,7 @@
 * Add cache-scanning, much credit to NPCScan by Saiket.
 * More options for notifying you: text, sound, screen-flashing.
 * LDB tooltip now says whether the rare is tameable.
-* [b]For the cache-scanning to work, you have to import data. It relies on NPC ids that can't be gained from within the game.[/b]
+* For the cache-scanning to work, you have to import data. It relies on NPC ids that can't be gained from within the game.
 
 ## Changed in v2.0 r20090403010638
 * Add a minimap icon for those without.
