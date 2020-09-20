@@ -165,6 +165,7 @@ function module:OnInitialize()
 					-- haakun = faker(83008, "Haakun", 946, 0.5, 0.5),
 					yiphrim = faker(157473, "Yiphrim the Will Ravager (Toy!)", 1527, 0.5, 0.786),
 					amalgamation = faker(157593, "Amalgamation of Flesh (Pet!)", 1527, 0.598, 0.724),
+					-- alash = faker(148787, "Alash'anir", 62, 0.598, 0.724),
 					-- burninator = faker(149141, "Burninator Mk V (Pet!)", 62, 0.414, 0.764),
 				},
 			},

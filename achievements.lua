@@ -503,6 +503,17 @@ function ns:UpdateTooltipWithCompletion(tooltip, id)
 	end
 end
 
+function ns:LootStatus(id)
+	if not id or not ns.mobdb[id] then
+		return
+	end
+
+	local toy = ns.mobdb[id].toy and PlayerHasToy(ns.mobdb[id].toy)
+	local mount = ns.mobdb[id].mount and select(11, C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount))
+	local pet = ns.mobdb[id].pet and (C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet) > 0)
+
+	return toy, mount, pet
+end
 function ns:UpdateTooltipWithLootDetails(tooltip, id, only)
 	if not (id and ns.mobdb[id]) then
 		return

@@ -63,6 +63,12 @@ function module:RefreshMobData(popup)
 
 	if ns.mobdb[data.id] and (ns.mobdb[data.id].mount or ns.mobdb[data.id].pet or ns.mobdb[data.id].toy) then
 		popup.lootIcon:Show()
+		local toy, mount, pet = ns:LootStatus(data.id)
+		if (toy or toy == nil) and (mount or mount == nil) and (pet or pet == nil) then
+			popup.lootIcon.complete:Show()
+		else
+			popup.lootIcon.complete:Hide()
+		end
 	else
 		popup.lootIcon:Hide()
 	end
@@ -160,10 +166,14 @@ function module:CreatePopup()
 	local lootIcon = CreateFrame("Frame", nil, popup)
 	popup.lootIcon = lootIcon
 	lootIcon:SetSize(40, 40)
-	lootIcon.texture = lootIcon:CreateTexture(nil, "OVERLAY")
+	lootIcon.texture = lootIcon:CreateTexture(nil, "OVERLAY", nil, 0)
 	lootIcon.texture:SetAllPoints(lootIcon)
 	lootIcon.texture:SetAtlas("ShipMissionIcon-Treasure-MapBadge")
 	lootIcon:Hide()
+	lootIcon.complete = lootIcon:CreateTexture(nil, "OVERLAY", nil, 1)
+	lootIcon.complete:SetAllPoints(lootIcon)
+	lootIcon.complete:SetAtlas("pvpqueue-conquestbar-checkmark")
+	lootIcon.complete:Hide()
 
 	local dead = model:CreateTexture(nil, "OVERLAY")
 	popup.dead = dead
