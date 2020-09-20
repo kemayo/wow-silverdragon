@@ -136,6 +136,9 @@ do
 	end
 	function handler:GetNodes2(uiMapID, minimap)
 		Debug("HandyNotes GetNodes2", uiMapID, minimap)
+		if minimap and not db.minimap then
+			return iter, {}, nil
+		end
 		return iter, nodes[uiMapID], nil
 	end
 end
@@ -289,6 +292,7 @@ function module:OnInitialize()
 			questcomplete = false,
 			achievementless = true,
 			hidden = {},
+			minimap = true,
 		},
 	})
 	db = self.db.profile
@@ -379,6 +383,13 @@ function module:OnInitialize()
 						arg = "achievementless",
 						width = "full",
 						order = 20,
+					},
+					minimap = {
+						type = "toggle",
+						name = "Minimap",
+						desc = "Whether to show icons on the minimap as well as the zone map",
+						arg = "minimap",
+						order = 30,
 					},
 					unhide = {
 						type = "execute",
