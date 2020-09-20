@@ -16,7 +16,7 @@ local escapes = {
 
 function module:ApplyLook(popup, look)
 	-- Many values cribbed from AlertFrameSystem.xml
-	(self.Looks[look] or self.Looks.LessAwesome)(self, popup)
+	(self.Looks[look] or self.Looks.SilverDragon)(self, popup)
 end
 module.Looks = {}
 
