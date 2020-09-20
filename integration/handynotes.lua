@@ -50,6 +50,14 @@ do
 			mount_partial = tex("VignetteKillElite", 1, 1, 0.33, 1.3), -- yellow shiny skull
 			mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1.3), -- green shiny skull
 		},
+		stars = {
+			default = tex("VignetteKill", 1, 0.33, 1, 1.3), -- red star
+			partial = tex("VignetteKill", 1, 1, 1, 1.3), -- gold star
+			done = tex("VignetteKill", 0, 1, 1), -- green star
+			mount = tex("VignetteKillElite", 1, 0.33, 1),
+			mount_partial = tex("VignetteKillElite", 0, 1, 1), -- yellow shiny skull
+			mount_done = tex("VignetteKillElite", 0, 1, 0), -- green shiny skull
+		}
 	}
 	local function should_show_mob(id)
 		if db.hidden[id] or core:ShouldIgnoreMob(id) then
@@ -340,6 +348,7 @@ function module:OnInitialize()
 						values = {
 							["skulls"] = "Skulls",
 							["circles"] = "Circles",
+							["stars"] = "Stars",
 						},
 						arg = "icon_theme",
 						order = 40,
