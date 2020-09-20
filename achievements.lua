@@ -503,29 +503,44 @@ function ns:UpdateTooltipWithCompletion(tooltip, id)
 	end
 end
 
-function ns:UpdateTooltipWithLootDetails(tooltip, id)
+function ns:UpdateTooltipWithLootDetails(tooltip, id, only)
 	if not (id and ns.mobdb[id]) then
 		return
 	end
 
-	if ns.mobdb[id].toy then
+	local toy = ns.mobdb[id].toy and (not only or only == "toy")
+	local mount = ns.mobdb[id].mount and (not only or only == "mount")
+	local pet = ns.mobdb[id].pet and (not only or only == "pet")
+
+	if toy then
 		tooltip:SetHyperlink(("item:%d"):format(ns.mobdb[id].toy))
 	end
-	if ns.mobdb[id].mount then
-		local name, spellid, texture = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
+	if mount then
+		if toy then
+			tooltip:AddLine("---")
+		end
+		local name, spellid, texture, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)
 		local _, description, source = C_MountJournal.GetMountInfoExtraByID(ns.mobdb[id].mount)
 
 		tooltip:AddLine(name)
 		tooltip:AddTexture(texture)
 		tooltip:AddLine(description, 1, 1, 1, true)
 		tooltip:AddLine(source)
+		if isCollected then
+			tooltip:AddLine(USED, 1, 0, 0)
+		end
 	end
-	if ns.mobdb[id].pet then
+	if pet then
+		if toy or mount then
+			tooltip:AddLine('---')
+		end
 		local name, texture, _, mobid, source, description = C_PetJournal.GetPetInfoBySpeciesID(ns.mobdb[id].pet)
+		local owned, limit = C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet)
 		tooltip:AddLine(name)
 		tooltip:AddTexture(texture)
 		tooltip:AddLine(description, 1, 1, 1, true)
 		tooltip:AddLine(source)
+		tooltip:AddLine(ITEM_PET_KNOWN:format(owned, limit))
 	end
 end
 function ns:UpdateTooltipWithLootSummary(tooltip, id)

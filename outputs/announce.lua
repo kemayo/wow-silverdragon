@@ -158,13 +158,14 @@ function module:OnInitialize()
 				args = {
 					-- id, name, zone, x, y, is_dead, is_new_location, source, unit
 					time = faker(32491, "Time-Lost Proto Drake (Mount!)", 120, 0.490, 0.362),
-					ishak = faker(157134, "Ishak of the Four Winds (Mount!)", 1527, 0.73, 0.83),
+					-- ishak = faker(157134, "Ishak of the Four Winds (Mount!)", 1527, 0.73, 0.83),
 					anger = faker(60491, "Sha of Anger (Boss!)", 809, 0.5, 0.5),
 					vyragosa = faker(32630, "Vyragosa (Boring)", 120, 0.5, 0.5),
 					deathmaw = faker(10077, "Deathmaw (Tame!)", 29, 0.5, 0.5),
-					haakun = faker(83008, "Haakun", 946, 0.5, 0.5),
+					-- haakun = faker(83008, "Haakun", 946, 0.5, 0.5),
 					yiphrim = faker(157473, "Yiphrim the Will Ravager (Toy!)", 1527, 0.5, 0.786),
 					amalgamation = faker(157593, "Amalgamation of Flesh (Pet!)", 1527, 0.598, 0.724),
+					-- burninator = faker(149141, "Burninator Mk V (Pet!)", 62, 0.414, 0.764),
 				},
 			},
 			sound = {

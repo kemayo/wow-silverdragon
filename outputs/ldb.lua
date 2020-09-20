@@ -152,12 +152,15 @@ function module:SetupDataObject()
 
 	local tooltip
 
-	local function show_loot_tooltip(cell, mobid)
+	local function show_loot_tooltip(cell, mobid, only)
 		tooltip:SetFrameStrata("DIALOG")
 		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
-		ns:UpdateTooltipWithLootDetails(GameTooltip, mobid)
+		ns:UpdateTooltipWithLootDetails(GameTooltip, mobid, only)
 		GameTooltip:Show()
 	end
+	local function show_mount_tooltip(cell, mobid) return show_loot_tooltip(cell, mobid, "mount") end
+	local function show_toy_tooltip(cell, mobid) return show_loot_tooltip(cell, mobid, "toy") end
+	local function show_pet_tooltip(cell, mobid) return show_loot_tooltip(cell, mobid, "pet") end
 	local function show_achievement_tooltip(cell, mobid)
 		local achievementid = ns:AchievementMobStatus(mobid)
 
@@ -222,21 +225,21 @@ function module:SetupDataObject()
 				)
 				if ns.mobdb[id] and ns.mobdb[id].mount then
 					index, col = tooltip:SetCell(index, col, ns.mobdb[id].mount, MountCellProvider)
-					tooltip:SetCellScript(index, col - 1, "OnEnter", show_loot_tooltip, id)
+					tooltip:SetCellScript(index, col - 1, "OnEnter", show_mount_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end
 				if ns.mobdb[id] and ns.mobdb[id].toy then
 					index, col = tooltip:SetCell(index, col, ns.mobdb[id].toy, ToyCellProvider)
-					tooltip:SetCellScript(index, col -1, "OnEnter", show_loot_tooltip, id)
+					tooltip:SetCellScript(index, col -1, "OnEnter", show_toy_tooltip, id)
 					tooltip:SetCellScript(index, col -1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end
 				if ns.mobdb[id] and ns.mobdb[id].pet then
 					index, col = tooltip:SetCell(index, col, ns.mobdb[id].pet, PetCellProvider)
-					tooltip:SetCellScript(index, col - 1, "OnEnter", show_loot_tooltip, id)
+					tooltip:SetCellScript(index, col - 1, "OnEnter", show_pet_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')

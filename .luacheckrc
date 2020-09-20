@@ -191,6 +191,7 @@ read_globals = {
     "ITEM_BIND_QUEST",
     "ITEM_BNETACCOUNTBOUND",
     "ITEM_CONJURED",
+    "ITEM_PET_KNOWN",
     "ITEM_SET_NAME",
     "ITEM_SOULBOUND",
     "LE_BAG_FILTER_FLAG_EQUIPMENT",
@@ -242,5 +243,6 @@ read_globals = {
     "UIDROPDOWNMENU_MENU_VALUE",
     "UNKNOWN",
     "UNKNOWNOBJECT",
+    "USED",
     "YES",
 }
