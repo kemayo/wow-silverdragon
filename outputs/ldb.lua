@@ -93,8 +93,8 @@ function module:SetupDataObject()
 		end
 		if not self.completionTexture then
 			self.completionTexture = self:CreateTexture(nil, "OVERLAY")
-			self.completionTexture:SetAtlas("Tracker-Check")
-			self.completionTexture:SetAllPoints(self)
+			self.completionTexture:SetAtlas("Tracker-Check", true)
+			self.completionTexture:SetPoint("CENTER", self)
 			self.completionTexture:Hide()
 		end
 	end
