@@ -113,8 +113,9 @@ do
 			end
 		end
 		-- In the olden days, we had one mob per quest and/or vignette. Alas...
-		if mobdata.quest then
-			local questMobs = questMobLookup[mobdata.quest]
+		local quest = addon:QuestForMob(mobid)
+		if quest then
+			local questMobs = questMobLookup[quest]
 			if not questMobs then
 				questMobs = {}
 				questMobLookup[mobdata.quest] = questMobs
@@ -290,8 +291,8 @@ end
 function addon:GetMobInfo(id)
 	if mobdb[id] then
 		local m = mobdb[id]
-		local name = addon:NameForMob(id)
-		return name, m.quest, m.vignette or name, m.tameable, globaldb.mob_seen[id], globaldb.mob_count[id]
+		local name = self:NameForMob(id)
+		return name, self:QuestForMob(id), m.vignette or name, m.tameable, globaldb.mob_seen[id], globaldb.mob_count[id]
 	end
 end
 function addon:IsMobInZone(id, zone)
@@ -341,12 +342,14 @@ do
 	end
 end
 -- Returns id, addon:GetMobInfo(id)
-function addon:GetMobByCoord(zone, coord)
+function addon:GetMobByCoord(zone, coord, include_ignored)
 	if not mobsByZone[zone] then return end
 	for id, locations in pairs(mobsByZone[zone]) do
-		for _, mob_coord in ipairs(locations) do
-			if coord == mob_coord then
-				return id, self:GetMobInfo(id)
+		if include_ignored or not self:ShouldIgnoreMob(id) then
+			for _, mob_coord in ipairs(locations) do
+				if coord == mob_coord then
+					return id, self:GetMobInfo(id)
+				end
 			end
 		end
 	end
@@ -409,6 +412,15 @@ do
 			if mobdb[id].source and globaldb.ignore_datasource[mobdb[id].source] then
 				return true
 			end
+		end
+	end
+	function addon:QuestForMob(id)
+		if mobdb[id] and mobdb[id].quest then
+			if type(mobdb[id].quest) == "table" then
+				-- some mobs have faction-based questids; they get stored as {alliance, horde}
+				return mobdb[id].quest[faction == "Alliance" and 1 or 2]
+			end
+			return mobdb[id].quest
 		end
 	end
 end
