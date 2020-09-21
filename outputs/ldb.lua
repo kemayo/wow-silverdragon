@@ -87,7 +87,7 @@ function module:SetupDataObject()
 	function CompletableCellPrototype:InitializeCell()
 		if not self.texture then
 			self.texture = self:CreateTexture(nil, 'ARTWORK')
-			self.texture:SetSize(16, 16)
+			self.texture:SetSize(20, 18)
 			self.texture:SetPoint("CENTER", self)
 			self.texture:Show()
 		end
@@ -118,8 +118,7 @@ function module:SetupDataObject()
 
 	local AchievementCellProvider, AchievementCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	function AchievementCellPrototype:SetupTexture()
-		self.texture:SetTexture("Interface\\AchievementFrame\\UI-Achievement-TinyShield")
-		self.texture:SetTexCoord(0, 0.625, 0, 0.625)
+		self.texture:SetAtlas("storyheader-cheevoicon")
 	end
 	local QuestCellProvider, QuestCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	function QuestCellPrototype:SetupTexture()
