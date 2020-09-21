@@ -205,10 +205,15 @@ function module:CreatePopup()
 	close:GetHighlightTexture():SetTexture([[Interface\FriendsFrame\UI-Toast-CloseButton-Highlight]])
 	close:GetNormalTexture():SetTexture([[Interface\FriendsFrame\UI-Toast-CloseButton-Up]])
 	close:GetPushedTexture():SetTexture([[Interface\FriendsFrame\UI-Toast-CloseButton-Down]])
+	close:RegisterForClicks("AnyUp")
+	-- called as onclick(self, button, down):
 	close:SetAttribute("_onclick", [[
-		local button = self:GetParent()
-		button:Disable()
-		button:Hide()
+		local popup = self:GetParent()
+		popup:Disable()
+		popup:Hide()
+		if button == "RightButton" then
+			popup:CallMethod("DoIgnore")
+		end
 	]])
 
 	-- Flashy effects
@@ -310,6 +315,12 @@ end
 
 function PopupClass:ShouldBeDraggable()
 	return (not module.db.profile.locked) or IsModifierKeyDown()
+end
+
+function PopupClass:DoIgnore()
+	if self.data and self.data.id then
+		core:SetIgnore(self.data.id, true)
+	end
 end
 
 function PopupClass:HideWhenPossible()
@@ -430,6 +441,7 @@ PopupClass.scripts = {
 	CloseOnEnter = function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
+		GameTooltip:AddLine(escapes.rightClick .. " " .. IGNORE)
 		GameTooltip:Show()
 	end,
 	CloseOnLeave = function(self)
