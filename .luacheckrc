@@ -148,6 +148,7 @@ read_globals = {
     "UIParent",
     "WorldFrame",
     "Minimap",
+    "WorldMapFrame",
     "DEFAULT_CHAT_FRAME",
     "GameFontHighlightSmall",
 

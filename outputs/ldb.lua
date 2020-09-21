@@ -6,15 +6,16 @@ local LibQTip = LibStub("LibQTip-1.0")
 local HBD = LibStub("HereBeDragons-2.0")
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
-local module = core:NewModule("LDB")
+local module = core:NewModule("LDB", "AceEvent-3.0")
 
-local dataobject
-local db
+local dataobject, tooltip, db
+local rares_seen = {}
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("LDB", {
 		profile = {
 			minimap = {},
+			worldmap = true,
 		},
 	})
 	db = self.db
@@ -69,6 +70,20 @@ function module:OnInitialize()
 						descStyle = "inline",
 						hidden = function() return not icon or not dataobject or not icon:IsRegistered("SilverDragon") end,
 					},
+					worldmap = {
+						type = "toggle",
+						name = "Show on the world map",
+						desc = "Toggle showing the icon in the world map's header",
+						get = function() return db.profile.worldmap end,
+						set = function(info, v)
+							db.profile.worldmap = v
+							module.worldmap[v and "Show" or "Hide"](module.worldmap)
+						end,
+						order = 40,
+						width = "full",
+						descStyle = "inline",
+						hidden = function() return not dataobject end,
+					},
 				},
 			},
 		}
@@ -83,6 +98,80 @@ function module:SetupDataObject()
 		text = "",
 	})
 
+	local tooltip_options = {
+		nearby = true,
+		recent = true,
+		help = true,
+	}
+	function dataobject:OnEnter()
+		if not tooltip or not tooltip:IsShown() then
+			module:ShowTooltip(self, HBD:GetPlayerZone(), tooltip_options)
+		end
+	end
+
+	function dataobject:OnLeave()
+		-- we rely on libqtip's autohide
+	end
+
+	function dataobject:OnClick(button)
+		if button ~= "RightButton" then
+			return
+		end
+		if IsShiftKeyDown() then
+			core:ShowDebugWindow()
+		else
+			local config = core:GetModule("Config", true)
+			if config then
+				config:ShowConfig()
+			end
+		end
+	end
+
+	core.RegisterCallback("LDB", "Seen", function(callback, id, zone, x, y, dead, source)
+		module.last_seen = id
+		if db.profile.show_lastseen then
+			dataobject.text = core:GetMobLabel(id)
+		end
+		table.insert(rares_seen, {
+			id = id,
+			zone = zone,
+			x = x,
+			y = y,
+			source = source,
+			when = time(),
+		})
+	end)
+
+	if icon then
+		icon:Register("SilverDragon", dataobject, self.db.profile.minimap)
+	end
+	if db.profile.show_lastseen then
+		dataobject.text = "None"
+	end
+
+	local mapbutton_options = {
+		nearby = true,
+		help = true,
+	}
+	local mapbutton = CreateFrame("Button", nil, WorldMapFrame.NavBar)
+	mapbutton:SetSize(20, 20)
+	mapbutton:SetPoint("RIGHT", -4, 0)
+	mapbutton:RegisterForClicks("AnyUp")
+	mapbutton.texture = mapbutton:CreateTexture(nil, "ARTWORK")
+	mapbutton.texture:SetTexture("Interface\\Icons\\INV_Misc_Head_Dragon_01")
+	mapbutton.texture:SetAllPoints()
+	mapbutton:SetScript("OnEnter", function()
+		module:ShowTooltip(mapbutton, WorldMapFrame.mapID, mapbutton_options)
+	end)
+	-- onleave is handled by the tooltip's autohide
+	mapbutton:SetScript("OnClick", dataobject.OnClick)
+	module.worldmap = mapbutton
+	if not db.profile.worldmap then
+		mapbutton:Hide()
+	end
+end
+
+do
 	local CompletableCellProvider, CompletableCellPrototype = LibQTip:CreateCellProvider()
 	function CompletableCellPrototype:InitializeCell()
 		if not self.texture then
@@ -98,7 +187,7 @@ function module:SetupDataObject()
 			self.completionTexture:Hide()
 		end
 	end
-	function CompletableCellPrototype:SetupCell(tooltip, value, justification, font, r, g, b, ...)
+	function CompletableCellPrototype:SetupCell(parent, value, justification, font, r, g, b, ...)
 		self:SetupTexture(value)
 		self:SetupCompletion(value)
 		return self.texture:GetSize()
@@ -149,8 +238,6 @@ function module:SetupDataObject()
 		return CompletableCellPrototype.SetupCompletion(self, isCollected)
 	end
 
-	local tooltip
-
 	local function show_loot_tooltip(cell, mobid, only)
 		tooltip:SetFrameStrata("DIALOG")
 		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
@@ -182,28 +269,26 @@ function module:SetupDataObject()
 		return tostring(aname):lower() < tostring(bname):lower()
 	end
 
-	local rares_seen = {}
 	local sorted_mobs = {}
 
-	local function draw_tooltip(self)
-		if not core.db then
+	function module:ShowTooltip(parent, zone, options)
+		if not (zone and core.db) then
 			return
 		end
 
 		if not tooltip then
 			tooltip = LibQTip:Acquire("SilverDragonTooltip", 9, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT")
-			tooltip:SetAutoHideDelay(0.25, self)
-			tooltip:SmartAnchorTo(self)
-			tooltip.OnRelease = function(self)
-				tooltip = nil
-			end
+			tooltip:SetAutoHideDelay(0.25, parent)
+			tooltip:SmartAnchorTo(parent)
+			tooltip.OnRelease = function() tooltip = nil end
 		end
 
 		tooltip:Clear()
 
-		local zone = HBD:GetPlayerZone()
-		if ns.mobsByZone[zone] then
-			tooltip:AddHeader("Nearby")
+		if options.nearby and ns.mobsByZone[zone] then
+			if options.recent then
+				tooltip:AddHeader("Nearby")
+			end
 			tooltip:AddHeader("Name", "Count", "Last Seen")
 
 			wipe(sorted_mobs)
@@ -271,81 +356,43 @@ function module:SetupDataObject()
 				end
 			end
 			if #sorted_mobs == 0 then
-				tooltip:AddLine("None")
+				tooltip:AddLine(NONE)
+			end
+		elseif options.nearby then
+			tooltip:AddLine(NONE)
+		end
+
+		if options.recent then
+			if #rares_seen > 0 then
+				if options.nearby then
+					tooltip:AddHeader("Seen this session")
+				end
+				tooltip:AddHeader("Name", "Zone", "Coords", "When", "Source")
+				for i,rare in ipairs(rares_seen) do
+					tooltip:AddLine(
+						core:GetMobLabel(rare.id) or core:NameForMob(rare.id) or UNKNOWN,
+						core.zone_names[rare.zone] or UNKNOWN,
+						(rare.x and rare.y) and (core.round(rare.x * 100, 1) .. ', ' .. core.round(rare.y * 100, 1)) or UNKNOWN,
+						core:FormatLastSeen(rare.when),
+						rare.source or UNKNOWN
+					)
+				end
+			else
+				tooltip:AddHeader("None seen this session")
 			end
 		end
 
-		if #rares_seen > 0 then
-			tooltip:AddHeader("Seen this session")
-			tooltip:AddHeader("Name", "Zone", "Coords", "When", "Source")
-			for i,rare in ipairs(rares_seen) do
-				tooltip:AddLine(
-					core:GetMobLabel(rare.id) or core:NameForMob(rare.id) or UNKNOWN,
-					core.zone_names[rare.zone] or UNKNOWN,
-					(rare.x and rare.y) and (core.round(rare.x * 100, 1) .. ', ' .. core.round(rare.y * 100, 1)) or UNKNOWN,
-					core:FormatLastSeen(rare.when),
-					rare.source or UNKNOWN
-				)
-			end
-		else
-			tooltip:AddHeader("None seen this session")
-		end
-
-		tooltip:AddSeparator()
-		local index = tooltip:AddLine("Right-click to open settings")
-		tooltip:SetLineTextColor(index, 0, 1, 1)
-		if core.debuggable then
-			index = tooltip:AddLine("Shift-right-click to view debug information")
+		if options.help then
+			tooltip:AddSeparator()
+			local index = tooltip:AddLine("Right-click to open settings")
 			tooltip:SetLineTextColor(index, 0, 1, 1)
+			if core.debuggable then
+				index = tooltip:AddLine("Shift-right-click to view debug information")
+				tooltip:SetLineTextColor(index, 0, 1, 1)
+			end
 		end
 
 		tooltip:UpdateScrolling()
 		tooltip:Show()
-	end
-
-	function dataobject:OnEnter()
-		if not tooltip or not tooltip:IsShown() then
-			draw_tooltip(self)
-		end
-	end
-
-	function dataobject:OnLeave()
-		-- we rely on libqtip's autohide
-	end
-
-	function dataobject:OnClick(button)
-		if button ~= "RightButton" then
-			return
-		end
-		if IsShiftKeyDown() then
-			core:ShowDebugWindow()
-		else
-			local config = core:GetModule("Config", true)
-			if config then
-				config:ShowConfig()
-			end
-		end
-	end
-
-	core.RegisterCallback("LDB", "Seen", function(callback, id, zone, x, y, dead, source)
-		module.last_seen = id
-		if db.profile.show_lastseen then
-			dataobject.text = core:GetMobLabel(id)
-		end
-		table.insert(rares_seen, {
-			id = id,
-			zone = zone,
-			x = x,
-			y = y,
-			source = source,
-			when = time(),
-		})
-	end)
-
-	if icon then
-		icon:Register("SilverDragon", dataobject, self.db.profile.minimap)
-	end
-	if db.profile.show_lastseen then
-		dataobject.text = "None"
 	end
 end
