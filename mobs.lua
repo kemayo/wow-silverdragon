@@ -63,8 +63,7 @@ function module:OnEnable()
 						order = 1,
 						args = {
 							add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)
-								core.db.global.always[id] = true
-								self:BuildCustomList(config.options)
+								core:SetCustom(id, true)
 							end),
 							mobs = {
 								type = "group",
@@ -72,8 +71,7 @@ function module:OnEnable()
 								inline = true,
 								get = function() return true end,
 								set = function(info, value)
-									core.db.global.always[info.arg] = value or nil
-									config.options.plugins.mobs.mobs.args.custom.args.mobs.args[info[#info]] = nil
+									core:SetCustom(info.arg, false)
 								end,
 								args = {},
 							},
@@ -85,8 +83,7 @@ function module:OnEnable()
 						desc = "Mobs you just want to ignore, already",
 						args = {
 							add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)
-								core.db.global.ignore[id] = true
-								self:BuildIgnoreList(config.options)
+								core:SetIgnore(id, true)
 							end),
 							mobs = {
 								type = "group",
@@ -94,8 +91,7 @@ function module:OnEnable()
 								inline = true,
 								get = function() return true end,
 								set = function(info, value)
-									core.db.global.ignore[info.arg] = value
-									config.options.plugins.mobs.mobs.args.ignore.args.mobs.args[info[#info]] = nil
+									core:SetIgnore(info.arg, false)
 								end,
 								args = {},
 							}
@@ -109,6 +105,22 @@ function module:OnEnable()
 		self:BuildIgnoreList(config.options)
 		self:BuildCustomList(config.options)
 		self:BuildMobList(config.options)
+
+		core.RegisterCallback(self, "IgnoreChanged")
+		core.RegisterCallback(self, "CustomChanged")
+	end
+end
+
+function module:IgnoreChanged(callback, id, ignored)
+	local config = core:GetModule("Config", true)
+	if config then
+		config.options.plugins.mobs.mobs.args.ignore.args.mobs.args["mob"..id] = ignored and toggle_mob(id) or nil
+	end
+end
+function module:CustomChanged(callback, id, watched)
+	local config = core:GetModule("Config", true)
+	if config then
+		config.options.plugins.mobs.mobs.args.custom.args.mobs.args["mob"..id] = watched and toggle_mob(id) or nil
 	end
 end
 
@@ -139,8 +151,7 @@ function module:BuildMobList(options)
 				return not core.db.global.ignore[info.arg]
 			end,
 			set = function(info, value)
-				core.db.global.ignore[info.arg] = not value
-				self:BuildIgnoreList(info.options)
+				core:SetIgnore(info.arg, not value)
 			end,
 			args = {
 				enabled = {
@@ -198,7 +209,7 @@ function module:BuildMobList(options)
 									func = function(info)
 										if not ns.mobsByZone[zone] then return end
 										for mobid, locations in pairs(ns.mobsByZone[zone]) do
-											core.db.global.ignore[mobid] = false
+											core:SetIgnore(mobid, false, true)
 										end
 										self:BuildIgnoreList(info.options)
 									end,
@@ -212,7 +223,7 @@ function module:BuildMobList(options)
 									func = function(info)
 										if not ns.mobsByZone[zone] then return end
 										for mobid, locations in pairs(ns.mobsByZone[zone]) do
-											core.db.global.ignore[mobid] = true
+											core:SetIgnore(mobid, true, true)
 										end
 										self:BuildIgnoreList(info.options)
 									end,

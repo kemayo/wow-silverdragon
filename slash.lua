@@ -19,13 +19,8 @@ local commands = {
     add = function(self, arg)
         local npcid = ns.input_to_mobid(arg)
         if npcid then
-            if core.db.global.always[npcid] then
+            if not core:SetCustom(npcid, true) then
                 return self:Printf("%s (%d) was already on the custom watch list", core:NameForMob(npcid) or UNKNOWN, npcid)
-            end
-            core.db.global.always[npcid] = true
-            if config then
-                local mobs = core:GetModule("Mobs")
-                mobs:BuildCustomList(config.options)
             end
             return self:Printf("Added %s (%d) to the custom watch list", core:NameForMob(npcid) or UNKNOWN, npcid)
         end
@@ -34,13 +29,8 @@ local commands = {
     remove = function(self, arg)
         local npcid = ns.input_to_mobid(arg)
         if npcid then
-            if not core.db.global.always[npcid] then
+            if not core:SetCustom(npcid, false) then
                 return self:Printf("%s (%d) wasn't on the custom watch list", core:NameForMob(npcid) or UNKNOWN, npcid)
-            end
-            core.db.global.always[npcid] = nil
-            if config then
-                local mobs = core:GetModule("Mobs")
-                mobs:BuildCustomList(config.options)
             end
             return self:Printf("Removed %s (%d) from the custom watch list", core:NameForMob(npcid) or UNKNOWN, npcid)
         end
@@ -49,13 +39,8 @@ local commands = {
     ignore = function(self, arg)
         local npcid = ns.input_to_mobid(arg)
         if npcid then
-            if core.db.global.ignore[npcid] then
+            if not core:SetIgnoreMob(npcid, true) then
                 return self:Printf("%s (%d) was already on the ignore list", core:NameForMob(npcid) or UNKNOWN, npcid)
-            end
-            core.db.global.ignore[npcid] = true
-            if config then
-                local mobs = core:GetModule("Mobs")
-                mobs:BuildIgnoreList(config.options)
             end
             return self:Printf("Added %s (%d) to the ignore list", core:NameForMob(npcid) or UNKNOWN, npcid)
         end
