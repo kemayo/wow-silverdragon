@@ -236,6 +236,34 @@ function addon:OnEnable()
 	end
 end
 
+-- returns true if the change had an effect
+function addon:SetIgnore(id, ignore, quiet)
+	if not id then return false end
+	if (ignore and globaldb.ignore[id]) or (not ignore and not globaldb.ignore[id]) then
+		-- to avoid the nil/false issue
+		return false
+	end
+	globaldb.ignore[id] = ignore
+	if not quiet then
+		self.events:Fire("IgnoreChanged", id, globaldb.ignore[id])
+	end
+	return true
+end
+
+-- returns true if the change had an effect
+function addon:SetCustom(id, watch, quiet)
+	if not id then return false end
+	if (watch and globaldb.always[id]) or (not watch and not globaldb.always[id]) then
+		-- to avoid the nil/false issue
+		return false
+	end
+	globaldb.always[id] = watch or nil
+	if not quiet then
+		self.events:Fire("CustomChanged", id, globaldb.always[id])
+	end
+	return true
+end
+
 do
 	local mobNameToId = {}
 	local questNameToId = {}
