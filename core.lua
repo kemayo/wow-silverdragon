@@ -345,7 +345,7 @@ end
 function addon:GetMobByCoord(zone, coord, include_ignored)
 	if not mobsByZone[zone] then return end
 	for id, locations in pairs(mobsByZone[zone]) do
-		if include_ignored or not self:ShouldIgnoreMob(id) then
+		if self:IsMobInPhase(id, zone) and include_ignored or not self:ShouldIgnoreMob(id) then
 			for _, mob_coord in ipairs(locations) do
 				if coord == mob_coord then
 					return id, self:GetMobInfo(id)
