@@ -167,7 +167,7 @@ function module:OnInitialize()
 		[136393] = {name="Bloodwing Bonepicker",locations={[864]={56005340},},quest=51079,},
 		[136413] = {name="Syrawon the Dominus",locations={[862]={53404460},},quest=51080,},
 		[136428] = {name="Dark Chronicler",locations={[862]={44007640},},quest=51083,},
-		[137025] = {name="Broodmother",locations={[942]={29206940},},quest=33843,},
+		[137025] = {name="Broodmother",locations={[942]={29206940},},quest=51298,},
 		[137183] = {name="Honey-Coated Slitherer",locations={[895]={64201940},},quest=51321,vignette=2942,},
 		[137529] = {name="Arvon the Betrayed",locations={[896]={35206900},},quest=51383,},
 		[137553] = {name="General Krathax",locations={[864]={60606260},},notes="World Quest",hidden=true,},
