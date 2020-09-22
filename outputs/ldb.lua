@@ -16,6 +16,7 @@ function module:OnInitialize()
 		profile = {
 			minimap = {},
 			worldmap = true,
+			tooltip = "always",
 		},
 	})
 	db = self.db
@@ -70,6 +71,20 @@ function module:OnInitialize()
 						descStyle = "inline",
 						hidden = function() return not icon or not dataobject or not icon:IsRegistered("SilverDragon") end,
 					},
+					tooltip = {
+						type = "select",
+						name = "Show tooltip",
+						values = {
+							always = "Always",
+							outofcombat = "Out of Combat",
+							never = "Never",
+						},
+						get = function() return db.profile.tooltip end,
+						set = function(info, v)
+							db.profile.tooltip = v
+						end,
+						order = 35,
+					},
 					worldmap = {
 						type = "toggle",
 						name = "Show on the world map",
@@ -104,7 +119,9 @@ function module:SetupDataObject()
 		help = true,
 	}
 	function dataobject:OnEnter()
-		if not tooltip or not tooltip:IsShown() then
+		if (not tooltip or not tooltip:IsShown()) then
+			if module.db.profile.tooltip == "never" then return end
+			if module.db.profile.tooltip == "outofcombat" and InCombatLockdown() then return end
 			module:ShowTooltip(self, HBD:GetPlayerZone(), tooltip_options)
 		end
 	end
