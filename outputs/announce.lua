@@ -318,11 +318,6 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 	if is_dead and not self.db.profile.dead then
 		return
 	end
-
-	local quest, achievement, by_alt = ns:CompletionStatus(id)
-	if by_alt and not self.db.profile.already_alt then
-		return false
-	end
 	if not self.db.profile.already_drop then
 		-- hide mobs which have a mount/pet/toy which you already own
 		if ns.mobdb[id] and ns.mobdb[id].mount and type(ns.mobdb[id].mount) == "number" then
@@ -342,6 +337,7 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		end
 	end
 	if not self.db.profile.already then
+		local quest, achievement, by_alt = ns:CompletionStatus(id)
 		-- hide already-completed mobs
 		if quest ~= nil or achievement ~= nil then
 			-- knowable
@@ -356,6 +352,10 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 					return true
 				end
 				-- can just fall back on achievement
+				if achievement and by_alt and not self.db.profile.already_alt then
+					-- we have the achievement because of an alt
+					return true
+				end
 				return not achievement
 			else
 				-- just quest knowable
