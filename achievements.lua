@@ -397,7 +397,9 @@ local achievements = {
 		[154701] = 45410, -- Gorged Gear-Cruncher
 		[154739] = 45411, -- Caustic Mechaslime
 		[155060] = 45433, -- The Doppel Gang
+		[155583] = 45691, -- Scrapclaw
 	},
+	[13690] = {}, -- Nazjatarget Eliminated (Nazjatar)
 	[13691] = {}, -- I Thought You Said They'd Be Rare (Nazjatar)
 	[14159] = {}, -- Combating the Corruption (Assaults)
 }
