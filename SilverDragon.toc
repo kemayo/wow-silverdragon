@@ -30,6 +30,7 @@ config.lua
 scan\targets.lua
 scan\macro.lua
 scan\vignettes.lua
+scan\chat.lua
 
 # optional bits
 outputs\tooltip.lua
