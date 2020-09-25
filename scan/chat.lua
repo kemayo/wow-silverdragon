@@ -40,7 +40,7 @@ function module:OnEnable()
 end
 
 function module:OnChatMessage(event, text, name, ...)
-    if not self.db.enabled then return end
+    if not self.db.profile.enabled then return end
     local guid = select(10, ...)
     local id
     if guid then
