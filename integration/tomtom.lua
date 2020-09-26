@@ -29,7 +29,7 @@ function module:OnInitialize()
 						type = "range",
 						name = "Duration",
 						desc = "How long to wait before clearing the waypoint if you don't reach it",
-						min = 0, max = (10 * 60), step = 10,
+						min = 0, max = (10 * 60), step = 5,
 						order = 40,
 					}
 				},
