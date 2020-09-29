@@ -128,7 +128,7 @@ end
 
 function module:PLAYER_REGEN_ENABLED()
 	if pending then
-		pending = nil
 		self:ShowFrame(pending)
+		pending = nil
 	end
 end
