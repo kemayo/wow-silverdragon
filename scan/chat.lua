@@ -50,6 +50,7 @@ function module:OnChatMessage(event, text, name, ...)
     end
     Debug("OnChatMessage", event, text, name, id, guid)
     if not id or not (ns.mobdb[id] or globaldb.always[id]) then return end
-    local x, y, zone = HBD:GetPlayerZonePosition()
+    local zone = HBD:GetPlayerZone()
+    local x, y = HBD:GetPlayerZonePosition()
     core:NotifyForMob(id, zone, x, y, false, "chat")
 end

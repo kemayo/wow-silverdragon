@@ -411,7 +411,7 @@ do
 		globaldb.mob_count[id] = globaldb.mob_count[id] + 1
 		globaldb.mob_seen[id] = time()
 		lastseen[id..zone] = time()
-		self.events:Fire("Seen", id, zone, x, y, is_dead, source, unit)
+		self.events:Fire("Seen", id, zone, x or 0, y or 0, is_dead, source, unit)
 	end
 end
 do
