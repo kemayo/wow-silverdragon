@@ -106,8 +106,9 @@ function module:ProcessUnit(unit, source)
 
 	if should_process then
 		-- from this point on, it's a rare
-		local x, y, zone = HBD:GetPlayerZonePosition()
-		if not (zone and x and y) then
+		local zone = HBD:GetPlayerZone()
+		local x, y = HBD:GetPlayerZonePosition()
+		if not zone then
 			-- there are only a few places where this will happen
 			return
 		end
