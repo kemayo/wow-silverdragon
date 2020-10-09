@@ -17,6 +17,8 @@ function module:OnInitialize()
 	HBD.RegisterCallback(self, "PlayerZoneChanged", "Update")
 	core.RegisterCallback(self, "Seen", "Update")
 	core.RegisterCallback(self, "Ready", "Update")
+	core.RegisterCallback(self, "IgnoreChanged", "Update")
+	core.RegisterCallback(self, "CustomChanged", "Update")
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -74,7 +76,7 @@ function module:Update()
 			local name = core:NameForMob(id)
 			if
 				name and
-				not core.db.global.ignore[id] and
+				not core:ShouldIgnoreMob(id, zone) and
 				core:IsMobInPhase(id, zone)
 			then
 				table.insert(macro, "/targetexact " .. name)
@@ -84,8 +86,7 @@ function module:Update()
 	end
 	if count == 0 then
 		table.insert(macro, "/print \"No mobs known to scan for\"")
-	end
-	if self.db.profile.verbose then
+	elseif self.db.profile.verbose then
 		table.insert(macro, 1, ("/print \"Scanning for %d nearby mobs...\""):format(count))
 	end
 	self.button:SetAttribute("macrotext", ("\n"):join(unpack(macro)))
