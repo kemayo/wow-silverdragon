@@ -99,7 +99,7 @@ end
 
 do
 	local bad_ids = {
-		[83008] = true, -- Haakun the All-Consuming
+		-- [83008] = true, -- Haakun the All-Consuming
 	}
 	function module:IsModelBlacklisted(id, unit)
 		if not (id or unit) then
