@@ -30,8 +30,6 @@ function module:ShowFrame(data)
 	if name then
 		local macrotext = "/cleartarget\n/targetexact "..name
 		popup:SetAttribute("macrotext", macrotext)
-	else
-		name = UNKNOWN
 	end
 
 	if popup:IsVisible() then

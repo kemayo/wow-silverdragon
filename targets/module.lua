@@ -18,6 +18,7 @@ function module:OnInitialize()
 				nameplate = true,
 				vignette = true,
 				['point-of-interest'] = true,
+				chat = true,
 				groupsync = true,
 				guildsync = false,
 				fake = true,
@@ -71,6 +72,7 @@ function module:OnInitialize()
 							nameplate = "Nameplates",
 							vignette = "Vignettes",
 							['point-of-interest'] = "Map Points of Interest",
+							chat = "Chat yells",
 							groupsync = "Group Sync",
 							guildsync = "Guild Sync",
 						},
@@ -103,6 +105,7 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 		end
 	end
 	if not self.db.profile.sources[source] then
+		Debug("Not showing popup, source disabled", source)
 		return
 	end
 	local data = {
@@ -112,6 +115,7 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 		dead = dead,
 	}
 	if InCombatLockdown() then
+		Debug("Queueing popup for out-of-combat")
 		pending = data
 	else
 		self:ShowFrame(data)
@@ -128,6 +132,7 @@ end
 
 function module:PLAYER_REGEN_ENABLED()
 	if pending then
+		Debug("Showing queued popup")
 		self:ShowFrame(pending)
 		pending = nil
 	end
