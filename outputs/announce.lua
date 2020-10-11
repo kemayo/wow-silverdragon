@@ -56,13 +56,17 @@ function module:OnInitialize()
 			flash_color_boss = {r=1,g=0,b=1,a=1,},
 			instances = false,
 			dead = true,
-			already = false,
-			already_drop = true,
-			already_alt = true,
 			sink_opts = {},
 			channel = "Master",
 			unmute = false,
 			background = false,
+			completion = {
+				achievementless = true,
+				achievement = true,
+				achievement_char = false,
+				quest = true,
+				loot = true,
+			},
 		},
 	})
 
@@ -71,6 +75,10 @@ function module:OnInitialize()
 	if self.db.profile.sink_opts.sink20OutputSink == "Channel" then
 		-- 8.2.5 / Classic removed the ability to output to channels, outside of hardware-driven events
 		self.db.profile.sink_opts.sink20OutputSink = "Default"
+	end
+	if self.db.profile.already_alt == false then
+		self.db.profile.completion.achievement_char = true
+		self.db.profile.already_alt = nil
 	end
 
 	core.RegisterCallback(self, "Seen")
@@ -136,9 +144,7 @@ function module:OnInitialize()
 				order = 10,
 				get = get, set = set,
 				args = {
-					already = toggle("Already found", "Announce when we see rares we've already killed / achieved (if known)", 0),
-					already_drop = toggle("Got the loot", "Announce when we see rares which drop a mount / toy / pet you already have", 10),
-					already_alt = toggle("Completed by an alt", "Announce when we see rares for an achievement that the current character doesn't have, but an alt has completed already", 20),
+					completion = config.mobfilter(self.db.profile.completion, "Announce if...", 0),
 					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not, so this isn't entirely reliable.", 30),
 					instances = toggle("Instances", "Show announcements while in an instance", 50),
 				},
@@ -318,50 +324,8 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 	if is_dead and not self.db.profile.dead then
 		return
 	end
-	if not self.db.profile.already_drop then
-		-- hide mobs which have a mount/pet/toy which you already own
-		if ns.mobdb[id] and ns.mobdb[id].mount and type(ns.mobdb[id].mount) == "number" then
-			if select(11, C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)) then -- isCollected
-				return false
-			end
-		end
-		if ns.mobdb[id] and ns.mobdb[id].pet and type(ns.mobdb[id].pet) == "number" then
-			if C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet) > 0 then
-				return false
-			end
-		end
-		if ns.mobdb[id] and ns.mobdb[id].toy and type(ns.mobdb[id].toy) == "number" then
-			if PlayerHasToy(ns.mobdb[id].toy) then
-				return false
-			end
-		end
-	end
-	if not self.db.profile.already then
-		local quest, achievement, by_alt = ns:CompletionStatus(id)
-		-- hide already-completed mobs
-		if quest ~= nil or achievement ~= nil then
-			-- knowable
-			if achievement ~= nil then
-				-- achievement knowable
-				if quest ~= nil then
-					-- quest also knowable
-					return not quest
-				end
-				if source == 'vignette' then
-					-- No quest known, but the vignette wouldn't be present if the quest was complete, so...
-					return true
-				end
-				-- can just fall back on achievement
-				if achievement and by_alt and not self.db.profile.already_alt then
-					-- we have the achievement because of an alt
-					return true
-				end
-				return not achievement
-			else
-				-- just quest knowable
-				return not quest
-			end
-		end
+	if not core:DoesMobPassFilter(self.db.profile.completion, id, source) then
+		return false
 	end
 
 	return true

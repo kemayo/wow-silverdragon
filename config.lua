@@ -3,11 +3,11 @@ local module = core:NewModule("Config", "AceConsole-3.0")
 
 local db
 
-local function toggle(name, desc, order, inline)
+local function toggle(name, description, order, inline)
 	return {
 		type = "toggle",
 		name = name,
-		desc = desc,
+		desc = description,
 		order = order,
 		descStyle = (inline or (inline == nil)) and "inline" or nil,
 		width = (inline or (inline == nil)) and "full" or nil,
@@ -23,6 +23,32 @@ local function desc(text, order)
 	}
 end
 module.desc = desc
+
+local function mobfilter(config, name, order, set_callback)
+	-- Reusable config-block to describe what mobs to match
+	return {
+		type = "group",
+		name = name, -- "Show mobs if..." / "Announce if..."
+		inline = true,
+		order = order,
+		args = {
+			desc = module.desc("Mobs will match if any of these (that apply) are true. E.g. if you uncheck 'not tied to an achievement', an achievementless mob with a mount would still match.", 0),
+			achievementless = module.toggle("Not tied to an achievement", "Mobs with no associated achievement known", 10),
+			achievement = module.toggle("Achievement unearned", "If the achievement-criteria for the mob isn't complete", 20),
+			achievement_char = module.toggle("...unless another character has the achievement", nil, 21),
+			quest = module.toggle("Quest incomplete", "If a quest ID is known for this mob it means you can get rewards for killing it", 30),
+			loot = module.toggle("Loot still available", "If there's any known loot", 40),
+		},
+		get = function(info) return config[info[#info]] end,
+		set = function(info, v)
+			config[info[#info]] = v
+			if set_callback then
+				set_callback(info, v)
+			end
+		end,
+	}
+end
+module.mobfilter = mobfilter
 
 local options = {
 	type = "group",

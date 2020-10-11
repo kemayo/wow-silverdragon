@@ -63,20 +63,10 @@ do
 		if db.hidden[id] or core:ShouldIgnoreMob(id) then
 			return false
 		end
-		local quest, achievement, achievement_completed_by_alt = ns:CompletionStatus(id)
-		if achievement ~= nil then
-			if quest ~= nil then
-				-- we have a quest *and* an achievement; we're going to treat "show achieved" as "show achieved if I can still loot them"
-				return (db.questcomplete or not quest) and (db.achieved or not achievement)
-			end
-			-- no quest, but achievement
-			return db.achieved or not achievement
+		if not core:DoesMobPassFilter(db.completion, id) then
+			return false
 		end
-		if db.achievementless then
-			-- no achievement, but quest
-			return db.questcomplete or not quest
-		end
-		return false
+		return true
 	end
 	local function icon_for_mob(id)
 		local set = icons[db.icon_theme]
@@ -296,9 +286,13 @@ function module:OnInitialize()
 			icon_alpha = 1.0,
 			icon_theme = 'skulls', -- circles / skulls
 			icon_color = 'distinct', -- completion / distinct
-			achieved = true,
-			questcomplete = false,
-			achievementless = true,
+			completion = {
+				achievementless = true,
+				achievement = true,
+				achievement_char = false,
+				quest = true,
+				loot = true,
+			},
 			hidden = {},
 			minimap = true,
 		},
@@ -371,28 +365,6 @@ function module:OnInitialize()
 				name = "What to display",
 				inline = true,
 				args = {
-					achieved = {
-						type = "toggle",
-						name = "Show achieved",
-						desc = "Whether to show icons for mobs you have already killed (tested by whether you've got their achievement progress)",
-						arg = "achieved",
-						order = 10,
-					},
-					questcomplete = {
-						type = "toggle",
-						name = "Show quest-complete",
-						desc = "Whether to show icons for mobs you have the tracking quest complete for (which probably means they won't drop anything)",
-						arg = "questcomplete",
-						order = 15,
-					},
-					achievementless = {
-						type = "toggle",
-						name = "Show non-achievement mobs",
-						desc = "Whether to show icons for mobs which aren't part of the criteria for any known achievement",
-						arg = "achievementless",
-						width = "full",
-						order = 20,
-					},
 					minimap = {
 						type = "toggle",
 						name = "Minimap",
@@ -417,6 +389,7 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
+		options.args.display.args.completion = config.mobfilter(db.completion, "Show if...", 0, function() module:SendMessage("HandyNotes_NotifyUpdate", "SilverDragon") end)
 		config.options.plugins.handynotes = {
 			handynotes = {
 				type = "group",
@@ -426,6 +399,18 @@ function module:OnInitialize()
 				args = options.args,
 			},
 		}
+	end
+
+	-- achieved = true,
+	-- questcomplete = false,
+	-- achievementless = true,
+	if db.achieved == false then
+		db.completion.achievement = false
+		db.achieved = nil
+	end
+	if db.achievementless == false then
+		db.completion.achievementless = false
+		db.achievementless = nil
 	end
 
 	HandyNotes:RegisterPluginDB("SilverDragon", handler, options)

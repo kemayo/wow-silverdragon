@@ -17,6 +17,13 @@ function module:OnInitialize()
 			minimap = {},
 			worldmap = true,
 			tooltip = "always",
+			completion = {
+				achievementless = true,
+				achievement = true,
+				achievement_char = false,
+				quest = true,
+				loot = true,
+			},
 		},
 	})
 	db = self.db
@@ -99,6 +106,7 @@ function module:OnInitialize()
 						descStyle = "inline",
 						hidden = function() return not dataobject end,
 					},
+					completion = config.mobfilter(db.profile.completion, "Show in tooltip if...", 50),
 				},
 			},
 		}
@@ -310,7 +318,7 @@ do
 
 			wipe(sorted_mobs)
 			for id in pairs(ns.mobsByZone[zone]) do
-				if core:IsMobInPhase(id, zone) and not core:ShouldIgnoreMob(id, zone) then
+				if core:IsMobInPhase(id, zone) and not core:ShouldIgnoreMob(id, zone) and core:DoesMobPassFilter(db.profile.completion, id) then
 					table.insert(sorted_mobs, id)
 				end
 			end

@@ -453,6 +453,55 @@ do
 	end
 end
 
+function addon:DoesMobPassFilter(config, id, source)
+	-- config is a table:
+	-- .loot = loot from mob?
+	-- .achievement = unearned achievement-criteria from mob?
+	-- .quest = incomplete quest for mob?
+	-- .achievement_char = ignore achievement/quest if the associated achievement is completed by another character
+	-- .achievementless = no associated achievement for mob (distinction from known-but-unearned is useful)
+	-- Returns true if any of these apply
+	local quest, achievement, by_alt = ns:CompletionStatus(id)
+	-- Debug("Completion status checked", quest, achievement, by_alt)
+	if config.loot and (not quest or quest == false) then
+		-- quest is a substitute for "is currently lootable?"
+		if ns.mobdb[id] and ns.mobdb[id].mount and type(ns.mobdb[id].mount) == "number" then
+			if not select(11, C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)) then -- isCollected
+				Debug("Filter passed", "drops mount")
+				return true
+			end
+		end
+		if ns.mobdb[id] and ns.mobdb[id].pet and type(ns.mobdb[id].pet) == "number" then
+			if C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet) == 0 then
+				Debug("Filter passed", "drops pet")
+				return true
+			end
+		end
+		if ns.mobdb[id] and ns.mobdb[id].toy and type(ns.mobdb[id].toy) == "number" then
+			if not PlayerHasToy(ns.mobdb[id].toy) then
+				Debug("Filter passed", "drops toy")
+				return true
+			end
+		end
+	end
+	if not by_alt or not config.achievement_char then
+		-- "another character has the achievement" overrides quest-completion and critera
+		if config.achievement and achievement == false then
+			Debug("Filter passed", "achievement needed")
+			return true
+		end
+		if config.quest and (quest == false or source == "vignette") then
+			-- if this is from a vignette, the quest is inherently incomplete
+			Debug("Filter passed", "quest incomplete")
+			return true
+		end
+	end
+	if achievement == nil and config.achievementless then
+		Debug("Filter passed", "achievementless")
+		return true
+	end
+end
+
 -- Scanning:
 
 function addon:CheckNearby()
