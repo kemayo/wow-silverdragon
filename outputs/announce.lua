@@ -316,51 +316,33 @@ end
 
 function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 	if is_dead and not self.db.profile.dead then
-		return
+		return false
 	end
 	if not self.db.profile.already_drop then
 		-- hide mobs which have a mount/pet/toy which you already own
-		if ns.mobdb[id] and ns.mobdb[id].mount and type(ns.mobdb[id].mount) == "number" then
-			if select(11, C_MountJournal.GetMountInfoByID(ns.mobdb[id].mount)) then -- isCollected
-				return false
-			end
-		end
-		if ns.mobdb[id] and ns.mobdb[id].pet and type(ns.mobdb[id].pet) == "number" then
-			if C_PetJournal.GetNumCollectedInfo(ns.mobdb[id].pet) > 0 then
-				return false
-			end
-		end
-		if ns.mobdb[id] and ns.mobdb[id].toy and type(ns.mobdb[id].toy) == "number" then
-			if PlayerHasToy(ns.mobdb[id].toy) then
-				return false
-			end
+		local toy, mount, pet = ns:LootStatus(id)
+		if toy ~= false and mount ~= false and pet ~= false then
+			-- this means there's not any loot left to drop, as everything is either true or nil
+			return false
 		end
 	end
 	if not self.db.profile.already then
 		local quest, achievement, by_alt = ns:CompletionStatus(id)
 		-- hide already-completed mobs
-		if quest ~= nil or achievement ~= nil then
-			-- knowable
-			if achievement ~= nil then
-				-- achievement knowable
-				if quest ~= nil then
-					-- quest also knowable
-					return not quest
-				end
-				if source == 'vignette' then
-					-- No quest known, but the vignette wouldn't be present if the quest was complete, so...
-					return true
-				end
-				-- can just fall back on achievement
-				if achievement and by_alt and not self.db.profile.already_alt then
-					-- we have the achievement because of an alt
-					return true
-				end
-				return not achievement
-			else
-				-- just quest knowable
-				return not quest
+		if source == "vignette" then
+			-- The vignette's presence implies no quest completion
+			return true
+		end
+		if quest ~= nil then
+			return not quest
+		end
+		if achievement ~= nil then
+			-- can just fall back on achievement
+			if by_alt and not self.db.profile.already_alt then
+				-- an alt has completed the achievement, and we don't want to know about that
+				return false
 			end
+			return not achievement
 		end
 	end
 
