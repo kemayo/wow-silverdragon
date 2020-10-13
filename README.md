@@ -87,4 +87,5 @@ SilverDragon includes a Broker plugin. It'll attach itself to your minimap, or a
 
  * [HandyNotes](https://www.curseforge.com/wow/addons/handynotes): integrates with SilverDragon to show icons on zone maps where a rare has been seen.
  * [ServerRestartSound](https://www.curseforge.com/wow/addons/serverrestartsound): plays a sound when the server's about to restart. If you're AFK-camping for a rare spawn, you probably want to know about this.
+ * [ObjectScanner](https://www.wowace.com/projects/objectscanner): A few rares are hidden away behind interacting with world-objects like the Edge of Reality. These have to be localized individually, so you need to work out what they're called in your language and set up a watch for tooltips mentioning them. This addon does that bit.
  * [ButtonBin](https://www.curseforge.com/wow/addons/button-bin): a broker display. SilverDragon's minimap icon will show up on it (or any other addon like it) instead of cluttering up your minimap, if you have it installed.
