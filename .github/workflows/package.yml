@@ -10,7 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: Jayrgo/luacheck-action@0.1.0
+      - name: Install luarocks
+        run: sudo apt-get install luarocks
+      - name: Install luacheck
+        run: luarocks install --local luacheck
+      - name: Run luacheck
+        run: ~/.luarocks/bin/luacheck . --no-color -q
   build:
     needs: lint
     runs-on: ubuntu-latest
