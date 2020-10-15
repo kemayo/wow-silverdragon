@@ -28,6 +28,7 @@ do
 	-- DungeonSkull = skull
 	-- VignetteKillElite = Skull with star around it
 	-- Islands-AzeriteBoss = more detailed skull
+	-- nazjatar-nagaevent = more detailed skull, glowing
 	-- WhiteCircle-RaidBlips / PlayerPartyBlip = white circle
 	-- WhiteDotCircle-RaidBlips / PlayerRaidBlip = white circle with dot
 	-- PlayerDeadBlip = black circle with white X
@@ -35,17 +36,23 @@ do
 	-- Warfront-NeutralHero-Silver = silver dragon on gold circle
 	local icons = {
 		circles = {
-			default = tex("PlayerPartyBlip", 1, 0.33, 0.33, 1.1),
-			partial = tex("PlayerPartyBlip", 1, 1, 0.33, 1.1),
-			done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1.1),
-			mount = tex("PlayerRaidBlip", 1, 0.33, 0.33, 1.1),
-			mount_partial = tex("PlayerRaidBlip", 1, 1, 0.33, 1.1),
-			mount_done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1.1),
+			default = tex("PlayerPartyBlip", 1, 0.33, 0.33, 1.3),
+			partial = tex("PlayerPartyBlip", 1, 1, 0.33, 1.3),
+			done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1.3),
+			loot = tex("Warfront-NeutralHero-Silver", 1, 0.33, 0.33, 1.3),
+			loot_partial = tex("Warfront-NeutralHero-Silver", 1, 1, 0.33, 1.3),
+			loot_done = tex("Warfront-NeutralHero-Silver", 0.33, 1, 0.33, 1.3),
+			mount = tex("PlayerRaidBlip", 1, 0.33, 0.33, 1.3),
+			mount_partial = tex("PlayerRaidBlip", 1, 1, 0.33, 1.3),
+			mount_done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1.3),
 		},
 		skulls = {
 			default = tex("Islands-AzeriteBoss", 1, 0.33, 0.33, 1.8), -- red skull
 			partial = tex("Islands-AzeriteBoss", 1, 1, 0.33, 1.8), -- yellow skull
 			done = tex("Islands-AzeriteBoss", 0.33, 1, 0.33, 1.8), -- green skull
+			loot = tex("nazjatar-nagaevent", 1, 0.33, 0.33, 1.8), -- red glowing skull
+			loot_partial = tex("nazjatar-nagaevent", 1, 1, 0.33, 1.8), -- yellow glowing skull
+			loot_done = tex("nazjatar-nagaevent", 0.33, 1, 0.33, 1.8), -- green glowing skull
 			mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.3), -- red shiny skull
 			mount_partial = tex("VignetteKillElite", 1, 1, 0.33, 1.3), -- yellow shiny skull
 			mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1.3), -- green shiny skull
@@ -54,9 +61,12 @@ do
 			default = tex("VignetteKill", 1, 0.33, 1, 1.3), -- red star
 			partial = tex("VignetteKill", 1, 1, 1, 1.3), -- gold star
 			done = tex("VignetteKill", 0, 1, 1), -- green star
-			mount = tex("VignetteKillElite", 1, 0.33, 1),
-			mount_partial = tex("VignetteKillElite", 0, 1, 1), -- yellow shiny skull
-			mount_done = tex("VignetteKillElite", 0, 1, 0), -- green shiny skull
+			loot = tex("VignetteLootElite", 1, 0.33, 1, 1.3), -- red shiny skull
+			loot_partial = tex("VignetteLootElite", 0, 1, 1, 1.3), -- yellow shiny skull
+			loot_done = tex("VignetteLootElite", 0, 1, 0, 1.3), -- green shiny skull
+			mount = tex("VignetteKillElite", 1, 0.33, 1, 1.3), -- red shiny skull
+			mount_partial = tex("VignetteKillElite", 0, 1, 1, 1.3), -- yellow shiny skull
+			mount_done = tex("VignetteKillElite", 0, 1, 0, 1.3), -- green shiny skull
 		}
 	}
 	local function should_show_mob(id)
@@ -78,26 +88,36 @@ do
 		end
 		return false
 	end
+	local function key_for_mob(id)
+		local quest, achievement = ns:CompletionStatus(id)
+		local toy, mount, pet = ns:LootStatus(id)
+		local prefix
+		if mount ~= nil then
+			-- a mount is always a mount
+			prefix = 'mount'
+		elseif toy == false or pet == false then
+			-- but toys and pets are only special until you loot them
+			prefix = 'loot'
+		end
+		local suffix
+		if quest or achievement then
+			if (quest and achievement) or (quest == nil or achievement == nil) then
+				suffix = 'done'
+			else
+				suffix = 'partial'
+			end
+		end
+		if prefix and suffix then
+			return prefix .. '_' .. suffix
+		end
+		return prefix or suffix
+	end
 	local function icon_for_mob(id)
 		local set = icons[db.icon_theme]
 		if not ns.mobdb[id] then
 			return set.default
 		end
-		local quest, achievement = ns:CompletionStatus(id)
-		if quest or achievement then
-			if (quest and achievement) or (quest == nil or achievement == nil) then
-				-- full completion
-				return ns.mobdb[id].mount and set.mount_done or set.done
-			end
-			-- partial completion
-			return ns.mobdb[id].mount and set.mount_partial or set.partial
-		end
-		return ns.mobdb[id].mount and set.mount or set.default
-
-		-- local achievement, name, completed = ns:AchievementMobStatus(id)
-		-- if achievement and completed then
-		-- 	return ns.mobdb[id].mount and icon_mount_found or icon_found
-		-- end
+		return set[key_for_mob(id)] or set.default
 	end
 	local function scale(value, currmin, currmax, min, max)
 		-- take a value between currmin and currmax and scale it to be between min and max
