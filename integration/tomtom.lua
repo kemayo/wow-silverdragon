@@ -11,6 +11,7 @@ function module:OnInitialize()
 			enabled = true,
 			duration = 120,
 			tomtom = true,
+			dbm = false,
 			replace = false,
 		},
 	})
@@ -27,7 +28,8 @@ function module:OnInitialize()
 				args = {
 					about = config.desc("When we see a mob via its minimap icon, we can ask an arrow to point us to it", 0),
 					enabled = config.toggle("Automatically", "Make a waypoint for the mob as soon as it's seen", 20),
-					tomtom = config.toggle("Use TomTom", "If TomTom is installed, use it", 25),
+					tomtom = config.toggle("Use TomTom", "If TomTom is installed, use it instead", 25, nil, function() return not TomTom end),
+					dbm = config.toggle("Use DeadlyBossMods", "If DeadlyBossMods is installed, use it instead", 26, nil, function() return not DBM end),
 					replace = config.toggle("Replace waypoints", "Replace an existing waypoint if one is set (doesn't apply to TomTom)", 30),
 					duration = {
 						type = "range",
@@ -55,7 +57,7 @@ end
 do
 	local waypoint
 	function module:PointTo(id, zone, x, y, duration, force)
-		if TomTom then
+		if TomTom and db.tomtom then
 			if waypoint then
 				TomTom:RemoveWaypoint(waypoint)
 			end
@@ -75,7 +77,23 @@ do
 					end
 				end)
 			end
-		elseif C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
+		end
+		if DBM and db.dbm then
+			DBM.Arrow:ShowRunTo(
+				x * 100,
+				y * 100,
+				25, -- clear distance
+				(duration and duration > 0) and duration or nil,
+				true, -- "legacy" which I think means to use per-zone coords rather than world coords
+				true, -- unused
+				core:GetMobLabel(id) or UNKNOWN,
+				zone
+			)
+		end
+		if (DBM and db.dbm) or (TomTom and db.tomtom) then
+			return
+		end
+		if C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
 			local current = C_Map.GetUserWaypoint()
 			local wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
 			local uiMapPoint = UiMapPoint.CreateFromCoordinates(zone, x, y)

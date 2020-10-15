@@ -2,6 +2,7 @@
 
 ## Upcoming release
 
+* Waypoint integration with DeadlyBossMods
 * Fixed broken N'zoth and Azerite loot popup target themes
 
 ## Changed in v90001.1
