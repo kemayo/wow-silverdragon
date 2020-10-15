@@ -574,6 +574,8 @@ function ns:UpdateTooltipWithLootSummary(tooltip, id)
 				1, 1, 0,
 				isCollected and 0 or 1, isCollected and 1 or 0, 0
 			)
+		else
+			tooltip:AddDoubleLine(MOUNT, SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end
 	if ns.mobdb[id].pet then
@@ -592,6 +594,8 @@ function ns:UpdateTooltipWithLootSummary(tooltip, id)
 				1, 1, 0,
 				r, g, b
 			)
+		else
+			tooltip:AddDoubleLine(TOOLTIP_BATTLE_PET, SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end
 	if ns.mobdb[id].toy then
@@ -604,6 +608,8 @@ function ns:UpdateTooltipWithLootSummary(tooltip, id)
 				1, 1, 0,
 				owned and 0 or 1, owned and 1 or 0, 0
 			)
+		else
+			tooltip:AddDoubleLine(TOY, SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end
 end
