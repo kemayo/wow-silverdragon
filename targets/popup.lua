@@ -127,7 +127,7 @@ local PopupClassMetatable = {__index = PopupClass}
 
 function module:CreatePopup()
 	-- Set up the frame
-	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate")
+	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
 	module.popup = popup
 	setmetatable(popup, PopupClassMetatable)
 

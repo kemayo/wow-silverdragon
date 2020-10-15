@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v90001.1
+
+* Fixed a backdrop error in the "classic" popup target theme
+
 ## Changed in v90001.0
 
 * Shadowlands data: most of the new rares are included, with questids and loot. Some are still missing quests, but we've got time.
