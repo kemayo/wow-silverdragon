@@ -1,5 +1,9 @@
 # Changelog
 
+## Upcoming release
+
+* Fixed broken N'zoth and Azerite loot popup target themes
+
 ## Changed in v90001.1
 
 * Fixed a backdrop error in the "classic" popup target theme

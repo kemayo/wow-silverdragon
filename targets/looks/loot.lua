@@ -42,8 +42,6 @@ function module.Looks:Loot_MoreAwesome(popup)
     popup.background:SetAtlas("loottoast-moreawesome", true)
 end
 
-local shadowlands = select(4, GetBuildInfo()) >= 90000
-
 function module.Looks:Loot_QuestReward(popup)
     Loot(self, popup)
     popup.background:SetAtlas("loottoast-bg-questrewardupgrade", true)
@@ -63,16 +61,14 @@ function module.Looks:Loot_Horde(popup)
 end
 function module.Looks:Loot_Azerite(popup)
     Loot(self, popup)
-    popup.background:SetAtlas(shadowlands and "loottoast-bg-azerite" or "loottoast-azerite", true)
+    popup.background:SetAtlas("loottoast-azerite", true)
 end
 function module.Looks:Loot_NZoth(popup)
     Loot(self, popup)
-    popup.background:SetAtlas(shadowlands and "loottoast-bg-nzoth" or "loottoast-nzoth", true)
+    popup.background:SetAtlas("loottoast-nzoth", true)
 end
 
-if shadowlands then
-    function module.Looks:Loot_Oribos(popup)
-        Loot(self, popup)
-        popup.background:SetAtlas("loottoast-oribos", true)
-    end
+function module.Looks:Loot_Oribos(popup)
+    Loot(self, popup)
+    popup.background:SetAtlas("loottoast-oribos", true)
 end
