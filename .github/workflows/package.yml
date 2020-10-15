@@ -23,13 +23,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@master
-        with:
-          python-version: 3.8
-      - name: Build Changelog
+      - uses: kemayo/actions-recent-changelog@v1
         if: startsWith(github.ref, 'refs/tags')
-        run: python tools/build_changelog.py CHANGELOG.md RECENT_CHANGES.md
+        with:
+          input: CHANGELOG.md
+          output: RECENT_CHANGES.md
       - name: Create Package
         run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
         env:
