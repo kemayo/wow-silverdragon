@@ -2,6 +2,7 @@
 
 ## Upcoming release
 
+* Special map icons for mobs with toys and pets as well
 * Waypoint integration with DeadlyBossMods
 * Fixed broken N'zoth and Azerite loot popup target themes
 
