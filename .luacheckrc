@@ -44,6 +44,7 @@ read_globals = {
     "ChatThrottleLib",
     "GetAuctionBuyout",
     "TomTom",
+    "DBM",
 
     -- API functions
     "C_AreaPoiInfo",
