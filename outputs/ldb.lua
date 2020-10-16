@@ -113,7 +113,9 @@ function module:OnInitialize()
 						get = function() return db.profile.mounts end,
 						set = function(info, v)
 							db.profile.mounts = v
-							module.mounts[v and "Show" or "Hide"](module.mounts)
+							if module.mounts then
+								module.mounts[v and "Show" or "Hide"](module.mounts)
+							end
 						end,
 						order = 40,
 						width = "full",
