@@ -14,10 +14,10 @@ function module:OnInitialize()
 		[156142] = {name="Seeker of Souls",locations={[1705]={},},},
 		[156158] = {name="Adjutant Felipos",locations={[1705]={},},},
 		[156237] = {name="Imperator Dara",locations={[1705]={},},},
-		[156676] = {name="Ogre Overseer",locations={[1409]={60406000},},},
+		[156676] = {name="Ogre Overseer",locations={[1409]={60406000},},quest=56051,},
 		[156916] = {name="Inquisitor Sorin",locations={[1525]={69604780},},},
 		[156919] = {name="Inquisitor Petre",locations={[1525]={67404380},},},
-		[156986] = {name="Ogre Taskmaster",locations={[1409]={57404080},},},
+		[156986] = {name="Ogre Taskmaster",locations={[1409]={57404080},},quest=59611,},
 		[157058] = {name="Corpsecutter Moroc",locations={[1536]={26392633},},quest=58335,},
 		[157294] = {name="Pulsing Leech",locations={[1536]={58407420},},},
 		[157308] = {name="Corrupted Sediment",locations={[1536]={58607400},},},
@@ -151,7 +151,6 @@ function module:OnInitialize()
 		[173134] = {name="Darksworn Goliath",locations={[1705]={},},},
 		[173191] = {name="Soulstalker V'lara",locations={[1705]={},},},
 		[173238] = {name="Deadsoul Strider",locations={[1705]={},},},
-		[174059] = {name="The Black Knight",locations={[118]={65002220},},},
 		[174108] = {name="Necromantic Anomaly",locations={[1536]={72872891},},quest=62369,},
 	})
 end
