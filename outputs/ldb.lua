@@ -16,12 +16,20 @@ function module:OnInitialize()
 		profile = {
 			minimap = {},
 			worldmap = true,
+			mounts = true,
 			tooltip = "always",
 		},
 	})
 	db = self.db
 
 	self:SetupDataObject()
+	self:SetupWorldMap()
+
+	if IsAddOnLoaded("Blizzard_Collections") then
+		self:SetupMounts()
+	else
+		self:RegisterEvent("ADDON_LOADED")
+	end
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -97,12 +105,32 @@ function module:OnInitialize()
 						order = 40,
 						width = "full",
 						descStyle = "inline",
-						hidden = function() return not dataobject end,
+					},
+					mounts = {
+						type = "toggle",
+						name = "Show on the mount list",
+						desc = "Toggle showing the icon in the map list",
+						get = function() return db.profile.mounts end,
+						set = function(info, v)
+							db.profile.mounts = v
+							module.mounts[v and "Show" or "Hide"](module.mounts)
+						end,
+						order = 40,
+						width = "full",
+						descStyle = "inline",
 					},
 				},
 			},
 		}
 	end
+end
+
+function module:ADDON_LOADED(event, addon)
+	if addon ~= "Blizzard_Collections" then
+		return
+	end
+	self:SetupMounts()
+	self:UnregisterEvent("ADDON_LOADED")
 end
 
 function module:SetupDataObject()
@@ -122,7 +150,8 @@ function module:SetupDataObject()
 		if (not tooltip or not tooltip:IsShown()) then
 			if module.db.profile.tooltip == "never" then return end
 			if module.db.profile.tooltip == "outofcombat" and InCombatLockdown() then return end
-			module:ShowTooltip(self, HBD:GetPlayerZone(), tooltip_options)
+			tooltip_options.nearby = HBD:GetPlayerZone()
+			module:ShowTooltip(self, tooltip_options)
 		end
 	end
 
@@ -165,26 +194,61 @@ function module:SetupDataObject()
 	if db.profile.show_lastseen then
 		dataobject.text = "None"
 	end
+end
 
-	local mapbutton_options = {
-		nearby = true,
+function module:SetupWorldMap()
+	local button_options = {
 		help = true,
 	}
-	local mapbutton = CreateFrame("Button", nil, WorldMapFrame.NavBar)
-	mapbutton:SetSize(20, 20)
-	mapbutton:SetPoint("RIGHT", -4, 0)
-	mapbutton:RegisterForClicks("AnyUp")
-	mapbutton.texture = mapbutton:CreateTexture(nil, "ARTWORK")
-	mapbutton.texture:SetTexture("Interface\\Icons\\INV_Misc_Head_Dragon_01")
-	mapbutton.texture:SetAllPoints()
-	mapbutton:SetScript("OnEnter", function()
-		module:ShowTooltip(mapbutton, WorldMapFrame.mapID, mapbutton_options)
+	local button = CreateFrame("Button", nil, WorldMapFrame.NavBar)
+	button:SetSize(20, 20)
+	button:SetPoint("RIGHT", -4, 0)
+	button:RegisterForClicks("AnyUp")
+	button.texture = button:CreateTexture(nil, "ARTWORK")
+	button.texture:SetTexture("Interface\\Icons\\INV_Misc_Head_Dragon_01")
+	button.texture:SetAllPoints()
+	button:SetScript("OnEnter", function()
+		button_options.nearby = WorldMapFrame.mapID
+		module:ShowTooltip(button, button_options)
 	end)
 	-- onleave is handled by the tooltip's autohide
-	mapbutton:SetScript("OnClick", dataobject.OnClick)
-	module.worldmap = mapbutton
+	button:SetScript("OnClick", dataobject.OnClick)
+	module.worldmap = button
 	if not db.profile.worldmap then
-		mapbutton:Hide()
+		button:Hide()
+	end
+end
+
+function module:SetupMounts()
+	local list = {}
+	for source, data in pairs(core.datasources) do
+		if core.db.global.datasources[source] then
+			for id, mobdata in pairs(data) do
+				if mobdata.mount and not core:ShouldIgnoreMob(id) then
+					table.insert(list, id)
+				end
+			end
+		end
+	end
+	local button_options = {
+		custom = list,
+		help = true,
+	}
+	local button = CreateFrame("Button", nil, MountJournal.MountCount)
+	button:SetSize(20, 20)
+	button:SetPoint("LEFT", MountJournal.MountCount, "RIGHT", 4, 0)
+	button:RegisterForClicks("AnyUp")
+	button.texture = button:CreateTexture(nil, "ARTWORK")
+	button.texture:SetTexture("Interface\\Icons\\INV_Misc_Head_Dragon_01")
+	button.texture:SetAllPoints()
+	button:SetScript("OnEnter", function()
+		module:ShowTooltip(button, button_options)
+	end)
+	-- onleave is handled by the tooltip's autohide
+	button:SetScript("OnClick", dataobject.OnClick)
+	module.mounts = button
+	if not db.profile.mounts then
+		button:Hide()
 	end
 end
 
@@ -288,8 +352,8 @@ do
 
 	local sorted_mobs = {}
 
-	function module:ShowTooltip(parent, zone, options)
-		if not (zone and core.db) then
+	function module:ShowTooltip(parent, options)
+		if not core.db then
 			return
 		end
 
@@ -301,19 +365,29 @@ do
 		end
 
 		tooltip:Clear()
+		wipe(sorted_mobs)
 
-		if options.nearby and ns.mobsByZone[zone] then
-			if options.recent then
-				tooltip:AddHeader("Nearby")
-			end
-			tooltip:AddHeader("Name", "Count", "Last Seen")
-
-			wipe(sorted_mobs)
+		local zone = options.nearby
+		if zone and ns.mobsByZone[zone] then
 			for id in pairs(ns.mobsByZone[zone]) do
 				if core:IsMobInPhase(id, zone) and not core:ShouldIgnoreMob(id, zone) then
 					table.insert(sorted_mobs, id)
 				end
 			end
+			if options.recent then
+				tooltip:AddHeader("Nearby")
+			end
+		end
+
+		if options.custom then
+			for _, id in ipairs(options.custom) do
+				table.insert(sorted_mobs, id);
+			end
+		end
+
+		if #sorted_mobs > 0 then
+			tooltip:AddHeader("Name", "Count", "Last Seen")
+
 			table.sort(sorted_mobs, mob_sorter)
 
 			for _, id in ipairs(sorted_mobs) do

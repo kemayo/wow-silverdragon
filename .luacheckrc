@@ -153,6 +153,7 @@ read_globals = {
     "WorldFrame",
     "Minimap",
     "WorldMapFrame",
+    "MountJournal",
     "DEFAULT_CHAT_FRAME",
     "GameFontHighlightSmall",
 

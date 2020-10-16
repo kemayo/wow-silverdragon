@@ -3,6 +3,7 @@
 ## Upcoming release
 
 * Special map icons for mobs with toys and pets as well
+* Broker dropdown added to the mount journal, will show all known mobs that drop mounts (and whether you've looted them)
 * Waypoint integration with DeadlyBossMods
 * Fixed broken N'zoth and Azerite loot popup target themes
 
