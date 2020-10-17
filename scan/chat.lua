@@ -41,16 +41,21 @@ end
 
 function module:OnChatMessage(event, text, name, ...)
     if not self.db.profile.enabled then return end
+    local zone = HBD:GetPlayerZone()
     local guid = select(10, ...)
-    local id
+    local id, x, y
     if guid then
         id = ns.IdFromGuid(guid)
     elseif name then
-        id = core:IdForMob(name)
+        id = core:IdForMob(name, zone)
     end
     Debug("OnChatMessage", event, text, name, id, guid)
     if not id or not (ns.mobdb[id] or globaldb.always[id]) then return end
-    local zone = HBD:GetPlayerZone()
-    local x, y = HBD:GetPlayerZonePosition()
+    -- Guess from the event whether we're anywhere near the mob
+    if event == "CHAT_MSG_MONSTER_SAY" or event == "CHAT_MSG_MONSTER_EMOTE" then
+        x, y = HBD:GetPlayerZonePosition()
+    else
+        x, y = 0, 0
+    end
     core:NotifyForMob(id, zone, x, y, false, "chat")
 end

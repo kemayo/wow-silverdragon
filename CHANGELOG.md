@@ -4,6 +4,8 @@
 
 * Special map icons for mobs with toys and pets as well
 * Broker dropdown added to the mount journal, will show all known mobs that drop mounts (and whether you've looted them)
+* Chat-scanner: looks for mobs in the current zone with that name before checking globally in case of a name-collision
+* Chat-scanner: only announce coordinates if it's from a chat event which implies the mob is anywhere near you (yells are zone-wide...)
 * Waypoint integration with DeadlyBossMods
 * Fixed broken N'zoth and Azerite loot popup target themes
 

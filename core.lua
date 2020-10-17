@@ -88,6 +88,10 @@ local mobsByZone = {
 	-- [zoneid] = { [mobid] = {coord, ...}
 }
 ns.mobsByZone = mobsByZone
+local mobNamesByZone = {
+	-- [zoneid] = { [mobname] = mobid, ... }
+}
+ns.mobNamesByZone = mobNamesByZone
 local questMobLookup = {
 	-- [questid] = { [mobid] = true, ... }
 }
@@ -293,7 +297,10 @@ do
 		end
 		return self.db.locale.mob_name[id] or (mobdb[id] and mobdb[id].name)
 	end
-	function addon:IdForMob(name)
+	function addon:IdForMob(name, zone)
+		if zone and mobNamesByZone[zone] and mobNamesByZone[zone][name] then
+			return mobNamesByZone[zone][name]
+		end
 		return mobNameToId[name]
 	end
 	function addon:NameForQuest(id)
