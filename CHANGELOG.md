@@ -8,7 +8,10 @@
 * Chat-scanner: looks for mobs in the current zone with that name before checking globally in case of a name-collision
 * Chat-scanner: only announce coordinates if it's from a chat event which implies the mob is anywhere near you (yells are zone-wide...)
 * Waypoint integration with DeadlyBossMods
+* If data on a toy/mount/pet is still loading, say that in the tooltip rather than not showing anything about it at all
+* Mists: Nalak and Oondasta questids
 * Fixed broken N'zoth and Azerite loot popup target themes
+* Included updated version of LibQTip-1.0 which won't error if you have a broken pre-9.0 addon installed with an older version of LibQTip-1.0
 
 ## Changed in v90001.1
 
