@@ -188,7 +188,7 @@ function handler:OnEnter(uiMapID, coord)
 		tooltip:AddDoubleLine("At", uiMapID .. ':' .. coord)
 		return tooltip:Show()
 	end
-	tooltip:AddLine(name)
+	tooltip:AddLine(core:GetMobLabel(id))
 	if ns.mobdb[id].notes then
 		tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
 	end
