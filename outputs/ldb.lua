@@ -338,6 +338,13 @@ do
 		GameTooltip:SetHyperlink(("achievement:%d:%s"):format(achievementid, UnitGUID('player')))
 		GameTooltip:Show()
 	end
+	local function show_notes_tooltip(cell, mobid)
+		tooltip:SetFrameStrata("DIALOG")
+		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
+		-- GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(mobid))
+		GameTooltip:AddLine(ns.mobdb[mobid] and ns.mobdb[mobid].notes or UNKNOWN)
+		GameTooltip:Show()
+	end
 	local function hide_subtooltip()
 		tooltip:SetFrameStrata("TOOLTIP")
 		GameTooltip:Hide()
@@ -392,14 +399,21 @@ do
 
 			table.sort(sorted_mobs, mob_sorter)
 
+			local notes = CreateAtlasMarkup("poi-workorders")
+
 			for _, id in ipairs(sorted_mobs) do
 				local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
+				local label = core:GetMobLabel(id)
 				local index, col = tooltip:AddLine(
-					core:GetMobLabel(id),
+					(ns.mobdb[id] and ns.mobdb[id].notes) and (label .. " " .. notes) or label,
 					times_seen,
 					core:FormatLastSeen(last_seen),
 					(tameable and 'Tameable' or '')
 				)
+				if ns.mobdb[id] and ns.mobdb[id].notes then
+					tooltip:SetCellScript(index, 1, "OnEnter", show_notes_tooltip, id)
+					tooltip:SetCellScript(index, 1, "OnLeave", hide_subtooltip)
+				end
 				if ns.mobdb[id] and ns.mobdb[id].mount then
 					index, col = tooltip:SetCell(index, col, ns.mobdb[id].mount, MountCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_mount_tooltip, id)
