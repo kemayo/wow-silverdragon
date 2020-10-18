@@ -493,7 +493,7 @@ function module:OnInitialize()
 		[153205] = {name="Gemicide",locations={[1462]={57406940},},quest=55855,},
 		[153206] = {name="Ol' Big Tusk",locations={[1462]={55403540},},quest=55853,},
 		[153226] = {name="Steel Singer Freza",locations={[1462]={24407740},},quest=55854,},
-		[153228] = {name="Gear Checker Cogstar",locations={[1462]={22608020,40203900,41202780,42404920,52004920,55405920,58405120,59206780,62805680},},quest=55852,},
+		[153228] = {name="Gear Checker Cogstar",locations={[1462]={23008160,42404940,51605000,56605960,58805200,59806700,67005340},},quest=55852,},
 		[153296] = {name="Shalan'ali Stormtongue",locations={[1355]={33204000},},hidden=true,},
 		[153299] = {name="Bonebreaker Szun",locations={[1355]={63805700},},hidden=true,},
 		[153300] = {name="Iron Zoko",locations={[1355]={42206900,42804300,69003280},},hidden=true,},
