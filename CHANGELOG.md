@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Option to hide the waypoint arrow when you manually close the popup
+* Some _very timely_ improvements on Argus
+
 ## Changed in v90001.2
 
 * Special map icons for mobs with toys and pets as well

@@ -13,6 +13,7 @@ function module:OnInitialize()
 			tomtom = true,
 			dbm = false,
 			replace = false,
+			popup = true,
 		},
 	})
 	db = self.db.profile
@@ -37,7 +38,8 @@ function module:OnInitialize()
 						desc = "How long to wait before clearing the waypoint if you don't reach it",
 						min = 0, max = (10 * 60), step = 5,
 						order = 40,
-					}
+					},
+					popup = config.toggle("Remove when target popup closed", "Clear the waypoint when the click target popup is closed. Only when you manually close it.", 50),
 				},
 			},
 		}
@@ -46,17 +48,20 @@ end
 
 function module:OnEnable()
 	core.RegisterCallback(self, "Announce")
+	core.RegisterCallback(self, "PopupHide")
 end
 
 function module:Announce(_, id, zone, x, y, is_dead, source, unit)
 	if not db.enabled then return end
-	if source ~= "vignette" then return end
+	if source ~= "vignette" and source ~="fake" then return end
+	if not (zone and x and y and x > 0 and y > 0) then return end
 	self:PointTo(id, zone, x, y, db.duration)
 end
 
 do
-	local waypoint
+	local waypoint, previous
 	function module:PointTo(id, zone, x, y, duration, force)
+		Debug("Waypoint.PointTo", id, zone, x, y, duration, force)
 		if TomTom and db.tomtom then
 			if waypoint then
 				TomTom:RemoveWaypoint(waypoint)
@@ -71,10 +76,7 @@ do
 			waypoint.mobid = id
 			if duration and duration > 0 then
 				C_Timer.After(duration, function()
-					if waypoint and waypoint.mobid == id then
-						TomTom:RemoveWaypoint(waypoint)
-						-- tomtom doesn't need to restore a waypoint, because it has a stack
-					end
+					self:Hide(id)
 				end)
 			end
 		end
@@ -94,27 +96,60 @@ do
 			return
 		end
 		if C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
-			local current = C_Map.GetUserWaypoint()
-			local wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
+			previous = C_Map.GetUserWaypoint()
+			if previous then
+				previous.wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
+			end
 			local uiMapPoint = UiMapPoint.CreateFromCoordinates(zone, x, y)
-			if (not current) or db.replace or force then
+			if (not previous) or db.replace or force then
 				C_Map.SetUserWaypoint(uiMapPoint)
 				C_SuperTrack.SetSuperTrackedUserWaypoint(true)
 				waypoint = uiMapPoint
 				if duration and duration > 0 then
 					C_Timer.After(duration, function()
-						local stillCurrent = C_Map.GetUserWaypoint()
-						if stillCurrent and waypoint and waypoint.position and waypoint.position:IsEqualTo(stillCurrent.position) then
-							C_Map.ClearUserWaypoint()
-							if current then
-								-- restore the one we replaced
-								C_Map.SetUserWaypoint(current)
-								C_SuperTrack.SetSuperTrackedUserWaypoint(wasTracked)
-							end
-						end
+						self:Hide(id)
 					end)
 				end
 			end
+		end
+	end
+	function module:Hide(id)
+		Debug("Waypoint.Hide", id)
+		if waypoint and waypoint.position and waypoint.uiMapID then
+			Debug("Hiding C_Map")
+			-- it's a UiMapPoint, so it's probably the Blizzard option
+			local stillCurrent = C_Map.GetUserWaypoint()
+			if stillCurrent and waypoint and waypoint.position and waypoint.position:IsEqualTo(stillCurrent.position) then
+				C_Map.ClearUserWaypoint()
+				if previous then
+					-- restore the one we replaced
+					C_Map.SetUserWaypoint(previous)
+					C_SuperTrack.SetSuperTrackedUserWaypoint(previous.wasTracked)
+					previous = nil
+				end
+				waypoint = nil
+			end
+			return
+		end
+		if TomTom and db.tomtom then
+			Debug("Hiding TomTom")
+			if waypoint and waypoint.mobid == id then
+				TomTom:RemoveWaypoint(waypoint)
+				-- tomtom doesn't need to restore a waypoint, because it has a stack
+				waypoint = nil
+			end
+		end
+		if DBM and db.dbm then
+			Debug("Hiding DBM")
+			-- no way to tell if it's still the same
+			DBM.Arrow:Hide()
+		end
+	end
+
+	function module:PopupHide(_, id, zone, x, y, automatic)
+		Debug("Waypoint.PopupHide", id, zone, x, y, automatic)
+		if db.popup and not automatic then
+			self:Hide(id, zone, x, y)
 		end
 	end
 end
