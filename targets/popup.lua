@@ -150,7 +150,7 @@ function module:CreatePopup()
 	popup.background = background
 	background:SetBlendMode("BLEND")
 
-	local modelbg = popup:CreateTexture(nil, "BORDER")
+	local modelbg = popup:CreateTexture(nil, "BORDER", nil, 2)
 	popup.modelbg = modelbg
 	modelbg:SetTexture([[Interface\FrameGeneral\UI-Background-Marble]])
 	modelbg:SetSize(52, 52)
@@ -324,8 +324,9 @@ function PopupClass:DoIgnore()
 	end
 end
 
-function PopupClass:HideWhenPossible()
+function PopupClass:HideWhenPossible(automatic)
 	-- this is for animations that want to hide the popup itself, since it can't be touched in-combat
+	self.automaticClose = automatic
 	if InCombatLockdown() then
 		self.waitingToHide = true
 	else
@@ -438,6 +439,8 @@ PopupClass.scripts = {
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 
 		self.elapsed = 0
+
+		core.events:Fire("PopupShow", self.data.id, self.data.zone, self.data.x, self.data.y, self)
 	end,
 	OnHide = function(self)
 		self.glow.animIn:Stop()
@@ -454,7 +457,10 @@ PopupClass.scripts = {
 		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
+		core.events:Fire("PopupHide", self.data.id, self.data.zone, self.data.x, self.data.y, self.automaticClose)
+
 		self.waitingToHide = false
+		self.automaticClose = nil
 	end,
 	-- Close button
 	CloseOnEnter = function(self)
