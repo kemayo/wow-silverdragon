@@ -335,7 +335,7 @@ do
 
 		tooltip:SetFrameStrata("DIALOG")
 		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
-		GameTooltip:SetHyperlink(("achievement:%d:%s"):format(achievementid, UnitGUID('player')))
+		GameTooltip:SetHyperlink(GetAchievementLink(achievementid))
 		GameTooltip:Show()
 	end
 	local function show_notes_tooltip(cell, mobid)
