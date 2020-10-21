@@ -75,6 +75,7 @@ read_globals = {
     "GetAchievementCriteriaInfo",
     "GetAchievementCriteriaInfoByID",
     "GetAchievementInfo",
+    "GetAchievementLink",
     "GetAchievementNumCriteria",
     "GetAuctionItemSubClasses",
     "GetBuildInfo",
