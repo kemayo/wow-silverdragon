@@ -515,7 +515,7 @@ function module:OnInitialize()
 		[154106] = {name="Quid",locations={[1530]={89004760},},poi={947,6489},quest=56094,},
 		[154148] = {name="Tidemistress Leth'sindra",locations={[1355]={67152325},},quest=56106,toy=170196,},
 		[154153] = {name="Enforcer KX-T57",locations={[1462]={53806180},},quest=56207,},
-		[154154] = {name="Honey Smasher",locations={[942]={59401700},},quest=57674,},
+		[154154] = {name="Honey Smasher",locations={[942]={59401700},},pet=2794,quest=57674,},
 		[154225] = {name="The Rusty Prince",locations={[1462]={57005740},},variant="Time displaced",quest=56182,toy=169347,},
 		[154332] = {name="Voidtender Malketh",locations={[1530]={63002800,68203040,68802520},},poi={947,6489},quest=56183,},
 		[154342] = {name="Arachnoid Harvester",locations={[1462]={52204160},},mount=1229,variant="Time displaced",quest=55512,},
