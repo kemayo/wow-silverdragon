@@ -144,7 +144,7 @@ function module:OnInitialize()
 		[73167] = {name="Huolon",locations={[554]={58005840,64404060,65005720,71805100,74004500},},mount=561,quest=33311,},
 		[73169] = {name="Jakur of Ordon",locations={[554]={52408240},},quest=33306,toy=104331,},
 		[73170] = {name="Watcher Osu",locations={[554]={57207640},},quest=33322,},
-		[73171] = {name="Champion of the Black Flame",locations={[554]={60005100,61404540,66405880,66804240,70205300,70804760},},quest=33299,toy=104331,},
+		[73171] = {name="Champion of the Black Flame",locations={[554]={60005100,61404540,66405880,66804240,70205300,70804760},},quest=33299,toy=104302,},
 		[73172] = {name="Flintlord Gairan",locations={[554]={40202580,43803320,46203920,55203800},},quest=33309,toy=104329,},
 		[73173] = {name="Urdur the Cauterizer",locations={[554]={43202660},},quest=33308,},
 		[73174] = {name="Archiereus of Flame",locations={[554]={48203320,49602200,55003580,55202740},},quest=33312,},
