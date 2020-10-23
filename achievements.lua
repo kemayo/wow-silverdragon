@@ -153,6 +153,7 @@ local achievements = {
 	},
 	[11786] = {}, -- Terrors of the Shore
 	[11841] = {}, -- Naxt Victim
+	[12026] = {}, -- Invasion Obliteration
 	[12028] = {}, -- Envision Invasion Eradication
 	[12078] = { -- Commander of Argus
 		[127323] = 37629, -- Ataxon
