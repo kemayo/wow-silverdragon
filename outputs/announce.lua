@@ -318,6 +318,10 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 	if is_dead and not self.db.profile.dead then
 		return false
 	end
+	if core.db.global.always[id] then
+		-- If you've manually added a mob, bypass any other checks
+		return true
+	end
 	if not self.db.profile.already_drop then
 		-- hide mobs which have a mount/pet/toy which you already own
 		local toy, mount, pet = ns:LootStatus(id)

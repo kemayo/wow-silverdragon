@@ -439,6 +439,11 @@ do
 		if globaldb.ignore[id] then
 			return true
 		end
+		if globaldb.always[id] then
+			-- If you've manually added a mob we should take that a signal that you always want it announced
+			-- (Unless you've also, weirdly, manually told it to be ignored as well.)
+			return false
+		end
 		if zone and zone_ignores[zone] and zone_ignores[zone][id] then
 			return true
 		end
