@@ -3,7 +3,13 @@
 ## Changed in upcoming release
 
 * Option to hide the waypoint arrow when you manually close the popup
+* Mobs that you've added to the "custom" section will now bypass most "should I announce this?" checks (e.g. you can ignore the entire Warlords source, and manually-add Rukhmar)
 * Some _very timely_ improvements on Argus
+* Achievement tooltip in the broker tooltip will now show your criteria-completion
+* Rukhmar's questid added
+* The highlight on the "store" popup theme was covering up the loot icon
+* Some more Shadowlands questids
+* Some missing pets / toys
 
 ## Changed in v90001.2
 
