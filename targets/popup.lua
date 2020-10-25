@@ -513,6 +513,10 @@ function PopupClass:COMBAT_LOG_EVENT_UNFILTERED()
 
 		-- might have changed things like achievement status
 		module:RefreshMobData(self)
+
+		if module.db.profile.closeDead then
+			self:HideWhenPossible()
+		end
 	end
 end
 function PopupClass:PLAYER_REGEN_ENABLED()
