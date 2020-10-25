@@ -1,5 +1,7 @@
 local myname, ns = ...
 
+local HBD = LibStub("HereBeDragons-2.0")
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:GetModule("ClickTarget")
 local Debug = core.Debug
@@ -406,6 +408,10 @@ PopupClass.scripts = {
 			-- worldmap:uiMapId:x:y
 			local data = self.data
 			local unit = core:FindUnitWithID(data.id)
+			local x, y = data.x, data.y
+			if not (x > 0 and y > 0) then
+				x, y = HBD:GetPlayerZonePosition()
+			end
 			local text = ("%s %s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
 				core:NameForMob(data.id, unit),
 				(unit and ('(' .. UnitHealth(unit) / UnitHealthMax(unit) * 100 .. '%) ') or ''),
