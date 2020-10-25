@@ -51,6 +51,7 @@ read_globals = {
     "C_ChatInfo",
     "C_Map",
     "C_MountJournal",
+    "C_NamePlate",
     "C_PetJournal",
     "C_QuestLog",
     "C_SuperTrack",
@@ -137,6 +138,8 @@ read_globals = {
     "UnitExists",
     "UnitFactionGroup",
     "UnitGUID",
+    "UnitHealth",
+    "UnitHealthMax",
     "UnitIsAFK",
     "UnitIsDead",
     "UnitIsVisible",
@@ -160,6 +163,7 @@ read_globals = {
 
     -- FrameXML API
     "ChatEdit_InsertLink",
+    "ChatFrame_OpenChat",
     "CreateAtlasMarkup",
     "CreateFrame",
     "CreateFramePool",

@@ -501,6 +501,28 @@ do
 	function addon:UnitID(unit)
 		return npcIdFromGuid(UnitGUID(unit))
 	end
+	function addon:FindUnitWithID(id)
+		if self:UnitID('target') == id then
+			return 'target'
+		end
+		if self:UnitID('mouseover') == id then
+			return 'mouseover'
+		end
+		for _, nameplate in ipairs(C_NamePlate.GetNamePlates()) do
+			if self:UnitID(nameplate.namePlateUnitToken) == id then
+				return nameplate.namePlateUnitToken
+			end
+		end
+		if IsInGroup() then
+			local prefix = IsInRaid() and 'raid' or 'party'
+			for i=1, GetNumGroupMembers() do
+				local unit = prefix .. i .. 'target'
+				if self:UnitID(unit) == id then
+					return unit
+				end
+			end
+		end
+	end
 end
 
 addon.round = function(num, precision)

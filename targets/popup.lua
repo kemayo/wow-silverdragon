@@ -404,7 +404,11 @@ PopupClass.scripts = {
 			module:Point()
 		elseif IsShiftKeyDown() then
 			-- worldmap:uiMapId:x:y
-			ChatEdit_InsertLink(("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+			local data = self.data
+			local unit = core:FindUnitWithID(data.id)
+			local text = ("%s %s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+				core:NameForMob(data.id, unit),
+				(unit and ('(' .. UnitHealth(unit) / UnitHealthMax(unit) * 100 .. '%) ') or ''),
 				self.data.zone,
 				self.data.x * 10000,
 				self.data.y * 10000,
@@ -412,7 +416,10 @@ PopupClass.scripts = {
 				-- core:GetMobLabel(self.data.id) or UNKNOWN
 				-- WoW seems to filter out anything which isn't the standard MAP_PIN_HYPERLINK
 				MAP_PIN_HYPERLINK
-			))
+			)
+			if not ChatEdit_InsertLink(text) then
+				ChatFrame_OpenChat(text)
+			end
 			PlaySound(SOUNDKIT.UI_MAP_WAYPOINT_CHAT_SHARE)
 		end
 	end,

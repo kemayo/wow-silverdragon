@@ -2,6 +2,9 @@
 
 ## Changed in upcoming release
 
+* Improve shift-clicking the popup to add a chat link:
+    * Don't require you to have an open chatbox before pasting it there; open the default chatbox if you have nothing else open
+    * Include the health for the mob if we can work it out (if it's a target or its nameplate is visible)
 * Option to hide the waypoint arrow when you manually close the popup
 * Mobs that you've added to the "custom" section will now bypass most "should I announce this?" checks (e.g. you can ignore the entire Warlords source, and manually-add Rukhmar)
 * Some _very timely_ improvements on Argus
