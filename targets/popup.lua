@@ -500,11 +500,13 @@ PopupClass.scripts = {
 		self:GetParent():HideWhenPossible()
 	end,
 }
--- timeStamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags
-function PopupClass:COMBAT_LOG_EVENT_UNFILTERED(_, _, combatEvent, _, _, _, _, _, destGUID)
-	if combatEvent ~= "UNIT_DIED" then
+function PopupClass:COMBAT_LOG_EVENT_UNFILTERED()
+	-- timeStamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags
+	local _, subevent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
+	if subevent ~= "UNIT_DIED" then
 		return
 	end
+
 	if destGUID and ns.IdFromGuid(destGUID) == self.data.id then
 		self.data.dead = true
 		self.dead.animIn:Play()

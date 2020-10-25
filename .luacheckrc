@@ -67,6 +67,7 @@ read_globals = {
     "ReagentBankButtonIDToInvSlotID",
     "Ambiguate",
     "CheckInteractDistance",
+    "CombatLogGetCurrentEventInfo",
     "CreateMacro",
     "CursorHasItem",
     "DeleteCursorItem",

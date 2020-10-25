@@ -11,6 +11,7 @@
 * Achievement tooltip in the broker tooltip will now show your criteria-completion
 * Rukhmar's questid added
 * The highlight on the "store" popup theme was covering up the loot icon
+* The X on the target popup wasn't appearing when the unit died
 * Some more Shadowlands questids
 * Some missing pets / toys
 
