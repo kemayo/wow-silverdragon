@@ -12,6 +12,7 @@
 * Rukhmar's questid added
 * The highlight on the "store" popup theme was covering up the loot icon
 * The X on the target popup wasn't appearing when the unit died
+* Fixed `/silverdragon add` with no parameter causing an error
 * Some more Shadowlands questids
 * Some missing pets / toys
 
