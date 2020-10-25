@@ -81,6 +81,7 @@ do
 			end
 		end
 		if DBM and db.dbm then
+			waypoint = {mobid = id}
 			DBM.Arrow:ShowRunTo(
 				x * 100,
 				y * 100,
@@ -141,8 +142,10 @@ do
 		end
 		if DBM and db.dbm then
 			Debug("Hiding DBM")
-			-- no way to tell if it's still the same
-			DBM.Arrow:Hide()
+			if waypoint and waypoint.mobid == id then
+				-- no way to tell if it's still the same
+				DBM.Arrow:Hide()
+			end
 		end
 	end
 
