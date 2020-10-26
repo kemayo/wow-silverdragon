@@ -51,9 +51,17 @@ function module:OnEnable()
 	core.RegisterCallback(self, "PopupHide")
 end
 
+
+local sources = {
+	grouptarget = true,
+	vignette = true,
+	['point-of-interest'] = true,
+	groupsync = true,
+	fake = true,
+}
 function module:Announce(_, id, zone, x, y, is_dead, source, unit)
 	if not db.enabled then return end
-	if source ~= "vignette" and source ~="fake" then return end
+	if not (source and sources[source]) then return end
 	if not (zone and x and y and x > 0 and y > 0) then return end
 	self:PointTo(id, zone, x, y, db.duration)
 end
