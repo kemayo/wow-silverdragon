@@ -9,6 +9,7 @@
 * Option to hide the target popup when the mob dies
 * Option to hide the waypoint arrow when you manually close the popup
 * Mobs that you've added to the "custom" section will now bypass most "should I announce this?" checks (e.g. you can ignore the entire Warlords source, and manually-add Rukhmar)
+* Unchecking "Got the loot" in the outputs config will now only affect mobs for which we know any drops
 * Some _very timely_ improvements on Argus
 * Achievement tooltip in the broker tooltip will now show your criteria-completion
 * Rukhmar's questid added

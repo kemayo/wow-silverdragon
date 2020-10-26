@@ -511,6 +511,13 @@ function ns:UpdateTooltipWithCompletion(tooltip, id)
 	end
 end
 
+function ns:HasLoot(id)
+	if not (id and ns.mobdb[id]) then
+		return false
+	end
+	return ns.mobdb[id].mount or ns.mobdb[id].toy or ns.mobdb[id].pet
+end
+
 function ns:LootStatus(id)
 	if not id or not ns.mobdb[id] then
 		return
