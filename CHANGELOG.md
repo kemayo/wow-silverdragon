@@ -1,6 +1,6 @@
 # Changelog
 
-## Changed in upcoming release
+## Changed in v90001.3
 
 * Improve shift-clicking the popup to add a chat link:
     * Don't require you to have an open chatbox before pasting it there; open the default chatbox if you have nothing else open
@@ -18,6 +18,7 @@
 * Fixed `/silverdragon add` with no parameter causing an error
 * Some more Shadowlands questids
 * Some missing pets / toys
+* Sha of Anger has only had one spawn point since 7.2 (thanks frumpymoons)
 
 ## Changed in v90001.2
 
