@@ -395,10 +395,10 @@ function addon:GetMobLabel(id)
 	if not name then
 		return UNKNOWN
 	end
-	if not mobdb[id] then
+	if not (mobdb[id] and mobdb[id].variant) then
 		return name
 	end
-	return name .. (mobdb[id].variant and (" (" .. mobdb[id].variant .. ")") or "")
+	return name .. (" (" .. mobdb[id].variant .. ")")
 end
 
 do
