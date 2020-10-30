@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Performance improvements when editing the mob ignore list
+
 ## Changed in v90001.3
 
 * Improve shift-clicking the popup to add a chat link:
