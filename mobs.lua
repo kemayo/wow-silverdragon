@@ -114,13 +114,13 @@ end
 function module:IgnoreChanged(callback, id, ignored)
 	local config = core:GetModule("Config", true)
 	if config then
-		self:BuildIgnoreList(config.options)
+		config.options.plugins.mobs.mobs.args.ignore.args.mobs.args["mob"..id] = ignored and toggle_mob(id) or nil
 	end
 end
 function module:CustomChanged(callback, id, watched)
 	local config = core:GetModule("Config", true)
 	if config then
-		self:BuildCustomList(config.options)
+		config.options.plugins.mobs.mobs.args.custom.args.mobs.args["mob"..id] = watched and toggle_mob(id) or nil
 	end
 end
 
