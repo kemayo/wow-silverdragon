@@ -10,7 +10,7 @@ local function toggle_mob(id)
 		name = core:GetMobLabel(id),
 		desc = "ID: " .. id,
 		type = "toggle",
-		width = "full",
+		-- width = "double",
 		descStyle = "inline",
 		order = id,
 	}
