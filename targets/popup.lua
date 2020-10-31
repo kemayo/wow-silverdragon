@@ -129,7 +129,7 @@ local PopupClassMetatable = {__index = PopupClass}
 
 function module:CreatePopup()
 	-- Set up the frame
-	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
+	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerClickTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
 	module.popup = popup
 	setmetatable(popup, PopupClassMetatable)
 
@@ -140,10 +140,16 @@ function module:CreatePopup()
 	popup:SetClampedToScreen(true)
 	popup:SetFrameStrata("DIALOG")
 	popup:RegisterForDrag("LeftButton")
+	popup:RegisterForClicks("RightButtonUp")
 
 	popup:SetAttribute("type1", "macro")
 	popup:SetAttribute("_onshow", "self:Enable()")
 	popup:SetAttribute("_onhide", "self:Disable()")
+	popup:SetAttribute("_onclick", [[ -- self, button, down
+		if button == "RightButton" then
+			self:Hide()
+		end
+	]])
 
 	popup:Hide()
 
@@ -212,7 +218,6 @@ function module:CreatePopup()
 	-- called as onclick(self, button, down):
 	close:SetAttribute("_onclick", [[
 		local popup = self:GetParent()
-		popup:Disable()
 		popup:Hide()
 		if button == "RightButton" then
 			popup:CallMethod("DoIgnore")
@@ -401,7 +406,8 @@ PopupClass.scripts = {
 	end,
 	OnMouseDown = function(self, button)
 		if button == "RightButton" then
-			self:HideWhenPossible()
+			-- handled in the secure click handler
+			return
 		elseif IsControlKeyDown() then
 			module:Point()
 		elseif IsShiftKeyDown() then

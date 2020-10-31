@@ -3,6 +3,7 @@
 ## Changed in upcoming release
 
 * Performance improvements when editing the mob ignore list
+* Right-clicking the target popup to close it will now happen immediately in combat
 
 ## Changed in v90001.3
 
