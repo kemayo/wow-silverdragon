@@ -33,8 +33,8 @@ function module:ShowFrame(data)
 
 	local name = core:NameForMob(data.id, data.unit)
 	if name then
-		local macrotext = "/cleartarget\n/targetexact "..name
-		popup:SetAttribute("macrotext", macrotext)
+		local macrotext = "/cleartarget \n/targetexact "..name
+		popup:SetAttribute("macrotext1", macrotext)
 	end
 
 	if popup:IsVisible() then
@@ -129,7 +129,7 @@ local PopupClassMetatable = {__index = PopupClass}
 
 function module:CreatePopup()
 	-- Set up the frame
-	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerClickTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
+	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
 	module.popup = popup
 	setmetatable(popup, PopupClassMetatable)
 
@@ -140,16 +140,13 @@ function module:CreatePopup()
 	popup:SetClampedToScreen(true)
 	popup:SetFrameStrata("DIALOG")
 	popup:RegisterForDrag("LeftButton")
-	popup:RegisterForClicks("RightButtonUp")
+	popup:RegisterForClicks("AnyUp")
 
-	popup:SetAttribute("type1", "macro")
+	popup:SetAttribute("type", "macro")
 	popup:SetAttribute("_onshow", "self:Enable()")
 	popup:SetAttribute("_onhide", "self:Disable()")
-	popup:SetAttribute("_onclick", [[ -- self, button, down
-		if button == "RightButton" then
-			self:Hide()
-		end
-	]])
+	-- Can't do type=click + clickbutton=close because then it'd be right-clicking the close button which also ignores the mob
+	popup:SetAttribute("macrotext2", "/click SilverDragonPopupButtonCloseButton")
 
 	popup:Hide()
 
@@ -207,7 +204,7 @@ function module:CreatePopup()
 	status:SetJustifyV("MIDDLE")
 
 	-- Close button
-	local close = CreateFrame("Button", nil, popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
+	local close = CreateFrame("Button", "SilverDragonPopupButtonCloseButton", popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
 	popup.close = close
 	close:SetSize(16, 16)
 	close:GetDisabledTexture():SetTexture("")
