@@ -4,6 +4,7 @@ local HBD = LibStub("HereBeDragons-2.0")
 
 local addon = LibStub("AceAddon-3.0"):NewAddon("SilverDragon", "AceEvent-3.0", "AceTimer-3.0", "AceConsole-3.0")
 SilverDragon = addon
+SilverDragon.NAMESPACE = ns -- for separate addons
 addon.events = LibStub("CallbackHandler-1.0"):New(addon)
 
 local Debug
