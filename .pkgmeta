@@ -28,6 +28,7 @@ externals:
    lib/LibTextDump-1.0: https://repos.wowace.com/wow/libtextdump-1-0
 
 move-folders:
+   SilverDragon/Overlay: SilverDragon_Overlay
    SilverDragon/Data/Vanilla: SilverDragon_Vanilla
    SilverDragon/Data/BurningCrusade: SilverDragon_BurningCrusade
    SilverDragon/Data/Wrath: SilverDragon_Wrath

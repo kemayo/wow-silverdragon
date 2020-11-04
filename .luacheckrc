@@ -16,6 +16,8 @@ ignore = {
 
 globals = {
     "SilverDragon",
+    "SilverDragonOverlayMinimapPinMixin",
+    "SilverDragonOverlayWorldMapPinMixin",
     "SilverDragonVignetteStretchPinMixin",
     "BINDING_HEADER_SILVERDRAGON",
     "SDCacheTooltipTextLeft1",
@@ -168,6 +170,7 @@ read_globals = {
     "CreateAtlasMarkup",
     "CreateFrame",
     "CreateFramePool",
+    "CreateFromMixins",
     "InterfaceOptionsFrame_OpenToCategory",
     "CloseDropDownMenus",
     "ToggleDropDownMenu",
@@ -177,6 +180,8 @@ read_globals = {
     "ScrollingEdit_OnUpdate",
     "GameTooltip_SetTitle",
     "GameTooltip_SetDefaultAnchor",
+    "MapCanvasDataProviderMixin",
+    "MapCanvasPinMixin",
 
     -- FrameXML Constants
     "ACTION_PARTY_KILL",

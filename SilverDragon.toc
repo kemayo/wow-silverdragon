@@ -11,7 +11,7 @@
 ## X-Donate: PayPal:kemayo AT gmail DOT com
 ## X-Curse-Project-ID: 14647
 ## X-WoWI-ID: 6606
-## OptionalDependencies: Ace3, LibSharedMedia-3.0, HandyNotes, TomTom, _NPCScan.Overlay, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons, LibTextDump-1.0
+## OptionalDependencies: Ace3, LibSharedMedia-3.0, TomTom, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons, LibTextDump-1.0
 ## SavedVariables: SilverDragon3DB,SilverDragon2DB
 ## LoadOnDemand: 0
 
@@ -49,10 +49,11 @@ targets\looks\looks.xml
 mobs.lua
 
 # working with other addons
-integration\handynotes.lua
 integration\tomtom.lua
 
 #@debug@
 # data imports
 Data\module.xml
+# overlay
+Overlay\module.xml
 #@end-debug@
