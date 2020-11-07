@@ -2,6 +2,10 @@
 
 ## Changed in upcoming release
 
+* Improve shift-clicking the popup to add a chat link:
+    * New default: immediately send the link to the /general channel
+    * Which channel to send to can be configured
+    * Old behavior of just opening the default chatbox is available in options
 * Performance improvements when editing the mob ignore list
 * Right-clicking the target popup to close it will now happen immediately in combat
 
