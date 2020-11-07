@@ -12,6 +12,8 @@ function module:OnInitialize()
 			style = "SilverDragon",
 			closeAfter = 30,
 			closeDead = true,
+			announce = "IMMEDIATELY", -- or "OPENLAST"
+			announceChannel = "CHANNEL",
 			sources = {
 				target = false,
 				grouptarget = true,
@@ -69,25 +71,60 @@ function module:OnInitialize()
 						order = 25,
 					},
 					closeDead = config.toggle("Close when dead", "Try to close the click-target frame when the mob dies. We'll only be able to *tell* if it dies if we're nearby and in combat. Might have to wait until you're out of combat to do the hiding.", 30),
-					sources = {
-						type="multiselect",
-						name = "Rare Sources",
-						desc = "Which ways of finding a rare should cause this frame to appear?",
-						get = function(info, key) return self.db.profile.sources[key] end,
-						set = function(info, key, v) self.db.profile.sources[key] = v end,
-						values = {
-							target = "Targets",
-							grouptarget = "Group targets",
-							mouseover = "Mouseover",
-							nameplate = "Nameplates",
-							vignette = "Vignettes",
-							['point-of-interest'] = "Map Points of Interest",
-							chat = "Chat yells",
-							groupsync = "Group Sync",
-							guildsync = "Guild Sync",
-						},
+					announceHeader = {
+						type = "header",
+						name = "Chat announcements",
 						order = 40,
 					},
+					announceDesc = config.desc("Shift-clicking the target popup will try to send a message about the rare. If you've got it targeted or are near enough to see its nameplate, health will be included.\nIf you have an editbox open, it'll paste the message into that for you to send. If you don't, it'll do whatever these settings say:", 41),
+					announce = {
+						type = "select",
+						name = "Announce to chat",
+						values = {
+							OPENLAST = "Open last editbox",
+							IMMEDIATELY = "Send immediately",
+						},
+						order = 45,
+					},
+					announceChannel = {
+						type = "select",
+						name = "Immediate announce to...",
+						values = {
+							["CHANNEL"] = COMMUNITIES_DEFAULT_CHANNEL_NAME, -- strictly this isn't correct, but...
+							["SAY"] = CHAT_MSG_SAY,
+							["YELL"] = CHAT_MSG_YELL,
+							["PARTY"] = CHAT_MSG_PARTY,
+							["RAID"] = CHAT_MSG_RAID,
+							["GUILD"] = CHAT_MSG_GUILD,
+							["OFFICER"] = CHAT_MSG_OFFICER,
+						},
+						order = 46,
+					},
+					sources = {
+						type = "group",
+						name = "Rare Sources",
+						args = {
+							desc = config.desc("Which ways of finding a rare should cause this frame to appear?", 0),
+							sources = {
+								type="multiselect",
+								name = "Sources",
+								get = function(info, key) return self.db.profile.sources[key] end,
+								set = function(info, key, v) self.db.profile.sources[key] = v end,
+								values = {
+									target = "Targets",
+									grouptarget = "Group targets",
+									mouseover = "Mouseover",
+									nameplate = "Nameplates",
+									vignette = "Vignettes",
+									['point-of-interest'] = "Map Points of Interest",
+									chat = "Chat yells",
+									groupsync = "Group Sync",
+									guildsync = "Guild Sync",
+								},
+								order = 10,
+							},
+						},
+					}
 				},
 			},
 		}
@@ -152,4 +189,12 @@ function module:PLAYER_REGEN_ENABLED()
 		self:ShowFrame(pending)
 		pending = nil
 	end
+end
+
+function module:GetGeneralID()
+	local channelFormat = GetLocale() == "ruRU" and "%s: %s" or "%s - %s"
+	local zoneText = GetZoneText()
+	local general = EnumerateServerChannels()
+	if zoneText == nil or general == nil then return false end
+	return GetChannelName(channelFormat:format(general, zoneText))
 end

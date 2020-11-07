@@ -426,10 +426,30 @@ PopupClass.scripts = {
 				-- WoW seems to filter out anything which isn't the standard MAP_PIN_HYPERLINK
 				MAP_PIN_HYPERLINK
 			)
-			if not ChatEdit_InsertLink(text) then
-				ChatFrame_OpenChat(text)
-			end
 			PlaySound(SOUNDKIT.UI_MAP_WAYPOINT_CHAT_SHARE)
+			-- if you have an open editbox, just paste to it
+			if not ChatEdit_InsertLink(text) then
+				-- then do whatever's configured
+				if module.db.profile.announce == "OPENLAST" then
+					ChatFrame_OpenChat(text)
+				elseif module.db.profile.announce == "IMMEDIATELY" then
+					local generalID
+					if module.db.profile.announceChannel == "CHANNEL" then
+						generalID = module:GetGeneralID()
+						if not generalID then
+							ChatFrame_OpenChat(text)
+							return
+						end
+					end
+					Debug("SendChatMessage", text, module.db.profile.announceChannel, generalID)
+					SendChatMessage(
+						text,
+						module.db.profile.announceChannel,
+						nil, -- use default language
+						module.db.profile.announceChannel == "CHANNEL" and generalID or nil
+					)
+				end
+			end
 		end
 	end,
 	-- hooked:
