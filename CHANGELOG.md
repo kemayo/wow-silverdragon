@@ -6,8 +6,10 @@
     * New default: immediately send the link to the /general channel
     * Which channel to send to can be configured
     * Old behavior of just opening the default chatbox is available in options
-* Performance improvements when editing the mob ignore list
+* Map icons no longer require HandyNotes
+* Right-clicking the LDB icon on the world map will immediately show the options for the map icons
 * Right-clicking the target popup to close it will now happen immediately in combat
+* Performance improvements when editing the mob ignore list
 
 ## Changed in v90001.3
 

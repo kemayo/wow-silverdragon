@@ -102,6 +102,6 @@ function module:OnInitialize()
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("SilverDragon", "SilverDragon")
 end
 
-function module:ShowConfig()
-	LibStub("AceConfigDialog-3.0"):Open("SilverDragon")
+function module:ShowConfig(...)
+	LibStub("AceConfigDialog-3.0"):Open("SilverDragon", ...)
 end

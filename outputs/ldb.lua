@@ -171,6 +171,9 @@ function module:SetupDataObject()
 			local config = core:GetModule("Config", true)
 			if config then
 				config:ShowConfig()
+				if tooltip.SDOptions.config_path then
+					LibStub("AceConfigDialog-3.0"):SelectGroup("SilverDragon", unpack(tooltip.SDOptions.config_path))
+				end
 			end
 		end
 	end
@@ -201,6 +204,7 @@ end
 function module:SetupWorldMap()
 	local button_options = {
 		help = true,
+		config_path = {'overlay'},
 	}
 	local button = CreateFrame("Button", nil, WorldMapFrame.NavBar)
 	button:SetSize(20, 20)
@@ -375,6 +379,8 @@ do
 
 		tooltip:Clear()
 		wipe(sorted_mobs)
+
+		tooltip.SDOptions = options
 
 		local zone = options.nearby
 		if zone and ns.mobsByZone[zone] then
