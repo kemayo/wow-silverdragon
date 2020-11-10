@@ -171,7 +171,7 @@ function module:SetupDataObject()
 			local config = core:GetModule("Config", true)
 			if config then
 				config:ShowConfig()
-				if tooltip.SDOptions.config_path then
+				if tooltip and tooltip.SDOptions.config_path then
 					LibStub("AceConfigDialog-3.0"):SelectGroup("SilverDragon", unpack(tooltip.SDOptions.config_path))
 				end
 			end
