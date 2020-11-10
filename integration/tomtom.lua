@@ -10,6 +10,7 @@ function module:OnInitialize()
 		profile = {
 			enabled = true,
 			duration = 120,
+			blizzard = true,
 			tomtom = true,
 			dbm = false,
 			replace = false,
@@ -29,8 +30,9 @@ function module:OnInitialize()
 				args = {
 					about = config.desc("When we see a mob via its minimap icon, we can ask an arrow to point us to it", 0),
 					enabled = config.toggle("Automatically", "Make a waypoint for the mob as soon as it's seen", 20),
-					tomtom = config.toggle("Use TomTom", "If TomTom is installed, use it instead", 25, nil, function() return not TomTom end),
-					dbm = config.toggle("Use DeadlyBossMods", "If DeadlyBossMods is installed, use it instead", 26, nil, function() return not DBM end),
+					blizzard = config.toggle("Use built-in", "Use the built-in Blizzard waypoints", 24),
+					tomtom = config.toggle("Use TomTom", "If TomTom is installed, use it", 25, nil, function() return not TomTom end),
+					dbm = config.toggle("Use DeadlyBossMods", "If DeadlyBossMods is installed, use it", 26, nil, function() return not DBM end),
 					replace = config.toggle("Replace waypoints", "Replace an existing waypoint if one is set (doesn't apply to TomTom)", 30),
 					duration = {
 						type = "range",
@@ -67,29 +69,25 @@ function module:Announce(_, id, zone, x, y, is_dead, source, unit)
 end
 
 do
-	local waypoint, previous
+	local waypoints = {}
+	local previous
 	function module:PointTo(id, zone, x, y, duration, force)
 		Debug("Waypoint.PointTo", id, zone, x, y, duration, force)
 		if TomTom and db.tomtom then
-			if waypoint then
-				TomTom:RemoveWaypoint(waypoint)
+			if waypoints.tomtom then
+				TomTom:RemoveWaypoint(waypoints.tomtom)
 			end
-			waypoint = TomTom:AddWaypoint(zone, x, y, {
+			waypoints.tomtom = TomTom:AddWaypoint(zone, x, y, {
 				title = core:GetMobLabel(id) or UNKNOWN,
 				persistent = false,
 				minimap = false,
 				world = false,
 				cleardistance = 25
 			})
-			waypoint.mobid = id
-			if duration and duration > 0 then
-				C_Timer.After(duration, function()
-					self:Hide(id)
-				end)
-			end
+			waypoints.tomtom.mobid = id
 		end
-		if DBM and db.dbm then
-			waypoint = {mobid = id}
+		if DBM and db.dbm and (db.replace or not DBM.Arrow:IsShown()) then
+			waypoints.dbm = {mobid = id}
 			DBM.Arrow:ShowRunTo(
 				x * 100,
 				y * 100,
@@ -101,10 +99,7 @@ do
 				zone
 			)
 		end
-		if (DBM and db.dbm) or (TomTom and db.tomtom) then
-			return
-		end
-		if C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
+		if db.blizzard and C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
 			previous = C_Map.GetUserWaypoint()
 			if previous then
 				previous.wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
@@ -113,22 +108,23 @@ do
 			if (not previous) or db.replace or force then
 				C_Map.SetUserWaypoint(uiMapPoint)
 				C_SuperTrack.SetSuperTrackedUserWaypoint(true)
-				waypoint = uiMapPoint
-				if duration and duration > 0 then
-					C_Timer.After(duration, function()
-						self:Hide(id)
-					end)
-				end
+				waypoints.blizzard = C_Map.GetUserWaypoint()
 			end
+		end
+
+		if duration and duration > 0 then
+			C_Timer.After(duration, function()
+				self:Hide(id)
+			end)
 		end
 	end
 	function module:Hide(id)
 		Debug("Waypoint.Hide", id)
-		if waypoint and waypoint.position and waypoint.uiMapID then
+		if waypoints.blizzard then
 			Debug("Hiding C_Map")
-			-- it's a UiMapPoint, so it's probably the Blizzard option
+			local waypoint = waypoints.blizzard
 			local stillCurrent = C_Map.GetUserWaypoint()
-			if stillCurrent and waypoint and waypoint.position and waypoint.position:IsEqualTo(stillCurrent.position) then
+			if stillCurrent and waypoint.uiMapID == stillCurrent.uiMapID and Vector2DMixin.IsEqualTo(waypoint.position, stillCurrent.position) then
 				C_Map.ClearUserWaypoint()
 				if previous then
 					-- restore the one we replaced
@@ -136,23 +132,23 @@ do
 					C_SuperTrack.SetSuperTrackedUserWaypoint(previous.wasTracked)
 					previous = nil
 				end
-				waypoint = nil
+				waypoints.blizzard = nil
 			end
-			return
 		end
-		if TomTom and db.tomtom then
-			Debug("Hiding TomTom")
-			if waypoint and waypoint.mobid == id then
-				TomTom:RemoveWaypoint(waypoint)
+		if TomTom and db.tomtom and waypoints.tomtom then
+			if waypoints.tomtom.mobid == id then
+				Debug("Hiding TomTom")
+				TomTom:RemoveWaypoint(waypoints.tomtom)
 				-- tomtom doesn't need to restore a waypoint, because it has a stack
-				waypoint = nil
+				waypoints.tomtom = nil
 			end
 		end
-		if DBM and db.dbm then
-			Debug("Hiding DBM")
-			if waypoint and waypoint.mobid == id then
+		if DBM and db.dbm and waypoints.dbm then
+			if waypoints.dbm.mobid == id then
+				Debug("Hiding DBM")
 				-- no way to tell if it's still the same
 				DBM.Arrow:Hide()
+				waypoints.dbm = nil
 			end
 		end
 	end

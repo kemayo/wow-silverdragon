@@ -187,6 +187,7 @@ read_globals = {
     "GameTooltip_SetDefaultAnchor",
     "MapCanvasDataProviderMixin",
     "MapCanvasPinMixin",
+    "Vector2DMixin",
 
     -- FrameXML Constants
     "ACTION_PARTY_KILL",

@@ -1,5 +1,12 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Refined waypoint options:
+    * Blizzard waypoints are now equivalent to TomTom/DBM, not just a fallback, and you can choose all/none of them independently
+    * Blizzard waypoints weren't being auto-removed on timeout correctly
+    * An error could happen on auto-removal if you had TomTom *and* DBM enabled simultaneously
+
 ## Changed in v90001.4
 
 * The Death Rising pre-launch rares in Icecrown are added temporarily; they won't actually spawn before the appropriate point in the event is reached
