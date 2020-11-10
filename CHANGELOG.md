@@ -1,7 +1,8 @@
 # Changelog
 
-## Changed in upcoming release
+## Changed in v90001.4
 
+* The Death Rising pre-launch rares in Icecrown are added temporarily; they won't actually spawn before the appropriate point in the event is reached
 * Improve shift-clicking the popup to add a chat link:
     * New default: immediately send the link to the /general channel
     * Which channel to send to can be configured
