@@ -417,7 +417,7 @@ PopupClass.scripts = {
 			end
 			local text = ("%s %s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
 				core:NameForMob(data.id, unit),
-				(unit and ('(' .. UnitHealth(unit) / UnitHealthMax(unit) * 100 .. '%) ') or ''),
+				(unit and ('(' .. math.ceil(UnitHealth(unit) / UnitHealthMax(unit) * 100) .. '%) ') or ''),
 				self.data.zone,
 				self.data.x * 10000,
 				self.data.y * 10000,
