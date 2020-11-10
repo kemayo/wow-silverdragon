@@ -39,6 +39,10 @@ function module:OnEnable()
     self:RegisterEvent("CHAT_MSG_MONSTER_YELL", "OnChatMessage")
 end
 
+local redirects = {
+    [62352] = 62346, -- Chief Salyis => Galleon
+}
+
 function module:OnChatMessage(event, text, name, ...)
     if not self.db.profile.enabled then return end
     local zone = HBD:GetPlayerZone()
@@ -50,6 +54,9 @@ function module:OnChatMessage(event, text, name, ...)
         id = core:IdForMob(name, zone)
     end
     Debug("OnChatMessage", event, text, name, id, guid)
+    if id and redirects[id] then
+        id = redirects[id]
+    end
     if not id or not (ns.mobdb[id] or globaldb.always[id]) then return end
     -- Guess from the event whether we're anywhere near the mob
     if event == "CHAT_MSG_MONSTER_SAY" or event == "CHAT_MSG_MONSTER_EMOTE" then

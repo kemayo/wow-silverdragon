@@ -10,6 +10,7 @@
 * Right-clicking the LDB icon on the world map will immediately show the options for the map icons
 * Right-clicking the target popup to close it will now happen immediately in combat
 * Performance improvements when editing the mob ignore list
+* Galleon's chat announcement wasn't being noticed, because Chief Salyis isn't Galleon
 
 ## Changed in v90001.3
 

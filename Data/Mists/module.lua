@@ -73,6 +73,7 @@ function module:OnInitialize()
 		[59369] = {name="Doctor Theolen Krastinov",locations={[476]={34404660,36402460,36403380,36403960,39205200},},},
 		[60491] = {name="Sha of Anger",boss=true,locations={[379]={53606460},},mount=473,quest=32099,},
 		[62346] = {name="Galleon",boss=true,locations={[376]={71606440},},mount=515,quest=32098,},
+		[62352] = {name="Chief Salyis",boss=true,locations={[376]={71616441},},mount=515,quest=32098,hidden=true,},
 		[62880] = {name="Gochao the Ironfist",locations={[390]={27001340},},},
 		[62881] = {name="Gaohun the Soul-Severer",locations={[390]={21201700,52205900,53006440},},},
 		[63101] = {name="General Temuja",locations={[390]={26405040,28405600},},},
