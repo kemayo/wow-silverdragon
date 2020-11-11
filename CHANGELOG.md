@@ -9,6 +9,8 @@
 * Map overlay improvements:
     * Shift-click a pin to link to it in chat (using your target popup settings)
     * Alt-click a pin to set a waypoint for it
+* Add notes on Death Rising rares about their spawn order
+* Fix a spawn location for Prince Keleseth
 
 ## Changed in v90001.4
 
