@@ -325,6 +325,10 @@ do
 		return CompletableCellPrototype.SetupCompletion(self, isCollected)
 	end
 
+	local function mob_click(cell, mobid)
+		core.events:Fire("BrokerMobClick", mobid)
+	end
+
 	local function show_loot_tooltip(cell, mobid, only)
 		tooltip:SetFrameStrata("DIALOG")
 		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
@@ -416,6 +420,7 @@ do
 					core:FormatLastSeen(last_seen),
 					(tameable and 'Tameable' or '')
 				)
+				tooltip:SetCellScript(index, 1, "OnMouseUp", mob_click, id)
 				if ns.mobdb[id] and ns.mobdb[id].notes then
 					tooltip:SetCellScript(index, 1, "OnEnter", show_notes_tooltip, id)
 					tooltip:SetCellScript(index, 1, "OnLeave", hide_subtooltip)

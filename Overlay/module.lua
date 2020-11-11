@@ -43,6 +43,7 @@ function module:OnEnable()
     WorldMapFrame:AddDataProvider(self.WorldMapDataProvider)
     HBD.RegisterCallback(self, "PlayerZoneChanged", "UpdateMinimapIcons")
     core.RegisterCallback(self, "Ready", "BuildNodeList")
+    core.RegisterCallback(self, "BrokerMobClick")
     self:RegisterEvent("LOOT_CLOSED", "Update")
     self:BuildNodeList()
 end
@@ -52,6 +53,7 @@ function module:OnDisable()
     end
     HBD.UnregisterCallback(self, "PlayerZoneChanged")
     core.UnregisterCallback(self, "Ready")
+    core.UnregisterCallback(self, "BrokerMobClick")
 end
 
 module.nodes = {}
@@ -70,6 +72,23 @@ function module:BuildNodeList()
     self:Update()
 end
 
+function module:BrokerMobClick(_, mobid)
+    self:FocusMob(mobid)
+end
+
+function module:FocusMob(mobid)
+    if self.focus_mob == mobid then
+        self.focus_mob = nil
+    else
+        self.focus_mob = mobid
+    end
+    if WorldMapFrame:IsShown() then
+        for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
+            pin:ApplyFocusState()
+        end
+    end
+end
+
 function module:Update()
     self:UpdateMinimapIcons()
     self:UpdateWorldMapIcons()
@@ -79,7 +98,8 @@ end
 
 local SilverDragonOverlayPinMixinBase = {}
 
-function SilverDragonOverlayPinMixinBase:OnAcquired(x, y, textureInfo, scale, alpha, originalCoord, originalMapID, minimap)
+function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, scale, alpha, originalCoord, originalMapID, minimap)
+    self.mobid = mobid
     self.coord = originalCoord
     self.uiMapID = originalMapID
     self.minimap = minimap
@@ -107,6 +127,8 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(x, y, textureInfo, scale, al
         end
         self.texture:SetTexture(textureInfo.icon)
     end
+
+    self:ApplyFocusState()
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseEnter()
@@ -139,10 +161,27 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
     end
 
     tooltip:Show()
+
+    if not self.minimap and self.mobid ~= module.focus_mob then
+        for pin in self:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
+            if pin.mobid == self.mobid then
+                pin.emphasis:SetVertexColor(1, 1, 1, 1)
+                pin.emphasis:Show()
+            end
+        end
+    end
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseLeave()
     GameTooltip:Hide()
+
+    if not self.minimap then
+        for pin in self:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
+            if pin.mobid ~= module.focus_mob then
+                pin.emphasis:Hide()
+            end
+        end
+    end
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseDown(button)
@@ -153,15 +192,35 @@ function SilverDragonOverlayPinMixinBase:OnMouseUp(button)
     if button == "RightButton" then
         module:ShowPinDropdown(self, self.uiMapID, self.coord)
     end
-    if IsAltKeyDown() then
-       module.CreateWaypoint(self, self.uiMapID, self.coord)
-    end
-    if IsShiftKeyDown() and targets then
-        local id, name = core:GetMobByCoord(self.uiMapID, self.coord)
-        local x, y = core:GetXY(self.coord)
-        if id and x and y then
-            targets:SendLinkToMob(id, self.uiMapID, x, y)
+    if button == "LeftButton" then
+        if IsAltKeyDown() then
+           module.CreateWaypoint(self, self.uiMapID, self.coord)
+           return
         end
+        if IsShiftKeyDown() then
+            if targets then
+                local x, y = core:GetXY(self.coord)
+                if x and y then
+                    targets:SendLinkToMob(self.mobid, self.uiMapID, x, y)
+                end
+            end
+            return
+        end
+        if not self.minimap then
+            module:FocusMob(self.mobid)
+        end
+    end
+end
+
+function SilverDragonOverlayPinMixinBase:ApplyFocusState()
+    if self.mobid == module.focus_mob then
+        self.emphasis:Show()
+        self.emphasis:SetVertexColor(0, 1, 1, 1)
+    else
+        if not MouseIsOver(self) then
+            self.emphasis:Hide()
+        end
+        self.emphasis:SetVertexColor(1, 1, 1, 1)
     end
 end
 
@@ -183,13 +242,10 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
     local uiMapID = self:GetMap():GetMapID()
     if not uiMapID then return end
 
-    for coord, uiMapID2, textureData, scale, alpha in module:IterateNodes(uiMapID, false) do
+    for coord, mobid, textureData, scale, alpha in module:IterateNodes(uiMapID, false) do
         local x, y = core:GetXY(coord)
-        if uiMapID2 and uiMapID ~= uiMapID2 then
-            x, y = HBD:TranslateZoneCoordinates(x, y, uiMapID2, uiMapID)
-        end
         if x and y then
-            self:GetMap():AcquirePin("SilverDragonOverlayWorldMapPinTemplate", x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID2 or uiMapID, false)
+            self:GetMap():AcquirePin("SilverDragonOverlayWorldMapPinTemplate", mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, false)
         end
     end
 end
@@ -226,13 +282,13 @@ function module:UpdateMinimapIcons()
 
     local ourScale, ourAlpha = 12 * db.icon_scale_minimap, db.icon_alpha_minimap
 
-    for coord, uiMapID2, textureData, scale, alpha in module:IterateNodes(uiMapID, true) do
+    for coord, mobid, textureData, scale, alpha in module:IterateNodes(uiMapID, true) do
         local x, y = core:GetXY(coord)
         local pin, newPin = self.pool:Acquire()
         if newPin then
             pin:OnLoad()
         end
-        pin:OnAcquired(x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID2 or uiMapID, true)
+        pin:OnAcquired(mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, true)
 
         scale = ourScale * (scale or 1.0)
         pin:SetHeight(scale) -- Can't use :SetScale as that changes our positioning scaling as well
@@ -503,7 +559,7 @@ do
                 else
                     icon = icon_for_mob(value)
                 end
-                return state, nil, icon, db.icon_scale * icon.scale, db.icon_alpha
+                return state, value, icon, db.icon_scale * icon.scale, db.icon_alpha
             end
             state, value = next(t, state)
         end

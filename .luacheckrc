@@ -127,6 +127,7 @@ read_globals = {
     "IsReagentBankUnlocked",
     "IsShiftKeyDown",
     "LoadAddOn",
+    "MouseIsOver",
     "PlaySound",
     "PlaySoundFile",
     "PlayerHasToy",

@@ -1,21 +1,26 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-    <Frame name="SilverDragonOverlayWorldMapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" mixin="SilverDragonOverlayWorldMapPinMixin" virtual="true">
-        <Size x="30" y="30"/>
+    <Frame name="SilverDragonOverlayMapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" virtual="true">
         <Layers>
             <Layer level="OVERLAY">
                 <Texture parentKey="texture" setAllPoints="true">
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture name="$parentHighlightTexture" parentKey="emphasis" hidden="true" atlas="Callings-TopHighlight" alphaMode="ADD">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.texture"/>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.texture"/>
+                    </Anchors>
+                    <Color r="1.0" g="1.0" b="1.0" a="0.4"/>
                 </Texture>
             </Layer>
         </Layers>
     </Frame>
-    <Frame name="SilverDragonOverlayMinimapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" mixin="SilverDragonOverlayMinimapPinMixin" virtual="true">
+    <Frame name="SilverDragonOverlayWorldMapPinTemplate" inherits="SilverDragonOverlayMapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" mixin="SilverDragonOverlayWorldMapPinMixin" virtual="true">
+        <Size x="30" y="30"/>
+    </Frame>
+    <Frame name="SilverDragonOverlayMinimapPinTemplate" inherits="SilverDragonOverlayMapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" mixin="SilverDragonOverlayMinimapPinMixin" virtual="true">
         <Size x="12" y="12"/>
-        <Layers>
-            <Layer level="OVERLAY">
-                <Texture parentKey="texture" setAllPoints="true">
-                </Texture>
-            </Layer>
-        </Layers>
     </Frame>
 </Ui>
