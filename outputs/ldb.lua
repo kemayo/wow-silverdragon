@@ -325,8 +325,23 @@ do
 		return CompletableCellPrototype.SetupCompletion(self, isCollected)
 	end
 
-	local function mob_click(cell, mobid)
+	local function mob_click(cell, mobid, button)
+		if button ~= "LeftButton" then return end
+		local zone, x, y = core:GetClosestLocationForMob(mobid)
+		if IsControlKeyDown() then
+			if zone and x and y then
+				core:GetModule("TomTom"):PointTo(mobid, zone, x, y, 0, true)
+			end
+			return
+		end
+		if IsShiftKeyDown() then
+			if zone and x and y then
+				core:GetModule("ClickTarget"):SendLinkToMob(mobid, zone, x, y)
+			end
+			return
+		end
 		core.events:Fire("BrokerMobClick", mobid)
+		OpenWorldMap(zone)
 	end
 
 	local function show_loot_tooltip(cell, mobid, only)
@@ -346,11 +361,33 @@ do
 		GameTooltip:SetHyperlink(GetAchievementLink(achievementid))
 		GameTooltip:Show()
 	end
-	local function show_notes_tooltip(cell, mobid)
+	local locations = {}
+	local function show_mob_tooltip(cell, mobid)
 		tooltip:SetFrameStrata("DIALOG")
 		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
-		-- GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(mobid))
-		GameTooltip:AddLine(ns.mobdb[mobid] and ns.mobdb[mobid].notes or UNKNOWN)
+		GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(mobid))
+		if ns.mobdb[mobid] then
+			if ns.mobdb[mobid].notes then
+				GameTooltip:AddLine(ns.mobdb[mobid].notes)
+			end
+			for zone, coords in pairs(ns.mobdb[mobid].locations or {}) do
+				if #coords == 1 then
+					local x, y = core:GetXY(coords[1])
+					GameTooltip:AddDoubleLine(core.zone_names[zone], ("%.1f, %.1f"):format(x * 100, y * 100))
+				else
+					wipe(locations)
+					for i, coord in ipairs(coords) do
+						local x, y = core:GetXY(coord)
+						table.insert(locations, ("[%.1f, %.1f]"):format(x * 100, y * 100))
+					end
+					GameTooltip:AddLine((SUBTITLE_FORMAT):format(core.zone_names[zone], (", "):join(unpack(locations))), nil, nil, nil, true)
+				end
+			end
+		end
+		core:GetModule("Tooltip"):UpdateTooltip(mobid, true, true)
+		GameTooltip:AddLine("Left-click to focus on the map", 0, 1, 1)
+		GameTooltip:AddLine("Control-click to set a waypoint", 0, 1, 1)
+		GameTooltip:AddLine("Shift-click to link location in chat", 0, 1, 1)
 		GameTooltip:Show()
 	end
 	local function hide_subtooltip()
@@ -421,10 +458,8 @@ do
 					(tameable and 'Tameable' or '')
 				)
 				tooltip:SetCellScript(index, 1, "OnMouseUp", mob_click, id)
-				if ns.mobdb[id] and ns.mobdb[id].notes then
-					tooltip:SetCellScript(index, 1, "OnEnter", show_notes_tooltip, id)
-					tooltip:SetCellScript(index, 1, "OnLeave", hide_subtooltip)
-				end
+				tooltip:SetCellScript(index, 1, "OnEnter", show_mob_tooltip, id)
+				tooltip:SetCellScript(index, 1, "OnLeave", hide_subtooltip)
 				if ns.mobdb[id] and ns.mobdb[id].mount then
 					index, col = tooltip:SetCell(index, col, ns.mobdb[id].mount, MountCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_mount_tooltip, id)
