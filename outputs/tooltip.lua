@@ -45,20 +45,20 @@ end
 -- This is split out entirely so I can test this without having to actually hunt down a rare:
 -- /script SilverDragon:GetModule('Tooltip'):UpdateTooltip(51059)
 -- /script SilverDragon:GetModule('Tooltip'):UpdateTooltip(32491)
-function module:UpdateTooltip(id)
+function module:UpdateTooltip(id, force_achievement, force_drop, force_id)
 	if not id then
 		return
 	end
 
-	if self.db.profile.achievement then
+	if self.db.profile.achievement or force_achievement then
 		ns:UpdateTooltipWithCompletion(GameTooltip, id)
 	end
 
-	if self.db.profile.drop then
+	if self.db.profile.drop or force_drop then
 		ns:UpdateTooltipWithLootSummary(GameTooltip, id)
 	end
 
-	if self.db.profile.id then
+	if self.db.profile.id or force_id then
 		GameTooltip:AddDoubleLine("id", id, 1, 1, 0, 1, 1, 0)
 	end
 

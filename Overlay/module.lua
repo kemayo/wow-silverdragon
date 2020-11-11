@@ -9,6 +9,7 @@ local HBD = LibStub("HereBeDragons-2.0")
 local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 
 local db
+local escapes = core.escapes
 
 function module:OnInitialize()
     self.db = core.db:RegisterNamespace("Overlay", {
@@ -25,6 +26,8 @@ function module:OnInitialize()
             achieved = true,
             questcomplete = false,
             achievementless = true,
+            tooltip_help = true,
+            tooltip_completion = true,
             hidden = {},
         },
     })
@@ -114,17 +117,26 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
         tooltip:SetOwner(self, "ANCHOR_RIGHT")
     end
     local id, name, questid, _, _, lastseen = core:GetMobByCoord(self.uiMapID, self.coord)
-    if not name then
+    if name then
+        tooltip:AddLine(core:GetMobLabel(id))
+        if ns.mobdb[id].notes then
+            tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
+        end
+        tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
+        if db.tooltip_completion then
+            core:GetModule("Tooltip"):UpdateTooltip(id, true, true)
+        end
+    else
         tooltip:AddLine(UNKNOWN)
         tooltip:AddDoubleLine("At", self.uiMapID .. ':' .. self.coord)
-        return tooltip:Show()
     end
-    tooltip:AddLine(core:GetMobLabel(id))
-    if ns.mobdb[id].notes then
-        tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
+
+    if db.tooltip_help then
+        GameTooltip:AddLine(escapes.keyDown .. ALT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
+        if C_Map.CanSetUserWaypointOnMap(self.uiMapID) then
+            GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
+        end
     end
-    tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
-    core:GetModule("Tooltip"):UpdateTooltip(id)
 
     tooltip:Show()
 end
@@ -137,8 +149,19 @@ function SilverDragonOverlayPinMixinBase:OnMouseDown(button)
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseUp(button)
+    local targets = core:GetModule("ClickTarget", true)
     if button == "RightButton" then
         module:ShowPinDropdown(self, self.uiMapID, self.coord)
+    end
+    if IsAltKeyDown() then
+       module.CreateWaypoint(self, self.uiMapID, self.coord)
+    end
+    if IsShiftKeyDown() and targets then
+        local id, name = core:GetMobByCoord(self.uiMapID, self.coord)
+        local x, y = core:GetXY(self.coord)
+        if id and x and y then
+            targets:SendLinkToMob(id, self.uiMapID, x, y)
+        end
     end
 end
 
@@ -250,7 +273,7 @@ do
         end
     end
 
-    local function createWaypoint(button, uiMapID, coord)
+    function module.CreateWaypoint(button, uiMapID, coord)
         -- point to it, without a timeout, and ignoring whether it'll be replacing an existing waypoint
         local id, name = core:GetMobByCoord(uiMapID, coord)
         local x, y = core:GetXY(coord)
@@ -293,7 +316,7 @@ do
                 info.notCheckable = nil
                 info.text = "Create waypoint"
                 info.icon = nil
-                info.func = createWaypoint
+                info.func = module.CreateWaypoint
                 info.arg1 = clicked_zone
                 info.arg2 = clicked_coord
                 UIDropDownMenu_AddButton(info, level)

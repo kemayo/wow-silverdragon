@@ -89,6 +89,16 @@ function module:RegisterConfig()
                 },
                 order = 10,
             },
+            tooltip = {
+                type = "group",
+                name = "Tooltips",
+                inline = true,
+                args = {
+                    tooltip_completion = config.toggle("Completion", "Show achievement/drop completion in the tooltip", 0),
+                    tooltip_help = config.toggle("Help", "Show the click shortcuts in the tooltip", 10),
+                },
+                order = 15,
+            },
             world = {
                 type = "group",
                 name = "World Map",

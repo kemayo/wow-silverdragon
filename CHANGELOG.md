@@ -6,6 +6,9 @@
     * Blizzard waypoints are now equivalent to TomTom/DBM, not just a fallback, and you can choose all/none of them independently
     * Blizzard waypoints weren't being auto-removed on timeout correctly
     * An error could happen on auto-removal if you had TomTom *and* DBM enabled simultaneously
+* Map overlay improvements:
+    * Shift-click a pin to link to it in chat (using your target popup settings)
+    * Alt-click a pin to set a waypoint for it
 
 ## Changed in v90001.4
 
