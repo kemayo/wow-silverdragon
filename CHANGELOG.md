@@ -1,6 +1,6 @@
 # Changelog
 
-## Changed in upcoming release
+## Changed in v90001.5
 
 * Refined waypoint options:
     * Blizzard waypoints are now equivalent to TomTom/DBM, not just a fallback, and you can choose all/none of them independently
