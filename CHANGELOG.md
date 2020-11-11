@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Minimap pins update their focus state immediately
+
 ## Changed in v90001.5
 
 * Refined waypoint options:

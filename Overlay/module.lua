@@ -86,6 +86,9 @@ function module:FocusMob(mobid)
         for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
             pin:ApplyFocusState()
         end
+        for pin in pairs(self.minimapPins) do
+            pin:ApplyFocusState()
+        end
     end
 end
 
@@ -269,6 +272,7 @@ end
 -- Minimap
 
 local minimapPins = {}
+module.minimapPins = minimapPins
 function module:UpdateMinimapIcons()
     HBDPins:RemoveAllMinimapIcons(self)
     for _, pin in pairs(minimapPins) do
