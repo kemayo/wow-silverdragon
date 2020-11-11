@@ -157,7 +157,7 @@ function module:OnInitialize()
 		-- Death Rising event:
 		[174066] = {name="Patchwerk",locations={[118]={34406850},},quest=62344,},
 		[174051] = {name="Trollgore",locations={[118]={58303940},},quest=62329,},
-		[174060] = {name="Prince Keleseth",locations={[118]={5404470},},quest=62338,},
+		[174060] = {name="Prince Keleseth",locations={[118]={53404470},},quest=62338,},
 		[174055] = {name="Marwyn",locations={[118]={58208340},},quest=62333,},
 		[174067] = {name="Noth the Plaguebringer",locations={[118]={31607050},},quest=62345,},
 		[174065] = {name="Blood Queen Lana'thel",locations={[118]={49703270},},quest=62343,},
