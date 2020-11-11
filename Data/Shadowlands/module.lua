@@ -172,7 +172,7 @@ function module:OnInitialize()
 		[174049] = {name="Prince Taldaram",locations={[118]={29606220},},quest=62327,},
 		[174052] = {name="Novos the Summoner",locations={[118]={77806610},},quest=62330,},
 		[174061] = {name="Ingvar the Plunderer",locations={[118]={52405260},},quest=62339,},
-		[174062] = {name="Skadi the Ruthless",locations={[118]={57805610},},quest=62340,},
+		[174062] = {name="Skadi the Ruthless",locations={[118]={57805610},},mount=264,quest=62340,},
 		[174048] = {name="Elder Nadox",locations={[118]={44204910},},quest=62326,},
 		[174056] = {name="Forgemaster Garfrost",locations={[118]={58607250},},quest=62334,},
 	})
