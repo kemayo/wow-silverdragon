@@ -325,6 +325,11 @@ do
 		return CompletableCellPrototype.SetupCompletion(self, isCollected)
 	end
 
+	local function hide_subtooltip()
+		tooltip:SetFrameStrata("TOOLTIP")
+		GameTooltip:Hide()
+	end
+
 	local function mob_click(cell, mobid, button)
 		if button ~= "LeftButton" then return end
 		local zone, x, y = core:GetClosestLocationForMob(mobid)
@@ -389,10 +394,12 @@ do
 		GameTooltip:AddLine("Control-click to set a waypoint", 0, 1, 1)
 		GameTooltip:AddLine("Shift-click to link location in chat", 0, 1, 1)
 		GameTooltip:Show()
+
+		core.events:Fire("BrokerMobEnter", mobid)
 	end
-	local function hide_subtooltip()
-		tooltip:SetFrameStrata("TOOLTIP")
-		GameTooltip:Hide()
+	local function mob_leave(cell, mobid)
+		hide_subtooltip()
+		core.events:Fire("BrokerMobLeave", mobid)
 	end
 
 	local function mob_sorter(aid, bid)
@@ -459,7 +466,7 @@ do
 				)
 				tooltip:SetCellScript(index, 1, "OnMouseUp", mob_click, id)
 				tooltip:SetCellScript(index, 1, "OnEnter", show_mob_tooltip, id)
-				tooltip:SetCellScript(index, 1, "OnLeave", hide_subtooltip)
+				tooltip:SetCellScript(index, 1, "OnLeave", mob_leave, id)
 				if ns.mobdb[id] and ns.mobdb[id].mount then
 					index, col = tooltip:SetCell(index, col, ns.mobdb[id].mount, MountCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_mount_tooltip, id)

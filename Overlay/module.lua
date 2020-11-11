@@ -44,6 +44,8 @@ function module:OnEnable()
     HBD.RegisterCallback(self, "PlayerZoneChanged", "UpdateMinimapIcons")
     core.RegisterCallback(self, "Ready", "BuildNodeList")
     core.RegisterCallback(self, "BrokerMobClick")
+    core.RegisterCallback(self, "BrokerMobEnter")
+    core.RegisterCallback(self, "BrokerMobLeave")
     self:RegisterEvent("LOOT_CLOSED", "Update")
     self:BuildNodeList()
 end
@@ -54,6 +56,8 @@ function module:OnDisable()
     HBD.UnregisterCallback(self, "PlayerZoneChanged")
     core.UnregisterCallback(self, "Ready")
     core.UnregisterCallback(self, "BrokerMobClick")
+    core.UnregisterCallback(self, "BrokerMobEnter")
+    core.UnregisterCallback(self, "BrokerMobLeave")
 end
 
 module.nodes = {}
@@ -74,6 +78,33 @@ end
 
 function module:BrokerMobClick(_, mobid)
     self:FocusMob(mobid)
+end
+function module:BrokerMobEnter(_, mobid)
+    self:HighlightMob(mobid)
+end
+function module:BrokerMobLeave(_, mobid)
+    self:UnhighlightMob(mobid)
+end
+
+function module:HighlightMob(mobid)
+    if mobid == self.focus_mob then return end
+    if not WorldMapFrame:IsShown() then return end
+    for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
+        if pin.mobid == mobid then
+            pin.emphasis:SetVertexColor(1, 1, 1, 1)
+            pin.emphasis:Show()
+        end
+    end
+end
+
+function module:UnhighlightMob(mobid)
+    if mobid == self.focus_mob then return end
+    if not WorldMapFrame:IsShown() then return end
+    for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
+        if pin.mobid == mobid then
+            pin.emphasis:Hide()
+        end
+    end
 end
 
 function module:FocusMob(mobid)
@@ -165,13 +196,8 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
 
     tooltip:Show()
 
-    if not self.minimap and self.mobid ~= module.focus_mob then
-        for pin in self:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
-            if pin.mobid == self.mobid then
-                pin.emphasis:SetVertexColor(1, 1, 1, 1)
-                pin.emphasis:Show()
-            end
-        end
+    if not self.minimap then
+        module:HighlightMob(self.mobid)
     end
 end
 
@@ -179,11 +205,7 @@ function SilverDragonOverlayPinMixinBase:OnMouseLeave()
     GameTooltip:Hide()
 
     if not self.minimap then
-        for pin in self:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
-            if pin.mobid ~= module.focus_mob then
-                pin.emphasis:Hide()
-            end
-        end
+        module:UnhighlightMob(self.mobid)
     end
 end
 
