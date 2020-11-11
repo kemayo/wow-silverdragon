@@ -400,46 +400,11 @@ PopupClass.scripts = {
 		elseif IsShiftKeyDown() then
 			-- worldmap:uiMapId:x:y
 			local data = self.data
-			local unit = core:FindUnitWithID(data.id)
 			local x, y = data.x, data.y
 			if not (x > 0 and y > 0) then
 				x, y = HBD:GetPlayerZonePosition()
 			end
-			local text = ("%s %s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
-				core:NameForMob(data.id, unit),
-				(unit and ('(' .. math.ceil(UnitHealth(unit) / UnitHealthMax(unit) * 100) .. '%) ') or ''),
-				self.data.zone,
-				self.data.x * 10000,
-				self.data.y * 10000,
-				-- Can't do this:
-				-- core:GetMobLabel(self.data.id) or UNKNOWN
-				-- WoW seems to filter out anything which isn't the standard MAP_PIN_HYPERLINK
-				MAP_PIN_HYPERLINK
-			)
-			PlaySound(SOUNDKIT.UI_MAP_WAYPOINT_CHAT_SHARE)
-			-- if you have an open editbox, just paste to it
-			if not ChatEdit_InsertLink(text) then
-				-- then do whatever's configured
-				if module.db.profile.announce == "OPENLAST" then
-					ChatFrame_OpenChat(text)
-				elseif module.db.profile.announce == "IMMEDIATELY" then
-					local generalID
-					if module.db.profile.announceChannel == "CHANNEL" then
-						generalID = module:GetGeneralID()
-						if not generalID then
-							ChatFrame_OpenChat(text)
-							return
-						end
-					end
-					Debug("SendChatMessage", text, module.db.profile.announceChannel, generalID)
-					SendChatMessage(
-						text,
-						module.db.profile.announceChannel,
-						nil, -- use default language
-						module.db.profile.announceChannel == "CHANNEL" and generalID or nil
-					)
-				end
-			end
+			module:SendLinkToMob(data.id, data.zone, x, y)
 		end
 	end,
 	-- hooked:

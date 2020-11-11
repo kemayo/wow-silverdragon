@@ -198,3 +198,42 @@ function module:GetGeneralID()
 	if zoneText == nil or general == nil then return false end
 	return GetChannelName(channelFormat:format(general, zoneText))
 end
+
+function module:SendLinkToMob(id, uiMapID, x, y)
+	local unit = core:FindUnitWithID(id)
+	local text = ("%s %s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+		core:NameForMob(id, unit),
+		(unit and ('(' .. math.ceil(UnitHealth(unit) / UnitHealthMax(unit) * 100) .. '%) ') or ''),
+		uiMapID,
+		x * 10000,
+		y * 10000,
+		-- Can't do this:
+		-- core:GetMobLabel(self.data.id) or UNKNOWN
+		-- WoW seems to filter out anything which isn't the standard MAP_PIN_HYPERLINK
+		MAP_PIN_HYPERLINK
+	)
+	PlaySound(SOUNDKIT.UI_MAP_WAYPOINT_CHAT_SHARE)
+	-- if you have an open editbox, just paste to it
+	if not ChatEdit_InsertLink(text) then
+		-- then do whatever's configured
+		if module.db.profile.announce == "OPENLAST" then
+			ChatFrame_OpenChat(text)
+		elseif module.db.profile.announce == "IMMEDIATELY" then
+			local generalID
+			if module.db.profile.announceChannel == "CHANNEL" then
+				generalID = module:GetGeneralID()
+				if not generalID then
+					ChatFrame_OpenChat(text)
+					return
+				end
+			end
+			Debug("SendChatMessage", text, module.db.profile.announceChannel, generalID)
+			SendChatMessage(
+				text,
+				module.db.profile.announceChannel,
+				nil, -- use default language
+				module.db.profile.announceChannel == "CHANNEL" and generalID or nil
+			)
+		end
+	end
+end
