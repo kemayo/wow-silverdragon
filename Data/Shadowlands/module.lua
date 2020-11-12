@@ -157,7 +157,7 @@ function module:OnInitialize()
 		-- Death Rising event:
 		[174048] = {name="Elder Nadox",locations={[118]={44204910},},notes="After Prince Taldaram, before Noth the Plaguebringer",quest=62326,},
 		[174049] = {name="Prince Taldaram",locations={[118]={29606220},},notes="After Krik'thir the Gatewatcher, before Elder Nadox",quest=62327,},
-		[174050] = {name="Krik'thir the Gatewatcher",locations={[118]={6750580},},notes="After Trollgore, before Prince Taldaram",quest=62328,},
+		[174050] = {name="Krik'thir the Gatewatcher",locations={[118]={67505800},},notes="After Trollgore, before Prince Taldaram",quest=62328,},
 		[174051] = {name="Trollgore",locations={[118]={58303940},},notes="After Novos the Summoner, before Krik'thir the Gatewatcher",quest=62329,},
 		[174052] = {name="Novos the Summoner",locations={[118]={77806610},},notes="After The Prophet Tharon'ja, before Trollgore",quest=62330,},
 		[174053] = {name="The Prophet Tharon'ja",locations={[118]={79306060},},notes="After Falric, before Novos the Summoner",quest=62331,},
