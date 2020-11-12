@@ -3,6 +3,7 @@
 ## Changed in upcoming release
 
 * Mobs on the map which are completed but shown anyway get slightly smaller icons (the "stars" theme did this already, but now it's consistent)
+* The "ignore mobs that an alt has completed the achievement for" option was being ignored for mobs that had a vignette
 
 ## Changed in v90001.6
 

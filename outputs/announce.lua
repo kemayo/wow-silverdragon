@@ -331,8 +331,12 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		end
 	end
 	if not self.db.profile.already then
-		local quest, achievement, by_alt = ns:CompletionStatus(id)
 		-- hide already-completed mobs
+		local quest, achievement, by_alt = ns:CompletionStatus(id)
+		if by_alt and not self.db.profile.already_alt then
+			-- an alt has completed the achievement, and we don't want to know about that
+			return false
+		end
 		if source == "vignette" then
 			-- The vignette's presence implies no quest completion
 			return true
@@ -342,10 +346,6 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		end
 		if achievement ~= nil then
 			-- can just fall back on achievement
-			if by_alt and not self.db.profile.already_alt then
-				-- an alt has completed the achievement, and we don't want to know about that
-				return false
-			end
 			return not achievement
 		end
 	end
