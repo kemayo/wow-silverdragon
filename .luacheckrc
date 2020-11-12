@@ -182,6 +182,7 @@ read_globals = {
     "CloseDropDownMenus",
     "ToggleDropDownMenu",
     "UIDropDownMenu_AddButton",
+    "UIDropDownMenu_CreateInfo",
     "UISpecialFrames",
     "ScrollingEdit_OnCursorChanged",
     "ScrollingEdit_OnUpdate",
