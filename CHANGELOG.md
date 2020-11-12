@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Mobs on the map which are completed but shown anyway get slightly smaller icons (the "stars" theme did this already, but now it's consistent)
+
 ## Changed in v90001.6
 
 * Mobs in the broker tooltip now get click actions and informational tooltips

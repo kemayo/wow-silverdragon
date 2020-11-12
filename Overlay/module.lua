@@ -467,24 +467,24 @@ do
         circles = {
             default = tex("PlayerPartyBlip", 1, 0.33, 0.33, 1.3),
             partial = tex("PlayerPartyBlip", 1, 1, 0.33, 1.3),
-            done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1.3),
+            done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1),
             loot = tex("Warfront-NeutralHero-Silver", 1, 0.33, 0.33, 1.3),
             loot_partial = tex("Warfront-NeutralHero-Silver", 1, 1, 0.33, 1.3),
-            loot_done = tex("Warfront-NeutralHero-Silver", 0.33, 1, 0.33, 1.3),
+            loot_done = tex("Warfront-NeutralHero-Silver", 0.33, 1, 0.33, 1),
             mount = tex("PlayerRaidBlip", 1, 0.33, 0.33, 1.3),
             mount_partial = tex("PlayerRaidBlip", 1, 1, 0.33, 1.3),
-            mount_done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1.3),
+            mount_done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1),
         },
         skulls = {
             default = tex("Islands-AzeriteBoss", 1, 0.33, 0.33, 1.8), -- red skull
             partial = tex("Islands-AzeriteBoss", 1, 1, 0.33, 1.8), -- yellow skull
-            done = tex("Islands-AzeriteBoss", 0.33, 1, 0.33, 1.8), -- green skull
+            done = tex("Islands-AzeriteBoss", 0.33, 1, 0.33, 1.5), -- green skull
             loot = tex("nazjatar-nagaevent", 1, 0.33, 0.33, 1.8), -- red glowing skull
             loot_partial = tex("nazjatar-nagaevent", 1, 1, 0.33, 1.8), -- yellow glowing skull
-            loot_done = tex("nazjatar-nagaevent", 0.33, 1, 0.33, 1.8), -- green glowing skull
+            loot_done = tex("nazjatar-nagaevent", 0.33, 1, 0.33, 1.5), -- green glowing skull
             mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.3), -- red shiny skull
             mount_partial = tex("VignetteKillElite", 1, 1, 0.33, 1.3), -- yellow shiny skull
-            mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1.3), -- green shiny skull
+            mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1), -- green shiny skull
         },
         stars = {
             default = tex("VignetteKill", 1, 0.33, 1, 1.3), -- red star
@@ -492,10 +492,10 @@ do
             done = tex("VignetteKill", 0, 1, 1), -- green star
             loot = tex("VignetteLootElite", 1, 0.33, 1, 1.3), -- red shiny skull
             loot_partial = tex("VignetteLootElite", 0, 1, 1, 1.3), -- yellow shiny skull
-            loot_done = tex("VignetteLootElite", 0, 1, 0, 1.3), -- green shiny skull
+            loot_done = tex("VignetteLootElite", 0, 1, 0, 1), -- green shiny skull
             mount = tex("VignetteKillElite", 1, 0.33, 1, 1.3), -- red shiny skull
             mount_partial = tex("VignetteKillElite", 0, 1, 1, 1.3), -- yellow shiny skull
-            mount_done = tex("VignetteKillElite", 0, 1, 0, 1.3), -- green shiny skull
+            mount_done = tex("VignetteKillElite", 0, 1, 0, 1), -- green shiny skull
         }
     }
     local function should_show_mob(id)
