@@ -1,6 +1,6 @@
 # Changelog
 
-## Changed in upcoming release
+## Changed in v90001.6
 
 * Mobs in the broker tooltip now get click actions and informational tooltips
     * Click a line to open the map with that mob focused
