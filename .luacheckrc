@@ -222,6 +222,7 @@ read_globals = {
     "DRAG_MODEL",
     "ENABLE",
     "EQUIP_CONTAINER",
+    "HIDE",
     "ICON_LIST",
     "IGNORE",
     "INCOMPLETE",

@@ -209,6 +209,7 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
         if C_Map.CanSetUserWaypointOnMap(self.uiMapID) then
             GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
         end
+        GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.rightClick .. "  " .. HIDE )
     end
 
     tooltip:Show()
@@ -232,7 +233,13 @@ end
 function SilverDragonOverlayPinMixinBase:OnMouseUp(button)
     local targets = core:GetModule("ClickTarget", true)
     if button == "RightButton" then
-        module:ShowPinDropdown(self, self.uiMapID, self.coord)
+        if IsShiftKeyDown() then
+            db.hidden[self.mobid] = true
+            module:Update()
+        else
+            module:ShowPinDropdown(self, self.uiMapID, self.coord)
+        end
+        return
     end
     if button == "LeftButton" then
         if IsAltKeyDown() then
