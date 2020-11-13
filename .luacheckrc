@@ -18,6 +18,7 @@ globals = {
     "SilverDragon",
     "SilverDragonOverlayMinimapPinMixin",
     "SilverDragonOverlayWorldMapPinMixin",
+    "SilverDragonOverlayMapPinPingDriverAnimationMixin",
     "SilverDragonVignetteStretchPinMixin",
     "BINDING_HEADER_SILVERDRAGON",
     "SDCacheTooltipTextLeft1",

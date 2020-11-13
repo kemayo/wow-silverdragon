@@ -7,15 +7,38 @@
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture name="$parentHighlightTexture" parentKey="emphasis" hidden="true" atlas="Callings-TopHighlight" alphaMode="ADD">
+                <Texture parentKey="emphasis" hidden="true" atlas="Callings-TopHighlight" alphaMode="ADD">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.texture"/>
                         <Anchor point="BOTTOMRIGHT" relativeKey="$parent.texture"/>
                     </Anchors>
                     <Color r="1.0" g="1.0" b="1.0" a="0.4"/>
                 </Texture>
+                <Texture parentKey="Expand" file="Interface/minimap/UI-Minimap-Ping-Expand" alpha="0">
+                    <Size x="30" y="30"/>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </Texture>
             </Layer>
         </Layers>
+        <Animations>
+            <AnimationGroup parentKey="DriverAnimation" mixin="SilverDragonOverlayMapPinPingDriverAnimationMixin" looping="REPEAT">
+                <Alpha childKey="Expand" fromAlpha="0" toAlpha="1"                      duration="0.2" order="1"/>
+                <Alpha childKey="Expand" fromAlpha="1" toAlpha="0" startDelay=".45"     duration="0.2" order="1"/>
+                <Alpha childKey="Expand" fromAlpha="0" toAlpha="1" startDelay=".575"    duration="0.2" order="1"/>
+                <Alpha childKey="Expand" fromAlpha="1" toAlpha="0" startDelay=".95"     duration="0.2" order="1"/>
+
+                <Scripts>
+                    <OnPlay method="OnPlay"/>
+                    <OnLoop method="OnLoop"/>
+                    <OnFinished method="OnFinished"/>
+                </Scripts>
+            </AnimationGroup>
+            <AnimationGroup parentKey="ScaleAnimation" looping="REPEAT">
+                <Scale childKey="Expand" fromScaleX=".5" fromScaleY=".5" toScaleX="1.2" toScaleY="1.2" duration=".575" order="1"/>
+            </AnimationGroup>
+        </Animations>
     </Frame>
     <Frame name="SilverDragonOverlayWorldMapPinTemplate" inherits="SilverDragonOverlayMapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" mixin="SilverDragonOverlayWorldMapPinMixin" virtual="true">
         <Size x="30" y="30"/>

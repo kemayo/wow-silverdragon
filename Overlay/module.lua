@@ -46,6 +46,8 @@ function module:OnEnable()
     core.RegisterCallback(self, "BrokerMobClick")
     core.RegisterCallback(self, "BrokerMobEnter")
     core.RegisterCallback(self, "BrokerMobLeave")
+    core.RegisterCallback(self, "Seen")
+
     self:RegisterEvent("LOOT_CLOSED", "Update")
     self:BuildNodeList()
 end
@@ -58,6 +60,7 @@ function module:OnDisable()
     core.UnregisterCallback(self, "BrokerMobClick")
     core.UnregisterCallback(self, "BrokerMobEnter")
     core.UnregisterCallback(self, "BrokerMobLeave")
+    core.UnregisterCallback(self, "Seen")
 end
 
 module.nodes = {}
@@ -86,6 +89,14 @@ function module:BrokerMobLeave(_, mobid)
     self:UnhighlightMob(mobid)
 end
 
+function module:Seen(_, id, zone, x, y, dead, source, unit)
+    self.last_mob = id
+    self.last_mob_time = time()
+    if WorldMapFrame:IsShown() then
+        self.WorldMapDataProvider:Ping(id)
+    end
+end
+
 function module:HighlightMob(mobid)
     if mobid == self.focus_mob then return end
     if not WorldMapFrame:IsShown() then return end
@@ -110,16 +121,22 @@ end
 function module:FocusMob(mobid)
     if self.focus_mob == mobid then
         self.focus_mob = nil
+        self.focus_mob_ping = nil
     else
         self.focus_mob = mobid
     end
     if WorldMapFrame:IsShown() then
         for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
             pin:ApplyFocusState()
+            if pin.mobid == self.focus_mob then
+                pin:Ping()
+            end
         end
-        for pin in pairs(self.minimapPins) do
-            pin:ApplyFocusState()
-        end
+    else
+        self.focus_mob_ping = true
+    end
+    for pin in pairs(self.minimapPins) do
+        pin:ApplyFocusState()
     end
 end
 
@@ -237,6 +254,11 @@ function SilverDragonOverlayPinMixinBase:OnMouseUp(button)
     end
 end
 
+function SilverDragonOverlayPinMixinBase:Ping()
+    self.DriverAnimation:Play()
+    self.ScaleAnimation:Play()
+end
+
 function SilverDragonOverlayPinMixinBase:ApplyFocusState()
     if self.mobid == module.focus_mob then
         self.emphasis:Show()
@@ -273,6 +295,23 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
             self:GetMap():AcquirePin("SilverDragonOverlayWorldMapPinTemplate", mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, false)
         end
     end
+
+    if module.last_mob and time() < (module.last_mob_time + 30) then
+        self:Ping(module.last_mob)
+    end
+    if module.focus_mob_ping then
+        self:Ping(module.focus_mob)
+        module.focus_mob_ping = nil
+    end
+end
+
+-- /script SilverDragon:GetModule("Overlay").WorldMapDataProvider:Ping(32487)
+function module.WorldMapDataProvider:Ping(mobid)
+    for pin in self:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
+        if pin.mobid == mobid then
+            pin:Ping()
+        end
+    end
 end
 
 SilverDragonOverlayWorldMapPinMixin = CreateFromMixins(MapCanvasPinMixin, SilverDragonOverlayPinMixinBase)
@@ -285,6 +324,26 @@ end
 
 function SilverDragonOverlayWorldMapPinMixin:OnReleased()
     self:Hide()
+end
+
+SilverDragonOverlayMapPinPingDriverAnimationMixin = {}
+
+function SilverDragonOverlayMapPinPingDriverAnimationMixin:OnPlay()
+    self.loops = 0
+    self:GetParent().Expand:Show()
+end
+
+function SilverDragonOverlayMapPinPingDriverAnimationMixin:OnLoop()
+    self.loops = self.loops + 1
+    if self.loops >= 2 then
+        self:Finish()
+    end
+end
+
+function SilverDragonOverlayMapPinPingDriverAnimationMixin:OnFinished()
+    local pin = self:GetParent()
+    pin.ScaleAnimation:Stop()
+    pin.Expand:Hide()
 end
 
 function module:UpdateWorldMapIcons()
