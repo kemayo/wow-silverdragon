@@ -140,6 +140,16 @@ function module:RegisterConfig()
                         width = "full",
                         order = 0,
                     },
+                    minimap_edge = {
+                        type = "select",
+                        name = "Show on edge",
+                        values = {
+                            [module.const.EDGE_NEVER] = "Never",
+                            [module.const.EDGE_FOCUS] = "Focused",
+                            [module.const.EDGE_ALWAYS] = "Always",
+                        },
+                        order = 10,
+                    },
                     icon_scale_minimap = {
                         type = "range",
                         name = "Icon Scale",

@@ -11,12 +11,18 @@ local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 local db
 local escapes = core.escapes
 
+module.const = {
+    EDGE_NEVER = 0,
+    EDGE_FOCUS = 1,
+    EDGE_ALWAYS = 2,
+}
+
 function module:OnInitialize()
     self.db = core.db:RegisterNamespace("Overlay", {
         profile = {
             worldmap = true,
             minimap = true,
-            minimap_edge = false,
+            minimap_edge = module.const.EDGE_FOCUS,
             icon_theme = 'skulls', -- circles / skulls
             icon_color = 'distinct', -- completion / distinct
             icon_scale = 1,
@@ -135,15 +141,19 @@ function module:FocusMob(mobid)
     else
         self.focus_mob_ping = true
     end
-    for pin in pairs(self.minimapPins) do
-        pin:ApplyFocusState()
-    end
+    self:UpdateMinimapIcons()
 end
 
 function module:Update()
     self:UpdateMinimapIcons()
     self:UpdateWorldMapIcons()
 end
+
+C_Timer.NewTicker(0.5, function(...)
+    for pin in pairs(module.minimapPins) do
+        pin:UpdateEdge()
+    end
+end)
 
 -- Pin mixin
 
@@ -387,8 +397,15 @@ function module:UpdateMinimapIcons()
         pin:SetWidth(scale)
         pin:SetAlpha(ourAlpha * (alpha or 1.0))
 
+        local edge = db.minimap_edge == module.const.EDGE_ALWAYS
+        if db.minimap_edge == module.const.EDGE_FOCUS then
+            edge = mobid == module.focus_mob
+        end
+
         minimapPins[pin] = pin
-        HBDPins:AddMinimapIconMap(self, pin, uiMapID, x, y, false, db.minimap_edge)
+        HBDPins:AddMinimapIconMap(self, pin, uiMapID, x, y, false, edge)
+
+        pin:UpdateEdge()
     end
 end
 
@@ -406,6 +423,10 @@ function SilverDragonOverlayMinimapPinMixin:OnLoad()
 
     self:SetMouseClickEnabled(true)
     self:SetMouseMotionEnabled(true)
+end
+
+function SilverDragonOverlayMinimapPinMixin:UpdateEdge()
+    self:SetAlpha(HBDPins:IsMinimapIconOnEdge(self) and 0.6 or 1)
 end
 
 -- Dropdown setup
