@@ -45,6 +45,7 @@ local redirects = {
 
 function module:OnChatMessage(event, text, name, ...)
     if not self.db.profile.enabled then return end
+    if not core.db.profile.instances and IsInInstance() then return end
     local zone = HBD:GetPlayerZone()
     local guid = select(10, ...)
     local id, x, y

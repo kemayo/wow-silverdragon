@@ -37,6 +37,8 @@ function module:OnEnable()
 end
 
 function module:WorkOutMobFromVignette(instanceid)
+	if not self.db.profile.enabled then return end
+	if not core.db.profile.instances and IsInInstance() then return end
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
 	if not vignetteInfo then
 		return Debug("vignette had no info")

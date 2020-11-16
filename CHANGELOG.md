@@ -9,6 +9,7 @@
 * Mobs on the map which are completed but shown anyway get slightly smaller icons (the "stars" theme did this already, but now it's consistent)
 * The "ignore mobs that an alt has completed the achievement for" option was being ignored for mobs that had a vignette
 * Some mobs (Basten) couldn't be hidden from the map... but now they can!
+* Chat and vignette scanning now respect the "don't scan in instances" setting
 
 ## Changed in v90001.6
 
