@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v90002.0
+
+* This one is just a TOC bump, y'all
+
 ## Changed in v90001.7
 
 * There's a ping highlight on the world map for:
