@@ -189,6 +189,8 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
         self.texture:SetTexture(textureInfo.icon)
     end
 
+    self.DriverAnimation:Finish()
+
     self:ApplyFocusState()
 end
 

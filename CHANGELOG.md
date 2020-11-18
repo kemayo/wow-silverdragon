@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Make sure the ping animation is stopped when the pin frames are reused
+
 ## Changed in v90002.0
 
 * This one is just a TOC bump, y'all
