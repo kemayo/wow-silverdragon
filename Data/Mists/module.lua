@@ -40,7 +40,7 @@ function module:OnInitialize()
 		[50776] = {name="Nalash Verdantis",locations={[422]={64005860},},pet=836,},
 		[50780] = {name="Sahn Tidehunter",locations={[390]={69203020},},},
 		[50782] = {name="Sarnak",locations={[371]={64407400},},},
-		[50783] = {name="Salyin Warscout",locations={[376]={66200500,67405940,69605420,74804860},},},
+		[50783] = {name="Salyin Warscout",locations={[376]={66200500,67405940,69605420,74804860},},toy=86583,},
 		[50787] = {name="Arness the Scale",locations={[418]={56204680},},},
 		[50789] = {name="Nessos the Oracle",locations={[379]={63801380},},},
 		[50791] = {name="Siltriss the Sharpener",locations={[388]={59208540},},},
