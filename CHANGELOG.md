@@ -3,6 +3,7 @@
 ## Changed in upcoming release
 
 * Make sure the ping animation is stopped when the pin frames are reused
+* Fix up various Bastion mobs, including making sure they're flagged as being part of the achievement
 * Remove the Death Rising rares, since the event is done
 
 ## Changed in v90002.0
