@@ -123,7 +123,7 @@ function module:OnInitialize()
 		[170414] = {name="Howling Spectre",locations={[1705]={},},},
 		[170417] = {name="Animated Stygia",locations={[1705]={},},},
 		[170434] = {name="Amalgamation of Sin",locations={[1525]={},},quest=60836,},
-		[170548] = {name="Sundancer",locations={[1533]={61409050},},mount=1307,},
+		[170548] = {name="Sundancer",locations={[1533]={60109350},},mount=1307,notes="Use the statue and a Skystrider Glider",},
 		[170623] = {name="Dark Watcher",locations={[1533]={27803000},},quest=60883,},
 		[170634] = {name="Shadeweaver Zeris",locations={[1543]={29805960},},quest=60884,},
 		[170711] = {name="Dolos",locations={[1543]={32946646},},quest=60909,},
