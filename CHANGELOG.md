@@ -3,6 +3,7 @@
 ## Changed in upcoming release
 
 * Make sure the ping animation is stopped when the pin frames are reused
+* Remove the Death Rising rares, since the event is done
 
 ## Changed in v90002.0
 
