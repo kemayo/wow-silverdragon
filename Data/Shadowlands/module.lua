@@ -126,6 +126,7 @@ function module:OnInitialize()
 		[170548] = {name="Sundancer",locations={[1533]={60109350},},mount=1307,notes="Use the statue and a Skystrider Glider",},
 		[170623] = {name="Dark Watcher",locations={[1533]={27803000},},quest=60883,},
 		[170634] = {name="Shadeweaver Zeris",locations={[1543]={29805960},},quest=60884,},
+		[170659] = {name="Basilofos, King of the Hill",locations={[1533]={48605080},},quest=60897,},
 		[170711] = {name="Dolos",locations={[1543]={32946646},},quest=60909,},
 		[170731] = {name="Thanassos",locations={[1543]={27407150},},quest=60914,},
 		[170774] = {name="Eketra",locations={[1543]={23205300},},quest=60915,},
