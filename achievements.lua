@@ -443,6 +443,7 @@ local achievements = {
 	[14308] = {}, -- Adventurer of Maldraxxus
 	[14309] = {}, -- Adventurer of Ardenweald
 	[14310] = {}, -- Adventurer of Revendreth
+	[14744] = {}, -- Better to Be Lucky Than Dead
 }
 core.achievements = achievements
 local mobs_to_achievement = {

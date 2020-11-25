@@ -3,6 +3,7 @@
 ## Changed in upcoming release
 
 * Add the ability to toggle the map icons on/off by clicking the world map broker icon
+* Add the Better to Be Lucky Than Dead achievement to the Maw mobs
 
 ## Changed in v90002.1
 
