@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Add the ability to toggle the map icons on/off by clicking the world map broker icon
+
 ## Changed in v90002.1
 
 * Make sure the ping animation is stopped when the pin frames are reused

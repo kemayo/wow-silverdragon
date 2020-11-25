@@ -35,7 +35,7 @@ read_globals = {
     "ceil", "floor",
     "abs", "mod", "max",
     "sin", "cos", "tan",
-    "table", "tinsert", "tContains", "wipe",
+    "table", "tinsert", "tContains", "tAppendAll", "wipe",
     "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower",
     "time",
 

@@ -11,6 +11,13 @@ local module = core:NewModule("LDB", "AceEvent-3.0")
 local dataobject, tooltip, db
 local rares_seen = {}
 
+local default_help = {
+	"Right-click to open settings",
+}
+if core.debuggable then
+	table.insert(default_help, "Shift-right-click to view debug information")
+end
+
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("LDB", {
 		profile = {
@@ -202,9 +209,15 @@ function module:SetupDataObject()
 end
 
 function module:SetupWorldMap()
+	local overlay = core:GetModule("Overlay", true)
+	local help = {}
+	if overlay then
+		table.insert(help, "Click to toggle map icons")
+	end
+	tAppendAll(help, default_help)
 	local button_options = {
-		help = true,
-		config_path = {'overlay'},
+		help = help,
+		config_path = overlay and {'overlay'} or nil,
 	}
 	local button = CreateFrame("Button", nil, WorldMapFrame.NavBar)
 	button:SetSize(20, 20)
@@ -218,7 +231,14 @@ function module:SetupWorldMap()
 		module:ShowTooltip(button, button_options)
 	end)
 	-- onleave is handled by the tooltip's autohide
-	button:SetScript("OnClick", dataobject.OnClick)
+	button:SetScript("OnClick", function(self, mButton)
+		if overlay and mButton == "LeftButton" and not IsModifierKeyDown() then
+			overlay.db.profile.worldmap = not overlay.db.profile.worldmap
+			overlay:UpdateWorldMapIcons()
+			return
+		end
+		dataobject.OnClick(self, mButton)
+	end)
 	module.worldmap = button
 	if not db.profile.worldmap then
 		button:Hide()
@@ -544,10 +564,9 @@ do
 
 		if options.help then
 			tooltip:AddSeparator()
-			local index = tooltip:AddLine("Right-click to open settings")
-			tooltip:SetLineTextColor(index, 0, 1, 1)
-			if core.debuggable then
-				index = tooltip:AddLine("Shift-right-click to view debug information")
+			local index
+			for _, line in ipairs(type(options.help) == "table" and options.help or default_help) do
+				index = tooltip:AddLine(line)
 				tooltip:SetLineTextColor(index, 0, 1, 1)
 			end
 		end
