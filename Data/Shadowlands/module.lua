@@ -162,7 +162,7 @@ function module:OnInitialize()
 		[171014] = {name="Collector Astorestes",locations={[1533]={66004370},},quest=61002,},
 		[171040] = {name="Xixin the Ravening",item=183605,locations={[1533]={52213282,63513601,56031462,47994296,59655143},},notes="Possible spawn from the Swelling Tear",quest=61046,},
 		[171041] = {name="Worldfeaster Chronn",item=183605,locations={[1533]={52213283,63513602,56031463,47994297,59655144},},notes="Possible spawn from the Swelling Tear",quest=61047,},
-		[171189] = {name="Bookkeeper Mnemis",locations={[1533]={55206220},},quest=59022,},
+		[171189] = {name="Bookkeeper Mnemis",locations={[1533]={56096200},},quest=59022,}, -- also 62167?
 		[171211] = {name="Aspirant Eolis",item=183607,locations={[1533]={32602340},},quest=61083,},
 		[171255] = {name="Echo of Aella",item=180062,locations={[1533]={44806460},},quest=61082,},
 		[171316] = {name="Malevolent Stygia",locations={[1543]={27301755},},quest=61125,},
