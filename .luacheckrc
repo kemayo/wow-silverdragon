@@ -114,6 +114,8 @@ read_globals = {
     "GetNumGroupMembers",
     "GetNumMacros",
     "GetRaidTargetIndex",
+    "GetScreenHeight",
+    "GetScreenWidth",
     "GetTime",
     "GetZoneText",
     "InCombatLockdown",

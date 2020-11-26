@@ -61,10 +61,43 @@ function ns.Loot.Status.Pet(id)
 	return ns.mobdb[id].pet and all(PlayerHasPet, safeunpack(ns.mobdb[id].pet))
 end
 
-local function tooltip_apply(tooltip, func, ...)
+local function _tooltip_apply(tooltip, pooled, func, ...)
 	for i=1,select("#", ...) do
+		-- TODO: a pool of extra tooltips, maybe?
+		if pooled and i > 1 then
+			local comparison = _G['ShoppingTooltip'..(i-1)]
+			if not comparison then return end
+			comparison:SetOwner(tooltip, "ANCHOR_NONE")
+			comparison:ClearAllPoints()
+
+			local anchor = tooltip:GetOwner()
+
+			local side
+			local topPos = anchor:GetTop() or 0
+			local bottomPos = anchor:GetBottom() or 0
+			local bottomDist = GetScreenHeight() - bottomPos
+			if bottomDist > topPos then
+				side = "top"
+			else
+				side = "bottom"
+			end
+			if side == "top" then
+				comparison:SetPoint("BOTTOMLEFT", tooltip, "TOPLEFT", 0, 10)
+			else
+				comparison:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT", 0, -10)
+			end
+
+			tooltip = comparison
+		end
 		func(tooltip, i, (select(i, ...)))
+		tooltip:Show()
 	end
+end
+local function tooltip_apply(tooltip, ...)
+	return _tooltip_apply(tooltip, false, ...)
+end
+local function tooltip_apply_individual(tooltip, ...)
+	return _tooltip_apply(tooltip, true, ...)
 end
 
 local Details = {
@@ -105,19 +138,19 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 	local pet = ns.mobdb[id].pet and (not only or only == "pet")
 
 	if toy then
-		tooltip_apply(tooltip, Details.toy, safeunpack(ns.mobdb[id].toy))
+		tooltip_apply_individual(tooltip, Details.toy, safeunpack(ns.mobdb[id].toy))
 	end
 	if mount then
 		if toy then
 			tooltip:AddLine("---")
 		end
-		tooltip_apply(tooltip, Details.mount, safeunpack(ns.mobdb[id].mount))
+		tooltip_apply_individual(tooltip, Details.mount, safeunpack(ns.mobdb[id].mount))
 	end
 	if pet then
 		if toy or mount then
 			tooltip:AddLine('---')
 		end
-		tooltip_apply(tooltip, Details.pet, safeunpack(ns.mobdb[id].pet))
+		tooltip_apply_individual(tooltip, Details.pet, safeunpack(ns.mobdb[id].pet))
 	end
 end
 
