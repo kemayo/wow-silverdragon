@@ -1,44 +1,38 @@
-local myname, ns = ...
+local myname = ...
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("VignetteStretch", "AceEvent-3.0")
 local Debug = core.Debug
+local ns = core.NAMESPACE
 
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 
 local compat_disabled
 
+local db
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("VignetteStretch", {
 		profile = {
 			enabled = true,
+			types = {
+				vignettekill = true,
+				vignettekillelite = true,
+				vignetteloot = true,
+				vignettelootelite = true,
+				vignetteevent = true,
+				vignetteeventelite = true,
+			},
 		},
 	})
+	db = self.db.profile
 
 	compat_disabled = IsAddOnLoaded("MinimapRangeExtender")
+	self.compat_disabled = compat_disabled
 
 	self.pool = CreateFramePool("FRAME", Minimap, "SilverDragonVignetteStretchPinTemplate")
 
-	local config = core:GetModule("Config", true)
-	if config then
-		config.options.args.outputs.plugins.vignettes = {
-			vignettes = {
-				type = "group",
-				name = "Vignettes",
-				get = function(info) return self.db.profile[info[#info]] end,
-				set = function(info, v) self.db.profile[info[#info]] = v end,
-				args = {
-					about = config.desc("Extend the range at which minimap vignettes will appear on the minimap.", 0),
-					enabled = config.toggle("Enabled", "Extend the range at which minimap vignettes will appear on the minimap.", 10),
-				},
-			},
-		}
-		if compat_disabled then
-			config.options.args.outputs.plugins.vignettes.vignettes.args.enabled.disabled = true
-			config.options.args.outputs.plugins.vignettes.vignettes.args.disabled = config.desc("Disabled because MinimapRangeExtender is installed and loaded, which does the same thing", 15)
-		end
-	end
+	self:RegisterConfig()
 end
 
 function module:OnEnable()
@@ -77,7 +71,7 @@ function module:VIGNETTES_UPDATED()
 	-- Debug("VIGNETTES_UPDATED", #vignetteids)
 
 	for instanceid, icon in pairs(vignetteIcons) do
-		if not tContains(vignetteids, instanceid) then
+		if not tContains(vignetteids, instanceid) or not db.types[icon.info.atlasName:lower()] or not db.enabled then
 			HBDPins:RemoveMinimapIcon(self, icon)
 			icon:Hide()
 			icon.info = nil
@@ -92,9 +86,10 @@ function module:VIGNETTES_UPDATED()
 end
 
 function module:UpdateVignetteOnMinimap(instanceid)
-	if compat_disabled or not self.db.profile.enabled then
+	if compat_disabled or not db.enabled then
 		return
 	end
+	Debug("considering vignette", instanceid)
 	local uiMapID = HBD:GetPlayerZone()
 	if not uiMapID then
 		return Debug("can't determine current zone")
@@ -105,6 +100,9 @@ function module:UpdateVignetteOnMinimap(instanceid)
 	end
 	if vignetteInfo.type ~= Enum.VignetteType.Normal then
 		return Debug("vignette isn't normal")
+	end
+	if not db.types[vignetteInfo.atlasName:lower()] then
+		return Debug("vignette type not enabled", vignetteInfo.atlasName)
 	end
 	local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, uiMapID)
 	if not position then

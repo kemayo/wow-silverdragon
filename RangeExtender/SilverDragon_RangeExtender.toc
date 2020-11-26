@@ -1,0 +1,13 @@
+## Interface: 90002
+## Title: SilverDragon: Range Extender
+## Notes: Show map vignettes when they'd normally be out of your range
+## Version: @project-version@
+## Author: Kemayo
+## eMail: kemayo at gmail dot com
+## X-Category: Interface Enhancements
+## X-Donate: PayPal:kemayo AT gmail DOT com
+## Dependencies: SilverDragon
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+
+module.xml

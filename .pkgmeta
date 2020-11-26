@@ -29,6 +29,7 @@ externals:
 
 move-folders:
    SilverDragon/Overlay: SilverDragon_Overlay
+   SilverDragon/RangeExtender: SilverDragon_RangeExtender
    SilverDragon/Data/Vanilla: SilverDragon_Vanilla
    SilverDragon/Data/BurningCrusade: SilverDragon_BurningCrusade
    SilverDragon/Data/Wrath: SilverDragon_Wrath
