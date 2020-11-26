@@ -33,30 +33,32 @@ local function PlayerHasPet(petid)
 	return (C_PetJournal.GetNumCollectedInfo(petid) > 0)
 end
 
-function ns:HasLoot(id)
+ns.Loot = {}
+
+function ns.Loot.HasLoot(id)
 	if not (id and ns.mobdb[id]) then
 		return false
 	end
 	return ns.mobdb[id].mount or ns.mobdb[id].toy or ns.mobdb[id].pet
 end
 
-function ns:LootStatusToy(id)
-	if not id or not ns.mobdb[id] then return end
-	return ns.mobdb[id].toy and all(PlayerHasToy, safeunpack(ns.mobdb[id].toy))
-end
-function ns:LootStatusMount(id)
-	if not id or not ns.mobdb[id] then return end
-	return ns.mobdb[id].mount and all(PlayerHasMount, safeunpack(ns.mobdb[id].mount))
-end
-function ns:LootStatusPet(id)
-	if not id or not ns.mobdb[id] then return end
-	return ns.mobdb[id].pet and all(PlayerHasPet, safeunpack(ns.mobdb[id].pet))
-end
-function ns:LootStatus(id)
+ns.Loot.Status = setmetatable({}, {__call = function(_, id)
 	if not id or not ns.mobdb[id] then
 		return
 	end
-	return ns:LootStatusToy(id), ns:LootStatusMount(id), ns:LootStatusPet(id)
+	return ns.Loot.Status.Toy(id), ns.Loot.Status.Mount(id), ns.Loot.Status.Pet(id)
+end})
+function ns.Loot.Status.Toy(id)
+	if not id or not ns.mobdb[id] then return end
+	return ns.mobdb[id].toy and all(PlayerHasToy, safeunpack(ns.mobdb[id].toy))
+end
+function ns.Loot.Status.Mount(id)
+	if not id or not ns.mobdb[id] then return end
+	return ns.mobdb[id].mount and all(PlayerHasMount, safeunpack(ns.mobdb[id].mount))
+end
+function ns.Loot.Status.Pet(id)
+	if not id or not ns.mobdb[id] then return end
+	return ns.mobdb[id].pet and all(PlayerHasPet, safeunpack(ns.mobdb[id].pet))
 end
 
 local function tooltip_apply(tooltip, func, ...)
@@ -91,8 +93,9 @@ local Details = {
 		tooltip:AddLine(ITEM_PET_KNOWN:format(owned, limit))
 	end,
 }
+ns.Loot.Details = Details
 
-function ns:UpdateTooltipWithLootDetails(tooltip, id, only)
+function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 	if not (id and ns.mobdb[id]) then
 		return
 	end
@@ -167,8 +170,9 @@ local Summary = {
 		end
 	end,
 }
+ns.Loot.Summary = Summary
 
-function ns:UpdateTooltipWithLootSummary(tooltip, id)
+function ns.Loot.Summary.UpdateTooltip(tooltip, id)
 	if not (id and ns.mobdb[id]) then
 		return
 	end

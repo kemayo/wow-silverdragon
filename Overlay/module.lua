@@ -602,7 +602,7 @@ do
     end
     local function key_for_mob(id)
         local quest, achievement = ns:CompletionStatus(id)
-        local toy, mount, pet = ns:LootStatus(id)
+        local toy, mount, pet = ns.Loot.Status(id)
         local prefix
         if mount ~= nil then
             -- a mount is always a mount

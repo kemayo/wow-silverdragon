@@ -325,21 +325,21 @@ do
 		self.texture:SetAtlas("StableMaster")
 	end
 	function MountCellPrototype:SetupCompletion(value)
-		return CompletableCellPrototype.SetupCompletion(self, ns:LootStatusMount(value))
+		return CompletableCellPrototype.SetupCompletion(self, ns.Loot.Status.Mount(value))
 	end
 	local ToyCellProvider, ToyCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	function ToyCellPrototype:SetupTexture()
 		self.texture:SetAtlas("mechagon-projects")
 	end
 	function ToyCellPrototype:SetupCompletion(value)
-		return CompletableCellPrototype.SetupCompletion(self, ns:LootStatusToy(value))
+		return CompletableCellPrototype.SetupCompletion(self, ns.Loot.Status.Toy(value))
 	end
 	local PetCellProvider, PetCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	function PetCellPrototype:SetupTexture()
 		self.texture:SetAtlas("WildBattlePetCapturable")
 	end
 	function PetCellPrototype:SetupCompletion(value)
-		return CompletableCellPrototype.SetupCompletion(self, ns:LootStatusPet(value))
+		return CompletableCellPrototype.SetupCompletion(self, ns.Loot.Status.Pet(value))
 	end
 
 	local function hide_subtooltip()
@@ -369,7 +369,7 @@ do
 	local function show_loot_tooltip(cell, mobid, only)
 		tooltip:SetFrameStrata("DIALOG")
 		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
-		ns:UpdateTooltipWithLootDetails(GameTooltip, mobid, only)
+		ns.Loot.Details.UpdateTooltip(GameTooltip, mobid, only)
 		GameTooltip:Show()
 	end
 	local function show_mount_tooltip(cell, mobid) return show_loot_tooltip(cell, mobid, "mount") end

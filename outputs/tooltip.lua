@@ -55,7 +55,7 @@ function module:UpdateTooltip(id, force_achievement, force_drop, force_id)
 	end
 
 	if self.db.profile.drop or force_drop then
-		ns:UpdateTooltipWithLootSummary(GameTooltip, id)
+		ns.Loot.Summary.UpdateTooltip(GameTooltip, id)
 	end
 
 	if self.db.profile.id or force_id then

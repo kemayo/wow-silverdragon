@@ -322,9 +322,9 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		-- If you've manually added a mob, bypass any other checks
 		return true
 	end
-	if not self.db.profile.already_drop and ns:HasLoot(id) then
+	if not self.db.profile.already_drop and ns.Loot.HasLoot(id) then
 		-- hide mobs which have a mount/pet/toy which you already own
-		local toy, mount, pet = ns:LootStatus(id)
+		local toy, mount, pet = ns.Loot.Status(id)
 		if toy ~= false and mount ~= false and pet ~= false then
 			-- this means there's not any loot left to drop, as everything is either true or nil
 			return false

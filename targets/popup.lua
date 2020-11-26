@@ -56,7 +56,7 @@ function module:RefreshMobData(popup)
 
 	if ns.mobdb[data.id] and (ns.mobdb[data.id].mount or ns.mobdb[data.id].pet or ns.mobdb[data.id].toy) then
 		popup.lootIcon:Show()
-		local toy, mount, pet = ns:LootStatus(data.id)
+		local toy, mount, pet = ns.Loot.Status(data.id)
 		if (toy or toy == nil) and (mount or mount == nil) and (pet or pet == nil) then
 			popup.lootIcon.complete:Show()
 		else
@@ -470,7 +470,7 @@ PopupClass.scripts = {
 			return
 		end
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
-		ns:UpdateTooltipWithLootDetails(GameTooltip, id)
+		ns.Loot.Details.UpdateTooltip(GameTooltip, id)
 		GameTooltip:Show()
 	end,
 	LootOnLeave = function(self)
