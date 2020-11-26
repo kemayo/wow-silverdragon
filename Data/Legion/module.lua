@@ -371,7 +371,7 @@ function module:OnInitialize()
 		[126896] = {name="Herald of Chaos",locations={[882]={35505870},},quest=48711,},
 		[126898] = {name="Sabuul",locations={[882]={44204980},},quest=48712,},
 		[126899] = {name="Jed'hin Champion Vorusk",locations={[882]={48504090},},quest=48713,},
-		[126900] = {name="Instructor Tarahna",locations={[882]={61405020},},notes="Drops three different scroll toys",quest=48718,toy=153179,},
+		[126900] = {name="Instructor Tarahna",locations={[882]={61405020},},notes="Drops three different scroll toys",quest=48718,toy={153179,153180,153181},},
 		[126908] = {name="Zul'tan the Numerous",locations={[882]={64002950},},quest=48719,},
 		[126910] = {name="Commander Xethgar",locations={[882]={56801450},},quest=48720,},
 		[126912] = {name="Skreeg the Devourer",locations={[882]={49700990},},mount=980,quest=48721,},
