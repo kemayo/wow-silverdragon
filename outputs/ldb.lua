@@ -325,24 +325,21 @@ do
 		self.texture:SetAtlas("StableMaster")
 	end
 	function MountCellPrototype:SetupCompletion(value)
-		local name, _, texture, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(value)
-		return CompletableCellPrototype.SetupCompletion(self, isCollected)
+		return CompletableCellPrototype.SetupCompletion(self, ns:LootStatusMount(value))
 	end
 	local ToyCellProvider, ToyCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	function ToyCellPrototype:SetupTexture()
 		self.texture:SetAtlas("mechagon-projects")
 	end
 	function ToyCellPrototype:SetupCompletion(value)
-		local isCollected = PlayerHasToy(value)
-		return CompletableCellPrototype.SetupCompletion(self, isCollected)
+		return CompletableCellPrototype.SetupCompletion(self, ns:LootStatusToy(value))
 	end
 	local PetCellProvider, PetCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	function PetCellPrototype:SetupTexture()
 		self.texture:SetAtlas("WildBattlePetCapturable")
 	end
 	function PetCellPrototype:SetupCompletion(value)
-		local isCollected = C_PetJournal.GetNumCollectedInfo(value) > 0
-		return CompletableCellPrototype.SetupCompletion(self, isCollected)
+		return CompletableCellPrototype.SetupCompletion(self, ns:LootStatusPet(value))
 	end
 
 	local function hide_subtooltip()
@@ -488,21 +485,21 @@ do
 				tooltip:SetCellScript(index, 1, "OnEnter", show_mob_tooltip, id)
 				tooltip:SetCellScript(index, 1, "OnLeave", mob_leave, id)
 				if ns.mobdb[id] and ns.mobdb[id].mount then
-					index, col = tooltip:SetCell(index, col, ns.mobdb[id].mount, MountCellProvider)
+					index, col = tooltip:SetCell(index, col, id, MountCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_mount_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end
 				if ns.mobdb[id] and ns.mobdb[id].toy then
-					index, col = tooltip:SetCell(index, col, ns.mobdb[id].toy, ToyCellProvider)
+					index, col = tooltip:SetCell(index, col, id, ToyCellProvider)
 					tooltip:SetCellScript(index, col -1, "OnEnter", show_toy_tooltip, id)
 					tooltip:SetCellScript(index, col -1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end
 				if ns.mobdb[id] and ns.mobdb[id].pet then
-					index, col = tooltip:SetCell(index, col, ns.mobdb[id].pet, PetCellProvider)
+					index, col = tooltip:SetCell(index, col, id, PetCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_pet_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_subtooltip)
 				else
