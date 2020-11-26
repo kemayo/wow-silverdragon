@@ -24,6 +24,7 @@ embeds.xml
 # the core
 core.lua
 achievements.lua
+loot.lua
 slash.lua
 config.lua
 
