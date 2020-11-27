@@ -220,3 +220,118 @@ function ns.Loot.Summary.UpdateTooltip(tooltip, id)
 		tooltip_apply(tooltip, Summary.toy, safeunpack(ns.mobdb[id].toy))
 	end
 end
+
+do
+	local ITEMS_PER_ROW = 6
+	local BORDER_WIDTH = 8
+	local ITEM_WIDTH = 37;
+	local ITEM_HEIGHT = 37;
+	local ITEM_XOFFSET = 4;
+	local ITEM_YOFFSET = -5;
+	local buttons = {}
+
+	local window = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
+	window:SetFrameStrata("HIGH")
+	window:SetClampedToScreen(true)
+	window:SetSize(43, 43)
+	window:SetBackdrop({
+		bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+		edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+		edgeSize = 16,
+		insets = { left = 4, right = 4, top = 4, bottom = 4 },
+	})
+	window:SetBackdropColor(0, 0, 0, .5)
+	window:Hide()
+
+	window:SetScript("OnHide", function(self)
+		self:Clear()
+		self:ClearAllPoints()
+	end)
+
+	-- local close = CreateFrame("Button", nil, window, "UIPanelCloseButton")
+	-- close:SetSize(18, 18)
+	-- close:SetPoint("CENTER", window, "TOPRIGHT", -4, -4)
+	-- close:Show()
+
+	window.itemPool = CreateFramePool("ItemButton", window)
+	local function button_onenter(button)
+		GameTooltip:SetFrameStrata("DIALOG")
+		if button:GetCenter() > UIParent:GetCenter() then
+			GameTooltip:SetOwner(button, "ANCHOR_LEFT")
+		else
+			GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+		end
+		GameTooltip:SetHyperlink(button:GetItemLink())
+		GameTooltip:Show()
+	end
+	local function button_onclick(button, mousebutton)
+		if IsModifiedClick() then
+			if HandleModifiedItemClick(button:GetItemLink()) then
+				return
+			end
+		end
+		if mousebutton == "RightButton" then
+			window:Hide()
+		end
+	end
+	local function sizeWindow()
+		local columns = math.min(#buttons, ITEMS_PER_ROW)
+		local rows = math.ceil(#buttons / ITEMS_PER_ROW)
+		window:SetSize(
+			(2 * BORDER_WIDTH) + (columns * ITEM_WIDTH) + ((columns - 1) * math.abs(ITEM_XOFFSET)),
+			(2 * BORDER_WIDTH) + (rows * ITEM_HEIGHT) + ((rows - 1) * math.abs(ITEM_YOFFSET))
+		)
+	end
+	function window:AddItem(itemid)
+		local button = window.itemPool:Acquire()
+		button:SetScript("OnClick", button_onclick)
+		button:SetScript("OnEnter", button_onenter)
+		button:SetScript("OnLeave", GameTooltip_Hide)
+
+		local numButtons = #buttons
+		local pos = numButtons / ITEMS_PER_ROW
+		if ( math.floor(pos) == pos ) then
+			-- This is the first button in a row.
+			button:SetPoint("TOPLEFT", window, "TOPLEFT", BORDER_WIDTH, -BORDER_WIDTH - (ITEM_HEIGHT - ITEM_YOFFSET) * pos)
+		else
+			button:SetPoint("TOPLEFT", buttons[numButtons], "TOPRIGHT", ITEM_XOFFSET, 0)
+		end
+		tinsert(buttons, button)
+		sizeWindow()
+
+		if itemid then
+			button:SetItem(itemid)
+		end
+
+		button:Show()
+		return button
+	end
+
+	function window:AddItems(items)
+		for _, itemid in ipairs(items) do
+			self:AddItem(itemid)
+		end
+	end
+	function window:Clear()
+		wipe(buttons)
+		self.itemPool:ReleaseAll()
+	end
+
+	local items = {}
+	function window:ShowForMob(id)
+		if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then
+			-- TODO: error message
+			return false
+		end
+		self:AddItems(ns.mobdb[id].loot)
+		self:Show()
+	end
+
+	ns.Loot.Window = window
+
+	-- debug:
+	-- window:ShowItems({
+	-- 	173468, 173468, 173468, 173468, 152739, 152739, 152739, 152739, 152739, 152739, 152739, 152739, 152739,
+	-- })
+
+end
