@@ -39,7 +39,52 @@ function ns.Loot.HasLoot(id)
 	if not (id and ns.mobdb[id]) then
 		return false
 	end
-	return ns.mobdb[id].mount or ns.mobdb[id].toy or ns.mobdb[id].pet
+	return ns.mobdb[id].loot
+end
+do
+	local function make_iter(test)
+		return function(t, prestate)
+			local state, item = next(t, prestate)
+			while state do
+				item = test(item)
+				if item then
+					return state, item
+				end
+				state, item = next(t, state)
+			end
+		end
+	end
+	local mount_iter = make_iter(function(item) return type(item) == "table" and item.mount end)
+	local pet_iter = make_iter(function(item) return type(item) == "table" and item.pet end)
+	local toy_iter = make_iter(function(item) return type(item) == "table" and item.toy end)
+	local noloot = {}
+	function ns.Loot.IterMounts(id)
+		return mount_iter, ns.mobdb[id].loot or noloot, nil
+	end
+	function ns.Loot.IterPets(id)
+		return pet_iter, ns.mobdb[id].loot or noloot, nil
+	end
+	function ns.Loot.IterToys(id)
+		return toy_iter, ns.mobdb[id].loot or noloot, nil
+	end
+end
+function ns.Loot.HasToys(id)
+	for toyid in ns.Loot.IterToys(id) do
+		return true
+	end
+	return false
+end
+function ns.Loot.HasMounts(id)
+	for mountid in ns.Loot.IterMounts(id) do
+		return true
+	end
+	return false
+end
+function ns.Loot.HasPets(id)
+	for petid in ns.Loot.IterPets(id) do
+		return true
+	end
+	return false
 end
 
 ns.Loot.Status = setmetatable({}, {__call = function(_, id)
@@ -50,54 +95,65 @@ ns.Loot.Status = setmetatable({}, {__call = function(_, id)
 end})
 function ns.Loot.Status.Toy(id)
 	if not id or not ns.mobdb[id] then return end
-	return ns.mobdb[id].toy and all(PlayerHasToy, safeunpack(ns.mobdb[id].toy))
+	local ret = nil
+	for _, toyid in ns.Loot.IterToys(id) do
+		if not PlayerHasToy(toyid) then
+			return false
+		end
+		ret = true
+	end
+	return ret
 end
 function ns.Loot.Status.Mount(id)
 	if not id or not ns.mobdb[id] then return end
-	return ns.mobdb[id].mount and all(PlayerHasMount, safeunpack(ns.mobdb[id].mount))
+	local ret = nil
+	for _, mountid in ns.Loot.IterMounts(id) do
+		if not PlayerHasMount(mountid) then
+			return false
+		end
+		ret = true
+	end
+	return ret
 end
 function ns.Loot.Status.Pet(id)
 	if not id or not ns.mobdb[id] then return end
-	return ns.mobdb[id].pet and all(PlayerHasPet, safeunpack(ns.mobdb[id].pet))
-end
-
-local function _tooltip_apply(tooltip, pooled, func, ...)
-	for i=1,select("#", ...) do
-		-- TODO: a pool of extra tooltips, maybe?
-		if pooled and i > 1 then
-			local comparison = _G['ShoppingTooltip'..(i-1)]
-			if not comparison then return end
-			comparison:SetOwner(tooltip, "ANCHOR_NONE")
-			comparison:ClearAllPoints()
-
-			local anchor = tooltip:GetOwner()
-
-			local side
-			local topPos = anchor:GetTop() or 0
-			local bottomPos = anchor:GetBottom() or 0
-			local bottomDist = GetScreenHeight() - bottomPos
-			if bottomDist > topPos then
-				side = "top"
-			else
-				side = "bottom"
-			end
-			if side == "top" then
-				comparison:SetPoint("BOTTOMLEFT", tooltip, "TOPLEFT", 0, 10)
-			else
-				comparison:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT", 0, -10)
-			end
-
-			tooltip = comparison
+	local ret = nil
+	for _, petid in ns.Loot.IterPets(id) do
+		if not PlayerHasToy(petid) then
+			return false
 		end
-		func(tooltip, i, (select(i, ...)))
-		tooltip:Show()
+		ret = true
 	end
+	return ret
 end
-local function tooltip_apply(tooltip, ...)
-	return _tooltip_apply(tooltip, false, ...)
-end
-local function tooltip_apply_individual(tooltip, ...)
-	return _tooltip_apply(tooltip, true, ...)
+
+local function get_tooltip(tooltip, i)
+	if i > 1 then
+		local comparison = _G['ShoppingTooltip'..(i-1)]
+		if not comparison then return end
+		comparison:SetOwner(tooltip, "ANCHOR_NONE")
+		comparison:ClearAllPoints()
+
+		local anchor = tooltip:GetOwner()
+
+		local side
+		local topPos = anchor:GetTop() or 0
+		local bottomPos = anchor:GetBottom() or 0
+		local bottomDist = GetScreenHeight() - bottomPos
+		if bottomDist > topPos then
+			side = "top"
+		else
+			side = "bottom"
+		end
+		if side == "top" then
+			comparison:SetPoint("BOTTOMLEFT", tooltip, "TOPLEFT", 0, 10)
+		else
+			comparison:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT", 0, -10)
+		end
+
+		return comparison
+	end
+	return tooltip
 end
 
 local Details = {
@@ -106,6 +162,11 @@ local Details = {
 	end,
 	mount = function(tooltip, i, mountid)
 		local name, spellid, texture, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(mountid)
+		if not name then
+			tooltip:AddLine("mount:" .. mountid)
+			tooltip:AddLine(SEARCH_LOADING_TEXT, 0, 1, 1)
+			return
+		end
 		local _, description, source = C_MountJournal.GetMountInfoExtraByID(mountid)
 
 		tooltip:AddLine(name)
@@ -118,6 +179,11 @@ local Details = {
 	end,
 	pet = function(tooltip, i, petid)
 		local name, texture, _, mobid, source, description = C_PetJournal.GetPetInfoBySpeciesID(petid)
+		if not name then
+			tooltip:AddLine("pet:" .. petid)
+			tooltip:AddLine(SEARCH_LOADING_TEXT, 0, 1, 1)
+			return
+		end
 		local owned, limit = C_PetJournal.GetNumCollectedInfo(petid)
 		tooltip:AddLine(name)
 		tooltip:AddTexture(texture)
@@ -133,24 +199,32 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 		return
 	end
 
-	local toy = ns.mobdb[id].toy and (not only or only == "toy")
-	local mount = ns.mobdb[id].mount and (not only or only == "mount")
-	local pet = ns.mobdb[id].pet and (not only or only == "pet")
+	local toy = (not only or only == "toy") and ns.Loot.HasToys(id)
+	local mount = (not only or only == "mount") and ns.Loot.HasMounts(id)
+	local pet = (not only or only == "pet") and ns.Loot.HasPets(id)
 
 	if toy then
-		tooltip_apply_individual(tooltip, Details.toy, safeunpack(ns.mobdb[id].toy))
+		local toytip
+		for i, toyid in ns.Loot.IterToys(id) do
+			toytip = get_tooltip(toytip or tooltip, i)
+			Details.toy(toytip, i, toyid)
+		end
 	end
 	if mount then
 		if toy then
 			tooltip:AddLine("---")
 		end
-		tooltip_apply_individual(tooltip, Details.mount, safeunpack(ns.mobdb[id].mount))
+		for i, mountid in ns.Loot.IterMounts(id) do
+			Details.mount(tooltip, i, mountid)
+		end
 	end
 	if pet then
 		if toy or mount then
 			tooltip:AddLine('---')
 		end
-		tooltip_apply_individual(tooltip, Details.pet, safeunpack(ns.mobdb[id].pet))
+		for i, petid in ns.Loot.IterPets(id) do
+			Details.pet(tooltip, i, petid)
+		end
 	end
 end
 
@@ -210,14 +284,14 @@ function ns.Loot.Summary.UpdateTooltip(tooltip, id)
 		return
 	end
 
-	if ns.mobdb[id].mount then
-		tooltip_apply(tooltip, Summary.mount, safeunpack(ns.mobdb[id].mount))
+	for i, mountid in ns.Loot.IterMounts(id) do
+		Summary.mount(tooltip, i, mountid)
 	end
-	if ns.mobdb[id].pet then
-		tooltip_apply(tooltip, Summary.pet, safeunpack(ns.mobdb[id].pet))
+	for i, toyid in ns.Loot.IterToys(id) do
+		Summary.toy(tooltip, i, toyid)
 	end
-	if ns.mobdb[id].toy then
-		tooltip_apply(tooltip, Summary.toy, safeunpack(ns.mobdb[id].toy))
+	for i, petid in ns.Loot.IterPets(id) do
+		Summary.pet(tooltip, i, petid)
 	end
 end
 
@@ -307,9 +381,12 @@ do
 		return button
 	end
 
-	function window:AddItems(items)
-		for _, itemid in ipairs(items) do
-			self:AddItem(itemid)
+	function window:AddLoot(loot)
+		for _, item in ipairs(loot) do
+			local itemid = type(item) == "table" and item.item or item
+			if itemid then
+				self:AddItem(itemid)
+			end
 		end
 	end
 	function window:Clear()
@@ -323,15 +400,21 @@ do
 			-- TODO: error message
 			return false
 		end
-		self:AddItems(ns.mobdb[id].loot)
+		self:AddLoot(ns.mobdb[id].loot)
 		self:Show()
 	end
 
 	ns.Loot.Window = window
 
 	-- debug:
-	-- window:ShowItems({
+	-- window:AddLoot({
 	-- 	173468, 173468, 173468, 173468, 152739, 152739, 152739, 152739, 152739, 152739, 152739, 152739, 152739,
 	-- })
 
+	-- /script SilverDragon:ShowLootWindowForMob(160821)
+	function core:ShowLootWindowForMob(id)
+		window:Hide()
+		window:ShowForMob(id)
+		window:SetPoint("CENTER")
+	end
 end

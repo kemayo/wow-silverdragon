@@ -250,7 +250,7 @@ function module:SetupMounts()
 	for source, data in pairs(core.datasources) do
 		if core.db.global.datasources[source] then
 			for id, mobdata in pairs(data) do
-				if mobdata.mount and not core:ShouldIgnoreMob(id) then
+				if ns.Loot.Status.Mount(id) ~= nil and not core:ShouldIgnoreMob(id) then
 					table.insert(list, id)
 				end
 			end
@@ -319,6 +319,13 @@ do
 	local QuestCellProvider, QuestCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	function QuestCellPrototype:SetupTexture()
 		self.texture:SetAtlas("QuestNormal")
+	end
+	local ItemsCellProvider, ItemsCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
+	function ItemsCellPrototype:SetupTexture()
+		self.texture:SetAtlas("banker")
+	end
+	function ItemsCellPrototype:SetupCompletion(value)
+		return CompletableCellPrototype.SetupCompletion(self, false)
 	end
 	local MountCellProvider, MountCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	function MountCellPrototype:SetupTexture()
@@ -484,21 +491,21 @@ do
 				tooltip:SetCellScript(index, 1, "OnMouseUp", mob_click, id)
 				tooltip:SetCellScript(index, 1, "OnEnter", show_mob_tooltip, id)
 				tooltip:SetCellScript(index, 1, "OnLeave", mob_leave, id)
-				if ns.mobdb[id] and ns.mobdb[id].mount then
+				if ns.Loot.HasMounts(id) then
 					index, col = tooltip:SetCell(index, col, id, MountCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_mount_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end
-				if ns.mobdb[id] and ns.mobdb[id].toy then
+				if ns.Loot.HasToys(id) then
 					index, col = tooltip:SetCell(index, col, id, ToyCellProvider)
 					tooltip:SetCellScript(index, col -1, "OnEnter", show_toy_tooltip, id)
 					tooltip:SetCellScript(index, col -1, "OnLeave", hide_subtooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end
-				if ns.mobdb[id] and ns.mobdb[id].pet then
+				if ns.Loot.HasPets(id) then
 					index, col = tooltip:SetCell(index, col, id, PetCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_pet_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_subtooltip)

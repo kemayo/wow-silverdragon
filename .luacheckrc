@@ -11,6 +11,7 @@ ignore = {
     "213", -- Unused loop variable
     "311", -- Value assigned to a local variable is unused
     "432", -- Shadowing an upvalue argument
+    "512", -- Loop is executed at most once
     "542", -- empty if branch
 }
 

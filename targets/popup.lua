@@ -54,7 +54,7 @@ function module:RefreshMobData(popup)
 		popup.status:SetText("")
 	end
 
-	if ns.mobdb[data.id] and (ns.mobdb[data.id].mount or ns.mobdb[data.id].pet or ns.mobdb[data.id].toy) then
+	if ns.Loot.HasLoot(data.id) then
 		popup.lootIcon:Show()
 		local toy, mount, pet = ns.Loot.Status(data.id)
 		if (toy or toy == nil) and (mount or mount == nil) and (pet or pet == nil) then
@@ -159,7 +159,7 @@ function module:CreatePopup()
 	raidIcon:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]])
 	raidIcon:Hide()
 
-	local lootIcon = CreateFrame("Frame", nil, popup)
+	local lootIcon = CreateFrame("Button", nil, popup)
 	popup.lootIcon = lootIcon
 	lootIcon:SetSize(40, 40)
 	lootIcon.texture = lootIcon:CreateTexture(nil, "OVERLAY", nil, 0)
@@ -281,6 +281,8 @@ function module:CreatePopup()
 
 	popup.lootIcon:SetScript("OnEnter", popup.scripts.LootOnEnter)
 	popup.lootIcon:SetScript("OnLeave", popup.scripts.LootOnLeave)
+	popup.lootIcon:SetScript("OnClick", popup.scripts.LootOnClick)
+	popup.lootIcon:SetScript("OnHide", popup.scripts.LootOnHide)
 
 	self:ApplyLook(popup, self.db.profile.style)
 
@@ -471,10 +473,28 @@ PopupClass.scripts = {
 		end
 		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
 		ns.Loot.Details.UpdateTooltip(GameTooltip, id)
+		if ns.mobdb[id].loot then
+			GameTooltip:AddLine("Click for more...", 0, 1, 1)
+		end
 		GameTooltip:Show()
 	end,
 	LootOnLeave = function(self)
 		GameTooltip:Hide()
+	end,
+	LootOnClick = function(self, button)
+		if ns.Loot.Window:IsShown() then
+			ns.Loot.Window:Hide()
+		else
+			ns.Loot.Window:ShowForMob(self:GetParent().data.id)
+			if self:GetParent():GetCenter() > UIParent:GetCenter() then
+				ns.Loot.Window:SetPoint("RIGHT", self:GetParent(), "LEFT")
+			else
+				ns.Loot.Window:SetPoint("LEFT", self:GetParent(), "RIGHT")
+			end
+		end
+	end,
+	LootOnHide = function()
+		ns.Loot.Window:Hide()
 	end,
 	-- Common animations
 	AnimationHideParent = function(self)

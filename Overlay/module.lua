@@ -602,12 +602,11 @@ do
     end
     local function key_for_mob(id)
         local quest, achievement = ns:CompletionStatus(id)
-        local toy, mount, pet = ns.Loot.Status(id)
         local prefix
-        if mount ~= nil then
+        if ns.Loot.HasMounts(id) then
             -- a mount is always a mount
             prefix = 'mount'
-        elseif toy == false or pet == false then
+        elseif ns.Loot.Status.Toy(id) == false or ns.Loot.Status.Pet(id) == false then
             -- but toys and pets are only special until you loot them
             prefix = 'loot'
         end
