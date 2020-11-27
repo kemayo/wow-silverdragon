@@ -301,16 +301,23 @@ end
 do
 	local ITEMS_PER_ROW = 6
 	local BORDER_WIDTH = 8
-	local ITEM_WIDTH = 37;
-	local ITEM_HEIGHT = 37;
-	local ITEM_XOFFSET = 4;
-	local ITEM_YOFFSET = -5;
+	local ITEM_WIDTH = 37
+	local ITEM_HEIGHT = 37
+	local ITEM_XOFFSET = 4
+	local ITEM_YOFFSET = -5
+	local TITLE_SPACING = 16
 
 	local windowPool = CreateFramePool("Frame", UIParent, "BackdropTemplate", function(framePool, frame)
 		frame:Hide()
 		frame:ClearAllPoints()
+		frame:SetMovable(false)
+		frame:RegisterForDrag(false)
+		frame:SetScript("OnDragStart", nil)
+		frame:SetScript("OnDragStop", nil)
 		if frame.ClearLoot then
 			frame:ClearLoot()
+			frame.title:Hide()
+			frame.close:Hide()
 		end
 	end)
 	local buttonPool = CreateFramePool("ItemButton")
@@ -334,11 +341,43 @@ do
 			end
 		end
 		if mousebutton == "RightButton" then
-			self:GetParent():Hide()
+			if self:GetParent().close:IsShown() then
+				ns.Loot.Window.Release(self:GetParent())
+			else
+				self:GetParent():Hide()
+			end
 		end
+	end
+	local function close_onclick(self)
+		ns.Loot.Window.Release(self:GetParent())
 	end
 
 	local WindowMixin = {
+		Init = function(self)
+			self.buttons = {}
+
+			self:SetBackdrop({
+				bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+				edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+				edgeSize = 16,
+				insets = { left = 4, right = 4, top = 4, bottom = 4 },
+			})
+			self:SetFrameStrata("HIGH")
+			self:SetClampedToScreen(true)
+			self:SetSize(43, 43)
+			self:SetBackdropColor(0, 0, 0, .5)
+
+			self.title = self:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+			self.title:SetPoint("TOPLEFT", BORDER_WIDTH, -BORDER_WIDTH)
+			self.title:SetPoint("TOPRIGHT", -BORDER_WIDTH, -BORDER_WIDTH)
+			self.title:Hide()
+
+			self.close = CreateFrame("Button", nil, self, "UIPanelCloseButtonNoScripts")
+			self.close:SetSize(18, 18)
+			self.close:SetPoint("CENTER", self, "TOPRIGHT", -4, -4)
+			self.close:SetScript("OnClick", close_onclick)
+			self.close:Hide()
+		end,
 		AddItem = function(self, itemid)
 			local button, isNew = buttonPool:Acquire()
 			button:SetParent(self)
@@ -352,7 +391,8 @@ do
 			local pos = numButtons / ITEMS_PER_ROW
 			if ( math.floor(pos) == pos ) then
 				-- This is the first button in a row.
-				button:SetPoint("TOPLEFT", self, "TOPLEFT", BORDER_WIDTH, -BORDER_WIDTH - (ITEM_HEIGHT - ITEM_YOFFSET) * pos)
+				-- button:SetPoint("TOPLEFT", self.title, "BOTTOMLEFT", 0, -(ITEM_HEIGHT - ITEM_YOFFSET) * pos)
+				button:SetPoint("TOPLEFT", self, "TOPLEFT", BORDER_WIDTH, -BORDER_WIDTH - (ITEM_HEIGHT - ITEM_YOFFSET) * pos - (self.title:IsShown() and TITLE_SPACING or 0))
 			else
 				button:SetPoint("TOPLEFT", self.buttons[numButtons], "TOPRIGHT", ITEM_XOFFSET, 0)
 			end
@@ -378,8 +418,8 @@ do
 			local columns = math.min(#self.buttons, ITEMS_PER_ROW)
 			local rows = math.ceil(#self.buttons / ITEMS_PER_ROW)
 			self:SetSize(
-				(2 * BORDER_WIDTH) + (columns * ITEM_WIDTH) + ((columns - 1) * math.abs(ITEM_XOFFSET)),
-				(2 * BORDER_WIDTH) + (rows * ITEM_HEIGHT) + ((rows - 1) * math.abs(ITEM_YOFFSET))
+				(2 * BORDER_WIDTH) + math.max((columns * ITEM_WIDTH) + ((columns - 1) * math.abs(ITEM_XOFFSET)), self.title:IsShown() and self.title:GetStringWidth() or 0),
+				(self.title:IsShown() and TITLE_SPACING or 0) + (2 * BORDER_WIDTH) + (rows * ITEM_HEIGHT) + ((rows - 1) * math.abs(ITEM_YOFFSET))
 			)
 		end,
 		ClearLoot = function(self)
@@ -394,25 +434,8 @@ do
 		local window, isNew = windowPool:Acquire()
 		if isNew then
 			Mixin(window, WindowMixin)
-			window.buttons = {}
-
-			window:SetBackdrop({
-				bgFile = "Interface/Tooltips/UI-Tooltip-Background",
-				edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-				edgeSize = 16,
-				insets = { left = 4, right = 4, top = 4, bottom = 4 },
-			})
-			window:SetFrameStrata("HIGH")
-			window:SetClampedToScreen(true)
-			window:SetSize(43, 43)
-			window:SetBackdropColor(0, 0, 0, .5)
-
-			-- local close = CreateFrame("Button", nil, window, "UIPanelCloseButton")
-			-- close:SetSize(18, 18)
-			-- close:SetPoint("CENTER", window, "TOPRIGHT", -4, -4)
-			-- close:Show()
+			window:Init()
 		end
-		window:Hide()
 
 		return window
 	end
@@ -423,12 +446,23 @@ do
 		windowPool:Release(window)
 	end
 
-	function ns.Loot.Window:ShowForMob(id)
+	function ns.Loot.Window.ShowForMob(id, independent)
 		if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then
 			-- TODO: error message
 			return false
 		end
 		local window = GetWindow()
+		if independent then
+			window.title:Show()
+			window.title:SetText(core:GetMobLabel(id))
+			window.close:Show()
+
+			window:SetMovable(true)
+			window:RegisterForDrag("LeftButton")
+			window:EnableMouse(true)
+			window:SetScript("OnDragStart", window.StartMoving)
+			window:SetScript("OnDragStop", window.StopMovingOrSizing)
+		end
 		window:AddLoot(ns.mobdb[id].loot)
 		window:Show()
 
@@ -442,7 +476,7 @@ do
 
 	-- /script SilverDragon:ShowLootWindowForMob(160821)
 	function core:ShowLootWindowForMob(id)
-		local window = ns.Loot.Window:ShowForMob(id)
+		local window = ns.Loot.Window.ShowForMob(id, true)
 		window:SetPoint("CENTER")
 	end
 end

@@ -487,7 +487,7 @@ PopupClass.scripts = {
 	end,
 	LootOnClick = function(self, button)
 		if not self.window then
-			self.window = ns.Loot.Window:ShowForMob(self:GetParent().data.id)
+			self.window = ns.Loot.Window.ShowForMob(self:GetParent().data.id)
 			self.window:Hide()
 		end
 		if not self.window:IsShown() then

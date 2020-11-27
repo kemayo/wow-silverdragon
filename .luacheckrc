@@ -183,6 +183,7 @@ read_globals = {
     "CreateFrame",
     "CreateFramePool",
     "CreateFromMixins",
+    "CreateAndInitFromMixin",
     "Mixin",
     "InterfaceOptionsFrame_OpenToCategory",
     "CloseDropDownMenus",
