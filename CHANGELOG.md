@@ -3,7 +3,16 @@
 ## Changed in upcoming release
 
 * Add the ability to toggle the map icons on/off by clicking the world map broker icon
-* Add the Better to Be Lucky Than Dead achievement to the Maw mobs
+* Add a bunch of missing Shadowlands rares
+* Add achievements:
+    * Better to Be Lucky Than Dead (Maw)
+    * It's About Sending A Message (Maw)
+    * In The Mix (Maldraxxus)
+    * Bloodsport (Maldraxxus)
+* Vignette range extension is broken out into a sub-addon; it now has a better explanation of what's going on in the options, and lets you choose which types of vignette to range-extend
+* Lots of work on rewriting the loot system
+    * Some loot that's not mounts/toys/pets being visible (but not much is added; I fleshed out Mechagon for blueprints etc for now)
+    * Clicking the loot icon on the target popup will slide out a list of known loot from that mob
 
 ## Changed in v90002.1
 
