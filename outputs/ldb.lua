@@ -375,25 +375,57 @@ do
 
 	local function show_loot_tooltip(cell, mobid, only)
 		tooltip:SetFrameStrata("DIALOG")
-		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
+		-- GameTooltip_SetDefaultAnchor(GameTooltip, cell)
+		GameTooltip:SetOwner(cell, cell:GetCenter() > UIParent:GetCenter() and "ANCHOR_LEFT" or "ANCHOR_RIGHT")
 		ns.Loot.Details.UpdateTooltip(GameTooltip, mobid, only)
 		GameTooltip:Show()
 	end
 	local function show_mount_tooltip(cell, mobid) return show_loot_tooltip(cell, mobid, "mount") end
 	local function show_toy_tooltip(cell, mobid) return show_loot_tooltip(cell, mobid, "toy") end
 	local function show_pet_tooltip(cell, mobid) return show_loot_tooltip(cell, mobid, "pet") end
+	local show_items_tooltip, hide_items_tooltip, click_items_tooltip
+	do
+		local lootwindow
+		function show_items_tooltip(cell, mobid)
+			if lootwindow then
+				ns.Loot.Window.Release(lootwindow)
+			end
+			lootwindow = ns.Loot.Window.ShowForMob(mobid)
+			lootwindow:SetParent(cell)
+			-- lootwindow:SetFrameStrata("TOOLTIP")
+			-- lootwindow:SetFrameLevel(cell:GetFrameLevel() + 1)
+			if cell:GetCenter() > UIParent:GetCenter() then
+				lootwindow:SetPoint("TOPRIGHT", cell, "BOTTOMLEFT")
+			else
+				lootwindow:SetPoint("TOPLEFT", cell, "BOTTOMRIGHT")
+			end
+		end
+		function hide_items_tooltip(cell)
+			if lootwindow then
+				ns.Loot.Window.Release(lootwindow)
+				lootwindow = nil
+			end
+		end
+		function click_items_tooltip(cell, mobid)
+			local window = ns.Loot.Window.ShowForMob(mobid, true)
+
+			if lootwindow then
+				hide_items_tooltip(cell)
+			end
+		end
+	end
 	local function show_achievement_tooltip(cell, mobid)
 		local achievementid = ns:AchievementMobStatus(mobid)
 
 		tooltip:SetFrameStrata("DIALOG")
-		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
+		GameTooltip:SetOwner(cell, cell:GetCenter() > UIParent:GetCenter() and "ANCHOR_LEFT" or "ANCHOR_RIGHT")
 		GameTooltip:SetHyperlink(GetAchievementLink(achievementid))
 		GameTooltip:Show()
 	end
 	local locations = {}
 	local function show_mob_tooltip(cell, mobid)
 		tooltip:SetFrameStrata("DIALOG")
-		GameTooltip_SetDefaultAnchor(GameTooltip, cell)
+		GameTooltip:SetOwner(cell, cell:GetCenter() > UIParent:GetCenter() and "ANCHOR_LEFT" or "ANCHOR_RIGHT")
 		GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(mobid))
 		if ns.mobdb[mobid] then
 			if ns.mobdb[mobid].notes then
@@ -443,7 +475,7 @@ do
 		end
 
 		if not tooltip then
-			tooltip = LibQTip:Acquire("SilverDragonTooltip", 9, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT")
+			tooltip = LibQTip:Acquire("SilverDragonTooltip", 10, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT")
 			tooltip:SetAutoHideDelay(0.25, parent)
 			tooltip:SmartAnchorTo(parent)
 			tooltip.OnRelease = function() tooltip = nil end
@@ -509,6 +541,14 @@ do
 					index, col = tooltip:SetCell(index, col, id, PetCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_pet_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_subtooltip)
+				else
+					index, col = tooltip:SetCell(index, col, '')
+				end
+				if ns.Loot.HasRegularLoot(id) then
+					index, col = tooltip:SetCell(index, col, id, ItemsCellProvider)
+					tooltip:SetCellScript(index, col - 1, "OnMouseUp", click_items_tooltip, id)
+					tooltip:SetCellScript(index, col - 1, "OnEnter", show_items_tooltip, id)
+					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_items_tooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end

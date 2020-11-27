@@ -13,6 +13,7 @@
 * Lots of work on rewriting the loot system
     * Some loot that's not mounts/toys/pets being visible (but not much is added; I fleshed out Mechagon for blueprints etc for now)
     * Clicking the loot icon on the target popup will slide out a list of known loot from that mob
+    * There's a new item in the broker tooltip to show if a rare has other known loot; click it to see a popup of that loot
 
 ## Changed in v90002.1
 

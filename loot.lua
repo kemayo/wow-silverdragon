@@ -69,25 +69,37 @@ do
 	end
 end
 function ns.Loot.HasToys(id)
-	for toyid in ns.Loot.IterToys(id) do
+	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+	for _ in ns.Loot.IterToys(id) do
 		return true
 	end
 	return false
 end
 function ns.Loot.HasMounts(id)
-	for mountid in ns.Loot.IterMounts(id) do
+	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+	for _ in ns.Loot.IterMounts(id) do
 		return true
 	end
 	return false
 end
 function ns.Loot.HasPets(id)
-	for petid in ns.Loot.IterPets(id) do
+	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+	for _ in ns.Loot.IterPets(id) do
 		return true
 	end
 	return false
 end
 function ns.Loot.HasKnowableLoot(id)
 	return ns.Loot.HasMounts(id) or ns.Loot.HasToys(id) or ns.Loot.HasPets(id)
+end
+function ns.Loot.HasRegularLoot(id)
+	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+	for _, item in ipairs(ns.mobdb[id].loot) do
+		if type(item) ~= "table" or not (item.mount or item.toy or item.pet) then
+			return true
+		end
+	end
+	return false
 end
 
 ns.Loot.Status = setmetatable({}, {__call = function(_, id)
@@ -310,10 +322,13 @@ do
 	local windowPool = CreateFramePool("Frame", UIParent, "BackdropTemplate", function(framePool, frame)
 		frame:Hide()
 		frame:ClearAllPoints()
+		frame:SetParent(UIParent)
+		frame:SetFrameStrata("HIGH")
 		frame:SetMovable(false)
 		frame:RegisterForDrag(false)
 		frame:SetScript("OnDragStart", nil)
 		frame:SetScript("OnDragStop", nil)
+		frame.independent = nil
 		if frame.ClearLoot then
 			frame:ClearLoot()
 			frame.title:Hide()
@@ -362,7 +377,6 @@ do
 				edgeSize = 16,
 				insets = { left = 4, right = 4, top = 4, bottom = 4 },
 			})
-			self:SetFrameStrata("HIGH")
 			self:SetClampedToScreen(true)
 			self:SetSize(43, 43)
 			self:SetBackdropColor(0, 0, 0, .5)
@@ -428,6 +442,27 @@ do
 			end
 			wipe(self.buttons)
 		end,
+		SetTitle = function(self, title)
+			if title then
+				self.title:Show()
+				self.title:SetText(title)
+			else
+				self.title:Hide()
+			end
+		end,
+		MakeIndependent = function(self)
+			self.close:Show()
+			self:SetMovable(true)
+			self:RegisterForDrag("LeftButton")
+			self:EnableMouse(true)
+			self:SetScript("OnDragStart", self.OnDragStart)
+			self:SetScript("OnDragStop", self.StopMovingOrSizing)
+
+			self.independent = true
+		end,
+		OnDragStart = function(self)
+			self:StartMoving()
+		end
 	}
 
 	local function GetWindow()
@@ -451,17 +486,24 @@ do
 			-- TODO: error message
 			return false
 		end
-		local window = GetWindow()
+		local window
 		if independent then
-			window.title:Show()
-			window.title:SetText(core:GetMobLabel(id))
-			window.close:Show()
-
-			window:SetMovable(true)
-			window:RegisterForDrag("LeftButton")
-			window:EnableMouse(true)
-			window:SetScript("OnDragStart", window.StartMoving)
-			window:SetScript("OnDragStop", window.StopMovingOrSizing)
+			for other in windowPool:EnumerateActive() do
+				if other.independent then
+					window = other
+					break
+				end
+			end
+			if window then
+				window:ClearLoot()
+			else
+				window = GetWindow()
+				window:MakeIndependent()
+				window:SetPoint("CENTER")
+			end
+			window:SetTitle(core:GetMobLabel(id))
+		else
+			window = GetWindow()
 		end
 		window:AddLoot(ns.mobdb[id].loot)
 		window:Show()
@@ -477,6 +519,5 @@ do
 	-- /script SilverDragon:ShowLootWindowForMob(160821)
 	function core:ShowLootWindowForMob(id)
 		local window = ns.Loot.Window.ShowForMob(id, true)
-		window:SetPoint("CENTER")
 	end
 end
