@@ -486,19 +486,26 @@ PopupClass.scripts = {
 		GameTooltip:Hide()
 	end,
 	LootOnClick = function(self, button)
-		if ns.Loot.Window:IsShown() then
-			ns.Loot.Window:Hide()
-		else
-			ns.Loot.Window:ShowForMob(self:GetParent().data.id)
+		if not self.window then
+			self.window = ns.Loot.Window:ShowForMob(self:GetParent().data.id)
+			self.window:Hide()
+		end
+		if not self.window:IsShown() then
+			self.window:Show()
 			if self:GetParent():GetCenter() > UIParent:GetCenter() then
-				ns.Loot.Window:SetPoint("RIGHT", self:GetParent(), "LEFT")
+				self.window:SetPoint("RIGHT", self:GetParent(), "LEFT")
 			else
-				ns.Loot.Window:SetPoint("LEFT", self:GetParent(), "RIGHT")
+				self.window:SetPoint("LEFT", self:GetParent(), "RIGHT")
 			end
+		else
+			self.window:Hide()
 		end
 	end,
-	LootOnHide = function()
-		ns.Loot.Window:Hide()
+	LootOnHide = function(self)
+		if self.window then
+			ns.Loot.Window.Release(self.window)
+		end
+		self.window = nil
 	end,
 	-- Common animations
 	AnimationHideParent = function(self)

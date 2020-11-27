@@ -305,109 +305,135 @@ do
 	local ITEM_HEIGHT = 37;
 	local ITEM_XOFFSET = 4;
 	local ITEM_YOFFSET = -5;
-	local buttons = {}
 
-	local window = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
-	window:SetFrameStrata("HIGH")
-	window:SetClampedToScreen(true)
-	window:SetSize(43, 43)
-	window:SetBackdrop({
-		bgFile = "Interface/Tooltips/UI-Tooltip-Background",
-		edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
-		edgeSize = 16,
-		insets = { left = 4, right = 4, top = 4, bottom = 4 },
-	})
-	window:SetBackdropColor(0, 0, 0, .5)
-	window:Hide()
-
-	window:SetScript("OnHide", function(self)
-		self:Clear()
-		self:ClearAllPoints()
-	end)
-
-	-- local close = CreateFrame("Button", nil, window, "UIPanelCloseButton")
-	-- close:SetSize(18, 18)
-	-- close:SetPoint("CENTER", window, "TOPRIGHT", -4, -4)
-	-- close:Show()
-
-	window.itemPool = CreateFramePool("ItemButton", window)
-	local function button_onenter(button)
-		GameTooltip:SetFrameStrata("DIALOG")
-		if button:GetCenter() > UIParent:GetCenter() then
-			GameTooltip:SetOwner(button, "ANCHOR_LEFT")
-		else
-			GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+	local windowPool = CreateFramePool("Frame", UIParent, "BackdropTemplate", function(framePool, frame)
+		frame:Hide()
+		frame:ClearAllPoints()
+		if frame.ClearLoot then
+			frame:ClearLoot()
 		end
-		GameTooltip:SetHyperlink(button:GetItemLink())
+	end)
+	local buttonPool = CreateFramePool("ItemButton")
+
+	ns.Loot.Window = {}
+
+	local function button_onenter(self)
+		GameTooltip:SetFrameStrata("DIALOG")
+		if self:GetCenter() > UIParent:GetCenter() then
+			GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+		else
+			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		end
+		GameTooltip:SetHyperlink(self:GetItemLink())
 		GameTooltip:Show()
 	end
-	local function button_onclick(button, mousebutton)
+	local function button_onclick(self, mousebutton)
 		if IsModifiedClick() then
-			if HandleModifiedItemClick(button:GetItemLink()) then
+			if HandleModifiedItemClick(self:GetItemLink()) then
 				return
 			end
 		end
 		if mousebutton == "RightButton" then
-			window:Hide()
+			self:GetParent():Hide()
 		end
 	end
-	local function sizeWindow()
-		local columns = math.min(#buttons, ITEMS_PER_ROW)
-		local rows = math.ceil(#buttons / ITEMS_PER_ROW)
-		window:SetSize(
-			(2 * BORDER_WIDTH) + (columns * ITEM_WIDTH) + ((columns - 1) * math.abs(ITEM_XOFFSET)),
-			(2 * BORDER_WIDTH) + (rows * ITEM_HEIGHT) + ((rows - 1) * math.abs(ITEM_YOFFSET))
-		)
-	end
-	function window:AddItem(itemid)
-		local button = window.itemPool:Acquire()
-		button:SetScript("OnClick", button_onclick)
-		button:SetScript("OnEnter", button_onenter)
-		button:SetScript("OnLeave", GameTooltip_Hide)
 
-		local numButtons = #buttons
-		local pos = numButtons / ITEMS_PER_ROW
-		if ( math.floor(pos) == pos ) then
-			-- This is the first button in a row.
-			button:SetPoint("TOPLEFT", window, "TOPLEFT", BORDER_WIDTH, -BORDER_WIDTH - (ITEM_HEIGHT - ITEM_YOFFSET) * pos)
-		else
-			button:SetPoint("TOPLEFT", buttons[numButtons], "TOPRIGHT", ITEM_XOFFSET, 0)
-		end
-		tinsert(buttons, button)
-		sizeWindow()
-
-		if itemid then
-			button:SetItem(itemid)
-		end
-
-		button:Show()
-		return button
-	end
-
-	function window:AddLoot(loot)
-		for _, item in ipairs(loot) do
-			local itemid = type(item) == "table" and item.item or item
-			if itemid then
-				self:AddItem(itemid)
+	local WindowMixin = {
+		AddItem = function(self, itemid)
+			local button, isNew = buttonPool:Acquire()
+			button:SetParent(self)
+			if isNew then
+				button:SetScript("OnClick", button_onclick)
+				button:SetScript("OnEnter", button_onenter)
+				button:SetScript("OnLeave", GameTooltip_Hide)
 			end
+
+			local numButtons = #self.buttons
+			local pos = numButtons / ITEMS_PER_ROW
+			if ( math.floor(pos) == pos ) then
+				-- This is the first button in a row.
+				button:SetPoint("TOPLEFT", self, "TOPLEFT", BORDER_WIDTH, -BORDER_WIDTH - (ITEM_HEIGHT - ITEM_YOFFSET) * pos)
+			else
+				button:SetPoint("TOPLEFT", self.buttons[numButtons], "TOPRIGHT", ITEM_XOFFSET, 0)
+			end
+			tinsert(self.buttons, button)
+			self:SizeForButtons()
+
+			if itemid then
+				button:SetItem(itemid)
+			end
+
+			button:Show()
+			return button
+		end,
+		AddLoot = function(self, loot)
+			for _, item in ipairs(loot) do
+				local itemid = type(item) == "table" and item.item or item
+				if itemid then
+					self:AddItem(itemid)
+				end
+			end
+		end,
+		SizeForButtons = function(self)
+			local columns = math.min(#self.buttons, ITEMS_PER_ROW)
+			local rows = math.ceil(#self.buttons / ITEMS_PER_ROW)
+			self:SetSize(
+				(2 * BORDER_WIDTH) + (columns * ITEM_WIDTH) + ((columns - 1) * math.abs(ITEM_XOFFSET)),
+				(2 * BORDER_WIDTH) + (rows * ITEM_HEIGHT) + ((rows - 1) * math.abs(ITEM_YOFFSET))
+			)
+		end,
+		ClearLoot = function(self)
+			for _, button in ipairs(self.buttons) do
+				buttonPool:Release(button)
+			end
+			wipe(self.buttons)
+		end,
+	}
+
+	local function GetWindow()
+		local window, isNew = windowPool:Acquire()
+		if isNew then
+			Mixin(window, WindowMixin)
+			window.buttons = {}
+
+			window:SetBackdrop({
+				bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+				edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+				edgeSize = 16,
+				insets = { left = 4, right = 4, top = 4, bottom = 4 },
+			})
+			window:SetFrameStrata("HIGH")
+			window:SetClampedToScreen(true)
+			window:SetSize(43, 43)
+			window:SetBackdropColor(0, 0, 0, .5)
+
+			-- local close = CreateFrame("Button", nil, window, "UIPanelCloseButton")
+			-- close:SetSize(18, 18)
+			-- close:SetPoint("CENTER", window, "TOPRIGHT", -4, -4)
+			-- close:Show()
 		end
+		window:Hide()
+
+		return window
 	end
-	function window:Clear()
-		wipe(buttons)
-		self.itemPool:ReleaseAll()
+	ns.Loot.Window.Get = GetWindow
+
+	ns.Loot.Window.Release = function(window)
+		-- this will hide / clearallpoints / clearloot the window
+		windowPool:Release(window)
 	end
 
-	local items = {}
-	function window:ShowForMob(id)
+	function ns.Loot.Window:ShowForMob(id)
 		if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then
 			-- TODO: error message
 			return false
 		end
-		self:AddLoot(ns.mobdb[id].loot)
-		self:Show()
-	end
+		local window = GetWindow()
+		window:AddLoot(ns.mobdb[id].loot)
+		window:Show()
 
-	ns.Loot.Window = window
+		return window
+	end
 
 	-- debug:
 	-- window:AddLoot({
@@ -416,8 +442,7 @@ do
 
 	-- /script SilverDragon:ShowLootWindowForMob(160821)
 	function core:ShowLootWindowForMob(id)
-		window:Hide()
-		window:ShowForMob(id)
+		local window = ns.Loot.Window:ShowForMob(id)
 		window:SetPoint("CENTER")
 	end
 end
