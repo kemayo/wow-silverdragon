@@ -169,6 +169,7 @@ function module:OnInitialize()
 					-- burninator = faker(149141, "Burninator Mk V (Pet!)", 62, 0.414, 0.764),
 					worldedge = faker(160821, "Worldedge Gorger (mount)", 1525, 0.5, 0.5),
 					tarahna = faker(126900, "Instructor Tarahna (multi-toy)", 882, 0.5, 0.5),
+					fixthis = faker(151625, "Mr. Fixthis (loot)", 1462, 0.5, 0.5),
 				},
 			},
 			sound = {
@@ -324,7 +325,7 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		-- If you've manually added a mob, bypass any other checks
 		return true
 	end
-	if not self.db.profile.already_drop and ns.Loot.HasLoot(id) then
+	if not self.db.profile.already_drop and ns.Loot.HasKnowableLoot(id) then
 		-- hide mobs which have a mount/pet/toy which you already own
 		local toy, mount, pet = ns.Loot.Status(id)
 		if toy ~= false and mount ~= false and pet ~= false then

@@ -86,6 +86,9 @@ function ns.Loot.HasPets(id)
 	end
 	return false
 end
+function ns.Loot.HasKnowableLoot(id)
+	return ns.Loot.HasMounts(id) or ns.Loot.HasToys(id) or ns.Loot.HasPets(id)
+end
 
 ns.Loot.Status = setmetatable({}, {__call = function(_, id)
 	if not id or not ns.mobdb[id] then
