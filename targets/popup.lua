@@ -471,7 +471,9 @@ PopupClass.scripts = {
 		if not ns.mobdb[id] then
 			return
 		end
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
+		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
+		GameTooltip:SetOwner(self, anchor, 0, 0)
+		GameTooltip:SetFrameStrata("TOOLTIP")
 		ns.Loot.Details.UpdateTooltip(GameTooltip, id)
 		if ns.mobdb[id].loot then
 			GameTooltip:AddLine("Click for more...", 0, 1, 1)
