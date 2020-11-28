@@ -14,6 +14,7 @@
     * Some loot that's not mounts/toys/pets being visible (but not much is added; I fleshed out Mechagon for blueprints etc for now)
     * Clicking the loot icon on the target popup will slide out a list of known loot from that mob
     * There's a new item in the broker tooltip to show if a rare has other known loot; click it to see a popup of that loot
+* When show the text alert for a rare, if we don't know its location (e.g. zone-wide mob yells) say that rather than just showing "0,0" for it
 
 ## Changed in v90002.1
 

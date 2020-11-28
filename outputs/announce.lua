@@ -367,7 +367,11 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zon
 		end
 	end
 	if x and y then
-		source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
+		if x == 0 and y == 0 then
+			source = source .. " @ unknown location"
+		else
+			source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
+		end
 	end
 	local prefix = "Rare seen: "
 	module:Pour((prefix .. "%s%s (%s)"):format(core:GetMobLabel(id), dead and "... but it's dead" or '', source or ''))
