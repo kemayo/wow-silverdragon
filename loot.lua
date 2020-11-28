@@ -388,6 +388,15 @@ do
 	loot_tooltip.shoppingTooltips[2]:SetScale(0.8)
 	GameTooltip_OnLoad(loot_tooltip)
 
+	local function window_onclick(self, mousebutton)
+		if mousebutton == "RightButton" then
+			if self.independent then
+				ns.Loot.Window.Release(self)
+			else
+				self:Hide()
+			end
+		end
+	end
 	local function button_onenter(self)
 		loot_tooltip:SetFrameStrata(self:GetFrameStrata())
 		loot_tooltip:SetFrameLevel(self:GetFrameLevel() + 1)
