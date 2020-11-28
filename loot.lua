@@ -332,14 +332,13 @@ do
 	local function timer_onupdate(self, elapsed)
 		self.checkThreshold = self.checkThreshold + elapsed
 		if self.checkThreshold > 0.1 then
-			local watch = self:GetParent()
-			if watch:IsMouseOver() or (self.additional and self.additional:IsMouseOver()) then
+			if self.watch:IsMouseOver() or (self.additional and self.additional:IsMouseOver()) then
 				self.timeOffFrame = 0
 			else
 				self.timeOffFrame = self.timeOffFrame + self.checkThreshold
 				if self.timeOffFrame > self.allowedTimeOffFrame then
-					if not self.callback or self.callback(watch) ~= false then
-						ns.Loot.Window.Release(watch)
+					if not self.callback or self.callback(self.watch) ~= false then
+						ns.Loot.Window.Release(self.watch)
 					end
 				end
 			end
@@ -410,7 +409,7 @@ do
 			end
 		end
 		if mousebutton == "RightButton" then
-			if self:GetParent().close:IsShown() then
+			if self:GetParent().independent then
 				ns.Loot.Window.Release(self:GetParent())
 			else
 				self:GetParent():Hide()
@@ -512,7 +511,7 @@ do
 				self.timer.allowedTimeOffFrame = delay
 				self.timer.additional = additional
 				self.timer.callback = callback
-				self.timer:SetParent(self)
+				self.timer.watch = self
 				self.timer:Show()
 			elseif self.timer then
 				timerPool:Release(self.timer)
