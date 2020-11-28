@@ -387,32 +387,30 @@ do
 	local show_items_tooltip, hide_items_tooltip, click_items_tooltip
 	do
 		local lootwindow
+		local function cleanup_lootwindow(window)
+			lootwindow = nil
+		end
 		function show_items_tooltip(cell, mobid)
 			if lootwindow then
 				ns.Loot.Window.Release(lootwindow)
 			end
 			lootwindow = ns.Loot.Window.ShowForMob(mobid)
-			lootwindow:SetParent(cell)
-			-- lootwindow:SetFrameStrata("TOOLTIP")
-			-- lootwindow:SetFrameLevel(cell:GetFrameLevel() + 1)
+			-- lootwindow:SetParent(cell)
+			lootwindow:SetFrameStrata(cell:GetFrameStrata())
+			lootwindow:SetFrameLevel(cell:GetFrameLevel() + 1)
 			if cell:GetCenter() > UIParent:GetCenter() then
 				lootwindow:SetPoint("TOPRIGHT", cell, "BOTTOMLEFT")
 			else
 				lootwindow:SetPoint("TOPLEFT", cell, "BOTTOMRIGHT")
 			end
+			lootwindow:SetAutoHideDelay(0.25, cell, cleanup_lootwindow)
 		end
-		function hide_items_tooltip(cell)
+		function click_items_tooltip(cell, mobid)
 			if lootwindow then
 				ns.Loot.Window.Release(lootwindow)
 				lootwindow = nil
 			end
-		end
-		function click_items_tooltip(cell, mobid)
-			local window = ns.Loot.Window.ShowForMob(mobid, true)
-
-			if lootwindow then
-				hide_items_tooltip(cell)
-			end
+			ns.Loot.Window.ShowForMob(mobid, true)
 		end
 	end
 	local function show_achievement_tooltip(cell, mobid)
@@ -553,7 +551,7 @@ do
 					index, col = tooltip:SetCell(index, col, id, ItemsCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnMouseUp", click_items_tooltip, id)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_items_tooltip, id)
-					tooltip:SetCellScript(index, col - 1, "OnLeave", hide_items_tooltip)
+					-- tooltip:SetCellScript(index, col - 1, "OnLeave", hide_items_tooltip)
 				else
 					index, col = tooltip:SetCell(index, col, '')
 				end

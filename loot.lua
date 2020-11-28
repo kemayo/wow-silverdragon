@@ -329,6 +329,24 @@ do
 	local ITEM_YOFFSET = -5
 	local TITLE_SPACING = 16
 
+	local function timer_onupdate(self, elapsed)
+		self.checkThreshold = self.checkThreshold + elapsed
+		if self.checkThreshold > 0.1 then
+			local watch = self:GetParent()
+			if watch:IsMouseOver() or (self.additional and self.additional:IsMouseOver()) then
+				self.timeOffFrame = 0
+			else
+				self.timeOffFrame = self.timeOffFrame + self.checkThreshold
+				if self.timeOffFrame > self.allowedTimeOffFrame then
+					if not self.callback or self.callback(watch) ~= false then
+						ns.Loot.Window.Release(watch)
+					end
+				end
+			end
+			self.checkThreshold = 0
+		end
+	end
+
 	local windowPool = CreateFramePool("Frame", UIParent, "BackdropTemplate", function(framePool, frame)
 		frame:Hide()
 		frame:ClearAllPoints()
@@ -340,24 +358,50 @@ do
 		frame:SetScript("OnDragStop", nil)
 		frame.independent = nil
 		if frame.ClearLoot then
+			frame:SetAutoHideDelay(0)
 			frame:ClearLoot()
 			frame.title:Hide()
 			frame.close:Hide()
 		end
 	end)
 	local buttonPool = CreateFramePool("ItemButton")
+	local timerPool = CreateFramePool("Frame", UIParent, nil, function(framePool, frame)
+		frame:Hide()
+		frame:SetParent(nil)
+		frame.checkThreshold = 0
+		frame.timeOffFrame = 0
+		frame.additional = false
+		frame:SetScript("OnUpdate", timer_onupdate)
+	end)
 
 	ns.Loot.Window = {}
 
+	local loot_tooltip = CreateFrame("GameTooltip", "SilverDragonLootTooltip", UIParent, "GameTooltipTemplate")
+	loot_tooltip:SetScript("OnTooltipSetUnit", GameTooltip_OnTooltipSetUnit)
+	loot_tooltip:SetScript("OnTooltipSetItem", GameTooltip_OnTooltipSetItem)
+	loot_tooltip:SetScript("OnTooltipSetSpell", GameTooltip_OnTooltipSetSpell)
+	loot_tooltip:SetScript("OnUpdate", GameTooltip_OnUpdate)
+	loot_tooltip.shoppingTooltips = {
+		CreateFrame("GameTooltip", "SilverDragonLootTooltipShopping1", loot_tooltip, "GameTooltipTemplate"),
+		CreateFrame("GameTooltip", "SilverDragonLootTooltipShopping2", loot_tooltip, "GameTooltipTemplate"),
+	}
+	loot_tooltip.shoppingTooltips[1]:SetScale(0.8)
+	loot_tooltip.shoppingTooltips[2]:SetScale(0.8)
+	GameTooltip_OnLoad(loot_tooltip)
+
 	local function button_onenter(self)
-		GameTooltip:SetFrameStrata("DIALOG")
+		loot_tooltip:SetFrameStrata(self:GetFrameStrata())
+		loot_tooltip:SetFrameLevel(self:GetFrameLevel() + 1)
 		if self:GetCenter() > UIParent:GetCenter() then
-			GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+			loot_tooltip:SetOwner(self, "ANCHOR_LEFT")
 		else
-			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+			loot_tooltip:SetOwner(self, "ANCHOR_RIGHT")
 		end
-		GameTooltip:SetHyperlink(self:GetItemLink())
-		GameTooltip:Show()
+		loot_tooltip:SetHyperlink(self:GetItemLink())
+		loot_tooltip:Show()
+	end
+	local function button_onleave(self)
+		loot_tooltip:Hide()
 	end
 	local function button_onclick(self, mousebutton)
 		if IsModifiedClick() then
@@ -408,7 +452,7 @@ do
 			if isNew then
 				button:SetScript("OnClick", button_onclick)
 				button:SetScript("OnEnter", button_onenter)
-				button:SetScript("OnLeave", GameTooltip_Hide)
+				button:SetScript("OnLeave", button_onleave)
 			end
 
 			local numButtons = #self.buttons
@@ -458,6 +502,20 @@ do
 				self.title:SetText(title)
 			else
 				self.title:Hide()
+			end
+		end,
+		SetAutoHideDelay = function(self, delay, additional, callback)
+			-- this is *highly* based on LibQTip-1.0's function
+			delay = tonumber(delay) or 0
+			if delay > 0 then
+				self.timer = timerPool:Acquire()
+				self.timer.allowedTimeOffFrame = delay
+				self.timer.additional = additional
+				self.timer.callback = callback
+				self.timer:SetParent(self)
+				self.timer:Show()
+			elseif self.timer then
+				timerPool:Release(self.timer)
 			end
 		end,
 		MakeIndependent = function(self)
