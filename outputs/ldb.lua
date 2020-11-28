@@ -250,7 +250,7 @@ function module:SetupMounts()
 	for source, data in pairs(core.datasources) do
 		if core.db.global.datasources[source] then
 			for id, mobdata in pairs(data) do
-				if ns.Loot.Status.Mount(id) ~= nil and not core:ShouldIgnoreMob(id) then
+				if ns.Loot.HasMounts(id) and not core:ShouldIgnoreMob(id) then
 					table.insert(list, id)
 				end
 			end
