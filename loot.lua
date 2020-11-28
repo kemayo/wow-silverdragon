@@ -103,10 +103,20 @@ function ns.Loot.HasRegularLoot(id)
 end
 
 ns.Loot.Status = setmetatable({}, {__call = function(_, id)
+	-- returns nil if there's no knowable loot
+	-- returns true if all knowable loot is collected
+	-- returns false if not all knowable loot is collected
+	-- if knowable loot, also returns the status for mount,toy,pet after the first return
 	if not id or not ns.mobdb[id] then
 		return
 	end
-	return ns.Loot.Status.Toy(id), ns.Loot.Status.Mount(id), ns.Loot.Status.Pet(id)
+	local mount = ns.Loot.Status.Mount(id)
+	local toy = ns.Loot.Status.Toy(id)
+	local pet = ns.Loot.Status.Pet(id)
+	if (mount == nil and toy == nil and pet == nil) then
+		return nil
+	end
+	return (mount and toy and pet), mount, toy, pet
 end})
 function ns.Loot.Status.Toy(id)
 	if not id or not ns.mobdb[id] then return end

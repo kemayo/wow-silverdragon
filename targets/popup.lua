@@ -59,13 +59,11 @@ function module:RefreshMobData(popup)
 	else
 		popup.lootIcon:Hide()
 	end
-	if ns.Loot.HasKnowableLoot(data.id) then
-		local toy, mount, pet = ns.Loot.Status(data.id)
-		if (toy or toy == nil) and (mount or mount == nil) and (pet or pet == nil) then
-			popup.lootIcon.complete:Show()
-		else
-			popup.lootIcon.complete:Hide()
-		end
+	if ns.Loot.Status(data.id) then
+		-- all loot is collected
+		popup.lootIcon.complete:Show()
+	else
+		popup.lootIcon.complete:Hide()
 	end
 end
 
