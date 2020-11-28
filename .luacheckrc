@@ -220,6 +220,7 @@ read_globals = {
     "CHAT_MSG_RAID",
     "CHAT_MSG_GUILD",
     "CHAT_MSG_OFFICER",
+    "CLASS_ICON_TCOORDS",
     "CLOSE",
     "COLOR",
     "COMMUNITIES_DEFAULT_CHANNEL_NAME",

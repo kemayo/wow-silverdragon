@@ -18,6 +18,7 @@
 * When show the text alert for a rare, if we don't know its location (e.g. zone-wide mob yells) say that rather than just showing "0,0" for it
 * The chat scanning will now only announce rares that are known to exist in the current zone (and mobs you've added as custom mobs regardless of zone)
     * Death Rising caused a lot of false-positives for people running the old Icecrown instances...
+* In the broker tooltip, show tameable mobs with a hunter icon rather than the (much bigger) text
 
 ## Changed in v90002.1
 

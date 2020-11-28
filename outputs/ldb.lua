@@ -279,14 +279,32 @@ function module:SetupMounts()
 end
 
 do
-	local CompletableCellProvider, CompletableCellPrototype = LibQTip:CreateCellProvider()
-	function CompletableCellPrototype:InitializeCell()
+	local TextureCellProvider, TextureCellPrototype = LibQTip:CreateCellProvider()
+	function TextureCellPrototype:InitializeCell()
 		if not self.texture then
 			self.texture = self:CreateTexture(nil, 'ARTWORK')
 			self.texture:SetSize(20, 18)
 			self.texture:SetPoint("CENTER", self)
 			self.texture:Show()
 		end
+	end
+	function TextureCellPrototype:SetupCell(parent, value, ...)
+		self:SetupTexture(value)
+		return self.texture:GetSize()
+	end
+	function TextureCellPrototype:SetupTexture()
+		if self.atlas then
+			self.texture:SetAtlas(self.atlas)
+		end
+	end
+	function TextureCellPrototype:ReleaseCell()
+	end
+	function TextureCellPrototype:getContentHeight()
+		return self.texture:GetHeight()
+	end
+	local CompletableCellProvider, CompletableCellPrototype = LibQTip:CreateCellProvider(TextureCellProvider)
+	function CompletableCellPrototype:InitializeCell()
+		TextureCellPrototype.InitializeCell(self)
 		if not self.completionTexture then
 			self.completionTexture = self:CreateTexture(nil, "OVERLAY")
 			self.completionTexture:SetAtlas("Tracker-Check", true)
@@ -294,60 +312,43 @@ do
 			self.completionTexture:Hide()
 		end
 	end
-	function CompletableCellPrototype:SetupCell(parent, value, justification, font, r, g, b, ...)
-		self:SetupTexture(value)
+	function CompletableCellPrototype:SetupCell(parent, value, ...)
 		self:SetupCompletion(value)
-		return self.texture:GetSize()
+		return TextureCellPrototype.SetupCell(self, parent, value, ...)
 	end
 	function CompletableCellPrototype:SetupCompletion(value)
+		if self.completion_function then
+			value = self.completion_function(value)
+		end
 		if value then
 			self.completionTexture:Show()
 		else
 			self.completionTexture:Hide()
 		end
 	end
-	function CompletableCellPrototype:ReleaseCell()
-	end
-	function CompletableCellPrototype:getContentHeight()
-		return self.texture:GetHeight()
-	end
 
+	local ItemsCellProvider, ItemsCellPrototype = LibQTip:CreateCellProvider(TextureCellProvider)
+	ItemsCellPrototype.atlas = "banker"
+	local TameableCellProvider, TameableCellPrototype = LibQTip:CreateCellProvider(TextureCellProvider)
+	function TameableCellPrototype:SetupTexture()
+		-- ClassHall-Circle-Hunter? classicon-hunter? groupfinder-icon-class-hunter? GarrMission_ClassIcon-Hunter? GarrMission_ClassIcon-Hunter-BeastMastery? ClassTrial-Hunter-Ring?
+		-- Interface\\RaidFrame\\UI-RaidFrame-Pets
+		self.texture:SetTexture("Interface\\TargetingFrame\\UI-Classes-Circles")
+		self.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS["HUNTER"]))
+	end
 	local AchievementCellProvider, AchievementCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
-	function AchievementCellPrototype:SetupTexture()
-		self.texture:SetAtlas("storyheader-cheevoicon")
-	end
+	AchievementCellPrototype.atlas = "storyheader-cheevoicon"
 	local QuestCellProvider, QuestCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
-	function QuestCellPrototype:SetupTexture()
-		self.texture:SetAtlas("QuestNormal")
-	end
-	local ItemsCellProvider, ItemsCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
-	function ItemsCellPrototype:SetupTexture()
-		self.texture:SetAtlas("banker")
-	end
-	function ItemsCellPrototype:SetupCompletion(value)
-		return CompletableCellPrototype.SetupCompletion(self, false)
-	end
+	QuestCellPrototype.atlas = "QuestNormal"
 	local MountCellProvider, MountCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
-	function MountCellPrototype:SetupTexture()
-		self.texture:SetAtlas("StableMaster")
-	end
-	function MountCellPrototype:SetupCompletion(value)
-		return CompletableCellPrototype.SetupCompletion(self, ns.Loot.Status.Mount(value))
-	end
+	MountCellPrototype.atlas = "StableMaster"
+	MountCellPrototype.completion_function = ns.Loot.Status.Mount
 	local ToyCellProvider, ToyCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
-	function ToyCellPrototype:SetupTexture()
-		self.texture:SetAtlas("mechagon-projects")
-	end
-	function ToyCellPrototype:SetupCompletion(value)
-		return CompletableCellPrototype.SetupCompletion(self, ns.Loot.Status.Toy(value))
-	end
+	ToyCellPrototype.atlas = "mechagon-projects"
+	ToyCellPrototype.completion_function = ns.Loot.Status.Toy
 	local PetCellProvider, PetCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
-	function PetCellPrototype:SetupTexture()
-		self.texture:SetAtlas("WildBattlePetCapturable")
-	end
-	function PetCellPrototype:SetupCompletion(value)
-		return CompletableCellPrototype.SetupCompletion(self, ns.Loot.Status.Pet(value))
-	end
+	PetCellPrototype.atlas = "WildBattlePetCapturable"
+	PetCellPrototype.completion_function = ns.Loot.Status.Pet
 
 	local function hide_subtooltip()
 		tooltip:SetFrameStrata("TOOLTIP")
@@ -517,12 +518,16 @@ do
 				local index, col = tooltip:AddLine(
 					(ns.mobdb[id] and ns.mobdb[id].notes) and (label .. " " .. notes) or label,
 					times_seen,
-					core:FormatLastSeen(last_seen),
-					(tameable and 'Tameable' or '')
+					core:FormatLastSeen(last_seen)
 				)
 				tooltip:SetCellScript(index, 1, "OnMouseUp", mob_click, id)
 				tooltip:SetCellScript(index, 1, "OnEnter", show_mob_tooltip, id)
 				tooltip:SetCellScript(index, 1, "OnLeave", mob_leave, id)
+				if tameable then
+					index, col = tooltip:SetCell(index, col, id, TameableCellProvider)
+				else
+					index, col = tooltip:SetCell(index, col, '')
+				end
 				if ns.Loot.HasMounts(id) then
 					index, col = tooltip:SetCell(index, col, id, MountCellProvider)
 					tooltip:SetCellScript(index, col - 1, "OnEnter", show_mount_tooltip, id)
