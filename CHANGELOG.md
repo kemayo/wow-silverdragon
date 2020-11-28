@@ -11,10 +11,13 @@
     * Bloodsport (Maldraxxus)
 * Vignette range extension is broken out into a sub-addon; it now has a better explanation of what's going on in the options, and lets you choose which types of vignette to range-extend
 * Lots of work on rewriting the loot system
-    * Some loot that's not mounts/toys/pets being visible (but not much is added; I fleshed out Mechagon for blueprints etc for now)
+    * Some loot that's not mounts/toys/pets being visible
+    * Not much is added yet; I've got some Shadowlands drops, and I fleshed out Mechagon for blueprints and Timeless Isle drops for now
     * Clicking the loot icon on the target popup will slide out a list of known loot from that mob
     * There's a new item in the broker tooltip to show if a rare has other known loot; click it to see a popup of that loot
 * When show the text alert for a rare, if we don't know its location (e.g. zone-wide mob yells) say that rather than just showing "0,0" for it
+* The chat scanning will now only announce rares that are known to exist in the current zone (and mobs you've added as custom mobs regardless of zone)
+    * Death Rising caused a lot of false-positives for people running the old Icecrown instances...
 
 ## Changed in v90002.1
 
