@@ -555,6 +555,8 @@ do
 	ns.Loot.Window.Release = function(window)
 		-- this will hide / clearallpoints / clearloot the window
 		windowPool:Release(window)
+
+		core.events:Fire("LootWindowReleased", window)
 	end
 
 	function ns.Loot.Window.ShowForMob(id, independent)
@@ -583,6 +585,8 @@ do
 		end
 		window:AddLoot(ns.mobdb[id].loot)
 		window:Show()
+
+		core.events:Fire("LootWindowOpened", window)
 
 		return window
 	end
