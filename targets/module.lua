@@ -43,10 +43,10 @@ function module:OnInitialize()
 					self.db.profile[info[#info]] = v
 					local oldpopup = self.popup
 					self.popup = self:CreatePopup()
-					if oldpopup:IsVisible() then
+					if oldpopup and oldpopup:IsVisible() then
 						self:ShowFrame(oldpopup.data)
+						oldpopup:Hide()
 					end
-					oldpopup:Hide()
 				end,
 				order = 25,
 				args = {
@@ -57,7 +57,15 @@ function module:OnInitialize()
 						type = "select",
 						name = "Style",
 						desc = "Appearance of the frame",
-						values = {},
+						values = function(info)
+							local values = {}
+							for key in pairs(self.Looks) do
+								values[key] = key:gsub("_", ": ")
+							end
+							-- replace ourself with the built values table
+							info.option.values = values
+							return values
+						end,
 						order = 20,
 					},
 					closeAfter = {
@@ -128,12 +136,7 @@ function module:OnInitialize()
 				},
 			},
 		}
-		for key in pairs(self.Looks) do
-			config.options.plugins.clicktarget.clicktarget.args.style.values[key] = key:gsub("_", ": ")
-		end
 	end
-
-	self.popup = self:CreatePopup()
 end
 
 local pending
@@ -170,7 +173,7 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 end
 
 function module:Point()
-	local data = self.popup.data
+	local data = self.popup and self.popup.data
 	if data and data.zone and data.x and data.y then
 		-- point to it, without a timeout, and ignoring whether it'll be replacing an existing waypoint
 		core:GetModule("TomTom"):PointTo(data.id, data.zone, data.x, data.y, 0, true)
@@ -178,7 +181,7 @@ function module:Point()
 end
 
 function module:Marked(callback, id, marker, unit)
-	if self.popup.data and self.popup.data.id == id then
+	if self.popup and self.popup.data and self.popup.data.id == id then
 		self.popup:SetRaidIcon(marker)
 	end
 end

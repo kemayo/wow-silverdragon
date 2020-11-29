@@ -18,6 +18,9 @@ module.Looks = {}
 function module:ShowFrame(data)
 	if not self.db.profile.show then return end
 	if not (data and data.id) then return end
+	if not self.popup then
+		self.popup = self:CreatePopup()
+	end
 	local popup = self.popup
 	popup.data = data
 
