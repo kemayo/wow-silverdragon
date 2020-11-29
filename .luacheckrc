@@ -53,6 +53,7 @@ read_globals = {
     -- API functions
     "C_AreaPoiInfo",
     "C_ChatInfo",
+    "C_Item",
     "C_Map",
     "C_MountJournal",
     "C_NamePlate",

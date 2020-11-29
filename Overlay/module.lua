@@ -312,6 +312,7 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
         local x, y = core:GetXY(coord)
         if x and y then
             self:GetMap():AcquirePin("SilverDragonOverlayWorldMapPinTemplate", mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, false)
+            ns.Loot.Cache(mobid)
         end
     end
 

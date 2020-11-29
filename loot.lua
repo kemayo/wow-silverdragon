@@ -104,6 +104,13 @@ function ns.Loot.HasRegularLoot(id)
 	return false
 end
 
+function ns.Loot.Cache(id)
+	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+	for _, item in ipairs(ns.mobdb[id].loot) do
+		C_Item.RequestLoadItemDataByID(type(item) == "table" and item.item or item)
+	end
+end
+
 ns.Loot.Status = setmetatable({}, {__call = function(_, id)
 	-- returns nil if there's no knowable loot
 	-- returns true if all knowable loot is collected

@@ -511,6 +511,7 @@ do
 			local notes = CreateAtlasMarkup("poi-workorders")
 
 			for _, id in ipairs(sorted_mobs) do
+				ns.Loot.Cache(id)
 				local name, questid, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
 				local label = core:GetMobLabel(id)
 				local index, col = tooltip:AddLine(
