@@ -1,5 +1,12 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Include unknowable loot in tooltips
+* Prime the loot cache when showing the world map or broker tooltip, so you see less "loading..." for items
+* Update a bunch of Shadowlands loot from new information
+* Unstable Memory in Bastion had a typo in its loot
+
 ## Changed in v90002.2
 
 * Add the ability to toggle the map icons on/off by clicking the world map broker icon
