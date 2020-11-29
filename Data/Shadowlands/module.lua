@@ -156,7 +156,7 @@ function module:OnInitialize()
 		[170932] = {name="Cloudfeather Guardian",locations={[1533]={49805900},},loot={{item=180812,pet=2925}},quest=60978,},
 		[171008] = {name="Unstable Memory",locations={[1533]={43502524},},loot={{item=184413,toy=184413}},quest=60997,},
 		[171009] = {name="Enforcer Aegeon",locations={[1533]={50801960},},quest=60998,},
-		[171010] = {name="Corrupted Clawguard",locations={[1533]={56904778},},quest=60999,},
+		[171010] = {name="Corrupted Clawguard",locations={[1533]={56904778},},loot={182759},quest=60999,vignette=4340,},
 		[171011] = {name="Demi the Relic Hoarder",locations={[1533]={36804180},},loot={183608},quest=61069,},
 		[171013] = {name="Embodied Hunger",locations={[1533]={52213281,63513600,56031461,47994295,59655142},},loot={183605},notes="Possible spawn from the Swelling Tear",quest=61001,},
 		[171014] = {name="Collector Astorestes",locations={[1533]={66004370},},quest=61002,},
