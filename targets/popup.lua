@@ -410,7 +410,9 @@ PopupClass.scripts = {
 	end,
 	OnMouseUp = function(self, button)
 		module.anchor:StopMovingOrSizing()
-		LibWindow.SavePosition(module.anchor)
+		if not InCombatLockdown() then
+			LibWindow.SavePosition(module.anchor)
+		end
 	end,
 	-- hooked:
 	OnShow = function(self)
@@ -454,6 +456,10 @@ PopupClass.scripts = {
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
 		core.events:Fire("PopupHide", self.data.id, self.data.zone, self.data.x, self.data.y, self.automaticClose)
+
+		if not InCombatLockdown() then
+			LibWindow.SavePosition(module.anchor)
+		end
 
 		self.waitingToHide = false
 		self.automaticClose = nil
