@@ -60,6 +60,7 @@ function module:RefreshMobData(popup)
 
 	if ns.Loot.HasLoot(data.id) then
 		popup.lootIcon:Show()
+		ns.Loot.Cache(data.id)
 	else
 		popup.lootIcon:Hide()
 	end
