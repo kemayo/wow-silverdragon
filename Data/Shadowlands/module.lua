@@ -154,7 +154,7 @@ function module:OnInitialize()
 		[170835] = {name="Champion of Courage",locations={[1533]={39012041},},loot={{item=183741,mount=1426}},notes="Ring all five vespers to summon the council",quest=60977,},
 		[170836] = {name="Champion of Humility",locations={[1533]={39002042},},loot={{item=183741,mount=1426}},notes="Ring all five vespers to summon the council",quest=60977,},
 		[170932] = {name="Cloudfeather Guardian",locations={[1533]={49805900},},loot={{item=180812,pet=2925}},quest=60978,},
-		[171008] = {name="Unstable Memory",locations={[1533]={43502524},},loot={item=184413,toy=184413},quest=60997,},
+		[171008] = {name="Unstable Memory",locations={[1533]={43502524},},loot={{item=184413,toy=184413}},quest=60997,},
 		[171009] = {name="Enforcer Aegeon",locations={[1533]={50801960},},quest=60998,},
 		[171010] = {name="Corrupted Clawguard",locations={[1533]={56904778},},quest=60999,},
 		[171011] = {name="Demi the Relic Hoarder",locations={[1533]={36804180},},loot={183608},quest=61069,},
