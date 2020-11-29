@@ -57,6 +57,7 @@ do
 	local mount_iter = make_iter(function(item) return type(item) == "table" and item.mount end)
 	local pet_iter = make_iter(function(item) return type(item) == "table" and item.pet end)
 	local toy_iter = make_iter(function(item) return type(item) == "table" and item.toy end)
+	local regular_iter = make_iter(function(item) return type(item) == "number" and item end)
 	local noloot = {}
 	function ns.Loot.IterMounts(id)
 		return mount_iter, ns.mobdb[id].loot or noloot, nil
@@ -66,6 +67,9 @@ do
 	end
 	function ns.Loot.IterToys(id)
 		return toy_iter, ns.mobdb[id].loot or noloot, nil
+	end
+	function ns.Loot.IterRegularLoot(id)
+		return regular_iter, ns.mobdb[id].loot or noloot, nil
 	end
 end
 function ns.Loot.HasToys(id)
@@ -94,10 +98,8 @@ function ns.Loot.HasKnowableLoot(id)
 end
 function ns.Loot.HasRegularLoot(id)
 	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
-	for _, item in ipairs(ns.mobdb[id].loot) do
-		if type(item) ~= "table" or not (item.mount or item.toy or item.pet) then
-			return true
-		end
+	for _ in ns.Loot.IterRegularLoot(id) do
+		return true
 	end
 	return false
 end
@@ -301,10 +303,23 @@ local Summary = {
 			tooltip:AddDoubleLine(i==1 and TOOLTIP_BATTLE_PET or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end,
+	item = function(tooltip, i, itemid)
+		local name, link, quality, _, _, _, _, _, _, icon = GetItemInfo(itemid)
+		if name then
+			tooltip:AddDoubleLine(
+				i==1 and ENCOUNTER_JOURNAL_ITEM or " ",
+				"|T" .. icon .. ":0|t " .. name,
+				1, 1, 0,
+				GetItemQualityColor(quality)
+			)
+		else
+			tooltip:AddDoubleLine(i==1 and ENCOUNTER_JOURNAL_ITEM or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
+		end
+	end,
 }
 ns.Loot.Summary = Summary
 
-function ns.Loot.Summary.UpdateTooltip(tooltip, id)
+function ns.Loot.Summary.UpdateTooltip(tooltip, id, only_knowable)
 	if not (id and ns.mobdb[id]) then
 		return
 	end
@@ -317,6 +332,11 @@ function ns.Loot.Summary.UpdateTooltip(tooltip, id)
 	end
 	for i, petid in ns.Loot.IterPets(id) do
 		Summary.pet(tooltip, i, petid)
+	end
+	if not only_knowable then
+		for i, itemid in ns.Loot.IterRegularLoot(id) do
+			Summary.item(tooltip, i, itemid)
+		end
 	end
 end
 

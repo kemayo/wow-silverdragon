@@ -201,13 +201,13 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
     else
         tooltip:SetOwner(self, "ANCHOR_RIGHT")
     end
-    local id, name, questid, _, _, lastseen = core:GetMobByCoord(self.uiMapID, self.coord)
-    if name then
+    local id = self.mobid
+    if id and ns.mobdb[id] then
         tooltip:AddLine(core:GetMobLabel(id))
         if ns.mobdb[id].notes then
             tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
         end
-        tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(lastseen))
+        tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
         if db.tooltip_completion then
             core:GetModule("Tooltip"):UpdateTooltip(id, true, true)
         end
