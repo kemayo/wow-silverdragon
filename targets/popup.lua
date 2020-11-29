@@ -1,6 +1,7 @@
 local myname, ns = ...
 
 local HBD = LibStub("HereBeDragons-2.0")
+local LibWindow = LibStub("LibWindow-1.1")
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:GetModule("ClickTarget")
@@ -135,12 +136,13 @@ function module:CreatePopup()
 	setmetatable(popup, PopupClassMetatable)
 
 	popup:SetSize(276, 96)
-	popup:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -260, 270)
+	-- TODO: a stack
+	popup:SetPoint("CENTER", self.anchor, "CENTER")
+	popup:SetScale(self.db.profile.anchor.scale)
 	popup:SetMovable(true)
-	popup:SetUserPlaced(true)
 	popup:SetClampedToScreen(true)
 	popup:SetFrameStrata("DIALOG")
-	popup:RegisterForDrag("LeftButton")
+	popup:SetFrameLevel(self.anchor:GetFrameLevel() + 5)
 	popup:RegisterForClicks("AnyUp")
 
 	popup:SetAttribute("type", "macro")
@@ -283,9 +285,8 @@ function module:CreatePopup()
 	popup:SetScript("OnEnter", popup.scripts.OnEnter)
 	popup:SetScript("OnLeave", popup.scripts.OnLeave)
 	popup:SetScript("OnUpdate", popup.scripts.OnUpdate)
-	popup:SetScript("OnDragStart", popup.scripts.OnDragStart)
-	popup:SetScript("OnDragStop", popup.scripts.OnDragStop)
 	popup:SetScript("OnMouseDown", popup.scripts.OnMouseDown)
+	popup:SetScript("OnMouseUp", popup.scripts.OnMouseUp)
 
 	popup.close:SetScript("OnEnter", popup.scripts.CloseOnEnter)
 	popup.close:SetScript("OnLeave", popup.scripts.CloseOnLeave)
@@ -321,10 +322,6 @@ function PopupClass:SetRaidIcon(icon)
 	self.raidIcon:Show()
 end
 
-function PopupClass:ShouldBeDraggable()
-	return (not module.db.profile.locked) or IsAltKeyDown()
-end
-
 function PopupClass:DoIgnore()
 	if self.data and self.data.id then
 		core:SetIgnore(self.data.id, true)
@@ -354,11 +351,7 @@ PopupClass.scripts = {
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, -60)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. TARGET)
-		if module.db.profile.locked then
-			GameTooltip:AddLine(escapes.keyDown .. ALT_KEY_TEXT .. " + " .. escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
-		else
-			GameTooltip:AddLine(escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
-		end
+		GameTooltip:AddLine(escapes.keyDown .. ALT_KEY_TEXT .. " + " .. escapes.leftClick .. " + " .. DRAG_MODEL .. "  " .. MOVE_FRAME)
 		GameTooltip:AddLine(escapes.keyDown .. CTRL_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
 		if C_Map.CanSetUserWaypointOnMap(self.data.zone) and self.data.x > 0 and self.data.y > 0 then
 			GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
@@ -396,14 +389,6 @@ PopupClass.scripts = {
 			self.elapsed = 0
 		end
 	end,
-	OnDragStart = function(self)
-		if self:ShouldBeDraggable() then
-			self:StartMoving()
-		end
-	end,
-	OnDragStop = function(self)
-		self:StopMovingOrSizing()
-	end,
 	OnMouseDown = function(self, button)
 		if button == "RightButton" then
 			-- handled in the secure click handler
@@ -418,7 +403,13 @@ PopupClass.scripts = {
 				x, y = HBD:GetPlayerZonePosition()
 			end
 			module:SendLinkToMob(data.id, data.zone, x, y)
+		elseif IsAltKeyDown() then
+			module.anchor:StartMoving()
 		end
+	end,
+	OnMouseUp = function(self, button)
+		module.anchor:StopMovingOrSizing()
+		LibWindow.SavePosition(module.anchor)
 	end,
 	-- hooked:
 	OnShow = function(self)

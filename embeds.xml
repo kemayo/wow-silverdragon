@@ -21,6 +21,7 @@
 <Script file="lib\LibDataBroker-1.1\LibDataBroker-1.1.lua"/>
 <Script file="lib\LibDBIcon-1.0\LibDBIcon-1.0.lua"/>
 <Script file="lib\LibQTip-1.0\LibQTip-1.0.lua"/>
+<Script file="lib\LibWindow-1.1\LibWindow-1.1.lua"/>
 <Script file="lib\HereBeDragons\HereBeDragons-2.0.lua"/>
 <Script file="lib\HereBeDragons\HereBeDragons-Pins-2.0.lua"/>
 <Script file="lib\HereBeDragons\HereBeDragons-Migrate.lua"/>

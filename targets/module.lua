@@ -4,6 +4,10 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("ClickTarget", "AceEvent-3.0")
 local Debug = core.Debug
 
+local LibWindow = LibStub("LibWindow-1.1")
+local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
+
+local db
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("ClickTarget", {
 		profile = {
@@ -26,11 +30,21 @@ function module:OnInitialize()
 				guildsync = false,
 				fake = true,
 			},
+			anchor = {
+				point = "BOTTOMRIGHT",
+				x = -260,
+				y =  270,
+				scale = 1,
+			},
 		},
 	})
+	db = self.db.profile
+
 	core.RegisterCallback(self, "Announce")
 	core.RegisterCallback(self, "Marked")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+
+	self.anchor = self:CreateAnchor()
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -38,21 +52,27 @@ function module:OnInitialize()
 			clicktarget = {
 				type = "group",
 				name = "ClickTarget",
-				get = function(info) return self.db.profile[info[#info]] end,
+				get = function(info) return db[info[#info]] end,
 				set = function(info, v)
-					self.db.profile[info[#info]] = v
-					local oldpopup = self.popup
-					self.popup = self:CreatePopup()
-					if oldpopup and oldpopup:IsVisible() then
-						self:ShowFrame(oldpopup.data)
-						oldpopup:Hide()
+					db[info[#info]] = v
+					if info.arg then
+						local oldpopup = self.popup
+						self.popup = self:CreatePopup()
+						if oldpopup and oldpopup:IsVisible() then
+							self:ShowFrame(oldpopup.data)
+							oldpopup:Hide()
+						end
 					end
 				end,
 				order = 25,
 				args = {
 					about = config.desc("Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it.", 0),
 					show = config.toggle("Show", "Show the click-target frame.", 10),
-					locked = config.toggle("Locked", "Lock the click-target frame in place unless ALT is held down", 15),
+					appearanceHeader = {
+						type = "header",
+						name = "Appearance",
+						order = 20,
+					},
 					style = {
 						type = "select",
 						name = "Style",
@@ -66,7 +86,35 @@ function module:OnInitialize()
 							info.option.values = values
 							return values
 						end,
-						order = 20,
+						arg = true,
+						order = 21,
+					},
+					anchor = {
+						type = "execute",
+						name = function() return self.anchor:IsShown() and "Hide Anchor" or "Show Anchor" end,
+						descStyle = "inline",
+						desc = "Show the anchor frame that the popup will attach to",
+						func = function()
+							self.anchor[self.anchor:IsShown() and "Hide" or "Show"](self.anchor)
+							AceConfigRegistry:NotifyChange(myname)
+						end,
+						order = 22,
+					},
+					scale = {
+						type = "range",
+						name = UI_SCALE,
+						width = "full",
+						min = 0.5,
+						max = 2,
+						get = function(info) return db.anchor.scale end,
+						set = function(info, value)
+							db.anchor.scale = value
+							LibWindow.SetScale(self.anchor, value)
+							if self.popup then
+								self.popup:SetScale(db.anchor.scale)
+							end
+						end,
+						order = 23,
 					},
 					closeAfter = {
 						type = "range",
@@ -116,8 +164,8 @@ function module:OnInitialize()
 							sources = {
 								type="multiselect",
 								name = "Sources",
-								get = function(info, key) return self.db.profile.sources[key] end,
-								set = function(info, key, v) self.db.profile.sources[key] = v end,
+								get = function(info, key) return db.sources[key] end,
+								set = function(info, key, v) db.sources[key] = v end,
 								values = {
 									target = "Targets",
 									grouptarget = "Group targets",
@@ -149,7 +197,7 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 			source = "groupsync"
 		end
 	end
-	if not self.db.profile.sources[source] then
+	if not db.sources[source] then
 		Debug("Not showing popup, source disabled", source)
 		return
 	end
@@ -219,24 +267,76 @@ function module:SendLinkToMob(id, uiMapID, x, y)
 	-- if you have an open editbox, just paste to it
 	if not ChatEdit_InsertLink(text) then
 		-- then do whatever's configured
-		if module.db.profile.announce == "OPENLAST" then
+		if db.announce == "OPENLAST" then
 			ChatFrame_OpenChat(text)
-		elseif module.db.profile.announce == "IMMEDIATELY" then
+		elseif db.announce == "IMMEDIATELY" then
 			local generalID
-			if module.db.profile.announceChannel == "CHANNEL" then
+			if db.announceChannel == "CHANNEL" then
 				generalID = module:GetGeneralID()
 				if not generalID then
 					ChatFrame_OpenChat(text)
 					return
 				end
 			end
-			Debug("SendChatMessage", text, module.db.profile.announceChannel, generalID)
+			Debug("SendChatMessage", text, db.announceChannel, generalID)
 			SendChatMessage(
 				text,
-				module.db.profile.announceChannel,
+				db.announceChannel,
 				nil, -- use default language
-				module.db.profile.announceChannel == "CHANNEL" and generalID or nil
+				db.announceChannel == "CHANNEL" and generalID or nil
 			)
 		end
 	end
+end
+
+function module:CreateAnchor()
+	local anchor = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
+	anchor:SetSize(250, 100)
+	anchor:SetFrameStrata("DIALOG")
+	anchor:SetBackdrop({
+		bgFile = [[Interface\FriendsFrame\UI-Toast-Background]],
+		edgeFile = [[Interface\FriendsFrame\UI-Toast-Border]],
+		edgeSize = 12,
+		tile = true,
+		tileSize = 12,
+		insets = { left = 5, right = 5, top = 5, bottom = 5, },
+	})
+
+	anchor:EnableMouse(true)
+	anchor:RegisterForDrag("LeftButton")
+	anchor:SetClampedToScreen(true)
+	anchor:Hide()
+
+	local title = anchor:CreateFontString(nil, "BORDER", "FriendsFont_Normal")
+	title:SetJustifyH("CENTER")
+	title:SetJustifyV("MIDDLE")
+	title:SetWordWrap(true)
+	title:SetPoint("TOPLEFT", anchor, "TOPLEFT", 15, -10)
+	title:SetPoint("RIGHT", anchor, "RIGHT", -20, 10)
+	title:SetText(myname)
+	title:SetWidth(anchor:GetWidth())
+
+	local text = anchor:CreateFontString(nil, "BORDER", "FriendsFont_Normal")
+	text:SetSize(anchor:GetWidth() - 20, 24)
+	text:SetJustifyH("MIDDLE")
+	text:SetJustifyV("TOP")
+	text:SetWordWrap(true)
+	text:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
+	text:SetText("Target buttons will appear here")
+
+	local close = CreateFrame("Button", nil, anchor, "UIPanelCloseButton")
+	close:SetSize(24, 24)
+	close:SetPoint("TOPRIGHT", anchor, "TOPRIGHT", -2, -2)
+
+	anchor:SetHeight(text:GetStringHeight() + title:GetStringHeight() + 25)
+
+	LibWindow.RegisterConfig(anchor, db.anchor)
+	LibWindow.RestorePosition(anchor)
+	LibWindow.MakeDraggable(anchor)
+
+	anchor:HookScript("OnDragStop", function()
+		AceConfigRegistry:NotifyChange(myname)
+	end)
+
+	return anchor
 end

@@ -26,6 +26,7 @@ externals:
    lib/AceGUI-3.0-SharedMediaWidgets: svn://svn.wowace.com/wow/ace-gui-3-0-shared-media-widgets/mainline/trunk/AceGUI-3.0-SharedMediaWidgets
    lib/HereBeDragons: https://repos.wowace.com/wow/herebedragons
    lib/LibTextDump-1.0: https://repos.wowace.com/wow/libtextdump-1-0
+   lib/LibWindow-1.1: https://repos.wowace.com/wow/libwindow-1-1/trunk/LibWindow-1.1
 
 move-folders:
    SilverDragon/Overlay: SilverDragon_Overlay

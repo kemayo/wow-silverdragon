@@ -302,6 +302,7 @@ read_globals = {
     "TOY",
     "TRADESKILL_POST",
     "UIDROPDOWNMENU_MENU_VALUE",
+    "UI_SCALE",
     "UNKNOWN",
     "UNKNOWNOBJECT",
     "USED",
