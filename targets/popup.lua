@@ -119,7 +119,13 @@ local PopupClassMetatable = {__index = PopupClass}
 
 function module:CreatePopup()
 	-- Set up the frame
-	local popup = CreateFrame("Button", "SilverDragonPopupButton", UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
+	local name = "SilverDragonPopupButton"
+	local i = 1
+	while _G[name] do
+		name = name .. i
+		i = i + 1
+	end
+	local popup = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
 	module.popup = popup
 	setmetatable(popup, PopupClassMetatable)
 
@@ -136,7 +142,7 @@ function module:CreatePopup()
 	popup:SetAttribute("_onshow", "self:Enable()")
 	popup:SetAttribute("_onhide", "self:Disable()")
 	-- Can't do type=click + clickbutton=close because then it'd be right-clicking the close button which also ignores the mob
-	popup:SetAttribute("macrotext2", "/click SilverDragonPopupButtonCloseButton")
+	popup:SetAttribute("macrotext2", "/click " .. popup:GetName() .. "CloseButton")
 
 	popup:Hide()
 
@@ -194,7 +200,7 @@ function module:CreatePopup()
 	status:SetJustifyV("MIDDLE")
 
 	-- Close button
-	local close = CreateFrame("Button", "SilverDragonPopupButtonCloseButton", popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
+	local close = CreateFrame("Button", popup:GetName() .. "CloseButton", popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
 	popup.close = close
 	close:SetSize(16, 16)
 	close:GetDisabledTexture():SetTexture("")
