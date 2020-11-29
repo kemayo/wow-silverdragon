@@ -199,6 +199,7 @@ read_globals = {
     "GameTooltip_OnTooltipSetItem",
     "GameTooltip_OnTooltipSetSpell",
     "GameTooltip_OnTooltipSetUnit",
+    "GameTooltip_OnTooltipSetShoppingItem",
     "GameTooltip_OnUpdate",
     "GameTooltip_SetTitle",
     "GameTooltip_SetDefaultAnchor",
