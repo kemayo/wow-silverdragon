@@ -123,10 +123,12 @@ local PopupClassMetatable = {__index = PopupClass}
 function module:CreatePopup()
 	-- Set up the frame
 	local name = "SilverDragonPopupButton"
-	local i = 1
-	while _G[name] do
-		name = name .. i
-		i = i + 1
+	do
+		local i = 1
+		while _G[name] do
+			name = name .. i
+			i = i + 1
+		end
 	end
 	local popup = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
 	module.popup = popup
@@ -235,7 +237,7 @@ function module:CreatePopup()
 	-- CreateAnimationAlpha(from, to, duration, delay, order)
 	popup.animIn = popup:CreateAnimationGroup()
 	popup.animIn:SetToFinalAlpha(true)
-	for i, child in ipairs({'background', 'model', 'modelbg', 'close'}) do
+	for _, child in ipairs({'background', 'model', 'modelbg', 'close'}) do
 		local animIn = CreateAnimationAlpha(popup.animIn, 0, 1, 0.4, nil, 1)
 		animIn:SetTarget(popup)
 		animIn:SetChildKey(child)
