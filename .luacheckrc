@@ -236,6 +236,7 @@ read_globals = {
     "DEFAULT",
     "DRAG_MODEL",
     "ENABLE",
+    "ENCOUNTER_JOURNAL_ITEM",
     "EQUIP_CONTAINER",
     "HIDE",
     "ICON_LIST",
