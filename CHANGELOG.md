@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Fix clicking the world map broker button to toggle map icons
+
 ## Changed in v90002.3
 
 * Include unknowable loot in tooltips
