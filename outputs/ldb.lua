@@ -209,16 +209,6 @@ function module:SetupDataObject()
 end
 
 function module:SetupWorldMap()
-	local overlay = core:GetModule("Overlay", true)
-	local help = {}
-	if overlay then
-		table.insert(help, "Click to toggle map icons")
-	end
-	tAppendAll(help, default_help)
-	local button_options = {
-		help = help,
-		config_path = overlay and {'overlay'} or nil,
-	}
 	local button = CreateFrame("Button", nil, WorldMapFrame.NavBar)
 	button:SetSize(20, 20)
 	button:SetPoint("RIGHT", -4, 0)
@@ -226,12 +216,22 @@ function module:SetupWorldMap()
 	button.texture = button:CreateTexture(nil, "ARTWORK")
 	button.texture:SetTexture("Interface\\Icons\\INV_Misc_Head_Dragon_01")
 	button.texture:SetAllPoints()
+	local button_options = {
+		help = true,
+	}
 	button:SetScript("OnEnter", function()
+		local overlay = core:GetModule("Overlay", true)
+		if overlay and not button_options.config_path then
+			button_options.config_path = {'overlay'}
+			button_options.help = {"Click to toggle map icons"}
+			tAppendAll(button_options.help, default_help)
+		end
 		button_options.nearby = WorldMapFrame.mapID
 		module:ShowTooltip(button, button_options)
 	end)
 	-- onleave is handled by the tooltip's autohide
 	button:SetScript("OnClick", function(self, mButton)
+		local overlay = core:GetModule("Overlay", true)
 		if overlay and mButton == "LeftButton" and not IsModifierKeyDown() then
 			overlay.db.profile.worldmap = not overlay.db.profile.worldmap
 			overlay:UpdateWorldMapIcons()
