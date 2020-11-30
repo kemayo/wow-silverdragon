@@ -1,11 +1,17 @@
 # Changelog
 
-## Changed in upcoming release
+## Changed in v90002.3
 
 * Include unknowable loot in tooltips
+    * Some of this is technically "knowable" in the transmog sense, but tracking that is complicated.
+    * You can go install [AppearanceTooltip](https://www.curseforge.com/wow/addons/appearancetooltip/) which'll integrate with the SilverDragon loot popups and show transmog-known.
 * Prime the loot cache when showing the world map or broker tooltip, so you see less "loading..." for items
 * Update a bunch of Shadowlands loot from new information
 * Unstable Memory in Bastion had a typo in its loot
+* Some fairly large behind the scenes changes to how the target popup is positioned, but what you should notice is:
+    * You can now scale the target popup in settings
+    * You can show an anchor for the target popup to see where it'll appear
+    * The popup position is saved per-profile rather than per character
 
 ## Changed in v90002.2
 
