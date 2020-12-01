@@ -22,7 +22,7 @@ function module:OnInitialize()
 		[156919] = {name="Inquisitor Petre",locations={[1525]={67404380},},},
 		[156986] = {name="Ogre Taskmaster",locations={[1409]={57404080},},quest=59611,},
 		[157058] = {name="Corpsecutter Moroc",locations={[1536]={26392633},},quest=58335,},
-		[157125] = {name="Zargox the Reborn",locations={[1536]={28965138},},loot={184285,181804},quest=62079,},
+		[157125] = {name="Zargox the Reborn",locations={[1536]={28965138},},loot={184285,181804},quest=59290,},
 		[157294] = {name="Pulsing Leech",locations={[1536]={58407420},},loot={184279},quest=61718,},
 		[157307] = {name="Gelloh",locations={[1536]={58607400},},quest=61721,},
 		[157308] = {name="Corrupted Sediment",locations={[1536]={58607400},},loot={184302},quest=61719,},
