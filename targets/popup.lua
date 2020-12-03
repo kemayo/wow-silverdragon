@@ -208,7 +208,7 @@ function module:CreatePopup()
 	status:SetJustifyV("MIDDLE")
 
 	-- Close button
-	local close = CreateFrame("Button", popup:GetName() .. "CloseButton", popup, "UIPanelCloseButton,SecureHandlerClickTemplate")
+	local close = CreateFrame("Button", popup:GetName() .. "CloseButton", popup, "UIPanelCloseButtonNoScripts,SecureHandlerClickTemplate")
 	popup.close = close
 	close:SetSize(16, 16)
 	close:GetDisabledTexture():SetTexture("")
@@ -229,7 +229,7 @@ function module:CreatePopup()
 	local glow = popup:CreateTexture(nil, "OVERLAY")
 	popup.glow = glow
 	glow:SetBlendMode("ADD")
-	glow:SetAtlas("loottoast-glow")
+	glow:SetAtlas("loottoast-glow") -- Garr_NotificationGlow?
 
 	local shine = popup:CreateTexture(nil, "OVERLAY")
 	popup.shine = shine
@@ -466,7 +466,8 @@ PopupClass.scripts = {
 	end,
 	-- Close button
 	CloseOnEnter = function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, 0)
+		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
+		GameTooltip:SetOwner(self, anchor, 0, 0)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
 		GameTooltip:AddLine(escapes.rightClick .. " " .. IGNORE)
 		GameTooltip:Show()
