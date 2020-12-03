@@ -7,6 +7,9 @@ local Debug = core.Debug
 local LibWindow = LibStub("LibWindow-1.1")
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
+module.Looks = {}
+module.LookConfig = {}
+
 local db
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("ClickTarget", {
@@ -36,6 +39,9 @@ function module:OnInitialize()
 				y =  270,
 				scale = 1,
 			},
+			style_options = {
+				['*'] = {},
+			},
 		},
 	})
 	db = self.db.profile
@@ -48,6 +54,16 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
+		local function refreshPopup(info)
+			if info.arg then
+				local oldpopup = self.popup
+				self.popup = self:CreatePopup()
+				if oldpopup and oldpopup:IsVisible() then
+					self:ShowFrame(oldpopup.data)
+					oldpopup:Hide()
+				end
+			end
+		end
 		config.options.plugins.clicktarget = {
 			clicktarget = {
 				type = "group",
@@ -55,14 +71,7 @@ function module:OnInitialize()
 				get = function(info) return db[info[#info]] end,
 				set = function(info, v)
 					db[info[#info]] = v
-					if info.arg then
-						local oldpopup = self.popup
-						self.popup = self:CreatePopup()
-						if oldpopup and oldpopup:IsVisible() then
-							self:ShowFrame(oldpopup.data)
-							oldpopup:Hide()
-						end
-					end
+					refreshPopup(info)
 				end,
 				order = 25,
 				args = {
@@ -180,10 +189,23 @@ function module:OnInitialize()
 								order = 10,
 							},
 						},
-					}
+					},
+					style_options = {
+						type = "group",
+						name = "Style options",
+						get = function(info)
+							return db.style_options[info[#info - 1]][info[#info]]
+						end,
+						set = function(info, value)
+							db.style_options[info[#info - 1]][info[#info]] = value
+							refreshPopup(info)
+						end,
+						args = module.LookConfig,
+					},
 				},
 			},
 		}
+		module.LookConfig.about = config.desc("Some styles have options. Change those here.", 0)
 	end
 end
 
@@ -339,4 +361,13 @@ function module:CreateAnchor()
 	end)
 
 	return anchor
+end
+
+function module:RegisterLookConfig(look, config)
+	self.LookConfig[look] = {
+		type = "group",
+		name = look:gsub("_", ": "),
+		args = config,
+		inline = true,
+	}
 end
