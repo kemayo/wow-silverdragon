@@ -194,6 +194,7 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
     self:ApplyFocusState()
 end
 
+local lootwindow
 function SilverDragonOverlayPinMixinBase:OnMouseEnter()
     local tooltip = GameTooltip
     if self:GetCenter() > UIParent:GetCenter() then -- compare X coordinate
@@ -210,6 +211,18 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
         tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
         if db.tooltip_completion then
             core:GetModule("Tooltip"):UpdateTooltip(id, true, true)
+            if ns.Loot.HasRegularLoot(id) then
+                if lootwindow then
+                    ns.Loot.Window.Release(lootwindow)
+                end
+                lootwindow = ns.Loot.Window.ShowForMob(id)
+                lootwindow:SetParent(GameTooltip)
+                if self:GetCenter() > UIParent:GetCenter() then
+                    lootwindow:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
+                else
+                    lootwindow:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
+                end
+            end
         end
     else
         tooltip:AddLine(UNKNOWN)
@@ -233,6 +246,10 @@ end
 
 function SilverDragonOverlayPinMixinBase:OnMouseLeave()
     GameTooltip:Hide()
+    if lootwindow then
+        ns.Loot.Window.Release(lootwindow)
+        lootwindow = nil
+    end
 
     if not self.minimap then
         module:UnhighlightMob(self.mobid)
