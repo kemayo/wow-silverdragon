@@ -4,13 +4,17 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:GetModule("ClickTarget")
 local Debug = core.Debug
 
-function module.Looks:Minimal(popup)
+function module.Looks:Minimal(popup, config)
     popup:SetSize(240, 60)
     popup:SetBackdrop({
         edgeFile = [[Interface\Buttons\WHITE8X8]], bgFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1
     })
     popup:SetBackdropColor(.2, .2, .2, .8)
-    popup:SetBackdropBorderColor(0, 0, 0)
+    if config.classcolor then
+        popup:SetBackdropBorderColor(RAID_CLASS_COLORS[select(2, UnitClass("player"))]:GetRGB())
+    else
+        popup:SetBackdropBorderColor(0, 0, 0)
+    end
 
     popup.title:SetFont([[Fonts\ARIALN.TTF]], 12, "OUTLINE")
     popup.source:SetFont([[Fonts\ARIALN.TTF]], 12, "OUTLINE")
@@ -18,8 +22,8 @@ function module.Looks:Minimal(popup)
     popup.status:SetFont([[Fonts\ARIALN.TTF]], 12, "OUTLINE")
     popup.status:SetTextColor(1.0, 1.0, 1.0)
 
-    popup.modelbg:SetPoint("TOPLEFT", 0, 0)
-    popup.modelbg:SetPoint("BOTTOMLEFT", 0, 0)
+    popup.modelbg:SetPoint("TOPLEFT", 1, -1)
+    popup.modelbg:SetPoint("BOTTOMLEFT", 1, 1)
     popup.modelbg:SetWidth(popup:GetHeight())
     self:SizeModel(popup, 4)
 
@@ -66,3 +70,12 @@ function module.Looks:Minimal(popup)
         self.text:SetTextColor(1, 1, 1)
     end)
 end
+
+module:RegisterLookConfig("Minimal", {
+    classcolor = {
+        type = "toggle",
+        name = "Class colored border",
+        desc = "Color the border of the popup by your class color",
+        arg = true,
+    },
+})
