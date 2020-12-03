@@ -3,6 +3,7 @@
 ## Changed in upcoming release
 
 * Fix clicking the world map broker button to toggle map icons
+* New minimal target popup look
 
 ## Changed in v90002.3
 

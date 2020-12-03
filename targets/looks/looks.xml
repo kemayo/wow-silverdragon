@@ -8,4 +8,5 @@
   <Script file="store.lua"/>
   <Script file="storesilver.lua"/>
   <Script file="loot.lua"/>
+  <Script file="minimal.lua"/>
 </Ui>
