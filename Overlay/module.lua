@@ -34,6 +34,7 @@ function module:OnInitialize()
             achievementless = true,
             tooltip_help = true,
             tooltip_completion = true,
+            tooltip_regularloot = true,
             hidden = {},
         },
     })
@@ -202,6 +203,9 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
     else
         tooltip:SetOwner(self, "ANCHOR_RIGHT")
     end
+    if lootwindow then
+        ns.Loot.Window.Release(lootwindow)
+    end
     local id = self.mobid
     if id and ns.mobdb[id] then
         tooltip:AddLine(core:GetMobLabel(id))
@@ -210,19 +214,22 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
         end
         tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
         if db.tooltip_completion then
-            core:GetModule("Tooltip"):UpdateTooltip(id, true, true)
-            if ns.Loot.HasRegularLoot(id) then
-                if lootwindow then
-                    ns.Loot.Window.Release(lootwindow)
-                end
-                lootwindow = ns.Loot.Window.ShowForMob(id)
-                lootwindow:SetParent(GameTooltip)
-                if self:GetCenter() > UIParent:GetCenter() then
-                    lootwindow:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
-                else
-                    lootwindow:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
-                end
+            ns:UpdateTooltipWithCompletion(tooltip, id)
+            ns.Loot.Summary.UpdateTooltip(tooltip, id, true)
+        end
+        if db.tooltip_regularloot and ns.Loot.HasRegularLoot(id) then
+            lootwindow = ns.Loot.Window.ShowForMob(id)
+            lootwindow:SetParent(GameTooltip)
+            if self:GetCenter() > UIParent:GetCenter() then
+                lootwindow:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
+            else
+                lootwindow:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
             end
+            lootwindow:SetAutoHideDelay(0.25, {self, tooltip}, function(self)
+                lootwindow = nil
+                ns.Loot.Window.Release(self)
+                GameTooltip:Hide()
+            end)
         end
     else
         tooltip:AddLine(UNKNOWN)
@@ -245,15 +252,18 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseLeave()
-    GameTooltip:Hide()
-    if lootwindow then
-        ns.Loot.Window.Release(lootwindow)
-        lootwindow = nil
-    end
-
     if not self.minimap then
         module:UnhighlightMob(self.mobid)
     end
+
+    if lootwindow then
+        if lootwindow.timer then
+            return
+        end
+        ns.Loot.Window.Release(lootwindow)
+        lootwindow = nil
+    end
+    GameTooltip:Hide()
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseDown(button)

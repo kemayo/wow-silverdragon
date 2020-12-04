@@ -356,14 +356,33 @@ do
 	local ITEM_YOFFSET = -5
 	local TITLE_SPACING = 16
 
+	local function isMouseOver(...)
+		for i=1, select("#", ...) do
+			local frame = select(i, ...)
+			if not frame then
+				break
+			end
+			if frame.IsMouseOver then
+				if frame:IsMouseOver() then
+					return true
+				end
+			elseif isMouseOver(unpack(frame)) then
+				-- this was a table, not an actual frame
+				return true
+			end
+		end
+		return false
+	end
+
 	local function timer_onupdate(self, elapsed)
 		self.checkThreshold = self.checkThreshold + elapsed
 		if self.checkThreshold > 0.1 then
-			if self.watch:IsMouseOver() or (self.additional and self.additional:IsMouseOver()) then
+			if isMouseOver(self.watch, self.additional) then
 				self.timeOffFrame = 0
 			else
 				self.timeOffFrame = self.timeOffFrame + self.checkThreshold
 				if self.timeOffFrame > self.allowedTimeOffFrame then
+					self.timeOffFrame = 0
 					if not self.callback or self.callback(self.watch) ~= false then
 						ns.Loot.Window.Release(self.watch)
 					end
@@ -383,11 +402,8 @@ do
 		frame:SetScript("OnDragStart", nil)
 		frame:SetScript("OnDragStop", nil)
 		frame.independent = nil
-		if frame.ClearLoot then
-			frame:SetAutoHideDelay(0)
-			frame:ClearLoot()
-			frame.title:Hide()
-			frame.close:Hide()
+		if frame.Reset then
+			frame:Reset()
 		end
 	end)
 	local buttonPool = CreateFramePool("ItemButton")
@@ -397,6 +413,8 @@ do
 		frame.checkThreshold = 0
 		frame.timeOffFrame = 0
 		frame.additional = false
+		frame.callback = nil
+		frame.watch = nil
 		frame:SetScript("OnUpdate", timer_onupdate)
 	end)
 
@@ -470,6 +488,7 @@ do
 			self:SetClampedToScreen(true)
 			self:SetSize(43, 43)
 			self:SetBackdropColor(0, 0, 0, .5)
+			self:EnableMouse(true)
 
 			self.title = self:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 			self.title:SetPoint("TOPLEFT", BORDER_WIDTH, -BORDER_WIDTH)
@@ -480,6 +499,12 @@ do
 			self.close:SetSize(18, 18)
 			self.close:SetPoint("CENTER", self, "TOPRIGHT", -4, -4)
 			self.close:SetScript("OnClick", close_onclick)
+			self.close:Hide()
+		end,
+		Reset = function(self)
+			self:SetAutoHideDelay(0)
+			self:ClearLoot()
+			self.title:Hide()
 			self.close:Hide()
 		end,
 		AddItem = function(self, itemid)
@@ -544,7 +569,7 @@ do
 			-- this is *highly* based on LibQTip-1.0's function
 			delay = tonumber(delay) or 0
 			if delay > 0 then
-				self.timer = timerPool:Acquire()
+				self.timer = self.timer or timerPool:Acquire()
 				self.timer.allowedTimeOffFrame = delay
 				self.timer.additional = additional
 				self.timer.callback = callback
@@ -552,13 +577,13 @@ do
 				self.timer:Show()
 			elseif self.timer then
 				timerPool:Release(self.timer)
+				self.timer = nil
 			end
 		end,
 		MakeIndependent = function(self)
 			self.close:Show()
 			self:SetMovable(true)
 			self:RegisterForDrag("LeftButton")
-			self:EnableMouse(true)
 			self:SetScript("OnDragStart", self.OnDragStart)
 			self:SetScript("OnDragStop", self.StopMovingOrSizing)
 

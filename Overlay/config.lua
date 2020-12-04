@@ -95,6 +95,7 @@ function module:RegisterConfig()
                 inline = true,
                 args = {
                     tooltip_completion = config.toggle("Completion", "Show achievement/drop completion in the tooltip", 0),
+                    tooltip_regularloot = config.toggle("Regular Loot", "Show regular untrackable loot in the tooltip", 5),
                     tooltip_help = config.toggle("Help", "Show the click shortcuts in the tooltip", 10),
                 },
                 order = 15,
