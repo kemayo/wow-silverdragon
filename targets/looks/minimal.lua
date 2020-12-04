@@ -9,7 +9,10 @@ function module.Looks:Minimal(popup, config)
     popup:SetBackdrop({
         edgeFile = [[Interface\Buttons\WHITE8X8]], bgFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1
     })
-    popup:SetBackdropColor(.2, .2, .2, .8)
+    local r, g, b, a = unpack(config.background)
+    popup:SetBackdropColor(r, g, b, a)
+    popup.modelbg.animIn:SetToAlpha(a * 0.5)
+
     if config.classcolor then
         popup:SetBackdropBorderColor(RAID_CLASS_COLORS[select(2, UnitClass("player"))]:GetRGB())
     else
@@ -25,7 +28,7 @@ function module.Looks:Minimal(popup, config)
     popup.modelbg:SetPoint("TOPLEFT", 1, -1)
     popup.modelbg:SetPoint("BOTTOMLEFT", 1, 1)
     popup.modelbg:SetWidth(popup:GetHeight())
-    self:SizeModel(popup, 4)
+    self:SizeModel(popup, 0, 0)
 
     popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 0, -16)
     popup.title:SetPoint("RIGHT")
@@ -38,6 +41,7 @@ function module.Looks:Minimal(popup, config)
     popup.status:SetPoint("TOPRIGHT", popup.title, "BOTTOMRIGHT")
 
     popup.glow:SetTexture([[Interface\FullScreenTextures\OutOfControl]])
+    -- popup.glow:SetVertexColor(r, g, b, 1)
     popup.glow:SetAllPoints()
 
     popup.shine:SetPoint("TOPLEFT", 0, 0)
@@ -78,4 +82,13 @@ module:RegisterLookConfig("Minimal", {
         desc = "Color the border of the popup by your class color",
         arg = true,
     },
+    background = {
+        type = "color",
+        name = "Background color",
+        hasAlpha = true,
+        arg = true,
+    },
+}, {
+    classcolor = false,
+    background = {0, 0, 0, 0.7},
 })
