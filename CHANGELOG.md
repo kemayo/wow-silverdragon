@@ -2,8 +2,10 @@
 
 ## Changed in upcoming release
 
-* Fix clicking the world map broker button to toggle map icons
 * New minimal target popup look
+* Show unknowable loot attached to tooltips on the world map
+* Option to not set waypoints while you're dead (because it interferes with your corpse waypoint...)
+* Fix clicking the world map broker button to toggle map icons
 
 ## Changed in v90002.3
 
