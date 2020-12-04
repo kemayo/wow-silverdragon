@@ -1,6 +1,6 @@
 # Changelog
 
-## Changed in upcoming release
+## Changed in v90002.4
 
 * New minimal target popup look
 * Show unknowable loot attached to tooltips on the world map
