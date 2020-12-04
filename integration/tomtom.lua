@@ -15,6 +15,7 @@ function module:OnInitialize()
 			dbm = false,
 			replace = false,
 			popup = true,
+			whiledead = true,
 		},
 	})
 	db = self.db.profile
@@ -30,6 +31,7 @@ function module:OnInitialize()
 				args = {
 					about = config.desc("When we see a mob via its minimap icon, we can ask an arrow to point us to it", 0),
 					enabled = config.toggle("Automatically", "Make a waypoint for the mob as soon as it's seen", 20),
+					whiledead = config.toggle("While dead", "...even when you're dead", 21),
 					blizzard = config.toggle("Use built-in", "Use the built-in Blizzard waypoints", 24),
 					tomtom = config.toggle("Use TomTom", "If TomTom is installed, use it", 25, nil, function() return not TomTom end),
 					dbm = config.toggle("Use DeadlyBossMods", "If DeadlyBossMods is installed, use it", 26, nil, function() return not DBM end),
@@ -63,6 +65,7 @@ local sources = {
 }
 function module:Announce(_, id, zone, x, y, is_dead, source, unit)
 	if not db.enabled then return end
+	if not db.whiledead and UnitIsDead("player") then return end
 	if not (source and sources[source]) then return end
 	if not (zone and x and y and x > 0 and y > 0) then return end
 	self:PointTo(id, zone, x, y, db.duration)
