@@ -243,6 +243,7 @@ function module:CreatePopup()
 		local animIn = CreateAnimationAlpha(popup.animIn, 0, 1, 0.4, nil, 1)
 		animIn:SetTarget(popup)
 		animIn:SetChildKey(child)
+		popup[child].animIn = animIn
 		popup[child]:SetAlpha(0)
 	end
 

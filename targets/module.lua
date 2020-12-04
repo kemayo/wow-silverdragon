@@ -9,41 +9,42 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 module.Looks = {}
 module.LookConfig = {}
+module.defaults = {
+	profile = {
+		show = true,
+		locked = true,
+		style = "SilverDragon",
+		closeAfter = 30,
+		closeDead = true,
+		announce = "IMMEDIATELY", -- or "OPENLAST"
+		announceChannel = "CHANNEL",
+		sources = {
+			target = false,
+			grouptarget = true,
+			mouseover = true,
+			nameplate = true,
+			vignette = true,
+			['point-of-interest'] = true,
+			chat = true,
+			groupsync = true,
+			guildsync = false,
+			fake = true,
+		},
+		anchor = {
+			point = "BOTTOMRIGHT",
+			x = -260,
+			y =  270,
+			scale = 1,
+		},
+		style_options = {
+			['*'] = {},
+		},
+	},
+}
 
 local db
 function module:OnInitialize()
-	self.db = core.db:RegisterNamespace("ClickTarget", {
-		profile = {
-			show = true,
-			locked = true,
-			style = "SilverDragon",
-			closeAfter = 30,
-			closeDead = true,
-			announce = "IMMEDIATELY", -- or "OPENLAST"
-			announceChannel = "CHANNEL",
-			sources = {
-				target = false,
-				grouptarget = true,
-				mouseover = true,
-				nameplate = true,
-				vignette = true,
-				['point-of-interest'] = true,
-				chat = true,
-				groupsync = true,
-				guildsync = false,
-				fake = true,
-			},
-			anchor = {
-				point = "BOTTOMRIGHT",
-				x = -260,
-				y =  270,
-				scale = 1,
-			},
-			style_options = {
-				['*'] = {},
-			},
-		},
-	})
+	self.db = core.db:RegisterNamespace("ClickTarget", self.defaults)
 	db = self.db.profile
 
 	core.RegisterCallback(self, "Announce")
@@ -54,14 +55,21 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
+		local recreating
+		local function _newPopup()
+			local oldpopup = self.popup
+			self.popup = self:CreatePopup()
+			if oldpopup and oldpopup:IsVisible() then
+				self:ShowFrame(oldpopup.data)
+				oldpopup:Hide()
+			end
+			recreating = nil
+		end
 		local function refreshPopup(info)
+			if recreating then return end
 			if info.arg then
-				local oldpopup = self.popup
-				self.popup = self:CreatePopup()
-				if oldpopup and oldpopup:IsVisible() then
-					self:ShowFrame(oldpopup.data)
-					oldpopup:Hide()
-				end
+				recreating = true
+				C_Timer.After(0.2, _newPopup)
 			end
 		end
 		config.options.plugins.clicktarget = {
@@ -194,9 +202,17 @@ function module:OnInitialize()
 						type = "group",
 						name = "Style options",
 						get = function(info)
-							return db.style_options[info[#info - 1]][info[#info]]
+							local value = db.style_options[info[#info - 1]][info[#info]]
+							if info.type == "color" then
+								return unpack(value)
+							end
+							return value
 						end,
-						set = function(info, value)
+						set = function(info, ...)
+							local value = ...
+							if info.type == "color" then
+								value = {...}
+							end
 							db.style_options[info[#info - 1]][info[#info]] = value
 							refreshPopup(info)
 						end,
@@ -363,11 +379,17 @@ function module:CreateAnchor()
 	return anchor
 end
 
-function module:RegisterLookConfig(look, config)
+function module:RegisterLookConfig(look, config, defaults)
 	self.LookConfig[look] = {
 		type = "group",
 		name = look:gsub("_", ": "),
 		args = config,
 		inline = true,
 	}
+	if defaults then
+		self.defaults.profile.style_options[look] = defaults
+		if self.db then
+			self.db:RegisterDefaults(self.db.defaults)
+		end
+	end
 end
