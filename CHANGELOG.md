@@ -2,6 +2,10 @@
 
 ## Changed in upcoming release
 
+* Show alerts and popups when treasure vignettes appear on the map
+    * Haven't y'all missed Ikiss screaming about trinkets? Well, if you really haven't, there's sound options for this.
+* New option to only have vignettes trigger alerts when they actually become visible
+    * This is force-enabled in Ardenweald, because it has all vignettes viewable from the entire map for some reason
 * Avoid the tooltip on the loot window attached to the target popup overlapping the popup poorly
 * Avoid an error if you focus a mob that's in a zone with no route to you
 * Touch up some Warlords data
