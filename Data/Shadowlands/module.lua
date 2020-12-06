@@ -147,7 +147,7 @@ function module:OnInitialize()
 		[170711] = {name="Dolos",locations={[1543]={32946646},},quest=60909,},
 		[170731] = {name="Thanassos",locations={[1543]={27407150},},quest=60914,},
 		[170774] = {name="Eketra",locations={[1543]={23205300},},quest=60915,},
-		[170787] = {name="Akros",locations={[1543]={26055500},},quest=60920,},
+		[170787] = {name="Akros",locations={[1543]={34007480},},quest=60920,},
 		[170832] = {name="Champion of Loyalty",locations={[1533]={39002040},},loot={{item=183741,mount=1426}},notes="Ring all five vespers to summon the council",quest=60977,},
 		[170833] = {name="Champion of Wisdom",locations={[1533]={39002041},},loot={{item=183741,mount=1426}},notes="Ring all five vespers to summon the council",quest=60977,},
 		[170834] = {name="Champion of Purity",locations={[1533]={39012040},},loot={{item=183741,mount=1426}},notes="Ring all five vespers to summon the council",quest=60977,},
