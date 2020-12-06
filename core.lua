@@ -590,6 +590,14 @@ function addon:GetClosestLocationForMob(id)
 		for i, coord in ipairs(coords) do
 			local x2, y2 = self:GetXY(coord)
 			local distance = HBD:GetZoneDistance(zone, x, y, zone2, x2, y2)
+			if not distance then
+				if not closest.zone then
+					-- make sure we get one
+					closest.zone = zone2
+					closest.x = x2
+					closest.y = y2
+				end
+			end
 			if distance < closest.distance then
 				closest.distance = distance
 				closest.zone = zone2

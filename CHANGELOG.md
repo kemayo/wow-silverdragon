@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Avoid an error if you focus a mob that's in a zone with no route to you
+
 ## Changed in v90002.4
 
 * New minimal target popup look
