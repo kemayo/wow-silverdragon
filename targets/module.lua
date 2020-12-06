@@ -12,6 +12,7 @@ module.LookConfig = {}
 module.defaults = {
 	profile = {
 		show = true,
+		loot = true,
 		locked = true,
 		style = "SilverDragon",
 		closeAfter = 30,
@@ -48,6 +49,7 @@ function module:OnInitialize()
 	db = self.db.profile
 
 	core.RegisterCallback(self, "Announce")
+	core.RegisterCallback(self, "AnnounceLoot")
 	core.RegisterCallback(self, "Marked")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 
@@ -84,7 +86,8 @@ function module:OnInitialize()
 				order = 25,
 				args = {
 					about = config.desc("Once you've found a rare, it can be nice to actually target it. So this pops up a frame that targets the rare when you click on it.", 0),
-					show = config.toggle("Show", "Show the click-target frame.", 10),
+					show = config.toggle("Show for mobs", "Show the click-target frame for mobs", 10),
+					loot = config.toggle("Show for treasure", "Show the click-target frame for treasures", 11),
 					appearanceHeader = {
 						type = "header",
 						name = "Appearance",
@@ -227,6 +230,7 @@ end
 
 local pending
 function module:Announce(callback, id, zone, x, y, dead, source, unit)
+	if not db.show then return end
 	if source:match("^sync") then
 		local channel, player = source:match("sync:(.+):(.+)")
 		if channel == "GUILD" then
@@ -240,6 +244,7 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 		return
 	end
 	local data = {
+		type = "mob",
 		id = id,
 		unit = unit,
 		source = source,
@@ -257,12 +262,30 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 	data.unit = nil -- can't be trusted to remain the same
 end
+function module:AnnounceLoot(_, name, id, zone, x, y)
+	if not db.loot then return end
+	local data = {
+		type = "loot",
+		id = id,
+		name = name,
+		zone = zone,
+		x = x or 0,
+		y = y or 0,
+	}
+	if InCombatLockdown() then
+		Debug("Queueing popup for out-of-combat")
+		pending = data
+	else
+		self:ShowFrame(data)
+	end
+	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
+end
 
 function module:Point()
 	local data = self.popup and self.popup.data
 	if data and data.zone and data.x and data.y then
 		-- point to it, without a timeout, and ignoring whether it'll be replacing an existing waypoint
-		core:GetModule("TomTom"):PointTo(data.id, data.zone, data.x, data.y, 0, true)
+		core:GetModule("TomTom"):PointTo(data.type == "mob" and data.id or data.name, data.zone, data.x, data.y, 0, true)
 	end
 end
 
@@ -288,11 +311,9 @@ function module:GetGeneralID()
 	return GetChannelName(channelFormat:format(general, zoneText))
 end
 
-function module:SendLinkToMob(id, uiMapID, x, y)
-	local unit = core:FindUnitWithID(id)
-	local text = ("%s %s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
-		core:NameForMob(id, unit),
-		(unit and ('(' .. math.ceil(UnitHealth(unit) / UnitHealthMax(unit) * 100) .. '%) ') or ''),
+function module:SendLink(prefix, uiMapID, x, y)
+	local message = ("%s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+		prefix,
 		uiMapID,
 		x * 10000,
 		y * 10000,
@@ -303,27 +324,48 @@ function module:SendLinkToMob(id, uiMapID, x, y)
 	)
 	PlaySound(SOUNDKIT.UI_MAP_WAYPOINT_CHAT_SHARE)
 	-- if you have an open editbox, just paste to it
-	if not ChatEdit_InsertLink(text) then
+	if not ChatEdit_InsertLink(message) then
 		-- then do whatever's configured
 		if db.announce == "OPENLAST" then
-			ChatFrame_OpenChat(text)
+			ChatFrame_OpenChat(message)
 		elseif db.announce == "IMMEDIATELY" then
 			local generalID
 			if db.announceChannel == "CHANNEL" then
 				generalID = module:GetGeneralID()
 				if not generalID then
-					ChatFrame_OpenChat(text)
+					ChatFrame_OpenChat(message)
 					return
 				end
 			end
-			Debug("SendChatMessage", text, db.announceChannel, generalID)
+			Debug("SendChatMessage", message, db.announceChannel, generalID)
 			SendChatMessage(
-				text,
+				message,
 				db.announceChannel,
 				nil, -- use default language
 				db.announceChannel == "CHANNEL" and generalID or nil
 			)
 		end
+	end
+end
+
+function module:SendLinkToMob(id, uiMapID, x, y)
+	local unit = core:FindUnitWithID(id)
+	local prefix = ("%s %s"):format(
+		core:NameForMob(id, unit),
+		(unit and ('(' .. math.ceil(UnitHealth(unit) / UnitHealthMax(unit) * 100) .. '%) ') or '')
+	)
+	self:SendLink(prefix, uiMapID, x, y)
+end
+
+function module:SendLinkToLoot(name, uiMapID, x, y)
+	self:SendLink(name, uiMapID, x, y)
+end
+
+function module:SendLinkFromData(data, uiMapID, x, y)
+	if data.type == "mob" then
+		self:SendLinkToMob(data.id, uiMapID, x, y)
+	elseif data.type == "loot" then
+		self:SendLinkToLoot(data.name, uiMapID, x, y)
 	end
 end
 

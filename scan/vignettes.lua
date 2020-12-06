@@ -11,6 +11,7 @@ function module:OnInitialize()
 		profile = {
 			enabled = true,
 			pointsofinterest = true,
+			visibleOnly = false,
 		},
 	})
 
@@ -24,7 +25,8 @@ function module:OnInitialize()
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
 					enabled = config.toggle("Enabled", "Scan minimap vignettes (it's what Blizzard calls them, okay?)", 10),
-					pointsofinterest = config.toggle("Show alerts for point of interest vignettes added to world map itself")
+					pointsofinterest = config.toggle("World points-of-interest", "Show alerts for point of interest vignettes added to world map itself", 20),
+					visibleOnly = config.toggle("Wait until visible", "Don't notify until the vignette is actually visible on the minimap", 30),
 				},
 			},
 		}
@@ -36,15 +38,16 @@ function module:OnEnable()
 	self:RegisterEvent("VIGNETTES_UPDATED")
 end
 
+local visible_overrides = {
+	[1565] = true, -- Ardenweald, where all chests are notified from the entire zone...
+}
+
 function module:WorkOutMobFromVignette(instanceid)
 	if not self.db.profile.enabled then return end
 	if not core.db.profile.instances and IsInInstance() then return end
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
 	if not vignetteInfo then
 		return Debug("vignette had no info")
-	end
-	if vignetteInfo.atlasName == "VignetteLoot" then
-		return Debug("skipping loot vignette")
 	end
 	local source = vignetteInfo.onWorldMap and "point-of-interest" or "vignette"
 	local current_zone = HBD:GetPlayerZone()
@@ -54,6 +57,13 @@ function module:WorkOutMobFromVignette(instanceid)
 		if position then
 			x, y = position:GetXY()
 		end
+	end
+	if (self.db.profile.visibleOnly or visible_overrides[current_zone or 0]) and not vignetteInfo.onMinimap then
+		return Debug("vignette not visible on minimap and we're only alerting for visibles")
+	end
+	if vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite" then
+		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0)
+		return true
 	end
 	if vignetteInfo.objectGUID then
 		-- this *may* be a mob, but it also may be something which you interact with to summon the mob
@@ -105,8 +115,9 @@ function module:VIGNETTE_MINIMAP_UPDATED(event, instanceid, onMinimap, ...)
 		Debug("Skipping notify", "already done", instanceid)
 		return
 	end
-	self:WorkOutMobFromVignette(instanceid)
-	already_notified[instanceid] = true
+	if self:WorkOutMobFromVignette(instanceid) then
+		already_notified[instanceid] = true
+	end
 end
 function module:VIGNETTES_UPDATED()
 	-- Debug("VIGNETTES_UPDATED")
@@ -117,8 +128,9 @@ function module:VIGNETTES_UPDATED()
 	for i=1, #vignetteids do
 		local instanceid = vignetteids[i]
 		if not already_notified[instanceid] then
-			self:WorkOutMobFromVignette(instanceid)
-			already_notified[instanceid] = true
+			if self:WorkOutMobFromVignette(instanceid) then
+				already_notified[instanceid] = true
+			end
 		end
 	end
 end
@@ -134,5 +146,5 @@ function module:NotifyIfNeeded(id, current_zone, x, y, variant)
 	if not (current_zone and x and y) then
 		return
 	end
-	core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, force)
+	return core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, force)
 end

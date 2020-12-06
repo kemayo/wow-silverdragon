@@ -76,12 +76,13 @@ do
 	local previous
 	function module:PointTo(id, zone, x, y, duration, force)
 		Debug("Waypoint.PointTo", id, zone, x, y, duration, force)
+		local title = type(id) == "number" and core:GetMobLabel(id) or id or UNKNOWN
 		if TomTom and db.tomtom then
 			if waypoints.tomtom then
 				TomTom:RemoveWaypoint(waypoints.tomtom)
 			end
 			waypoints.tomtom = TomTom:AddWaypoint(zone, x, y, {
-				title = core:GetMobLabel(id) or UNKNOWN,
+				title = title,
 				persistent = false,
 				minimap = false,
 				world = false,
@@ -98,7 +99,7 @@ do
 				(duration and duration > 0) and duration or nil,
 				true, -- "legacy" which I think means to use per-zone coords rather than world coords
 				true, -- unused
-				core:GetMobLabel(id) or UNKNOWN,
+				title,
 				zone
 			)
 		end

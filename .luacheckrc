@@ -149,6 +149,7 @@ read_globals = {
     "SetRaidTargetIconTexture",
     "SplitContainerItem",
     "SplitGuildBankItem",
+    "StopSound",
     "UnitClass",
     "UnitClassification",
     "UnitCreatureType",

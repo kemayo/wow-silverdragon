@@ -440,6 +440,7 @@ do
 		globaldb.mob_seen[id] = time()
 		lastseen[id..zone] = time()
 		self.events:Fire("Seen", id, zone, x or 0, y or 0, is_dead, source, unit)
+		return true
 	end
 end
 do

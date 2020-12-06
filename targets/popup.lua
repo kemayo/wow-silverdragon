@@ -16,7 +16,6 @@ function module:ApplyLook(popup, look)
 end
 
 function module:ShowFrame(data)
-	if not self.db.profile.show then return end
 	if not (data and data.id) then return end
 	if not self.popup then
 		self.popup = self:CreatePopup()
@@ -24,24 +23,34 @@ function module:ShowFrame(data)
 	local popup = self.popup
 	popup.data = data
 
-	local name = core:NameForMob(data.id, data.unit)
-	if name then
-		local macrotext = "/cleartarget \n/targetexact "..name
-		popup:SetAttribute("macrotext1", macrotext)
+	if data.type == "mob" then
+		local name = core:NameForMob(data.id, data.unit)
+		if name then
+			local macrotext = "/cleartarget \n/targetexact "..name
+			popup:SetAttribute("macrotext1", macrotext)
+		end
+		if data.unit and GetRaidTargetIndex(data.unit) then
+			popup:SetRaidIcon(GetRaidTargetIndex(data.unit))
+		end
+	else
+		popup:SetAttribute("macrotext1", "")
 	end
 
 	if popup:IsVisible() then
 		popup:Hide()
 	end
 
+	self:RefreshData(popup)
 	popup:Show()
 
-	self:RefreshMobData(popup)
+	self:SetModel(popup)
+end
 
-	self:ShowModel(popup)
-
-	if data.unit and GetRaidTargetIndex(data.unit) then
-		popup:SetRaidIcon(GetRaidTargetIndex(data.unit))
+function module:RefreshData(popup)
+	if popup.data.type == "mob" then
+		return self:RefreshMobData(popup)
+	else
+		return self:RefreshLootData(popup)
 	end
 end
 
@@ -49,6 +58,7 @@ function module:RefreshMobData(popup)
 	local data = popup.data
 	popup.title:SetText(core:GetMobLabel(data.id))
 	popup.source:SetText(data.source or "")
+	popup.model.fallback:Hide()
 
 	local achievement, achievement_name, completed = ns:AchievementMobStatus(data.id)
 	if achievement then
@@ -70,8 +80,18 @@ function module:RefreshMobData(popup)
 		popup.lootIcon.complete:Hide()
 	end
 end
+function module:RefreshLootData(popup)
+	local data = popup.data
+	popup.title:SetText(data.name or UNKNOWN)
+	popup.source:SetText("vignette")
+	popup.model.fallback:Show()
+	-- TODO: work out the Treasure of X achievements?
+	popup.status:SetText("")
+	-- TODO: know about loot?
+	popup.lootIcon:Hide()
+end
 
-function module:ShowModel(popup)
+function module:SetModel(popup)
 	-- reset the model
 	popup.model:ClearModel()
 	popup.model:SetModelScale(1)
@@ -79,7 +99,7 @@ function module:ShowModel(popup)
 	popup.model:SetFacing(0)
 
 	local data = popup.data
-	if (data.id or data.unit) and not self:IsModelBlacklisted(data.id, data.unit) then
+	if (data.type == "mob" and data.id or data.unit) and not self:IsModelBlacklisted(data.id, data.unit) then
 		if data.unit then
 			popup.model:SetUnit(data.unit)
 		else
@@ -87,6 +107,20 @@ function module:ShowModel(popup)
 		end
 
 		popup.model:SetPortraitZoom(1)
+	elseif data.type == "loot" then
+		-- So, this is the classic world treasure chest model:
+		-- popup.model:SetModel([[world/skillactivated/containers/treasurechest01.mdx]])
+		-- ...but you can't use anything outside of interface on a model and have it work.
+		-- Could do something like gears
+		-- popup.model:SetModel([[interface/buttons/talktome_gears.mdx]])
+		-- ...but probably better use a texture
+		-- popup.model.fallback:SetAtlas("Mobile-TreasureIcon")
+		-- popup.model.fallback:SetAtlas("pvpqueue-chest-alliance-complete")
+		-- popup.model.fallback:SetAtlas("ShipMissionIcon-Treasure-Map")
+		-- popup.model.fallback:SetTexture("interface/worldmap/treasurechest_64")
+		-- popup.model.fallback:SetTexture("interface/icons/buff_feltreasures")
+		-- popup.model.fallback:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+		popup.model.fallback:SetAtlas("BonusLoot-Chest")
 	else
 		popup.model:SetModelScale(4.25)
 		popup.model:SetPosition(4, 0, 1.5)
@@ -165,6 +199,10 @@ function module:CreatePopup()
 
 	local model = CreateFrame("PlayerModel", nil, popup)
 	popup.model = model
+	local modelfallback = model:CreateTexture(nil, "OVERLAY")
+	modelfallback:SetAllPoints(model)
+	modelfallback:Hide()
+	model.fallback = modelfallback
 
 	local raidIcon = model:CreateTexture(nil, "OVERLAY")
 	popup.raidIcon = raidIcon
@@ -380,12 +418,12 @@ PopupClass.scripts = {
 	OnUpdate = function(self, elapsed)
 		self.elapsed = self.elapsed + elapsed
 		if self.elapsed > 0.5 then
-			if not self.model:GetModelFileID() then
+			if not self.model:GetModelFileID() and not self.model.fallback:IsShown() then
 				-- Sometimes models don't load the first time you request them for some reason. In this case,
 				-- re-requesting it seems to be needed. This might be a client bug, so testing whether it's still
 				-- necessary would be wise. (Added in 70100, reproducing by flying around Pandaria works pretty well.)
 				Debug("Poll for model reload")
-				module:ShowModel(self)
+				module:SetModel(self)
 			end
 			self.elapsed = 0
 		end
@@ -403,7 +441,7 @@ PopupClass.scripts = {
 			if not (x > 0 and y > 0) then
 				x, y = HBD:GetPlayerZonePosition()
 			end
-			module:SendLinkToMob(data.id, data.zone, x, y)
+			module:SendLinkFromData(data, data.zone, x, y)
 		elseif IsAltKeyDown() then
 			module.anchor:StartMoving()
 		end
