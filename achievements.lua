@@ -20,6 +20,7 @@ local achievements = {
 	[9400] = {}, -- Gorgrond Monster Hunter
 	[9541] = {}, -- The Song of Silence
 	[9571] = {}, -- Broke Back Precipice
+	[9601] = {}, -- King of the Monsters
 	[9617] = {}, -- Making the Cut
 	[9633] = {}, -- Cut off the Head (Shatt)
 	[9638] = {}, -- Heralds of the Legion (Shatt)
