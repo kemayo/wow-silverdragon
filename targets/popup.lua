@@ -496,15 +496,17 @@ PopupClass.scripts = {
 	LootOnClick = function(self, button)
 		if not self.window then
 			self.window = ns.Loot.Window.ShowForMob(self:GetParent().data.id)
+			self.window:SetParent(self)
 			self.window:Hide()
 		end
 		if not self.window:IsShown() then
-			self.window:Show()
+			self.window:ClearAllPoints()
 			if self:GetParent():GetCenter() > UIParent:GetCenter() then
 				self.window:SetPoint("RIGHT", self:GetParent(), "LEFT")
 			else
 				self.window:SetPoint("LEFT", self:GetParent(), "RIGHT")
 			end
+			self.window:Show()
 		else
 			self.window:Hide()
 		end

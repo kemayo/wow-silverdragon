@@ -2,6 +2,7 @@
 
 ## Changed in upcoming release
 
+* Avoid the tooltip on the loot window attached to the target popup overlapping the popup poorly
 * Avoid an error if you focus a mob that's in a zone with no route to you
 * Touch up some Warlords data
 
