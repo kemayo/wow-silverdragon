@@ -170,9 +170,21 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
         self:SetPosition(x, y)
     end
 
-    local size = 12 * db.icon_scale * scale
+    local size, inset
+    if minimap then
+        size = 12
+        scale = db.icon_scale_minimap * scale
+        alpha = db.icon_alpha_minimap * alpha
+    else
+        size = 12
+        scale = db.icon_scale * scale
+        alpha = db.icon_alpha * alpha
+    end
+    size = size * scale
     self:SetSize(size, size)
-    self:SetAlpha(db.icon_alpha * alpha)
+    inset = 3 * scale
+    self:SetHitRectInsets(inset, inset, inset, inset)
+    self:SetAlpha(alpha)
 
     if textureInfo.r then
         self.texture:SetVertexColor(textureInfo.r, textureInfo.g, textureInfo.b, textureInfo.a)
@@ -412,8 +424,6 @@ function module:UpdateMinimapIcons()
     local uiMapID = HBD:GetPlayerZone()
     if not uiMapID then return end
 
-    local ourScale, ourAlpha = 12 * db.icon_scale_minimap, db.icon_alpha_minimap
-
     for coord, mobid, textureData, scale, alpha in module:IterateNodes(uiMapID, true) do
         local x, y = core:GetXY(coord)
         local pin, newPin = self.pool:Acquire()
@@ -421,11 +431,6 @@ function module:UpdateMinimapIcons()
             pin:OnLoad()
         end
         pin:OnAcquired(mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, true)
-
-        scale = ourScale * (scale or 1.0)
-        pin:SetHeight(scale) -- Can't use :SetScale as that changes our positioning scaling as well
-        pin:SetWidth(scale)
-        pin:SetAlpha(ourAlpha * (alpha or 1.0))
 
         local edge = db.minimap_edge == module.const.EDGE_ALWAYS
         if db.minimap_edge == module.const.EDGE_FOCUS then
@@ -695,7 +700,7 @@ do
                 else
                     icon = icon_for_mob(value)
                 end
-                return state, value, icon, db.icon_scale * icon.scale, db.icon_alpha
+                return state, value, icon, icon.scale, db.icon_alpha
             end
             state, value = next(t, state)
         end

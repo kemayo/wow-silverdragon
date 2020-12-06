@@ -2,15 +2,16 @@
 ..\FrameXML\UI.xsd">
     <Frame name="SilverDragonOverlayMapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" virtual="true">
         <Layers>
-            <Layer level="OVERLAY">
-                <Texture parentKey="texture" setAllPoints="true">
+            <Layer level="ARTWORK">
+                <Texture parentKey="texture">
+                    <Anchor point="CENTER"/>
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND">
                 <Texture parentKey="emphasis" hidden="true" atlas="Callings-TopHighlight" alphaMode="ADD">
+                    <Size x="20" y="20"/>
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.texture"/>
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.texture"/>
+                        <Anchor point="CENTER"/>
                     </Anchors>
                     <Color r="1.0" g="1.0" b="1.0" a="0.4"/>
                 </Texture>
@@ -41,9 +42,7 @@
         </Animations>
     </Frame>
     <Frame name="SilverDragonOverlayWorldMapPinTemplate" inherits="SilverDragonOverlayMapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" mixin="SilverDragonOverlayWorldMapPinMixin" virtual="true">
-        <Size x="30" y="30"/>
     </Frame>
     <Frame name="SilverDragonOverlayMinimapPinTemplate" inherits="SilverDragonOverlayMapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" mixin="SilverDragonOverlayMinimapPinMixin" virtual="true">
-        <Size x="12" y="12"/>
     </Frame>
 </Ui>
