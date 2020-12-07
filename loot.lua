@@ -363,7 +363,7 @@ do
 				break
 			end
 			if frame.IsMouseOver then
-				if frame:IsMouseOver() then
+				if frame:IsMouseOver() and frame:IsVisible() then
 					return true
 				end
 			elseif isMouseOver(unpack(frame)) then
@@ -453,9 +453,11 @@ do
 		end
 		loot_tooltip:SetHyperlink(self:GetItemLink())
 		loot_tooltip:Show()
+		self:GetParent().tooltip = loot_tooltip
 	end
 	local function button_onleave(self)
 		loot_tooltip:Hide()
+		self:GetParent().tooltip = nil
 	end
 	local function button_onclick(self, mousebutton)
 		if IsModifiedClick() then
@@ -506,6 +508,10 @@ do
 			self:ClearLoot()
 			self.title:Hide()
 			self.close:Hide()
+			if self.tooltip then
+				self.tooltip:Hide()
+				self.tooltip = nil
+			end
 		end,
 		AddItem = function(self, itemid)
 			local button, isNew = buttonPool:Acquire()

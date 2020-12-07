@@ -48,6 +48,7 @@ end
 
 function module:OnEnable()
     WorldMapFrame:AddDataProvider(self.WorldMapDataProvider)
+    WorldMapFrame:RegisterCallback("WorldMapOnHide", self.OnWorldMapHide, self)
     HBD.RegisterCallback(self, "PlayerZoneChanged", "UpdateMinimapIcons")
     core.RegisterCallback(self, "Ready", "BuildNodeList")
     core.RegisterCallback(self, "BrokerMobClick")
@@ -68,6 +69,14 @@ function module:OnDisable()
     core.UnregisterCallback(self, "BrokerMobEnter")
     core.UnregisterCallback(self, "BrokerMobLeave")
     core.UnregisterCallback(self, "Seen")
+end
+
+function module:OnWorldMapHide()
+    for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
+        if pin.lootwindow then
+            pin:CleanupTooltip()
+        end
+    end
 end
 
 module.nodes = {}
@@ -207,7 +216,14 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
     self:ApplyFocusState()
 end
 
-local lootwindow
+function SilverDragonOverlayPinMixinBase:CleanupTooltip()
+    if self.lootwindow then
+        ns.Loot.Window.Release(self.lootwindow)
+        self.lootwindow = nil
+        GameTooltip:Hide()
+    end
+end
+
 function SilverDragonOverlayPinMixinBase:OnMouseEnter()
     local tooltip = GameTooltip
     if self:GetCenter() > UIParent:GetCenter() then -- compare X coordinate
@@ -215,9 +231,7 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
     else
         tooltip:SetOwner(self, "ANCHOR_RIGHT")
     end
-    if lootwindow then
-        ns.Loot.Window.Release(lootwindow)
-    end
+    self:CleanupTooltip()
     local id = self.mobid
     if id and ns.mobdb[id] then
         tooltip:AddLine(core:GetMobLabel(id))
@@ -230,17 +244,16 @@ function SilverDragonOverlayPinMixinBase:OnMouseEnter()
             ns.Loot.Summary.UpdateTooltip(tooltip, id, true)
         end
         if db.tooltip_regularloot and ns.Loot.HasRegularLoot(id) then
-            lootwindow = ns.Loot.Window.ShowForMob(id)
-            lootwindow:SetParent(GameTooltip)
+            self.lootwindow = ns.Loot.Window.ShowForMob(id)
+            self.lootwindow:SetParent(GameTooltip)
             if self:GetCenter() > UIParent:GetCenter() then
-                lootwindow:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
+                self.lootwindow:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
             else
-                lootwindow:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
+                self.lootwindow:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
             end
-            lootwindow:SetAutoHideDelay(0.25, {self, tooltip}, function(self)
-                lootwindow = nil
-                ns.Loot.Window.Release(self)
-                GameTooltip:Hide()
+            local pin = self
+            self.lootwindow:SetAutoHideDelay(0.25, {self, tooltip}, function(self)
+                pin:CleanupTooltip()
             end)
         end
     else
@@ -268,12 +281,11 @@ function SilverDragonOverlayPinMixinBase:OnMouseLeave()
         module:UnhighlightMob(self.mobid)
     end
 
-    if lootwindow then
-        if lootwindow.timer then
+    if self.lootwindow then
+        if self.lootwindow.timer then
             return
         end
-        ns.Loot.Window.Release(lootwindow)
-        lootwindow = nil
+        self:CleanupTooltip()
     end
     GameTooltip:Hide()
 end
