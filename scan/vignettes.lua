@@ -63,6 +63,9 @@ function module:WorkOutMobFromVignette(instanceid)
 		return Debug("vignette not visible on minimap and we're only alerting for visibles")
 	end
 	if vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite" then
+		if (not core.db.profile.taxi) and UnitOnTaxi('player') then
+			return
+		end
 		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0)
 		return true
 	end
