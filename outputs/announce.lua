@@ -193,7 +193,6 @@ function module:OnInitialize()
 				order = 10,
 				args = {
 					about = config.desc("Play sounds to announce rare mobs? Can do special things for special mobs. You *really* don't want to miss, say, the Time-Lost Proto Drake, after all...", 0),
-					sound = toggle("Enabled", "Play sounds at all!", 10),
 					channel = {
 						type = "select",
 						name = _G.SOUND_CHANNELS,
@@ -212,18 +211,20 @@ function module:OnInitialize()
 					drums = toggle("The Sound of Drums", "Underneath it all, the constant drumming", 14),
 					soundgroup = toggle("Group Sync Sounds", "Play sounds from synced mobs from party/raid members", 15),
 					soundguild = toggle("Guild Sync Sounds", "Play sounds from synced mobs from guild members not in group", 16),
-					soundfile = soundfile("sound", 15),
-					sound_loop = soundrange(17),
-					mount = {type="header", name="", order=20,},
-					sound_mount = toggle("Mount sounds", "Play a special sound for mobs that drop a mount", 21),
-					soundfile_mount = soundfile("sound_mount", 25),
-					sound_mount_loop = soundrange(27),
+					regular = {type="header", name="", order=20,},
+					sound = toggle("Sounds", "Play sounds for regular mobs", 21),
+					soundfile = soundfile("sound", 22),
+					sound_loop = soundrange(23),
+					mount = {type="header", name="", order=25,},
+					sound_mount = toggle("Mount sounds", "Play a sound for mobs that drop a mount", 26),
+					soundfile_mount = soundfile("sound_mount", 27),
+					sound_mount_loop = soundrange(28),
 					boss = {type="header", name="", order=30,},
-					sound_boss = toggle("Boss sounds", "Play a special sound for mobs that require a group", 31),
+					sound_boss = toggle("Boss sounds", "Play a sound for mobs that require a group", 31),
 					soundfile_boss = soundfile("sound_boss", 35),
 					sound_boss_loop = soundrange(37),
 					loot = {type="header", name="", order=40,},
-					sound_loot = toggle("Loot sounds", "Play a special sound for treasures", 41),
+					sound_loot = toggle("Loot sounds", "Play a sound for treasures", 41),
 					soundfile_loot = soundfile("sound_loot", 45),
 					sound_loot_loop = soundrange(47),
 				},
@@ -484,28 +485,29 @@ function module:PlaySound(s)
 	self:ScheduleTimer("PlaySound", delays[s.soundfile] or 4.5, s)
 end
 core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zone, x, y, dead, source)
-	if not (module.db.profile.sound and LSM) then
-		return
-	end
+	if not LSM then return end
 	if source:match("^sync") then
 		local channel, player = source:match("sync:(.+):(.+)")
 		if channel == "GUILD" and not module.db.profile.soundguild or (channel == "PARTY" or channel == "RAID") and not module.db.profile.soundgroup then return end
 	end
 	local soundfile, loops
-	if module.db.profile.sound_mount and ns.Loot.HasMounts(id) then
+	if ns.Loot.HasMounts(id) then
+		if not module.db.profile.sound_mount then return end
 		soundfile = module.db.profile.soundfile_mount
 		loops = module.db.profile.sound_mount_loop
-	elseif module.db.profile.sound_boss and ns.mobdb[id] and ns.mobdb[id].boss then
+	elseif ns.mobdb[id] and ns.mobdb[id].boss then
+		if not module.db.profile.sound_boss then return end
 		soundfile = module.db.profile.soundfile_boss
 		loops = module.db.profile.sound_boss_loop
 	else
+		if not module.db.profile.sound then return end
 		soundfile = module.db.profile.soundfile
 		loops = module.db.profile.sound_loop
 	end
 	module:PlaySound{soundfile = soundfile, loops = loops}
 end)
 core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback, id, zone, x, y, dead, source)
-	if not (module.db.profile.sound and LSM) then
+	if not (module.db.profile.sound_loot and LSM) then
 		return
 	end
 	module:PlaySound{soundfile = module.db.profile.soundfile_loot, loops = module.db.profile.sound_loot_loop}
