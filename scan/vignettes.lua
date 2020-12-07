@@ -39,7 +39,8 @@ function module:OnEnable()
 end
 
 local visible_overrides = {
-	[1565] = true, -- Ardenweald, where all chests are notified from the entire zone...
+	[1550] = true, -- The Shadowlands, because of...
+	[1565] = true, -- Ardenweald, where all chests are notified from the entire zone
 }
 
 function module:WorkOutMobFromVignette(instanceid)
