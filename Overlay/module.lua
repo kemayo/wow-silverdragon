@@ -44,6 +44,8 @@ function module:OnInitialize()
     self.pool = CreateFramePool("FRAME", Minimap, "SilverDragonOverlayMinimapPinTemplate")
     self.tooltip = ns.Tooltip.Get("OverlayPin")
 
+    GameTooltip:HookScript("OnShow", function(tooltip) self:CleanupTooltip() end)
+
     self:RegisterConfig()
 end
 
