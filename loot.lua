@@ -420,19 +420,7 @@ do
 
 	ns.Loot.Window = {}
 
-	local loot_tooltip = CreateFrame("GameTooltip", "SilverDragonLootTooltip", UIParent, "GameTooltipTemplate")
-	loot_tooltip:SetScript("OnTooltipSetUnit", GameTooltip_OnTooltipSetUnit)
-	loot_tooltip:SetScript("OnTooltipSetItem", GameTooltip_OnTooltipSetItem)
-	loot_tooltip:SetScript("OnTooltipSetSpell", GameTooltip_OnTooltipSetSpell)
-	loot_tooltip:SetScript("OnUpdate", GameTooltip_OnUpdate)
-	loot_tooltip.shoppingTooltips = {
-		CreateFrame("GameTooltip", "SilverDragonLootTooltipShopping1", loot_tooltip, "GameTooltipTemplate"),
-		CreateFrame("GameTooltip", "SilverDragonLootTooltipShopping2", loot_tooltip, "GameTooltipTemplate"),
-	}
-	loot_tooltip.shoppingTooltips[1]:SetScript("OnTooltipSetItem", GameTooltip_OnTooltipSetShoppingItem)
-	loot_tooltip.shoppingTooltips[1]:SetScale(0.8)
-	loot_tooltip.shoppingTooltips[2]:SetScript("OnTooltipSetItem", GameTooltip_OnTooltipSetShoppingItem)
-	loot_tooltip.shoppingTooltips[2]:SetScale(0.8)
+	local loot_tooltip = ns.Tooltip.Get("Loot")
 
 	local function window_onclick(self, mousebutton)
 		if mousebutton == "RightButton" then

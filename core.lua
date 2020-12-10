@@ -609,3 +609,28 @@ function addon:GetClosestLocationForMob(id)
 	end
 	return closest.zone, closest.x, closest.y, closest.distance
 end
+
+-- utility tooltip stuff
+
+ns.Tooltip = {
+	Get = function(name)
+		name = "SilverDragon" .. name .. "Tooltip"
+		if _G[name] then
+			return _G[name]
+		end
+		local tooltip = CreateFrame("GameTooltip", name, UIParent, "GameTooltipTemplate")
+		tooltip:SetScript("OnTooltipSetUnit", GameTooltip_OnTooltipSetUnit)
+		tooltip:SetScript("OnTooltipSetItem", GameTooltip_OnTooltipSetItem)
+		tooltip:SetScript("OnTooltipSetSpell", GameTooltip_OnTooltipSetSpell)
+		tooltip:SetScript("OnUpdate", GameTooltip_OnUpdate)
+		tooltip.shoppingTooltips = {
+			CreateFrame("GameTooltip", name.."Shopping1", tooltip, "GameTooltipTemplate"),
+			CreateFrame("GameTooltip", name.."Shopping2", tooltip, "GameTooltipTemplate"),
+		}
+		tooltip.shoppingTooltips[1]:SetScript("OnTooltipSetItem", GameTooltip_OnTooltipSetShoppingItem)
+		tooltip.shoppingTooltips[1]:SetScale(0.8)
+		tooltip.shoppingTooltips[2]:SetScript("OnTooltipSetItem", GameTooltip_OnTooltipSetShoppingItem)
+		tooltip.shoppingTooltips[2]:SetScale(0.8)
+		return tooltip
+	end,
+}
