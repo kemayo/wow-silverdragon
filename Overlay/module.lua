@@ -633,6 +633,12 @@ do
         if db.hidden[id] or core:ShouldIgnoreMob(id) then
             return false
         end
+        if not db.mountcomplete and ns.Loot.HasMounts(id) then
+            --check if mount is collected, if so hide pin
+            if ns.Loot.Status.Mount(id) then
+                return false
+            end
+        end
         local quest, achievement, achievement_completed_by_alt = ns:CompletionStatus(id)
         if achievement ~= nil then
             if quest ~= nil then
