@@ -8,6 +8,7 @@
     * This is force-enabled in Ardenweald, because it has all vignettes viewable from the entire map for some reason
 * Change the behavior of the sound preferences: you can now separately toggle regular-mob sounds, mount-dropping sounds, boss sounds, and loot sounds without having to use the hack of setting the sound file to "None"
 * The overlay map pins were too sensitive, triggering the tooltip sooner than was ideal
+* Avoid tooltips for mobs with loot in the map overlay sticking around when they shouldn't
 * Avoid the tooltip on the loot window attached to the target popup overlapping the popup poorly
 * Avoid an error if you focus a mob that's in a zone with no route to you
 * Touch up some Warlords data
