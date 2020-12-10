@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v90002.6
+
+* Click-to-ignore on the target popup didn't understand loot
+
 ## Changed in v90002.5
 
 * Show alerts and popups when treasure vignettes appear on the map
