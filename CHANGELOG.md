@@ -1,6 +1,6 @@
 # Changelog
 
-## Changed in upcoming release
+## Changed in v90002.5
 
 * Show alerts and popups when treasure vignettes appear on the map
     * Haven't y'all missed Ikiss screaming about trinkets? Well, if you really haven't, there's sound options for this.
