@@ -42,6 +42,12 @@ function module:RegisterConfig()
                         width = "full",
                         order = 20,
                     },
+                    mountcomplete = {
+                        type = "toggle",
+                        name = "Show mount-achieved mobs",
+                        desc = "Whether to show icons for mobs that drop a mount that you've already learned",
+                        order = 25,
+                    },
                     unhide = {
                         type = "execute",
                         name = "Reset hidden mobs",
