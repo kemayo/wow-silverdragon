@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in upcoming release
+
+* Forbidding certain vignettes from being announced. I'm looking at you, Garrison Cache.
+
 ## Changed in v90002.6
 
 * Click-to-ignore on the target popup didn't understand loot

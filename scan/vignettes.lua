@@ -38,6 +38,9 @@ function module:OnEnable()
 	self:RegisterEvent("VIGNETTES_UPDATED")
 end
 
+-- handy debug command:
+-- /dump C_VignetteInfo.GetVignetteInfo(C_VignetteInfo.GetVignettes()[1])
+
 local already_notified = {
 	-- [instanceid] = true
 }
@@ -56,6 +59,9 @@ local visible_overrides = {
 	[1525] = LOOT, -- Revendreth
 	[1543] = LOOT, -- Maw
 }
+local vignette_denylist = {
+	[637] = true, -- Garrison Cache
+}
 local function shouldShowNotVisible(vignetteInfo, zone)
 	local variant = (vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite") and LOOT or MOB
 	if zone and (visible_overrides[zone] == true or visible_overrides[zone] == variant) then
@@ -71,6 +77,9 @@ function module:WorkOutMobFromVignette(instanceid)
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
 	if not vignetteInfo then
 		return Debug("vignette had no info")
+	end
+	if vignette_denylist[vignetteInfo.vignetteID or 0] then
+		return Debug("Vignette was on the denylist", vignetteInfo.vignetteID)
 	end
 	local source = vignetteInfo.onWorldMap and "point-of-interest" or "vignette"
 	local current_zone = HBD:GetPlayerZone()
