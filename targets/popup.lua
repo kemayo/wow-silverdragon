@@ -362,7 +362,7 @@ function PopupClass:SetRaidIcon(icon)
 end
 
 function PopupClass:DoIgnore()
-	if self.data and self.data.id then
+	if self.data and self.data.type ~= "loot" and self.data.id then
 		core:SetIgnore(self.data.id, true)
 	end
 end
@@ -507,7 +507,9 @@ PopupClass.scripts = {
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, 0)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
-		GameTooltip:AddLine(escapes.rightClick .. " " .. IGNORE)
+		if self:GetParent().data.type ~= "loot" then
+			GameTooltip:AddLine(escapes.rightClick .. " " .. IGNORE)
+		end
 		GameTooltip:Show()
 	end,
 	CloseOnLeave = function(self)
