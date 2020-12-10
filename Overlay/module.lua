@@ -42,6 +42,7 @@ function module:OnInitialize()
 
     -- frame pool for minimap pins (world map is handled by the data provider)
     self.pool = CreateFramePool("FRAME", Minimap, "SilverDragonOverlayMinimapPinTemplate")
+    self.tooltip = ns.Tooltip.Get("OverlayPin")
 
     self:RegisterConfig()
 end
@@ -72,11 +73,7 @@ function module:OnDisable()
 end
 
 function module:OnWorldMapHide()
-    for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
-        if pin.lootwindow then
-            pin:CleanupTooltip()
-        end
-    end
+    self:CleanupTooltip()
 end
 
 module.nodes = {}
@@ -165,6 +162,68 @@ C_Timer.NewTicker(0.5, function(...)
     end
 end)
 
+function module:ShowTooltip(pin)
+    local tooltip = self.tooltip
+    if tooltip:IsShown() and tooltip.pin == pin then
+        return
+    end
+    self:CleanupTooltip()
+    tooltip.pin = pin
+    if pin:GetCenter() > UIParent:GetCenter() then -- compare X coordinate
+        tooltip:SetOwner(pin, "ANCHOR_LEFT")
+    else
+        tooltip:SetOwner(pin, "ANCHOR_RIGHT")
+    end
+    local id = pin.mobid
+    if id and ns.mobdb[id] then
+        tooltip:AddLine(core:GetMobLabel(id))
+        if ns.mobdb[id].notes then
+            tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
+        end
+        tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
+        if db.tooltip_completion then
+            ns:UpdateTooltipWithCompletion(tooltip, id)
+            ns.Loot.Summary.UpdateTooltip(tooltip, id, true)
+        end
+        if db.tooltip_regularloot and ns.Loot.HasRegularLoot(id) then
+            self.lootwindow = ns.Loot.Window.ShowForMob(id)
+            self.lootwindow:SetParent(tooltip)
+            if pin:GetCenter() > UIParent:GetCenter() then
+                self.lootwindow:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
+            else
+                self.lootwindow:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
+            end
+            self.lootwindow:SetAutoHideDelay(0.25, {pin, tooltip}, function()
+                self:CleanupTooltip()
+            end)
+
+            core.events:Fire("LootWindowOpened", self.lootwindow)
+        end
+    else
+        tooltip:AddLine(UNKNOWN)
+        tooltip:AddDoubleLine("At", pin.uiMapID .. ':' .. pin.coord)
+    end
+
+    if db.tooltip_help then
+        tooltip:AddLine(escapes.keyDown .. ALT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
+        if C_Map.CanSetUserWaypointOnMap(pin.uiMapID) then
+            tooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
+        end
+        tooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.rightClick .. "  " .. HIDE )
+    end
+
+    tooltip:Show()
+end
+
+function module:CleanupTooltip()
+    if self.lootwindow then
+        ns.Loot.Window.Release(self.lootwindow)
+        self.lootwindow = nil
+    end
+    self.tooltip:Hide()
+end
+
+
 -- Pin mixin
 
 local SilverDragonOverlayPinMixinBase = {}
@@ -216,64 +275,11 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
     self:ApplyFocusState()
 end
 
-function SilverDragonOverlayPinMixinBase:CleanupTooltip()
-    if self.lootwindow then
-        ns.Loot.Window.Release(self.lootwindow)
-        self.lootwindow = nil
-        GameTooltip:Hide()
-    end
-end
-
 function SilverDragonOverlayPinMixinBase:OnMouseEnter()
-    local tooltip = GameTooltip
-    if self:GetCenter() > UIParent:GetCenter() then -- compare X coordinate
-        tooltip:SetOwner(self, "ANCHOR_LEFT")
-    else
-        tooltip:SetOwner(self, "ANCHOR_RIGHT")
-    end
-    self:CleanupTooltip()
-    local id = self.mobid
-    if id and ns.mobdb[id] then
-        tooltip:AddLine(core:GetMobLabel(id))
-        if ns.mobdb[id].notes then
-            tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
-        end
-        tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
-        if db.tooltip_completion then
-            ns:UpdateTooltipWithCompletion(tooltip, id)
-            ns.Loot.Summary.UpdateTooltip(tooltip, id, true)
-        end
-        if db.tooltip_regularloot and ns.Loot.HasRegularLoot(id) then
-            self.lootwindow = ns.Loot.Window.ShowForMob(id)
-            self.lootwindow:SetParent(GameTooltip)
-            if self:GetCenter() > UIParent:GetCenter() then
-                self.lootwindow:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
-            else
-                self.lootwindow:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
-            end
-            local pin = self
-            self.lootwindow:SetAutoHideDelay(0.25, {self, tooltip}, function(self)
-                pin:CleanupTooltip()
-            end)
-        end
-    else
-        tooltip:AddLine(UNKNOWN)
-        tooltip:AddDoubleLine("At", self.uiMapID .. ':' .. self.coord)
-    end
-
-    if db.tooltip_help then
-        GameTooltip:AddLine(escapes.keyDown .. ALT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
-        if C_Map.CanSetUserWaypointOnMap(self.uiMapID) then
-            GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
-        end
-        GameTooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.rightClick .. "  " .. HIDE )
-    end
-
-    tooltip:Show()
-
     if not self.minimap then
         module:HighlightMob(self.mobid)
     end
+    module:ShowTooltip(self)
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseLeave()
@@ -281,13 +287,9 @@ function SilverDragonOverlayPinMixinBase:OnMouseLeave()
         module:UnhighlightMob(self.mobid)
     end
 
-    if self.lootwindow then
-        if self.lootwindow.timer then
-            return
-        end
-        self:CleanupTooltip()
-    end
-    GameTooltip:Hide()
+    if module.lootwindow then return end
+
+    module:CleanupTooltip()
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseDown(button)
@@ -388,8 +390,7 @@ end
 SilverDragonOverlayWorldMapPinMixin = CreateFromMixins(MapCanvasPinMixin, SilverDragonOverlayPinMixinBase)
 
 function SilverDragonOverlayWorldMapPinMixin:OnLoad()
-    self:UseFrameLevelType("PIN_FRAME_LEVEL_AREA_POI")
-    self:SetMovable(true)
+    self:UseFrameLevelType("PIN_FRAME_LEVEL_VIGNETTE")
     self:SetScalingLimits(1, 1.0, 1.2)
 end
 
