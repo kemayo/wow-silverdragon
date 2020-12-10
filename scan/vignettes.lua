@@ -45,10 +45,24 @@ local already_notified_loot = {
 	-- [vignetteid] = time()
 }
 
+local MOB = 1
+local LOOT = 2
 local visible_overrides = {
 	[1550] = true, -- The Shadowlands, because of...
-	[1565] = true, -- Ardenweald, where all chests are notified from the entire zone
+	[1565] = LOOT, -- Ardenweald, where all chests are notified from the entire zone
+	-- But also all the Shadowlands zones, because callings quests are fucky about this and I need to work out a heuristic for them
+	[1533] = LOOT, -- Bastion
+	[1536] = LOOT, -- Maldraxxus
+	[1525] = LOOT, -- Revendreth
+	[1543] = LOOT, -- Maw
 }
+local function shouldShowNotVisible(vignetteInfo, zone)
+	local variant = (vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite") and LOOT or MOB
+	if zone and (visible_overrides[zone] == true or visible_overrides[zone] == variant) then
+		return false
+	end
+	return not module.db.profile.visibleOnly
+end
 
 function module:WorkOutMobFromVignette(instanceid)
 	if not self.db.profile.enabled then return end
@@ -67,7 +81,7 @@ function module:WorkOutMobFromVignette(instanceid)
 			x, y = position:GetXY()
 		end
 	end
-	if (self.db.profile.visibleOnly or visible_overrides[current_zone or 0]) and not vignetteInfo.onMinimap then
+	if not vignetteInfo.onMinimap and not shouldShowNotVisible(vignetteInfo, current_zone) then
 		return Debug("vignette not visible on minimap and we're only alerting for visibles")
 	end
 	if vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite" then
