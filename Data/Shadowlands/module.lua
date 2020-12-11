@@ -119,7 +119,7 @@ function module:OnInitialize()
 		[166993] = {name="Huntmaster Petrus",locations={[1525]={61707950},},loot={180874,180705,180405},quest=60022,},
 		[167078] = {name="Wingflayer the Cruel",item=182749,locations={[1533]={40405340},},loot={182749},notes="Be Kyrian",quest=60314,},
 		[167464] = {name="Grand Arcanist Dimitri",locations={[1525]={20485300},},loot={180708,180503},quest=60173,},
-		[167721] = {name="The Slumbering Emperor",locations={[1565]={59304660},},loot={175711},quest=60290,},
+		[167721] = {name="The Slumbering Emperor",locations={[1565]={59304660},},loot={175711},note="You need detect invisible, or just to AOE into the fog",quest=60290,vignette=4193,},
 		[167724] = {name="Rotbriar Boggart",locations={[1565]={65702430},},loot={175729},quest=60258,vignette=4435,},
 		[167726] = {name="Rootwrithe",locations={[1565]={65104430},},loot={179603},quest=60273,},
 		[167851] = {name="Egg-Tender Leh'go",locations={[1565]={58403230},},loot={179539},notes="Destroy eggs, might have to wait a bit",quest=60266,vignette=4191,},
