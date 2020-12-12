@@ -69,6 +69,10 @@ local function shouldShowNotVisible(vignetteInfo, zone)
 	if zone and (visible_overrides[zone] == true or visible_overrides[zone] == variant) then
 		return false
 	end
+	local info = C_Map.GetMapInfo(zone)
+	if info and info.parentMapID then
+		return shouldShowNotVisible(vignetteInfo, info.parentMapID)
+	end
 	return not module.db.profile.visibleOnly
 end
 
