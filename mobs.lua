@@ -49,79 +49,84 @@ end
 
 function module:OnEnable()
 	local config = core:GetModule("Config", true)
-	if config then
-		config.options.plugins.mobs = {
-			mobs = {
-				type = "group",
-				name = "Mobs",
-				childGroups = "tab",
-				order = 15,
-				args = {
-					custom = {
-						type = "group",
-						name = "Custom",
-						order = 1,
-						args = {
-							add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)
-								core:SetCustom(id, true)
-							end),
-							mobs = {
-								type = "group",
-								name = REMOVE,
-								inline = true,
-								get = function() return true end,
-								set = function(info, value)
-									core:SetCustom(info.arg, false)
-								end,
-								args = {},
-							},
-						},
-					},
-					ignore = {
-						type = "group",
-						name = "Ignore",
-						desc = "Mobs you just want to ignore, already",
-						args = {
-							add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)
-								core:SetIgnore(id, true)
-							end),
-							mobs = {
-								type = "group",
-								name = REMOVE,
-								inline = true,
-								get = function() return true end,
-								set = function(info, value)
-									core:SetIgnore(info.arg, false)
-								end,
-								args = {},
-							}
-						},
-						order = 2,
-					},
-				},
-			},
-		}
+	if not config then return end
 
-		self:BuildIgnoreList(config.options)
-		self:BuildCustomList(config.options)
-		self:BuildMobList(config.options)
-
-		core.RegisterCallback(self, "IgnoreChanged")
-		core.RegisterCallback(self, "CustomChanged")
-	end
+	core.RegisterCallback(self, "OptionsRequested")
+	core.RegisterCallback(self, "IgnoreChanged")
+	core.RegisterCallback(self, "CustomChanged")
 end
+
 
 function module:IgnoreChanged(callback, id, ignored)
 	local config = core:GetModule("Config", true)
-	if config then
+	if config and config.options.plugins.mobs then
 		config.options.plugins.mobs.mobs.args.ignore.args.mobs.args["mob"..id] = ignored and toggle_mob(id) or nil
 	end
 end
 function module:CustomChanged(callback, id, watched)
 	local config = core:GetModule("Config", true)
-	if config then
+	if config and config.options.plugins.mobs then
 		config.options.plugins.mobs.mobs.args.custom.args.mobs.args["mob"..id] = watched and toggle_mob(id) or nil
 	end
+end
+
+function module:OptionsRequested(callback, options)
+	options.plugins.mobs = {
+		mobs = {
+			type = "group",
+			name = "Mobs",
+			childGroups = "tab",
+			order = 15,
+			args = {
+				custom = {
+					type = "group",
+					name = "Custom",
+					order = 1,
+					args = {
+						add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)
+							core:SetCustom(id, true)
+						end),
+						mobs = {
+							type = "group",
+							name = REMOVE,
+							inline = true,
+							get = function() return true end,
+							set = function(info, value)
+								core:SetCustom(info.arg, false)
+							end,
+							args = {},
+						},
+					},
+				},
+				ignore = {
+					type = "group",
+					name = "Ignore",
+					desc = "Mobs you just want to ignore, already",
+					args = {
+						add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)
+							core:SetIgnore(id, true)
+						end),
+						mobs = {
+							type = "group",
+							name = REMOVE,
+							inline = true,
+							get = function() return true end,
+							set = function(info, value)
+								core:SetIgnore(info.arg, false)
+							end,
+							args = {},
+						}
+					},
+					order = 2,
+				},
+			},
+		},
+	}
+	self:BuildIgnoreList(options)
+	self:BuildCustomList(options)
+	self:BuildMobList(options)
+
+	core.UnregisterCallback(self, "OptionsRequested")
 end
 
 function module:BuildIgnoreList(options)
@@ -143,6 +148,7 @@ function module:BuildCustomList(options)
 end
 
 function module:BuildMobList(options)
+	ns:LoadAllAchievementMobs()
 	for source, data in pairs(core.datasources) do
 		local group = {
 			type = "group",
@@ -182,7 +188,7 @@ function module:BuildMobList(options)
 				},
 				zones = {
 					type = "group",
-					name = "Zones",
+					name = ZONE,
 					inline = false,
 					childGroups = "tree",
 					args = {},
@@ -193,6 +199,59 @@ function module:BuildMobList(options)
 			return not core.db.global.datasources[info[#info - 3]]
 		end
 		for id, mob in pairs(data) do
+			if ns.mobs_to_achievement[id] then
+				local achievement = ns.mobs_to_achievement[id]
+				if not group.args.achievements then
+					group.args.achievements = {
+						type = "group",
+						name = ACHIEVEMENTS,
+						inline = false,
+						childGroups = "tree",
+						args = {},
+					}
+				end
+				if not group.args.achievements.args["achievement"..achievement] then
+					group.args.achievements.args["achievement"..achievement] = {
+						type = "group",
+						inline = false,
+						name = 	select(2, GetAchievementInfo(achievement)) or "achievement:"..achievement,
+						desc = "ID: " .. achievement,
+						args = {
+							all = {
+								type = "execute",
+								name = ALL,
+								desc = "Select every mob in the list",
+								func = function(info)
+									if not ns.achievements[achievement] then return end
+									for mobid, criteria in pairs(ns.achievements[achievement]) do
+										core:SetIgnore(mobid, false, true)
+									end
+									self:BuildIgnoreList(info.options)
+								end,
+								width = "half",
+								order = 1,
+							},
+							none = {
+								type = "execute",
+								name = NONE,
+								desc = "Deselect every mob in the list",
+								func = function(info)
+									if not ns.achievements[achievement] then return end
+									for mobid, criteria in pairs(ns.achievements[achievement]) do
+										core:SetIgnore(mobid, true, true)
+									end
+									self:BuildIgnoreList(info.options)
+								end,
+								width = "half",
+								order = 2,
+							},
+						},
+					}
+				end
+				local toggle = toggle_mob(id)
+				toggle.disabled = mob_toggle_disabled
+				group.args.achievements.args["achievement"..achievement].args["mob"..id] = toggle
+			end
 			if not mob.hidden and mob.locations then
 				for zone in pairs(mob.locations) do
 					if not group.args.zones.args["map"..zone] then

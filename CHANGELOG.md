@@ -2,6 +2,7 @@
 
 ## Changed in upcoming release
 
+* In the mobs options, expose achievements so you can easily ignore/unignore every mob for a given achievement. Like, hypothetically, if you want to stop being notified about the Maw bonus bosses, you can quickly hide everything for "It’s About Sending a Message"
 * Split up the options for the map overlay: you can now control everything separately about minimap and worldmap pins
 * Changed the defaults for minimap pins so that their tooltips are less bulky
 * Added a central toggle for scanning for loot vignettes in the scan>vignette options, so you don't have to turn announcements off in several places if you don't want them.

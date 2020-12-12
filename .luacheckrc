@@ -212,6 +212,7 @@ read_globals = {
     "Vector2DMixin",
 
     -- FrameXML Constants
+    "ACHIEVEMENTS",
     "ACTION_PARTY_KILL",
     "ADD",
     "ALL",
@@ -310,4 +311,5 @@ read_globals = {
     "UNKNOWNOBJECT",
     "USED",
     "YES",
+    "ZONE",
 }

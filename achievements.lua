@@ -465,10 +465,11 @@ local achievements = {
 	[14744] = {}, -- Better to Be Lucky Than Dead
 	[14802] = {}, -- Bloodsport
 }
-core.achievements = achievements
+ns.achievements = achievements
 local mobs_to_achievement = {
 	-- [43819] = 2257,
 }
+ns.mobs_to_achievement = mobs_to_achievement
 local achievements_loaded = false
 
 function ns:AchievementMobStatus(id)
