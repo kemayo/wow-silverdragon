@@ -2,7 +2,12 @@
 
 ## Changed in upcoming release
 
-* Forbidding certain vignettes from being announced. I'm looking at you, Garrison Cache.
+* Split up the options for the map overlay: you can now control everything separately about minimap and worldmap pins
+* Changed the defaults for minimap pins so that their tooltips are less bulky
+* Added a central toggle for scanning for loot vignettes in the scan>vignette options, so you don't have to turn announcements off in several places if you don't want them.
+* Forbidding certain vignettes from being announced. I'm looking at you, Garrison Cache
+* Fixed the location of the Ascended Council in Bastion (thanks rainfordays!)
+* Filled out other mob locations / vignette ids
 
 ## Changed in v90002.6
 
