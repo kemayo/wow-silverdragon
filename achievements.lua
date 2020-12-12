@@ -402,7 +402,23 @@ local achievements = {
 		[155060] = 45433, -- The Doppel Gang
 		[155583] = 45691, -- Scrapclaw
 	},
-	[13690] = {}, -- Nazjatarget Eliminated (Nazjatar)
+	[13690] = { -- Nazjatarget Eliminated (Nazjatar)
+		[153299] = 45504, -- Szun, Breaker of Slaves
+		[153302] = 45505, -- Frozen Winds of Zhiela
+		[153300] = 45506, -- Zoko, Her Iron Defender
+		[153296] = 45507, -- Tempest-Speaker Shalan'ali
+		[153301] = 45508, -- Starseeker of the Shirakess
+		[153311] = 45509, -- Azanz, the Slitherblade
+		[153304] = 45510, -- Undana, Chilling Assassin
+		[153303] = 45511, -- Kassar, Wielder of Dark Blades
+		[153305] = 45512, -- The Zanj'ir Brutalizer
+		[153314] = 45513, -- Champion Aldrantiss, Defender of Her Kingdom
+		[153309] = 45514, -- Champion Alzana, Arrow of Thunder
+		[153315] = 45515, -- Champion Eldanar, Shield of Her Glory
+		[153312] = 45516, -- Champion Kyx'zhul the Deepspeaker
+		[153310] = 45517, -- Champion Qalina, Spear of Ice
+		[153313] = 45518, -- Champion Vyz'olgo the Mind-Taker
+	},
 	[13691] = {}, -- I Thought You Said They'd Be Rare (Nazjatar)
 	[14159] = {}, -- Combating the Corruption (Assaults)
 	[14307] = { -- Adventurer of Bastion
