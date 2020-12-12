@@ -187,20 +187,7 @@ function addon:OnInitialize()
 			always = {
 			},
 			ignore = {
-				[32435] = true, -- Vern
 				[64403] = true, -- Alani
-				[62346] = true, -- Galleon (spawns every 2 hourish)
---				[62346] = true, -- Oondasta (spawns every 2 hoursish now)
-				[123087] = true, -- Al'Abas in rogue class hall
-				--Throne of Thunder Weekly bosses
-				[70243] = true,--Agony and Anima (Archritualist Kelada)
-				[70238] = true,--Eyes of the Thunder King
-				[70249] = true,--Eyes of the Thunder King
-				[70440] = true,--Requiem for a Queen (Monara)
-				[70430] = true,--Rocks Fall, People Die (Rocky Horror)
-				[70429] = true,--Something Foul is Afoot (Flesh'rok the Diseased)
-				[70276] = true,--Taming the Tempest (No'ku Stormsayer)
-				[69843] = true,--Zao'cho the Wicked (Zao'cho)
 			},
 			ignore_datasource = {
 				-- "BurningCrusade" = true,
