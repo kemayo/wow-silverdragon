@@ -33,14 +33,24 @@ function module:OnInitialize()
 end
 
 function module:OnEnable()
+    self:RegisterEvent("CHAT_MSG_MONSTER_YELL", "OnChatMessage")
     self:RegisterEvent("CHAT_MSG_MONSTER_EMOTE", "OnChatMessage")
     self:RegisterEvent("CHAT_MSG_MONSTER_SAY", "OnChatMessage")
     self:RegisterEvent("CHAT_MSG_MONSTER_WHISPER", "OnChatMessage")
-    self:RegisterEvent("CHAT_MSG_MONSTER_YELL", "OnChatMessage")
 end
 
 local redirects = {
     [62352] = 62346, -- Chief Salyis => Galleon
+    [157726] = 160857, -- Scorched Scavenger => Sire Ladinas
+    [157727] = 160857, -- Scorched Outcast => Sire Ladinas
+    [157733] = 160857, -- Crazed Ash Ghoul => Sire Ladinas
+    [166726] = 160857, -- Blistering Ash Ghoul => Sire Ladinas
+}
+local type_restriction = {
+    [157726] = "CHAT_MSG_MONSTER_YELL", -- Scorched Scavenger
+    [157727] = "CHAT_MSG_MONSTER_YELL", -- Scorched Outcast
+    [157733] = "CHAT_MSG_MONSTER_YELL", -- Crazed Ash Ghoul
+    [166726] = "CHAT_MSG_MONSTER_YELL", -- Blistering Ash Ghoul
 }
 
 function module:OnChatMessage(event, text, name, ...)
@@ -55,8 +65,17 @@ function module:OnChatMessage(event, text, name, ...)
         id = core:IdForMob(name, zone)
     end
     Debug("OnChatMessage", event, text, name, id, guid)
-    if id and redirects[id] then
-        id = redirects[id]
+    if id then
+        if type_restriction[id] and type_restriction[id] ~= event then
+            -- Added for Sire Ladinas, whose spawn is announced by a different
+            -- type of mob yelling. That mob can normally say things in
+            -- combat, so restricting the announcement to yells seems to make
+            -- sense...
+            return
+        end
+        if redirects[id] then
+            id = redirects[id]
+        end
     end
     if not id or not (ns.mobdb[id] or globaldb.always[id]) then return end
     if not globaldb.always[id] and not (ns.mobsByZone[zone] and ns.mobsByZone[zone][id]) then
