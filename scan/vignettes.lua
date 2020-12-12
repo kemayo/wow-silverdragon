@@ -12,6 +12,7 @@ function module:OnInitialize()
 			enabled = true,
 			pointsofinterest = true,
 			visibleOnly = false,
+			loot = true,
 		},
 	})
 
@@ -27,6 +28,7 @@ function module:OnInitialize()
 					enabled = config.toggle("Enabled", "Scan minimap vignettes (it's what Blizzard calls them, okay?)", 10),
 					pointsofinterest = config.toggle("World points-of-interest", "Show alerts for point of interest vignettes added to world map itself", 20),
 					visibleOnly = config.toggle("Wait until visible", "Don't notify until the vignette is actually visible on the minimap", 30),
+					loot = config.toggle("Scan for treasure", ("Also scan for treasures (%s / %s)"):format(CreateAtlasMarkup("vignetteloot", 16, 16), CreateAtlasMarkup("vignettelootelite", 16, 16)), 40),
 				},
 			},
 		}
