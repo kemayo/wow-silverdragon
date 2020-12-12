@@ -182,6 +182,7 @@ read_globals = {
     -- FrameXML API
     "ChatEdit_InsertLink",
     "ChatFrame_OpenChat",
+    "CopyTable",
     "CreateAtlasMarkup",
     "CreateFrame",
     "CreateFramePool",

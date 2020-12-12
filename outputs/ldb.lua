@@ -233,7 +233,7 @@ function module:SetupWorldMap()
 	button:SetScript("OnClick", function(self, mButton)
 		local overlay = core:GetModule("Overlay", true)
 		if overlay and mButton == "LeftButton" and not IsModifierKeyDown() then
-			overlay.db.profile.worldmap = not overlay.db.profile.worldmap
+			overlay.db.profile.worldmap.enabled = not overlay.db.profile.worldmap.enabled
 			overlay:UpdateWorldMapIcons()
 			return
 		end

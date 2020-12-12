@@ -20,25 +20,68 @@ module.const = {
 function module:OnInitialize()
     self.db = core.db:RegisterNamespace("Overlay", {
         profile = {
-            worldmap = true,
-            minimap = true,
-            minimap_edge = module.const.EDGE_FOCUS,
+            worldmap = {
+                enabled = true,
+                tooltip_help = true,
+                tooltip_completion = true,
+                tooltip_regularloot = true,
+                tooltip_lootwindow = true,
+                icon_scale = 1,
+                icon_alpha = 1,
+            },
+            minimap = {
+                enabled = true,
+                tooltip_help = false,
+                tooltip_completion = true,
+                tooltip_regularloot = true,
+                tooltip_lootwindow = false,
+                icon_scale = 1,
+                icon_alpha = 1,
+                edge = module.const.EDGE_FOCUS
+            },
             icon_theme = 'skulls', -- circles / skulls
             icon_color = 'distinct', -- completion / distinct
-            icon_scale = 1,
-            icon_alpha = 1,
-            icon_scale_minimap = 1,
-            icon_alpha_minimap = 1,
             achieved = true,
             questcomplete = false,
             achievementless = true,
-            tooltip_help = true,
-            tooltip_completion = true,
-            tooltip_regularloot = true,
             hidden = {},
         },
     })
     db = self.db.profile
+
+    -- migration
+    if type(db.enabled) == "boolean" or db.icon_scale or db.icon_scale_minimap or db.icon_alpha or db.icon_alpha_minimap then
+        local function ifnotnil(t, key, val)
+            if val ~= nil then
+                t[key] = val
+            end
+        end
+        local enabled = db.enabled
+        ifnotnil(db.worldmap, "enabled", enabled)
+        ifnotnil(db.worldmap, "tooltip_help", db.tooltip_help)
+        ifnotnil(db.worldmap, "tooltip_completion", db.tooltip_completion)
+        ifnotnil(db.worldmap, "tooltip_regularloot", db.tooltip_regularloot)
+        ifnotnil(db.worldmap, "icon_scale", db.icon_scale)
+        ifnotnil(db.worldmap, "icon_alpha", db.icon_alpha)
+
+        enabled = type(db.minimap) == "boolean" and db.minimap or false
+        db.minimap = CopyTable(self.db.defaults.profile.minimap)
+        ifnotnil(db.minimap, "enabled", enabled)
+        ifnotnil(db.minimap, "tooltip_help", db.tooltip_help)
+        ifnotnil(db.minimap, "tooltip_completion", db.tooltip_completion)
+        ifnotnil(db.minimap, "tooltip_regularloot", db.tooltip_regularloot)
+        ifnotnil(db.minimap, "icon_scale", db.icon_scale_minimap)
+        ifnotnil(db.minimap, "icon_alpha", db.icon_alpha_minimap)
+        ifnotnil(db.minimap, "edge", db.minimap_edge)
+
+        db.enabled = nil
+        db.minimap_edge = nil
+        db.tooltip_help = nil
+        db.tooltip_completion = nil
+        db.tooltip_regularloot = nil
+        db.icon_scale_minimap = nil
+        db.icon_alpha_minimap = nil
+    end
 
     -- frame pool for minimap pins (world map is handled by the data provider)
     self.pool = CreateFramePool("FRAME", Minimap, "SilverDragonOverlayMinimapPinTemplate")
@@ -183,11 +226,11 @@ function module:ShowTooltip(pin)
             tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
         end
         tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
-        if db.tooltip_completion then
+        if pin.config.tooltip_completion then
             ns:UpdateTooltipWithCompletion(tooltip, id)
-            ns.Loot.Summary.UpdateTooltip(tooltip, id, true)
+            ns.Loot.Summary.UpdateTooltip(tooltip, id, not pin.config.tooltip_regularloot)
         end
-        if db.tooltip_regularloot and ns.Loot.HasRegularLoot(id) then
+        if pin.config.tooltip_lootwindow and pin.config.tooltip_regularloot and ns.Loot.HasRegularLoot(id) then
             self.lootwindow = ns.Loot.Window.ShowForMob(id)
             self.lootwindow:SetParent(tooltip)
             if pin:GetCenter() > UIParent:GetCenter() then
@@ -206,7 +249,7 @@ function module:ShowTooltip(pin)
         tooltip:AddDoubleLine("At", pin.uiMapID .. ':' .. pin.coord)
     end
 
-    if db.tooltip_help then
+    if pin.config.tooltip_help then
         tooltip:AddLine(escapes.keyDown .. ALT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
         if C_Map.CanSetUserWaypointOnMap(pin.uiMapID) then
             tooltip:AddLine(escapes.keyDown .. SHIFT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. TRADESKILL_POST )
@@ -235,24 +278,20 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
     self.coord = originalCoord
     self.uiMapID = originalMapID
     self.minimap = minimap
+    self.config = minimap and db.minimap or db.worldmap
 
     if not minimap then
         self:SetPosition(x, y)
     end
 
-    local size, inset
-    if minimap then
-        size = 12
-        scale = db.icon_scale_minimap * scale
-        alpha = db.icon_alpha_minimap * alpha
-    else
-        size = 12
-        scale = db.icon_scale * scale
-        alpha = db.icon_alpha * alpha
-    end
+
+    local size = 12
+    scale = scale * self.config.icon_scale
+    alpha = alpha * self.config.icon_alpha
+
     size = size * scale
     self:SetSize(size, size)
-    inset = 3 * scale
+    local inset = 3 * scale
     self:SetHitRectInsets(inset, inset, inset, inset)
     self:SetAlpha(alpha)
 
@@ -358,7 +397,7 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
     if not self:GetMap() then return end
     self:RemoveAllData()
 
-    if not db.worldmap then return end
+    if not db.worldmap.enabled then return end
 
     local uiMapID = self:GetMap():GetMapID()
     if not uiMapID then return end
@@ -436,6 +475,8 @@ function module:UpdateMinimapIcons()
         self.pool:Release(pin)
     end
 
+    if not db.minimap.enabled then return end
+
     local uiMapID = HBD:GetPlayerZone()
     if not uiMapID then return end
 
@@ -447,8 +488,8 @@ function module:UpdateMinimapIcons()
         end
         pin:OnAcquired(mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, true)
 
-        local edge = db.minimap_edge == module.const.EDGE_ALWAYS
-        if db.minimap_edge == module.const.EDGE_FOCUS then
+        local edge = db.minimap.edge == module.const.EDGE_ALWAYS
+        if db.minimap.edge == module.const.EDGE_FOCUS then
             edge = mobid == module.focus_mob
         end
 
@@ -715,7 +756,7 @@ do
                 else
                     icon = icon_for_mob(value)
                 end
-                return state, value, icon, icon.scale, db.icon_alpha
+                return state, value, icon, icon.scale, icon.alpha
             end
             state, value = next(t, state)
         end
@@ -723,9 +764,6 @@ do
     end
     function module:IterateNodes(uiMapID, minimap)
         Debug("Overlay IterateNodes", uiMapID, minimap)
-        if minimap and not db.minimap then
-            return iter, {}, nil
-        end
         return iter, self.nodes[uiMapID], nil
     end
 end

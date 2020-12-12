@@ -89,23 +89,17 @@ function module:RegisterConfig()
                 },
                 order = 10,
             },
-            tooltip = {
-                type = "group",
-                name = "Tooltips",
-                inline = true,
-                args = {
-                    tooltip_completion = config.toggle("Completion", "Show achievement/drop completion in the tooltip", 0),
-                    tooltip_regularloot = config.toggle("Regular Loot", "Show regular untrackable loot in the tooltip", 5),
-                    tooltip_help = config.toggle("Help", "Show the click shortcuts in the tooltip", 10),
-                },
-                order = 15,
-            },
-            world = {
+            worldmap = {
                 type = "group",
                 name = "World Map",
                 inline = true,
+                get = function(info) return self.db.profile.worldmap[info[#info]] end,
+                set = function(info, v)
+                    self.db.profile.worldmap[info[#info]] = v
+                    module:Update()
+                end,
                 args = {
-                    worldmap = {
+                    enabled = {
                         type = "toggle",
                         name = "Enabled",
                         desc = "Show icons on the world map",
@@ -126,6 +120,10 @@ function module:RegisterConfig()
                         min = 0, max = 1, step = 0.01,
                         order = 30,
                     },
+                    tooltip_completion = config.toggle("Completion", "Show achievement/drop completion in the tooltip", 40),
+                    tooltip_regularloot = config.toggle("Regular Loot", "Show regular untrackable loot in the tooltip", 41),
+                    tooltip_lootwindow = config.toggle("Popout loot window", "Show a popout for the loot so you can see its details", 42),
+                    tooltip_help = config.toggle("Help", "Show the click shortcuts in the tooltip", 43),
                 },
                 order = 20,
             },
@@ -133,15 +131,20 @@ function module:RegisterConfig()
                 type = "group",
                 name = "Minimap",
                 inline = true,
+                get = function(info) return self.db.profile.minimap[info[#info]] end,
+                set = function(info, v)
+                    self.db.profile.minimap[info[#info]] = v
+                    module:Update()
+                end,
                 args = {
-                    minimap = {
+                    enabled = {
                         type = "toggle",
                         name = "Enabled",
                         desc = "Show icons on the minimap",
                         width = "full",
                         order = 0,
                     },
-                    minimap_edge = {
+                    edge = {
                         type = "select",
                         name = "Show on edge",
                         values = {
@@ -151,20 +154,24 @@ function module:RegisterConfig()
                         },
                         order = 10,
                     },
-                    icon_scale_minimap = {
+                    icon_scale = {
                         type = "range",
                         name = "Icon Scale",
                         desc = "The scale of the icons",
                         min = 0.25, max = 2, step = 0.01,
                         order = 20,
                     },
-                    icon_alpha_minimap = {
+                    icon_alpha = {
                         type = "range",
                         name = "Icon Alpha",
                         desc = "The alpha transparency of the icons",
                         min = 0, max = 1, step = 0.01,
                         order = 30,
                     },
+                    tooltip_completion = config.toggle("Completion", "Show achievement/drop completion in the tooltip", 40),
+                    tooltip_regularloot = config.toggle("Regular Loot", "Show regular untrackable loot in the tooltip", 41),
+                    tooltip_lootwindow = config.toggle("Popout loot window", "Show a popout for the loot so you can see its details", 42),
+                    tooltip_help = config.toggle("Help", "Show the click shortcuts in the tooltip", 43),
                 },
                 order = 30,
             },
