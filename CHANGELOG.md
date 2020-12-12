@@ -1,6 +1,6 @@
 # Changelog
 
-## Changed in upcoming release
+## Changed in v90002.7
 
 * In the mobs options, expose achievements so you can easily ignore/unignore every mob for a given achievement. Like, hypothetically, if you want to stop being notified about the Maw bonus bosses, you can quickly hide everything for "It’s About Sending a Message"
 * Split up the options for the map overlay: you can now control everything separately about minimap and worldmap pins
@@ -9,6 +9,7 @@
 * Forbidding certain vignettes from being announced. I'm looking at you, Garrison Cache
 * Fixed the location of the Ascended Council in Bastion (thanks rainfordays!)
 * Filled out other mob locations / vignette ids
+* Updated some Maw loot
 
 ## Changed in v90002.6
 
