@@ -210,6 +210,7 @@ read_globals = {
     "MapCanvasDataProviderMixin",
     "MapCanvasPinMixin",
     "Vector2DMixin",
+    "WorldMapPOIQuantizerMixin",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",

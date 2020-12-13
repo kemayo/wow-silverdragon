@@ -388,11 +388,22 @@ end
 
 module.WorldMapDataProvider = CreateFromMixins(MapCanvasDataProviderMixin)
 
+function module.WorldMapDataProvider:OnAdded(owningMap)
+    self.owningMap = owningMap
+
+    if not self.poiQuantizer then
+        self.poiQuantizer = CreateFromMixins(WorldMapPOIQuantizerMixin)
+        self.poiQuantizer.size = 75
+        self.poiQuantizer:OnLoad(self.poiQuantizer.size, self.poiQuantizer.size)
+    end
+end
+
 function module.WorldMapDataProvider:RemoveAllData()
     if not self:GetMap() then return end
     self:GetMap():RemoveAllPinsByTemplate("SilverDragonOverlayWorldMapPinTemplate")
 end
 
+local pinsToQuantize = {}
 function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
     if not self:GetMap() then return end
     self:RemoveAllData()
@@ -405,10 +416,17 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
     for coord, mobid, textureData, scale, alpha in module:IterateNodes(uiMapID, false) do
         local x, y = core:GetXY(coord)
         if x and y then
-            self:GetMap():AcquirePin("SilverDragonOverlayWorldMapPinTemplate", mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, false)
+            local pin = self:GetMap():AcquirePin("SilverDragonOverlayWorldMapPinTemplate", mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, false)
             ns.Loot.Cache(mobid)
+            table.insert(pinsToQuantize, pin)
         end
     end
+
+    self.poiQuantizer:ClearAndQuantize(pinsToQuantize)
+    for _, pin in ipairs(pinsToQuantize) do
+        pin:SetPosition(pin.quantizedX or pin.normalizedX, pin.quantizedY or pin.normalizedY)
+    end
+    wipe(pinsToQuantize)
 
     if module.last_mob and time() < (module.last_mob_time + 30) then
         self:Ping(module.last_mob)
@@ -417,6 +435,11 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
         self:Ping(module.focus_mob)
         module.focus_mob_ping = nil
     end
+end
+
+function module.WorldMapDataProvider:OnCanvasSizeChanged()
+    local ratio = self:GetMap():DenormalizeHorizontalSize(1.0) / self:GetMap():DenormalizeVerticalSize(1.0);
+    self.poiQuantizer:Resize(math.ceil(self.poiQuantizer.size * ratio), self.poiQuantizer.size);
 end
 
 -- /script SilverDragon:GetModule("Overlay").WorldMapDataProvider:Ping(32487)
