@@ -101,7 +101,7 @@ function module:OnInitialize()
 		[164391] = {name="Old Ardeite",locations={[1565]={51005740},},loot={{item=180643,pet=2908}},quest=60273,},
 		[164415] = {name="Skuld Vit",locations={[1565]={37675917},},loot={180146,182183},notes="Be Night Fae",quest=59220,},
 		[164477] = {name="Deathbinder Hroth",locations={[1565]={34606800},},loot={180166},quest=59226,},
-		[164547] = {name="Mystic Rainbowhorn",locations={[1565]={50092091},},loot={179586,182179},quest=59235,},
+		[164547] = {name="Mystic Rainbowhorn",locations={[1565]={65502910},},loot={179586,182179},quest=59235,},
 		[165047] = {name="Soulsmith Yol-Mattar",locations={[1543]={36253745},},quest=59441,},
 		[165053] = {name="Mymaen",locations={[1565]={62102460},},loot={179502},quest=59431,},
 		[165152] = {name="Leeched Soul",locations={[1525]={67978179},},loot={183736},quest=59580,},
