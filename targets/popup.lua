@@ -58,7 +58,6 @@ function module:RefreshMobData(popup)
 	local data = popup.data
 	popup.title:SetText(core:GetMobLabel(data.id))
 	popup.source:SetText(data.source or "")
-	popup.model.fallback:Hide()
 
 	local achievement, achievement_name, completed = ns:AchievementMobStatus(data.id)
 	if achievement then
@@ -84,11 +83,37 @@ function module:RefreshLootData(popup)
 	local data = popup.data
 	popup.title:SetText(data.name or UNKNOWN)
 	popup.source:SetText("vignette")
-	popup.model.fallback:Show()
 	-- TODO: work out the Treasure of X achievements?
 	popup.status:SetText("")
 	-- TODO: know about loot?
 	popup.lootIcon:Hide()
+end
+
+local models = {
+	question = {
+		model = [[Interface\Buttons\talktomequestionmark.mdx]],
+		position = {4, 0, 1.5},
+		scale = 4.25,
+	},
+	loot = {
+		-- https://wow.tools/files/#search=type%3Am2%2Ctreasure&page=1&sort=0&desc=asc
+		{
+			model = 1100065, -- world/skillactivated/containers/treasurechest01hd.m2
+			position = nil,
+			scale = nil,
+		},
+		{
+			model = 3189119, -- world/expansion08/doodads/valkyr/9vl_aspirants_treasurechest_large01.m2
+			position = {-8, 0, 0.5},
+			scale = nil,
+		}
+	}
+}
+local function applyModelSettings(model, settings)
+	model:SetModel(settings.model)
+	if settings.scale then model:SetModelScale(settings.scale) end
+	if settings.position then model:SetPosition(unpack(settings.position)) end
+	if settings.facing then model:SetFacing(settings.facing) end
 end
 
 function module:SetModel(popup)
@@ -97,6 +122,7 @@ function module:SetModel(popup)
 	popup.model:SetModelScale(1)
 	popup.model:SetPosition(0, 0, 0)
 	popup.model:SetFacing(0)
+	popup.model.fallback:Hide()
 
 	local data = popup.data
 	if (data.type == "mob" and data.id or data.unit) and not self:IsModelBlacklisted(data.id, data.unit) then
@@ -108,23 +134,12 @@ function module:SetModel(popup)
 
 		popup.model:SetPortraitZoom(1)
 	elseif data.type == "loot" then
-		-- So, this is the classic world treasure chest model:
-		-- popup.model:SetModel([[world/skillactivated/containers/treasurechest01.mdx]])
-		-- ...but you can't use anything outside of interface on a model and have it work.
-		-- Could do something like gears
-		-- popup.model:SetModel([[interface/buttons/talktome_gears.mdx]])
-		-- ...but probably better use a texture
-		-- popup.model.fallback:SetAtlas("Mobile-TreasureIcon")
-		-- popup.model.fallback:SetAtlas("pvpqueue-chest-alliance-complete")
-		-- popup.model.fallback:SetAtlas("ShipMissionIcon-Treasure-Map")
-		-- popup.model.fallback:SetTexture("interface/worldmap/treasurechest_64")
-		-- popup.model.fallback:SetTexture("interface/icons/buff_feltreasures")
-		-- popup.model.fallback:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 		popup.model.fallback:SetAtlas("BonusLoot-Chest")
+		popup.model.fallback:Show()
+		-- I could do a 3d model, but since I can't get the right model for the treasure, it's arguably confusing
+		-- applyModelSettings(popup.model, models.loot[1])
 	else
-		popup.model:SetModelScale(4.25)
-		popup.model:SetPosition(4, 0, 1.5)
-		popup.model:SetModel([[Interface\Buttons\talktomequestionmark.mdx]])
+		applyModelSettings(popup.model, models.question)
 	end
 end
 
