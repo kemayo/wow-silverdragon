@@ -62,7 +62,6 @@ function module:OnInitialize()
 		[160985] = {name="Selena the Reborn",locations={[1533]={61305090},},loot={183608},quest=58320,},
 		[161105] = {name="Indomitable Schmitd",locations={[1536]={38804335},},loot={182192},quest=58332,},
 		[161310] = {name="Executioner Adrastia",locations={[1525]={43055185},},loot={180502},quest=58441,},
-		[161481] = {name="Vinyeti",locations={[1565]={40205300},},},
 		[161527] = {name="Sigilback",item=179486,locations={[1533]={55208040},},loot={{item=174445,toy=174445},179486},quest=60570,vignette=4032,},
 		[161528] = {name="Aethon",item=179487,locations={[1533]={55208020},},loot={179487},quest=58526,vignette=4032,},
 		[161529] = {name="Nemaeus",item=179485,locations={[1533]={55008020},},loot={179485},quest=60569,vignette=4032,},
