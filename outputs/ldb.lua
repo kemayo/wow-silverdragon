@@ -430,7 +430,8 @@ do
 	local locations = {}
 	local function show_mob_tooltip(cell, mobid)
 		tooltip:SetFrameStrata("DIALOG")
-		GameTooltip:SetOwner(cell, cell:GetCenter() > UIParent:GetCenter() and "ANCHOR_LEFT" or "ANCHOR_RIGHT")
+		GameTooltip:SetOwner(cell, "ANCHOR_NONE")
+		GameTooltip:SetPoint("TOPLEFT", cell, "BOTTOMLEFT")
 		GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(mobid))
 		if ns.mobdb[mobid] then
 			if ns.mobdb[mobid].notes then
