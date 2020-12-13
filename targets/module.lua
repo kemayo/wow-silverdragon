@@ -253,12 +253,12 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 		x = x or 0,
 		y = y or 0,
 	}
-	-- if InCombatLockdown() then
-	-- 	Debug("Queueing popup for out-of-combat")
-	-- 	pending = data
-	-- else
+	if InCombatLockdown() then
+		Debug("Queueing popup for out-of-combat")
+		pending = data
+	else
 		self:ShowFrame(data)
-	-- end
+	end
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 	data.unit = nil -- can't be trusted to remain the same
 end
