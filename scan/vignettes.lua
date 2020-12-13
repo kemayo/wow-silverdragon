@@ -53,13 +53,13 @@ local already_notified_loot = {
 local MOB = 1
 local LOOT = 2
 local visible_overrides = {
-	[1550] = true, -- The Shadowlands, because of...
+	[1550] = LOOT, -- The Shadowlands, because of...
 	[1565] = LOOT, -- Ardenweald, where all chests are notified from the entire zone
 	-- But also all the Shadowlands zones, because callings quests are fucky about this and I need to work out a heuristic for them
 	[1533] = LOOT, -- Bastion
 	[1536] = LOOT, -- Maldraxxus
 	[1525] = LOOT, -- Revendreth
-	[1543] = LOOT, -- Maw
+	[1543] = true, -- Maw
 }
 local vignette_denylist = {
 	[637] = true, -- Garrison Cache
