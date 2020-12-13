@@ -86,7 +86,7 @@ function module:OnInitialize()
 		[162829] = {name="Razkazzar",locations={[1543]={26153745},},quest=60992,},
 		[162844] = {name="Dath Rezara",locations={[1543]={19205740},},loot={183066,183067,183068},quest=61140,},
 		[162845] = {name="Orrholyn",locations={[1543]={25354875},},quest=60991,},
-		[162849] = {name="Morguliax",locations={[1543]={16945102},},loot={{item=184292,toy=184292},184292},quest=60987,},
+		[162849] = {name="Morguliax",locations={[1543]={16945102},},loot={{item=184292,toy=184292}},quest=60987,},
 		[162965] = {name="Sorath the Sated",locations={[1543]={20802970},},quest=58918,},
 		[163229] = {name="Dustbrawl",locations={[1565]={48407580},},quest=58987,},
 		[163370] = {name="Gormbore",locations={[1565]={53807580},},loot={{item=183196,pet=3035}},quest=59006,},
