@@ -228,6 +228,12 @@ function module:SetupWorldMap()
 		end
 		button_options.nearby = WorldMapFrame.mapID
 		module:ShowTooltip(button, button_options)
+		-- now redo the anchoring!
+		if tooltip then
+			tooltip:ClearAllPoints()
+			tooltip:SetPoint("TOPLEFT", button, "BOTTOMLEFT")
+			tooltip:SetClampedToScreen(true)
+		end
 	end)
 	-- onleave is handled by the tooltip's autohide
 	button:SetScript("OnClick", function(self, mButton)
@@ -621,5 +627,7 @@ do
 
 		tooltip:UpdateScrolling()
 		tooltip:Show()
+
+		return tooltip
 	end
 end
