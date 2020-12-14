@@ -1,5 +1,19 @@
 # Changelog
 
+## Changed in v90002.8
+
+* Scanning macro improvements:
+    * Will no longer target hunter pets with the same name as a rare
+    * Zones with lots of rares will no longer be quietly truncated by the macro length limit, all rares will now be scanned
+* Improved chat scanning so we can catch the Sire Ladinas yell which comes from a different mob
+* Improved the detection of zones where we should restrict the range at which we scan for vignettes (no more going into caves in Ardenweald and having Ikiss yell at you suddenly)
+* Restrict all scanning in the Maw to visible-only, because of the rare-density there
+* Automatically shift the points in the map overlay so they try not to overlap each other
+* Range-extended vignettes now have smaller icons but easier mouseover tooltip targets
+* Broker tooltip anchor is adjusted to avoid overlapping the map
+* Include the Wild Hunting achievement
+* Various data updates in Shadowlands
+
 ## Changed in v90002.7
 
 * In the mobs options, expose achievements so you can easily ignore/unignore every mob for a given achievement. Like, hypothetically, if you want to stop being notified about the Maw bonus bosses, you can quickly hide everything for "It’s About Sending a Message"
