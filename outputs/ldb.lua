@@ -53,12 +53,8 @@ function module:OnInitialize()
 						get = function() return db.profile.show_lastseen end,
 						set = function(info, v)
 							db.profile.show_lastseen = v
-							if v then
-								if module.last_seen then
-									dataobject.text = core:GetMobLabel(module.last_seen)
-								else
-									dataobject.text = "None"
-								end
+							if v and module.last_seen then
+								dataobject.text = core:GetMobLabel(module.last_seen)
 							else
 								dataobject.text = ""
 							end
@@ -202,9 +198,6 @@ function module:SetupDataObject()
 
 	if icon then
 		icon:Register("SilverDragon", dataobject, self.db.profile.minimap)
-	end
-	if db.profile.show_lastseen then
-		dataobject.text = "None"
 	end
 end
 
