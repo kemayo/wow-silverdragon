@@ -26,7 +26,7 @@ function module:ShowFrame(data)
 	if data.type == "mob" then
 		local name = core:NameForMob(data.id, data.unit)
 		if name then
-			local macrotext = "/cleartarget \n/targetexact "..name
+			local macrotext = "/cleartarget \n/targetexact [nopet] "..name
 			popup:SetAttribute("macrotext1", macrotext)
 		end
 		if data.unit and GetRaidTargetIndex(data.unit) then
