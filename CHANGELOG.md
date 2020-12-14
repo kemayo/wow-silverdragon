@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v90002.8.1
+
+* Reverted the no-target-hunter-pet thing because it didn't work
+
 ## Changed in v90002.8
 
 * Scanning macro improvements:

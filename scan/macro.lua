@@ -80,7 +80,7 @@ function module:Update()
 				not core:ShouldIgnoreMob(id, zone) and
 				core:IsMobInPhase(id, zone)
 			then
-				table.insert(macro, "/targetexact [nopet] " .. name)
+				table.insert(macro, "/targetexact " .. name)
 				count = count + 1
 			end
 		end
