@@ -167,6 +167,13 @@ function module:HighlightMob(mobid)
             pin.emphasis:Show()
         end
     end
+    if self.WorldMapDataProvider.connectionPool then
+        for connection in self.WorldMapDataProvider.connectionPool:EnumerateActive() do
+            if connection.mobid == mobid then
+                connection.Line:SetThickness(30)
+            end
+        end
+    end
 end
 
 function module:UnhighlightMob(mobid)
@@ -175,6 +182,13 @@ function module:UnhighlightMob(mobid)
     for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
         if pin.mobid == mobid then
             pin.emphasis:Hide()
+        end
+    end
+    if self.WorldMapDataProvider.connectionPool then
+        for connection in self.WorldMapDataProvider.connectionPool:EnumerateActive() do
+            if connection.mobid == mobid then
+                connection.Line:SetThickness(20)
+            end
         end
     end
 end
