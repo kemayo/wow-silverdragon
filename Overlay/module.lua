@@ -104,7 +104,7 @@ function module:OnEnable()
     core.RegisterCallback(self, "Seen")
 
     self:RegisterEvent("LOOT_CLOSED", "Update")
-    self:BuildNodeList()
+    self:BuildNodeList(true)
 end
 function module:OnDisable()
     if WorldMapFrame.dataProviders[self.WorldMapDataProvider] then
@@ -123,7 +123,7 @@ function module:OnWorldMapHide()
 end
 
 module.nodes = {}
-function module:BuildNodeList()
+function module:BuildNodeList(noupdate)
     wipe(self.nodes)
     for zone, mobs in pairs(ns.mobsByZone) do
         self.nodes[zone] = {}
@@ -135,7 +135,9 @@ function module:BuildNodeList()
             end
         end
     end
-    self:Update()
+    if not noupdate then
+        self:Update()
+    end
 end
 
 function module:BrokerMobClick(_, mobid)
