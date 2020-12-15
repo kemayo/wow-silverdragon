@@ -1,6 +1,10 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
   <Script file="module.lua"/>
+  <Script file="pins.lua"/>
+  <Script file="worldmap.lua"/>
+  <Script file="minimap.lua"/>
+  <Script file="nodes.lua"/>
   <Script file="config.lua"/>
   <Include file="pins.xml"/>
 </Ui>
