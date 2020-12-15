@@ -87,8 +87,11 @@ function module:WorkOutMobFromVignette(instanceid)
 	if vignette_denylist[vignetteInfo.vignetteID or 0] then
 		return Debug("Vignette was on the denylist", vignetteInfo.vignetteID)
 	end
-	local source = vignetteInfo.onWorldMap and "point-of-interest" or "vignette"
 	local current_zone = HBD:GetPlayerZone()
+	if not current_zone or current_zone == 0 then
+		return Debug("We don't know what zone we're in", current_zone)
+	end
+	local source = vignetteInfo.onWorldMap and "point-of-interest" or "vignette"
 	local x, y
 	if current_zone and vignetteInfo.vignetteGUID then
 		local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, current_zone)
