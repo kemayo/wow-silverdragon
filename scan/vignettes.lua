@@ -93,7 +93,7 @@ function module:WorkOutMobFromVignette(instanceid)
 	end
 	local source = vignetteInfo.onWorldMap and "point-of-interest" or "vignette"
 	local x, y
-	if current_zone and vignetteInfo.vignetteGUID then
+	if vignetteInfo.vignetteGUID then
 		local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, current_zone)
 		if position then
 			x, y = position:GetXY()
