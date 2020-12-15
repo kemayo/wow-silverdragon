@@ -19,6 +19,8 @@ globals = {
     "SilverDragon",
     "SilverDragonOverlayMinimapPinMixin",
     "SilverDragonOverlayWorldMapPinMixin",
+    "SilverDragonOverlayRoutePinMixin",
+    "SilverDragonOverlayRoutePinConnectionMixin",
     "SilverDragonOverlayMapPinPingDriverAnimationMixin",
     "SilverDragonVignetteStretchPinMixin",
     "BINDING_HEADER_SILVERDRAGON",
@@ -211,6 +213,7 @@ read_globals = {
     "MapCanvasPinMixin",
     "Vector2DMixin",
     "WorldMapPOIQuantizerMixin",
+    "RegionUtil",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",
