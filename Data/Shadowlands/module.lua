@@ -115,7 +115,7 @@ function module:OnInitialize()
 		[166576] = {name="Azgar",locations={[1525]={35807050},},loot={183731},quest=59893,},
 		[166679] = {name="Hopecrusher",locations={[1525]={51985179},},loot={{item=180581,mount=1298}},quest=59900,},
 		[166710] = {name="Executioner Aatron",locations={[1525]={37104740},},loot={180696,183737},quest=59913,},
-		[166993] = {name="Huntmaster Petrus",locations={[1525]={61707950},},loot={180874,180705,180405},quest=60022,},
+		[166993] = {name="Huntmaster Petrus",locations={[1525]={61707950},},loot={180874,180705,180405},quest=60022,vignette=4170,},
 		[167078] = {name="Wingflayer the Cruel",item=182749,locations={[1533]={40405340},},loot={182749},notes="Be Kyrian",quest=60314,},
 		[167464] = {name="Grand Arcanist Dimitri",locations={[1525]={20485300},},loot={180708,180503},quest=60173,},
 		[167721] = {name="The Slumbering Emperor",locations={[1565]={59304660},},loot={175711},note="You need detect invisible, or just to AOE into the fog",quest=60290,vignette=4193,},
