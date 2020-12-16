@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v90002.9
+
+* Can now show mob routes on the map. But I've not added much yet. So, if you want to see it, the Time Lost Proto-Drake is it for this release.
+* Avoid an error in the vignette scanner during certain zone transitions
+* There's now a crack-of-thunder sound included as an announcement option
+
 ## Changed in v90002.8.1
 
 * Reverted the no-target-hunter-pet thing because it didn't work
