@@ -80,7 +80,9 @@ function module:OnInitialize()
         db.tooltip_help = nil
         db.tooltip_completion = nil
         db.tooltip_regularloot = nil
+        db.icon_scale = nil
         db.icon_scale_minimap = nil
+        db.icon_alpha = nil
         db.icon_alpha_minimap = nil
     end
 
