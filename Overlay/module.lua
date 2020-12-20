@@ -99,14 +99,13 @@ function module:OnEnable()
     WorldMapFrame:AddDataProvider(self.WorldMapDataProvider)
     WorldMapFrame:RegisterCallback("WorldMapOnHide", self.OnWorldMapHide, self)
     HBD.RegisterCallback(self, "PlayerZoneChanged", "UpdateMinimapIcons")
-    core.RegisterCallback(self, "Ready", "BuildNodeList")
+    core.RegisterCallback(self, "Ready", "Update")
     core.RegisterCallback(self, "BrokerMobClick")
     core.RegisterCallback(self, "BrokerMobEnter")
     core.RegisterCallback(self, "BrokerMobLeave")
     core.RegisterCallback(self, "Seen")
 
     self:RegisterEvent("LOOT_CLOSED", "Update")
-    self:BuildNodeList(true)
 end
 function module:OnDisable()
     if WorldMapFrame.dataProviders[self.WorldMapDataProvider] then
@@ -122,24 +121,6 @@ end
 
 function module:OnWorldMapHide()
     self:CleanupTooltip()
-end
-
-module.nodes = {}
-function module:BuildNodeList(noupdate)
-    wipe(self.nodes)
-    for zone, mobs in pairs(ns.mobsByZone) do
-        self.nodes[zone] = {}
-        for id, locs in pairs(mobs) do
-            if core:IsMobInPhase(id, zone) and not core:ShouldIgnoreMob(id, zone) then
-                for _, loc in ipairs(locs) do
-                    self.nodes[zone][loc] = id
-                end
-            end
-        end
-    end
-    if not noupdate then
-        self:Update()
-    end
 end
 
 function module:BrokerMobClick(_, mobid)

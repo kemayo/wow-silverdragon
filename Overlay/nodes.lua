@@ -63,8 +63,11 @@ do
             mount_done = tex("VignetteKillElite", 0, 1, 0, 1), -- green shiny skull
         }
     }
-    local function should_show_mob(id)
-        if module.db.profile.hidden[id] or core:ShouldIgnoreMob(id) then
+    local function should_show_mob(id, uiMapID)
+        if module.db.profile.hidden[id] or core:ShouldIgnoreMob(id, uiMapID) then
+            return false
+        end
+        if not core:IsMobInPhase(id, uiMapID) then
             return false
         end
         local quest, achievement, achievement_completed_by_alt = ns:CompletionStatus(id)
@@ -139,26 +142,26 @@ do
         icon_cache[id].b = b
         return icon_cache[id]
     end
-    local function iter(t, prestate)
-        if not t then return nil end
-        local state, value = next(t, prestate)
-        while state do
-            -- Debug("Overlay node", state, value, should_show_mob(value))
-            if value and should_show_mob(value) then
+    local function mobsForZone(uiMapID)
+        if not ns.mobsByZone[uiMapID] then return end
+        for id, coords in pairs(ns.mobsByZone[uiMapID]) do
+            if should_show_mob(id, uiMapID) then
                 local icon
                 if module.db.profile.icon_color == 'distinct' then
-                    icon = distinct_icon_for_mob(value)
+                    icon = distinct_icon_for_mob(id)
                 else
-                    icon = icon_for_mob(value)
+                    icon = icon_for_mob(id)
                 end
-                return state, value, icon, icon.scale, icon.alpha
+                for _, coord in ipairs(coords) do
+                    coroutine.yield(coord, id, icon, icon.scale, icon.alpha)
+                end
             end
-            state, value = next(t, state)
         end
-        return nil, nil, nil, nil, nil
     end
     function module:IterateNodes(uiMapID, minimap)
         Debug("Overlay IterateNodes", uiMapID, minimap)
-        return iter, self.nodes[uiMapID], nil
+        return coroutine.wrap(function()
+            return mobsForZone(uiMapID)
+        end)
     end
 end
