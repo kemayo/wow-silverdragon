@@ -5,6 +5,7 @@
   <Script file="worldmap.lua"/>
   <Script file="minimap.lua"/>
   <Script file="nodes.lua"/>
+  <Script file="colors.lua"/>
   <Script file="config.lua"/>
   <Include file="pins.xml"/>
 </Ui>

@@ -116,17 +116,6 @@ do
         end
         return set[key_for_mob(id)] or set.default
     end
-    local function scale(value, currmin, currmax, min, max)
-        -- take a value between currmin and currmax and scale it to be between min and max
-        return ((value - currmin) / (currmax - currmin)) * (max - min) + min
-    end
-    local function hasher(value)
-        return scale(select(2, math.modf(math.abs(math.tan(value)) * 10000, 1)), 0, 1, 0.3, 1)
-    end
-    local function id_to_color(id)
-        return hasher(id + 1), hasher(id + 2), hasher(id + 3)
-    end
-    module.id_to_color = id_to_color
     local icon_cache = {}
     local function distinct_icon_for_mob(id)
         local icon = icon_for_mob(id)
@@ -136,7 +125,7 @@ do
         for k,v in pairs(icon) do
             icon_cache[id][k] = v
         end
-        local r, g, b = id_to_color(id)
+        local r, g, b = module.id_to_color(id)
         icon_cache[id].r = r
         icon_cache[id].g = g
         icon_cache[id].b = b

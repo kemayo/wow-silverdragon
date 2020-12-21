@@ -75,6 +75,8 @@ read_globals = {
     "Ambiguate",
     "CheckInteractDistance",
     "CombatLogGetCurrentEventInfo",
+    "CreateColor",
+    "CreateColorFromBytes",
     "CreateMacro",
     "CursorHasItem",
     "DeleteCursorItem",
