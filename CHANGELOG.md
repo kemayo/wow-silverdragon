@@ -1,5 +1,12 @@
 # Changelog
 
+## Changed in v90002.10
+
+* Changed the way I was picking distinct colors for map icons
+* Fixed an issue where some people were having the minimap icons disabled when logging in
+* Fixed an issue where two mobs with identical coordinates wouldn't show up on the map
+* Add a few mob routes in Bastion
+
 ## Changed in v90002.9
 
 * Can now show mob routes on the map. But I've not added much yet. So, if you want to see it, the Time Lost Proto-Drake is it for this release.
