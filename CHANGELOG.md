@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v90002.11
+
+* Don't try to draw routes if the map isn't visible (this caused some `y2 is nil` errors, if you saw those)
+* Add some more vignette ids to the Maw
+
 ## Changed in v90002.10
 
 * Changed the way I was picking distinct colors for map icons
