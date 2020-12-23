@@ -61,7 +61,7 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
     wipe(pinsToQuantize)
 
     -- Routes
-    if module.db.profile.worldmap.routes and ns.mobsByZone[uiMapID] then
+    if module.db.profile.worldmap.routes and ns.mobsByZone[uiMapID] and self:GetMap():IsVisible() then
         for mobid, coords in pairs(ns.mobsByZone[uiMapID]) do
             self:AddRoute(uiMapID, mobid)
         end

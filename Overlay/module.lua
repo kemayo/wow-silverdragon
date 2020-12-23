@@ -196,6 +196,7 @@ function module:FocusMob(mobid)
     self:UpdateMinimapIcons()
 end
 
+-- /script SilverDragon:GetModule("Overlay"):Update()
 function module:Update()
     self:UpdateMinimapIcons()
     self:UpdateWorldMapIcons()
