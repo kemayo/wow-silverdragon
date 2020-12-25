@@ -464,6 +464,13 @@ local achievements = {
 	[14721] = {}, -- It's In The Mix (Maldraxxus)
 	[14744] = {}, -- Better to Be Lucky Than Dead (Maw)
 	[14779] = {}, -- Wild Hunting (Ardenweald)
+	[14788] = { -- Fractured Faerie Tales (Ardenweald)
+		[174721] = 50012, -- A Meandering Story
+		[174723] = 50013, -- A Wandering Tale
+		[174724] = 50014, -- An Escapist Novel
+		[174725] = 50015, -- A Travel Journal
+		[174726] = 50016, -- A Naughty Story
+	},
 	[14802] = {}, -- Bloodsport (Maldraxxus)
 }
 ns.achievements = achievements
