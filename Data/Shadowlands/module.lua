@@ -181,7 +181,7 @@ function module:OnInitialize()
 		[173134] = {name="Darksworn Goliath",locations={[1705]={},},},
 		[173191] = {name="Soulstalker V'lara",locations={[1705]={},},},
 		[173238] = {name="Deadsoul Strider",locations={[1705]={},},},
-		[173468] = {name="Dead Blanchy",locations={[1525]={53104290},},loot={{item=182614,mount=1414}},notes="7 days of quests",quest=62050,},
+		[173468] = {name="Dead Blanchy",locations={[1525]={63134311},},loot={{item=182614,mount=1414}},notes="7 days of quests",quest=62050,},
 		[173499] = {name="Loyal Gorger",locations={[1525]={59305700},},loot={{item=182589,mount=1391}},notes="Kill Worldedge Gorger first",quest=62046,},
 		[174108] = {name="Necromantic Anomaly",locations={[1536]={72852890},},loot={181810,184174},quest=62369,},
 		[174827] = {name="Gorged Shadehound",locations={[1543]={53507950},},loot={{item=184167,mount=1304}},notes="Only during the Hunt: Shadehounds event",},
