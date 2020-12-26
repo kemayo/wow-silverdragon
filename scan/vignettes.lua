@@ -6,6 +6,18 @@ local Debug = core.Debug
 
 local HBD = LibStub("HereBeDragons-2.0")
 
+local function vignetteToggle(vignetteid, name)
+	return {
+		type = "toggle",
+		name = name,
+		desc = "ID: " .. vignetteid,
+		arg = vignetteid,
+		-- width = "double",
+		descStyle = "inline",
+		order = vignetteid,
+	}
+end
+
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Scan_Vignettes", {
 		profile = {
@@ -13,6 +25,9 @@ function module:OnInitialize()
 			pointsofinterest = true,
 			visibleOnly = false,
 			loot = true,
+			ignore = {
+				-- [id] = "name",
+			},
 		},
 	})
 
@@ -29,15 +44,38 @@ function module:OnInitialize()
 					pointsofinterest = config.toggle("World points-of-interest", "Show alerts for point of interest vignettes added to world map itself", 20),
 					visibleOnly = config.toggle("Wait until visible", "Don't notify until the vignette is actually visible on the minimap", 30),
 					loot = config.toggle("Scan for treasure", ("Also scan for treasures (%s / %s)"):format(CreateAtlasMarkup("vignetteloot", 16, 16), CreateAtlasMarkup("vignettelootelite", 16, 16)), 40),
+					ignore = {
+						type="group",
+						name=IGNORE,
+						get=function(info) return self.db.profile.ignore[info.arg] end,
+						set=function(info, v) self.db.profile.ignore[info.arg] = v and info.option.name or nil end,
+						args={
+							desc = config.desc("This list will fill in as vignettes are announced. Check a box, and we'll remember to never announce that specific vignette again.", 0)
+						},
+					},
 				},
 			},
 		}
+		local vignettes = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args
+		for vignetteid, name in pairs(self.db.profile.ignore) do
+			vignettes['vignette:'..vignetteid] = vignetteToggle(vignetteid, name)
+		end
 	end
 end
 
 function module:OnEnable()
 	self:RegisterEvent("VIGNETTE_MINIMAP_UPDATED")
 	self:RegisterEvent("VIGNETTES_UPDATED")
+
+	core.RegisterCallback(self, "SeenVignette")
+end
+
+function module:SeenVignette(event, name, vignetteid)
+	local config = core:GetModule("Config", true)
+	if not config then return end
+	local vignetteconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args
+	if vignetteconfig["vignette:"..vignetteid] then return end
+	vignetteconfig["vignette:"..vignetteid] = vignetteToggle(vignetteid, name)
 end
 
 -- handy debug command:
@@ -87,6 +125,9 @@ function module:WorkOutMobFromVignette(instanceid)
 	if vignette_denylist[vignetteInfo.vignetteID or 0] then
 		return Debug("Vignette was on the denylist", vignetteInfo.vignetteID)
 	end
+	if self.db.profile.ignore[vignetteInfo.vignetteID] then
+		return Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
+	end
 	local current_zone = HBD:GetPlayerZone()
 	if not current_zone or current_zone == 0 then
 		return Debug("We don't know what zone we're in", current_zone)
@@ -110,6 +151,7 @@ function module:WorkOutMobFromVignette(instanceid)
 			return Debug("skipping notification", "delay not exceeded")
 		end
 		already_notified_loot[vignetteInfo.vignetteID] = time()
+		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0)
 		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0)
 		return true
 	end
@@ -183,5 +225,7 @@ function module:NotifyIfNeeded(id, current_zone, x, y, variant, instanceid)
 		return
 	end
 	already_notified[instanceid] = true
+	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
+	core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x, y)
 	return core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, force)
 end

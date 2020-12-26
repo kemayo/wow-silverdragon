@@ -377,7 +377,13 @@ function PopupClass:SetRaidIcon(icon)
 end
 
 function PopupClass:DoIgnore()
-	if self.data and self.data.type ~= "loot" and self.data.id then
+	if not (self.data and self.data.id) then return end
+	if self.data.type == "loot" then
+		local vignette = core:GetModule("Scan_Vignettes", true)
+		if vignette then
+			vignette.db.profile.ignore[self.data.id] = self.data.name
+		end
+	else
 		core:SetIgnore(self.data.id, true)
 	end
 end
@@ -522,9 +528,7 @@ PopupClass.scripts = {
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, 0)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
-		if self:GetParent().data.type ~= "loot" then
-			GameTooltip:AddLine(escapes.rightClick .. " " .. IGNORE)
-		end
+		GameTooltip:AddLine(escapes.rightClick .. " " .. IGNORE)
 		GameTooltip:Show()
 	end,
 	CloseOnLeave = function(self)
