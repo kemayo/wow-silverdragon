@@ -18,18 +18,29 @@ local function vignetteToggle(vignetteid, name)
 	}
 end
 
+local db
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Scan_Vignettes", {
 		profile = {
 			enabled = true,
 			pointsofinterest = true,
 			visibleOnly = false,
-			loot = true,
 			ignore = {
 				-- [id] = "name",
 			},
+			ignore_type = {
+				-- [atlas:lower()] = true
+			},
 		},
 	})
+	db = self.db.profile
+
+	-- migrate!
+	if db.loot == false then
+		db.ignore_type.vignetteloot = true
+		db.ignore_type.vignettelootelite = true
+		db.loot = nil
+	end
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -37,27 +48,51 @@ function module:OnInitialize()
 			vignettes = {
 				type = "group",
 				name = "Vignettes",
-				get = function(info) return self.db.profile[info[#info]] end,
-				set = function(info, v) self.db.profile[info[#info]] = v end,
+				get = function(info) return db[info[#info]] end,
+				set = function(info, v) db[info[#info]] = v end,
 				args = {
 					enabled = config.toggle("Enabled", "Scan minimap vignettes (it's what Blizzard calls them, okay?)", 10),
 					pointsofinterest = config.toggle("World points-of-interest", "Show alerts for point of interest vignettes added to world map itself", 20),
 					visibleOnly = config.toggle("Wait until visible", "Don't notify until the vignette is actually visible on the minimap", 30),
-					loot = config.toggle("Scan for treasure", ("Also scan for treasures (%s / %s)"):format(CreateAtlasMarkup("vignetteloot", 16, 16), CreateAtlasMarkup("vignettelootelite", 16, 16)), 40),
 					ignore = {
 						type="group",
 						name=IGNORE,
-						get=function(info) return self.db.profile.ignore[info.arg] end,
-						set=function(info, v) self.db.profile.ignore[info.arg] = v and info.option.name or nil end,
 						args={
-							desc = config.desc("This list will fill in as vignettes are announced. Check a box, and we'll remember to never announce that specific vignette again.", 0)
+							desc = config.desc("These lists will fill in as vignettes are announced. Check a box, and we'll remember to never announce that specific vignette again.", 0),
+							type = {
+								type = "multiselect",
+								name = "Types",
+								get = function(info, key) return db.ignore_type[key] end,
+								set = function(info, key, value)
+									db.ignore_type[key] = value
+								end,
+								values = {
+									vignettekill = CreateAtlasMarkup("vignettekill", 20, 20) .. " Kill",
+									vignettekillelite = CreateAtlasMarkup("vignettekillelite", 24, 24) .. " Kill elite",
+									vignetteloot = CreateAtlasMarkup("vignetteloot", 20, 20) .. " Loot",
+									vignettelootelite = CreateAtlasMarkup("vignettelootelite", 24, 24) .. " Loot elite",
+									vignetteevent = CreateAtlasMarkup("vignetteevent", 20, 20) .. " Event",
+									vignetteeventelite = CreateAtlasMarkup("vignetteeventelite", 24, 24) .. " Event elite",
+									["warfront-neutralhero"] = CreateAtlasMarkup("warfront-neutralhero", 20, 20) .. " Bonus boss",
+								},
+								order=10,
+							},
+							specific = {
+								type="group",
+								name="Specific",
+								inline=true,
+								get=function(info) return db.ignore[info.arg] end,
+								set=function(info, v) db.ignore[info.arg] = v and info.option.name or nil end,
+								args={},
+								order=20,
+							},
 						},
 					},
 				},
 			},
 		}
-		local vignettes = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args
-		for vignetteid, name in pairs(self.db.profile.ignore) do
+		local vignettes = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.specific.args
+		for vignetteid, name in pairs(db.ignore) do
 			vignettes['vignette:'..vignetteid] = vignetteToggle(vignetteid, name)
 		end
 	end
@@ -70,12 +105,17 @@ function module:OnEnable()
 	core.RegisterCallback(self, "SeenVignette")
 end
 
-function module:SeenVignette(event, name, vignetteid)
+function module:SeenVignette(event, name, vignetteid, atlas)
 	local config = core:GetModule("Config", true)
 	if not config then return end
-	local vignetteconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args
-	if vignetteconfig["vignette:"..vignetteid] then return end
-	vignetteconfig["vignette:"..vignetteid] = vignetteToggle(vignetteid, name)
+	local vignetteconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.specific.args
+	if not vignetteconfig["vignette:"..vignetteid] then
+		vignetteconfig["vignette:"..vignetteid] = vignetteToggle(vignetteid, name)
+	end
+	local typeconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.type.values
+	if not typeconfig[atlas:lower()] then
+		typeconfig[atlas:lower()] = CreateAtlasMarkup(atlas, 20, 20) .. " " .. atlas
+	end
 end
 
 -- handy debug command:
@@ -115,7 +155,7 @@ local function shouldShowNotVisible(vignetteInfo, zone)
 end
 
 function module:WorkOutMobFromVignette(instanceid)
-	if not self.db.profile.enabled then return end
+	if not db.enabled then return end
 	if already_notified[instanceid] then return Debug("Skipping notify", "already done", instanceid) end
 	if not core.db.profile.instances and IsInInstance() then return end
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
@@ -125,8 +165,11 @@ function module:WorkOutMobFromVignette(instanceid)
 	if vignette_denylist[vignetteInfo.vignetteID or 0] then
 		return Debug("Vignette was on the denylist", vignetteInfo.vignetteID)
 	end
-	if self.db.profile.ignore[vignetteInfo.vignetteID] then
+	if db.ignore[vignetteInfo.vignetteID] then
 		return Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
+	end
+	if not db.types[vignetteInfo.atlasName:lower()] then
+		return Debug("Vignette type not enabled", vignetteInfo.atlasName, vignetteInfo.vignetteID, vignetteInfo.name)
 	end
 	local current_zone = HBD:GetPlayerZone()
 	if not current_zone or current_zone == 0 then
@@ -151,7 +194,7 @@ function module:WorkOutMobFromVignette(instanceid)
 			return Debug("skipping notification", "delay not exceeded")
 		end
 		already_notified_loot[vignetteInfo.vignetteID] = time()
-		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0)
+		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x or 0, y or 0)
 		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0)
 		return true
 	end
@@ -226,6 +269,6 @@ function module:NotifyIfNeeded(id, current_zone, x, y, variant, instanceid)
 	end
 	already_notified[instanceid] = true
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-	core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x, y)
+	core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x, y)
 	return core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, force)
 end
