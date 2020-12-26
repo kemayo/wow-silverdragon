@@ -168,7 +168,7 @@ function module:WorkOutMobFromVignette(instanceid)
 	if db.ignore[vignetteInfo.vignetteID] then
 		return Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
 	end
-	if not db.types[vignetteInfo.atlasName:lower()] then
+	if db.ignore_type[vignetteInfo.atlasName:lower()] then
 		return Debug("Vignette type not enabled", vignetteInfo.atlasName, vignetteInfo.vignetteID, vignetteInfo.name)
 	end
 	local current_zone = HBD:GetPlayerZone()
