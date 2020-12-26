@@ -8,7 +8,7 @@ function module:OnInitialize()
 		[152508] = {name="Dusky Tremorbeast",locations={[1705]={},},},
 		[152517] = {name="Deadsoul Lifetaker",locations={[1705]={},},},
 		[152612] = {name="Subjugator Klontzas",locations={[1705]={},},},
-		[154330] = {name="Eternas the Tormentor",locations={[1543]={27584966},},loot={{item=183407,pet=3037}},quest=57509,},
+		[154330] = {name="Eternas the Tormentor",locations={[1543]={19204600},},loot={{item=183407,pet=3037}},quest=57509,},
 		[155779] = {name="Tomb Burster",locations={[1525]={43007910},},loot={{item=180584,pet=2891}},quest=56877,},
 		[156134] = {name="Ghastly Charger",locations={[1705]={},},},
 		[156142] = {name="Seeker of Souls",locations={[1705]={},},},
