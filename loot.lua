@@ -125,7 +125,7 @@ ns.Loot.Status = setmetatable({}, {__call = function(_, id)
 	if (mount == nil and toy == nil and pet == nil) then
 		return nil
 	end
-	return (mount and toy and pet), mount, toy, pet
+	return (mount ~= false and toy ~= false and pet ~= false), mount, toy, pet
 end})
 function ns.Loot.Status.Toy(id)
 	if not id or not ns.mobdb[id] then return end

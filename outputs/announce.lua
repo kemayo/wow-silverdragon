@@ -177,6 +177,7 @@ function module:OnInitialize()
 					-- burninator = faker(149141, "Burninator Mk V (Pet!)", 62, 0.414, 0.764),
 					worldedge = faker(160821, "Worldedge Gorger (mount)", 1525, 0.5, 0.5),
 					tarahna = faker(126900, "Instructor Tarahna (multi-toy)", 882, 0.5, 0.5),
+					nerissa = faker(162690, "Nerissa Heartless (mount)", 1536, 0.5, 0.5),
 					scrapking = faker(151625, "Scrap King (loot)", 1462, 0.5, 0.5),
 					chest = {
 						type = "execute", name = "Waterlogged Chest",
