@@ -308,7 +308,8 @@ function module:GetGeneralID()
 	local zoneText = GetZoneText()
 	local general = EnumerateServerChannels()
 	if zoneText == nil or general == nil then return false end
-	return GetChannelName(channelFormat:format(general, zoneText))
+	local id = GetChannelName(channelFormat:format(general, zoneText))
+	return (id and id > 0) and id
 end
 
 function module:SendLink(prefix, uiMapID, x, y)
