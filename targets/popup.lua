@@ -544,8 +544,8 @@ PopupClass.scripts = {
 		GameTooltip:SetOwner(self, anchor, 0, 0)
 		GameTooltip:SetFrameStrata("TOOLTIP")
 		ns.Loot.Details.UpdateTooltip(GameTooltip, id)
-		if ns.mobdb[id].loot then
-			GameTooltip:AddLine("Click for more...", 0, 1, 1)
+		if ns.mobdb[id].loot and #ns.mobdb[id].loot > 1 then
+			GameTooltip:AddLine(CLICK_FOR_DETAILS, 0, 1, 1)
 		end
 		GameTooltip:Show()
 	end,

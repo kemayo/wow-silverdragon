@@ -225,6 +225,9 @@ local Details = {
 		tooltip:AddLine(source)
 		tooltip:AddLine(ITEM_PET_KNOWN:format(owned, limit))
 	end,
+	item = function(tooltip, i, itemid)
+		tooltip:SetHyperlink(("item:%d"):format(itemid))
+	end,
 }
 ns.Loot.Details = Details
 
@@ -236,12 +239,15 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 	local toy = (not only or only == "toy") and ns.Loot.HasToys(id)
 	local mount = (not only or only == "mount") and ns.Loot.HasMounts(id)
 	local pet = (not only or only == "pet") and ns.Loot.HasPets(id)
+	local regular = (not only or only == "regular") and ns.Loot.HasRegularLoot(id)
 
+	local n = 1
 	if toy then
 		local toytip
 		for i, toyid in ns.Loot.IterToys(id) do
-			toytip = get_tooltip(toytip or tooltip, i)
-			Details.toy(toytip, i, toyid)
+			toytip = get_tooltip(toytip or tooltip, n)
+			Details.toy(toytip, n, toyid)
+			n = n + 1
 		end
 	end
 	if mount then
@@ -249,7 +255,8 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 			tooltip:AddLine("---")
 		end
 		for i, mountid in ns.Loot.IterMounts(id) do
-			Details.mount(tooltip, i, mountid)
+			Details.mount(tooltip, n, mountid)
+			n = n + 1
 		end
 	end
 	if pet then
@@ -257,7 +264,16 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 			tooltip:AddLine('---')
 		end
 		for i, petid in ns.Loot.IterPets(id) do
-			Details.pet(tooltip, i, petid)
+			Details.pet(tooltip, n, petid)
+			n = n + 1
+		end
+	end
+	if regular then
+		local itemtip
+		for i, itemid in ns.Loot.IterRegularLoot(id) do
+			itemtip = get_tooltip(itemtip or tooltip, n)
+			Details.item(itemtip, n, itemid)
+			n = n + 1
 		end
 	end
 end
