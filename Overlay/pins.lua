@@ -24,7 +24,6 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
         self:SetPosition(x, y)
     end
 
-
     local size = 12
     scale = scale * self.config.icon_scale
     alpha = alpha * self.config.icon_alpha
@@ -54,6 +53,18 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
     self.DriverAnimation:Finish()
 
     self:ApplyFocusState()
+end
+
+function SilverDragonOverlayPinMixinBase:OnReleased()
+    self.mobid = nil
+    self.coord = nil
+    self.uiMapID = nil
+    self.minimap = nil
+    self.config = nil
+
+    self.DriverAnimation:Stop()
+    self.DriverAnimation:Finish()
+    self:Hide()
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseEnter()
@@ -122,6 +133,29 @@ function SilverDragonOverlayPinMixinBase:ApplyFocusState()
         end
         self.emphasis:SetVertexColor(1, 1, 1, 1)
     end
+end
+
+-- Animation mixin
+
+SilverDragonOverlayMapPinPingDriverAnimationMixin = {}
+
+function SilverDragonOverlayMapPinPingDriverAnimationMixin:OnPlay()
+    self.loops = 0
+    self:GetParent().Expand:Show()
+end
+
+function SilverDragonOverlayMapPinPingDriverAnimationMixin:OnLoop()
+    self.loops = self.loops + 1
+    if self.loops >= 2 then
+        self:Finish()
+    end
+end
+
+function SilverDragonOverlayMapPinPingDriverAnimationMixin:OnFinished()
+    local pin = self:GetParent()
+    pin.ScaleAnimation:Stop()
+    pin.ScaleAnimation:Finish()
+    pin.Expand:Hide()
 end
 
 -- Dropdown setup

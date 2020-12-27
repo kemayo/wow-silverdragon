@@ -25,7 +25,6 @@ function module.WorldMapDataProvider:RemoveAllData()
     self:GetMap():RemoveAllPinsByTemplate("SilverDragonOverlayWorldMapPinTemplate")
     -- routes
     self:GetMap():RemoveAllPinsByTemplate("SilverDragonOverlayRoutePinTemplate")
-    self:GetMap():RemoveAllPinsByTemplate("SilverDragonOverlayRoutePinConnectionTemplate")
     if self.connectionPool then
         self.connectionPool:ReleaseAll()
     end
@@ -45,7 +44,6 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
     if not uiMapID then return end
 
     -- Regular nodes
-
     for coord, mobid, textureData, scale, alpha in module:IterateNodes(uiMapID, false) do
         local x, y = core:GetXY(coord)
         if x and y then
@@ -136,30 +134,6 @@ SilverDragonOverlayWorldMapPinMixin = CreateFromMixins(MapCanvasPinMixin, module
 function SilverDragonOverlayWorldMapPinMixin:OnLoad()
     self:UseFrameLevelType("PIN_FRAME_LEVEL_VIGNETTE")
     self:SetScalingLimits(1, 1.0, 1.2)
-end
-
-function SilverDragonOverlayWorldMapPinMixin:OnReleased()
-    self:Hide()
-end
-
-SilverDragonOverlayMapPinPingDriverAnimationMixin = {}
-
-function SilverDragonOverlayMapPinPingDriverAnimationMixin:OnPlay()
-    self.loops = 0
-    self:GetParent().Expand:Show()
-end
-
-function SilverDragonOverlayMapPinPingDriverAnimationMixin:OnLoop()
-    self.loops = self.loops + 1
-    if self.loops >= 2 then
-        self:Finish()
-    end
-end
-
-function SilverDragonOverlayMapPinPingDriverAnimationMixin:OnFinished()
-    local pin = self:GetParent()
-    pin.ScaleAnimation:Stop()
-    pin.Expand:Hide()
 end
 
 SilverDragonOverlayRoutePinMixin = CreateFromMixins(MapCanvasPinMixin)
