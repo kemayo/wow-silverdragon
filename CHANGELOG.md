@@ -1,5 +1,13 @@
 # Changelog
 
+## Changed in v90002.12
+
+* Better vignette scanning options:
+    * You can ignore specific vignettes, including loot vignette (see options > scanning > vignettes > ignore)
+    * You can ignore entire categories of vignette by their icon (in particular, the white-skull for Maw bonus bosses may be of interest here...)
+* Fix Dead Blanchy's position
+* Add Fractured Faerie Tales achievement completion to tooltips
+
 ## Changed in v90002.11
 
 * Don't try to draw routes if the map isn't visible (this caused some `y2 is nil` errors, if you saw those)
