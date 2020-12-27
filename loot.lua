@@ -107,7 +107,7 @@ end
 function ns.Loot.Cache(id)
 	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
 	for _, item in ipairs(ns.mobdb[id].loot) do
-		C_Item.RequestLoadItemDataByID(type(item) == "table" and item.item or item)
+		C_Item.RequestLoadItemDataByID(type(item) == "table" and item[1] or item)
 	end
 end
 
@@ -547,7 +547,7 @@ do
 		end,
 		AddLoot = function(self, loot)
 			for _, item in ipairs(loot) do
-				local itemid = type(item) == "table" and item.item or item
+				local itemid = type(item) == "table" and item[1] or item
 				if itemid then
 					self:AddItem(itemid)
 				end

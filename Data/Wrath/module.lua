@@ -49,7 +49,7 @@ function module:OnInitialize()
 					r=1,g=1,b=0,
 				},
 			}},
-			loot={{item=44168,mount=265}},
+			loot={{44168,mount=265}},
 		},
 		[32495] = {name="Hildana Deathstealer",locations={[118]={28604540,29603800,30803280,36802540,54005300,59605940},},},
 		[32500] = {name="Dirkee",locations={[120]={37805840,41005180,41404020,68004760},},},
