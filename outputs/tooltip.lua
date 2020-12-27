@@ -59,7 +59,7 @@ function module:UpdateTooltip(id, force_achievement, force_drop, force_id)
 	end
 
 	if self.db.profile.id or force_id and not force_id == false then
-		GameTooltip:AddDoubleLine("id", id, 1, 1, 0, 1, 1, 0)
+		GameTooltip:AddDoubleLine(ID, id, 1, 1, 0, 1, 1, 0)
 	end
 
 	GameTooltip:Show()

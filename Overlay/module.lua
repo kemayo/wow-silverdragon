@@ -250,6 +250,11 @@ function module:ShowTooltip(pin)
         tooltip:AddDoubleLine("At", pin.uiMapID .. ':' .. pin.coord)
     end
 
+    if core.debuggable then
+        tooltip:AddDoubleLine(ID, id)
+        tooltip:AddDoubleLine(LOCATION_COLON, ("%s %s"):format(pin.uiMapID, pin.coord))
+    end
+
     if pin.config.tooltip_help then
         tooltip:AddLine(escapes.keyDown .. ALT_KEY_TEXT .. " + " .. escapes.leftClick .. "  " .. MAP_PIN )
         if C_Map.CanSetUserWaypointOnMap(pin.uiMapID) then
