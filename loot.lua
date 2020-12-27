@@ -46,9 +46,9 @@ do
 		return function(t, prestate)
 			local state, item = next(t, prestate)
 			while state do
-				item = test(item)
-				if item then
-					return state, item
+				local ret = test(item)
+				if ret then
+					return state, ret, item
 				end
 				state, item = next(t, state)
 			end
@@ -57,7 +57,14 @@ do
 	local mount_iter = make_iter(function(item) return type(item) == "table" and item.mount end)
 	local pet_iter = make_iter(function(item) return type(item) == "table" and item.pet end)
 	local toy_iter = make_iter(function(item) return type(item) == "table" and item.toy end)
-	local regular_iter = make_iter(function(item) return type(item) == "number" and item end)
+	local regular_iter = make_iter(function(item)
+		if type(item) == "number" then
+			return item
+		end
+		if not (item.mount or item.pet or item.toy) then
+			return item[1]
+		end
+	end)
 	local noloot = {}
 	function ns.Loot.IterMounts(id)
 		return mount_iter, ns.mobdb[id].loot or noloot, nil
@@ -228,6 +235,26 @@ local Details = {
 	item = function(tooltip, i, itemid)
 		tooltip:SetHyperlink(("item:%d"):format(itemid))
 	end,
+	restrictions = function(tooltip, itemdata)
+		if not (itemdata and type(itemdata) == "table") then return end
+		if itemdata.covenant then
+			local covenant = C_Covenants.GetCovenantData(itemdata.covenant)
+			local active = itemdata.covenant == C_Covenants.GetActiveCovenantID()
+			if covenant then
+				tooltip:AddLine(
+					ITEM_REQ_SKILL:format(COVENANT_COLORS[covenant.ID]:WrapTextInColorCode(covenant.name)),
+					(active and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+				)
+			end
+		end
+		if itemdata.class then
+			local active = select(2, UnitClass("player")) == itemdata.class
+			tooltip:AddLine(
+				ITEM_REQ_SKILL:format(RAID_CLASS_COLORS[itemdata.class]:WrapTextInColorCode(LOCALIZED_CLASS_NAMES_FEMALE[itemdata.class])),
+				(active and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+			)
+		end
+	end,
 }
 ns.Loot.Details = Details
 
@@ -244,9 +271,10 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 	local n = 1
 	if toy then
 		local toytip
-		for i, toyid in ns.Loot.IterToys(id) do
+		for i, toyid, itemdata in ns.Loot.IterToys(id) do
 			toytip = get_tooltip(toytip or tooltip, n)
 			Details.toy(toytip, n, toyid)
+			Details.restrictions(toytip, itemdata)
 			n = n + 1
 		end
 	end
@@ -254,8 +282,9 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 		if toy then
 			tooltip:AddLine("---")
 		end
-		for i, mountid in ns.Loot.IterMounts(id) do
+		for i, mountid, itemdata in ns.Loot.IterMounts(id) do
 			Details.mount(tooltip, n, mountid)
+			Details.restrictions(tooltip, itemdata)
 			n = n + 1
 		end
 	end
@@ -263,29 +292,50 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 		if toy or mount then
 			tooltip:AddLine('---')
 		end
-		for i, petid in ns.Loot.IterPets(id) do
+		for i, petid, itemdata in ns.Loot.IterPets(id) do
 			Details.pet(tooltip, n, petid)
+			Details.restrictions(tooltip, itemdata)
 			n = n + 1
 		end
 	end
 	if regular then
 		local itemtip
-		for i, itemid in ns.Loot.IterRegularLoot(id) do
+		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id) do
 			itemtip = get_tooltip(itemtip or tooltip, n)
 			Details.item(itemtip, n, itemid)
+			Details.restrictions(itemtip, itemdata)
 			n = n + 1
 		end
 	end
 end
 
+local function requiresLabel(item)
+	if type(item) ~= "table" then
+		return ""
+	end
+	local ret = " "
+	-- todo: faction?
+	if item.covenant then
+		local data = C_Covenants.GetCovenantData(item.covenant)
+		-- local active = item.covenant == C_Covenants.GetActiveCovenantID()
+		if data then
+			ret = ret .. PARENS_TEMPLATE:format(COVENANT_COLORS[item.covenant]:WrapTextInColorCode(data.name))
+		end
+	end
+	if item.class then
+		ret = ret .. PARENS_TEMPLATE:format(RAID_CLASS_COLORS[item.class]:WrapTextInColorCode(LOCALIZED_CLASS_NAMES_FEMALE[item.class]))
+	end
+	return ret
+end
+
 local Summary = {
-	toy = function(tooltip, i, toyid)
+	toy = function(tooltip, i, toyid, itemdata)
 		local _, name, icon = C_ToyBox.GetToyInfo(toyid)
 		local owned = PlayerHasToy(toyid)
 		if name then
 			tooltip:AddDoubleLine(
 				i==1 and TOY or " ",
-				"|T" .. icon .. ":0|t " .. name,
+				"|T" .. icon .. ":0|t " .. name .. requiresLabel(itemdata),
 				1, 1, 0,
 				owned and 0 or 1, owned and 1 or 0, 0
 			)
@@ -293,12 +343,12 @@ local Summary = {
 			tooltip:AddDoubleLine(i==1 and TOY or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end,
-	mount = function(tooltip, i, mountid)
+	mount = function(tooltip, i, mountid, itemdata)
 		local name, _, icon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(mountid)
 		if name then
 			tooltip:AddDoubleLine(
 				i==1 and MOUNT or " ",
-				"|T" .. icon .. ":0|t " .. name,
+				"|T" .. icon .. ":0|t " .. name .. requiresLabel(itemdata),
 				1, 1, 0,
 				isCollected and 0 or 1, isCollected and 1 or 0, 0
 			)
@@ -306,7 +356,7 @@ local Summary = {
 			tooltip:AddDoubleLine(i==1 and MOUNT or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end,
-	pet = function(tooltip, i, petid)
+	pet = function(tooltip, i, petid, itemdata)
 		local name, icon = C_PetJournal.GetPetInfoBySpeciesID(petid)
 		local owned, limit = C_PetJournal.GetNumCollectedInfo(petid)
 		if name then
@@ -318,7 +368,7 @@ local Summary = {
 			end
 			tooltip:AddDoubleLine(
 				i==1 and TOOLTIP_BATTLE_PET or " ",
-				"|T" .. icon .. ":0|t " .. (ITEM_SET_NAME):format(name, owned, limit),
+				"|T" .. icon .. ":0|t " .. (ITEM_SET_NAME):format(name, owned, limit) .. requiresLabel(itemdata),
 				1, 1, 0,
 				r, g, b
 			)
@@ -326,12 +376,12 @@ local Summary = {
 			tooltip:AddDoubleLine(i==1 and TOOLTIP_BATTLE_PET or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end,
-	item = function(tooltip, i, itemid)
+	item = function(tooltip, i, itemid, itemdata)
 		local name, link, quality, _, _, _, _, _, _, icon = GetItemInfo(itemid)
 		if name then
 			tooltip:AddDoubleLine(
 				i==1 and ENCOUNTER_JOURNAL_ITEM or " ",
-				"|T" .. icon .. ":0|t " .. name,
+				"|T" .. icon .. ":0|t " .. name .. requiresLabel(itemdata),
 				1, 1, 0,
 				GetItemQualityColor(quality)
 			)
@@ -347,18 +397,18 @@ function ns.Loot.Summary.UpdateTooltip(tooltip, id, only_knowable)
 		return
 	end
 
-	for i, mountid in ns.Loot.IterMounts(id) do
-		Summary.mount(tooltip, i, mountid)
+	for i, mountid, itemdata in ns.Loot.IterMounts(id) do
+		Summary.mount(tooltip, i, mountid, itemdata)
 	end
-	for i, toyid in ns.Loot.IterToys(id) do
-		Summary.toy(tooltip, i, toyid)
+	for i, toyid, itemdata in ns.Loot.IterToys(id) do
+		Summary.toy(tooltip, i, toyid, itemdata)
 	end
-	for i, petid in ns.Loot.IterPets(id) do
-		Summary.pet(tooltip, i, petid)
+	for i, petid, itemdata in ns.Loot.IterPets(id) do
+		Summary.pet(tooltip, i, petid, itemdata)
 	end
 	if not only_knowable then
-		for i, itemid in ns.Loot.IterRegularLoot(id) do
-			Summary.item(tooltip, i, itemid)
+		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id) do
+			Summary.item(tooltip, i, itemid, itemdata)
 		end
 	end
 end
@@ -371,6 +421,15 @@ do
 	local ITEM_XOFFSET = 4
 	local ITEM_YOFFSET = -5
 	local TITLE_SPACING = 16
+
+	-- we need non-localized covenant names for atlases
+	-- can't use the texturekit value from covenant data, since the atlas I want doesn't conform to it
+	local covenants = {
+		[Enum.CovenantType.Kyrian] = "Kyrian",
+		[Enum.CovenantType.Necrolord] = "Necrolords",
+		[Enum.CovenantType.NightFae] = "NightFae",
+		[Enum.CovenantType.Venthyr] = "Venthyr",
+	}
 
 	local function isMouseOver(...)
 		for i=1, select("#", ...) do
@@ -422,7 +481,15 @@ do
 			frame:Reset()
 		end
 	end)
-	local buttonPool = CreateFramePool("ItemButton")
+	local buttonPool = CreateFramePool("ItemButton", nil, nil, function(framePool, button)
+		if button.RestrictionIcon then
+			button.RestrictionIcon:Hide()
+		end
+		button.lootdata = nil
+		button:ClearAllPoints()
+		button:SetParent(nil)
+		button:Hide()
+	end)
 	local timerPool = CreateFramePool("Frame", UIParent, nil, function(framePool, frame)
 		frame:Hide()
 		frame:SetParent(nil)
@@ -456,6 +523,10 @@ do
 			loot_tooltip:SetOwner(self, "ANCHOR_RIGHT")
 		end
 		loot_tooltip:SetHyperlink(self:GetItemLink())
+		ns.Loot.Details.restrictions(loot_tooltip, self.lootdata)
+		if core.debuggable then
+			loot_tooltip:AddDoubleLine(ID, self:GetItemID())
+		end
 		loot_tooltip:Show()
 		self:GetParent().tooltip = loot_tooltip
 	end
@@ -517,13 +588,19 @@ do
 				self.tooltip = nil
 			end
 		end,
-		AddItem = function(self, itemid)
+		AddItem = function(self, itemid, item)
 			local button, isNew = buttonPool:Acquire()
 			button:SetParent(self)
 			if isNew then
 				button:SetScript("OnClick", button_onclick)
 				button:SetScript("OnEnter", button_onenter)
 				button:SetScript("OnLeave", button_onleave)
+				local sublevel = 4
+				if button.IconOverlay then
+					sublevel = select(2, button.IconOverlay:GetDrawLayer()) + 1
+				end
+				button.RestrictionIcon = button:CreateTexture(nil, "OVERLAY", nil, sublevel)
+				button.RestrictionIcon:SetPoint("TOPRIGHT", 4, 4)
 			end
 
 			local numButtons = #self.buttons
@@ -540,6 +617,21 @@ do
 
 			if itemid then
 				button:SetItem(itemid)
+				if type(item) == "table" then
+					button.lootdata = item
+					if item.count then
+						button:SetItemButtonCount(item.count)
+					end
+					if item.covenant and covenants[item.covenant] then
+						button.RestrictionIcon:SetAtlas(("covenantchoice-panel-sigil-%s"):format(covenants[item.covenant]))
+						button.RestrictionIcon:SetSize(16, 20) -- these are 73x96 natively
+						button.RestrictionIcon:Show()
+					elseif item.class then
+						button.RestrictionIcon:SetAtlas(("groupfinder-icon-class-%s"):format(item.class))
+						button.RestrictionIcon:SetSize(20, 20)
+						button.RestrictionIcon:Show()
+					end
+				end
 			end
 
 			button:Show()
@@ -549,7 +641,7 @@ do
 			for _, item in ipairs(loot) do
 				local itemid = type(item) == "table" and item[1] or item
 				if itemid then
-					self:AddItem(itemid)
+					self:AddItem(itemid, item)
 				end
 			end
 		end,
