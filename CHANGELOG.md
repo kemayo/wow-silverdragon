@@ -1,5 +1,14 @@
 # Changelog
 
+## Changed in v90002.13
+
+* Loot can now be flagged as being covenant/class-specific, and some is; Blizzard is quiet about what counts, so we're going by wowhead comments here, expect further updates
+* Checkmark on the popup loot icon was missing if you had all the knowable loot
+* Stop an error when mousing over the loot icon on the popup for mobs with more than 3 items that'd have to be previewed
+* Sharing a link to chat could fail if you were in an area where the general channel couldn't be identified; it'll fall back properly to opening the chatbox now
+* Stop the map overlay from pinging multiple mobs at once if a vignette was visible when you first logged in
+* Apparently I missed migrating Cataclysm loot data to the new format a few releases back, so it wasn't properly showing mounts and pets
+
 ## Changed in v90002.12
 
 * Better vignette scanning options:
