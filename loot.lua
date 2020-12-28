@@ -268,33 +268,29 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 	local pet = (not only or only == "pet") and ns.Loot.HasPets(id)
 	local regular = (not only or only == "regular") and ns.Loot.HasRegularLoot(id)
 
-	local n = 1
+	if mount then
+		for i, mountid, itemdata in ns.Loot.IterMounts(id) do
+			Details.mount(tooltip, i, mountid)
+			Details.restrictions(tooltip, itemdata)
+		end
+	end
+	if pet then
+		if mount then
+			tooltip:AddLine("---")
+		end
+		for i, petid, itemdata in ns.Loot.IterPets(id) do
+			Details.pet(tooltip, i, petid)
+			Details.restrictions(tooltip, itemdata)
+		end
+	end
+	local n = (pet or mount) and 2 or 1
 	if toy then
 		local toytip
 		for i, toyid, itemdata in ns.Loot.IterToys(id) do
 			toytip = get_tooltip(toytip or tooltip, n)
+			if not toytip then return end -- out of comparisons
 			Details.toy(toytip, n, toyid)
 			Details.restrictions(toytip, itemdata)
-			n = n + 1
-		end
-	end
-	if mount then
-		if toy then
-			tooltip:AddLine("---")
-		end
-		for i, mountid, itemdata in ns.Loot.IterMounts(id) do
-			Details.mount(tooltip, n, mountid)
-			Details.restrictions(tooltip, itemdata)
-			n = n + 1
-		end
-	end
-	if pet then
-		if toy or mount then
-			tooltip:AddLine('---')
-		end
-		for i, petid, itemdata in ns.Loot.IterPets(id) do
-			Details.pet(tooltip, n, petid)
-			Details.restrictions(tooltip, itemdata)
 			n = n + 1
 		end
 	end
@@ -302,6 +298,7 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 		local itemtip
 		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id) do
 			itemtip = get_tooltip(itemtip or tooltip, n)
+			if not itemtip then return end -- out of comparisons
 			Details.item(itemtip, n, itemid)
 			Details.restrictions(itemtip, itemdata)
 			n = n + 1
