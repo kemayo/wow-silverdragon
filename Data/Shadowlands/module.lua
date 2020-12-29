@@ -78,7 +78,7 @@ function module:OnInitialize()
 		[162690] = {name="Nerissa Heartless",locations={[1536]={66023532},},loot={{182084,mount=1373},184179},quest=58851,},
 		[162711] = {name="Deadly Dapperling",locations={[1536]={76835707},},loot={{181263,pet=2953},184280,{184224,covenant=Enum.CovenantType.Necrolord}},quest=58868,},
 		[162727] = {name="Bubbleblood",locations={[1536]={52653540},},loot={{184476,toy=184476},184290,184154},quest=58870,},
-		[162741] = {name="Gieger",locations={[1536]={31603540},},loot={{182080,mount=1411,covenant=Enum.CovenantType.Necrolord},184298},quest=58872,},
+		[162741] = {name="Gieger",locations={[1536]={31603540},},loot={{182080,mount=1411,covenant=Enum.CovenantType.Necrolord},184298,{183754,covenant=Enum.CovenantType.Necrolord},},quest=58872,},
 		[162767] = {name="Nirvaska the Summoner",locations={[1536]={53706130},},loot={182205,183700},quest=58875,},
 		[162797] = {name="Deepscar",182191,locations={[1536]={46734550},},quest=58878,},
 		[162819] = {name="Warbringer Mal'Korak",locations={[1536]={33718016},},loot={{182085,mount=1372},184288},quest=58889,},
