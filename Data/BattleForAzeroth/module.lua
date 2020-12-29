@@ -553,7 +553,7 @@ function module:OnInitialize()
 		[155958] = {name="Tashara",locations={[1530]={29402220},},poi={947,6490},quest=58507,loot={{174873,toy=174873}},},
 		[156078] = {name="Magus Rehleth",locations={[1527]={30006500},},poi={947,6488},quest=56952,},
 		[156083] = {name="Sanguifang",locations={[1530]={47605600},},loot={174071},poi={947,6490},quest=56954,},
-		[156299] = {name="R'khuzj the Unfathomable",locations={[1527]={50205080,56405240,57407280,57407820,58006000,58406640},},poi={947,6486,947,6488},quest=57430,},
+		[156299] = {name="R'khuzj the Unfathomable",locations={[1527]={58006000},},routes={[1527]={{50205080,56405240,58006000,58406640,57407820}}},poi={947,6486,947,6488},quest=57430,},
 		[156654] = {name="Shol'thoss the Doomspeaker",locations={[1527]={58408220},},poi={947,6486},quest=57432,},
 		[156655] = {name="Korzaran the Slaughterer",locations={[1527]={70407440},},poi={947,6486},quest=57433,},
 		[157120] = {name="Fangtaker Orsa",locations={[1527]={74806820},},poi={947,6488,947,6487},quest=57258,},
