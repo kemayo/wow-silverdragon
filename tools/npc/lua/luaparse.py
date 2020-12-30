@@ -90,7 +90,13 @@ lexer = lex.lex()
 
 def p_tableconstructor(p):
     """tableconstructor : OPBRACE fieldlist CLBRACE
+                        | OPBRACE CLBRACE
     """
+    if len(p) == 3:
+        # the empty-table case
+        # Arguable whether this should become a dict or a list...
+        p[0] = {}
+        return
     p[0] = p[2]
     # If this is a pure numeric-keys table, turn it into a python list
     # Could argue this shouldn't be done, since it changes the index start
@@ -184,7 +190,7 @@ def parse(s):
 
 if __name__ == "__main__":
     # s = '{23.4, "pony express\\" ri\'de", \'Test\\\'s fun\', 4, "apple", fred=400, ["foo"]=999, [90]="beauty", {1,2}, p={2},}'
-    s = r'{[61] = {name="Thuros \"Fred\" Lightfingers",["creature_type"]="Humanoid",level=9,locations={[30]={50408320,50408280},},},}'
+    s = r'{[61] = {name="Thuros \"Fred\" Lightfingers",["creature_type"]="Humanoid",level=9,locations={[30]={50408320,50408280},},},loot={},}'
     print(s)
 
     lexer.input(s)

@@ -3,7 +3,7 @@
 from . import luaparse
 
 
-def serialize(v, key=str):
+def serialize(v, key=str, tablespace=False):
     """Serialize a lua table to a string
     
     Keyword arguments:
@@ -15,15 +15,15 @@ def serialize(v, key=str):
     if t == str:
         return '"' + v.replace('"', '\\"') + '"'
     if t in (list, tuple, set):
-        return "{" + ",".join(map(serialize, v)) + "}"
+        return "{" + (tablespace and ", " or ",").join(serialize(vv, key=key, tablespace=tablespace) for vv in v) + "}"
     if t == dict:
         out = ["{"]
         lastindex = None
         for k in sorted(v.keys(), key=key):
-            vk = serialize(v[k])
+            vk = serialize(v[k], key=key, tablespace=tablespace)
             k = str(k)
             if lastindex:
-                out.append(',')
+                out.append(tablespace and ", " or ",")
             if k.isnumeric():
                 # If we've got mixed numeric and string keys, and the numeric
                 # keys start at 1, leave out showing those keys while they're
