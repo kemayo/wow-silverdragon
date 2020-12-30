@@ -4,33 +4,43 @@
 import re
 import sys
 
+from npc import lua, __keysort
+
+
 def main(inf, outf):
     output = []
     with open(inf, 'r') as infile, open(outf, 'r') as outfile:
         npc_loot = {}
         for line in infile:
+            # This is attempting to filter for a single-line table. I think
+            # the parser could handle a multi-line one, but I'd need to write
+            # more complex code to extract them... and overhaul the serializer
+            # to pretty-print it.
             if "npc=" in line and "loot=" in line:
-                npcid = re.search(r"npc=(\d+)", line).group(1)
-                loot = re.search(r"loot={(.+?)},", line).group(1)
-                npc_loot[npcid] = loot
-        # print(npc_loot)
+                tables = re.search(r"\[\d+\]\s*=\s*(\{.+\}), --", line).group(1)
+                table = lua.loadtable(tables)
+                if table.get("loot"):
+                    # *could* have the key but be nil
+                    npc_loot[table['npc']] = table['loot']
         print("loot input", len(npc_loot))
 
         for line in outfile:
-            match = re.search(r"\[(\d+)\] = {name", line)
+            match = re.search(r"\[(\d+)\] = ({.+}),$", line)
             if not match:
                 output.append(line)
                 continue
-            npcid = match.group(1)
+
+            npcid = int(match.group(1))
             if npcid in npc_loot:
-                # print("loot for", npcid, npc_loot[npcid])
-                if "loot=" in line:
-                    # replace existing loot
-                    output.append(re.sub(r"loot={.+},quest", f"loot={{{npc_loot[npcid]}}},quest", line))
-                    print("replaced loot for", npcid, npc_loot[npcid])
+                tables = match.group(2)
+                table = lua.loadtable(tables)
+                if oldloot := table.get('loot', None):
+                    print("replacing loot for", npcid, oldloot, npc_loot[npcid])
                 else:
-                    output.append(line.replace(",quest", f",loot={{{npc_loot[npcid]}}},quest"))
-                    print("added loot for", npcid, npc_loot[npcid])
+                    print("adding loot for", npcid, npc_loot[npcid])
+                table['loot'] = npc_loot[npcid]
+                output.append(line[:match.start(2)] + lua.serialize(table, key=__keysort) + line[match.end(2):])
+                # output.append(re.sub(r"\[(\d+)\] = ({.+}),$", r"[$1] = ", line))
             else:
                 output.append(line)
     with open(outf, 'w') as outfile:
