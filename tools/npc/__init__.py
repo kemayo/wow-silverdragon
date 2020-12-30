@@ -19,6 +19,15 @@ types = {
 }
 
 
+def __keysort(k):
+    # Yeah, this isn't very generic. But I want 'name' to always be first.
+    if k == "name":
+        return "aaaaaaaaa"
+    if k == "hidden":
+        return "zzzzzzzzz"
+    return str(k)
+
+
 class NPC:
     @classmethod
     def url(cls, ptr=False, beta=False):
@@ -124,7 +133,7 @@ class NPC:
         )
 
     def to_lua(self, *args, **kwargs):
-        return lua.serialize(self.clean_data(*args, **kwargs))
+        return lua.serialize(self.clean_data(*args, **kwargs), key=__keysort)
 
     def html_decode(self, text):
         return text.replace("&#39;", "'").replace("&#x27;", "'").replace("&quot;", '"')
