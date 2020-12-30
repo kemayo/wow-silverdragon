@@ -56,7 +56,7 @@ do
 	end
 	local mount_iter = make_iter(function(item) return type(item) == "table" and item.mount end)
 	local pet_iter = make_iter(function(item) return type(item) == "table" and item.pet end)
-	local toy_iter = make_iter(function(item) return type(item) == "table" and item.toy end)
+	local toy_iter = make_iter(function(item) return type(item) == "table" and item.toy and item[1] end)
 	local regular_iter = make_iter(function(item)
 		if type(item) == "number" then
 			return item
