@@ -32,6 +32,21 @@ end
 local function PlayerHasPet(petid)
 	return (C_PetJournal.GetNumCollectedInfo(petid) > 0)
 end
+local itemIsKnowable = function(item)
+	return type(item) == "table" and (item.toy or item.mount or item.pet or item.quest)
+end
+local itemIsKnown = function(item)
+	-- returns true/false/nil for yes/no/not-knowable
+	if type(item) == "table" then
+		-- TODO: could arguably do transmog here, too. Since we're mostly
+		-- considering soulbound things, the restrictions on seeing appearances
+		-- known cross-armor-type wouldn't really matter...
+		if item.toy then return PlayerHasToy(item[1]) end
+		if item.mount then return PlayerHasMount(item.mount) end
+		if item.pet then return PlayerHasPet(item.pet) end
+		if item.quest then return C_QuestLog.IsQuestFlaggedCompleted(item.quest) or C_QuestLog.IsOnQuest(item.quest) end
+	end
+end
 
 ns.Loot = {}
 
@@ -54,15 +69,16 @@ do
 			end
 		end
 	end
-	local mount_iter = make_iter(function(item) return type(item) == "table" and item.mount end)
-	local pet_iter = make_iter(function(item) return type(item) == "table" and item.pet end)
-	local toy_iter = make_iter(function(item) return type(item) == "table" and item.toy and item[1] end)
+	local mount_iter = make_iter(function(item) return type(item) == "table" and item.mount, item end)
+	local pet_iter = make_iter(function(item) return type(item) == "table" and item.pet, item end)
+	local toy_iter = make_iter(function(item) return type(item) == "table" and item.toy and item[1], item end)
+	local quest_iter = make_iter(function(item) return type(item) == "table" and item.quest, item end)
 	local regular_iter = make_iter(function(item)
 		if type(item) == "number" then
 			return item
 		end
 		if not (item.mount or item.pet or item.toy) then
-			return item[1]
+			return item[1], item
 		end
 	end)
 	local noloot = {}
@@ -74,6 +90,9 @@ do
 	end
 	function ns.Loot.IterToys(id)
 		return toy_iter, ns.mobdb[id].loot or noloot, nil
+	end
+	function ns.Loot.IterQuests(id)
+		return quest_iter, ns.mobdb[id].loot or noloot, nil
 	end
 	function ns.Loot.IterRegularLoot(id)
 		return regular_iter, ns.mobdb[id].loot or noloot, nil
@@ -101,7 +120,8 @@ function ns.Loot.HasPets(id)
 	return false
 end
 function ns.Loot.HasKnowableLoot(id)
-	return ns.Loot.HasMounts(id) or ns.Loot.HasToys(id) or ns.Loot.HasPets(id)
+	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+	return any(itemIsKnowable, unpack(ns.mobdb[id].loot))
 end
 function ns.Loot.HasRegularLoot(id)
 	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
@@ -129,10 +149,11 @@ ns.Loot.Status = setmetatable({}, {__call = function(_, id)
 	local mount = ns.Loot.Status.Mount(id)
 	local toy = ns.Loot.Status.Toy(id)
 	local pet = ns.Loot.Status.Pet(id)
-	if (mount == nil and toy == nil and pet == nil) then
+	local quest = ns.Loot.Status.Quest(id)
+	if (mount == nil and toy == nil and pet == nil and quest == nil) then
 		return nil
 	end
-	return (mount ~= false and toy ~= false and pet ~= false), mount, toy, pet
+	return (mount ~= false and toy ~= false and pet ~= false and quest ~= false), mount, toy, pet, quest
 end})
 function ns.Loot.Status.Toy(id)
 	if not id or not ns.mobdb[id] then return end
@@ -160,7 +181,18 @@ function ns.Loot.Status.Pet(id)
 	if not id or not ns.mobdb[id] then return end
 	local ret = nil
 	for _, petid in ns.Loot.IterPets(id) do
-		if not PlayerHasToy(petid) then
+		if not PlayerHasPet(petid) then
+			return false
+		end
+		ret = true
+	end
+	return ret
+end
+function ns.Loot.Status.Quest(id)
+	if not id or not ns.mobdb[id] then return end
+	local ret = nil
+	for _, questid in ns.Loot.IterQuests(id) do
+		if not (C_QuestLog.IsQuestFlaggedCompleted(questid) or C_QuestLog.IsOnQuest(questid)) then
 			return false
 		end
 		ret = true
@@ -321,6 +353,10 @@ local function requiresLabel(item)
 	end
 	if item.class then
 		ret = ret .. PARENS_TEMPLATE:format(RAID_CLASS_COLORS[item.class]:WrapTextInColorCode(LOCALIZED_CLASS_NAMES_FEMALE[item.class]))
+	end
+	if itemIsKnowable(item) then
+		-- local complete = C_QuestLog.IsQuestFlaggedCompleted(item.quest) or C_QuestLog.IsOnQuest(item.quest)
+		ret = ret .. CreateAtlasMarkup(itemIsKnown(item) and "common-icon-checkmark" or "common-icon-redx")
 	end
 	return ret
 end
@@ -490,6 +526,7 @@ do
 	local buttonPool = CreateFramePool("ItemButton", nil, nil, function(framePool, button)
 		if button.RestrictionIcon then
 			button.RestrictionIcon:Hide()
+			button.KnownIcon:Hide()
 		end
 		button.lootdata = nil
 		button:ClearAllPoints()
@@ -607,6 +644,9 @@ do
 				end
 				button.RestrictionIcon = button:CreateTexture(nil, "OVERLAY", nil, sublevel)
 				button.RestrictionIcon:SetPoint("TOPRIGHT", 4, 4)
+				button.KnownIcon = button:CreateTexture(nil, "OVERLAY", nil, sublevel)
+				button.KnownIcon:SetPoint("BOTTOMRIGHT", 4, -4)
+				button.KnownIcon:SetSize(16, 16)
 			end
 
 			local numButtons = #self.buttons
@@ -636,6 +676,10 @@ do
 						button.RestrictionIcon:SetAtlas(("groupfinder-icon-class-%s"):format(item.class))
 						button.RestrictionIcon:SetSize(20, 20)
 						button.RestrictionIcon:Show()
+					end
+					if itemIsKnowable(item) then
+						button.KnownIcon:SetAtlas(itemIsKnown(item) and "common-icon-checkmark" or "common-icon-redx")
+						button.KnownIcon:Show()
 					end
 				end
 			end
