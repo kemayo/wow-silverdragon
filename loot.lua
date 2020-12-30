@@ -32,8 +32,18 @@ end
 local function PlayerHasPet(petid)
 	return (C_PetJournal.GetNumCollectedInfo(petid) > 0)
 end
+local itemRestricted = function(item)
+	if type(item) ~= "table" then return false end
+	if item.covenant and item.covenant ~= C_Covenants.GetActiveCovenantID() then
+		return true
+	end
+	if item.class and select(2, UnitClass("player")) ~= item.class then
+		return true
+	end
+	return false
+end
 local itemIsKnowable = function(item)
-	return type(item) == "table" and (item.toy or item.mount or item.pet or item.quest)
+	return type(item) == "table" and (item.toy or item.mount or item.pet or item.quest) -- and not itemRestricted(item)
 end
 local itemIsKnown = function(item)
 	-- returns true/false/nil for yes/no/not-knowable
@@ -355,8 +365,11 @@ local function requiresLabel(item)
 		ret = ret .. PARENS_TEMPLATE:format(RAID_CLASS_COLORS[item.class]:WrapTextInColorCode(LOCALIZED_CLASS_NAMES_FEMALE[item.class]))
 	end
 	if itemIsKnowable(item) then
-		-- local complete = C_QuestLog.IsQuestFlaggedCompleted(item.quest) or C_QuestLog.IsOnQuest(item.quest)
-		ret = ret .. CreateAtlasMarkup(itemIsKnown(item) and "common-icon-checkmark" or "common-icon-redx")
+		local known = itemIsKnown(item)
+		if known or not itemRestricted(item) then
+			-- don't want to show the x, but might as well show the check
+			ret = ret .. CreateAtlasMarkup(known and "common-icon-checkmark" or "common-icon-redx")
+		end
 	end
 	return ret
 end
@@ -678,8 +691,12 @@ do
 						button.RestrictionIcon:Show()
 					end
 					if itemIsKnowable(item) then
-						button.KnownIcon:SetAtlas(itemIsKnown(item) and "common-icon-checkmark" or "common-icon-redx")
-						button.KnownIcon:Show()
+						local known = itemIsKnown(item)
+						if known or not itemRestricted(item) then
+							-- don't show the x for restricted items
+							button.KnownIcon:SetAtlas(known and "common-icon-checkmark" or "common-icon-redx")
+							button.KnownIcon:Show()
+						end
 					end
 				end
 			end
