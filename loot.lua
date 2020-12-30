@@ -394,18 +394,27 @@ function ns.Loot.Summary.UpdateTooltip(tooltip, id, only_knowable)
 		return
 	end
 
+	local offset = 0
+	local n = 0
 	for i, mountid, itemdata in ns.Loot.IterMounts(id) do
-		Summary.mount(tooltip, i, mountid, itemdata)
+		n = n + 1
+		Summary.mount(tooltip, i - offset, mountid, itemdata)
 	end
+	offset = n
 	for i, toyid, itemdata in ns.Loot.IterToys(id) do
-		Summary.toy(tooltip, i, toyid, itemdata)
+		n = n + 1
+		Summary.toy(tooltip, i - offset, toyid, itemdata)
 	end
+	offset = n
 	for i, petid, itemdata in ns.Loot.IterPets(id) do
-		Summary.pet(tooltip, i, petid, itemdata)
+		n = n + 1
+		Summary.pet(tooltip, i - offset, petid, itemdata)
 	end
 	if not only_knowable then
+		offset = n
 		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id) do
-			Summary.item(tooltip, i, itemid, itemdata)
+			n = n + 1
+			Summary.item(tooltip, i - offset, itemid, itemdata)
 		end
 	end
 end
