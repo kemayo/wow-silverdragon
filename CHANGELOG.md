@@ -1,5 +1,12 @@
 # Changelog
 
+## Changed in v90002.14
+
+* A huge amount of loot has been added, across all expansions. I've only added unique-to-that-mob loot
+* Now support loot that has an associated quest, and count it for completion purposes. I'm looking at you, Mechagon blueprints
+* Update tameable-mob information, which was very out of date, and show the icon for the type of tameable mob in the broker tooltip
+* Fix item-type headers not showing in the loot summary part of tooltips
+
 ## Changed in v90002.13
 
 * Loot can now be flagged as being covenant/class-specific, and some is; Blizzard is quiet about what counts, so we're going by wowhead comments here, expect further updates
