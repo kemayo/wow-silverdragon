@@ -189,6 +189,7 @@ read_globals = {
     "ChatFrame_OpenChat",
     "CopyTable",
     "CreateAtlasMarkup",
+    "CreateTextureMarkup",
     "CreateFrame",
     "CreateFramePool",
     "CreateFromMixins",
