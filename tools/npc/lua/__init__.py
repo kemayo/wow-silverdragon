@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
+import re
+
 from . import luaparse
 
 
-def serialize(v, key=str, tablespace=False):
+def serialize(v, key=str, tablespace=False, trailingcomma=False):
     """Serialize a lua table to a string
     
     Keyword arguments:
@@ -15,12 +17,13 @@ def serialize(v, key=str, tablespace=False):
     if t == str:
         return '"' + v.replace('"', '\\"') + '"'
     if t in (list, tuple, set):
-        return "{" + (tablespace and ", " or ",").join(serialize(vv, key=key, tablespace=tablespace) for vv in v) + "}"
+        return "{" + (tablespace and ", " or ",").join(serialize(vv, key=key, tablespace=tablespace, trailingcomma=trailingcomma) for vv in v) + "}"
     if t == dict:
         out = ["{"]
         lastindex = None
+        brokesequence = False
         for k in sorted(v.keys(), key=key):
-            vk = serialize(v[k], key=key, tablespace=tablespace)
+            vk = serialize(v[k], key=key, tablespace=tablespace, trailingcomma=trailingcomma)
             k = str(k)
             if lastindex:
                 out.append(tablespace and ", " or ",")
@@ -35,12 +38,17 @@ def serialize(v, key=str, tablespace=False):
                     pass
                 else:
                     out.extend(("[", k, "]="))
-            elif not k.isalnum():
+                    brokesequence = True
+            elif not re.match(r"^\w+$", k, re.ASCII):
                 out.extend(('["', k, '"]='))
+                brokesequence = True
             else:
                 out.extend((k, '='))
+                brokesequence = True
             out.append(vk)
             lastindex = k
+        if trailingcomma and brokesequence:
+            out.append(",")
         out.append("}")
         return "".join(out)
     if t == bool:
