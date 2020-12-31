@@ -96,7 +96,7 @@ function module:OnInitialize()
 		[164112] = {name="Humon'gozz",locations={[1565]={31803040},},loot={{182650,mount=1415,}},quest=59157,},
 		[164147] = {name="Wrigglemortis",locations={[1565]={58306180},},loot={181396},quest=59170,vignette=4115,},
 		[164238] = {name="Deifir the Untamed",locations={[1565]={46202180,47002740},},loot={{180631,pet=2920,}},notes="So tame him",quest=59201,tameable=2011146,},
-		[164388] = {name="Amalgamation of Light",locations={[1525]={25304850},},loot={179924,180688,179653,179925,179926},quest=59584,},
+		[164388] = {name="Amalgamation of Light",locations={[1525]={25304850},},loot={{180586,pet=2892,},179924,180688,179653,179925,179926},quest=59584,},
 		[164391] = {name="Old Ardeite",locations={[1565]={51005740},},loot={{180643,pet=2908,}},quest=60273,tameable=132200,},
 		[164415] = {name="Skuld Vit",locations={[1565]={37675917},},loot={180146,{182183,quest=62439,covenant=Enum.CovenantType.NightFae}},notes="Be Night Fae",quest=59220,},
 		[164477] = {name="Deathbinder Hroth",locations={[1565]={34606800},},loot={180166},quest=59226,},
