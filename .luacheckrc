@@ -66,6 +66,8 @@ read_globals = {
     "C_Texture",
     "C_Timer",
     "C_ToyBox",
+    "C_Transmog",
+    "C_TransmogCollection",
     "C_VignetteInfo",
     "UiMapPoint",
     "Debug",

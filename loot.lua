@@ -26,6 +26,82 @@ local function any(test, ...)
 	end
 	return false
 end
+
+local brokenItems = {
+	-- itemid : {appearanceid, sourceid}
+	[153268] = {25124, 90807}, -- Enclave Aspirant's Axe
+}
+local function GetAppearanceAndSource(itemLinkOrID)
+	local itemID = GetItemInfoInstant(itemLinkOrID)
+	if not itemID then return end
+	local appearanceID, sourceID = C_TransmogCollection.GetItemInfo(itemLinkOrID)
+	if not appearanceID then
+		-- sometimes the link won't actually give us an appearance, but itemID will
+		-- e.g. mythic Drape of Iron Sutures from Shadowmoon Burial Grounds
+		appearanceID, sourceID = C_TransmogCollection.GetItemInfo(itemID)
+	end
+	if not appearanceID and brokenItems[itemID] then
+		-- ...and there's a few that just need to be hardcoded
+		appearanceID, sourceID = unpack(brokenItems[itemID])
+	end
+	return appearanceID, sourceID
+end
+local canLearnCache = {}
+local function CanLearnAppearance(itemLinkOrID)
+	local itemID = GetItemInfoInstant(itemLinkOrID)
+	if not itemID then return end
+	if canLearnCache[itemID] then
+		return canLearnCache[itemID]
+	end
+	-- First, is this a valid source at all?
+	local canBeChanged, noChangeReason, canBeSource, noSourceReason = C_Transmog.GetItemInfo(itemID)
+	if not canBeSource then
+		canLearnCache[itemID] = false
+		return false
+	end
+	local appearanceID = GetAppearanceAndSource(itemLinkOrID)
+	if not appearanceID then
+		canLearnCache[itemID] = false
+		return false
+	end
+	if not C_TransmogCollection.GetAppearanceSources(appearanceID) then
+		-- This returns nil for inappropriate appearances
+		canLearnCache[itemID] = false
+		return false
+	end
+	canLearnCache[itemID] = true
+	return true
+end
+local hasAppearanceCache = {}
+local function HasAppearance(itemLinkOrID)
+	local itemID = GetItemInfoInstant(itemLinkOrID)
+	if not itemID then return end
+	if hasAppearanceCache[itemID] ~= nil then
+		return hasAppearanceCache[itemID]
+	end
+	local appearanceID, sourceID = GetAppearanceAndSource(itemLinkOrID)
+	if not appearanceID then
+		hasAppearanceCache[itemID] = false
+		return false
+	end
+	local _, _, _, _, sourceKnown = C_TransmogCollection.GetAppearanceSourceInfo(sourceID)
+	if sourceKnown then
+		hasAppearanceCache[itemID] = true
+		return true
+	end
+	local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+	if not sources then
+		hasAppearanceCache[itemID] = false
+		return false
+	end
+	for _, source in pairs(sources) do
+		if source.isCollected == true then
+			hasAppearanceCache[itemID] = true
+			return true
+		end
+	end
+end
+
 local function PlayerHasMount(mountid)
 	return (select(11, C_MountJournal.GetMountInfoByID(mountid)))
 end
@@ -43,19 +119,21 @@ local itemRestricted = function(item)
 	return false
 end
 local itemIsKnowable = function(item)
-	return type(item) == "table" and (item.toy or item.mount or item.pet or item.quest) -- and not itemRestricted(item)
+	if type(item) == "table" then
+		return (item.toy or item.mount or item.pet or item.quest or CanLearnAppearance(item[1])) -- and not itemRestricted(item)
+	end
+	return CanLearnAppearance(item)
 end
 local itemIsKnown = function(item)
 	-- returns true/false/nil for yes/no/not-knowable
 	if type(item) == "table" then
-		-- TODO: could arguably do transmog here, too. Since we're mostly
-		-- considering soulbound things, the restrictions on seeing appearances
-		-- known cross-armor-type wouldn't really matter...
 		if item.toy then return PlayerHasToy(item[1]) end
 		if item.mount then return PlayerHasMount(item.mount) end
 		if item.pet then return PlayerHasPet(item.pet) end
 		if item.quest then return C_QuestLog.IsQuestFlaggedCompleted(item.quest) or C_QuestLog.IsOnQuest(item.quest) end
+		if CanLearnAppearance(item[1]) then return HasAppearance(item[1]) end
 	end
+	if CanLearnAppearance(item) then return HasAppearance(item) end
 end
 
 ns.Loot = {}
@@ -160,16 +238,17 @@ ns.Loot.Status = setmetatable({}, {__call = function(_, id)
 	local toy = ns.Loot.Status.Toy(id)
 	local pet = ns.Loot.Status.Pet(id)
 	local quest = ns.Loot.Status.Quest(id)
-	if (mount == nil and toy == nil and pet == nil and quest == nil) then
+	local transmog = ns.Loot.Status.Transmog(id)
+	if (mount == nil and toy == nil and pet == nil and quest == nil and transmog == nil) then
 		return nil
 	end
-	return (mount ~= false and toy ~= false and pet ~= false and quest ~= false), mount, toy, pet, quest
+	return (mount ~= false and toy ~= false and pet ~= false and quest ~= false and transmog ~= false), mount, toy, pet, quest, transmog
 end})
 function ns.Loot.Status.Toy(id)
 	if not id or not ns.mobdb[id] then return end
 	local ret = nil
-	for _, toyid in ns.Loot.IterToys(id) do
-		if not PlayerHasToy(toyid) then
+	for _, toyid, item in ns.Loot.IterToys(id) do
+		if not itemRestricted(item) and not PlayerHasToy(toyid) then
 			return false
 		end
 		ret = true
@@ -179,8 +258,8 @@ end
 function ns.Loot.Status.Mount(id)
 	if not id or not ns.mobdb[id] then return end
 	local ret = nil
-	for _, mountid in ns.Loot.IterMounts(id) do
-		if not PlayerHasMount(mountid) then
+	for _, mountid, item in ns.Loot.IterMounts(id) do
+		if not itemRestricted(item) and not PlayerHasMount(mountid) then
 			return false
 		end
 		ret = true
@@ -190,8 +269,8 @@ end
 function ns.Loot.Status.Pet(id)
 	if not id or not ns.mobdb[id] then return end
 	local ret = nil
-	for _, petid in ns.Loot.IterPets(id) do
-		if not PlayerHasPet(petid) then
+	for _, petid, item in ns.Loot.IterPets(id) do
+		if not itemRestricted(item) and not PlayerHasPet(petid) then
 			return false
 		end
 		ret = true
@@ -201,8 +280,19 @@ end
 function ns.Loot.Status.Quest(id)
 	if not id or not ns.mobdb[id] then return end
 	local ret = nil
-	for _, questid in ns.Loot.IterQuests(id) do
+	for _, questid, item in ns.Loot.IterQuests(id) do
 		if not (C_QuestLog.IsQuestFlaggedCompleted(questid) or C_QuestLog.IsOnQuest(questid)) then
+			return false
+		end
+		ret = true
+	end
+	return ret
+end
+function ns.Loot.Status.Transmog(id)
+	if not id or not ns.mobdb[id] then return end
+	local ret = nil
+	for _, itemid, item in ns.Loot.IterRegularLoot(id) do
+		if not itemRestricted(item) and CanLearnAppearance(itemid) and not HasAppearance(itemid) then
 			return false
 		end
 		ret = true
@@ -349,20 +439,19 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 end
 
 local function requiresLabel(item)
-	if type(item) ~= "table" then
-		return ""
-	end
 	local ret = " "
-	-- todo: faction?
-	if item.covenant then
-		local data = C_Covenants.GetCovenantData(item.covenant)
-		-- local active = item.covenant == C_Covenants.GetActiveCovenantID()
-		if data then
-			ret = ret .. PARENS_TEMPLATE:format(COVENANT_COLORS[item.covenant]:WrapTextInColorCode(data.name))
+	if type(item) == "table" then
+		-- todo: faction?
+		if item.covenant then
+			local data = C_Covenants.GetCovenantData(item.covenant)
+			-- local active = item.covenant == C_Covenants.GetActiveCovenantID()
+			if data then
+				ret = ret .. PARENS_TEMPLATE:format(COVENANT_COLORS[item.covenant]:WrapTextInColorCode(data.name))
+			end
 		end
-	end
-	if item.class then
-		ret = ret .. PARENS_TEMPLATE:format(RAID_CLASS_COLORS[item.class]:WrapTextInColorCode(LOCALIZED_CLASS_NAMES_FEMALE[item.class]))
+		if item.class then
+			ret = ret .. PARENS_TEMPLATE:format(RAID_CLASS_COLORS[item.class]:WrapTextInColorCode(LOCALIZED_CLASS_NAMES_FEMALE[item.class]))
+		end
 	end
 	if itemIsKnowable(item) then
 		local known = itemIsKnown(item)
@@ -371,7 +460,7 @@ local function requiresLabel(item)
 			ret = ret .. CreateAtlasMarkup(known and "common-icon-checkmark" or "common-icon-redx")
 		end
 	end
-	return ret
+	return ret == " " and "" or ret
 end
 
 local Summary = {
@@ -690,13 +779,13 @@ do
 						button.RestrictionIcon:SetSize(20, 20)
 						button.RestrictionIcon:Show()
 					end
-					if itemIsKnowable(item) then
-						local known = itemIsKnown(item)
-						if known or not itemRestricted(item) then
-							-- don't show the x for restricted items
-							button.KnownIcon:SetAtlas(known and "common-icon-checkmark" or "common-icon-redx")
-							button.KnownIcon:Show()
-						end
+				end
+				if itemIsKnowable(item) then
+					local known = itemIsKnown(item)
+					if known or not itemRestricted(item) then
+						-- don't show the x for restricted items
+						button.KnownIcon:SetAtlas(known and "common-icon-checkmark" or "common-icon-redx")
+						button.KnownIcon:Show()
 					end
 				end
 			end
