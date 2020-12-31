@@ -329,11 +329,17 @@ do
 	local ItemsCellProvider, ItemsCellPrototype = LibQTip:CreateCellProvider(TextureCellProvider)
 	ItemsCellPrototype.atlas = "banker"
 	local TameableCellProvider, TameableCellPrototype = LibQTip:CreateCellProvider(TextureCellProvider)
-	function TameableCellPrototype:SetupTexture()
+	function TameableCellPrototype:SetupTexture(id)
 		-- ClassHall-Circle-Hunter? classicon-hunter? groupfinder-icon-class-hunter? GarrMission_ClassIcon-Hunter? GarrMission_ClassIcon-Hunter-BeastMastery? ClassTrial-Hunter-Ring?
 		-- Interface\\RaidFrame\\UI-RaidFrame-Pets
-		self.texture:SetTexture("Interface\\TargetingFrame\\UI-Classes-Circles")
-		self.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS["HUNTER"]))
+		local mob = id and ns.mobdb[id]
+		if mob and mob.tameable and type(mob.tameable) == "number" then
+			self.texture:SetTexture(mob.tameable)
+		else
+			self.texture:SetTexture("Interface\\TargetingFrame\\UI-Classes-Circles")
+			self.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS["HUNTER"]))
+		end
+
 	end
 	local AchievementCellProvider, AchievementCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	AchievementCellPrototype.atlas = "storyheader-cheevoicon"
@@ -504,7 +510,8 @@ do
 		end
 
 		if #sorted_mobs > 0 then
-			tooltip:AddHeader("Name", "Count", "Last Seen")
+			local headerLine, headerIndex = tooltip:AddHeader("Name", "Count", "Last Seen")
+			local tameableHeader = false
 
 			table.sort(sorted_mobs, mob_sorter)
 
@@ -523,6 +530,17 @@ do
 				tooltip:SetCellScript(index, 1, "OnEnter", show_mob_tooltip, id)
 				tooltip:SetCellScript(index, 1, "OnLeave", mob_leave, id)
 				if tameable then
+					if not tameableHeader then
+						-- self.texture:SetTexture("Interface\\TargetingFrame\\UI-Classes-Circles")
+						-- self.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS["HUNTER"]))
+						local hunter = CreateTextureMarkup(
+							"Interface\\TargetingFrame\\UI-Classes-Circles",
+							256, 256, -- filewidth, fileheight
+							20, 20, -- width, height
+							unpack(CLASS_ICON_TCOORDS["HUNTER"]) -- left, right, top, bottom
+						)
+						tooltip:SetCell(headerLine, headerIndex, hunter)
+					end
 					index, col = tooltip:SetCell(index, col, id, TameableCellProvider)
 				else
 					index, col = tooltip:SetCell(index, col, '')
