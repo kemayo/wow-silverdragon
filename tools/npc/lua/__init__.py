@@ -2,7 +2,7 @@
 
 import re
 
-from . import luaparse
+from . import parse
 
 
 def serialize(v, key=str, tablespace=False, trailingcomma=False):
@@ -53,8 +53,10 @@ def serialize(v, key=str, tablespace=False, trailingcomma=False):
         return "".join(out)
     if t == bool:
         return v and "true" or "false"
+    if t == parse.FunctionCall:
+        return f"{v.name}({serialize(v.args)[1:-1]})"
     return str(v)
 
 
 def loadtable(s):
-    return luaparse.parse(s.strip())
+    return parse.parse(s.strip())

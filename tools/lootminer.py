@@ -1,13 +1,13 @@
-
+import argparse
 import glob
 import re
 import sys
+import html
 import yaml
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
-
 
 import requests
 import requests_cache
@@ -35,6 +35,9 @@ def additemdata(item):
     # print("Fetching", url)
     r = requests.get(url)
 
+    if m := re.search(r'<meta property="og:title" content="([^"]+)">', r.text):
+        item["name"] = html.unescape(m.group(1))
+
     # quest
     # new Listview({
     #     template: 'quest',
@@ -55,7 +58,7 @@ def additemdata(item):
     if "pet" not in item and "Teaches you how to summon this companion." in r.text:
         item["pet"] = None
 
-    return len(item) == 1 and item[1] or item
+    return item
 
 
 def fetchnpc(npc):
@@ -92,6 +95,15 @@ def mergeloot(loot, new):
     return loot
 
 
+def cleanloot(item):
+    # get it down to what we expect in the module
+    if "name" in item:
+        del item["name"]
+    if len(item) == 1:
+        return item[1]
+    return item
+
+
 def update(f):
     output = []
     with open(f, 'r') as infile:
@@ -116,7 +128,7 @@ def update(f):
             if remote and "loot" in remote and len(remote["loot"]) > 0:
                 mergeloot(loot, remote["loot"])
             if len(loot):
-                data["loot"] = [additemdata(item) for item in loot]
+                data["loot"] = [cleanloot(additemdata(item).copy()) for item in loot]
 
             if "family" in remote and remote["family"] in petfamilies:
                 data["tameable"] = petfamilies[remote["family"]][1]
@@ -127,10 +139,51 @@ def update(f):
         outfile.writelines(output)
 
 
+def export(inf, outf):
+    output = []
+    with open(inf, 'r') as infile:
+        for line in infile:
+            match = re.search(r"\[(\d+)\] = ({.+}),$", line)
+            if not match:
+                continue
+            npcid = int(match.group(1))
+            try:
+                data = lua.loadtable(match.group(2))
+            except SyntaxError as e:
+                print("Skipping", npcid)
+                continue
+            print("Loading", npcid, data["name"])
+            remote = fetchnpc(int(npcid))
+
+            loot = data.get("loot", [])
+            if remote and "loot" in remote and len(remote["loot"]) > 0:
+                mergeloot(loot, remote["loot"])
+            if len(loot):
+                data["loot"] = [additemdata(item) for item in loot]
+
+            if "family" in remote and remote["family"] in petfamilies:
+                data["tameable"] = petfamilies[remote["family"]]
+
+            output.append(f"[{npcid}]={lua.serialize(data, key=__keysort, trailingcomma=True)},\n")
+
+    with open(outf, 'w') as outfile:
+        outfile.writelines(output)
+
+
 if __name__ == '__main__':
     requests_cache.install_cache()
     # print(fetchnpc(50358))
-    for f in glob.glob(sys.argv[1], recursive=True):
-        print("Updating", f)
-        update(f)
+
+    parser = argparse.ArgumentParser(description="Strip data out of wowhead")
+    parser.add_argument('input', metavar="INPUT", type=str, help="Module file to use as input (wildcards work)")
+    parser.add_argument('--export', nargs="?", type=str, help="Export loot data to another file rather than updating in place")
+    args = parser.parse_args()
+
+    for f in glob.glob(args.input, recursive=True):
+        if args.export:
+            print("Exporting", f)
+            export(f, args.export)
+        else:
+            print("Updating", f)
+            update(f)
 

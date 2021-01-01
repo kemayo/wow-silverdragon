@@ -12,6 +12,24 @@ expressions as table values. (e.g. `t[var]` will just error.)
 
 """
 
+
+class Literal:
+    def __init__(self, content):
+        self.content = [content]
+    def __repr__(self):
+        return ''.join(self.content)
+    def extend(self, content):
+        self.content.extend(content)
+
+
+class FunctionCall:
+    def __init__(self, name, args):
+        self.name = name
+        self.args = args
+    def __repr__(self):
+        return repr(self.name) + "(" + repr(self.args) + ")"
+
+
 # Lexer
 
 tokens = (
@@ -19,11 +37,15 @@ tokens = (
     "CLBRACE",
     "OPBRAK",
     "CLBRAK",
+    "OPPAREN",
+    "CLPAREN",
     "STRING",
     "NAME",
     "NUMBER",
     "EQUALS",
+    "DOT",
     "COMMA",
+    "COLON",
     "SEMICOLON",
     "BOOL",
     "NIL",
@@ -33,9 +55,13 @@ t_OPBRACE = r"{"
 t_CLBRACE = r"}"
 t_OPBRAK = r"\["
 t_CLBRAK = r"\]"
+t_OPPAREN = r"\("
+t_CLPAREN = r"\)"
 t_NAME = r"[A-Za-z_][A-Za-z_0-9]*"
 t_EQUALS = r"="
+t_DOT = r"\."
 t_COMMA = r","
+t_COLON = r":"
 t_SEMICOLON = r";"
 
 t_ignore = r" "
@@ -86,6 +112,20 @@ lexer = lex.lex()
 
 
 # Parser
+
+
+def p_exp(p):
+    """exp : NIL
+           | BOOL
+           | NUMBER
+           | STRING
+           | tableconstructor
+           | prefixexp
+    """
+    # Note: incomplete, both in accepted values and in handling-of-values.
+    # Most importantly: prefixexp isn't handled, so this deals solely with
+    # literals and really simple variable references.
+    p[0] = p[1]
 
 
 def p_tableconstructor(p):
@@ -160,16 +200,62 @@ def p_field(p):
         p[0] = (None, p[1])
 
 
-def p_exp(p):
-    """exp : NIL
-           | BOOL
-           | NUMBER
-           | STRING
-           | tableconstructor
+def p_var(p):
+    """var : var DOT NAME
+           | NAME
     """
-    # Note: incomplete, both in accepted values and in handling-of-values
-    # Most importantly: NAME isn't handled, so this deals solely with literals
-    p[0] = p[1]
+    if len(p) == 2:
+        p[0] = Literal(p[1])
+    else:
+        p[1].extend(p[2:])
+        p[0] = p[1]
+
+
+def p_prefixexp(p):
+    """prefixexp : var
+                 | functioncall
+                 | OPPAREN exp CLPAREN
+    """
+    if p[1] == "(":
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
+
+
+def p_functioncall(p):
+    """functioncall : prefixexp args
+                    | prefixexp COLON NAME args
+    """
+    if p[2] == ":":
+        p[1].extend((':', p[3]))
+        p[0] = FunctionCall(p[1], p[4])
+    else:
+        p[0] = FunctionCall(p[1], p[2])
+
+
+def p_args(p):
+    """args : OPPAREN explist CLPAREN
+            | tableconstructor
+            | STRING
+    """
+    if p[1] == "(":
+        p[0] = p[2]
+    else:
+        p[0] = [p[1]]
+
+
+def p_explist(p):
+    """explist : explist COMMA exp
+               | exp
+               |
+    """
+    if len(p) == 1:
+        p[0] = []
+    if len(p) == 2:
+        p[0] = [p[1]]
+    if len(p) == 4:
+        p[1].append(p[3])
+        p[0] = p[1]
 
 
 def p_error(p):
@@ -180,9 +266,9 @@ def p_error(p):
 parser = yacc.yacc()
 
 
-def parse(s):
+def parse(s, *args, **kwargs):
     parser.error = 0
-    p = parser.parse(s)
+    p = parser.parse(s, *args, **kwargs)
     if parser.error:
         return None
     return p
@@ -190,11 +276,12 @@ def parse(s):
 
 if __name__ == "__main__":
     # s = '{23.4, "pony express\\" ri\'de", \'Test\\\'s fun\', 4, "apple", fred=400, ["foo"]=999, [90]="beauty", {1,2}, p={2},}'
-    s = r'{[61] = {name="Thuros \"Fred\" Lightfingers",["creature_type"]="Humanoid",level=9,locations={[30]={50408320,50408280},},},loot={},}'
+    # s = r'{[61] = {name="Thuros \"Fred\" Lightfingers",["creature_type"]="Humanoid",level=9,locations={[30]={50408320,50408280},},},loot={},test=Enum.foo.bar}'
+    s = r'{a=b.c.d, q={}, qq={1,2,3}, x=aa.y:frog{z, zz, "hi", {a=b()}, t=22}}'
     print(s)
 
     lexer.input(s)
     for token in lexer:
         print(token)
 
-    print(parse(s))
+    print(parse(s, debug=False))
