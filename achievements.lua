@@ -421,6 +421,7 @@ local achievements = {
 	},
 	[13691] = {}, -- I Thought You Said They'd Be Rare (Nazjatar)
 	[14159] = {}, -- Combating the Corruption (Assaults)
+	[14276] = {}, -- It's Always Sinny in Revendreth
 	[14307] = { -- Adventurer of Bastion
 		[158659] = 50582, -- Herculon
 		[160721] = 50596, -- Fallen Acolyte Erisne
