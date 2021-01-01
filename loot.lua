@@ -394,6 +394,7 @@ local Details = {
 				(active and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
 			)
 		end
+		tooltip:Show()
 	end,
 }
 ns.Loot.Details = Details
