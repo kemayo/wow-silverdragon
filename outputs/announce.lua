@@ -356,15 +356,18 @@ end
 
 function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 	if is_dead and not self.db.profile.dead then
+		Debug("ShouldAnnounce", false, "dead")
 		return false
 	end
 	if core.db.global.always[id] then
 		-- If you've manually added a mob, bypass any other checks
+		Debug("ShouldAnnounce", true, "always")
 		return true
 	end
 	if not self.db.profile.already_drop and ns.Loot.Status(id) == true then
 		-- hide mobs which have a mount/pet/toy which you already own
 		-- this means there's knowable loot, and it's all known
+		Debug("ShouldAnnounce", false, "already got loot")
 		return false
 	end
 	if not self.db.profile.already then
@@ -372,21 +375,26 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		local quest, achievement, by_alt = ns:CompletionStatus(id)
 		if by_alt and not self.db.profile.already_alt then
 			-- an alt has completed the achievement, and we don't want to know about that
+			Debug("ShouldAnnounce", false, "alt got achievement")
 			return false
 		end
 		if source == "vignette" then
 			-- The vignette's presence implies no quest completion
+			Debug("ShouldAnnounce", true, "vignette implies quest")
 			return true
 		end
 		if quest ~= nil then
+			Debug("ShouldAnnounce", not quest, "quest")
 			return not quest
 		end
 		if achievement ~= nil then
 			-- can just fall back on achievement
+			Debug("ShouldAnnounce", not achievement, "achievement")
 			return not achievement
 		end
 	end
 
+	Debug("ShouldAnnounce", true, "fallback")
 	return true
 end
 
