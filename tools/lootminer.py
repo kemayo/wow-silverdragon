@@ -139,8 +139,8 @@ def update(f):
         outfile.writelines(output)
 
 
-def export(inf, outf):
-    output = []
+def export(inf, outf, hn=False):
+    mobs = {}
     with open(inf, 'r') as infile:
         for line in infile:
             match = re.search(r"\[(\d+)\] = ({.+}),$", line)
@@ -164,7 +164,40 @@ def export(inf, outf):
             if "family" in remote and remote["family"] in petfamilies:
                 data["tameable"] = petfamilies[remote["family"]]
 
-            output.append(f"[{npcid}]={lua.serialize(data, key=__keysort, trailingcomma=True)},\n")
+            mobs[npcid] = data
+
+    if hn:
+        output = []
+        zones = {}
+        for npcid in mobs:
+            data = mobs[npcid]
+            for zone in data["locations"]:
+                if zone not in zones:
+                    zones[zone] = []
+                zones[zone].append(npcid)
+        for zone in zones:
+            output.append(f"ns.RegisterPoints({zone}, {{\n")
+            for npcid in sorted(zones[zone], key=lambda npcid: mobs[npcid]["name"]):
+                data = mobs[npcid]
+                coords = data["locations"][zone] or [""]
+                for coord in coords:
+                    output.extend((
+                        f"\t[{coord}] = {{ -- {data['name']}{len(coords) > 1 and f' +{len(coords)}' or ''}\n",
+                        f"\t\tquest={data.get('quest', 'nil')},\n",
+                        f"\t\tnpc={npcid},\n",
+                    ))
+                    if data.get("loot", []):
+                        output.append("\t\tloot={\n")
+                        for item in data.get("loot", []):
+                            name = item["name"]
+                            cleaned = cleanloot(item.copy())
+                            output.append(f"\t\t\t{lua.serialize(cleaned, key=__keysort, trailingcomma=True)}, -- {item['name']}\n")
+                        output.append("\t\t},\n")
+                    output.append("\t},\n")
+                    break
+            output.append("})\n")
+    else:
+        output = [f"[{npcid}]={lua.serialize(mobs[npcid], key=__keysort, trailingcomma=True)},\n" for npcid in mobs]
 
     with open(outf, 'w') as outfile:
         outfile.writelines(output)
@@ -177,12 +210,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Strip data out of wowhead")
     parser.add_argument('input', metavar="INPUT", type=str, help="Module file to use as input (wildcards work)")
     parser.add_argument('--export', nargs="?", type=str, help="Export loot data to another file rather than updating in place")
+    parser.add_argument('--export_handynotes', action="store_true", default=False, help="Export in my handynotes format")
     args = parser.parse_args()
 
     for f in glob.glob(args.input, recursive=True):
         if args.export:
             print("Exporting", f)
-            export(f, args.export)
+            export(f, args.export, hn=args.export_handynotes)
         else:
             print("Updating", f)
             update(f)
