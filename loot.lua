@@ -248,10 +248,12 @@ function ns.Loot.Status.Toy(id)
 	if not id or not ns.mobdb[id] then return end
 	local ret = nil
 	for _, toyid, item in ns.Loot.IterToys(id) do
-		if not itemRestricted(item) and not PlayerHasToy(toyid) then
-			return false
+		if not itemRestricted(item) then
+			if not PlayerHasToy(toyid) then
+				return false
+			end
+			ret = true
 		end
-		ret = true
 	end
 	return ret
 end
@@ -259,10 +261,12 @@ function ns.Loot.Status.Mount(id)
 	if not id or not ns.mobdb[id] then return end
 	local ret = nil
 	for _, mountid, item in ns.Loot.IterMounts(id) do
-		if not itemRestricted(item) and not PlayerHasMount(mountid) then
-			return false
+		if not itemRestricted(item) then
+			if not not PlayerHasMount(mountid) then
+				return false
+			end
+			ret = true
 		end
-		ret = true
 	end
 	return ret
 end
@@ -270,10 +274,12 @@ function ns.Loot.Status.Pet(id)
 	if not id or not ns.mobdb[id] then return end
 	local ret = nil
 	for _, petid, item in ns.Loot.IterPets(id) do
-		if not itemRestricted(item) and not PlayerHasPet(petid) then
-			return false
+		if not itemRestricted(item) then
+			if not PlayerHasPet(petid) then
+				return false
+			end
+			ret = true
 		end
-		ret = true
 	end
 	return ret
 end
@@ -292,10 +298,12 @@ function ns.Loot.Status.Transmog(id)
 	if not id or not ns.mobdb[id] then return end
 	local ret = nil
 	for _, itemid, item in ns.Loot.IterRegularLoot(id) do
-		if not itemRestricted(item) and CanLearnAppearance(itemid) and not HasAppearance(itemid) then
-			return false
+		if not itemRestricted(item) and CanLearnAppearance(itemid) then
+			if not HasAppearance(itemid) then
+				return false
+			end
+			ret = true
 		end
-		ret = true
 	end
 	return ret
 end
