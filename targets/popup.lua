@@ -87,6 +87,7 @@ function module:RefreshLootData(popup)
 	popup.status:SetText("")
 	-- TODO: know about loot?
 	popup.lootIcon:Hide()
+	popup.raidIcon:Hide()
 end
 
 local models = {
