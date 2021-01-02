@@ -1,5 +1,14 @@
 # Changelog
 
+## Changed in v90002.15
+
+* Transmog appearances can now be counted as part of mob completion. I've disabled this by default for now, but it's in "settings > outputs > ...include transmog appearances" as a modifier to the existing "got the loot" setting.
+* More updates to loot data
+* Add It's Always Sinny In Revendreth to tracked achievements
+* Fix a number of mobs appearing in Durotar that shouldn't have
+* Fix restricted items (covenant/class-specific) counting towards loot completion if you couldn't get them
+* Fix restriction labels on the popup tooltip going outside the tooltip borders
+
 ## Changed in v90002.14
 
 * A huge amount of loot has been added, across all expansions. I've only added unique-to-that-mob loot
