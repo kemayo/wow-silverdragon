@@ -32,7 +32,7 @@ def serialize(v, key=str, tablespace=False, trailingcomma=False):
                 # keys start at 1, leave out showing those keys while they're
                 # in sequence.
                 # TODO: could verify that *all* numeric keys are in sequence?
-                if lastindex and lastindex.isnumeric() and int(lastindex) == int(k) - 1:
+                if not brokesequence and lastindex and lastindex.isnumeric() and int(lastindex) == int(k) - 1:
                     pass
                 elif not lastindex and k == "1":
                     pass
