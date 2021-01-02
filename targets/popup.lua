@@ -72,7 +72,7 @@ function module:RefreshMobData(popup)
 	else
 		popup.lootIcon:Hide()
 	end
-	if ns.Loot.Status(data.id) then
+	if ns.Loot.Status(data.id, true) then
 		-- all loot is collected
 		popup.lootIcon.complete:Show()
 	else

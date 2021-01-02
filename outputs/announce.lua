@@ -63,6 +63,7 @@ function module:OnInitialize()
 			dead = true,
 			already = false,
 			already_drop = true,
+			already_transmog = false,
 			already_alt = true,
 			sink_opts = {},
 			channel = "Master",
@@ -145,6 +146,7 @@ function module:OnInitialize()
 				args = {
 					already = toggle("Already found", "Announce when we see rares we've already killed / achieved (if known)", 0),
 					already_drop = toggle("Got the loot", "Announce when we see rares which drop a mount / toy / pet you already have", 10),
+					already_transmog = toggle("...include transmog as loot", "Count transmog appearances as knowable loot for the previous option?", 11),
 					already_alt = toggle("Completed by an alt", "Announce when we see rares for an achievement that the current character doesn't have, but an alt has completed already", 20),
 					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not, so this isn't entirely reliable.", 30),
 					instances = toggle("Instances", "Show announcements while in an instance", 50),
@@ -178,6 +180,7 @@ function module:OnInitialize()
 					worldedge = faker(160821, "Worldedge Gorger (mount)", 1525, 0.5, 0.5),
 					tarahna = faker(126900, "Instructor Tarahna (multi-toy)", 882, 0.5, 0.5),
 					nerissa = faker(162690, "Nerissa Heartless (mount)", 1536, 0.5, 0.5),
+					-- faeflayer = faker(171688, "Faeflayer", 1536, 0.5, 0.5),
 					scrapking = faker(151625, "Scrap King (loot)", 1462, 0.5, 0.5),
 					kash = faker(159105, "Collector Kash (lots of loot)", 1536, 0.5, 0.5),
 					chest = {
@@ -364,7 +367,7 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		Debug("ShouldAnnounce", true, "always")
 		return true
 	end
-	if not self.db.profile.already_drop and ns.Loot.Status(id) == true then
+	if not self.db.profile.already_drop and ns.Loot.Status(id, self.db.profile.already_transmog) == true then
 		-- hide mobs which have a mount/pet/toy which you already own
 		-- this means there's knowable loot, and it's all known
 		Debug("ShouldAnnounce", false, "already got loot")

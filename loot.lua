@@ -227,7 +227,7 @@ function ns.Loot.Cache(id)
 	end
 end
 
-ns.Loot.Status = setmetatable({}, {__call = function(_, id)
+ns.Loot.Status = setmetatable({}, {__call = function(_, id, include_transmog)
 	-- returns nil if there's no knowable loot
 	-- returns true if all knowable loot is collected
 	-- returns false if not all knowable loot is collected
@@ -239,7 +239,7 @@ ns.Loot.Status = setmetatable({}, {__call = function(_, id)
 	local toy = ns.Loot.Status.Toy(id)
 	local pet = ns.Loot.Status.Pet(id)
 	local quest = ns.Loot.Status.Quest(id)
-	local transmog = ns.Loot.Status.Transmog(id)
+	local transmog = include_transmog and ns.Loot.Status.Transmog(id) or nil
 	if (mount == nil and toy == nil and pet == nil and quest == nil and transmog == nil) then
 		return nil
 	end
