@@ -13,6 +13,13 @@ import requests
 import requests_cache
 
 from npc import lua, petfamilies
+try:
+    from zones import zones
+except ImportError:
+    # zones.py should be generated from a CSV dump of the UIMap table
+    # s/^([^,]+),(\d+),(\d+),.+$/$2: ("$1", ($3, $2)),/g
+    # s/^"([^"]+)",(\d+),(\d+),.+$/$2: ("$1", ($3, $2)),/g
+    pass
 
 
 __start = ("name", "mount", "pet", "toy")
@@ -152,6 +159,7 @@ def export(inf, outf, hn=False):
             except SyntaxError as e:
                 print("Skipping", npcid)
                 continue
+
             print("Loading", npcid, data["name"])
             remote = fetchnpc(int(npcid))
 
@@ -167,19 +175,22 @@ def export(inf, outf, hn=False):
             mobs[npcid] = data
 
     if hn:
-        output = []
-        zones = {}
+        output = ["local myname, ns = ...\n\n"]
+        mobzones = {}
         for npcid in mobs:
             data = mobs[npcid]
+            print(data)
             for zone in data["locations"]:
-                if zone not in zones:
-                    zones[zone] = []
-                zones[zone].append(npcid)
-        for zone in zones:
-            output.append(f"ns.RegisterPoints({zone}, {{\n")
-            for npcid in sorted(zones[zone], key=lambda npcid: mobs[npcid]["name"]):
+                if zone not in mobzones:
+                    mobzones[zone] = []
+                mobzones[zone].append(npcid)
+        for zone in sorted(mobzones, key=lambda z: zones[z][1]):
+            output.append(f"ns.RegisterPoints({zone}, {{ -- {zones[zone][0]}\n")
+            for npcid in sorted(mobzones[zone], key=lambda npcid: mobs[npcid]["name"]):
                 data = mobs[npcid]
-                coords = data["locations"][zone] or [""]
+                coords = data["locations"][zone]
+                if not coords:
+                    continue
                 for coord in coords:
                     output.extend((
                         f"\t[{coord}] = {{ -- {data['name']}{len(coords) > 1 and f' +{len(coords)}' or ''}\n",
