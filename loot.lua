@@ -50,11 +50,15 @@ local canLearnCache = {}
 local function CanLearnAppearance(itemLinkOrID)
 	local itemID = GetItemInfoInstant(itemLinkOrID)
 	if not itemID then return end
-	if canLearnCache[itemID] then
+	if canLearnCache[itemID] ~= nil then
 		return canLearnCache[itemID]
 	end
 	-- First, is this a valid source at all?
 	local canBeChanged, noChangeReason, canBeSource, noSourceReason = C_Transmog.GetItemInfo(itemID)
+	if canBeSource == nil then
+		-- data loading, don't cache this
+		return
+	end
 	if not canBeSource then
 		canLearnCache[itemID] = false
 		return false
@@ -240,7 +244,8 @@ ns.Loot.Status = setmetatable({}, {__call = function(_, id, include_transmog)
 	local toy = ns.Loot.Status.Toy(id)
 	local pet = ns.Loot.Status.Pet(id)
 	local quest = ns.Loot.Status.Quest(id)
-	local transmog = include_transmog and ns.Loot.Status.Transmog(id) or nil
+	local transmog
+	if include_transmog then transmog = ns.Loot.Status.Transmog(id) end
 	if (mount == nil and toy == nil and pet == nil and quest == nil and transmog == nil) then
 		return nil
 	end
