@@ -100,6 +100,7 @@ local function HasAppearance(itemLinkOrID)
 			return true
 		end
 	end
+	return false
 end
 
 local function PlayerHasMount(mountid)
