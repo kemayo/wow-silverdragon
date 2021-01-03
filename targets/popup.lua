@@ -13,6 +13,11 @@ local escapes = core.escapes
 function module:ApplyLook(popup, look)
 	-- Many values cribbed from AlertFrameSystem.xml
 	(self.Looks[look] or self.Looks.SilverDragon)(self, popup, self.db.profile.style_options[look])
+	popup.look = look
+end
+function module:ResetLook(popup)
+	if not (popup.look and self.LookReset[popup.look]) then return end
+	self.LookReset[popup.look](self, popup, self.db.profile.style_options[popup.look])
 end
 
 function module:ShowFrame(data)

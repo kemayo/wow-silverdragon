@@ -9,15 +9,6 @@ function module.Looks:Minimal(popup, config)
     popup:SetBackdrop({
         edgeFile = [[Interface\Buttons\WHITE8X8]], bgFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1
     })
-    local r, g, b, a = unpack(config.background)
-    popup:SetBackdropColor(r, g, b, a)
-    popup.modelbg.animIn:SetToAlpha(a * 0.5)
-
-    if config.classcolor then
-        popup:SetBackdropBorderColor(RAID_CLASS_COLORS[select(2, UnitClass("player"))]:GetRGB())
-    else
-        popup:SetBackdropBorderColor(0, 0, 0)
-    end
 
     popup.title:SetFont([[Fonts\ARIALN.TTF]], 12, "OUTLINE")
     popup.source:SetFont([[Fonts\ARIALN.TTF]], 12, "OUTLINE")
@@ -80,15 +71,23 @@ module:RegisterLookConfig("Minimal", {
         type = "toggle",
         name = "Class colored border",
         desc = "Color the border of the popup by your class color",
-        arg = true,
     },
     background = {
         type = "color",
         name = "Background color",
         hasAlpha = true,
-        arg = true,
     },
 }, {
     classcolor = false,
     background = {0, 0, 0, 0.7},
-})
+}, function(_, popup, config)
+    local r, g, b, a = unpack(config.background)
+    popup:SetBackdropColor(r, g, b, a)
+    popup.modelbg.animIn:SetToAlpha(a * 0.5)
+
+    if config.classcolor then
+        popup:SetBackdropBorderColor(RAID_CLASS_COLORS[select(2, UnitClass("player"))]:GetRGB())
+    else
+        popup:SetBackdropBorderColor(0, 0, 0)
+    end
+end)

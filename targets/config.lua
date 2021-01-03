@@ -173,7 +173,9 @@ function module:RegisterConfig()
 							value = {...}
 						end
 						db.style_options[info[#info - 1]][info[#info]] = value
-						refreshPopup(info)
+						if self.popup then
+							self:ResetLook(self.popup)
+						end
 					end,
 					args = module.LookConfig,
 				},
@@ -183,7 +185,7 @@ function module:RegisterConfig()
 	module.LookConfig.about = config.desc("Some styles have options. Change those here.", 0)
 end
 
-function module:RegisterLookConfig(look, config, defaults)
+function module:RegisterLookConfig(look, config, defaults, reset)
 	self.LookConfig[look] = {
 		type = "group",
 		name = look:gsub("_", ": "),
@@ -196,4 +198,5 @@ function module:RegisterLookConfig(look, config, defaults)
 			self.db:RegisterDefaults(self.db.defaults)
 		end
 	end
+	self.LookReset[look] = reset
 end

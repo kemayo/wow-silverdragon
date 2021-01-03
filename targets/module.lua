@@ -9,6 +9,7 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 module.Looks = {}
 module.LookConfig = {}
+module.LookReset = {}
 module.defaults = {
 	profile = {
 		show = true,
