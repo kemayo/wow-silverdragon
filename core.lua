@@ -57,8 +57,8 @@ addon.escapes = {
 	-- |A:atlas:height:width[:offsetX:offsetY]|a
 	-- leftClick = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:19:11:-1:0:512:512:9:67:227:306|t]],
 	-- rightClick = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:20:12:0:-1:512:512:9:66:332:411|t]],
-	leftClick = CreateAtlasMarkup("newplayertutorial-icon-mouse-leftbutton", 15, 18),
-	rightClick = CreateAtlasMarkup("newplayertutorial-icon-mouse-rightbutton", 15, 18),
+	leftClick = CreateAtlasMarkup("newplayertutorial-icon-mouse-leftbutton", 12, 15),
+	rightClick = CreateAtlasMarkup("newplayertutorial-icon-mouse-rightbutton", 12, 15),
 	keyDown = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:0:0:0:-1:512:512:9:66:437:490|t]],
 	green = _G.GREEN_FONT_COLOR_CODE,
 	red = _G.RED_FONT_COLOR_CODE,
