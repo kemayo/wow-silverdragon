@@ -42,6 +42,7 @@ outputs\marker.lua
 
 targets\module.lua
 targets\popup.lua
+targets\config.lua
 targets\looks\looks.xml
 
 mobs.lua
