@@ -43,7 +43,8 @@ end
 
 module.queue = {}
 module.stack = {}
-function module:Enqueue(data, front)
+module.overflow = {}
+function module:Enqueue(data)
 	for _, data2 in ipairs(self.queue) do
 		if data.type == data2.type and data.id == data2.id then
 			-- don't double up on the queue
@@ -56,11 +57,7 @@ function module:Enqueue(data, front)
 			return
 		end
 	end
-	if front then
-		table.insert(self.queue, data)
-	else
-		table.insert(self.queue, 1, data)
-	end
+	table.insert(self.queue, data)
 	if InCombatLockdown() then
 		Debug("Queueing popup for out-of-combat")
 		data.unit = nil
@@ -71,9 +68,20 @@ end
 
 function module:ProcessQueue()
 	if module.PAUSED or InCombatLockdown() then return end
-	while #self.queue > 0 and #self.stack < self.db.profile.stacksize do
+	while #self.queue > 0 do
 		local data = table.remove(self.queue)
 		Debug("Showing queued popup")
+		table.insert(self.stack, 1, self:ShowFrame(data))
+		-- overflow off the end:
+		if #self.stack > self.db.profile.stacksize then
+			local stacked = table.remove(self.stack)
+			table.insert(module.overflow, 1, stacked.data)
+			stacked:Hide()
+		end
+	end
+	while #self.overflow > 0 and #self.stack < self.db.profile.stacksize do
+		-- overflow data was previously pushed off the end of the stack, and so should be put back in at the end
+		local data = table.remove(self.overflow)
 		table.insert(self.stack, self:ShowFrame(data))
 	end
 	self:Reflow()
