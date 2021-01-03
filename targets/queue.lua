@@ -82,11 +82,10 @@ end
 function module:Reflow()
 	if module.PAUSED or InCombatLockdown() then return end
 	for i, popup in ipairs(self.stack) do
-		popup:ClearAllPoints() -- in case we've just been dragged around
+		popup:ClearAllPoints()
 		if i == 1 then
 			popup:SetPoint("CENTER", self.anchor, "CENTER")
 		else
-			-- TODO: directional
 			local _, y = self.anchor:GetCenter()
 			local s = self.anchor:GetScale()
 			if (y * s) < (UIParent:GetHeight() / 2) then

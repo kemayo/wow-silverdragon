@@ -401,6 +401,10 @@ function PopupMixin:HideWhenPossible(automatic)
 end
 
 function PopupMixin:Reset()
+	-- note to self: this gets called as part of a chain from OnHide, so we
+	-- can't do anything which might trip in-combat lockdowns here.
+	-- In particular, this means that anything which needs to use this post-
+	-- reset will have to ClearAllPoints manually
 	self.data = nil
 
 	self.glow.animIn:Stop()
@@ -416,8 +420,6 @@ function PopupMixin:Reset()
 
 	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-
-	self:ClearAllPoints()
 end
 
 PopupMixin.scripts = {
