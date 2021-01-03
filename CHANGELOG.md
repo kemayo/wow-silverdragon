@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v90002.15.1
+
+* The broker tooltip "regular loot" icon will now show a checkmark if you have all the quests/appearances your character can get from that loot
+* Fix some mounts incorrectly showing as collected
+* Fix Tomb Burster questid
+
 ## Changed in v90002.15
 
 * Transmog appearances can now be counted as part of mob completion. I've disabled this by default for now, but it's in "settings > outputs > ...include transmog appearances" as a modifier to the existing "got the loot" setting.
