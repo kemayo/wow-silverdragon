@@ -143,6 +143,7 @@ local itemIsKnown = function(item)
 end
 
 ns.Loot = {}
+-- _G.SDLoot = ns.Loot
 
 function ns.Loot.HasLoot(id)
 	if not (id and ns.mobdb[id]) then
@@ -269,7 +270,7 @@ function ns.Loot.Status.Mount(id)
 	local ret = nil
 	for _, mountid, item in ns.Loot.IterMounts(id) do
 		if not itemRestricted(item) then
-			if not not PlayerHasMount(mountid) then
+			if not PlayerHasMount(mountid) then
 				return false
 			end
 			ret = true
