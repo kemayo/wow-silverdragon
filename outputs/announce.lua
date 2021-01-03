@@ -447,7 +447,7 @@ local channel_cvars = {
 	Dialog = "Sound_EnableDialog",
 }
 local delays = {
-	["Ikiss: Trinkets"] = 7,
+	["Ikiss: Trinkets"] = 5.7,
 }
 local nowplaying
 function module:PlaySound(s)
