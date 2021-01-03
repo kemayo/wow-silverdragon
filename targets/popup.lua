@@ -168,8 +168,7 @@ function module:SizeModel(popup, offset, borders)
 end
 
 -- copy the Button metatable on to this, because otherwise we lose all regular frame methods
-local PopupClass = setmetatable({}, getmetatable(CreateFrame("Button")))
-local PopupClassMetatable = {__index = PopupClass}
+local PopupMixin = {}
 
 function module:CreatePopup()
 	-- Set up the frame
@@ -182,8 +181,8 @@ function module:CreatePopup()
 		end
 	end
 	local popup = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
+	Mixin(popup, PopupMixin)
 	module.popup = popup
-	setmetatable(popup, PopupClassMetatable)
 
 	popup:SetSize(276, 96)
 	-- TODO: a stack
@@ -372,12 +371,12 @@ function CreateAnimationAlpha(animationGroup, fromAlpha, toAlpha, duration, star
 	return animation
 end
 
-function PopupClass:SetRaidIcon(icon)
+function PopupMixin:SetRaidIcon(icon)
 	SetRaidTargetIconTexture(self.raidIcon, icon)
 	self.raidIcon:Show()
 end
 
-function PopupClass:DoIgnore()
+function PopupMixin:DoIgnore()
 	if not (self.data and self.data.id) then return end
 	if self.data.type == "loot" then
 		local vignette = core:GetModule("Scan_Vignettes", true)
@@ -389,7 +388,7 @@ function PopupClass:DoIgnore()
 	end
 end
 
-function PopupClass:HideWhenPossible(automatic)
+function PopupMixin:HideWhenPossible(automatic)
 	-- this is for animations that want to hide the popup itself, since it can't be touched in-combat
 	self.automaticClose = automatic
 	if InCombatLockdown() then
@@ -399,7 +398,7 @@ function PopupClass:HideWhenPossible(automatic)
 	end
 end
 
-PopupClass.scripts = {
+PopupMixin.scripts = {
 	OnEvent = function(self, event, ...)
 		self[event](self, event, ...)
 	end,
@@ -585,7 +584,7 @@ PopupClass.scripts = {
 		self:GetParent():HideWhenPossible()
 	end,
 }
-function PopupClass:COMBAT_LOG_EVENT_UNFILTERED()
+function PopupMixin:COMBAT_LOG_EVENT_UNFILTERED()
 	-- timeStamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags
 	local _, subevent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
 	if subevent ~= "UNIT_DIED" then
@@ -604,7 +603,7 @@ function PopupClass:COMBAT_LOG_EVENT_UNFILTERED()
 		end
 	end
 end
-function PopupClass:PLAYER_REGEN_ENABLED()
+function PopupMixin:PLAYER_REGEN_ENABLED()
 	if self.waitingToHide then
 		self:Hide()
 	end
