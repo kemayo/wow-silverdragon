@@ -9,7 +9,7 @@ function module:OnInitialize()
 		[152517] = {name="Deadsoul Lifetaker",locations={[1705]={},},},
 		[152612] = {name="Subjugator Klontzas",locations={[1705]={},},},
 		[154330] = {name="Eternas the Tormentor",locations={[1543]={19204600},},loot={{183407,pet=3037,}},quest=57509,},
-		[155779] = {name="Tomb Burster",locations={[1525]={43007910},},loot={{180584,pet=2891,},179613,179939},quest=56877,tameable=132196,},
+		[155779] = {name="Tomb Burster",locations={[1525]={43007910},},loot={{180584,pet=2891,},179613,179939},quest=61231,tameable=132196,},
 		[156134] = {name="Ghastly Charger",locations={[1705]={},},},
 		[156142] = {name="Seeker of Souls",locations={[1705]={},},},
 		[156158] = {name="Adjutant Felipos",locations={[1705]={},},},
