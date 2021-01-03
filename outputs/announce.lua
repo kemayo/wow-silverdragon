@@ -449,12 +449,18 @@ local channel_cvars = {
 local delays = {
 	["Ikiss: Trinkets"] = 7,
 }
+local nowplaying
 function module:PlaySound(s)
 	-- Arg is a table, to make scheduling the loops easier. I am lazy.
 	Debug("Playing sound", s.soundfile, s.loops)
 	-- boring check:
 	if s and s.handle then
 		StopSound(s.handle)
+		if s.drumshandle then
+			StopSound(s.drumshandle)
+		end
+		s.handle = nil
+		s.drumshandle = nil
 	end
 	if not s.loops or s.loops == 0 then
 		if cvar_overrides and s.cvars then
@@ -463,6 +469,7 @@ function module:PlaySound(s)
 			end
 			cvar_overrides = false
 		end
+		nowplaying = false
 		return
 	end
 	if not cvar_overrides then
@@ -492,14 +499,17 @@ function module:PlaySound(s)
 		s.handle = handle
 	end
 	if drums then
-		PlaySoundFile(LSM:Fetch("sound", "War Drums"), self.db.profile.channel)
+		local _, handle = PlaySoundFile(LSM:Fetch("sound", "War Drums"), self.db.profile.channel)
+		s.drumshandle = handle
 	end
 	s.loops = s.loops - 1
 	-- we guarantee one callback, in case we need to do cleanup
 	self:ScheduleTimer("PlaySound", delays[s.soundfile] or 4.5, s)
+	nowplaying = true
 end
 core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zone, x, y, dead, source)
 	if not LSM then return end
+	if nowplaying then return end
 	if source:match("^sync") then
 		local channel, player = source:match("sync:(.+):(.+)")
 		if channel == "GUILD" and not module.db.profile.soundguild or (channel == "PARTY" or channel == "RAID") and not module.db.profile.soundgroup then return end
@@ -524,6 +534,7 @@ core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback
 	if not (module.db.profile.sound_loot and LSM) then
 		return
 	end
+	if nowplaying then return end
 	module:PlaySound{soundfile = module.db.profile.soundfile_loot, loops = module.db.profile.sound_loot_loop}
 end)
 
