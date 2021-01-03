@@ -22,10 +22,7 @@ end
 
 function module:ShowFrame(data)
 	if not (data and data.id) then return end
-	if not self.popup then
-		self.popup = self:CreatePopup()
-	end
-	local popup = self.popup
+	local popup = self:Acquire(self.db.profile.style)
 	popup.data = data
 
 	if data.type == "mob" then
@@ -49,6 +46,8 @@ function module:ShowFrame(data)
 	popup:Show()
 
 	self:SetModel(popup)
+
+	return popup
 end
 
 function module:RefreshData(popup)
@@ -175,7 +174,7 @@ end
 -- copy the Button metatable on to this, because otherwise we lose all regular frame methods
 local PopupMixin = {}
 
-function module:CreatePopup()
+function module:CreatePopup(look)
 	-- Set up the frame
 	local name = "SilverDragonPopupButton"
 	do
@@ -187,11 +186,9 @@ function module:CreatePopup()
 	end
 	local popup = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
 	Mixin(popup, PopupMixin)
-	module.popup = popup
 
 	popup:SetSize(276, 96)
-	-- TODO: a stack
-	popup:SetPoint("CENTER", self.anchor, "CENTER")
+
 	popup:SetScale(self.db.profile.anchor.scale)
 	popup:SetMovable(true)
 	popup:SetClampedToScreen(true)
@@ -355,7 +352,7 @@ function module:CreatePopup()
 	popup.lootIcon:SetScript("OnClick", popup.scripts.LootOnClick)
 	popup.lootIcon:SetScript("OnHide", popup.scripts.LootOnHide)
 
-	self:ApplyLook(popup, self.db.profile.style)
+	self:ApplyLook(popup, look)
 
 	return popup
 end
@@ -401,6 +398,26 @@ function PopupMixin:HideWhenPossible(automatic)
 	else
 		self:Hide()
 	end
+end
+
+function PopupMixin:Reset()
+	self.data = nil
+
+	self.glow.animIn:Stop()
+	self.shine.animIn:Stop()
+	self.dead.animIn:Stop()
+	self.animIn:Stop()
+	self.animFade:Stop()
+
+	self.raidIcon:Hide()
+	self.lootIcon:Hide()
+	self.dead:SetAlpha(0)
+	self.model:ClearModel()
+
+	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+
+	self:ClearAllPoints()
 end
 
 PopupMixin.scripts = {
@@ -459,7 +476,7 @@ PopupMixin.scripts = {
 			-- handled in the secure click handler
 			return
 		elseif IsControlKeyDown() then
-			module:Point()
+			module:Point(self.data)
 		elseif IsShiftKeyDown() then
 			-- worldmap:uiMapId:x:y
 			local data = self.data
@@ -476,11 +493,15 @@ PopupMixin.scripts = {
 		module.anchor:StopMovingOrSizing()
 		if not InCombatLockdown() then
 			LibWindow.SavePosition(module.anchor)
+			module:Reflow()
 		end
 	end,
 	-- hooked:
 	OnShow = function(self)
+		module:ResetLook(self)
+
 		self:SetAlpha(1)
+		self:SetScale(module.db.profile.anchor.scale)
 
 		self.glow:Show()
 		self.glow.animIn:Play()
@@ -505,20 +526,6 @@ PopupMixin.scripts = {
 		core.events:Fire("PopupShow", self.data.id, self.data.zone, self.data.x, self.data.y, self)
 	end,
 	OnHide = function(self)
-		self.glow.animIn:Stop()
-		self.shine.animIn:Stop()
-		self.dead.animIn:Stop()
-		self.animIn:Stop()
-		self.animFade:Stop()
-
-		self.raidIcon:Hide()
-		self.lootIcon:Hide()
-		self.dead:SetAlpha(0)
-		self.model:ClearModel()
-
-		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-
 		core.events:Fire("PopupHide", self.data.id, self.data.zone, self.data.x, self.data.y, self.automaticClose)
 
 		if not InCombatLockdown() then
@@ -527,6 +534,8 @@ PopupMixin.scripts = {
 
 		self.waitingToHide = false
 		self.automaticClose = nil
+
+		module:Release(self)
 	end,
 	-- Close button
 	CloseOnEnter = function(self)

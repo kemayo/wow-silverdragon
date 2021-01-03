@@ -13,23 +13,6 @@ function module:RegisterConfig()
 	if not config then return end
 
 	local db = self.db.profile
-	local recreating
-	local function _newPopup()
-		local oldpopup = self.popup
-		self.popup = self:CreatePopup()
-		if oldpopup and oldpopup:IsVisible() then
-			self:ShowFrame(oldpopup.data)
-			oldpopup:Hide()
-		end
-		recreating = nil
-	end
-	local function refreshPopup(info)
-		if recreating then return end
-		if info.arg then
-			recreating = true
-			C_Timer.After(0.2, _newPopup)
-		end
-	end
 	config.options.plugins.clicktarget = {
 		clicktarget = {
 			type = "group",
@@ -37,7 +20,6 @@ function module:RegisterConfig()
 			get = function(info) return db[info[#info]] end,
 			set = function(info, v)
 				db[info[#info]] = v
-				refreshPopup(info)
 			end,
 			order = 25,
 			args = {
@@ -62,7 +44,10 @@ function module:RegisterConfig()
 						info.option.values = values
 						return values
 					end,
-					arg = true,
+					set = function(info, v)
+						db[info[#info]] = v
+						module:Redraw()
+					end,
 					order = 21,
 				},
 				anchor = {
@@ -76,6 +61,15 @@ function module:RegisterConfig()
 					end,
 					order = 22,
 				},
+				stacksize = {
+					type = "range",
+					name = "Stack size",
+					desc = "How many popups to show at once",
+					min = 1,
+					max = 6,
+					step = 1,
+					order = 23,
+				},
 				scale = {
 					type = "range",
 					name = UI_SCALE,
@@ -86,11 +80,12 @@ function module:RegisterConfig()
 					set = function(info, value)
 						db.anchor.scale = value
 						LibWindow.SetScale(self.anchor, value)
-						if self.popup then
-							self.popup:SetScale(db.anchor.scale)
+						for _, popup in ipairs(self.stack) do
+							popup:SetScale(db.anchor.scale)
+							self:SetModel(popup)
 						end
 					end,
-					order = 23,
+					order = 24,
 				},
 				closeAfter = {
 					type = "range",
@@ -173,8 +168,10 @@ function module:RegisterConfig()
 							value = {...}
 						end
 						db.style_options[info[#info - 1]][info[#info]] = value
-						if self.popup then
-							self:ResetLook(self.popup)
+						for popup, look in self:EnumerateActive() do
+							if look == info[#info - 1] then
+								self:ResetLook(popup)
+							end
 						end
 					end,
 					args = module.LookConfig,

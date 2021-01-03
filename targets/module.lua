@@ -18,6 +18,7 @@ module.defaults = {
 		style = "SilverDragon",
 		closeAfter = 30,
 		closeDead = true,
+		stacksize = 4,
 		announce = "IMMEDIATELY", -- or "OPENLAST"
 		announceChannel = "CHANNEL",
 		sources = {
@@ -52,7 +53,7 @@ function module:OnInitialize()
 	core.RegisterCallback(self, "Announce")
 	core.RegisterCallback(self, "AnnounceLoot")
 	core.RegisterCallback(self, "Marked")
-	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", "ProcessQueue")
 
 	self.anchor = self:CreateAnchor()
 
@@ -84,12 +85,7 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 		x = x or 0,
 		y = y or 0,
 	}
-	if InCombatLockdown() then
-		Debug("Queueing popup for out-of-combat")
-		pending = data
-	else
-		self:ShowFrame(data)
-	end
+	self:Enqueue(data)
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 	data.unit = nil -- can't be trusted to remain the same
 end
@@ -103,17 +99,11 @@ function module:AnnounceLoot(_, name, id, zone, x, y)
 		x = x or 0,
 		y = y or 0,
 	}
-	if InCombatLockdown() then
-		Debug("Queueing popup for out-of-combat")
-		pending = data
-	else
-		self:ShowFrame(data)
-	end
+	self:Enqueue(data)
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 end
 
-function module:Point()
-	local data = self.popup and self.popup.data
+function module:Point(data)
 	if data and data.zone and data.x and data.y then
 		-- point to it, without a timeout, and ignoring whether it'll be replacing an existing waypoint
 		core:GetModule("TomTom"):PointTo(data.type == "mob" and data.id or data.name, data.zone, data.x, data.y, 0, true)
@@ -123,14 +113,6 @@ end
 function module:Marked(callback, id, marker, unit)
 	if self.popup and self.popup.data and self.popup.data.id == id then
 		self.popup:SetRaidIcon(marker)
-	end
-end
-
-function module:PLAYER_REGEN_ENABLED()
-	if pending then
-		Debug("Showing queued popup")
-		self:ShowFrame(pending)
-		pending = nil
 	end
 end
 

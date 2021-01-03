@@ -41,6 +41,7 @@ outputs\sync.lua
 outputs\marker.lua
 
 targets\module.lua
+targets\queue.lua
 targets\popup.lua
 targets\config.lua
 targets\looks\looks.xml

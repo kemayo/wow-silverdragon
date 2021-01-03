@@ -38,7 +38,7 @@ read_globals = {
     "ceil", "floor",
     "abs", "mod", "max",
     "sin", "cos", "tan",
-    "table", "tinsert", "tContains", "tAppendAll", "wipe",
+    "table", "tinsert", "tContains", "tAppendAll", "tDeleteItem", "wipe",
     "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower",
     "time",
 
@@ -194,6 +194,7 @@ read_globals = {
     "CreateTextureMarkup",
     "CreateFrame",
     "CreateFramePool",
+    "CreateObjectPool",
     "CreateFromMixins",
     "CreateAndInitFromMixin",
     "Mixin",
