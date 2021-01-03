@@ -111,8 +111,10 @@ function module:Point(data)
 end
 
 function module:Marked(callback, id, marker, unit)
-	if self.popup and self.popup.data and self.popup.data.id == id then
-		self.popup:SetRaidIcon(marker)
+	for popup in self:EnumerateActive() do
+		if popup.data and popup.data.id == id then
+			popup:SetRaidIcon(marker)
+		end
 	end
 end
 
