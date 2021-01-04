@@ -192,8 +192,6 @@ function module:CreatePopup(look)
 	popup:SetScale(self.db.profile.anchor.scale)
 	popup:SetMovable(true)
 	popup:SetClampedToScreen(true)
-	popup:SetFrameStrata("DIALOG")
-	popup:SetFrameLevel(self.anchor:GetFrameLevel() + 5)
 	popup:RegisterForClicks("AnyUp")
 
 	popup:SetAttribute("type", "macro")
