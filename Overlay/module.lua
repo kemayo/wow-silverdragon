@@ -29,6 +29,7 @@ function module:OnInitialize()
                 icon_scale = 1,
                 icon_alpha = 1,
                 routes = true,
+                zone_disabled = {},
             },
             minimap = {
                 enabled = true,

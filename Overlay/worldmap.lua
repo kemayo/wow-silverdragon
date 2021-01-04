@@ -43,6 +43,8 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
     local uiMapID = self:GetMap():GetMapID()
     if not uiMapID then return end
 
+    if module.db.profile.worldmap.zone_disabled[uiMapID] then return end
+
     -- Regular nodes
     for coord, mobid, textureData, scale, alpha in module:IterateNodes(uiMapID, false) do
         local x, y = core:GetXY(coord)

@@ -202,25 +202,32 @@ function module:SetupDataObject()
 end
 
 function module:SetupWorldMap()
-	local button = CreateFrame("Button", nil, WorldMapFrame.NavBar)
+	local button = WorldMapFrame:AddOverlayFrame(nil, "Button", "RIGHT", WorldMapFrame.NavBar, "RIGHT", -4, 0)
 	button:SetSize(20, 20)
-	button:SetPoint("RIGHT", -4, 0)
 	button:RegisterForClicks("AnyUp")
 	button.texture = button:CreateTexture(nil, "ARTWORK")
 	button.texture:SetTexture("Interface\\Icons\\INV_Misc_Head_Dragon_01")
 	button.texture:SetAllPoints()
-	local button_options = {
+	button.options = {
 		help = true,
 	}
-	button:SetScript("OnEnter", function()
+	function button:Refresh()
 		local overlay = core:GetModule("Overlay", true)
-		if overlay and not button_options.config_path then
-			button_options.config_path = {'overlay'}
-			button_options.help = {"Click to toggle map icons"}
-			tAppendAll(button_options.help, default_help)
+		if overlay then
+			self.texture:SetDesaturated((not overlay.db.profile.worldmap.enabled) or overlay.db.profile.worldmap.zone_disabled[WorldMapFrame.mapID])
+			if not button.options.config_path then
+				button.options.config_path = {'overlay'}
+				button.options.help = {
+					"Click to toggle map icons",
+					"Shift-click to toggle map icons for this zone only",
+				}
+				tAppendAll(button.options.help, default_help)
+			end
 		end
-		button_options.nearby = WorldMapFrame.mapID
-		module:ShowTooltip(button, button_options)
+		button.options.nearby = WorldMapFrame.mapID
+	end
+	button:SetScript("OnEnter", function()
+		module:ShowTooltip(button, button.options)
 		-- now redo the anchoring!
 		if tooltip then
 			tooltip:ClearAllPoints()
@@ -231,9 +238,24 @@ function module:SetupWorldMap()
 	-- onleave is handled by the tooltip's autohide
 	button:SetScript("OnClick", function(self, mButton)
 		local overlay = core:GetModule("Overlay", true)
-		if overlay and mButton == "LeftButton" and not IsModifierKeyDown() then
-			overlay.db.profile.worldmap.enabled = not overlay.db.profile.worldmap.enabled
+		if overlay and mButton == "LeftButton" then
+			local odb = overlay.db.profile.worldmap
+			local state = not odb.zone_disabled[WorldMapFrame.mapID] and odb.enabled
+			-- if it's enabled, respect the zone/global request
+			-- if it's disabled, they want it back so toggle everything on
+			-- (there's no way to turn it on for *only* one zone)
+			if state then
+				if IsShiftKeyDown() then
+					odb.zone_disabled[WorldMapFrame.mapID] = true
+				else
+					odb.enabled = false
+				end
+			else
+				odb.zone_disabled[WorldMapFrame.mapID] = nil
+				odb.enabled = true
+			end
 			overlay:UpdateWorldMapIcons()
+			self:Refresh()
 			return
 		end
 		dataobject.OnClick(self, mButton)
