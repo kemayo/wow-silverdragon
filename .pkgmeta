@@ -6,24 +6,24 @@ manual-changelog:
    markup-type: markdown
 
 externals:
-   lib/LibStub: svn://svn.wowace.com/wow/libstub/mainline/trunk
-   lib/CallbackHandler-1.0: svn://svn.wowace.com/wow/callbackhandler/mainline/trunk/CallbackHandler-1.0
-   lib/ChatThrottleLib: svn://svn.wowace.com/wow/chatthrottlelib/mainline/trunk
-   lib/AceAddon-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
-   lib/AceConfig-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConfig-3.0
-   lib/AceConsole-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConsole-3.0
-   lib/AceDB-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDB-3.0
-   lib/AceDBOptions-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDBOptions-3.0
-   lib/AceEvent-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceEvent-3.0
-   lib/AceTimer-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceTimer-3.0
-   lib/AceGUI-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
-   lib/AceLocale-3.0: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceLocale-3.0
-   lib/LibSink-2.0: svn://svn.wowace.com/wow/libsink-2-0/mainline/trunk/LibSink-2.0
+   lib/LibStub: svn://repos.curseforge.com/wow/libstub/mainline/trunk
+   lib/CallbackHandler-1.0: svn://repos.curseforge.com/wow/callbackhandler/mainline/trunk/CallbackHandler-1.0
+   lib/ChatThrottleLib: svn://repos.curseforge.com/wow/chatthrottlelib/mainline/trunk
+   lib/AceAddon-3.0: svn://repos.curseforge.com/wow/ace3/mainline/trunk/AceAddon-3.0
+   lib/AceConfig-3.0: svn://repos.curseforge.com/wow/ace3/mainline/trunk/AceConfig-3.0
+   lib/AceConsole-3.0: svn://repos.curseforge.com/wow/ace3/mainline/trunk/AceConsole-3.0
+   lib/AceDB-3.0: svn://repos.curseforge.com/wow/ace3/mainline/trunk/AceDB-3.0
+   lib/AceDBOptions-3.0: svn://repos.curseforge.com/wow/ace3/mainline/trunk/AceDBOptions-3.0
+   lib/AceEvent-3.0: svn://repos.curseforge.com/wow/ace3/mainline/trunk/AceEvent-3.0
+   lib/AceTimer-3.0: svn://repos.curseforge.com/wow/ace3/mainline/trunk/AceTimer-3.0
+   lib/AceGUI-3.0: svn://repos.curseforge.com/wow/ace3/mainline/trunk/AceGUI-3.0
+   lib/AceLocale-3.0: svn://repos.curseforge.com/wow/ace3/mainline/trunk/AceLocale-3.0
+   lib/LibSink-2.0: svn://repos.curseforge.com/wow/libsink-2-0/mainline/trunk/LibSink-2.0
    lib/LibQTip-1.0: https://repos.curseforge.com/wow/libqtip-1-0
    lib/LibDataBroker-1.1: git://github.com/tekkub/libdatabroker-1-1.git
-   lib/LibDBIcon-1.0: svn://svn.wowace.com/wow/libdbicon-1-0/mainline/trunk/LibDBIcon-1.0
-   lib/LibSharedMedia-3.0: svn://svn.wowace.com/wow/libsharedmedia-3-0/mainline/trunk/LibSharedMedia-3.0
-   lib/AceGUI-3.0-SharedMediaWidgets: svn://svn.wowace.com/wow/ace-gui-3-0-shared-media-widgets/mainline/trunk/AceGUI-3.0-SharedMediaWidgets
+   lib/LibDBIcon-1.0: svn://repos.curseforge.com/wow/libdbicon-1-0/mainline/trunk/LibDBIcon-1.0
+   lib/LibSharedMedia-3.0: svn://repos.curseforge.com/wow/libsharedmedia-3-0/mainline/trunk/LibSharedMedia-3.0
+   lib/AceGUI-3.0-SharedMediaWidgets: svn://repos.curseforge.com/wow/ace-gui-3-0-shared-media-widgets/mainline/trunk/AceGUI-3.0-SharedMediaWidgets
    lib/HereBeDragons: https://repos.wowace.com/wow/herebedragons
    lib/LibTextDump-1.0: https://repos.wowace.com/wow/libtextdump-1-0
    lib/LibWindow-1.1: https://repos.wowace.com/wow/libwindow-1-1/trunk/LibWindow-1.1
