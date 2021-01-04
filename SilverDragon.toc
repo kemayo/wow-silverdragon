@@ -27,6 +27,7 @@ achievements.lua
 loot.lua
 slash.lua
 config.lua
+util.lua
 
 scan\targets.lua
 scan\macro.lua

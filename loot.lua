@@ -665,8 +665,6 @@ do
 
 	ns.Loot.Window = {}
 
-	local loot_tooltip = ns.Tooltip.Get("Loot")
-
 	local function window_onclick(self, mousebutton)
 		if mousebutton == "RightButton" then
 			if self.independent then
@@ -677,6 +675,7 @@ do
 		end
 	end
 	local function button_onenter(self)
+		local loot_tooltip = ns.Tooltip.Get("Loot")
 		loot_tooltip:SetFrameStrata(self:GetFrameStrata())
 		loot_tooltip:SetFrameLevel(self:GetFrameLevel() + 1)
 		if self:GetCenter() > UIParent:GetCenter() then
@@ -693,7 +692,7 @@ do
 		self:GetParent().tooltip = loot_tooltip
 	end
 	local function button_onleave(self)
-		loot_tooltip:Hide()
+		ns.Tooltip.Get("Loot"):Hide()
 		self:GetParent().tooltip = nil
 	end
 	local function button_onclick(self, mousebutton)
