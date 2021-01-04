@@ -224,7 +224,7 @@ function module:ShowTooltip(pin)
     if id and ns.mobdb[id] then
         tooltip:AddLine(core:GetMobLabel(id))
         if ns.mobdb[id].notes then
-            tooltip:AddDoubleLine("Note", ns.mobdb[id].notes)
+            tooltip:AddDoubleLine("Note", (core:RenderString(ns.mobdb[id].notes)))
         end
         tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
         if pin.config.tooltip_completion then

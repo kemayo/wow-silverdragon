@@ -6,6 +6,80 @@ local DebugF = addon.DebugF
 
 local HBD = LibStub("HereBeDragons-2.0")
 
+-- Strings
+
+local function quick_texture_markup(icon)
+	-- needs less than CreateTextureMarkup
+	return '|T' .. icon .. ':0:0:1:-1|t'
+end
+local completeColor = CreateColor(0, 1, 0, 1)
+local incompleteColor = CreateColor(1, 0, 0, 1)
+function addon:RenderString(s)
+	if type(s) == "function" then s = s() end
+	return s:gsub("{(%l+):(%d+):?([^}]*)}", function(variant, id, fallback)
+		id = tonumber(id)
+		if variant == "item" then
+			local name, link, _, _, _, _, _, _, _, icon = GetItemInfo(id)
+			if link and icon then
+				return quick_texture_markup(icon) .. link
+			end
+		elseif variant == "spell" then
+			local name, _, icon = GetSpellInfo(id)
+			if name and icon then
+				return quick_texture_markup(icon) .. name
+			end
+		elseif variant == "quest" then
+			local name = C_QuestLog.GetTitleForQuestID(id)
+			if not (name and name ~= "") then
+				name = tostring(id)
+			end
+			local completed = C_QuestLog.IsQuestFlaggedCompleted(id)
+			return CreateAtlasMarkup("questnormal") .. (completed and completeColor or incompleteColor):WrapTextInColorCode(name)
+		elseif variant == "questid" then
+			return CreateAtlasMarkup("questnormal") .. (C_QuestLog.IsQuestFlaggedCompleted(id) and completeColor or incompleteColor):WrapTextInColorCode(id)
+		elseif variant == "npc" then
+			local name = self:NameForMob(id)
+			if name then
+				return name
+			end
+		elseif variant == "currency" then
+			local info = C_CurrencyInfo.GetCurrencyInfo(id)
+			if info then
+				return quick_texture_markup(info.iconFileID) .. info.name
+			end
+		end
+		return fallback ~= "" and fallback or (variant .. ':' .. id)
+	end)
+end
+function addon:CacheString(s)
+	if not s then return end
+	if type(s) == "function" then s = s() end
+	for variant, id, fallback in s:gmatch("{(%l+):(%d+):?([^}]*)}") do
+		id = tonumber(id)
+		if variant == "item" then
+			C_Item.RequestLoadItemDataByID(id)
+		elseif variant == "spell" then
+			C_Spell.RequestLoadSpellData(id)
+		elseif variant == "quest" then
+			C_QuestLog.RequestLoadQuestByID(id)
+		elseif variant == "npc" then
+			self:NameForMob(id)
+		end
+	end
+end
+do
+	local out = {}
+	function addon:RenderStringList(variant, ...)
+		if not ... then return "" end
+		if type(...) == "table" then return self:RenderStringList(variant, unpack(...)) end
+		wipe(out)
+		for i=1,select("#", ...) do
+			table.insert(out, ("{%s:%d}"):format(variant, (select(i, ...))))
+		end
+		return self:RenderString(string.join(", ", unpack(out)))
+	end
+end
+
 -- GUID / unit
 
 do

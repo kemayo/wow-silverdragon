@@ -435,7 +435,7 @@ do
 		GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(mobid))
 		if ns.mobdb[mobid] then
 			if ns.mobdb[mobid].notes then
-				GameTooltip:AddLine(ns.mobdb[mobid].notes)
+				GameTooltip:AddLine((core:RenderString(ns.mobdb[mobid].notes)))
 			end
 			for zone, coords in pairs(ns.mobdb[mobid].locations or {}) do
 				if #coords == 1 then
