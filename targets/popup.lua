@@ -497,6 +497,10 @@ PopupMixin.scripts = {
 	end,
 	-- hooked:
 	OnShow = function(self)
+		if not self.data then
+			-- Things which show/hide UIParent (cinematics) *might* get us here without data
+			return self:Hide()
+		end
 		module:ResetLook(self)
 
 		self:SetAlpha(1)
@@ -525,7 +529,10 @@ PopupMixin.scripts = {
 		core.events:Fire("PopupShow", self.data.id, self.data.zone, self.data.x, self.data.y, self)
 	end,
 	OnHide = function(self)
-		core.events:Fire("PopupHide", self.data.id, self.data.zone, self.data.x, self.data.y, self.automaticClose)
+		if self.data then
+			-- Things which show/hide UIParent (cinematics) *might* get us here without data
+			core.events:Fire("PopupHide", self.data.id, self.data.zone, self.data.x, self.data.y, self.automaticClose)
+		end
 
 		if not InCombatLockdown() then
 			LibWindow.SavePosition(module.anchor)
