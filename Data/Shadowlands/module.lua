@@ -174,7 +174,7 @@ function module:OnInitialize()
 		[171255] = {name="Echo of Aella",locations={[1533]={44806460},},loot={180062},quest=61082,routes={[1533]={{45106860,46306760,46406670,47206620,47506510,46906400,46006380,45706460,45606570,46306670},{45706460,44806460,44706600,45406680,45906650}},},},
 		[171316] = {name="Malevolent Stygia",locations={[1543]={27301755},},quest=61125,},
 		[171317] = {name="Conjured Death",locations={[1543]={27731305},},loot={183887},quest=61106,},
-		[171327] = {name="Reekmonger",locations={[1533]={30365517},},},
+		[171327] = {name="Reekmonger",locations={[1533]={30365517},},quest=61101,notes="Kill enemies in the Temple of Courage to summon"},
 		[171451] = {name="Soultwister Cero",locations={[1565]={72405175},},loot={180164},quest=61177,},
 		[171688] = {name="Faeflayer",locations={[1565]={68602765},},loot={180144},quest=61184,},
 		[172207] = {name="Odalrik",locations={[1543]={38652880},},loot={{183061,quest=63158,},178561},quest=62618,},
