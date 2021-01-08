@@ -146,7 +146,7 @@ function module:OnInitialize()
 		[170414] = {name="Howling Spectre",locations={[1705]={},},},
 		[170417] = {name="Animated Stygia",locations={[1705]={},},},
 		[170434] = {name="Amalgamation of Sin",locations={[1525]={65802915},},loot={183730},quest=60836,},
-		[170548] = {name="Sundancer",locations={[1533]={60109350},},loot={{180773,mount=1307,}},notes="Use the statue and a Skystrider Glider",tameable=2143073,},
+		[170548] = {name="Sundancer",locations={[1533]={60109350},},loot={{180773,mount=1307,}},notes="Use the statue and a Skystrider Glider",quest=60860,tameable=2143073,},
 		[170623] = {name="Dark Watcher",locations={[1533]={27803000},},loot={184297},notes="Die to see it",quest=60883,},
 		[170634] = {name="Shadeweaver Zeris",locations={[1543]={30706035},},loot={{183066,quest=63160,},{183067,quest=63161,},{183068,quest=63162,},183187},quest=60884,},
 		[170659] = {name="Basilofos, King of the Hill",locations={[1533]={48605080},},loot={180704,182653},quest=60897,tameable=929300,},
