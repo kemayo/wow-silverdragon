@@ -89,24 +89,24 @@ function module:UpdateVignetteOnMinimap(instanceid)
 	if compat_disabled or not db.enabled then
 		return
 	end
-	Debug("considering vignette", instanceid)
+	-- Debug("considering vignette", instanceid)
 	local uiMapID = HBD:GetPlayerZone()
 	if not uiMapID then
-		return Debug("can't determine current zone")
+		return -- Debug("can't determine current zone")
 	end
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
 	if not (vignetteInfo and vignetteInfo.vignetteGUID and vignetteInfo.atlasName) then
-		return Debug("vignette had no info")
+		return -- Debug("vignette had no info")
 	end
 	if vignetteInfo.type ~= Enum.VignetteType.Normal then
-		return Debug("vignette isn't normal")
+		return -- Debug("vignette isn't normal")
 	end
 	if not db.types[vignetteInfo.atlasName:lower()] then
-		return Debug("vignette type not enabled", vignetteInfo.atlasName)
+		return -- Debug("vignette type not enabled", vignetteInfo.atlasName)
 	end
 	local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, uiMapID)
 	if not position then
-		return Debug("vignette had no position")
+		return -- Debug("vignette had no position")
 	end
 	local x, y = position:GetXY()
 

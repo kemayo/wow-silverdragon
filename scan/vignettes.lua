@@ -156,24 +156,26 @@ end
 
 function module:WorkOutMobFromVignette(instanceid)
 	if not db.enabled then return end
-	if already_notified[instanceid] then return Debug("Skipping notify", "already done", instanceid) end
+	if already_notified[instanceid] then
+		return --Debug("Skipping notify", "already done", instanceid)
+	end
 	if not core.db.profile.instances and IsInInstance() then return end
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
 	if not vignetteInfo then
-		return Debug("vignette had no info")
+		return -- Debug("vignette had no info")
 	end
 	if vignette_denylist[vignetteInfo.vignetteID or 0] then
-		return Debug("Vignette was on the denylist", vignetteInfo.vignetteID)
+		return -- Debug("Vignette was on the denylist", vignetteInfo.vignetteID)
 	end
 	if db.ignore[vignetteInfo.vignetteID] then
-		return Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
+		return -- Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
 	end
 	if db.ignore_type[vignetteInfo.atlasName:lower()] then
-		return Debug("Vignette type not enabled", vignetteInfo.atlasName, vignetteInfo.vignetteID, vignetteInfo.name)
+		return -- Debug("Vignette type not enabled", vignetteInfo.atlasName, vignetteInfo.vignetteID, vignetteInfo.name)
 	end
 	local current_zone = HBD:GetPlayerZone()
 	if not current_zone or current_zone == 0 then
-		return Debug("We don't know what zone we're in", current_zone)
+		return -- Debug("We don't know what zone we're in", current_zone)
 	end
 	local source = vignetteInfo.onWorldMap and "point-of-interest" or "vignette"
 	local x, y
@@ -184,14 +186,14 @@ function module:WorkOutMobFromVignette(instanceid)
 		end
 	end
 	if not vignetteInfo.onMinimap and not shouldShowNotVisible(vignetteInfo, current_zone) then
-		return Debug("vignette not visible on minimap and we're only alerting for visibles")
+		return -- Debug("vignette not visible on minimap and we're only alerting for visibles")
 	end
 	if vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite" then
 		if (not core.db.profile.taxi) and UnitOnTaxi('player') then
-			return Debug("skipping notification", "on taxi")
+			return -- Debug("skipping notification", "on taxi")
 		end
 		if already_notified_loot[vignetteInfo.vignetteID] and time() < (already_notified_loot[vignetteInfo.vignetteID] + core.db.profile.delay) then
-			return Debug("skipping notification", "delay not exceeded")
+			return -- Debug("skipping notification", "delay not exceeded")
 		end
 		already_notified_loot[vignetteInfo.vignetteID] = time()
 		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x or 0, y or 0)
@@ -202,24 +204,24 @@ function module:WorkOutMobFromVignette(instanceid)
 		-- this *may* be a mob, but it also may be something which you interact with to summon the mob
 		local mobid = ns.IdFromGuid(vignetteInfo.objectGUID)
 		if mobid and ns.mobdb[mobid] then
-			Debug("mob from guid", vignetteInfo.objectGUID, mobid)
+			--Debug("mob from guid", vignetteInfo.objectGUID, mobid)
 			return self:NotifyIfNeeded(mobid, current_zone, x, y, source, instanceid)
 		end
 	end
 	-- And now, comparatively uncommon fallbacks:
 	if vignetteInfo.vignetteID and ns.vignetteMobLookup[vignetteInfo.vignetteID] then
 		-- IDs are based on https://bnet.marlam.in/dbc.php?dbc=vignette.db2
-		Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.vignetteID])
+		--Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.vignetteID])
 		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.vignetteID], current_zone, x, y, source, instanceid)
 	end
 	if vignetteInfo.name then
 		if ns.vignetteMobLookup[vignetteInfo.name] then
-			Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.name])
+			--Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.name])
 			return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.name], current_zone, x, y, source, instanceid)
 		end
 		local mobid = core:IdForMob(vignetteInfo.name)
 		if mobid then
-			Debug("name", vignetteInfo.name, mobid)
+			--Debug("name", vignetteInfo.name, mobid)
 			return self:NotifyIfNeeded(mobid, current_zone, x, y, source, instanceid)
 		end
 	end
