@@ -471,6 +471,9 @@ PopupMixin.scripts = {
 		end
 	end,
 	OnMouseDown = function(self, button)
+		if self.waitingToHide then
+			return
+		end
 		if button == "RightButton" then
 			-- handled in the secure click handler
 			return
@@ -545,6 +548,9 @@ PopupMixin.scripts = {
 	end,
 	-- Close button
 	CloseOnEnter = function(self)
+		if self:GetParent().waitingToHide then
+			return
+		end
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, 0)
 		GameTooltip:AddLine(escapes.leftClick .. " " .. CLOSE)
@@ -556,6 +562,9 @@ PopupMixin.scripts = {
 	end,
 	-- Loot icon
 	LootOnEnter = function(self)
+		if self:GetParent().waitingToHide then
+			return
+		end
 		local id = self:GetParent().data.id
 		if not ns.mobdb[id] then
 			return
@@ -573,6 +582,9 @@ PopupMixin.scripts = {
 		GameTooltip:Hide()
 	end,
 	LootOnClick = function(self, button)
+		if self:GetParent().waitingToHide then
+			return
+		end
 		if not self.window then
 			self.window = ns.Loot.Window.ShowForMob(self:GetParent().data.id)
 			self.window:SetParent(self)
