@@ -114,7 +114,7 @@ function module:OnInitialize()
 		[165175] = {name="Prideful Hulk",locations={[1525]={67808200},},loot={{180585,pet=2897,},183736,179938},quest=59580,hidden=true,},
 		[165206] = {name="Endlurker",locations={[1525]={66555945},},loot={179927,{183759,covenant=Enum.CovenantType.Necrolord,quest=62474,}},quest=59582,},
 		[165253] = {name="Tollkeeper Varaboss",locations={[1525]={66507080},},loot={{179363,quest=60517,}},quest=59595,},
-		[165290] = {name="Harika the Horrid",locations={[1525]={45847919},},loot={{180461,mount=1310,},183720},notes="Be Venthyr",quest=59612,},
+		[165290] = {name="Harika the Horrid",locations={[1525]={45847919},},loot={{180461,covenant=Enum.CovenantType.Venthyr,mount=1310,},183720},notes="Be Venthyr",quest=59612,},
 		[166292] = {name="Bog Beast",locations={[1525]={33403240},},loot={{180588,pet=2896,}},quest=59823,},
 		[166393] = {name="Amalgamation of Filth",locations={[1525]={53257300},},loot={183729},quest=59854,},
 		[166398] = {name="Soulforger Rhovus",locations={[1543]={35954155},},loot={183141},quest=60834,},
