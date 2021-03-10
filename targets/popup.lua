@@ -195,8 +195,8 @@ function module:CreatePopup(look)
 	popup:RegisterForClicks("AnyUp")
 
 	popup:SetAttribute("type", "macro")
-	popup:SetAttribute("_onshow", "self:Enable()")
-	popup:SetAttribute("_onhide", "self:Disable()")
+	-- popup:SetAttribute("_onshow", "self:Enable()")
+	-- popup:SetAttribute("_onhide", "self:Disable()")
 	-- Can't do type=click + clickbutton=close because then it'd be right-clicking the close button which also ignores the mob
 	popup:SetAttribute("macrotext2", "/click " .. popup:GetName() .. "CloseButton")
 
