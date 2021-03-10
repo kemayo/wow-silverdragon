@@ -1,4 +1,4 @@
-## Interface: 90002
+## Interface: 90005
 ## Title: SilverDragon (Warlords)
 ## Notes: Mobs for Warlords
 ## Version: @project-version@

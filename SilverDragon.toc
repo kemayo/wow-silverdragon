@@ -1,4 +1,4 @@
-﻿## Interface: 90002
+﻿## Interface: 90005
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
