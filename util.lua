@@ -175,14 +175,27 @@ do
 			local name = unit and UnitName(unit) or TextFromHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
 			if name and name ~= UNKNOWNOBJECT then
 				self.db.locale.mob_name[id] = name
-				mobNameToId[self.db.locale.mob_name[id]] = id
 			end
+		end
+		if self.db.locale.mob_name[id] then
+			mobNameToId[self.db.locale.mob_name[id]] = id
 		end
 		return self.db.locale.mob_name[id] or (ns.mobdb[id] and ns.mobdb[id].name)
 	end
 	function addon:IdForMob(name, zone)
-		if zone and ns.mobNamesByZone[zone] and ns.mobNamesByZone[zone][name] then
-			return ns.mobNamesByZone[zone][name]
+		if zone and ns.mobsByZone[zone] then
+			if not ns.mobNamesByZone[zone] then
+				ns.mobNamesByZone[zone] = {}
+				for id in pairs(ns.mobsByZone[zone]) do
+					local name = addon:NameForMob(id)
+					if name then
+						ns.mobNamesByZone[zone][name] = id
+					end
+				end
+			end
+			if ns.mobNamesByZone[zone][name] then
+				return ns.mobNamesByZone[zone][name]
+			end
 		end
 		return mobNameToId[name]
 	end
