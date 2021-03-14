@@ -187,9 +187,9 @@ do
 			if not ns.mobNamesByZone[zone] then
 				ns.mobNamesByZone[zone] = {}
 				for id in pairs(ns.mobsByZone[zone]) do
-					local name = addon:NameForMob(id)
-					if name then
-						ns.mobNamesByZone[zone][name] = id
+					local zname = addon:NameForMob(id)
+					if zname then
+						ns.mobNamesByZone[zone][zname] = id
 					end
 				end
 			end
