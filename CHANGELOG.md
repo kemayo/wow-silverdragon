@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v90005.1
+
+* Updated with new loot from wowhead
+* Fixed chat scanning
+
 ## Changed in v90005.0
 
 * Avoid a new issue which caused errors when showing/hiding the popup in 9.0.5 (had to remove some normal API calls here, so there might be subtle issues with the mouse working on a hidden-in-combat popup until this is resolved on Blizzard's end)
