@@ -183,20 +183,29 @@ do
 		return self.db.locale.mob_name[id] or (ns.mobdb[id] and ns.mobdb[id].name)
 	end
 	function addon:IdForMob(name, zone)
-		if zone and ns.mobsByZone[zone] then
-			if not ns.mobNamesByZone[zone] then
-				ns.mobNamesByZone[zone] = {}
-				for id in pairs(ns.mobsByZone[zone]) do
-					local zname = addon:NameForMob(id)
-					if zname then
-						ns.mobNamesByZone[zone][zname] = id
+		if zone then
+			if ns.mobsByZone[zone] then
+				if not ns.mobNamesByZone[zone] then
+					ns.mobNamesByZone[zone] = {}
+					for id in pairs(ns.mobsByZone[zone]) do
+						local zname = addon:NameForMob(id)
+						if zname then
+							ns.mobNamesByZone[zone][zname] = id
+						end
 					end
 				end
+				if ns.mobNamesByZone[zone][name] then
+					-- print("from zone", zone, name)
+					return ns.mobNamesByZone[zone][name]
+				end
 			end
-			if ns.mobNamesByZone[zone][name] then
-				return ns.mobNamesByZone[zone][name]
+			local info = C_Map.GetMapInfo(zone)
+			if info and info.parentMapID then
+				-- could also restrict this by info.mapType to stop when we hit a Enum.UIMapType.Zone?
+				return self:IdForMob(name, info.parentMapID)
 			end
 		end
+		-- print("from fallback", zone, name)
 		return mobNameToId[name]
 	end
 end
