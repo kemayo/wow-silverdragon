@@ -171,8 +171,15 @@ do
 		end
 	end
 	function addon:NameForMob(id, unit)
+		if unit then
+			-- refresh the locale when we actually meet the mob, because blizzard fixes typos occasionally
+			local name = UnitName(unit)
+			if name and name ~= UNKNOWNOBJECT then
+				self.db.locale.mob_name[id] = name
+			end
+		end
 		if not self.db.locale.mob_name[id] then
-			local name = unit and UnitName(unit) or TextFromHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
+			local name = TextFromHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
 			if name and name ~= UNKNOWNOBJECT then
 				self.db.locale.mob_name[id] = name
 			end
