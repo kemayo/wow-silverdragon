@@ -73,7 +73,7 @@ function module:OnInitialize()
 		[161528] = {name="Aethon",locations={[1533]={55208020},},loot={179487},quest=58526,tameable=2143073,vignette=4032,},
 		[161529] = {name="Nemaeus",locations={[1533]={55008020},},loot={179485},quest=60569,tameable=929300,vignette=4032,},
 		[161530] = {name="Cloudtail",locations={[1533]={55208040},},loot={179488},quest=60571,tameable=458223,vignette=4032,},
-		[161857] = {name="Nirvaska the Summoner",locations={[1536]={50356330},},loot={183700,{181811,covenant=Enum.CovenantType.Necrolord,}},quest=58629,},
+		[161857] = {name="Nirvaska the Summoner",locations={[1536]={50356330},},loot={183700,{181811,covenant=Enum.CovenantType.Necrolord,}},quest=58629,notes="Only when the {quest:58490} world quest is up",},
 		[161891] = {name="Lord Mortegore",locations={[1525]={76006160},},loot={180501,182968},quest=58633,},
 		[162180] = {name="Thread Mistress Leeda",locations={[1536]={24204295},},loot={184180},quest=58678,},
 		[162452] = {name="Dartanos",locations={[1543]={25851480},},quest=59230,},
