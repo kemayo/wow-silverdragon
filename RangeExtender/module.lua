@@ -147,7 +147,7 @@ function SilverDragonVignetteStretchPinMixin:OnLoad()
 end
 function SilverDragonVignetteStretchPinMixin:OnMouseEnter()
 	-- TODO: see VignettePinMixin for PVP bounty vignettes if I want to handle this?
-	-- Debug("OnMouseEnter", self)
+	-- Debug("OnMouseEnter", self, self.info and self.info.name)
 	if not (self.info and self.info.name) then return end
 	if self:GetCenter() > UIParent:GetCenter() then
 		GameTooltip:SetOwner(self, "ANCHOR_LEFT")
@@ -155,6 +155,7 @@ function SilverDragonVignetteStretchPinMixin:OnMouseEnter()
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 	end
 	GameTooltip_SetTitle(GameTooltip, self.info.name)
+	GameTooltip:Show()
 end
 function SilverDragonVignetteStretchPinMixin:OnMouseLeave()
 	GameTooltip:Hide()
