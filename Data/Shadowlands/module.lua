@@ -16,7 +16,7 @@ function module:OnInitialize()
 		[156203] = {name="Stygian Incinerator",locations={[1543]={36854480},},quest=62539,},
 		[156237] = {name="Imperator Dara",locations={[1705]={},},},
 		[156339] = {name="Eliminator Sotiros",locations={[1533]={22452285},},loot={184365},notes="Requires Kyrian to summon",quest=61634,},
-		[156340] = {name="Larionrider Orstus",locations={[1533]={22442286},},loot={{184401,pet=3063,}},notes="Requires Kyrian to summon",quest=61634,},
+		[156340] = {name="Larionrider Orstus",locations={[1533]={22442286},},loot={{184401,pet=3063,covenant=Enum.CovenantType.Kyrian}},notes="Requires Kyrian to summon",quest=61634,},
 		[156676] = {name="Ogre Overseer",locations={[1409]={60406000},},loot={11847,174790},quest=56051,},
 		[156916] = {name="Inquisitor Sorin",locations={[1525]={69754720},},},
 		[156918] = {name="Inquisitor Otilia",locations={[1525]={64704640},},},
