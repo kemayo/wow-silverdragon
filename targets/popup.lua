@@ -271,10 +271,10 @@ function module:CreatePopup(look)
 	-- called as onclick(self, button, down):
 	close:SetAttribute("_onclick", [[
 		local popup = self:GetParent()
-		popup:Hide()
 		if button == "RightButton" then
 			popup:CallMethod("DoIgnore")
 		end
+		popup:Hide()
 	]])
 
 	-- Flashy effects
