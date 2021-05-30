@@ -10,7 +10,7 @@ local function toggle_mob(id)
 		name = core:GetMobLabel(id),
 		desc = "ID: " .. id,
 		type = "toggle",
-		width = "full",
+		-- width = "double",
 		descStyle = "inline",
 		order = id,
 	}
@@ -188,7 +188,36 @@ function module:BuildMobList(options)
 							inline = false,
 							name = core.zone_names[zone] or ("map"..zone),
 							desc = "ID: " .. zone,
-							args = {},
+							args = {
+								all = {
+									type = "execute",
+									name = ALL,
+									desc = "Select every mob in the list",
+									func = function(info)
+										if not ns.mobsByZone[zone] then return end
+										for mobid, locations in pairs(ns.mobsByZone[zone]) do
+											core.db.global.ignore[mobid] = false
+										end
+										self:BuildIgnoreList(info.options)
+									end,
+									width = "half",
+									order = 1,
+								},
+								none = {
+									type = "execute",
+									name = NONE,
+									desc = "Deselect every mob in the list",
+									func = function(info)
+										if not ns.mobsByZone[zone] then return end
+										for mobid, locations in pairs(ns.mobsByZone[zone]) do
+											core.db.global.ignore[mobid] = true
+										end
+										self:BuildIgnoreList(info.options)
+									end,
+									width = "half",
+									order = 2,
+								},
+							},
 						}
 					end
 					local toggle = toggle_mob(id)
