@@ -4,6 +4,9 @@ on:
   push:
     branches: [ master ]
     tags: [ '*' ]
+    paths-ignore:
+      - '.github/**'
+      - 'tools/**'
 
 jobs:
   lint:
