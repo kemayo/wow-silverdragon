@@ -1,0 +1,53 @@
+name: Package Addon (Classic + BCC)
+
+on:
+  push:
+    branches: [ classic ]
+    tags: [ '*' ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install luarocks
+        run: sudo apt-get install luarocks
+      - name: Install luacheck
+        run: luarocks install --local luacheck
+      - name: Run luacheck
+        run: ~/.luarocks/bin/luacheck . --no-color -q
+  build:
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: kemayo/actions-recent-changelog@v1
+        if: startsWith(github.ref, 'refs/tags')
+        with:
+          input: CHANGELOG.md
+          output: RECENT_CHANGES.md
+
+      - name: Create Classic Package
+        uses: BigWigsMods/packager@master
+        with:
+          args: -w 0 -g classic
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create BCC Package
+        uses: BigWigsMods/packager@master
+        with:
+          args: -w 0 -g bcc
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
