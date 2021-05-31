@@ -143,7 +143,7 @@ function module:SendLinkToMob(id, uiMapID, x, y)
 end
 
 function module:CreateAnchor()
-	local anchor = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
+	local anchor = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	anchor:SetSize(250, 100)
 	anchor:SetFrameStrata("DIALOG")
 	anchor:SetBackdrop({

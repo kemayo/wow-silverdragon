@@ -14,10 +14,26 @@ local db
 local nodes = {}
 module.nodes = nodes
 
+-- Classic compat:
+local GetAtlasInfo = C_Texture and C_Texture.GetAtlasInfo or function(atlas)
+	local texture, width, height, left, right, top, bottom, tilesHorizontally, tilesVertically = _G.GetAtlasInfo(atlas)
+	return {
+		file = texture,
+		leftTexCoord = left,
+		rightTexCoord = right,
+		topTexCoord = top,
+		bottomTexCoord = bottom,
+		width = width,
+		height = height,
+		tilesHorizontally = tilesHorizontally,
+		tilesVertically = tilesVertically,
+	}
+end
+
 local handler = {}
 do
 	local function tex(atlas, r, g, b, scale)
-		atlas = C_Texture.GetAtlasInfo(atlas)
+		atlas = GetAtlasInfo(atlas)
 		return {
 			icon = atlas.file,
 			tCoordLeft = atlas.leftTexCoord, tCoordRight = atlas.rightTexCoord, tCoordTop = atlas.topTexCoord, tCoordBottom = atlas.bottomTexCoord,

@@ -1,4 +1,5 @@
-﻿## Interface: 11302
+﻿## Interface: 20501
+## Interface-Classic: 11307
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon

@@ -122,7 +122,7 @@ function module:CreatePopup()
 			i = i + 1
 		end
 	end
-	local popup = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate, BackdropTemplate")
+	local popup = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate, SecureHandlerShowHideTemplate" .. (BackdropTemplateMixin and ", BackdropTemplate" or ""))
 	Mixin(popup, PopupMixin)
 	module.popup = popup
 
