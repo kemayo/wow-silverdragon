@@ -330,10 +330,10 @@ zoneid_to_mapid = {
     9105: 1530,  # Vale of Eternal Blossoms
     10052: 1355,  # Nazjatar
     10290: 1462,  # Mechagon
-    10534: 1533,  # Bastion
     10413: 1525,  # Revendreth
     10424: 1409,  # Exile's Reach
     10472: 1705,  # Torghast, Tower of the Damned
+    10534: 1533,  # Bastion
     10833: 1527,  # Uldum
     11400: 1543,  # The Maw
     11462: 1536,  # Maldraxxus
@@ -344,6 +344,9 @@ zoneid_to_mapid = {
     13332: 1543,  # The Maw
     13387: 1565,  # Ardenweald
     13476: 1543,  # The Maw
+    13570: 1961,  # Korthia
+    13577: 1989,  # Tazavesh, the Veiled Market
+    13672: 1993,  # Tazavesh, the Veiled Market
     # Missing:
     5: False,  # - QA and DVD GLOBAL -
     34: False,  # Echo Ridge Mine
@@ -798,7 +801,7 @@ zoneid_to_mapid = {
     9602: False,  # Mariner's Row
     9616: False,  # Jorundall
     9627: False,  # Crosswind Commons
-    9651: False,  # Model Size Land
+    9651: False,  # Model Test World
     9653: False,  # Hall of Communion
     9660: False,  # The Drunken Drummer
     9661: False,  # Lost Spirit Lounge
@@ -920,6 +923,7 @@ zoneid_to_mapid = {
     10727: False,  # Suramar
     10731: False,  # The Great Sea
     10886: False,  # Deepwind Gorge
+    10887: False,  # Solesa naksu [DNT]
     10920: False,  # The Veiled Stair
     10986: False,  # Sinfall
     11024: False,  # The Jade Forest
@@ -929,9 +933,13 @@ zoneid_to_mapid = {
     11054: False,  # The Veiled Stair
     11356: False,  # Continent
     11375: False,  # The Eternal Palace
+    11382: False,  # 8.2.5 War Campaign
     11384: False,  # Mogu'shan Palace
     11395: False,  # Mogu'shan Vaults
     11397: False,  # Temple of the Jade Serpent
+    11401: False,  # The Dranosh'ar Blockade
+    11402: False,  # Orgrimmar
+    11403: False,  # Durotar
     11419: False,  # Cinematic Test Map
     11455: False,  # Crapopolis
     11463: False,  # MalDoodadtest
@@ -972,6 +980,12 @@ zoneid_to_mapid = {
     13366: False,  # Shattered Grove
     13367: False,  # Queen's Conservatory
     13377: False,  # The North Sea
+    13400: False,  # Skoldus Hall
+    13403: False,  # The Fracture Chambers
+    13404: False,  # The Soulforges
+    13411: False,  # Coldheart Interstitia
+    13412: False,  # Mort'regar
+    13413: False,  # The Upper Reaches
     13428: False,  # Empyrean Domain
     13433: False,  # The In-Between
     13462: False,  # Ascension Coliseum
@@ -981,4 +995,19 @@ zoneid_to_mapid = {
     13497: False,  # The Fracture Chambers
     13506: False,  # awood_dev1
     13507: False,  # sbenyona_dev1
+    13546: False,  # Torghast, Tower of the Damned
+    13548: False,  # Boralus Harbor
+    13553: False,  # Escape from the Maw
+    13556: False,  # Revendreth
+    13561: False,  # Sanctum of Domination
+    13574: False,  # PTH Test Area
+    13580: False,  # Fungal Wasteland
+    13581: False,  # Overgrown Canopy
+    13582: False,  # Edge of Darkness
+    13583: False,  # Lug'thun's Crater
+    13587: False,  # The Maw
+    13619: False,  # Ardenweald
+    13633: False,  # 9.1 Campaign
+    13637: False,  # Skyhold
+    13699: False,  # Seat of the Archon
 }
