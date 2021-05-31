@@ -1,4 +1,4 @@
-name: Package Addon
+name: Package Addon (Mainline)
 
 on:
   push:
@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Install luarocks
         run: sudo apt-get install luarocks
       - name: Install luacheck
@@ -23,13 +25,17 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - uses: kemayo/actions-recent-changelog@v1
         if: startsWith(github.ref, 'refs/tags')
         with:
           input: CHANGELOG.md
           output: RECENT_CHANGES.md
-      - name: Create Package
-        run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
+
+      - name: Create Mainline Package
+        uses: BigWigsMods/packager@master
         env:
            CF_API_KEY: ${{ secrets.CF_API_KEY }}
            WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
