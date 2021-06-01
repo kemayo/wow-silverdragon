@@ -184,6 +184,7 @@ function module:SetupWorldMap()
 		help = true,
 	}
 	button:SetScript("OnEnter", function()
+		button.options.nearby = WorldMapFrame.mapID
 		module:ShowTooltip(button, button.options)
 		-- now redo the anchoring!
 		if tooltip then
@@ -216,7 +217,6 @@ function module:SetupWorldMap()
 			end
 			button.texture:SetDesaturated(not overlay.db.profile.worldmap)
 		end
-		button.options.nearby = WorldMapFrame.mapID
 	end)
 	module.worldmap = button
 	if not db.profile.worldmap then
