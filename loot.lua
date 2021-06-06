@@ -683,7 +683,12 @@ do
 		else
 			loot_tooltip:SetOwner(self, "ANCHOR_RIGHT")
 		end
-		loot_tooltip:SetHyperlink(self:GetItemLink())
+		local link = self:GetItemLink()
+		if link then
+			loot_tooltip:SetHyperlink(self:GetItemLink())
+		else
+			loot_tooltip:AddLine(RETRIEVING_ITEM_INFO, 1, 0, 0)
+		end
 		ns.Loot.Details.restrictions(loot_tooltip, self.lootdata)
 		if core.debuggable then
 			loot_tooltip:AddDoubleLine(ID, self:GetItemID())

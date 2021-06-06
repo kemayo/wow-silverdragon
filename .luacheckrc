@@ -317,6 +317,7 @@ read_globals = {
     "REAGENTBANK_DEPOSIT",
     "RED_FONT_COLOR",
     "REMOVE",
+    "RETRIEVING_ITEM_INFO",
     "SEARCH_LOADING_TEXT",
     "SHIFT_KEY_TEXT",
     "SOUNDKIT",
