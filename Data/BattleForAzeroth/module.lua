@@ -39,7 +39,7 @@ function module:OnInitialize()
 		[127820] = {name="Scout Skrasniss",locations={[863]={59003900},},loot={160951},quest=48972,},
 		[127844] = {name="Gluttonous Yeti",locations={[896]={63006940},},loot={158683},quest=48979,},
 		[127873] = {name="Scrounger Patriarch",locations={[863]={58200900},},loot={161219},quest=48980,tameable=132193,},
-		[127877] = {name="Longfang",locations={[896]={59205540},},quest=48981,vignette=2311,},
+		[127877] = {name="Longfang",locations={[896]={59205540},},loot={159518},quest=48981,vignette=2311,},
 		[127901] = {name="Henry Breakwater",locations={[896]={59205540},},loot={160468},quest=48981,vignette=2311,},
 		[127939] = {name="Torraske the Eternal",locations={[862]={46406520},},loot={161029},quest=49004,tameable=2027936,},
 		[128426] = {name="Gutrip",locations={[863]={32404340},},loot={161041},quest=49231,},
