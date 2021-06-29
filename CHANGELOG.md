@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v90100.0
+
+* Update for 9.1
+* New rares in Korthia
+* Avoid an error in loot when an item is uncached and not fetched
+
 ## Changed in v90005.2
 
 * Blizzard has fixed a few typos in mob names, so add some code that'll refresh the name-cache when you actually see one of these mobs
