@@ -1,4 +1,4 @@
-## Interface: 90005
+## Interface: 90100
 ## Title: SilverDragon (Shadowlands)
 ## Notes: Mobs for Shadowlands
 ## Version: @project-version@
