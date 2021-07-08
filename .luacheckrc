@@ -170,6 +170,7 @@ read_globals = {
     "UnitHealthMax",
     "UnitIsAFK",
     "UnitIsDead",
+    "UnitIsGroupLeader",
     "UnitIsVisible",
     "UnitLevel",
     "UnitName",
