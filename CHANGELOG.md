@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v90100.1
+
+* Conquering Korthia achievement
+* Maelie the Wanderer in Korthia
+* Better display of long notes in tooltips
+
 ## Changed in v90100.0
 
 * Update for 9.1
