@@ -200,7 +200,7 @@ function module:OnInitialize()
 		[179108] = {name="Kroke the Tormented",locations={[1961]={59203580},},loot={187394,187250,187248,},quest=64428,},
 		[179472] = {name="Konthrogz the Obliterator",locations={[1961]={10008000},},loot={{187183, mount=1514},187375,187378,187384,187397,},quest=64246,},
 		[179608] = {name="Screaming Shade",locations={[1961]={44604240},},quest=64263,},
-		[179684] = {name="Hunting the Hunter",locations={[1961]={60652315},},loot={{186645, mount=1506},},quest=64233,},
+		[179684] = {name="Malbog",locations={[1961]={44202920},},loot={{186645, mount=1506},},notes="Talk to {npc:179729} in town, then follow footprints",quest=64233,},
 		[179760] = {name="Towering Exterminator",locations={[1961]={12008000},},loot={187241,187242,187373,187376,},quest=64245,},
 		[179768] = {name="Consumption",locations={[1961]={51154165},},loot={187245,187246,187247,},quest=64243,},
 		[179802] = {name="Yarxhov the Pillager",locations={[1961]={39405240},},loot={{187103, quest=63917},187366,},quest=64257,},
