@@ -473,6 +473,7 @@ local achievements = {
 		[174726] = 50016, -- A Naughty Story
 	},
 	[14802] = {}, -- Bloodsport (Maldraxxus)
+	[15107] = {}, -- Conquering Korthia
 }
 ns.achievements = achievements
 local mobs_to_achievement = {
