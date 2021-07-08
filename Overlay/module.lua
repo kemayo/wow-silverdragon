@@ -224,13 +224,13 @@ function module:ShowTooltip(pin)
     local id = pin.mobid
     if id and ns.mobdb[id] then
         tooltip:AddLine(core:GetMobLabel(id))
-        if ns.mobdb[id].notes then
-            tooltip:AddDoubleLine("Note", (core:RenderString(ns.mobdb[id].notes)))
-        end
         tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
         if pin.config.tooltip_completion then
             ns:UpdateTooltipWithCompletion(tooltip, id)
             ns.Loot.Summary.UpdateTooltip(tooltip, id, not pin.config.tooltip_regularloot)
+        end
+        if ns.mobdb[id].notes then
+            tooltip:AddLine(core:RenderString(ns.mobdb[id].notes), 1, 1, 1, true)
         end
         if pin.config.tooltip_lootwindow and pin.config.tooltip_regularloot and ns.Loot.HasRegularLoot(id) then
             self.lootwindow = ns.Loot.Window.ShowForMob(id)
