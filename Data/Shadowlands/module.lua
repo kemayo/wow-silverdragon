@@ -206,6 +206,7 @@ function module:OnInitialize()
 		[179802] = {name="Yarxhov the Pillager",locations={[1961]={39405240},},loot={{187103, quest=63917},187366,},quest=64257,},
 		[179859] = {name="Xyraxz the Unknowable",locations={[1961]={44903550},},loot={{186538, pet=3140},{187104, quest=63918},187387,},quest=64278,},
 		[179911] = {name="Silent Soulstalker",locations={[1961]={57607040},},quest=64284,},
+		[179912] = {name="Maelie the Wanderer",locations={[1961]={30005560,38403140,39703490,41103980,41302750,42806040,43003260,49304170,50302290,59801510,61304040},},loot={{186643,mount=1511}},notes="{npc:179930} asks you to find {npc:179912}, who spawns in a different place each day. Find her each day, use {spell:355862} on her, and get a mount from {npc:179930}",quest=64298},
 		[179913] = {name="Deadsoul Hatcher",locations={[1961]={59355220},},loot={{187174, toy=true},},quest=64285,},
 		[179914] = {name="Observer Yorik",locations={[1961]={50307590},},loot={{187420, toy=true},},quest=64369,},
 		[179931] = {name="Relic Breaker Krelva",locations={[1961]={22604140},},loot={187403,},quest=64291,},
