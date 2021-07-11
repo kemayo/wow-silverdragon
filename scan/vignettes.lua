@@ -143,6 +143,10 @@ local vignette_denylist = {
 	[637] = true, -- Garrison Cache
 }
 local function shouldShowNotVisible(vignetteInfo, zone)
+	if vignetteInfo.onWorldMap and db.pointsofinterest then
+		-- on the world map, it's cool
+		return true
+	end
 	local variant = (vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite") and LOOT or MOB
 	if zone and (visible_overrides[zone] == true or visible_overrides[zone] == variant) then
 		return false
