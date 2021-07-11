@@ -215,10 +215,6 @@ function module:WorkOutMobFromVignette(instanceid)
 		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.vignetteID], current_zone, x, y, source, instanceid)
 	end
 	if vignetteInfo.name then
-		if ns.vignetteMobLookup[vignetteInfo.name] then
-			--Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.name])
-			return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.name], current_zone, x, y, source, instanceid)
-		end
 		local mobid = core:IdForMob(vignetteInfo.name)
 		if mobid then
 			--Debug("name", vignetteInfo.name, mobid)
