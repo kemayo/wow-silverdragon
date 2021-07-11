@@ -274,3 +274,32 @@ function module:CleanupTooltip()
     end
     self.tooltip:Hide()
 end
+
+local function AddMobToTooltip(tooltip, mobid, name)
+    if not (mobid and ns.mobdb[mobid]) then return end
+    if name then
+        tooltip:AddLine(core:GetMobLabel(mobid))
+    end
+    if db.worldmap.tooltip_completion then
+        ns:UpdateTooltipWithCompletion(tooltip, mobid)
+        ns.Loot.Summary.UpdateTooltip(tooltip, mobid, not db.worldmap.tooltip_regularloot)
+    end
+    if ns.mobdb[mobid].notes then
+        tooltip:AddLine(core:RenderString(ns.mobdb[mobid].notes), 1, 1, 1, true)
+    end
+    tooltip:Show()
+end
+
+hooksecurefunc(VignettePinMixin, "OnMouseEnter", function(self)
+    -- _G.PIN = self
+    if not self.hasTooltip then return end
+    local vignetteInfo = self.vignetteInfo
+    if vignetteInfo.vignetteID and ns.vignetteMobLookup[vignetteInfo.vignetteID] then
+        for mobid in pairs(ns.vignetteMobLookup[vignetteInfo.vignetteID]) do
+            AddMobToTooltip(GameTooltip, mobid, true)
+        end
+    end
+    if vignetteInfo.name then
+        AddMobToTooltip(GameTooltip, core:IdForMob(vignetteInfo.name))
+    end
+end)

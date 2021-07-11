@@ -38,6 +38,7 @@ read_globals = {
     "ceil", "floor",
     "abs", "mod", "max",
     "sin", "cos", "tan",
+    "hooksecurefunc",
     "table", "tinsert", "tContains", "tAppendAll", "tDeleteItem", "wipe",
     "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower",
     "time",
@@ -223,6 +224,7 @@ read_globals = {
     "MapCanvasDataProviderMixin",
     "MapCanvasPinMixin",
     "Vector2DMixin",
+    "VignettePinMixin",
     "WorldMapPOIQuantizerMixin",
     "RegionUtil",
 
