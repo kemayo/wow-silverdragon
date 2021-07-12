@@ -170,6 +170,7 @@ function module:OnInitialize()
 		[171040] = {name="Xixin the Ravening",locations={[1533]={52213282,63513601,56031462,47994296,59655143},},loot={183605},notes="Possible spawn from the Swelling Tear",quest=61046,},
 		[171041] = {name="Worldfeaster Chronn",locations={[1533]={52213283,63513602,56031463,47994297,59655144},},loot={183605},notes="Possible spawn from the Swelling Tear",quest=61047,},
 		[171189] = {name="Bookkeeper Mnemis",locations={[1533]={56096200},},loot={182682},quest=59022,}, -- also 62167?
+		[171206] = {name="Playful Vulpin",locations={[1565]={},},loot={{180645, pet=2905}},notes="Play with this critter 5 times to get a pet. Use emotes related to what they're doing. They spawn anywhere vulpin cubs are found.",quest=61086,},
 		[171211] = {name="Aspirant Eolis",locations={[1533]={32602340},},loot={183607},quest=61083,},
 		[171255] = {name="Echo of Aella",locations={[1533]={44806460},},loot={180062},quest=61082,routes={[1533]={{45106860,46306760,46406670,47206620,47506510,46906400,46006380,45706460,45606570,46306670},{45706460,44806460,44706600,45406680,45906650}},},},
 		[171316] = {name="Malevolent Stygia",locations={[1543]={27301755},},quest=61125,},
