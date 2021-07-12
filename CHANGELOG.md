@@ -1,5 +1,13 @@
 # Changelog
 
+## Changed in v90100.2
+
+* Add rare information to the Blizzard world map icons (the big stars in Korthia, mostly)
+* Explain Consumption, because people are killing it too soon 😭
+* Don't try to set target icons in raids unless you're the RL
+* Add some missing 9.1 Maw rares
+* Add vignetteids to trigger alerts for Korthia rares whose names aren't their event
+
 ## Changed in v90100.1
 
 * Conquering Korthia achievement
