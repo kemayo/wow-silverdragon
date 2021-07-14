@@ -200,6 +200,7 @@ function module:OnInitialize()
 		[177444] = {name="Ylva",locations={[1543]={66404190}},loot={186217,187359,187393,{186970, quest=62683, note="{item:186727}"}},quest=64152,},
 		[177903] = {name="Dominated Protector",locations={[1961]={51802080},},loot={187390,},quest=63830,},
 		[179108] = {name="Kroke the Tormented",locations={[1961]={59203580},},loot={187394,187250,187248,},quest=64428,},
+		[179460] = {name="Fallen Charger",locations={[1543]={16274949,27906290,31803850}},loot={{186659,mount=1502},},notes="Yells, runs from its spawn point to Korthia, then despawns",quest=64164,},
 		[179472] = {name="Konthrogz the Obliterator",locations={[1961]={10008000},},loot={{187183, mount=1514},187375,187378,187384,187397,},quest=64246,vignette=4885,},
 		[179608] = {name="Screaming Shade",locations={[1961]={44604240},},quest=64263,},
 		[179684] = {name="Malbog",locations={[1961]={44202920},},loot={{186645, mount=1506},},notes="Talk to {npc:179729} in town, then follow footprints",quest=64233,},
