@@ -209,6 +209,7 @@ function module:OnInitialize()
 		[179768] = {name="Consumption",locations={[1961]={51154165},},loot={187245,187246,187247,},notes="Starts as an elite, eats {npc:179344} until it becomes a rare and then a rare-elite. Loot gets better as it gets stronger, so wait.",quest=64243,variant="rare-elite",},
 		[179769] = {name="Consumption",locations={[1961]={}},hidden=true,notes="Starts as an elite, eats {npc:179344} until it becomes a rare and then a rare-elite. Loot gets better as it gets stronger, so wait.",quest=64243,variant="normal",},
 		[179802] = {name="Yarxhov the Pillager",locations={[1961]={39405240},},loot={{187103, quest=63917},187366,},quest=64257,vignette=4859,},
+		[179853] = {name="Blinding Shadow",locations={[1543]={35904370}},loot={187361,187406},notes="In the Rift",quest=64276,},
 		[179859] = {name="Xyraxz the Unknowable",locations={[1961]={44903550},},loot={{186538, pet=3140},{187104, quest=63918},187387,},quest=64278,vignette=4861,},
 		[179911] = {name="Silent Soulstalker",locations={[1961]={57607040},},quest=64284,},
 		[179912] = {name="Maelie the Wanderer",locations={[1961]={30005560,35804650,38403140,39703490,41103980,41302750,42806040,43203130,49304170,50302290,59801510,61304040,62404970,},},loot={{186643,mount=1511}},notes="{npc:179930} asks you to find {npc:179912}, who spawns in a different place each day. Find her each day, use {spell:355862} on her, and get a mount from {npc:179930}",quest=64298},
