@@ -36,7 +36,7 @@ function module:OnInitialize()
 		[157733] = {name="Crazed Ash Ghoul",locations={[1525]={},},hidden=true,},
 		[157833] = {name="Borr-Geth",locations={[1543]={39014119},},loot={{184312,toy=true,}},quest=57469,},
 		[157964] = {name="Adjutant Dekaris",locations={[1543]={25903115},},quest=57482,},
-		[158025] = {name="Darklord Taraxis",locations={[1543]={49128175},},quest=62282,},
+		[158025] = {name="Darklord Taraxis",locations={[1543]={49128175},},loot={{183901,toy=true},186611},quest=62282,},
 		[158278] = {name="Nascent Devourer",locations={[1543]={45507376},},quest=57573,},
 		[158314] = {name="Drifting Sorrow",locations={[1543]={32002120},},quest=59183,},
 		[158406] = {name="Scunner",locations={[1536]={62107580},},loot={{181267,pet=2957,},184287,{183833,covenant=Enum.CovenantType.Necrolord,quest=62570,},{181797,covenant=Enum.CovenantType.Necrolord,quest=61561,}},quest=58006,},
