@@ -223,6 +223,11 @@ function module:SetupWorldMap()
 				}
 				tAppendAll(button.options.help, default_help)
 			end
+		else
+			button.options.help = {
+				RED_FONT_COLOR:WrapTextInColorCode("No map icons as SilverDragon: Overlay is disabled")
+			}
+			tAppendAll(button.options.help, default_help)
 		end
 		button.options.nearby = WorldMapFrame.mapID
 	end
