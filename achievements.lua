@@ -473,7 +473,11 @@ local achievements = {
 		[174726] = 50016, -- A Naughty Story
 	},
 	[14802] = {}, -- Bloodsport (Maldraxxus)
-	[15107] = {}, -- Conquering Korthia
+	[15107] = { -- Conquering Korthia
+		[179755] = 52285, -- Consumption (has multiple ids)
+		[179768] = 52285, -- Consumption (has multiple ids)
+		[179769] = 52285, -- Consumption (has multiple ids)
+	},
 }
 ns.achievements = achievements
 local mobs_to_achievement = {
