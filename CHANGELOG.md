@@ -1,5 +1,13 @@
 # Changelog
 
+## Changed in v90100.3
+
+* Missing Maw rares: Blinding Shadow, Fallen Charger
+* Include the Playful Vulpin in Ardenweald. It's a critter, so nameplate scanning can't catch it, but the macro will work.
+* Show a note in the map-icon tooltip if the Overlay addon is disabled, so you know why there are no icons
+* Show achievement status for all of Consumption's stages
+* Add some loot
+
 ## Changed in v90100.2
 
 * Add rare information to the Blizzard world map icons (the big stars in Korthia, mostly)
