@@ -181,7 +181,7 @@ function module:OnInitialize()
 		[172207] = {name="Odalrik",locations={[1543]={38652880},},loot={{183061,quest=63158,},178561},quest=62618,},
 		[172521] = {name="Sanngror the Torturer",locations={[1543]={55606320},},loot={{183410,pet=3040,},186629},quest=62210,},
 		[172523] = {name="Houndmaster Vasanok",locations={[1543]={60456480},},loot={186224},quest=62209,},
-		[172524] = {name="Skittering Broodmother",locations={[1543]={61757795},},loot={186240},quest=62211,tameable=644001,},
+		[172524] = {name="Skittering Broodmother",locations={[1543]={54507930},[1820]={36707940}},loot={186240},quest=62211,tameable=644001,},
 		[172577] = {name="Orophea",locations={[1543]={23692139},},loot={{181794,toy=true,},186211},quest=61519,},
 		[172862] = {name="Yero the Skittish",locations={[1543]={37406200},},loot={186228},quest=61568,},
 		[173051] = {name="Suppressor Xelors",locations={[1705]={},},},
