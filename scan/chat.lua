@@ -45,12 +45,14 @@ local redirects = {
     [157727] = 160857, -- Scorched Outcast => Sire Ladinas
     [157733] = 160857, -- Crazed Ash Ghoul => Sire Ladinas
     [166726] = 160857, -- Blistering Ash Ghoul => Sire Ladinas
+    [179974] = 179985, -- Drippy => Stygian Stonecrusher
 }
 local type_restriction = {
     [157726] = "CHAT_MSG_MONSTER_YELL", -- Scorched Scavenger
     [157727] = "CHAT_MSG_MONSTER_YELL", -- Scorched Outcast
     [157733] = "CHAT_MSG_MONSTER_YELL", -- Crazed Ash Ghoul
     [166726] = "CHAT_MSG_MONSTER_YELL", -- Blistering Ash Ghoul
+    [179974] = "CHAT_MSG_MONSTER_YELL", -- Stygian Stonecrusher
 }
 
 function module:OnChatMessage(event, text, name, ...)

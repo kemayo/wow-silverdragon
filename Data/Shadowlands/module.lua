@@ -218,6 +218,7 @@ function module:OnInitialize()
 		[179913] = {name="Deadsoul Hatcher",locations={[1961]={59355220},},loot={{187174,toy=true,},187396,187401},quest=64285,},
 		[179914] = {name="Observer Yorik",locations={[1961]={50307590},},loot={{187420,toy=true,},187365,187405},quest=64369,},
 		[179931] = {name="Relic Breaker Krelva",locations={[1961]={22604140},},loot={187403},quest=64291,},
+		[179974] = {name="Drippy",locations={[1961]={46507951},},notes="Yells about Stygian Stonecrusher",hidden=true,},
 		[179985] = {name="Stygian Stonecrusher",locations={[1961]={46507950},},loot={184790,{186479,mount=nil,covenant=Enum.CovenantType.Venthyr,},{187283,quest=64530,},187386,{187428,quest=64553,}},quest=64313,},
 		[180014] = {name="Escaped Wilderling",locations={[1961]={33103930},},loot={{186492,mount=1487,covenant=Enum.CovenantType.NightFae,}},quest=64320,},
 		[180032] = {name="Wild Worldcracker",locations={[1961]={56853235},},loot={{187176,toy=true,},{186483,mount=1493,covenant=Enum.CovenantType.Kyrian,},{187282,quest=64529,},187380,{187426,quest=64552,}},quest=64338,vignette=4838,},
