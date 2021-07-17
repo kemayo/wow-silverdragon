@@ -130,7 +130,7 @@ function module:OnInitialize()
 		[167724] = {name="Rotbriar Boggart",locations={[1565]={65702430},},loot={175729},quest=60258,vignette=4435,},
 		[167726] = {name="Rootwrithe",locations={[1565]={65104430},},loot={179603},quest=60273,vignette=4192,},
 		[167851] = {name="Egg-Tender Leh'go",locations={[1565]={58403230},},loot={179539},notes="Destroy eggs, might have to wait a bit",quest=60266,tameable=2011146,vignette=4191,},
-		[168135] = {name="Night Mare",locations={[1565]={57874983},},loot={{180728,mount=1306,}},notes="Be Night Fae; summoning quest chain",quest=60306,tameable=2143073,},
+		[168135] = {name="Night Mare",locations={[1565]={57874983},},loot={{180728,mount=1306,}},notes="Summoning quest chain",quest=60306,tameable=2143073,},
 		[168147] = {name="Sabriel the Bonecleaver",locations={[1536]={50404820},},loot={{181815,mount=1370,covenant=Enum.CovenantType.Necrolord,},184291},quest=58784,},
 		[168148] = {name="Drolkrad",locations={[1536]={50204840},},notes="Sabriel's mount",quest=58784,hidden=true,},
 		[168647] = {name="Valfir the Unrelenting",locations={[1565]={29605540},},loot={{180730,mount=1393,covenant=Enum.CovenantType.NightFae,},180154,{182176,covenant=Enum.CovenantType.NightFae,quest=62431,}},notes="Be Night Fae",quest=61632,},
