@@ -99,7 +99,7 @@ function module:OnInitialize()
 		[163460] = {name="Dionae",locations={[1533]={41354885},},loot={{180856,pet=2932,}},quest=62650,},
 		[164064] = {name="Obolos",locations={[1543]={48801830},},loot={186238},quest=60667,},
 		[164093] = {name="Macabre",locations={[1565]={36504790,32704477,58702920},},loot={{180644,pet=2907,}},quest=59140,vignette=4113,},
-		[164107] = {name="Gormtamer Tizo",locations={[1565]={27885248},},loot={{180725,mount=1362,}},quest=59145,},
+		[164107] = {name="Gormtamer Tizo",locations={[1565]={27885248},},loot={{180725,mount=1362,}},notes="Kill {npc:166736} until it spawns",quest=59145,},
 		[164112] = {name="Humon'gozz",locations={[1565]={31803040},},loot={{182650,mount=1415,}},quest=59157,},
 		[164147] = {name="Wrigglemortis",locations={[1565]={58306180},},loot={181396},quest=59170,vignette=4115,},
 		[164238] = {name="Deifir the Untamed",locations={[1565]={46202180,47002740},},loot={{180631,pet=2920,}},notes="So tame him",quest=59201,tameable=2011146,},
