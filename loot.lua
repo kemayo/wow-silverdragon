@@ -27,6 +27,15 @@ local function any(test, ...)
 	return false
 end
 
+-- we need non-localized covenant names for atlases
+-- can't use the texturekit value from covenant data, since the atlas I want doesn't conform to it
+local covenants = {
+	[Enum.CovenantType.Kyrian] = "Kyrian",
+	[Enum.CovenantType.Necrolord] = "Necrolords",
+	[Enum.CovenantType.NightFae] = "NightFae",
+	[Enum.CovenantType.Venthyr] = "Venthyr",
+}
+
 local brokenItems = {
 	-- itemid : {appearanceid, sourceid}
 	[153268] = {25124, 90807}, -- Enclave Aspirant's Axe
@@ -388,12 +397,10 @@ local Details = {
 		if itemdata.covenant then
 			local covenant = C_Covenants.GetCovenantData(itemdata.covenant)
 			local active = itemdata.covenant == C_Covenants.GetActiveCovenantID()
-			if covenant then
-				tooltip:AddLine(
-					ITEM_REQ_SKILL:format(COVENANT_COLORS[covenant.ID]:WrapTextInColorCode(covenant.name)),
-					(active and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
-				)
-			end
+			tooltip:AddLine(
+				ITEM_REQ_SKILL:format(COVENANT_COLORS[itemdata.covenant]:WrapTextInColorCode(covenant and covenant.name or covenants[itemdata.covenant])),
+				(active and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+			)
 		end
 		if itemdata.class then
 			local active = select(2, UnitClass("player")) == itemdata.class
@@ -462,9 +469,7 @@ local function requiresLabel(item)
 		if item.covenant then
 			local data = C_Covenants.GetCovenantData(item.covenant)
 			-- local active = item.covenant == C_Covenants.GetActiveCovenantID()
-			if data then
-				ret = ret .. PARENS_TEMPLATE:format(COVENANT_COLORS[item.covenant]:WrapTextInColorCode(data.name))
-			end
+			ret = ret .. PARENS_TEMPLATE:format(COVENANT_COLORS[item.covenant]:WrapTextInColorCode(data and data.name or covenants[item.covenant]))
 		end
 		if item.class then
 			ret = ret .. PARENS_TEMPLATE:format(RAID_CLASS_COLORS[item.class]:WrapTextInColorCode(LOCALIZED_CLASS_NAMES_FEMALE[item.class]))
@@ -582,15 +587,6 @@ do
 	local ITEM_XOFFSET = 4
 	local ITEM_YOFFSET = -5
 	local TITLE_SPACING = 16
-
-	-- we need non-localized covenant names for atlases
-	-- can't use the texturekit value from covenant data, since the atlas I want doesn't conform to it
-	local covenants = {
-		[Enum.CovenantType.Kyrian] = "Kyrian",
-		[Enum.CovenantType.Necrolord] = "Necrolords",
-		[Enum.CovenantType.NightFae] = "NightFae",
-		[Enum.CovenantType.Venthyr] = "Venthyr",
-	}
 
 	local function isMouseOver(...)
 		for i=1, select("#", ...) do
