@@ -196,7 +196,7 @@ function module:OnInitialize()
 		[174827] = {name="Gorged Shadehound",locations={[1543]={53507950},},loot={{184167,mount=1304,}},notes="Only during the Hunt: Shadehounds event",},
 		[175012] = {name="Ikras the Devourer",locations={[1543]={30775000},},loot={186214},quest=62788,},
 		[175821] = {name="Ratgusher",locations={[1543]={22654225},},loot={186627},quest=63044,},
-		[177336] = {name="Zelnithop",locations={[1961]={27755885},},loot={{186542,pet=3136,},187371},quest=64442,},
+		[177336] = {name="Zelnithop",locations={[1961]={30305480},[2007]={45606830},},loot={{186542,pet=3136,},187371},quest=64442,},
 		[177444] = {name="Ylva",locations={[1543]={66404190},},loot={186217,187359,187393,{186970,note="{item:186727}",quest=62683,}},quest=64152,tameable=877481,},
 		[177903] = {name="Dominated Protector",locations={[1961]={51802080},},loot={187390},quest=63830,},
 		[179108] = {name="Kroke the Tormented",locations={[1961]={59203580},},loot={187394,187250,187248},quest=64428,},
