@@ -69,7 +69,7 @@ function module:OnInitialize()
 		[160985] = {name="Selena the Reborn",locations={[1533]={61305090},},loot={183608},notes="Needs three players to summon",quest=58320,vignette=4571,},
 		[161105] = {name="Indomitable Schmitd",locations={[1536]={38804335},},loot={182192,{174070,covenant=Enum.CovenantType.Necrolord,quest=58379,}},quest=58332,},
 		[161310] = {name="Executioner Adrastia",locations={[1525]={43055185},},loot={180502,182967},quest=58441,},
-		[161527] = {name="Sigilback",locations={[1533]={55208040},},loot={{174445,toy=true,},179486},quest=60570,tameable=132199,vignette=4032,},
+		[161527] = {name="Sigilback",locations={[1533]={55208040},},loot={179486},quest=60570,tameable=132199,vignette=4032,},
 		[161528] = {name="Aethon",locations={[1533]={55208020},},loot={179487},quest=58526,tameable=2143073,vignette=4032,},
 		[161529] = {name="Nemaeus",locations={[1533]={55008020},},loot={179485},quest=60569,tameable=929300,vignette=4032,},
 		[161530] = {name="Cloudtail",locations={[1533]={55208040},},loot={179488},quest=60571,tameable=458223,vignette=4032,},
