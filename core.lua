@@ -7,6 +7,8 @@ SilverDragon = addon
 SilverDragon.NAMESPACE = ns -- for separate addons
 addon.events = LibStub("CallbackHandler-1.0"):New(addon)
 
+local faction = UnitFactionGroup("player")
+
 local Debug
 do
 	local TextDump = LibStub("LibTextDump-1.0")
@@ -112,6 +114,24 @@ function addon:RegisterMobData(source, data)
 	addon.datasources[source] = data
 end
 do
+	local function addQuestMobLookup(mobid, quest)
+		if type(quest) == "table" then
+			if quest.alliance then
+				return addQuestMobLookup(mobid, faction == "Alliance" and quest.alliance or quest.horde)
+			end
+			for _, questid in ipairs(quest) do
+				if not questMobLookup[quest] then
+					questMobLookup[quest] = {}
+				end
+				questMobLookup[quest][mobid] = true
+			end
+		else
+			if not questMobLookup[quest] then
+				questMobLookup[quest] = {}
+			end
+			questMobLookup[quest][mobid] = true
+		end
+	end
 	local function addMobToLookups(mobid, mobdata)
 		if mobdata.hidden then
 			return
@@ -125,14 +145,8 @@ do
 			end
 		end
 		-- In the olden days, we had one mob per quest and/or vignette. Alas...
-		local quest = addon:QuestForMob(mobid)
-		if quest then
-			local questMobs = questMobLookup[quest]
-			if not questMobs then
-				questMobs = {}
-				questMobLookup[mobdata.quest] = questMobs
-			end
-			questMobs[mobid] = true
+		if mobdata.quest then
+			addQuestMobLookup(mobid, mobdata.quest)
 		end
 		if mobdata.vignette then
 			local vignetteMobs = vignetteMobLookup[mobdata.vignette]
@@ -263,12 +277,12 @@ function addon:SetCustom(id, watch, quiet)
 	return true
 end
 
--- returns name, questid, vignette, tameable, last_seen, times_seen
+-- returns name, vignette, tameable, last_seen, times_seen
 function addon:GetMobInfo(id)
 	if mobdb[id] then
 		local m = mobdb[id]
 		local name = self:NameForMob(id)
-		return name, self:QuestForMob(id), m.vignette or name, m.tameable, globaldb.mob_seen[id], globaldb.mob_count[id]
+		return name, m.vignette or name, m.tameable, globaldb.mob_seen[id], globaldb.mob_count[id]
 	end
 end
 function addon:IsMobInZone(id, zone)
@@ -376,7 +390,6 @@ do
 			[32491] = true, -- Time-Lost
 		},
 	}
-	local faction = UnitFactionGroup("player")
 	function addon:ShouldIgnoreMob(id, zone)
 		if globaldb.ignore[id] then
 			return true
@@ -401,15 +414,6 @@ do
 			if mobdb[id].source and globaldb.ignore_datasource[mobdb[id].source] then
 				return true
 			end
-		end
-	end
-	function addon:QuestForMob(id)
-		if mobdb[id] and mobdb[id].quest then
-			if type(mobdb[id].quest) == "table" then
-				-- some mobs have faction-based questids; they get stored as {alliance, horde}
-				return mobdb[id].quest[faction == "Alliance" and 1 or 2]
-			end
-			return mobdb[id].quest
 		end
 	end
 end
