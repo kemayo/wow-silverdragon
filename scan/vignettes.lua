@@ -131,23 +131,29 @@ local already_notified_loot = {
 local MOB = 1
 local LOOT = 2
 local visible_overrides = {
-	[1550] = LOOT, -- The Shadowlands, because of...
-	[1565] = LOOT, -- Ardenweald, where all chests are notified from the entire zone
+	-- [1550] = LOOT, -- The Shadowlands, because of...
+	-- [1565] = LOOT, -- Ardenweald, where all chests are notified from the entire zone
 	-- But also all the Shadowlands zones, because callings quests are fucky about this and I need to work out a heuristic for them
-	[1533] = LOOT, -- Bastion
-	[1536] = LOOT, -- Maldraxxus
-	[1525] = LOOT, -- Revendreth
-	[1543] = true, -- Maw
+	-- [1533] = LOOT, -- Bastion
+	-- [1536] = LOOT, -- Maldraxxus
+	-- [1525] = LOOT, -- Revendreth
+	[1543] = true, -- Maw (where there's just so *many*)
 }
 local vignette_denylist = {
 	[637] = true, -- Garrison Cache
 }
 local function shouldShowNotVisible(vignetteInfo, zone)
-	if vignetteInfo.onWorldMap and db.pointsofinterest then
-		-- on the world map, it's cool
+	local variant = (vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite") and LOOT or MOB
+	if vignetteInfo.onWorldMap and db.pointsofinterest and not vignetteInfo.zoneInfiniteAOI then
+		-- If it's on the world map, it's cool
+		-- BUT don't alert for treasures on the world map, because there's no time-sensitive ones so far (9.1), and
+		-- it results in bursts of alerts when zoning into the Shadowlands area with the daily chests
 		return true
 	end
-	local variant = (vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite") and LOOT or MOB
+	if vignetteInfo.zoneInfiniteAOI then
+		-- It can be semi-seen from the entire zone, and so we should wait until it's actually-visible
+		return false
+	end
 	if zone and (visible_overrides[zone] == true or visible_overrides[zone] == variant) then
 		return false
 	end
