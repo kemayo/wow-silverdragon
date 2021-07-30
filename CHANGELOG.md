@@ -1,5 +1,18 @@
 # Changelog
 
+## Changed in v90100.5
+
+* Maw:
+    * Added Traitor Balthier, Demen the Vortex, Guard Orguluus
+    * Skittering Broodmother has moved
+* Korthia:
+    * A few new Maelie locations
+    * Show Zelnithop inside Gromit Hollow
+    * Recognize the Stygian Stonecrusher vignette and Drippy's yell
+* Revendreth: more loot on the inquisitors
+* Rewrote some tracking quest handling so that Maelie will now stay counted as complete once you've completed the final day
+* Removed the Glimmerfly Cocoon, since it seems to definitely not be dropping
+
 ## Changed in v90100.4
 
 * Mine new loot; lots added to the Maw rares
