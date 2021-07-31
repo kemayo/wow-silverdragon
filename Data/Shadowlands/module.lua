@@ -226,7 +226,7 @@ function module:OnInitialize()
 		[180014] = {name="Escaped Wilderling",locations={[1961]={33103930},},loot={{186492,mount=1487,covenant=Enum.CovenantType.NightFae,}},quest=64320,},
 		[180032] = {name="Wild Worldcracker",locations={[1961]={56853235},},loot={{187176,toy=true,},{186483,mount=1493,covenant=Enum.CovenantType.Kyrian,},{187282,quest=64529,},187380,{187426,quest=64552,}},quest=64338,vignette=4838,},
 		[180042] = {name="Fleshwing",locations={[1961]={59954370},},loot={187372,{186489,mount=1449,covenant=Enum.CovenantType.Necrolord,},187181,{187424,quest=64551,}},quest=64349,vignette=4854,},
-		[180160] = {name="Reliwik the Defiant",locations={[1961]={56256615},},loot={{186652,mount=1509,},187388},quest=64455,},
+		[180160] = {name="Reliwik the Defiant",locations={[1961]={56256615},},loot={{186652,mount=1509,},187388},quest=64455,vignette=4864,},
 		[180162] = {name="Ve'rayn",locations={[1961]={14008000},},loot={{187264,quest=64513,},187369,187404},quest=64457,},
 		[180246] = {name="Carriage Crusher",locations={[1961]={58201775},},loot={187370,187391,187399},quest=64258,vignette=4857,},
 	})
