@@ -202,6 +202,7 @@ function module:OnInitialize()
 		[179108] = {name="Kroke the Tormented",locations={[1961]={59203580},},loot={187394,187250,187248},quest=64428,},
 		[179460] = {name="Fallen Charger",locations={[1543]={16274949,27906290,31803850},},loot={{186659,mount=1502,},186660,186661},notes="Yells, runs from its spawn point to Korthia, then despawns",quest=64164,},
 		[179472] = {name="Konthrogz the Obliterator",locations={[1961]={10008000},},loot={{187183,mount=1514,},187375,187378,187384,187397},quest=64246,vignette=4885,},
+		[179565] = {name="Relic Gorger",locations={[1961]={},},quest=64433,},
 		[179608] = {name="Screaming Shade",locations={[1961]={44604240},},loot={187362,187400},quest=64263,},
 		[179684] = {name="Malbog",locations={[1961]={44202920},},loot={{186645,mount=1506,},187377},notes="Talk to {npc:179729} in town, then follow footprints",quest=64233,},
 		[179735] = {name="Torglluun",locations={[1543]={27672526},},loot={187360,187389,{187139,toy=true,},186605},notes="In the Rift",quest=64232,},
