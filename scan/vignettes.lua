@@ -144,7 +144,7 @@ local vignette_denylist = {
 }
 local function shouldShowNotVisible(vignetteInfo, zone)
 	local variant = (vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite") and LOOT or MOB
-	if vignetteInfo.onWorldMap and db.pointsofinterest and not vignetteInfo.zoneInfiniteAOI then
+	if vignetteInfo.onWorldMap and db.pointsofinterest and variant == MOB then
 		-- If it's on the world map, it's cool
 		-- BUT don't alert for treasures on the world map, because there's no time-sensitive ones so far (9.1), and
 		-- it results in bursts of alerts when zoning into the Shadowlands area with the daily chests
