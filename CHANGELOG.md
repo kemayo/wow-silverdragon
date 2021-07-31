@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v90100.6
+
+* Changed some anti-loot-spam code that had gone overzealous and was stopping you seeing the off-minimap rares in Korthia
+
 ## Changed in v90100.5
 
 * Maw:
