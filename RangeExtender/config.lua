@@ -20,6 +20,7 @@ function module:RegisterConfig()
 		args = {
 			about = config.desc("Minimap vignettes tell us where various things are. Blizzard lets us know about them before they'll be shown on the minimap sometimes, whether because of zoom levels or something concealing the vignette from your view. As such we can fake those hidden vignettes, to give you early warning of things you might want to pursue.", 0),
 			enabled = config.toggle("Enabled", "Extend the range at which minimap vignettes will appear.", 10),
+			mystery = config.toggle("Mystery vignettes", "Show mysterious vignettes that don't return any information from the API", 15),
 			types_desc = config.desc("You can adjust the types of vignettes to extend. This is inherently fuzzy because we don't get much information about them, so it's just going off their internal icon names. There's nothing stopping Blizzard from categorizing things weirdly, or making new icons.", 20),
 			types = {
 				type = "multiselect",
