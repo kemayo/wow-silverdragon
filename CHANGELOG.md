@@ -1,5 +1,12 @@
 # Changelog
 
+## Changed in v90100.7
+
+* The vignette range extender has a new option to show "mystery" vignettes that exist but are hidden from the API. I can't tell *what* any specific one is, but they tend to be lootable things like relic caches in Korthia.
+* Observer Yorik has a new questid, and so won't keep on looking incomplete
+* Reliwik has an associated vignetteid that'll help with alerts
+* Mobs that had a mount/pet *and* toys *and* regular items as loot had a tooltip glitch with overlapping loot tooltips
+
 ## Changed in v90100.6
 
 * Changed some anti-loot-spam code that had gone overzealous and was stopping you seeing the off-minimap rares in Korthia
