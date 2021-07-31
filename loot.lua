@@ -440,18 +440,17 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 		end
 	end
 	local n = (pet or mount) and 2 or 1
+	local itemtip
 	if toy then
-		local toytip
 		for i, toyid, itemdata in ns.Loot.IterToys(id) do
-			toytip = get_tooltip(toytip or tooltip, n)
-			if not toytip then return end -- out of comparisons
-			Details.toy(toytip, n, toyid)
-			Details.restrictions(toytip, itemdata)
+			itemtip = get_tooltip(itemtip or tooltip, n)
+			if not itemtip then return end -- out of comparisons
+			Details.toy(itemtip, n, toyid)
+			Details.restrictions(itemtip, itemdata)
 			n = n + 1
 		end
 	end
 	if regular then
-		local itemtip
 		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id) do
 			itemtip = get_tooltip(itemtip or tooltip, n)
 			if not itemtip then return end -- out of comparisons

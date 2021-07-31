@@ -183,6 +183,7 @@ function module:OnInitialize()
 					-- faeflayer = faker(171688, "Faeflayer", 1536, 0.5, 0.5),
 					scrapking = faker(151625, "Scrap King (loot)", 1462, 0.5, 0.5),
 					kash = faker(159105, "Collector Kash (lots of loot)", 1536, 0.5, 0.5),
+					-- worldcracker = faker(180032, "Wild Worldcracker", 1961, 0.5, 0.5),
 					chest = {
 						type = "execute", name = "Waterlogged Chest",
 						desc = "Fake seeing a Waterlogged Chest",
