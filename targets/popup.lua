@@ -480,13 +480,7 @@ PopupMixin.scripts = {
 		elseif IsControlKeyDown() then
 			module:Point(self.data)
 		elseif IsShiftKeyDown() then
-			-- worldmap:uiMapId:x:y
-			local data = self.data
-			local x, y = data.x, data.y
-			if not (x > 0 and y > 0) then
-				x, y = HBD:GetPlayerZonePosition()
-			end
-			module:SendLinkFromData(data, data.zone, x, y)
+			module:SendLinkFromData(self.data)
 		elseif IsAltKeyDown() then
 			module.anchor:StartMoving()
 		end

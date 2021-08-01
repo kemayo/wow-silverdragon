@@ -90,7 +90,7 @@ function module:UpdateVignetteOnMinimap(instanceid)
 		return
 	end
 	-- Debug("considering vignette", instanceid)
-	local uiMapID = HBD:GetPlayerZone()
+	local uiMapID = C_Map.GetBestMapForUnit("player")
 	if not uiMapID then
 		return -- Debug("can't determine current zone")
 	end
