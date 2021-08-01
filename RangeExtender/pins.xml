@@ -7,7 +7,7 @@
 		</Anchors>
 		<Layers>
 			<Layer level="OVERLAY">
-				<Texture parentKey="texture">
+				<Texture parentKey="texture" texelSnappingBias="0.0" snapToPixelGrid="false">
 					<Size x="20" y="20"/>
 					<Anchors>
 						<Anchor point="CENTER"/>
