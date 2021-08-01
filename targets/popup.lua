@@ -433,11 +433,18 @@ PopupMixin.scripts = {
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, -60)
 		GameTooltip:AddDoubleLine(escapes.leftClick .. " " .. TARGET, escapes.rightClick .. " " .. CLOSE)
-		GameTooltip:AddDoubleLine(ALT_KEY_TEXT .. " + " .. escapes.leftClick .. " + " .. DRAG_MODEL, MOVE_FRAME)
-		GameTooltip:AddDoubleLine(CTRL_KEY_TEXT .. " + " .. escapes.leftClick, MAP_PIN )
-		if C_Map.CanSetUserWaypointOnMap(self.data.zone) and self.data.x > 0 and self.data.y > 0 then
-			GameTooltip:AddDoubleLine(SHIFT_KEY_TEXT .. " + " .. escapes.leftClick, TRADESKILL_POST )
+		local uiMapID, x, y = module:GetPositionFromData(self.data)
+		if uiMapID then
+			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, ("%.1f, %.1f"):format(x * 100, y * 100),
+				0, 1, 0,
+				0, 1, 0
+			)
 		end
+		GameTooltip:AddDoubleLine(ALT_KEY_TEXT .. " + " .. escapes.leftClick .. " + " .. DRAG_MODEL, MOVE_FRAME)
+		if uiMapID and C_Map.CanSetUserWaypointOnMap(uiMapID) then
+			GameTooltip:AddDoubleLine(CTRL_KEY_TEXT .. " + " .. escapes.leftClick, MAP_PIN )
+		end
+		GameTooltip:AddDoubleLine(SHIFT_KEY_TEXT .. " + " .. escapes.leftClick, TRADESKILL_POST )
 		GameTooltip:Show()
 
 		self.glow.animIn:Stop() -- in case
