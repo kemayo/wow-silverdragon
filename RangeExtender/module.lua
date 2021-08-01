@@ -52,13 +52,12 @@ function module:VIGNETTE_MINIMAP_UPDATED(event, instanceid, onMinimap, ...)
 	-- Debug("VIGNETTE_MINIMAP_UPDATED", instanceid, onMinimap, ...)
 	if not instanceid then
 		-- ...just in case
-		Debug("No Vignette instanceid")
 		return
 	end
 
 	local icon = vignetteIcons[instanceid]
 	if not icon then
-		return module:UpdateVignetteOnMinimap(instanceid)
+		return self:UpdateVignetteOnMinimap(instanceid)
 	end
 
 	if onMinimap then
@@ -160,7 +159,7 @@ function SilverDragonVignetteStretchPinMixin:OnMouseEnter()
 	end
 	GameTooltip_SetTitle(GameTooltip, self.info and self.info.name or UNKNOWN)
 	if not self.info then
-		GameTooltip:AddLine("This mystery vignette has no information available about itself through the API.", 1, 1, 1, true)
+		GameTooltip:AddLine("This mystery vignette has no information available", 1, 1, 1, true)
 	end
 	GameTooltip:Show()
 end
