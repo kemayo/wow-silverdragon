@@ -358,7 +358,7 @@ end
 
 do
 	local lastseen = {}
-	function addon:NotifyForMob(id, zone, x, y, is_dead, source, unit, silent, force)
+	function addon:NotifyForMob(id, zone, x, y, is_dead, source, unit, silent, force, vignetteGUID)
 		self.events:Fire("Seen_Raw", id, zone, x, y, is_dead, source, unit)
 
 		if silent then
@@ -380,7 +380,7 @@ do
 		globaldb.mob_count[id] = globaldb.mob_count[id] + 1
 		globaldb.mob_seen[id] = time()
 		lastseen[id..zone] = time()
-		self.events:Fire("Seen", id, zone, x or 0, y or 0, is_dead, source, unit)
+		self.events:Fire("Seen", id, zone, x or 0, y or 0, is_dead, source, unit, vignetteGUID)
 		return true
 	end
 end

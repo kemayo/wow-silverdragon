@@ -206,8 +206,8 @@ function module:WorkOutMobFromVignette(instanceid)
 			return -- Debug("skipping notification", "delay not exceeded")
 		end
 		already_notified_loot[vignetteInfo.vignetteID] = time()
-		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x or 0, y or 0)
-		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0)
+		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x or 0, y or 0, instanceid)
+		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0, instanceid)
 		return true
 	end
 	if vignetteInfo.objectGUID then
@@ -260,10 +260,10 @@ function module:VIGNETTES_UPDATED()
 end
 
 function module:NotifyIfNeeded(id, current_zone, x, y, variant, instanceid)
-	local force = true
+	local force = false
 	if x and y then
 		--Triggered by map update, vignette has exact location that does not match player, so update x, y
-		force = false
+		force = true
 	else
 		x, y = HBD:GetPlayerZonePosition()
 	end
@@ -272,6 +272,7 @@ function module:NotifyIfNeeded(id, current_zone, x, y, variant, instanceid)
 	end
 	already_notified[instanceid] = true
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-	core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x, y)
-	return core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, force)
+	local ret = core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, force, instanceid)
+	core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x, y, instanceid, id)
+	return ret
 end

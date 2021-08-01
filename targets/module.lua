@@ -61,7 +61,7 @@ function module:OnInitialize()
 end
 
 local pending
-function module:Announce(callback, id, zone, x, y, dead, source, unit)
+function module:Announce(callback, id, zone, x, y, dead, source, unit, _, vignetteGUID)
 	if not db.show then return end
 	if source:match("^sync") then
 		local channel, player = source:match("sync:(.+):(.+)")
@@ -89,7 +89,7 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit)
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 	data.unit = nil -- can't be trusted to remain the same
 end
-function module:AnnounceLoot(_, name, id, zone, x, y)
+function module:AnnounceLoot(_, name, id, zone, x, y, vignetteGUID)
 	if not db.loot then return end
 	local data = {
 		type = "loot",
