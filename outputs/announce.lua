@@ -31,8 +31,8 @@ LSM:Register("sound", "Magtheridon: I am Unleashed", 554554)
 LSM:Register("sound", "Loatheb: I see you", 554236)
 LSM:Register("sound", "Ikiss: Trinkets", 561403)
 LSM:Register("sound", "NPCScan", 567275)--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
-LSM:Register("sound", "PvP Warning Alliance", 568320) -- PVPWarningAllianceLong
-LSM:Register("sound", "PvP Warning Horde", 569112) -- PVPWarningHordeLong
+LSM:Register("sound", "PvP Alliance", 568320) -- PVPWarningAllianceLong
+LSM:Register("sound", "PvP Horde", 569112) -- PVPWarningHordeLong
 LSM:Register("sound", "Grimrail Train Horn", 1023633)
 LSM:Register("sound", "Squire Horn", 598079)
 LSM:Register("sound", "Gruntling Horn", 598196)
