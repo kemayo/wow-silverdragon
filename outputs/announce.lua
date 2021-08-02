@@ -15,6 +15,7 @@ LSM:Register("sound", "Wham!", 566946)
 LSM:Register("sound", "Simon Chime", 566076)
 LSM:Register("sound", "War Drums", 567275)--NPC Scan default
 LSM:Register("sound", "Scourge Horn", 567386)--NPC Scan default
+LSM:Register("sound", "Dwarf Horn", 566064)
 LSM:Register("sound", "Pygmy Drums", 566508)
 LSM:Register("sound", "Cheer", 567283)
 LSM:Register("sound", "Humm", 569518)
@@ -30,6 +31,11 @@ LSM:Register("sound", "Magtheridon: I am Unleashed", 554554)
 LSM:Register("sound", "Loatheb: I see you", 554236)
 LSM:Register("sound", "Ikiss: Trinkets", 561403)
 LSM:Register("sound", "NPCScan", 567275)--Sound file is actually bogus, this just forces the option NPCScan into menu. We hack it later.
+LSM:Register("sound", "PvP Warning Alliance", 568320) -- PVPWarningAllianceLong
+LSM:Register("sound", "PvP Warning Horde", 569112) -- PVPWarningHordeLong
+LSM:Register("sound", "Grimrail Train Horn", 1023633)
+LSM:Register("sound", "Squire Horn", 598079)
+LSM:Register("sound", "Gruntling Horn", 598196)
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Announce", {
