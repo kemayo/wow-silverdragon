@@ -199,6 +199,7 @@ do
 		return quest_iter, ns.mobdb[id].loot or noloot, nil
 	end
 	function ns.Loot.IterRegularLoot(id)
+		-- this includes any transmog loot
 		return regular_iter, ns.mobdb[id].loot or noloot, nil
 	end
 end
@@ -247,6 +248,7 @@ ns.Loot.Status = setmetatable({}, {__call = function(_, id, include_transmog)
 	-- returns true if all knowable loot is collected
 	-- returns false if not all knowable loot is collected
 	-- if knowable loot, also returns the status for mount,toy,pet after the first return
+	-- knowable loot that's restricted from the current character will still return true if collected, but nil if not
 	if not id or not ns.mobdb[id] then
 		return
 	end
@@ -261,69 +263,38 @@ ns.Loot.Status = setmetatable({}, {__call = function(_, id, include_transmog)
 	end
 	return (mount ~= false and toy ~= false and pet ~= false and quest ~= false and transmog ~= false), mount, toy, pet, quest, transmog
 end})
-function ns.Loot.Status.Toy(id)
-	if not id or not ns.mobdb[id] then return end
-	local ret = nil
-	for _, toyid, item in ns.Loot.IterToys(id) do
-		if not itemRestricted(item) then
-			if not PlayerHasToy(toyid) then
+local function restrictedCheck(test, id, item)
+	local known = test(id)
+	if known then return true end
+	if known == nil or itemRestricted(item) then return nil end
+	return false
+end
+local function statusChecker(iterator, test)
+	return function(id)
+		if not id or not ns.mobdb[id] then return end
+		local ret = nil
+		for _, typeid, item in iterator(id) do
+			local known = restrictedCheck(test, typeid, item)
+			if known then
+				ret = true
+			elseif known == false then
 				return false
 			end
-			ret = true
 		end
+		return ret
 	end
-	return ret
 end
-function ns.Loot.Status.Mount(id)
-	if not id or not ns.mobdb[id] then return end
-	local ret = nil
-	for _, mountid, item in ns.Loot.IterMounts(id) do
-		if not itemRestricted(item) then
-			if not PlayerHasMount(mountid) then
-				return false
-			end
-			ret = true
-		end
+ns.Loot.Status.Toy = statusChecker(ns.Loot.IterToys, PlayerHasToy)
+ns.Loot.Status.Mount = statusChecker(ns.Loot.IterMounts, PlayerHasMount)
+ns.Loot.Status.Pet = statusChecker(ns.Loot.IterPets, PlayerHasPet)
+ns.Loot.Status.Quest = statusChecker(ns.Loot.IterQuests, function(questid)
+	return C_QuestLog.IsQuestFlaggedCompleted(questid) or C_QuestLog.IsOnQuest(questid)
+end)
+ns.Loot.Status.Transmog = statusChecker(ns.Loot.IterRegularLoot, function(itemid)
+	if CanLearnAppearance(itemid) then
+		return HasAppearance(itemid)
 	end
-	return ret
-end
-function ns.Loot.Status.Pet(id)
-	if not id or not ns.mobdb[id] then return end
-	local ret = nil
-	for _, petid, item in ns.Loot.IterPets(id) do
-		if not itemRestricted(item) then
-			if not PlayerHasPet(petid) then
-				return false
-			end
-			ret = true
-		end
-	end
-	return ret
-end
-function ns.Loot.Status.Quest(id)
-	if not id or not ns.mobdb[id] then return end
-	local ret = nil
-	for _, questid, item in ns.Loot.IterQuests(id) do
-		if not (C_QuestLog.IsQuestFlaggedCompleted(questid) or C_QuestLog.IsOnQuest(questid)) then
-			return false
-		end
-		ret = true
-	end
-	return ret
-end
-function ns.Loot.Status.Transmog(id)
-	if not id or not ns.mobdb[id] then return end
-	local ret = nil
-	for _, itemid, item in ns.Loot.IterRegularLoot(id) do
-		if not itemRestricted(item) and CanLearnAppearance(itemid) then
-			if not HasAppearance(itemid) then
-				return false
-			end
-			ret = true
-		end
-	end
-	return ret
-end
+end)
 
 local function get_tooltip(tooltip, i)
 	if i > 1 then
