@@ -99,9 +99,6 @@ function module:UpdateVignetteOnMinimap(instanceid)
 		return -- Debug("vignette had no info")
 	end
 	if vignetteInfo then
-		if vignetteInfo.type ~= Enum.VignetteType.Normal then
-			return -- Debug("vignette isn't normal")
-		end
 		if not db.types[vignetteInfo.atlasName:lower()] then
 			return -- Debug("vignette type not enabled", vignetteInfo.atlasName)
 		end
