@@ -260,11 +260,7 @@ function module:VIGNETTES_UPDATED()
 end
 
 function module:NotifyIfNeeded(id, current_zone, x, y, variant, instanceid)
-	local force = false
-	if x and y then
-		--Triggered by map update, vignette has exact location that does not match player, so update x, y
-		force = true
-	else
+	if not (x and y) then
 		x, y = HBD:GetPlayerZonePosition()
 	end
 	if not (current_zone and x and y) then
@@ -272,7 +268,7 @@ function module:NotifyIfNeeded(id, current_zone, x, y, variant, instanceid)
 	end
 	already_notified[instanceid] = true
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-	local ret = core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, force, instanceid)
+	local ret = core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, false, instanceid)
 	core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x, y, instanceid, id)
 	return ret
 end

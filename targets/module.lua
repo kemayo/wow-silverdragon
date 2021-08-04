@@ -117,6 +117,7 @@ function module:SeenVignette(_, name, vigentteID, atlasName, uiMapID, x, y, vign
 			popup.data.x = x
 			popup.data.y = y
 			popup.data.source = "vignette"
+			popup.source:SetText("vignette")
 		end
 	end
 end
@@ -129,6 +130,7 @@ function module:SeenLoot(_, name, vigentteID, uiMapID, x, y, vignetteGUID)
 			popup.data.x = x
 			popup.data.y = y
 			popup.data.source = "vignette"
+			popup.source:SetText("vignette")
 		end
 	end
 end
