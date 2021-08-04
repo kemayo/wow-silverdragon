@@ -23,6 +23,7 @@ LSM:Register("sound", "Short Circuit", 568975)
 LSM:Register("sound", "Fel Portal", 569215)
 LSM:Register("sound", "Fel Nova", 568582)
 LSM:Register("sound", "PVP Flag", 569200)
+LSM:Register("sound", "PvP Flag Horde", 568165) -- PVPFlagTakenHorde
 LSM:Register("sound", "Thunder crack", 566202) -- doodad/fx_thundercrack04.ogg
 LSM:Register("sound", "Algalon: Beware!", 543587)
 LSM:Register("sound", "Yogg Saron: Laugh", 564859)
