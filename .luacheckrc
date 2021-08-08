@@ -22,6 +22,7 @@ globals = {
     "SilverDragonOverlayRoutePinMixin",
     "SilverDragonOverlayRoutePinConnectionMixin",
     "SilverDragonOverlayMapPinPingDriverAnimationMixin",
+    "SilverDragonOverlayMinimapRoutePinMixin",
     "SilverDragonVignetteStretchPinMixin",
     "BINDING_HEADER_SILVERDRAGON",
     "SDCacheTooltipTextLeft1",
@@ -60,6 +61,7 @@ read_globals = {
     "C_CurrencyInfo",
     "C_Item",
     "C_Map",
+    "C_Minimap",
     "C_MountJournal",
     "C_NamePlate",
     "C_PetJournal",
@@ -125,6 +127,7 @@ read_globals = {
     "GetMacroIndexByName",
     "GetNumGroupMembers",
     "GetNumMacros",
+    "GetPlayerFacing",
     "GetRaidTargetIndex",
     "GetScreenHeight",
     "GetScreenWidth",
@@ -227,6 +230,7 @@ read_globals = {
     "VignettePinMixin",
     "WorldMapPOIQuantizerMixin",
     "RegionUtil",
+    "FramePool_HideAndClearAnchors",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",

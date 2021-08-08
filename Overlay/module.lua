@@ -39,6 +39,7 @@ function module:OnInitialize()
                 tooltip_lootwindow = false,
                 icon_scale = 1,
                 icon_alpha = 1,
+                routes = true,
                 edge = module.const.EDGE_FOCUS
             },
             icon_theme = 'skulls', -- circles / skulls

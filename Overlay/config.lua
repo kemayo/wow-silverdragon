@@ -170,6 +170,7 @@ function module:RegisterConfig()
                         min = 0, max = 1, step = 0.01,
                         order = 30,
                     },
+                    routes = config.toggle("Routes", "Show the routes that some mobs take", 40),
                     tooltip_completion = config.toggle("Completion", "Show achievement/drop completion in the tooltip", 40),
                     tooltip_regularloot = config.toggle("Regular Loot", "Show regular untrackable loot in the tooltip", 41),
                     tooltip_lootwindow = config.toggle("Popout loot window", "Show a popout for the loot so you can see its details", 42),

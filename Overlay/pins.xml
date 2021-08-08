@@ -62,4 +62,13 @@
             </Layer>
         </Layers>
     </Frame>
+
+    <Frame name="SilverDragonOverlayMinimapRoutePinTemplate" mixin="SilverDragonOverlayMinimapRoutePinMixin" enableMouse="false" virtual="true">
+        <Size x="12" y="12"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="texture" setAllPoints="true" texelSnappingBias="0.0" snapToPixelGrid="false"/>
+            </Layer>
+        </Layers>
+    </Frame>
 </Ui>
