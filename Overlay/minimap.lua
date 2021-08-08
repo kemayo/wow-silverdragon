@@ -98,7 +98,8 @@ function SilverDragonOverlayMinimapPinMixin:OnLoad()
 end
 
 function SilverDragonOverlayMinimapPinMixin:UpdateEdge()
-    self:SetAlpha(HBDPins:IsMinimapIconOnEdge(self) and 0.6 or 1)
+    local alpha = (HBDPins:IsMinimapIconOnEdge(self) and 0.6 or 1) * self.config.icon_alpha
+    self:SetAlpha(alpha)
 end
 
 --
