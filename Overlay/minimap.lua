@@ -10,6 +10,7 @@ local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 
 local f = CreateFrame("Frame", myname .. "MiniMapDataProviderFrame")
 local dataProvider = {
+    facing = GetPlayerFacing(),
     pins = {},
     pinPools = {},
     -- pool = CreateFramePool("FRAME", Minimap, "SilverDragonOverlayMinimapPinTemplate"),
@@ -17,6 +18,8 @@ local dataProvider = {
 module.MiniMapDataProvider = dataProvider
 
 function dataProvider:RefreshAllData()
+    if GetCVar('rotateMinimap') == '1' and self.facing == nil then return end
+
     HBDPins:RemoveAllMinimapIcons(self)
     self:ReleaseAllPins()
 
@@ -47,9 +50,25 @@ function dataProvider:RefreshAllData()
     end
 end
 
+function dataProvider:RefreshAllRotations()
+    for _, pool in pairs(self.pinPools) do
+        for pin in pool:EnumerateActive() do
+            if pin.UpdateRotation then
+                pin:UpdateRotation()
+            end
+        end
+    end
+end
+
 local function OnPinReleased(pinPool, pin)
     FramePool_HideAndClearAnchors(pinPool, pin)
     pin:OnReleased()
+
+    pin.pinTemplate = nil
+    pin.provider = nil
+end
+function dataProvider:AcquirePin(template, ...)
+    local pin, newPin = self.pool:Acquire()
 
     pin.pinTemplate = nil
     pin.provider = nil
@@ -79,6 +98,21 @@ function dataProvider:ReleaseAllPins()
     end
 end
 
+module:RegisterEvent("MINIMAP_UPDATE_ZOOM", function() dataProvider:RefreshAllData() end)
+module:RegisterEvent("CVAR_UPDATE", function(_, varname)
+    if varname == "ROTATE_MINIMAP" then
+        dataProvider:RefreshAllData()
+    end
+end)
+f:SetScript("OnUpdate", function(self)
+    if GetCVar("rotateMinimap") == "1" then
+        local facing = GetPlayerFacing()
+        if facing ~= dataProvider.facing then
+            dataProvider.facing = facing
+            dataProvider:RefreshAllRotations()
+        end
+    end
+end)
 C_Timer.NewTicker(0.5, function(...)
     for pin in pairs(dataProvider.pins) do
         pin:UpdateEdge()
@@ -182,6 +216,8 @@ function SilverDragonOverlayMinimapRoutePinMixin:OnAcquired(coord1, coord2, uiMa
 
     local x, y = (x1+x2)/2, (y1+y2)/2
     HBDPins:AddMinimapIconMap(dataProvider, self, uiMapID, x, y)
+
+    if GetCVar('rotateMinimap') == '1' then self:UpdateRotation() end
 end
 function SilverDragonOverlayMinimapRoutePinMixin:OnReleased()
     self.texture:SetRotation(0)
@@ -192,6 +228,10 @@ function SilverDragonOverlayMinimapRoutePinMixin:OnReleased()
     if self.SetScalingLimits then -- world map
         self:SetScalingLimits(nil, nil, nil)
     end
+end
+function SilverDragonOverlayMinimapRoutePinMixin:UpdateRotation()
+    if self.rotation == nil then return end
+    self.texture:SetRotation(self.rotation + math.pi*2 - self.provider.facing)
 end
 
 --
