@@ -3,7 +3,7 @@
     <Frame name="SilverDragonOverlayMapPinTemplate" hidden="true" enableMouse="true" frameLevel="5" virtual="true">
         <Layers>
             <Layer level="ARTWORK">
-                <Texture parentKey="texture">
+                <Texture parentKey="texture" texelSnappingBias="0.0" snapToPixelGrid="false">
                     <Anchor point="CENTER"/>
                 </Texture>
             </Layer>
