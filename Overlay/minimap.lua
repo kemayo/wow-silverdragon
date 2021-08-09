@@ -37,7 +37,6 @@ function dataProvider:RefreshAllData()
             edge = mobid == module.focus_mob
         end
 
-        self.pins[pin] = pin
         HBDPins:AddMinimapIconMap(self, pin, uiMapID, x, y, false, edge)
 
         pin:UpdateEdge()
@@ -114,8 +113,12 @@ f:SetScript("OnUpdate", function(self)
     end
 end)
 C_Timer.NewTicker(0.5, function(...)
-    for pin in pairs(dataProvider.pins) do
-        pin:UpdateEdge()
+    for _, pool in pairs(dataProvider.pinPools) do
+        for pin in pool:EnumerateActive() do
+            if pin.UpdateEdge then
+                pin:UpdateEdge()
+            end
+        end
     end
 end)
 
