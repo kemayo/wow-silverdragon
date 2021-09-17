@@ -260,6 +260,7 @@ read_globals = {
     "COMPLETE",
     "CONFIRM_BUY_BANK_SLOT",
     "COVENANT_COLORS",
+    "CRITERIA_COMPLETED",
     "CTRL_KEY_TEXT",
     "DEFAULT",
     "DRAG_MODEL",
