@@ -1,4 +1,4 @@
-## Interface: 90100
+## Interface: 90105
 ## Title: SilverDragon (Vanilla)
 ## Notes: Mobs for Vanilla
 ## Version: @project-version@

@@ -1,4 +1,4 @@
-## Interface: 90100
+## Interface: 90105
 ## Title: SilverDragon (Wrath)
 ## Notes: Mobs for Wrath
 ## Version: @project-version@
