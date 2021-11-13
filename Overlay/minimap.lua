@@ -236,7 +236,7 @@ function SilverDragonOverlayMinimapRoutePinMixin:OnReleased()
     end
 end
 function SilverDragonOverlayMinimapRoutePinMixin:UpdateRotation()
-    if self.rotation == nil then return end
+    if self.rotation == nil or self.provider.facing == nil then return end
     self.texture:SetRotation(self.rotation + math.pi*2 - self.provider.facing)
 end
 
