@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v90105.1
+
+* Fix an error that could happen if you have minimap rotation turned on in rare situations
+
 ## Changed in v90105.0
 
 * Updated for 9.1.5: mostly this just means LibQTip was updated
