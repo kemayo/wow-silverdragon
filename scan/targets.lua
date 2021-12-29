@@ -86,9 +86,9 @@ local rare_nonflags = {
 function module:ProcessUnit(unit, source)
 	if not UnitExists(unit) then return end
 	if not UnitIsVisible(unit) then return end
-	if UnitPlayerControlled(unit) then return end -- helps filter out player-pets
 	local id = core:UnitID(unit)
 	if not id then return end
+	if UnitPlayerControlled(unit) and not globaldb.always[id] then return end -- helps filter out player-pets
 	local unittype = UnitClassification(unit)
 	local is_rare = (id and rare_nonflags[id]) or (unittype == 'rare' or unittype == 'rareelite')
 	local should_process = false
