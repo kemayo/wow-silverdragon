@@ -150,6 +150,12 @@ function SilverDragonOverlayRoutePinConnectionMixin:Connect(pin1, pin2)
     self:SetParent(pin1)
     -- Anchor straight up from the origin
     self:SetPoint("BOTTOM", pin1, "CENTER")
+    if not (pin1:GetCenter() and pin2:GetCenter()) then
+        -- I'm seeing reports of errors in CalculateAngleBetween which would imply one of the pins
+        -- isn't returning a center. I can't reproduce this to test it, but I think aborting here
+        -- should avoid errors.
+        return
+    end
     -- Then adjust the height to be the length from origin to pin
     local length = RegionUtil.CalculateDistanceBetween(pin1, pin2) * pin1:GetEffectiveScale()
     self:SetHeight(length)
