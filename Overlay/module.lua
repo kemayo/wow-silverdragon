@@ -291,6 +291,7 @@ hooksecurefunc(VignettePinMixin, "OnMouseEnter", function(self)
         for mobid in pairs(ns.vignetteMobLookup[vignetteInfo.vignetteID]) do
             AddMobToTooltip(GameTooltip, mobid, true)
         end
+        return
     end
     if vignetteInfo.name then
         AddMobToTooltip(GameTooltip, core:IdForMob(vignetteInfo.name))
