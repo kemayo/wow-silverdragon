@@ -489,6 +489,9 @@ local achievements = {
 		[179768] = 52285, -- Consumption (has multiple ids)
 		[179769] = 52285, -- Consumption (has multiple ids)
 	},
+	[15211] = {}, -- Completing the Code
+	[15391] = {}, -- Adventurer of Zereth Mortis
+	[15392] = {}, -- Dune Dominance
 }
 ns.achievements = achievements
 local mobs_to_achievement = {

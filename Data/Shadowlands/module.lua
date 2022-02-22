@@ -199,6 +199,13 @@ function module:OnInitialize()
 		[177336] = {name="Zelnithop",locations={[1961]={30305480},[2007]={45606830},},loot={{186542,pet=3136,},187371},quest=64442,},
 		[177444] = {name="Ylva",locations={[1543]={66404190},},loot={186217,187359,187393,{186970,note="{item:186727}",quest=62683,}},quest=64152,tameable=877481,},
 		[177903] = {name="Dominated Protector",locations={[1961]={51802080},},loot={187390},quest=63830,},
+		[178229] = {name="Feasting",locations={[1970]={61806060},},loot={187848,189936,189969,189970,},quest=65557,},
+		[178508] = {name="Mother Phestis",locations={[1970]={54103495},},loot={189923,189950,190045,},quest=65547,},
+		[178563] = {name="Hadeon the Stonebreaker",locations={[1970]={52602505},},loot={189919,189942,190000,190051,},quest=65581,},
+		[178778] = {name="Gluttonous Overgrowth",locations={[1970]={53109305},},loot={189929,190008,190049,},quest=65579,notes="Break nearby {npc:184048}",},
+		[178963] = {name="Gorkek",locations={[1970]={80404705},},loot={190001,},quest=63988,vignette=4746,},
+		[179006] = {name="Akkaris",locations={[1970]={64753370},},loot={189903,189958,190053,},quest=65549,vignette=4747,},
+		[179043] = {name="Orixal",locations={[1970]={58008455},},loot={189912,189934,189952,},quest=65582,},
 		[179108] = {name="Kroke the Tormented",locations={[1961]={59203580},},loot={187394,187250,187248},quest=64428,},
 		[179460] = {name="Fallen Charger",locations={[1543]={16274949,27906290,31803850},},loot={{186659,mount=1502,},186660,186661},notes="Yells, runs from its spawn point to Korthia, then despawns",quest=64164,},
 		[179472] = {name="Konthrogz the Obliterator",locations={[1961]={10008000},},loot={{187183,mount=1514,},187375,187378,187384,187397},quest=64246,vignette=4885,},
@@ -229,5 +236,38 @@ function module:OnInitialize()
 		[180160] = {name="Reliwik the Defiant",locations={[1961]={56256615},},loot={{186652,mount=1509,},187388},quest=64455,vignette=4864,},
 		[180162] = {name="Ve'rayn",locations={[1961]={14008000},},loot={{187264,quest=64513,},187369,187404},quest=64457,},
 		[180246] = {name="Carriage Crusher",locations={[1961]={58201775},[1543]={46005640},},loot={187370,187391,187399},quest=64258,vignette=4857,},
+		[180746] = {name="Protector of the First Ones",locations={[1970]={38852760},},loot={189984,190002,},quest=64668,notes="Two people required to open the barrier",},
+		[180917] = {name="Destabilized Core",locations={[1970]={53654435},},loot={187837,189910,189985,189999,},quest=64716,},
+		[180924] = {name="Garudeon",locations={[1970]={69053660},},loot={187832,189937,189951,},quest=64719,vignette=4982,notes="Gather {npc:183562} nearby, feed to {npc:183554}",},
+		[180978] = {name="Hirukon",locations={[1970]={52307540},},loot={189905,189946,190005,{187676,mount=1434},},quest=65548,
+			notes="You have to make a {item:187923}:\n"..
+				"* Fish up {item:187662} nearby\n"..
+				"* Fish up {item:187915} from Coilfang Reservoir in Zangarmarsh\n"..
+				"* Fish up {item:187922} near Keyla's Grave in Nazjatar\n"..
+				"* Find {item:187916} in Nar'shola Terrace in the Shimmering Expanse (34.7, 75.0)\n"..
+				"* Ask {npc:182194} south of the Seat of the Primus in Maldraxxus to make your {item:187923}\n"..
+				"* Bring it back here, use it, and fish in the Aurelid Cluster you can now see.",
+		},
+		[181249] = {name="Tethos",locations={[1970]={54507345},},loot={189928,189966,190055,187830,},quest=65550,vignette=4903,},
+		[181360] = {name="Vexis",locations={[1970]={39555735},},loot={190048,},quest=65239,},
+		[182114] = {name="Iska, Outrider of Ruin",locations={[1970]={63202605},},loot={190107,190126,{190765,mount=1584},},quest=65585,},
+		[182155] = {name="High Reaver Damaris",locations={[1970]={63202605},},loot={190104,190459,190460,},quest=65586,},
+		[182158] = {name="Reanimatrox Marzan",locations={[1970]={63202605},},loot={190104,},quest=65587,},
+		[182318] = {name="General Zarathura",locations={[1970]={59852110},},loot={189968,189948,},quest=65583,vignette=4909,},
+		[183516] = {name="The Engulfer",locations={[1970]={43957530},},loot={190006,},quest=65580,notes="Protect {npc:183505} until this appears",},
+		[183596] = {name="Chitali the Eldest",locations={[1970]={49556750},},loot={189906,189947,189994,},quest=65553,vignette=4948,},
+		[183646] = {name="Furidian",locations={[1970]={64605865},},loot={189920,189932,189963,190004,},quest=65544,notes="Find 3x Empowered Keys nearby then unlock the Suspiciously Angry Vault",},
+		[183722] = {name="Sorranos",locations={[1970]={35857120},},loot={189911,189944,189962,187826,},quest=65240,},
+		[183737] = {name="Xy'rath the Covetous",locations={[1970]={64054975},},loot={190052,190007,{190238, toy=true},187828,},quest=65241,vignette=4938,},
+		[183746] = {name="Otiosen",locations={[1970]={43308760},},loot={189914,189925,190046,189995,},quest=65556,},
+		[183747] = {name="Vitiane",locations={[1970]={47054700},},loot={189901,189922,189935,},quest=65584,},
+		[183748] = {name="Helmix",locations={[1970]={58206835},},loot={189931,189965,190054,190056,},quest=65551,},
+		[183764] = {name="Zatojin",locations={[1970]={43503295},},loot={189902,189924,189939,},quest=65251,notes="Engage the {npc:183721} to get 20 stacks of {spell:362976} and be {spell:362983}. Make sure you're standing on the {npc:183774} corpses.",},
+		[183814] = {name="Otaris the Provoked",locations={[1970]={58654040},},loot={189909,189945,},quest=65257,notes="Inside a cave",},
+		[183925] = {name="Tahkwitz",locations={[1970]={49803915},},loot={189915,189933,189954,187832,},quest=65272,},
+		[183927] = {name="Sand Matriarch Ileus",locations={[1970]={53404705},},loot={189927,189955,189998,},quest=65574,},
+		[183953] = {name="Corrupted Architect",locations={[1970]={47506230},},loot={189907,189940,190009,},quest=65273,vignette=4989,notes="Fight {npc:183958} and {npc:183961} to trigger",},
+		[184409] = {name="Euv'ouk",locations={[1970]={47454515},},loot={189949,190047,},quest=65555,vignette=4961,},
+		[184413] = {name="Shifting Stargorger",locations={[1970]={42302100},},loot={189908,189916,189941,189972,},quest=65549,},
 	})
 end
