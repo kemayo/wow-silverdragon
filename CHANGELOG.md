@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v90200.1
+
+* ...also, update the TOC version.
+
 ## Changed in v90200.0
 
 * Data added for Zereth Mortis

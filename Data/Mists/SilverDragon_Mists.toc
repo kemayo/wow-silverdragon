@@ -1,4 +1,4 @@
-## Interface: 90105
+## Interface: 90200
 ## Title: SilverDragon (Mists)
 ## Notes: Mobs for Mists
 ## Version: @project-version@
