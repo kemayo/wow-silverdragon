@@ -222,7 +222,7 @@ function module:OnInitialize()
 		[179805] = {name="Traitor Balthier",locations={[1543]={67804740},},loot={187364,187374},quest=64258,},
 		[179851] = {name="Guard Orguluus",locations={[1543]={53007280},},loot={187363,187398},notes="In the rift, wanders a bit",quest=64272,},
 		[179853] = {name="Blinding Shadow",locations={[1543]={35904370},},loot={187361,187406},notes="In the Rift",quest=64276,},
-		[179859] = {name="Xyraxz the Unknowable",locations={[1961]={44903550},},loot={{186538,pet=3140,},{187104,quest=63918,},187387,187368},quest=64278,vignette=4861,},
+		[179859] = {name="Xyraxz the Unknowable",locations={[1961]={44903550},},loot={{187104,quest=63918,},187387,187368},quest=64278,vignette=4861,},
 		[179911] = {name="Silent Soulstalker",locations={[1961]={57607040},},loot={187381,187383},quest=64284,},
 		[179912] = {name="Maelie the Wanderer",locations={[1961]={30005560,33103865,35804650,35856225,38403140,39703490,41103980,41302750,42806040,43203130,49304170,50302290,59801510,61304040,62404970,67962980},},loot={{186643,mount=1511,}},notes="{npc:179930} asks you to find {npc:179912}, who spawns in a different place each day. Find her each day, use {spell:355862} on her, and get a mount from {npc:179930}",quest={64292,64298,any=true},},
 		[179913] = {name="Deadsoul Hatcher",locations={[1961]={59355220},},loot={{187174,toy=true,},187396,187401},quest=64285,},
