@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v90200.0
+
+* Data added for Zereth Mortis
+* If you manually-add a mob it'll still be announced if it's seen controlled by another player
+* Don't double add some mob's data to the tooltip for Blizzard's zone map POI announcements
+
 ## Changed in v90105.2
 
 * Add a new Maelie location
