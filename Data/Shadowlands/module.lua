@@ -270,4 +270,7 @@ function module:OnInitialize()
 		[184409] = {name="Euv'ouk",locations={[1970]={47454515},},loot={189949,190047,},quest=65555,vignette=4961,},
 		[184413] = {name="Shifting Stargorger",locations={[1970]={42302100},},loot={189908,189916,189941,189972,},quest=65549,},
 	})
+	core:RegisterTreasureData("Shadowlands", {
+		[5021] = {name="Drowned Broker Supplies",requires=core.conditions.GarrisonTalent(1932),},
+	})
 end
