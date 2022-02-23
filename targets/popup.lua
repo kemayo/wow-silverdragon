@@ -440,6 +440,10 @@ PopupMixin.scripts = {
 				0, 1, 0
 			)
 		end
+		if self.data.vignetteID then
+			GameTooltip:AddDoubleLine("Vignette ID", self.data.vignetteID, 0, 1, 1, 0, 1, 1)
+		end
+
 		GameTooltip:AddDoubleLine(ALT_KEY_TEXT .. " + " .. escapes.leftClick .. " + " .. DRAG_MODEL, MOVE_FRAME)
 		if uiMapID and C_Map.CanSetUserWaypointOnMap(uiMapID) then
 			GameTooltip:AddDoubleLine(CTRL_KEY_TEXT .. " + " .. escapes.leftClick, MAP_PIN )

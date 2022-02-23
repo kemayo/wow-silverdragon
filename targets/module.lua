@@ -89,6 +89,12 @@ function module:Announce(callback, id, zone, x, y, dead, source, unit, _, vignet
 		y = y or 0,
 		vignetteGUID = vignetteGUID,
 	}
+	if vignetteGUID then
+		local vignetteInfo = C_VignetteInfo.GetVignetteInfo(vignetteGUID)
+		if vignetteInfo then
+			data.vignetteID = vignetteInfo.vignetteID
+		end
+	end
 	self:Enqueue(data)
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 	data.unit = nil -- can't be trusted to remain the same
@@ -103,16 +109,18 @@ function module:AnnounceLoot(_, name, id, zone, x, y, vignetteGUID)
 		x = x or 0,
 		y = y or 0,
 		vignetteGUID = vignetteGUID,
+		vignetteID = id,
 	}
 	self:Enqueue(data)
 	FlashClientIcon() -- If you're tabbed out, bounce the WoW icon if we're in a context that supports that
 end
-function module:SeenVignette(_, name, vigentteID, atlasName, uiMapID, x, y, vignetteGUID, mobid)
+function module:SeenVignette(_, name, vignetteID, atlasName, uiMapID, x, y, vignetteGUID, mobid)
 	if not mobid then return end
 	for popup in self:EnumerateActive() do
 		if popup.data and popup.data.type == "mob" and popup.data.id == mobid then
 			Debug("Updated mob from vignette", name, vignetteGUID)
 			popup.data.vignetteGUID = vignetteGUID
+			popup.data.vignetteID = vignetteID
 			popup.data.zone = uiMapID
 			popup.data.x = x
 			popup.data.y = y
@@ -121,11 +129,12 @@ function module:SeenVignette(_, name, vigentteID, atlasName, uiMapID, x, y, vign
 		end
 	end
 end
-function module:SeenLoot(_, name, vigentteID, uiMapID, x, y, vignetteGUID)
+function module:SeenLoot(_, name, vignetteID, uiMapID, x, y, vignetteGUID)
 	for popup in self:EnumerateActive() do
-		if popup.data and popup.data.type == "loot" and popup.data.id == vigentteID then
+		if popup.data and popup.data.type == "loot" and popup.data.id == vignetteID then
 			Debug("Updated loot from vignette", name, vignetteGUID)
 			popup.data.vignetteGUID = vignetteGUID
+			popup.data.vignetteID = vignetteID
 			popup.data.zone = uiMapID
 			popup.data.x = x
 			popup.data.y = y
