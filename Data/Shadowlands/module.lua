@@ -272,6 +272,9 @@ function module:OnInitialize()
 		[184413] = {name="Shifting Stargorger",locations={[1970]={42302100},},loot={189908,189916,189941,189972,},quest=65549,},
 	})
 	core:RegisterTreasureData("Shadowlands", {
+		[4928] = {name="Provis Cache",requires=core.conditions.QuestComplete(64717),}, -- Check: is this horde and alliance? wowhead is weird
+		[4981] = {name="Misplaced Ovoid",requires=core.conditions.Item(190239, 5)},
+		[5019] = {name="Torn Ethereal Drape",requires={core.conditions.GarrisonTalent(1902),core.conditions.QuestComplete(65328)},},
 		[5021] = {name="Drowned Broker Supplies",requires=core.conditions.GarrisonTalent(1932),},
 	})
 end
