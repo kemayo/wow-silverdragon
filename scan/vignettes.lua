@@ -208,6 +208,10 @@ function module:WorkOutMobFromVignette(instanceid)
 		if already_notified_loot[vignetteInfo.vignetteID] and time() < (already_notified_loot[vignetteInfo.vignetteID] + core.db.profile.delay) then
 			return -- Debug("skipping notification", "delay not exceeded")
 		end
+		if ns.vignetteTreasureLookup[vignetteInfo.vignetteID] and ns.vignetteTreasureLookup[vignetteInfo.vignetteID].requires and not ns.conditions.check(ns.vignetteTreasureLookup[vignetteInfo.vignetteID].requires) then
+			-- Debug("skipping notification", "vignette requirements not met", ns.conditions.summarize(ns.vignetteTreasureLookup[vignetteInfo.vignetteID].requires))
+			return
+		end
 		already_notified_loot[vignetteInfo.vignetteID] = time()
 		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x or 0, y or 0, instanceid)
 		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0, instanceid)
