@@ -381,6 +381,10 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		Debug("ShouldAnnounce", false, "already got loot")
 		return false
 	end
+	if ns.mobdb[id].requires and not ns.conditions.check(ns.mobdb[id].requires) then
+		Debug("ShouldAnnounce", false, "requirements not met")
+		return false
+	end
 	if not self.db.profile.already then
 		-- hide already-completed mobs
 		local quest, achievement, by_alt = ns:CompletionStatus(id)
