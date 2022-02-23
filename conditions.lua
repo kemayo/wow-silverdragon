@@ -95,9 +95,19 @@ ns.conditions.GarrisonTalent = Class{
 }
 
 ns.conditions.Item = Class{
-	__parent = Condition,
-	type = 'item',
-	Matched = function(self) return GetItemCount(self.id, true) > 0 end,
+    __parent = Condition,
+    type = 'item',
+    Initialize = function(self, id, count)
+        self.id = id
+        self.count = count
+    end,
+    Label = function(self)
+        if self.count and self.count > 1 then
+            return ("{item:%d} x%d"):format(self.id, self.count)
+        end
+        return self.__parent.Label(self)
+    end,
+    Matched = function(self) return GetItemCount(self.id, true) >= (self.count or 1) end,
 }
 
 ns.conditions.QuestComplete = Class{
