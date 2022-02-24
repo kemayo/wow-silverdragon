@@ -273,6 +273,7 @@ function module:OnInitialize()
 	})
 	core:RegisterTreasureData("Shadowlands", {
 		[4928] = {name="Provis Cache",requires=core.conditions.QuestComplete(64717),}, -- Check: is this horde and alliance? wowhead is weird
+		[4980] = {name="Architect's Reserve",requires=core.conditions.GarrisonTalent(1931)},
 		[4981] = {name="Misplaced Ovoid",requires=core.conditions.Item(190239, 5)},
 		[5019] = {name="Torn Ethereal Drape",requires={core.conditions.GarrisonTalent(1902),core.conditions.QuestComplete(65328)},},
 		[5021] = {name="Drowned Broker Supplies",requires=core.conditions.GarrisonTalent(1932),},
