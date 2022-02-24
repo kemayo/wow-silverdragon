@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v90200.3
+
+* Don't error when announcing a completely-unknown rare
+
 ## Changed in v90200.2
 
 * Gave myself the ability to much better flag mobs and treasures as having conditions that must be met before they'll be alerted
