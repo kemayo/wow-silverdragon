@@ -381,7 +381,7 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		Debug("ShouldAnnounce", false, "already got loot")
 		return false
 	end
-	if ns.mobdb[id].requires and not ns.conditions.check(ns.mobdb[id].requires) then
+	if ns.mobdb[id] and ns.mobdb[id].requires and not ns.conditions.check(ns.mobdb[id].requires) then
 		Debug("ShouldAnnounce", false, "requirements not met")
 		return false
 	end
