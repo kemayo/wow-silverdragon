@@ -1,5 +1,12 @@
 # Changelog
 
+## Changed in v90200.2
+
+* Gave myself the ability to much better flag mobs and treasures as having conditions that must be met before they'll be alerted
+* ...used this for some Zereth Mortis treasures. I still need to gather more vignette IDs for this, but the worst offenders should be gone.
+* Coincidentally, show the vignette ID if known on the tooltip for the mob/loot popup
+* Korthia: Xyraxz the Unknowable seems to not drop Gnashtooth after all
+
 ## Changed in v90200.1
 
 * ...also, update the TOC version.
