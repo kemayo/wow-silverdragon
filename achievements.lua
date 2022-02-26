@@ -489,7 +489,10 @@ local achievements = {
 		[179768] = 52285, -- Consumption (has multiple ids)
 		[179769] = 52285, -- Consumption (has multiple ids)
 	},
-	[15211] = {}, -- Completing the Code
+	[15211] = {
+		[181223] = 52553, -- Gaiagantic
+		[179007] = 52565, -- Overgrown Geomental
+	}, -- Completing the Code
 	[15391] = {}, -- Adventurer of Zereth Mortis
 	[15392] = {}, -- Dune Dominance
 }
