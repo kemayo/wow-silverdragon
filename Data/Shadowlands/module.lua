@@ -67,7 +67,7 @@ function module:OnInitialize()
 		[160857] = {name="Sire Ladinas",locations={[1525]={34045555},},loot={{180873,toy=true,}},quest=58263,},
 		[160882] = {name="Nikara Blackheart",locations={[1533]={51406800},},loot={183608},notes="Needs three players to summon",quest=58319,vignette=4007,},
 		[160985] = {name="Selena the Reborn",locations={[1533]={61305090},},loot={183608},notes="Needs three players to summon",quest=58320,vignette=4571,},
-		[161105] = {name="Indomitable Schmitd",locations={[1536]={38804335},},loot={182192,{174070,covenant=Enum.CovenantType.Necrolord,quest=58379,}},quest=58332,},
+		[161105] = {name="Indomitable Schmitd",locations={[1536]={38804335},},loot={182192,{174070,covenant=Enum.CovenantType.Necrolord,quest=58411,}},quest=58332,},
 		[161310] = {name="Executioner Adrastia",locations={[1525]={43055185},},loot={180502,182967},quest=58441,},
 		[161527] = {name="Sigilback",locations={[1533]={55208040},},loot={179486},quest=60570,tameable=132199,vignette=4032,},
 		[161528] = {name="Aethon",locations={[1533]={55208020},},loot={179487},quest=58526,tameable=2143073,vignette=4032,},
