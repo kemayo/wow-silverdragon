@@ -272,7 +272,7 @@ function module:OnInitialize()
 		[184413] = {name="Shifting Stargorger",locations={[1970]={42302100},},loot={189908,189916,189941,{189972,quest=65505,}},quest=65549,},
 	})
 	core:RegisterTreasureData("Shadowlands", {
-		[4928] = {name="Provis Cache",requires=core.conditions.QuestComplete(64717),}, -- Check: is this horde and alliance? wowhead is weird
+		[4928] = {name="Provis Cache",requires=core.conditions.Item(188231),},
 		[4980] = {name="Architect's Reserve",requires=core.conditions.GarrisonTalent(1931),},
 		[4981] = {name="Misplaced Ovoid",requires=core.conditions.Item(190239,5),},
 		[4992] = {name="Protomineral Extractor",requires=core.conditions.QuestComplete(64889),},
