@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v90200.4
+
+* Added a bunch of loot from wowhead
+* Only play the special mount announcement sounds for rares with mounts you're eligible to loot
+
 ## Changed in v90200.3
 
 * Don't error when announcing a completely-unknown rare
