@@ -490,8 +490,25 @@ local achievements = {
 		[179769] = 52285, -- Consumption (has multiple ids)
 	},
 	[15211] = {
-		[181223] = 52553, -- Gaiagantic
+		completed = CRITERIA_COMPLETED, -- COVENANT_SANCTUM_UPGRADE_ACTIVATING?
+		[178835] = 52573, -- Sharpeye Collector
 		[179007] = 52565, -- Overgrown Geomental
+		[181208] = 52567, -- Enchained Servitor
+		[181219] = 52554, -- Moss-Choked Guardian
+		[181221] = 52552, -- Bygone Geomental
+		[181222] = 52606, -- Over-charged Vespoid
+		[181223] = 52553, -- Gaiagantic
+		[181287] = 52566, -- Gorged Runefeaster
+		[181290] = 52569, -- Corrupted Runehoarder
+		[181292] = 52570, -- Misaligned Enforcer
+		[181293] = 52571, -- Suspicious Nesmin
+		[181294] = 52572, -- Runegorged Bufonid
+		[181295] = 52574, -- Runethief Xy'lora
+		[181344] = 52575, -- Runefur
+		[181349] = 52576, -- Cipherclad
+		[181352] = 52577, -- Bitterbeak
+		[182798] = 52686, -- Twisted Warpcrafter
+		[184819] = 52568, -- Dominated Irregular
 	}, -- Completing the Code
 	[15391] = {}, -- Adventurer of Zereth Mortis
 	[15392] = {}, -- Dune Dominance
