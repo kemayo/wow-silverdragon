@@ -527,7 +527,7 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zo
 		if channel == "GUILD" and not module.db.profile.soundguild or (channel == "PARTY" or channel == "RAID") and not module.db.profile.soundgroup then return end
 	end
 	local soundfile, loops
-	if ns.Loot.HasMounts(id) then
+	if ns.Loot.HasMounts(id, true) then
 		if not module.db.profile.sound_mount then return end
 		soundfile = module.db.profile.soundfile_mount
 		loops = module.db.profile.sound_mount_loop

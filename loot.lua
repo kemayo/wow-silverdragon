@@ -203,24 +203,30 @@ do
 		return regular_iter, ns.mobdb[id].loot or noloot, nil
 	end
 end
-function ns.Loot.HasToys(id)
+function ns.Loot.HasToys(id, only_knowable)
 	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
-	for _ in ns.Loot.IterToys(id) do
-		return true
+	for _, _, item in ns.Loot.IterToys(id) do
+		if (not only_knowable) or (not itemRestricted(item)) then
+			return true
+		end
 	end
 	return false
 end
-function ns.Loot.HasMounts(id)
+function ns.Loot.HasMounts(id, only_knowable)
 	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
-	for _ in ns.Loot.IterMounts(id) do
-		return true
+	for _, _, item in ns.Loot.IterMounts(id) do
+		if (not only_knowable) or (not itemRestricted(item)) then
+			return true
+		end
 	end
 	return false
 end
-function ns.Loot.HasPets(id)
+function ns.Loot.HasPets(id, only_knowable)
 	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
-	for _ in ns.Loot.IterPets(id) do
-		return true
+	for _, _, item in ns.Loot.IterPets(id) do
+		if (not only_knowable) or (not itemRestricted(item)) then
+			return true
+		end
 	end
 	return false
 end
