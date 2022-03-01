@@ -239,7 +239,7 @@ function module:OnInitialize()
 		[180746] = {name="Protector of the First Ones",locations={[1970]={38852760},},loot={189984,190002,189961,190390,189176,189177},notes="Two people required to open the barrier",quest=64668,},
 		[180917] = {name="Destabilized Core",locations={[1970]={53654435},},loot={187837,189153,189910,189985,189999,189930},quest=64716,},
 		[180924] = {name="Garudeon",locations={[1970]={69053660},},loot={187832,189937,189951,190057,190602},notes="Gather {npc:183562} nearby, feed to {npc:183554}",quest=64719,tameable=132192,vignette=4982,},
-		[180978] = {name="Hirukon",locations={[1970]={52307540},},loot={189905,189946,190005,{187636,pet=3230},{187676,mount=1434},},quest=65548,
+		[180978] = {name="Hirukon",locations={[1970]={52307540},},loot={189905,189946,190005,187636,{187676,mount=1434},},quest=65548,
 			requires=core.conditions.Item(187923),
 			notes="You have to make a {item:187923}:\n"..
 				"* Fish up {item:187662} nearby\n"..
