@@ -87,6 +87,29 @@ function module:ProcessQueue()
 	self:Reflow()
 end
 
+do
+	local merge = function(t1, t2)
+		if not t2 then return t1 end
+		for k, v in pairs(t2) do
+			t1[k] = v
+		end
+		return t1
+	end
+	function module:UpdateWithData(data)
+		for _, data2 in ipairs(self.queue) do
+			if data.type == data2.type and data.id == data2.id then
+				return merge(data2, data)
+			end
+		end
+		for _, popup in ipairs(self.stack) do
+			if popup.data and popup.data.type == data.type  and popup.data.id == data.id then
+				merge(popup.data, data)
+				return self:RefreshData(popup)
+			end
+		end
+	end
+end
+
 function module:Reflow()
 	if module.PAUSED or InCombatLockdown() then return end
 	for i, popup in ipairs(self.stack) do

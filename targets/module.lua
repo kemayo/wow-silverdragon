@@ -116,32 +116,28 @@ function module:AnnounceLoot(_, name, id, zone, x, y, vignetteGUID)
 end
 function module:SeenVignette(_, name, vignetteID, atlasName, uiMapID, x, y, vignetteGUID, mobid)
 	if not mobid then return end
-	for popup in self:EnumerateActive() do
-		if popup.data and popup.data.type == "mob" and popup.data.id == mobid then
-			Debug("Updated mob from vignette", name, vignetteGUID)
-			popup.data.vignetteGUID = vignetteGUID
-			popup.data.vignetteID = vignetteID
-			popup.data.zone = uiMapID
-			popup.data.x = x
-			popup.data.y = y
-			popup.data.source = "vignette"
-			popup.source:SetText("vignette")
-		end
-	end
+	self:UpdateWithData({
+		type = "mob",
+		id = mobid,
+		vignetteGUID = vignetteGUID,
+		vignetteID = vignetteID,
+		zone = uiMapID,
+		x = x,
+		y = y,
+		source = "vignette",
+	})
 end
 function module:SeenLoot(_, name, vignetteID, uiMapID, x, y, vignetteGUID)
-	for popup in self:EnumerateActive() do
-		if popup.data and popup.data.type == "loot" and popup.data.id == vignetteID then
-			Debug("Updated loot from vignette", name, vignetteGUID)
-			popup.data.vignetteGUID = vignetteGUID
-			popup.data.vignetteID = vignetteID
-			popup.data.zone = uiMapID
-			popup.data.x = x
-			popup.data.y = y
-			popup.data.source = "vignette"
-			popup.source:SetText("vignette")
-		end
-	end
+	self:UpdateWithData({
+		type = "loot",
+		id = vignetteID,
+		vignetteGUID = vignetteGUID,
+		vignetteID = vignetteID,
+		zone = uiMapID,
+		x = x,
+		y = y,
+		source = "vignette",
+	})
 end
 
 function module:Point(data)
