@@ -141,9 +141,10 @@ function module:SeenLoot(_, name, vignetteID, uiMapID, x, y, vignetteGUID)
 end
 
 function module:Point(data)
-	if data and data.zone and data.x and data.y then
+	local uiMapID, x, y = self:GetPositionFromData(data)
+	if uiMapID and x and y then
 		-- point to it, without a timeout, and ignoring whether it'll be replacing an existing waypoint
-		core:GetModule("TomTom"):PointTo(data.type == "mob" and data.id or data.name, data.zone, data.x, data.y, 0, true)
+		core:GetModule("TomTom"):PointTo(data.type == "mob" and data.id or data.name, uiMapID, x, y, 0, true)
 	end
 end
 
@@ -224,7 +225,7 @@ function module:SendLinkFromData(data)
 	end
 end
 
-function module:GetPositionFromData(data)
+function module:GetPositionFromData(data, allowFallback)
 	local x, y, uiMapID = data.x, data.y, data.zone
 	if uiMapID and data.vignetteGUID then
 		local position = C_VignetteInfo.GetVignettePosition(data.vignetteGUID, uiMapID)
@@ -232,7 +233,10 @@ function module:GetPositionFromData(data)
 			x, y = position:GetXY()
 		end
 	end
-	if not (x and y) then
+	if not (x and y and x > 0 and y > 0) and data.type == "mob" then
+		uiMapID, x, y = core:GetClosestLocationForMob(data.id)
+	end
+	if allowFallback and not (x and y and x > 0 and y > 0) then
 		-- fall back to sending a link to the current position
 		x, y, uiMapID = HBD:GetPlayerZonePosition()
 	end

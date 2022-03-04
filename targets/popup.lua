@@ -433,11 +433,16 @@ PopupMixin.scripts = {
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, -60)
 		GameTooltip:AddDoubleLine(escapes.leftClick .. " " .. TARGET, escapes.rightClick .. " " .. CLOSE)
-		local uiMapID, x, y = module:GetPositionFromData(self.data)
-		if uiMapID then
+		local uiMapID, x, y = module:GetPositionFromData(self.data, false)
+		if uiMapID and x and y then
 			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, ("%.1f, %.1f"):format(x * 100, y * 100),
 				0, 1, 0,
 				0, 1, 0
+			)
+		else
+			GameTooltip:AddDoubleLine("Location", UNKNOWN,
+				0, 1, 0,
+				1, 0, 0
 			)
 		end
 		if self.data.vignetteID then
@@ -448,7 +453,9 @@ PopupMixin.scripts = {
 		if uiMapID and C_Map.CanSetUserWaypointOnMap(uiMapID) then
 			GameTooltip:AddDoubleLine(CTRL_KEY_TEXT .. " + " .. escapes.leftClick, MAP_PIN )
 		end
-		GameTooltip:AddDoubleLine(SHIFT_KEY_TEXT .. " + " .. escapes.leftClick, TRADESKILL_POST )
+		if uiMapID and x and y then
+			GameTooltip:AddDoubleLine(SHIFT_KEY_TEXT .. " + " .. escapes.leftClick, TRADESKILL_POST )
+		end
 		GameTooltip:Show()
 
 		self.glow.animIn:Stop() -- in case
