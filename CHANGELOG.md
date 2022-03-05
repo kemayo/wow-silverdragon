@@ -1,5 +1,14 @@
 # Changelog
 
+## Changed in v90200.6
+
+* Improvements to mob positions when linking to chat and making waypoints:
+    * If we see a vignette after some other method, update the popup to know about that
+    * If we know about a vignette, always request fresh coordinates from it rather than trusting the initial coords
+    * Don't trust that the player must be nearby if we noticed the mob from an emote, thanks lots of Zereth Mortis zone-wide emotes
+* March 3rd hotfix: Interrogator's Vicious Dirk now drops from all the Dune Domination mobs
+* Orixal has moved
+
 ## Changed in v90200.5
 
 * More loot added in from wowhead
