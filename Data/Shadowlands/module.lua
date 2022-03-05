@@ -205,7 +205,7 @@ function module:OnInitialize()
 		[178778] = {name="Gluttonous Overgrowth",locations={[1970]={53109305},},loot={189929,190008,190049,189953},notes="Break nearby {npc:184048}",quest=65579,},
 		[178963] = {name="Gorkek",locations={[1970]={80404705},},loot={190001,189926,189960},quest=63988,tameable=804969,vignette=4746,},
 		[179006] = {name="Akkaris",locations={[1970]={64753370},},loot={189903,189958,190053,190733},quest=65552,vignette=4747,},
-		[179043] = {name="Orixal",locations={[1970]={58008455},},loot={189912,189934,189952},quest=65582,tameable=2011146,},
+		[179043] = {name="Orixal",locations={[1970]={56406820},},loot={189912,189934,189952},quest=65582,tameable=2011146,},
 		[179108] = {name="Kroke the Tormented",locations={[1961]={59203580},},loot={187394,187250,187248},quest=64428,},
 		[179460] = {name="Fallen Charger",locations={[1543]={16274949,27906290,31803850},},loot={{186659,mount=1502,},186660,186661},notes="Yells, runs from its spawn point to Korthia, then despawns",quest=64164,},
 		[179472] = {name="Konthrogz the Obliterator",locations={[1961]={10008000},},loot={{187183,mount=1514,},187375,187378,187384,187397},quest=64246,vignette=4885,},
