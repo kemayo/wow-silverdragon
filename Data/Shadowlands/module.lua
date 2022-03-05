@@ -279,5 +279,6 @@ function module:OnInitialize()
 		[4992] = {name="Protomineral Extractor",requires=core.conditions.QuestComplete(64889),},
 		[5019] = {name="Torn Ethereal Drape",requires={core.conditions.GarrisonTalent(1902),core.conditions.QuestComplete(65328)},},
 		[5021] = {name="Drowned Broker Supplies",requires=core.conditions.GarrisonTalent(1932),},
+		[4997] = {name="Forgotten Treasure Vault",requires=core.conditions.Achievement(15514),},
 	})
 end
