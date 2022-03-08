@@ -276,7 +276,7 @@ function module:OnInitialize()
 	core:RegisterTreasureData("Shadowlands", {
 		[4928] = {name="Provis Cache",requires=core.conditions.Item(188231),},
 		[4968] = {name="Domination Cache",requires=core.conditions.Item(189704),},
-		[4980] = {name="Architect's Reserve",requires={{core.conditions.GarrisonTalent(1931), core.conditions.QuestComplete(65427)}},},
+		[4980] = {name="Architect's Reserve",requires={core.conditions.GarrisonTalent(1931), core.conditions.QuestComplete(65427)},},
 		[4981] = {name="Misplaced Ovoid",requires=core.conditions.Item(190239,5),},
 		[4992] = {name="Protomineral Extractor",requires=core.conditions.QuestComplete(64889),},
 		[4999] = {name="Ripened Protopear",requires=core.conditions.GarrisonTalent(1931),},
