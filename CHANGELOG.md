@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v90200.7
+
+* Dune Dominance mobs: more loot
+* Helmix: only announce one bit of it
+* Hide various other treasures in ZM until they're attainable (Rogues, Warlocks, and Venthyr not accounted for.)
+
 ## Changed in v90200.6
 
 * Improvements to mob positions when linking to chat and making waypoints:
