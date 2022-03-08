@@ -279,6 +279,7 @@ function module:OnInitialize()
 		[4980] = {name="Architect's Reserve",requires={{core.conditions.GarrisonTalent(1931), core.conditions.QuestComplete(65427)}},},
 		[4981] = {name="Misplaced Ovoid",requires=core.conditions.Item(190239,5),},
 		[4992] = {name="Protomineral Extractor",requires=core.conditions.QuestComplete(64889),},
+		[4999] = {name="Ripened Protopear",requires=core.conditions.GarrisonTalent(1931),},
 		[5019] = {name="Torn Ethereal Drape",requires={core.conditions.GarrisonTalent(1902),core.conditions.QuestComplete(65328)},},
 		[5021] = {name="Drowned Broker Supplies",requires=core.conditions.GarrisonTalent(1932),},
 		[4997] = {name="Forgotten Treasure Vault",requires=core.conditions.Achievement(15514),},
