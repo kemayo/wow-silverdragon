@@ -263,6 +263,7 @@ function module:OnInitialize()
 		[183746] = {name="Otiosen",locations={[1970]={43308760},},loot={189914,189925,190046,189995,187634},quest=65556,},
 		[183747] = {name="Vitiane",locations={[1970]={47054700},},loot={189901,189922,189935},quest=65584,},
 		[183748] = {name="Helmix",locations={[1970]={58206835},},loot={189931,189965,190054,190056},quest=65551,},
+		[183749] = {name="Helmix",hidden=true},
 		[183764] = {name="Zatojin",locations={[1970]={43503295},},loot={189902,189924,189939,190726},notes="Engage the {npc:183721} to get 20 stacks of {spell:362976} and be {spell:362983}. Make sure you're standing on the {npc:183774} corpses.",quest=65251,tameable=236196,},
 		[183814] = {name="Otaris the Provoked",locations={[1970]={58654040},},loot={189909,189945,189957},notes="Inside a cave",quest=65257,},
 		[183925] = {name="Tahkwitz",locations={[1970]={49803915},},loot={189915,189933,189954,187832,190003},quest=65272,tameable=132192,},
@@ -270,6 +271,7 @@ function module:OnInitialize()
 		[183953] = {name="Corrupted Architect",locations={[1970]={47506230},},loot={189907,189940,190009,190732},notes="Fight {npc:183958} and {npc:183961} to trigger",quest=65273,vignette=4989,},
 		[184409] = {name="Euv'ouk",locations={[1970]={47454515},},loot={189949,190047,189956,189993},quest=65555,vignette=4961,},
 		[184413] = {name="Shifting Stargorger",locations={[1970]={42302100},},loot={189908,189916,189941,{189972,covenant=Enum.CovenantType.NightFae,quest=65505,}},quest=65549,},
+		[184804] = {name="Helmix",hidden=true},
 	})
 	core:RegisterTreasureData("Shadowlands", {
 		[4928] = {name="Provis Cache",requires=core.conditions.Item(188231),},
