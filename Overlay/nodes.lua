@@ -89,7 +89,7 @@ do
     local function key_for_mob(id)
         local quest, achievement = ns:CompletionStatus(id)
         local prefix
-        if ns.Loot.HasMounts(id) then
+        if ns.Loot.HasMounts(id, true) then
             -- a mount is always a mount
             prefix = 'mount'
         elseif ns.Loot.Status.Toy(id) == false or ns.Loot.Status.Pet(id) == false then
