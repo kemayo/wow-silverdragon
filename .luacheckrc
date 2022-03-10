@@ -234,6 +234,7 @@ read_globals = {
     "WorldMapPOIQuantizerMixin",
     "RegionUtil",
     "FramePool_HideAndClearAnchors",
+    "OpenAchievementFrameToAchievement",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",
@@ -261,6 +262,7 @@ read_globals = {
     "CLOSE",
     "COLOR",
     "COMMUNITIES_DEFAULT_CHANNEL_NAME",
+    "COMMUNITIES_INVITE_MANAGER_LINK_TO_CHAT",
     "COMPLETE",
     "CONFIRM_BUY_BANK_SLOT",
     "COVENANT_COLORS",
@@ -321,6 +323,7 @@ read_globals = {
     "NUM_BANKBAGSLOTS",
     "NUM_CONTAINER_FRAMES",
     "NUM_LE_BAG_FILTER_FLAGS",
+    "OBJECTIVES_VIEW_ACHIEVEMENT",
     "PARENS_TEMPLATE",
     "PREVIEW",
     "QUESTS_COLON",

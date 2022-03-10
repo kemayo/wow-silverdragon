@@ -191,6 +191,20 @@ do
         end
     end
 
+    local function showAchievement(button, achievement)
+        OpenAchievementFrameToAchievement(achievement)
+    end
+
+    local function sendToChat(mobid, uiMapID, coord)
+        local targets = core:GetModule("ClickTarget", true)
+        if targets then
+            local x, y = core:GetXY(coord)
+            if x and y then
+                targets:SendLinkToMob(mobid, uiMapID, x, y)
+            end
+        end
+    end
+
     local dropdown = CreateFrame("Frame", nil, UIParent, "UIDropDownMenuTemplate")
     dropdown.displayMode = "MENU"
 
@@ -204,10 +218,19 @@ do
             info.notCheckable = 1
             UIDropDownMenu_AddButton(info, level)
 
+            local achievement = button.mobid and ns:AchievementMobStatus(button.mobid)
+            if achievement then
+                info.text = OBJECTIVES_VIEW_ACHIEVEMENT
+                info.notCheckable = 1
+                info.func = showAchievement
+                info.arg1 = achievement
+                UIDropDownMenu_AddButton(info, level)
+            end
+
             -- Waypoint menu item
             info.disabled     = nil
             info.isTitle      = nil
-            info.notCheckable = nil
+            info.notCheckable = true
             info.text = "Create waypoint"
             info.icon = nil
             info.func = module.CreateWaypoint
@@ -217,7 +240,7 @@ do
 
             info.disabled = not TomTom
             info.isTitle = nil
-            info.notCheckable = nil
+            info.notCheckable = true
             info.text = "Create waypoint for all locations"
             info.icon = nil
             info.func = createWaypointForAll
@@ -225,10 +248,18 @@ do
             info.arg2 = button.mobid
             UIDropDownMenu_AddButton(info, level)
 
+            info.disabled = nil
+            info.isTitle = nil
+            info.notCheckable = true
+            info.text = COMMUNITIES_INVITE_MANAGER_LINK_TO_CHAT -- Link to chat
+            local mobid, uiMapID, coord = button.mobid, button.uiMapID, button.coord
+            info.func = function() sendToChat(mobid, uiMapID, coord) end
+            UIDropDownMenu_AddButton(info, level)
+
             -- Hide menu item
             info.disabled     = nil
             info.isTitle      = nil
-            info.notCheckable = nil
+            info.notCheckable = true
             info.text = "Hide mob"
             info.icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
             info.func = hideMob
