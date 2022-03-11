@@ -593,7 +593,7 @@ do
 				local background = module.db.profile.flash_texture
 				local color = module.db.profile.flash_color
 				if self.id and ns.mobdb[self.id] then
-					if ns.Loot.HasMounts(self.id) and module.db.profile.flash_mount then
+					if ns.Loot.HasMounts(self.id, true) and module.db.profile.flash_mount then
 						background = module.db.profile.flash_texture_mount
 						color = module.db.profile.flash_color_mount
 					elseif ns.mobdb[self.id].boss and module.db.profile.flash_boss then
