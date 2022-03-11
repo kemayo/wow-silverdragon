@@ -393,7 +393,7 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 			Debug("ShouldAnnounce", false, "alt got achievement")
 			return false
 		end
-		if source == "vignette" then
+		if source == "vignette" or source == "point-of-interest" then
 			-- The vignette's presence implies no quest completion
 			Debug("ShouldAnnounce", true, "vignette implies quest")
 			return true
