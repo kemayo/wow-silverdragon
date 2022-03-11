@@ -103,7 +103,7 @@ function module:OnInitialize()
 		[80725] = {name="Sulfurious",locations={[543]={39406040},},loot={{114227,toy=true,}},quest=36394,},
 		[80785] = {name="Fungal Praetorian",locations={[535]={58006360},},loot={{113453,quest=35813,},{113454,quest=35814,}},quest=35153,},
 		[80868] = {name="Glut",locations={[543]={45605060},},loot={118229},quest=36204,vignette=434,},
-		[81001] = {name="Nok-Karosh",locations={[525]={13805140},},loot={{116794,mount=657,}},tameable=132203,},
+		[81001] = {name="Nok-Karosh",locations={[525]={13805140},},loot={{116794,mount=657,boe=true,}},tameable=132203,},
 		[81038] = {name="Gelgor of the Blue Flame",locations={[543]={29003880,34203800,41804540},},loot={118230},quest=36391,},
 		[81330] = {name="Warleader Tome",locations={[550]={81406040},},loot={{120276,toy=true,}},note="Has a long path all around the zone, but spawns here",},
 		[81406] = {name="Bahameye",locations={[539]={29600620},},loot={111666},quest=35281,},

@@ -212,10 +212,10 @@ function ns.Loot.HasToys(id, only_knowable)
 	end
 	return false
 end
-function ns.Loot.HasMounts(id, only_knowable)
+function ns.Loot.HasMounts(id, only_knowable, only_boe)
 	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
 	for _, _, item in ns.Loot.IterMounts(id) do
-		if (not only_knowable) or (not itemRestricted(item)) then
+		if ((not only_knowable) or (not itemRestricted(item)) and ((not only_boe) or item.boe)) then
 			return true
 		end
 	end

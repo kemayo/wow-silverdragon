@@ -375,8 +375,8 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		Debug("ShouldAnnounce", true, "always")
 		return true
 	end
-	if not self.db.profile.already_drop and ns.Loot.Status(id, self.db.profile.already_transmog) == true then
-		-- hide mobs which have a mount/pet/toy which you already own
+	if not self.db.profile.already_drop and ns.Loot.Status(id, self.db.profile.already_transmog) == true and not ns.Loot.HasMounts(id, true, true) then
+		-- hide mobs which have a mount/pet/toy which you already own... apart from BoE mounts
 		-- this means there's knowable loot, and it's all known
 		Debug("ShouldAnnounce", false, "already got loot")
 		return false

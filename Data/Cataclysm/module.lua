@@ -6,7 +6,7 @@ function module:OnInitialize()
 	core:RegisterMobData("Cataclysm", {
 		[49822] = {name="Jadefang",locations={[207]={61202260},},loot={{64494,pet=279,}},tameable=877478,},
 		[49913] = {name="Lady La-La",locations={[201]={57008220,60207080},},loot={67152},},
-		[50005] = {name="Poseidus",locations={[204]={41207660},[205]={38006780,44804880,56408220,66004440},},loot={{67151,mount=420,}},},
+		[50005] = {name="Poseidus",locations={[204]={41207660},[205]={38006780,44804880,56408220,66004440},},loot={{67151,mount=420,boe=true,}},},
 		[50009] = {name="Mobus",boss=true,locations={[204]={63003000,65603740,67001920,73201920,75803580,77602820},},loot={69843},},
 		[50050] = {name="Shok'sharak",locations={[204]={41803240,48002740,48003420},},loot={67233},},
 		[50051] = {name="Ghostcrawler",locations={[204]={12408300,15207640,19605040,19808340,23207620,23406640,28607320,29008260},},tameable=236165,},
