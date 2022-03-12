@@ -482,7 +482,7 @@ local achievements = {
 		[177767] = 52047, -- Boil Master Yetch
 		[158300] = 52048, -- Flytrap
 	},
-	[15042] = {}, -- Tea for the Troubled
+	[15042] = {completed = CRITERIA_COMPLETED}, -- Tea for the Troubled
 	[15044] = {}, -- Krrprripripkraak's Heroes
 	[15107] = { -- Conquering Korthia
 		[179755] = 52285, -- Consumption (has multiple ids)
