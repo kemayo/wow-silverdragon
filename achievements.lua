@@ -484,6 +484,7 @@ local achievements = {
 	},
 	[15042] = {completed = CRITERIA_COMPLETED}, -- Tea for the Troubled
 	[15044] = {}, -- Krrprripripkraak's Heroes
+	[15054] = {}, -- Minions of the Cold Dark
 	[15107] = { -- Conquering Korthia
 		[179755] = 52285, -- Consumption (has multiple ids)
 		[179768] = 52285, -- Consumption (has multiple ids)
