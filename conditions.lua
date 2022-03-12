@@ -64,7 +64,7 @@ ns.conditions.AuraActive = Class{
 	type = 'spell',
 	Matched = function(self) return GetPlayerAuraBySpellID(self.id) end,
 }
-ns.conditions.AuraInactive = Negated(ns.conditions.AuraActive)
+ns.conditions.AuraInactive = Class(Negated(ns.conditions.AuraActive))
 
 ns.conditions.Covenant = Class{
 	__parent = Condition,
@@ -95,19 +95,19 @@ ns.conditions.GarrisonTalent = Class{
 }
 
 ns.conditions.Item = Class{
-    __parent = Condition,
-    type = 'item',
-    Initialize = function(self, id, count)
-        self.id = id
-        self.count = count
-    end,
-    Label = function(self)
-        if self.count and self.count > 1 then
-            return ("{item:%d} x%d"):format(self.id, self.count)
-        end
-        return self.__parent.Label(self)
-    end,
-    Matched = function(self) return GetItemCount(self.id, true) >= (self.count or 1) end,
+	__parent = Condition,
+	type = 'item',
+	Initialize = function(self, id, count)
+		self.id = id
+		self.count = count
+	end,
+	Label = function(self)
+		if self.count and self.count > 1 then
+			return ("{item:%d} x%d"):format(self.id, self.count)
+		end
+		return self.__parent.Label(self)
+	end,
+	Matched = function(self) return GetItemCount(self.id, true) >= (self.count or 1) end,
 }
 
 ns.conditions.QuestComplete = Class{
@@ -115,7 +115,7 @@ ns.conditions.QuestComplete = Class{
 	type = 'quest',
 	Matched = function(self) return C_QuestLog.IsQuestFlaggedCompleted(self.id) end,
 }
-ns.conditions.QuestIncomplete = Negated(ns.conditions.QuestComplete)
+ns.conditions.QuestIncomplete = Class(Negated(ns.conditions.QuestComplete))
 
 -- Helpers:
 
