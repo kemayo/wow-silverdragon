@@ -275,6 +275,7 @@ function module:OnInitialize()
 	})
 	core:RegisterTreasureData("Shadowlands", {
 		[4928] = {name="Provis Cache",requires=core.conditions.Item(188231),},
+		[4929] = {name="Prying Eye Discovery",requires={core.conditions.Item(188170),core.conditions.Achievement(15514),any=true},},
 		[4968] = {name="Domination Cache",requires=core.conditions.Item(189704),},
 		[4980] = {name="Architect's Reserve",requires={core.conditions.GarrisonTalent(1931), core.conditions.QuestComplete(65427)},},
 		[4981] = {name="Misplaced Ovoid",requires=core.conditions.Item(190239,5),},
