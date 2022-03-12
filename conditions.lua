@@ -117,6 +117,12 @@ ns.conditions.QuestComplete = Class{
 }
 ns.conditions.QuestIncomplete = Class(Negated(ns.conditions.QuestComplete))
 
+ns.conditions.WorldQuestActive = Class{
+	__parent = Condition,
+	type = 'worldquest',
+	Matched = function(self) return C_TaskQuest.IsActive(self.id) end,
+}
+
 -- Helpers:
 
 do

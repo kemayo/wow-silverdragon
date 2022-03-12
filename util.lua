@@ -28,13 +28,14 @@ function addon:RenderString(s)
 			if name and icon then
 				return quick_texture_markup(icon) .. " " .. name
 			end
-		elseif variant == "quest" then
+		elseif variant == "quest" or variant == "worldquest" then
 			local name = C_QuestLog.GetTitleForQuestID(id)
 			if not (name and name ~= "") then
 				name = tostring(id)
 			end
 			local completed = C_QuestLog.IsQuestFlaggedCompleted(id)
-			return CreateAtlasMarkup("questnormal") .. (completed and completeColor or incompleteColor):WrapTextInColorCode(name)
+			return CreateAtlasMarkup(variant == "worldquest" and "worldquest-tracker-questmarker" or "questnormal") ..
+				(completed and completeColor or incompleteColor):WrapTextInColorCode(name)
 		elseif variant == "questid" then
 			return CreateAtlasMarkup("questnormal") .. (C_QuestLog.IsQuestFlaggedCompleted(id) and completeColor or incompleteColor):WrapTextInColorCode(id)
 		elseif variant == "achievement" then
@@ -75,7 +76,7 @@ function addon:CacheString(s)
 			C_Item.RequestLoadItemDataByID(id)
 		elseif variant == "spell" then
 			C_Spell.RequestLoadSpellData(id)
-		elseif variant == "quest" then
+		elseif variant == "quest" or variant == "worldquest" then
 			C_QuestLog.RequestLoadQuestByID(id)
 		elseif variant == "npc" then
 			self:NameForMob(id)
