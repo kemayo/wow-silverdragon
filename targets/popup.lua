@@ -588,10 +588,9 @@ PopupMixin.scripts = {
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, 0)
 		GameTooltip:SetFrameStrata("TOOLTIP")
-		ns.Loot.Details.UpdateTooltip(GameTooltip, id)
-		if ns.mobdb[id].loot and #ns.mobdb[id].loot > 1 then
-			GameTooltip:AddLine(CLICK_FOR_DETAILS, 0, 1, 1)
-		end
+		GameTooltip:AddDoubleLine(core:GetMobLabel(id), "Loot")
+		ns.Loot.Summary.UpdateTooltip(GameTooltip, id)
+		GameTooltip:AddLine(CLICK_FOR_DETAILS, 0, 1, 1)
 		GameTooltip:Show()
 	end,
 	LootOnLeave = function(self)
