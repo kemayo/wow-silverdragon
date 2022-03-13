@@ -70,8 +70,10 @@ function module:RefreshMobData(popup)
 		popup.status:SetText("")
 	end
 
-	if ns.Loot.HasLoot(data.id) then
+	local loot = ns.Loot.HasLoot(data.id)
+	if loot then
 		popup.lootIcon:Show()
+		popup.lootIcon.count:SetText(#loot)
 		ns.Loot.Cache(data.id)
 	else
 		popup.lootIcon:Hide()
@@ -236,6 +238,8 @@ function module:CreatePopup(look)
 	lootIcon.complete:SetAllPoints(lootIcon)
 	lootIcon.complete:SetAtlas("pvpqueue-conquestbar-checkmark")
 	lootIcon.complete:Hide()
+	lootIcon.count = lootIcon:CreateFontString(nil, "OVERLAY", "GameFontHighlightOutline")
+	lootIcon.count:SetAllPoints(lootIcon)
 
 	local dead = model:CreateTexture(nil, "OVERLAY")
 	popup.dead = dead
