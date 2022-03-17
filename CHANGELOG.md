@@ -1,5 +1,17 @@
 # Changelog
 
+## Changed in v90200.8
+
+* Map pins will only show a mob with the mount icon if you're eligible for that mount (unless it's one of the BoE mounts, which are always given priority)
+* Similarly, announcement sounds and screen flashes will only use their mount variants for mounts you don't have yet or BoE mounts
+* Right-click menu on map pins give you a shortcut to open the achievement associated with that mob
+* A zonewide point-of-interest means the same thing as vignette: you're definitely eligible to loot that mob
+* Zereth Mortis: assorted improvements to treasure/rare requirements
+* Maw tweaks:
+    * Tea for the Troubled mobs will show as "completed" rather than "killed" in tooltips
+    * Minions of the Cold Dark is tracked in tooltips
+* Legion: added some missing loot and cleaned up some data (legendaries had snuck in where they shouldn't...)
+
 ## Changed in v90200.7.1
 
 * Fixed a typo in the Architect's Reserve treasure requirements that was causing an error when it was up
