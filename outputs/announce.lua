@@ -527,7 +527,7 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zo
 		if channel == "GUILD" and not module.db.profile.soundguild or (channel == "PARTY" or channel == "RAID") and not module.db.profile.soundgroup then return end
 	end
 	local soundfile, loops
-	if ns.Loot.HasMounts(id, true) then
+	if ns.Loot.HasInterestingMounts(id) then
 		if not module.db.profile.sound_mount then return end
 		soundfile = module.db.profile.soundfile_mount
 		loops = module.db.profile.sound_mount_loop
@@ -593,7 +593,7 @@ do
 				local background = module.db.profile.flash_texture
 				local color = module.db.profile.flash_color
 				if self.id and ns.mobdb[self.id] then
-					if ns.Loot.HasMounts(self.id, true) and module.db.profile.flash_mount then
+					if ns.Loot.HasInterestingMounts(self.id) and module.db.profile.flash_mount then
 						background = module.db.profile.flash_texture_mount
 						color = module.db.profile.flash_color_mount
 					elseif ns.mobdb[self.id].boss and module.db.profile.flash_boss then
