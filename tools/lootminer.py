@@ -8,19 +8,21 @@ try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
+from collections import defaultdict
 
 import requests
 import requests_cache
 
 from npc import lua, petfamilies
 try:
-    from zones import zones
+    from zones import zones as zones_raw
 except ImportError:
     # zones.py should be generated from a CSV dump of the UIMap table
     # s/^([^,]+),(\d+),(\d+),.+$/$2: ("$1", ($3, $2)),/g
     # s/^"([^"]+)",(\d+),(\d+),.+$/$2: ("$1", ($3, $2)),/g
     pass
-
+zones = defaultdict(lambda: ("Unknown", (-1, -1)))
+zones.update(zones_raw)
 
 __start = ("name", "mount", "pet", "toy")
 __end = ("hidden")
