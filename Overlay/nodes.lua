@@ -89,8 +89,8 @@ do
     local function key_for_mob(id)
         local quest, achievement = ns:CompletionStatus(id)
         local prefix
-        if ns.Loot.HasMounts(id, true) then
-            -- a mount is always a mount
+        if ns.Loot.HasInterestingMounts(id) then
+            -- an unknown mount or a BoE mount
             prefix = 'mount'
         elseif ns.Loot.Status.Toy(id) == false or ns.Loot.Status.Pet(id) == false then
             -- but toys and pets are only special until you loot them

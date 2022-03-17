@@ -221,6 +221,10 @@ function ns.Loot.HasMounts(id, only_knowable, only_boe)
 	end
 	return false
 end
+function ns.Loot.HasInterestingMounts(id)
+	-- This comes up a lot: mounts that you don't know, or which are BoE and so can be sold
+	return ns.Loot.Status.Mount(id, true) == false or ns.Loot.HasMounts(id, true, true)
+end
 function ns.Loot.HasPets(id, only_knowable)
 	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
 	for _, _, item in ns.Loot.IterPets(id) do
