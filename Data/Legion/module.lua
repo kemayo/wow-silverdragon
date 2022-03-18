@@ -334,7 +334,7 @@ function module:OnInitialize()
 		[122911] = {name="Commander Vecaya",locations={[830]={38005840},},loot={153299},quest=48563,},
 		[122912] = {name="Commander Sathrenael",locations={[830]={33207580},},quest=48562,},
 		[122947] = {name="Mistress Il'thendra",locations={[885]={57203380},},loot={153327},quest=49240,},
-		[122958] = {name="Blistermaw",locations={[885]={60403820},},loot={{152905,mount=979,}},quest=49183,},
+		[122958] = {name="Blistermaw",locations={[885]={61803710},},loot={{152905,mount=979,}},quest=49183,},
 		[122999] = {name="Gar'zoth",locations={[885]={55404540},},quest=49241,},
 		[123087] = {name="Al'Abas",locations={[625]={42802420,47203020},},notes="Rogue",hidden=true,},
 		[123464] = {name="Sister Subversia",locations={[830]={52403120},},loot={{153124,toy=true,}},quest=48565,},
