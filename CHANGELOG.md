@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v90200.9
+
+* If you checked for transmogs being known very soon after the game loaded, some bad information could be cached because item information wasn't fully loaded from the server yet. This would make SilverDragon report that some items weren't learnable until your next UI reload. This should no longer happen.
+* Minor tweak to Blistermaw's location in Antoran Wastes
+
 ## Changed in v90200.8
 
 * Map pins will only show a mob with the mount icon if you're eligible for that mount (unless it's one of the BoE mounts, which are always given priority)
