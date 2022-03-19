@@ -64,7 +64,7 @@ local function CanLearnAppearance(itemLinkOrID)
 	end
 	-- First, is this a valid source at all?
 	local canBeChanged, noChangeReason, canBeSource, noSourceReason = C_Transmog.CanTransmogItem(itemID)
-	if canBeSource == nil then
+	if canBeSource == nil or noSourceReason == 'NO_ITEM' then
 		-- data loading, don't cache this
 		return
 	end
