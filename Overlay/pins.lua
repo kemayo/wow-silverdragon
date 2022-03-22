@@ -220,6 +220,9 @@ do
 
             local achievement = button.mobid and ns:AchievementMobStatus(button.mobid)
             if achievement then
+                info.disabled     = nil
+                info.isTitle      = nil
+                info.notCheckable = true
                 info.text = OBJECTIVES_VIEW_ACHIEVEMENT
                 info.notCheckable = 1
                 info.func = showAchievement
