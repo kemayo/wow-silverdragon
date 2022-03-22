@@ -8,7 +8,6 @@ local ns = core.NAMESPACE
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 
-local db
 local escapes = core.escapes
 
 module.const = {
@@ -50,9 +49,9 @@ function module:OnInitialize()
             hidden = {},
         },
     })
-    db = self.db.profile
 
     -- migration
+    local db = self.db.profile
     if type(db.enabled) == "boolean" or db.icon_scale or db.icon_scale_minimap or db.icon_alpha or db.icon_alpha_minimap then
         local function ifnotnil(t, key, val)
             if val ~= nil then
@@ -273,9 +272,9 @@ local function AddMobToTooltip(tooltip, mobid, name)
     if name then
         tooltip:AddLine(core:GetMobLabel(mobid))
     end
-    if db.worldmap.tooltip_completion then
+    if module.db.profile.worldmap.tooltip_completion then
         ns:UpdateTooltipWithCompletion(tooltip, mobid)
-        ns.Loot.Summary.UpdateTooltip(tooltip, mobid, not db.worldmap.tooltip_regularloot)
+        ns.Loot.Summary.UpdateTooltip(tooltip, mobid, not module.db.profile.worldmap.tooltip_regularloot)
     end
     if ns.mobdb[mobid].notes then
         tooltip:AddLine(core:RenderString(ns.mobdb[mobid].notes), 1, 1, 1, true)

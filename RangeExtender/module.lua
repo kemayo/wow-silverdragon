@@ -10,7 +10,6 @@ local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 
 local compat_disabled
 
-local db
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("VignetteStretch", {
 		profile = {
@@ -26,7 +25,6 @@ function module:OnInitialize()
 			},
 		},
 	})
-	db = self.db.profile
 
 	compat_disabled = IsAddOnLoaded("MinimapRangeExtender")
 	self.compat_disabled = compat_disabled
@@ -71,7 +69,7 @@ function module:VIGNETTES_UPDATED()
 	-- Debug("VIGNETTES_UPDATED", #vignetteids)
 
 	for instanceid, icon in pairs(vignetteIcons) do
-		if not tContains(vignetteids, instanceid) or (icon.info and not db.types[icon.info.atlasName:lower()]) or (not icon.info and not db.mystery) or not db.enabled then
+		if not tContains(vignetteids, instanceid) or (icon.info and not self.db.profile.types[icon.info.atlasName:lower()]) or (not icon.info and not self.db.profile.mystery) or not self.db.profile.enabled then
 			HBDPins:RemoveMinimapIcon(self, icon)
 			icon:Hide()
 			icon.info = nil
@@ -86,7 +84,7 @@ function module:VIGNETTES_UPDATED()
 end
 
 function module:UpdateVignetteOnMinimap(instanceid)
-	if compat_disabled or not db.enabled then
+	if compat_disabled or not self.db.profile.enabled then
 		return
 	end
 	-- Debug("considering vignette", instanceid)
@@ -95,11 +93,11 @@ function module:UpdateVignetteOnMinimap(instanceid)
 		return -- Debug("can't determine current zone")
 	end
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-	if not db.mystery and not (vignetteInfo and vignetteInfo.vignetteGUID and vignetteInfo.atlasName) then
+	if not self.db.profile.mystery and not (vignetteInfo and vignetteInfo.vignetteGUID and vignetteInfo.atlasName) then
 		return -- Debug("vignette had no info")
 	end
 	if vignetteInfo then
-		if not db.types[vignetteInfo.atlasName:lower()] then
+		if not self.db.profile.types[vignetteInfo.atlasName:lower()] then
 			return -- Debug("vignette type not enabled", vignetteInfo.atlasName)
 		end
 	end

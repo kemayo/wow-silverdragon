@@ -18,7 +18,6 @@ local function vignetteToggle(vignetteid, name)
 	}
 end
 
-local db
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Scan_Vignettes", {
 		profile = {
@@ -33,9 +32,9 @@ function module:OnInitialize()
 			},
 		},
 	})
-	db = self.db.profile
 
 	-- migrate!
+	local db = self.db.profile
 	if db.loot == false then
 		db.ignore_type.vignetteloot = true
 		db.ignore_type.vignettelootelite = true
@@ -48,8 +47,8 @@ function module:OnInitialize()
 			vignettes = {
 				type = "group",
 				name = "Vignettes",
-				get = function(info) return db[info[#info]] end,
-				set = function(info, v) db[info[#info]] = v end,
+				get = function(info) return self.db.profile[info[#info]] end,
+				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
 					enabled = config.toggle("Enabled", "Scan minimap vignettes (it's what Blizzard calls them, okay?)", 10),
 					pointsofinterest = config.toggle("World points-of-interest", "Show alerts for point of interest vignettes added to world map itself", 20),
@@ -62,9 +61,9 @@ function module:OnInitialize()
 							type = {
 								type = "multiselect",
 								name = "Types",
-								get = function(info, key) return db.ignore_type[key] end,
+								get = function(info, key) return self.db.profile.ignore_type[key] end,
 								set = function(info, key, value)
-									db.ignore_type[key] = value
+									self.db.profile.ignore_type[key] = value
 								end,
 								values = {
 									vignettekill = CreateAtlasMarkup("vignettekill", 20, 20) .. " Kill",
@@ -81,8 +80,8 @@ function module:OnInitialize()
 								type="group",
 								name="Specific",
 								inline=true,
-								get=function(info) return db.ignore[info.arg] end,
-								set=function(info, v) db.ignore[info.arg] = v and info.option.name or nil end,
+								get=function(info) return self.db.profile.ignore[info.arg] end,
+								set=function(info, v) self.db.profile.ignore[info.arg] = v and info.option.name or nil end,
 								args={},
 								order=20,
 							},
@@ -92,7 +91,7 @@ function module:OnInitialize()
 			},
 		}
 		local vignettes = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.specific.args
-		for vignetteid, name in pairs(db.ignore) do
+		for vignetteid, name in pairs(self.db.profile.ignore) do
 			vignettes['vignette:'..vignetteid] = vignetteToggle(vignetteid, name)
 		end
 	end
@@ -147,7 +146,7 @@ local vignette_denylist = {
 }
 local function shouldShowNotVisible(vignetteInfo, zone)
 	local variant = (vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite") and LOOT or MOB
-	if vignetteInfo.onWorldMap and db.pointsofinterest and variant == MOB then
+	if vignetteInfo.onWorldMap and module.db.profile.pointsofinterest and variant == MOB then
 		-- If it's on the world map, it's cool
 		-- BUT don't alert for treasures on the world map, because there's no time-sensitive ones so far (9.1), and
 		-- it results in bursts of alerts when zoning into the Shadowlands area with the daily chests
@@ -168,7 +167,7 @@ local function shouldShowNotVisible(vignetteInfo, zone)
 end
 
 function module:WorkOutMobFromVignette(instanceid)
-	if not db.enabled then return end
+	if not self.db.profile.enabled then return end
 	if already_notified[instanceid] then
 		return --Debug("Skipping notify", "already done", instanceid)
 	end
@@ -180,10 +179,10 @@ function module:WorkOutMobFromVignette(instanceid)
 	if vignette_denylist[vignetteInfo.vignetteID or 0] then
 		return -- Debug("Vignette was on the denylist", vignetteInfo.vignetteID)
 	end
-	if db.ignore[vignetteInfo.vignetteID] then
+	if self.db.profile.ignore[vignetteInfo.vignetteID] then
 		return -- Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
 	end
-	if db.ignore_type[vignetteInfo.atlasName:lower()] then
+	if self.db.profile.ignore_type[vignetteInfo.atlasName:lower()] then
 		return -- Debug("Vignette type not enabled", vignetteInfo.atlasName, vignetteInfo.vignetteID, vignetteInfo.name)
 	end
 	local current_zone = HBD:GetPlayerZone()

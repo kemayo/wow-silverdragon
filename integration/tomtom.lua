@@ -3,7 +3,6 @@ local myname, ns = ...
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("TomTom", "AceEvent-3.0")
 local Debug = core.Debug
-local db
 
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("TomTom", {
@@ -18,7 +17,6 @@ function module:OnInitialize()
 			whiledead = true,
 		},
 	})
-	db = self.db.profile
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -64,11 +62,11 @@ local sources = {
 	fake = true,
 }
 function module:Announce(_, id, zone, x, y, is_dead, source, unit)
-	if not db.enabled then return end
-	if not db.whiledead and UnitIsDead("player") then return end
+	if not self.db.profile.enabled then return end
+	if not self.db.profile.whiledead and UnitIsDead("player") then return end
 	if not (source and sources[source]) then return end
 	if not (zone and x and y and x > 0 and y > 0) then return end
-	self:PointTo(id, zone, x, y, db.duration)
+	self:PointTo(id, zone, x, y, self.db.profile.duration)
 end
 
 do
@@ -76,6 +74,7 @@ do
 	local previous
 	function module:PointTo(id, zone, x, y, duration, force)
 		Debug("Waypoint.PointTo", id, zone, x, y, duration, force)
+		local db = self.db.profile
 		local title = type(id) == "number" and core:GetMobLabel(id) or id or UNKNOWN
 		if TomTom and db.tomtom then
 			if waypoints.tomtom then
@@ -124,6 +123,7 @@ do
 	end
 	function module:Hide(id)
 		Debug("Waypoint.Hide", id)
+		local db = self.db.profile
 		if waypoints.blizzard then
 			Debug("Hiding C_Map")
 			local waypoint = waypoints.blizzard
@@ -159,7 +159,7 @@ do
 
 	function module:PopupHide(_, id, zone, x, y, automatic)
 		Debug("Waypoint.PopupHide", id, zone, x, y, automatic)
-		if db.popup and not automatic then
+		if self.db.profile.popup and not automatic then
 			self:Hide(id, zone, x, y)
 		end
 	end

@@ -8,7 +8,6 @@ local ns = core.NAMESPACE
 function module:RegisterConfig()
 	local config = core:GetModule("Config", true)
 	if not config then return end
-	local db = module.db.profile
 	config.options.plugins.rangeextender = { rangeextender = {
 		type = "group",
 		name = "Range Extender",
@@ -25,9 +24,9 @@ function module:RegisterConfig()
 			types = {
 				type = "multiselect",
 				name = "Types",
-				get = function(info, key) return db[info[#info]][key] end,
+				get = function(info, key) return self.db.profile[info[#info]][key] end,
 				set = function(info, key, value)
-					db[info[#info]][key] = value
+					self.db.profile[info[#info]][key] = value
 					module:VIGNETTES_UPDATED()
 				end,
 				values = {

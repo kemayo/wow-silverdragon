@@ -12,14 +12,13 @@ function module:RegisterConfig()
 	local config = core:GetModule("Config", true)
 	if not config then return end
 
-	local db = self.db.profile
 	config.options.plugins.clicktarget = {
 		clicktarget = {
 			type = "group",
 			name = "ClickTarget",
-			get = function(info) return db[info[#info]] end,
+			get = function(info) return self.db.profile[info[#info]] end,
 			set = function(info, v)
-				db[info[#info]] = v
+				self.db.profile[info[#info]] = v
 			end,
 			order = 25,
 			args = {
@@ -45,7 +44,7 @@ function module:RegisterConfig()
 						return values
 					end,
 					set = function(info, v)
-						db[info[#info]] = v
+						self.db.profile[info[#info]] = v
 						module:Redraw()
 					end,
 					order = 21,
@@ -76,12 +75,12 @@ function module:RegisterConfig()
 					width = "full",
 					min = 0.5,
 					max = 2,
-					get = function(info) return db.anchor.scale end,
+					get = function(info) return self.db.profile.anchor.scale end,
 					set = function(info, value)
-						db.anchor.scale = value
+						self.db.profile.anchor.scale = value
 						LibWindow.SetScale(self.anchor, value)
 						for _, popup in ipairs(self.stack) do
-							popup:SetScale(db.anchor.scale)
+							popup:SetScale(self.db.profile.anchor.scale)
 							self:SetModel(popup)
 						end
 					end,
@@ -135,8 +134,8 @@ function module:RegisterConfig()
 						sources = {
 							type="multiselect",
 							name = "Sources",
-							get = function(info, key) return db.sources[key] end,
-							set = function(info, key, v) db.sources[key] = v end,
+							get = function(info, key) return self.db.profile.sources[key] end,
+							set = function(info, key, v) self.db.profile.sources[key] = v end,
 							values = {
 								target = "Targets",
 								grouptarget = "Group targets",
@@ -156,7 +155,7 @@ function module:RegisterConfig()
 					type = "group",
 					name = "Style options",
 					get = function(info)
-						local value = db.style_options[info[#info - 1]][info[#info]]
+						local value = self.db.profile.style_options[info[#info - 1]][info[#info]]
 						if info.type == "color" then
 							return unpack(value)
 						end
@@ -167,7 +166,7 @@ function module:RegisterConfig()
 						if info.type == "color" then
 							value = {...}
 						end
-						db.style_options[info[#info - 1]][info[#info]] = value
+						self.db.profile.style_options[info[#info - 1]][info[#info]] = value
 						for popup, look in self:EnumerateActive() do
 							if look == info[#info - 1] then
 								self:ResetLook(popup)

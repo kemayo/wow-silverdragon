@@ -8,7 +8,6 @@ local ns = core.NAMESPACE
 function module:RegisterConfig()
     local config = core:GetModule("Config", true)
     if not config then return end
-    local db = module.db.profile
     config.options.plugins.overlay = { overlay = {
         type = "group",
         name = "Map Overlay",
@@ -47,7 +46,7 @@ function module:RegisterConfig()
                         name = "Reset hidden mobs",
                         desc = "Show all nodes that you manually hid by right-clicking on them and choosing \"hide\".",
                         func = function()
-                            wipe(db.hidden)
+                            wipe(self.db.profile.hidden)
                             module:Update()
                         end,
                         order = 50,

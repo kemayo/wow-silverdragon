@@ -1,8 +1,6 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Config", "AceConsole-3.0")
 
-local db
-
 local function toggle(name, desc, order, inline, disabled)
 	return {
 		type = "toggle",
@@ -28,8 +26,8 @@ module.desc = desc
 local options = {
 	type = "group",
 	name = "SilverDragon",
-	get = function(info) return db[info[#info]] end,
-	set = function(info, v) db[info[#info]] = v end,
+	get = function(info) return core.db.profile[info[#info]] end,
+	set = function(info, v) core.db.profile[info[#info]] = v end,
 	args = {
 		about = {
 			type = "group",
@@ -91,8 +89,6 @@ local options = {
 module.options = options
 
 function module:OnInitialize()
-	db = core.db.profile
-
 	options.plugins["profiles"] = {
 		profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(core.db)
 	}

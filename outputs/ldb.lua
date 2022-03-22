@@ -8,7 +8,7 @@ local HBD = LibStub("HereBeDragons-2.0")
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("LDB", "AceEvent-3.0")
 
-local dataobject, tooltip, db
+local dataobject, tooltip
 local rares_seen = {}
 
 local default_help = {
@@ -27,7 +27,6 @@ function module:OnInitialize()
 			tooltip = "always",
 		},
 	})
-	db = self.db
 
 	self:SetupDataObject()
 	self:SetupWorldMap()
@@ -52,7 +51,7 @@ function module:OnInitialize()
 						desc = "Toggle showing or hiding the last seen rare as the dataobject's text",
 						get = function() return db.profile.show_lastseen end,
 						set = function(info, v)
-							db.profile.show_lastseen = v
+							self.db.profile.show_lastseen = v
 							if v and module.last_seen then
 								dataobject.text = core:GetMobLabel(module.last_seen)
 							else
@@ -67,10 +66,10 @@ function module:OnInitialize()
 						type = "toggle",
 						name = "Show minimap icon",
 						desc = "Toggle showing or hiding the minimap icon.",
-						get = function() return not db.profile.minimap.hide end,
+						get = function() return not self.db.profile.minimap.hide end,
 						set = function(info, v)
 							local hide = not v
-							db.profile.minimap.hide = hide
+							self.db.profile.minimap.hide = hide
 							if hide then
 								icon:Hide("SilverDragon")
 							else
@@ -90,9 +89,9 @@ function module:OnInitialize()
 							outofcombat = "Out of Combat",
 							never = "Never",
 						},
-						get = function() return db.profile.tooltip end,
+						get = function() return self.db.profile.tooltip end,
 						set = function(info, v)
-							db.profile.tooltip = v
+							self.db.profile.tooltip = v
 						end,
 						order = 35,
 					},
@@ -100,9 +99,9 @@ function module:OnInitialize()
 						type = "toggle",
 						name = "Show on the world map",
 						desc = "Toggle showing the icon in the world map's header",
-						get = function() return db.profile.worldmap end,
+						get = function() return self.db.profile.worldmap end,
 						set = function(info, v)
-							db.profile.worldmap = v
+							self.db.profile.worldmap = v
 							module.worldmap[v and "Show" or "Hide"](module.worldmap)
 						end,
 						order = 40,
@@ -113,9 +112,9 @@ function module:OnInitialize()
 						type = "toggle",
 						name = "Show on the mount list",
 						desc = "Toggle showing the icon in the map list",
-						get = function() return db.profile.mounts end,
+						get = function() return self.db.profile.mounts end,
 						set = function(info, v)
-							db.profile.mounts = v
+							self.db.profile.mounts = v
 							if module.mounts then
 								module.mounts[v and "Show" or "Hide"](module.mounts)
 							end
@@ -183,7 +182,7 @@ function module:SetupDataObject()
 
 	core.RegisterCallback("LDB", "Seen", function(callback, id, zone, x, y, dead, source)
 		module.last_seen = id
-		if db.profile.show_lastseen then
+		if self.db.profile.show_lastseen then
 			dataobject.text = core:GetMobLabel(id)
 		end
 		table.insert(rares_seen, {
@@ -266,7 +265,7 @@ function module:SetupWorldMap()
 		dataobject.OnClick(self, mButton)
 	end)
 	module.worldmap = button
-	if not db.profile.worldmap then
+	if not self.db.profile.worldmap then
 		button:Hide()
 	end
 end
@@ -299,7 +298,7 @@ function module:SetupMounts()
 	-- onleave is handled by the tooltip's autohide
 	button:SetScript("OnClick", dataobject.OnClick)
 	module.mounts = button
-	if not db.profile.mounts then
+	if not self.db.profile.mounts then
 		button:Hide()
 	end
 end
