@@ -181,7 +181,7 @@ function SilverDragonOverlayMinimapPinMixin:OnLoad()
 end
 
 function SilverDragonOverlayMinimapPinMixin:UpdateEdge()
-    local alpha = (HBDPins:IsMinimapIconOnEdge(self) and 0.6 or 1) * self.config.icon_alpha
+    local alpha = (HBDPins:IsMinimapIconOnEdge(self) and 0.6 or 1) * self:Config().icon_alpha
     self:SetAlpha(alpha)
 end
 
@@ -194,7 +194,6 @@ function SilverDragonOverlayMinimapRoutePinMixin:OnLoad()
     self.texture:SetAtlas("_AnimaChannel-Channel-Line-horizontal")
 
     self.minimap = true
-    self.config = module.db.profile.minimap
 end
 
 function SilverDragonOverlayMinimapRoutePinMixin:OnAcquired(coord1, coord2, uiMapID, mobid, route)
@@ -218,7 +217,7 @@ function SilverDragonOverlayMinimapRoutePinMixin:OnAcquired(coord1, coord2, uiMa
     else
         r, g, b = module.id_to_color(mobid)
     end
-    self.texture:SetVertexColor(r, g, b, a * self.config.icon_alpha)
+    self.texture:SetVertexColor(r, g, b, a * self:Config().icon_alpha)
 
     local x, y = (x1+x2)/2, (y1+y2)/2
     HBDPins:AddMinimapIconMap(dataProvider, self, uiMapID, x, y)

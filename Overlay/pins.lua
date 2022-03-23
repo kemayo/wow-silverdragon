@@ -18,15 +18,14 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
     self.coord = originalCoord
     self.uiMapID = originalMapID
     self.minimap = minimap
-    self.config = minimap and module.db.profile.minimap or module.db.profile.worldmap
 
     if not minimap then
         self:SetPosition(x, y)
     end
 
     local size = 12
-    scale = scale * self.config.icon_scale
-    alpha = alpha * self.config.icon_alpha
+    scale = scale * self:Config().icon_scale
+    alpha = alpha * self:Config().icon_alpha
 
     size = size * scale
     self:SetSize(size, size)
@@ -60,7 +59,6 @@ function SilverDragonOverlayPinMixinBase:OnReleased()
     self.coord = nil
     self.uiMapID = nil
     self.minimap = nil
-    self.config = nil
 
     self.DriverAnimation:Stop()
     self.DriverAnimation:Finish()
@@ -133,6 +131,10 @@ function SilverDragonOverlayPinMixinBase:ApplyFocusState()
         end
         self.emphasis:SetVertexColor(1, 1, 1, 1)
     end
+end
+
+function SilverDragonOverlayPinMixinBase:Config()
+    return self.minimap and module.db.profile.minimap or module.db.profile.worldmap
 end
 
 -- Animation mixin
