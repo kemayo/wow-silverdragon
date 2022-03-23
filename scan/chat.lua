@@ -41,6 +41,7 @@ end
 
 local redirects = {
     [62352] = 62346, -- Chief Salyis => Galleon
+    [154342] = 151934, -- Arachnoid Harvester (time displaced) => Arachnoid Harvester
     [157726] = 160857, -- Scorched Scavenger => Sire Ladinas
     [157727] = 160857, -- Scorched Outcast => Sire Ladinas
     [157733] = 160857, -- Crazed Ash Ghoul => Sire Ladinas
