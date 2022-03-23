@@ -69,12 +69,6 @@ local function OnPinReleased(pinPool, pin)
     pin.pinTemplate = nil
     pin.provider = nil
 end
-function dataProvider:AcquirePin(template, ...)
-    local pin, newPin = self.pool:Acquire()
-
-    pin.pinTemplate = nil
-    pin.provider = nil
-end
 function dataProvider:AcquirePin(pinTemplate, ...)
     if not self.pinPools[pinTemplate] then
         self.pinPools[pinTemplate] = CreateFramePool("FRAME", Minimap, pinTemplate, OnPinReleased)
