@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v90200.10.1
+
+* Fixed an error that would happen on maps with mobs that have routes associated
+
 ## Changed in v90200.10
 
 * Avoid some issues with switching profiles in settings
