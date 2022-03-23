@@ -239,6 +239,9 @@ function SilverDragonOverlayMinimapRoutePinMixin:UpdateRotation()
     self.texture:SetRotation(self.rotation + math.pi*2 - self.provider.facing)
 end
 
+-- This isn't made from the mixin, but I want this method anyway:
+SilverDragonOverlayMinimapRoutePinMixin.Config = module.SilverDragonOverlayPinMixinBase.Config
+
 --
 
 function module:UpdateMinimapIcons()
