@@ -1,5 +1,12 @@
 # Changelog
 
+## Changed in v90200.10
+
+* Avoid some issues with switching profiles in settings
+* Fix the open achievement item in the right-click menu
+* Zereth Mortis: include the Dune Dominance mobs vignette IDs for better alerts
+* Mechagon: stop the chat-alerts from saying the Arachnoid Harvester is the time-displaced version
+
 ## Changed in v90200.9
 
 * If you checked for transmogs being known very soon after the game loaded, some bad information could be cached because item information wasn't fully loaded from the server yet. This would make SilverDragon report that some items weren't learnable until your next UI reload. This should no longer happen.
