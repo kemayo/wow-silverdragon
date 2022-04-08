@@ -519,7 +519,7 @@ function module:OnInitialize()
 		[154153] = {name="Enforcer KX-T57",locations={[1462]={53806180},},loot={{169174,quest=55082,},170467},quest=56207,},
 		[154154] = {name="Honey Smasher",locations={[942]={59401700},},loot={{172493,pet=2794,},{172405,class="SHAMAN",},169133,172500,172501,172502,172503,172504},quest=57674,},
 		[154225] = {name="The Rusty Prince",locations={[1462]={57005740},},loot={{169347,toy=true,},170467},quest=56182,variant="Time displaced",},
-		[154332] = {name="Voidtender Malketh",locations={[1530]={67602900},},poi={947,6489},quest=56183,},
+		[154332] = {name="Voidtender Malketh",locations={[1530]={67602900},[1579]={37004780},},poi={947,6489},quest=56183,},
 		[154342] = {name="Arachnoid Harvester",locations={[1462]={52204160},},loot={{168823,mount=1229,}},quest=55512,variant="Time displaced",},
 		[154394] = {name="Veskan the Fallen",locations={[1530]={85404120},},loot={173911,173912,173913},poi={947,6489},quest=56213,},
 		[154447] = {name="Brother Meller",locations={[1530]={56404120},},poi={947,6489},quest=56237,},
