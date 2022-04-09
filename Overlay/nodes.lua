@@ -87,8 +87,9 @@ do
     end
     module.should_show_mob = should_show_mob
     local function key_for_mob(id)
+        -- TODO: when I overhaul completion it needs to affect this
         local quest, achievement = ns:CompletionStatus(id)
-        local prefix
+        local prefix, suffix
         if ns.Loot.HasInterestingMounts(id) then
             -- an unknown mount or a BoE mount
             prefix = 'mount'
@@ -96,13 +97,16 @@ do
             -- but toys and pets are only special until you loot them
             prefix = 'loot'
         end
-        local suffix
-        if quest or achievement then
-            if (quest and achievement) or (quest == nil or achievement == nil) then
-                suffix = 'done'
-            else
-                suffix = 'partial'
-            end
+        if quest ~= nil then
+            -- if there's a quest, it controls because loot is irrelevant
+            -- (and I don't think there's any way of having the quest
+            -- done without getting achievement-credit)
+            suffix = quest and 'done' or (achievement and 'partial')
+        elseif achievement ~= nil then
+            -- if there's an achievement, loot-status controls whether
+            -- we're partial or complete, because achievement-only mobs
+            -- can generally be farmed
+            suffix = achievement and (prefix and 'partial' or 'done')
         end
         if prefix and suffix then
             return prefix .. '_' .. suffix
