@@ -66,6 +66,18 @@ function module:OnInitialize()
 			flash_boss = false,
 			flash_texture_boss = "Blizzard Low Health",
 			flash_color_boss = {r=1,g=0,b=1,a=1,},
+			vibrate = true,
+			vibrate_type = "High",
+			vibrate_intensity = 1,
+			vibrate_mount = true,
+			vibrate_type_mount = "Low",
+			vibrate_intensity_mount = 1,
+			vibrate_boss = true,
+			vibrate_type_boss = "High",
+			vibrate_intensity_boss = 1,
+			vibrate_loot = true,
+			vibrate_type_loot = "High",
+			vibrate_intensity_loot = 0.8,
 			instances = false,
 			dead = true,
 			already = false,
@@ -330,8 +342,55 @@ function module:OnInitialize()
 						order = 24,
 					},
 				},
-			}
+			},
+			controller = {
+				type = "group", name = "Controller",
+				get = get, set = set,
+				disabled = function(info) return info[#info] ~= "controller" and not C_GamePad.IsEnabled() end,
+				order = 15,
+				args = {
+					about = config.desc("Vibrate a connected controller when a rare is seen. Only works if controller support is enabled. You can turn it on by typing `/console GamePadEnable 1` in the chat box.", 0),
+				},
+			},
 		}
+
+		local function vibrate_section(t, key, order, heading)
+			key = key and ("_"..key) or ""
+			if heading then
+				t["vibrate_heading" .. key] = {type="header", name="", order=order,}
+			end
+			t["vibrate" .. key] = toggle(heading or "Vibrate", "Vibrate the controller?", order + 1)
+			t["vibrate_type" .. key] = {
+				type = "select", name = "Type",
+				desc = "What type of vibration to use",
+				values = {
+					Low = "Low",
+					High = "High",
+					LTrigger = "LTrigger (PS5 only)",
+					RTrigger = "RTrigger (PS5 only)",
+				},
+				order = order + 2,
+			}
+			t["vibrate_intensity" .. key] = {
+				type = "range", name = "Intensity",
+				desc = "How strong the vibration should be",
+				min = 0, max = 1, step = 0.1,
+				order = order + 3,
+			}
+			t["preview" .. key] = {
+				type = "execute", name = PREVIEW,
+				func = function(info)
+					C_GamePad.SetVibration(self.db.profile["vibrate_type" .. key], self.db.profile["vibrate_intensity" .. key])
+				end,
+				order = order + 4,
+			}
+			return order + 5
+		end
+		local order = 1
+		order = vibrate_section(options.controller.args, nil, 1)
+		order = vibrate_section(options.controller.args, "mount", order, "Vibrate for mounts")
+		order = vibrate_section(options.controller.args, "boss", order, "Vibrate for bosses")
+		order = vibrate_section(options.controller.args, "loot", order, "Vibrate for loot")
 
 		config.options.args.outputs.plugins.announce = options
 	end
@@ -621,3 +680,28 @@ do
 		module:Flash(id)
 	end)
 end
+
+core.RegisterCallback("SD Announce Controller", "Announce", function(callback, id, zone, x, y, dead, source)
+	local vibrate_type, vibrate_intensity
+	if ns.Loot.HasInterestingMounts(id) then
+		if not module.db.profile.vibrate_mount then return end
+		vibrate_type = module.db.profile.vibrate_type_mount
+		vibrate_intensity = module.db.profile.vibrate_intensity_mount
+	elseif ns.mobdb[id] and ns.mobdb[id].boss then
+		if not module.db.profile.vibrate_boss then return end
+		vibrate_type = module.db.profile.vibrate_type_boss
+		vibrate_intensity = module.db.profile.vibrate_intensity_boss
+	else
+		if not module.db.profile.vibrate then return end
+		vibrate_type = module.db.profile.vibrate_type
+		vibrate_intensity = module.db.profile.vibrate_intensity
+	end
+	C_GamePad.SetVibration(vibrate_type, vibrate_intensity)
+end)
+core.RegisterCallback("SD AnnounceLoot Controller", "AnnounceLoot", function(callback, id, zone, x, y, dead, source)
+	if not module.db.profile.vibrate_loot then
+		return
+	end
+	C_GamePad.SetVibration(module.db.profile.vibrate_type_loot, module.db.profile.vibrate_intensity_loot)
+end)
+
