@@ -492,8 +492,10 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zon
 			source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
 		end
 	end
-	local prefix = "Rare seen: "
-	module:Pour((prefix .. "%s%s (%s)"):format(core:GetMobLabel(id), dead and "... but it's dead" or '', source or ''))
+	local pin = (zone and x and y) and module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" and (" |cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+		zone, x * 10000, y * 10000, MAP_PIN_HYPERLINK
+	) or ""
+	module:Pour(("Rare seen: %s%s (%s)%s"):format(core:GetMobLabel(id), dead and "... but it's dead" or '', source or '', pin))
 end)
 core.RegisterCallback("SD AnnounceLoot Sink", "AnnounceLoot", function(callback, name, id, zone, x, y)
 	if not module.db.profile.sink then
@@ -505,8 +507,10 @@ core.RegisterCallback("SD AnnounceLoot Sink", "AnnounceLoot", function(callback,
 	if x and y and x > 0 and y > 0 then
 		location = core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
 	end
-	local prefix = "Treasure seen: "
-	module:Pour((prefix .. "%s (%s)"):format(name, location))
+	local pin = (zone and x and y) and module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" and (" |cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+		zone, x * 10000, y * 10000, MAP_PIN_HYPERLINK
+	) or ""
+	module:Pour(("Treasure seen: %s (%s)%s"):format(name, location, pin))
 end)
 
 local cvar_overrides
