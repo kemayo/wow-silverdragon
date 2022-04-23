@@ -59,6 +59,7 @@ read_globals = {
     "C_ChatInfo",
     "C_Covenants",
     "C_CurrencyInfo",
+    "C_GamePad",
     "C_Garrison",
     "C_Item",
     "C_Map",
