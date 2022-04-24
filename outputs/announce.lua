@@ -485,16 +485,19 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zon
 			source = "by " .. player .. " in your " .. strlower(channel) .. "; " .. localized_zone
 		end
 	end
+	local pin = ""
 	if x and y then
 		if x == 0 and y == 0 then
 			source = source .. " @ unknown location"
 		else
-			source = source .. " @ " .. core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
+			source = source .. (" @ %.1f, %.1f"):format(x * 100, y * 100)
+			if module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" then
+				pin = (" |cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+					zone, x * 10000, y * 10000, MAP_PIN_HYPERLINK
+				)
+			end
 		end
 	end
-	local pin = (zone and x and y) and module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" and (" |cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
-		zone, x * 10000, y * 10000, MAP_PIN_HYPERLINK
-	) or ""
 	module:Pour(("Rare seen: %s%s (%s)%s"):format(core:GetMobLabel(id), dead and "... but it's dead" or '', source or '', pin))
 end)
 core.RegisterCallback("SD AnnounceLoot Sink", "AnnounceLoot", function(callback, name, id, zone, x, y)
@@ -503,13 +506,16 @@ core.RegisterCallback("SD AnnounceLoot Sink", "AnnounceLoot", function(callback,
 	end
 
 	Debug("Pouring")
+	local pin = ""
 	local location = UNKNOWN
 	if x and y and x > 0 and y > 0 then
-		location = core.round(x * 100, 1) .. "," .. core.round(y * 100, 1)
+		location = ("%.1f, %.1f"):format(x * 100, y * 100)
+		if module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" then
+			pin = (" |cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+				zone, x * 10000, y * 10000, MAP_PIN_HYPERLINK
+			)
+		end
 	end
-	local pin = (zone and x and y) and module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" and (" |cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
-		zone, x * 10000, y * 10000, MAP_PIN_HYPERLINK
-	) or ""
 	module:Pour(("Treasure seen: %s (%s)%s"):format(name, location, pin))
 end)
 
