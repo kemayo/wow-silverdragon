@@ -119,7 +119,7 @@ function module:OnInitialize()
 		[166393] = {name="Amalgamation of Filth",locations={[1525]={53257300},},loot={183729},quest=59854,},
 		[166398] = {name="Soulforger Rhovus",locations={[1543]={35954155},},loot={183141,185473,186613},quest=60834,},
 		[166521] = {name="Famu the Infinite",locations={[1525]={62484716},},loot={{180582,mount=1379,},183739},quest=59869,},
-		[166576] = {name="Azgar",locations={[1525]={35807050},},loot={183731},quest=59893,},
+		[166576] = {name="Azgar",locations={[1525]={35807050},},loot={183731,180690},quest=59893,},
 		[166679] = {name="Hopecrusher",locations={[1525]={51985179},},loot={{180581,mount=1298,covenant=Enum.CovenantType.Venthyr,}},quest=59900,tameable=625905,},
 		[166710] = {name="Executioner Aatron",locations={[1525]={37104740},},loot={180696,183737},quest=59913,},
 		[166726] = {name="Blistering Ash Ghoul",locations={[1525]={},},hidden=true,},
