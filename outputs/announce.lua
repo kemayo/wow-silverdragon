@@ -89,6 +89,7 @@ function module:OnInitialize()
 			unmute = false,
 			background = false,
 			loot = true,
+			known_mounts = true,
 		},
 	})
 
@@ -165,9 +166,10 @@ function module:OnInitialize()
 				args = {
 					already = toggle("Already found", "Announce when we see rares we've already killed / achieved (if known)", 0),
 					already_drop = toggle("Got the loot", "Announce when we see rares which drop a mount / toy / pet you already have", 10),
-					already_transmog = toggle("...include transmog as loot", "Count transmog appearances as knowable loot for the previous option?", 11),
+					already_transmog = toggle("...include transmog as loot", "Count transmog appearances as knowable loot", 11),
 					already_alt = toggle("Completed by an alt", "Announce when we see rares for an achievement that the current character doesn't have, but an alt has completed already", 20),
-					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not, so this isn't entirely reliable.", 30),
+					known_mounts = toggle("Known mounts are boring", "Treat mount-dropping rares whose mount you already know as if they're regular rares (unless the mount is BoE)", 25),
+					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not", 30),
 					instances = toggle("Instances", "Show announcements while in an instance", 50),
 					loot = toggle("Treasures", "Show announcements when treasure appears on the minimap", 60),
 				},
@@ -203,6 +205,7 @@ function module:OnInitialize()
 					scrapking = faker(151625, "Scrap King (loot)", 1462, 0.5, 0.5),
 					kash = faker(159105, "Collector Kash (lots of loot)", 1536, 0.5, 0.5),
 					-- worldcracker = faker(180032, "Wild Worldcracker", 1961, 0.5, 0.5),
+					-- blanchy = faker(173468, "Dead Blanchy", 1525, 0.5, 0.5),
 					chest = {
 						type = "execute", name = "Waterlogged Chest",
 						desc = "Fake seeing a Waterlogged Chest",
@@ -394,6 +397,13 @@ function module:OnInitialize()
 
 		config.options.args.outputs.plugins.announce = options
 	end
+end
+
+function module:HasInterestingMounts(id)
+	if not module.db.profile.known_mounts then
+		return ns.Loot.HasMounts(id)
+	end
+	return ns.Loot.HasInterestingMounts(id)
 end
 
 function module:Seen(callback, id, zone, x, y, is_dead, source, ...)
@@ -596,7 +606,7 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zo
 		if channel == "GUILD" and not module.db.profile.soundguild or (channel == "PARTY" or channel == "RAID") and not module.db.profile.soundgroup then return end
 	end
 	local soundfile, loops
-	if ns.Loot.HasInterestingMounts(id) then
+	if module:HasInterestingMounts(id) then
 		if not module.db.profile.sound_mount then return end
 		soundfile = module.db.profile.soundfile_mount
 		loops = module.db.profile.sound_mount_loop
@@ -662,7 +672,7 @@ do
 				local background = module.db.profile.flash_texture
 				local color = module.db.profile.flash_color
 				if self.id and ns.mobdb[self.id] then
-					if ns.Loot.HasInterestingMounts(self.id) and module.db.profile.flash_mount then
+					if module.db.profile.flash_mount and module:HasInterestingMounts(id) then
 						background = module.db.profile.flash_texture_mount
 						color = module.db.profile.flash_color_mount
 					elseif ns.mobdb[self.id].boss and module.db.profile.flash_boss then
@@ -693,7 +703,7 @@ end
 
 core.RegisterCallback("SD Announce Controller", "Announce", function(callback, id, zone, x, y, dead, source)
 	local vibrate_type, vibrate_intensity
-	if ns.Loot.HasInterestingMounts(id) then
+	if module:HasInterestingMounts(id) then
 		if not module.db.profile.vibrate_mount then return end
 		vibrate_type = module.db.profile.vibrate_type_mount
 		vibrate_intensity = module.db.profile.vibrate_intensity_mount

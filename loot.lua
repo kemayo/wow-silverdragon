@@ -223,7 +223,7 @@ function ns.Loot.HasMounts(id, only_knowable, only_boe)
 end
 function ns.Loot.HasInterestingMounts(id)
 	-- This comes up a lot: mounts that you don't know, or which are BoE and so can be sold
-	return ns.Loot.Status.Mount(id, true) == false or ns.Loot.HasMounts(id, true, true)
+	return ns.Loot.Status.Mount(id) == false or ns.Loot.HasMounts(id, true, true)
 end
 function ns.Loot.HasPets(id, only_knowable)
 	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
@@ -294,6 +294,7 @@ local function statusChecker(iterator, test)
 		return ret
 	end
 end
+-- these all have mobid as the argument and return true/false/nil for known/unknown/none
 ns.Loot.Status.Toy = statusChecker(ns.Loot.IterToys, PlayerHasToy)
 ns.Loot.Status.Mount = statusChecker(ns.Loot.IterMounts, PlayerHasMount)
 ns.Loot.Status.Pet = statusChecker(ns.Loot.IterPets, PlayerHasPet)
