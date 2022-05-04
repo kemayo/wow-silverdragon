@@ -510,6 +510,7 @@ do
 			tooltip = LibQTip:Acquire("SilverDragonTooltip", 10, "LEFT", "CENTER", "RIGHT", "CENTER", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT")
 			tooltip:SetAutoHideDelay(0.25, parent)
 			tooltip:SmartAnchorTo(parent)
+			tooltip:SetScrollStep(50)
 			tooltip.OnRelease = function() tooltip = nil end
 		end
 
