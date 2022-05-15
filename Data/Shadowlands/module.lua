@@ -77,7 +77,7 @@ function module:OnInitialize()
 		[161891] = {name="Lord Mortegore",locations={[1525]={76006160},},loot={180501,182968},quest=58633,},
 		[162180] = {name="Thread Mistress Leeda",locations={[1536]={24204295},},loot={184180},quest=58678,},
 		[162452] = {name="Dartanos",locations={[1543]={25851480},},loot={186619},quest=59230,},
-		[162481] = {name="Sinstone Hoarder",locations={[1525]={67453050},},loot={183732},quest=62252,},
+		[162481] = {name="Sinstone Hoarder",locations={[1525]={67453050},},loot={183732},quest=62252,vignette=4061,},
 		[162528] = {name="Smorgas the Feaster",locations={[1536]={42465345},},loot={{181265,pet=2955,},{181266,pet=2956,},184299,{184038,covenant=Enum.CovenantType.Necrolord,quest=62760,}},quest=58768,},
 		[162586] = {name="Tahonta",locations={[1536]={44215132},},loot={{182075,mount=1366,covenant=Enum.CovenantType.Necrolord,},182190},quest=58783,tameable=616693,},
 		[162588] = {name="Gristlebeak",locations={[1536]={57805155},},loot={182196},quest=58837,tameable=236190,},
