@@ -40,6 +40,40 @@ local brokenItems = {
 	-- itemid : {appearanceid, sourceid}
 	[153268] = {25124, 90807}, -- Enclave Aspirant's Axe
 }
+local itemSlots = {
+	INVTYPE_HEAD = "HEADSLOT",
+	INVTYPE_SHOULDER = "SHOULDERSLOT",
+	INVTYPE_CLOAK = "BACKSLOT",
+	INVTYPE_CHEST = "CHESTSLOT",
+	INVTYPE_ROBE = "CHESTSLOT",
+	INVTYPE_TABARD = "TABARDSLOT",
+	INVTYPE_BODY = "SHIRTSLOT",
+	INVTYPE_WRIST = "WRISTSLOT",
+	INVTYPE_HAND = "HANDSSLOT",
+	INVTYPE_WAIST = "WAISTSLOT",
+	INVTYPE_LEGS = "LEGSSLOT",
+	INVTYPE_FEET = "FEETSLOT",
+	INVTYPE_WEAPON = "MAINHANDSLOT",
+	INVTYPE_RANGED = "MAINHANDSLOT",
+	INVTYPE_RANGEDRIGHT = "MAINHANDSLOT",
+	INVTYPE_THROWN = "MAINHANDSLOT",
+	INVTYPE_SHIELD = "SECONDARYHANDSLOT",
+	INVTYPE_2HWEAPON = "MAINHANDSLOT",
+	INVTYPE_WEAPONMAINHAND = "MAINHANDSLOT",
+	INVTYPE_WEAPONOFFHAND = "SECONDARYHANDSLOT",
+	INVTYPE_HOLDABLE = "SECONDARYHANDSLOT",
+}
+local function GetItemSlot(itemLinkOrID)
+	local _, _, _, slot = GetItemInfoInstant(itemLinkOrID)
+	if not slot then return end
+	return itemSlots[slot]
+end
+local function GetItemCategory(appearanceID, sourceID)
+	return C_TransmogCollection.GetCategoryForItem(appearanceID) or C_TransmogCollection.GetCategoryForItem(sourceID)
+end
+local function GetTransmogLocation(itemLinkOrID)
+	return TransmogUtil.GetTransmogLocation(GetItemSlot(itemLinkOrID), Enum.TransmogType.Appearance, Enum.TransmogModification.Main)
+end
 local function GetAppearanceAndSource(itemLinkOrID)
 	local itemID = GetItemInfoInstant(itemLinkOrID)
 	if not itemID then return end
@@ -72,12 +106,12 @@ local function CanLearnAppearance(itemLinkOrID)
 		canLearnCache[itemID] = false
 		return false
 	end
-	local appearanceID = GetAppearanceAndSource(itemLinkOrID)
+	local appearanceID, sourceID = GetAppearanceAndSource(itemLinkOrID)
 	if not appearanceID then
 		canLearnCache[itemID] = false
 		return false
 	end
-	if not C_TransmogCollection.GetAppearanceSources(appearanceID) then
+	if not C_TransmogCollection.GetAppearanceSources(appearanceID, GetItemCategory(appearanceID, sourceID), GetTransmogLocation(itemLinkOrID)) then
 		-- This returns nil for inappropriate appearances
 		canLearnCache[itemID] = false
 		return false
@@ -87,8 +121,13 @@ local function CanLearnAppearance(itemLinkOrID)
 end
 local hasAppearanceCache = {}
 local function HasAppearance(itemLinkOrID)
+	-- 9.1.5 added PlayerHasTransmogByItemInfo, but I can't use (just) it
+	-- because it's specific to that item and won't say if you've learned the
+	-- appearance from other sources
 	local itemID = GetItemInfoInstant(itemLinkOrID)
-	if not itemID then return end
+	if not itemID then
+		return
+	end
 	if hasAppearanceCache[itemID] ~= nil then
 		return hasAppearanceCache[itemID]
 	end
@@ -102,7 +141,7 @@ local function HasAppearance(itemLinkOrID)
 		hasAppearanceCache[itemID] = true
 		return true
 	end
-	local sources = C_TransmogCollection.GetAppearanceSources(appearanceID)
+	local sources = C_TransmogCollection.GetAppearanceSources(appearanceID, GetItemCategory(appearanceID, sourceID), GetTransmogLocation(itemLinkOrID))
 	if not sources then
 		hasAppearanceCache[itemID] = false
 		return false
