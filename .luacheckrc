@@ -77,6 +77,7 @@ read_globals = {
     "C_Transmog",
     "C_TransmogCollection",
     "C_VignetteInfo",
+    "TransmogUtil",
     "UiMapPoint",
     "Debug",
     "Enum",
