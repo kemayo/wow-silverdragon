@@ -69,7 +69,7 @@ expansions = {
     9: "Shadowlands",
 }
 
-TOC_TEMPLATE = """## Interface: 90200
+TOC_TEMPLATE = """## Interface: 90205
 ## Title: SilverDragon ({exp})
 ## Notes: Mobs for {exp}
 ## Version: @project-version@
