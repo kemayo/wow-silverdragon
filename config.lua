@@ -73,6 +73,15 @@ local options = {
 			},
 			plugins = {},
 		},
+		loot = {
+			type = "group",
+			name = "Loot",
+			order = 15,
+			args = {
+				about = desc("Some options for how SilverDragon will treat loot drops from mobs", 0),
+				charloot = toggle("Current character only", "Only show loot that should drop for your current character.", 10),
+			}
+		},
 		outputs = {
 			type = "group",
 			name = "Outputs",

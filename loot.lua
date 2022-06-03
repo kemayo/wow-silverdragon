@@ -151,11 +151,30 @@ end
 ns.Loot = {}
 -- _G.SDLoot = ns.Loot
 
+local function suitable(item)
+	if not core.db.profile.charloot then
+		return true
+	end
+	local id = type(item) == "table" and item[1] or item
+	-- show loot for the current character only
+	-- can't pass in a reusable table for the second argument because it changes the no-data case
+	local specTable = GetItemSpecInfo(id)
+	if specTable and #specTable == 0 then return false end
+	-- then catch covenants / classes / etc
+	if itemRestricted(item) then return false end
+	return true
+end
 function ns.Loot.HasLoot(id)
-	if not (id and ns.mobdb[id]) then
+	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then
 		return false
 	end
-	return ns.mobdb[id].loot
+	local lootCount = 0
+	for _, item in ipairs(ns.mobdb[id].loot) do
+		if suitable(item) then
+			lootCount = lootCount + 1
+		end
+	end
+	return lootCount > 0, lootCount
 end
 do
 	local function make_iter(test)
@@ -163,7 +182,7 @@ do
 			local state, item = next(t, prestate)
 			while state do
 				local ret = test(item)
-				if ret then
+				if ret and suitable(item) then
 					return state, ret, item
 				end
 				state, item = next(t, state)
@@ -765,6 +784,7 @@ do
 					if item.count then
 						button:SetItemButtonCount(item.count)
 					end
+					-- TODO: show icon for spec if GetItemSpecInfo says it doesn't drop for the current spec
 					if item.covenant and covenants[item.covenant] then
 						button.RestrictionIcon:SetAtlas(("covenantchoice-panel-sigil-%s"):format(covenants[item.covenant]))
 						button.RestrictionIcon:SetSize(16, 20) -- these are 73x96 natively
@@ -791,7 +811,7 @@ do
 		AddLoot = function(self, loot)
 			for _, item in ipairs(loot) do
 				local itemid = type(item) == "table" and item[1] or item
-				if itemid then
+				if itemid and suitable(item) then
 					self:AddItem(itemid, item)
 				end
 			end

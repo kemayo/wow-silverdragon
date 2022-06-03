@@ -128,6 +128,7 @@ read_globals = {
     "GetItemInfo",
     "GetItemInfoInstant",
     "GetItemQualityColor",
+    "GetItemSpecInfo",
     "GetLocale",
     "GetMacroIndexByName",
     "GetNumGroupMembers",

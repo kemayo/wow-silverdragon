@@ -230,6 +230,7 @@ function addon:OnInitialize()
 			delay = 1200, -- number of seconds to wait between recording the same mob
 			instances = false,
 			taxi = true,
+			charloot = false,
 		},
 	}, true)
 	globaldb = self.db.global
