@@ -12,6 +12,7 @@ from collections import defaultdict
 
 import requests
 import requests_cache
+from requests.adapters import HTTPAdapter, Retry
 
 from npc import lua, petfamilies
 try:
@@ -23,6 +24,12 @@ except ImportError:
     pass
 zones = defaultdict(lambda: ("Unknown", (-1, -1)))
 zones.update(zones_raw)
+
+session = requests_cache.CachedSession()
+retries = Retry(total=5, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
+session.mount('http://', HTTPAdapter(max_retries=retries))
+session.mount('https://', HTTPAdapter(max_retries=retries))
+session.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0'})
 
 __start = ("name", "mount", "pet", "toy")
 __end = ("hidden")
@@ -37,12 +44,13 @@ def __keysort(k):
 
 
 def additemdata(item):
-    if type(item) != dict:
-        item = {1: item}
+    print("additemdata", item)
+    item = normalizeitem(item)
 
     url = f"https://wowhead.com/item={item[1]}"
-    # print("Fetching", url)
-    r = requests.get(url)
+    print("Fetching", url)
+    r = session.get(url, timeout=5)
+    print("fetch completed")
 
     if m := re.search(r'<meta property="og:title" content="([^"]+)">', r.text):
         item["name"] = html.unescape(m.group(1))
@@ -70,9 +78,16 @@ def additemdata(item):
     return item
 
 
+def normalizeitem(item):
+    if type(item) != dict:
+        item = {1: item}
+    return item
+
 def fetchnpc(npc):
+    print("fetchnpc", npc)
     url = f"https://wowhead.com/npc={npc}"
-    r = requests.get(url)
+    r = session.get(url, timeout=5)
+    print("fetch completed")
 
     data = None
 
@@ -148,7 +163,7 @@ def update(f):
         outfile.writelines(output)
 
 
-def export(inf, outf, hn=False):
+def export(inf, outf, hn=False, local=False):
     mobs = {}
     with open(inf, 'r') as infile:
         for line in infile:
@@ -162,17 +177,20 @@ def export(inf, outf, hn=False):
                 print("Skipping", npcid)
                 continue
 
-            print("Loading", npcid, data["name"])
-            remote = fetchnpc(int(npcid))
+            if local:
+                data["loot"] = [normalizeitem(item) for item in data.get("loot", [])]
+            else:
+                print("Loading", npcid, data["name"])
+                remote = fetchnpc(int(npcid))
 
-            loot = data.get("loot", [])
-            if remote and "loot" in remote and len(remote["loot"]) > 0:
-                mergeloot(loot, remote["loot"])
-            if len(loot):
-                data["loot"] = [additemdata(item) for item in loot]
+                loot = data.get("loot", [])
+                if remote and "loot" in remote and len(remote["loot"]) > 0:
+                    mergeloot(loot, remote["loot"])
+                if len(loot):
+                    data["loot"] = [additemdata(item) for item in loot]
 
-            if "family" in remote and remote["family"] in petfamilies:
-                data["tameable"] = petfamilies[remote["family"]]
+                if "family" in remote and remote["family"] in petfamilies:
+                    data["tameable"] = petfamilies[remote["family"]]
 
             mobs[npcid] = data
 
@@ -181,7 +199,7 @@ def export(inf, outf, hn=False):
         mobzones = {}
         for npcid in mobs:
             data = mobs[npcid]
-            print(data)
+            # print(data)
             for zone in data["locations"]:
                 if zone not in mobzones:
                     mobzones[zone] = []
@@ -202,9 +220,9 @@ def export(inf, outf, hn=False):
                     if data.get("loot", []):
                         output.append("\t\tloot={\n")
                         for item in data.get("loot", []):
-                            name = item["name"]
+                            name = item.get("name", "?")
                             cleaned = cleanloot(item.copy())
-                            output.append(f"\t\t\t{lua.serialize(cleaned, key=__keysort, trailingcomma=True)}, -- {item['name']}\n")
+                            output.append(f"\t\t\t{lua.serialize(cleaned, key=__keysort, trailingcomma=True)}, -- {name}\n")
                         output.append("\t\t},\n")
                     output.append("\t},\n")
                     break
@@ -217,19 +235,20 @@ def export(inf, outf, hn=False):
 
 
 if __name__ == '__main__':
-    requests_cache.install_cache()
+    # requests_cache.install_cache()
     # print(fetchnpc(50358))
 
     parser = argparse.ArgumentParser(description="Strip data out of wowhead")
     parser.add_argument('input', metavar="INPUT", type=str, help="Module file to use as input (wildcards work)")
     parser.add_argument('--export', nargs="?", type=str, help="Export loot data to another file rather than updating in place")
     parser.add_argument('--export_handynotes', action="store_true", default=False, help="Export in my handynotes format")
+    parser.add_argument('--local', action="store_true", default=False, help="Export local data rather than fetching anything")
     args = parser.parse_args()
 
     for f in glob.glob(args.input, recursive=True):
         if args.export:
             print("Exporting", f)
-            export(f, args.export, hn=args.export_handynotes)
+            export(f, args.export, hn=args.export_handynotes, local=args.local)
         else:
             print("Updating", f)
             update(f)
