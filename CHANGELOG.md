@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v90205.1
+
+* New option to only show loot the current character can receive. Find it in `Settings > General > Loot`, off by default while I make sure it doesn't have any problems.
+* Better data in Pandaria; mostly fixing up the spam on the Timeless Isle and the Zandalari Warbringers
+* Better fix for the C_TransmogCollection API changes
+
 ## Changed in v90205.0
 
 * Updated for 9.2.5, fixing errors about C_TransmogCollection (in a rush, so there might be followup fixes)
