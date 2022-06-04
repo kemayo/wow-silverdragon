@@ -48,10 +48,29 @@ local options = {
 			},
 			order = 0,
 		},
+		general = {
+			type = "group",
+			name = "General",
+			order = 10,
+			args = {
+				about = desc("SilverDragon wants to tell you things. Check out the sub-sections here to adjust how it does that.", 0),
+				loot = {
+					type = "group",
+					name = "Loot",
+					inline = true,
+					order = 5,
+					args = {
+						about = desc("Some options for how SilverDragon will treat loot drops from mobs", 0),
+						charloot = toggle("Current character only", "Only show loot that should drop for your current character.", 10),
+					}
+				},
+			},
+			plugins = {},
+		},
 		scanning = {
 			type = "group",
 			name = "Scanning",
-			order = 10,
+			order = 20,
 			args = {
 				about = desc("SilverDragon is all about scanning for rare mobs. The options you see in this tab apply generally to all the scanning methods used. For more specific controls, check out the sub-sections.", 0),
 				scan = {
@@ -70,24 +89,6 @@ local options = {
 				},
 				instances = toggle("Scan in instances", "There aren't that many actual rares in instances, and scanning might slow things down at a time when you'd like the most performance possible.", 50),
 				taxi = toggle("Scan on taxis", "Keep scanning for rares while flying on a taxi. Just hope that it'll still be there after you land and make your way back...", 55),
-			},
-			plugins = {},
-		},
-		loot = {
-			type = "group",
-			name = "Loot",
-			order = 15,
-			args = {
-				about = desc("Some options for how SilverDragon will treat loot drops from mobs", 0),
-				charloot = toggle("Current character only", "Only show loot that should drop for your current character.", 10),
-			}
-		},
-		outputs = {
-			type = "group",
-			name = "Outputs",
-			order = 20,
-			args = {
-				about = desc("SilverDragon wants to tell you things. Check out the sub-sections here to adjust how it does that.", 0),
 			},
 			plugins = {},
 		},

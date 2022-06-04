@@ -160,12 +160,12 @@ function module:OnInitialize()
 
 		local options = {
 			general = {
-				type = "group", name = "General", inline = true,
+				type = "group", name = "Announcements", inline = true,
 				order = 10,
 				get = get, set = set,
 				args = {
 					already = toggle("Already found", "Announce when we see rares we've already killed / achieved (if known)", 0),
-					already_drop = toggle("Got the loot", "Announce when we see rares which drop a mount / toy / pet you already have", 10),
+					already_drop = toggle("Got the loot", "Still announce when we see rares which drop a mount / toy / pet you already have", 10),
 					already_transmog = toggle("...include transmog as loot", "Count transmog appearances as knowable loot", 11),
 					already_alt = toggle("Completed by an alt", "Announce when we see rares for an achievement that the current character doesn't have, but an alt has completed already", 20),
 					known_mounts = toggle("Known mounts are boring", "Treat mount-dropping rares whose mount you already know as if they're regular rares (unless the mount is BoE)", 25),
@@ -395,7 +395,7 @@ function module:OnInitialize()
 		order = vibrate_section(options.controller.args, "boss", order, "Vibrate for bosses")
 		order = vibrate_section(options.controller.args, "loot", order, "Vibrate for loot")
 
-		config.options.args.outputs.plugins.announce = options
+		config.options.args.general.plugins.announce = options
 	end
 end
 

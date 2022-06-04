@@ -16,7 +16,7 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
-		config.options.plugins.tooltip = {
+		config.options.args.general.plugins.tooltip = {
 			tooltip = {
 				type = "group",
 				name = "Tooltips",

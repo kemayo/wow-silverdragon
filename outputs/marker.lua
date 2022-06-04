@@ -19,7 +19,7 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
-		config.options.args.outputs.plugins.marker = {
+		config.options.args.general.plugins.marker = {
 			marker = {
 				type = "group",
 				name = "Marker",
