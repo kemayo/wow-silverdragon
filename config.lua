@@ -62,6 +62,7 @@ local options = {
 					args = {
 						about = desc("Some options for how SilverDragon will treat loot drops from mobs", 0),
 						charloot = toggle("Current character only", "Only show loot that should drop for your current character.", 10),
+						lootappearances = toggle("Appearances not items", "Count an item as obtained if you know its appearance, even if it's from a different item", 20),
 					}
 				},
 			},

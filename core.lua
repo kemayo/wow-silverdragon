@@ -231,6 +231,7 @@ function addon:OnInitialize()
 			instances = false,
 			taxi = true,
 			charloot = false,
+			lootappearances = true,
 		},
 	}, true)
 	globaldb = self.db.global
