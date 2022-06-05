@@ -145,6 +145,7 @@ read_globals = {
     "IsAddOnLoaded",
     "IsAltKeyDown",
     "IsControlKeyDown",
+    "IsCosmeticItem",
     "IsInGroup",
     "IsInGuild",
     "IsInInstance",

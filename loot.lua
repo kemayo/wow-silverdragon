@@ -159,7 +159,13 @@ local function suitable(item)
 	-- show loot for the current character only
 	-- can't pass in a reusable table for the second argument because it changes the no-data case
 	local specTable = GetItemSpecInfo(id)
-	if specTable and #specTable == 0 then return false end
+	-- Some cosmetic items seem to be flagged as not dropping for any spec. I
+	-- could only confirm this for some cosmetic back items but let's play it
+	-- safe and say that any cosmetic item can drop regardless of what the
+	-- spec info says...
+	if specTable and #specTable == 0 and not IsCosmeticItem(id) then
+		return false
+	end
 	-- then catch covenants / classes / etc
 	if itemRestricted(item) then return false end
 	return true
