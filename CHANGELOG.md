@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v90205.2
+
+* New option to only consider transmogs obtained if you have that exact item (disabled by default)
+* Some cosmetic items were incorrectly saying they wouldn't drop for anyone, mostly Korthia back items it seemed
+
 ## Changed in v90205.1
 
 * New option to only show loot the current character can receive. Find it in `Settings > General > Loot`, off by default while I make sure it doesn't have any problems.
