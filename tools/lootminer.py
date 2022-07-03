@@ -83,6 +83,19 @@ def normalizeitem(item):
         item = {1: item}
     return item
 
+def isvaliddrop(npc, loot):
+    if "sourcemore" not in loot:
+        return False
+    for source in loot["sourcemore"]:
+        if source.get("ti") == npc:
+            # Only drops from this npc
+            return True
+        if source.get("bd"):
+            # Boss drop, which means it's inherently interesting
+            return True
+    return False
+
+
 def fetchnpc(npc):
     print("fetchnpc", npc)
     url = f"https://wowhead.com/npc={npc}"
@@ -98,13 +111,14 @@ def fetchnpc(npc):
     if m := re.search(r"^\$.extend\(g_npcs\[\d+], ({.+})\);$", r.text, re.MULTILINE):
         data = yaml.load(m.group(1), Loader=Loader)
         if data["id"] != npc:
+            print("couldn't find npc data")
             return False
 
     if m := re.search(r"^new Listview\(({template: 'item', id: 'drops',.+})\);$", r.text, re.MULTILINE):
         lootdata = yaml.load(m.group(1).replace("undefined", "null"), Loader=Loader)
         data["loot"] = []
         for loot in lootdata["data"]:
-            if "sourcemore" in loot and 'ti' in loot["sourcemore"][0] and loot["sourcemore"][0]["ti"] == npc:
+            if isvaliddrop(npc, loot):
                 data["loot"].append(loot["id"])
 
     return data
@@ -126,6 +140,22 @@ def cleanloot(item):
     if len(item) == 1:
         return item[1]
     return item
+
+def output_npc(output, coords, data, indentlevel=1):
+    indent = "\t" * indentlevel
+    output.extend((
+        f"{indent}[{coords[0]}] = {{ -- {data['name']}{len(coords) > 1 and f' +{len(coords)}' or ''}\n",
+        f"{indent}\tquest={data.get('quest', 'nil')},\n",
+        f"{indent}\tnpc={npcid},\n",
+    ))
+    if data.get("loot", []):
+        output.append(f"{indent}\tloot={{\n")
+        for item in data.get("loot", []):
+            name = item.get("name", "?")
+            cleaned = cleanloot(item.copy())
+            output.append(f"{indent}\t\t{lua.serialize(cleaned, key=__keysort, trailingcomma=True)}, -- {name}\n")
+        output.append(f"{indent}\t}},\n")
+    output.append(f"{indent}}},\n")
 
 
 def update(f):
@@ -211,21 +241,7 @@ def export(inf, outf, hn=False, local=False):
                 coords = data["locations"][zone]
                 if not coords:
                     continue
-                for coord in coords:
-                    output.extend((
-                        f"\t[{coord}] = {{ -- {data['name']}{len(coords) > 1 and f' +{len(coords)}' or ''}\n",
-                        f"\t\tquest={data.get('quest', 'nil')},\n",
-                        f"\t\tnpc={npcid},\n",
-                    ))
-                    if data.get("loot", []):
-                        output.append("\t\tloot={\n")
-                        for item in data.get("loot", []):
-                            name = item.get("name", "?")
-                            cleaned = cleanloot(item.copy())
-                            output.append(f"\t\t\t{lua.serialize(cleaned, key=__keysort, trailingcomma=True)}, -- {name}\n")
-                        output.append("\t\t},\n")
-                    output.append("\t},\n")
-                    break
+                output_npc(coords, data)
             output.append("})\n")
     else:
         output = [f"[{npcid}]={lua.serialize(mobs[npcid], key=__keysort, trailingcomma=True)},\n" for npcid in mobs]
@@ -245,11 +261,21 @@ if __name__ == '__main__':
     parser.add_argument('--local', action="store_true", default=False, help="Export local data rather than fetching anything")
     args = parser.parse_args()
 
-    for f in glob.glob(args.input, recursive=True):
-        if args.export:
-            print("Exporting", f)
-            export(f, args.export, hn=args.export_handynotes, local=args.local)
-        else:
-            print("Updating", f)
-            update(f)
+    if re.match(r"[\d,]", args.input):
+        output = []
+        for npcid in args.input.split(","):
+            npc = fetchnpc(int(npcid))
+            if "loot" in npc:
+                npc["loot"] = [additemdata(item) for item in npc["loot"]]
+            # print(lua.serialize(npc), key=__keysort, trailingcomma=True))
+            output_npc(output, [0], npc, 0)
+        print("".join(output))
+    else:
+        for f in glob.glob(args.input, recursive=True):
+            if args.export:
+                print("Exporting", f)
+                export(f, args.export, hn=args.export_handynotes, local=args.local)
+            else:
+                print("Updating", f)
+                update(f)
 
