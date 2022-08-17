@@ -259,6 +259,7 @@ function addon:GetClosestLocationForMob(id)
 					closest.x = x2
 					closest.y = y2
 				end
+				distance = 999999999
 			end
 			if distance < closest.distance then
 				closest.distance = distance
