@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v90207.0
+
+* Updated for 9.2.7
+* Avoid error when trying to find distance to a mob with no route to you
+
 ## Changed in v90205.2
 
 * New option to only consider transmogs obtained if you have that exact item (disabled by default)
