@@ -1,4 +1,4 @@
-## Interface: 90205
+## Interface: 90207
 ## Title: SilverDragon: Map Overlays
 ## Notes: Mobs on the maps
 ## Version: @project-version@

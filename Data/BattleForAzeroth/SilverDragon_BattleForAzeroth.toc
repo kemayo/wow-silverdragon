@@ -1,4 +1,4 @@
-## Interface: 90205
+## Interface: 90207
 ## Title: SilverDragon (BattleForAzeroth)
 ## Notes: Mobs for BattleForAzeroth
 ## Version: @project-version@
