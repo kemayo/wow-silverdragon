@@ -2,4 +2,5 @@
 ..\FrameXML\UI.xsd">
   <Script file="Classic/module.lua"/>
   <Script file="BurningCrusade/module.lua"/>
+  <Script file="Wrath/module.lua"/>
 </Ui>
