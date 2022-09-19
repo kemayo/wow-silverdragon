@@ -1,5 +1,6 @@
-## Interface: 20501
-## Interface-Classic: 11307
+## Interface: 30400
+## Interface-BCC: 20501
+## Interface-Classic: 11403
 ## Title: SilverDragon (Classic)
 ## Notes: Mobs for Classic
 ## Version: @project-version@

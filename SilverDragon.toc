@@ -1,5 +1,6 @@
-﻿## Interface: 20501
-## Interface-Classic: 11307
+﻿## Interface: 30400
+## Interface-BCC: 20501
+## Interface-Classic: 11403
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
