@@ -31,6 +31,7 @@ externals:
 move-folders:
    SilverDragon/Data/Classic: SilverDragon_Classic
    SilverDragon/Data/BurningCrusade: SilverDragon_BurningCrusade
+   SilverDragon/Data/Wrath: SilverDragon_Wrath
 
 ignore:
    - tools
