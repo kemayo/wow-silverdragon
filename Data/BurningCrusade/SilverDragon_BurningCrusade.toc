@@ -1,5 +1,4 @@
 ## Interface: 30400
-## Interface-BCC: 20501
 ## Interface-Classic: 11403
 ## Title: SilverDragon (Burning Crusade Classic)
 ## Notes: Mobs for Burning Crusade Classic
