@@ -1,5 +1,16 @@
 # Changelog
 
+## Changed in v30400.1
+* Added missing loot to Wrath rares
+
+## Changed in v11403.0 / v30400.0
+* Updated for Wrath launch
+
+## Changed in v11307.0 / v20501.0
+* Updated for BCC launch
+* Can't output to channels any more
+* Pulled in many improvements from retail version
+
 ## Changed in v11302.0
 * Fixed absent sounds
 * Classic rare list is vastly more complete now
