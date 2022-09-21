@@ -13,7 +13,7 @@ module.WorldMapDataProvider = CreateFromMixins(MapCanvasDataProviderMixin)
 function module.WorldMapDataProvider:OnAdded(owningMap)
     self.owningMap = owningMap
 
-    if not self.poiQuantizer then
+    if not self.poiQuantizer and _G.WorldMapPOIQuantizerMixin then
         self.poiQuantizer = CreateFromMixins(WorldMapPOIQuantizerMixin)
         self.poiQuantizer.size = 75
         self.poiQuantizer:OnLoad(self.poiQuantizer.size, self.poiQuantizer.size)
@@ -54,9 +54,11 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
             table.insert(pinsToQuantize, pin)
         end
     end
-    self.poiQuantizer:ClearAndQuantize(pinsToQuantize)
-    for _, pin in ipairs(pinsToQuantize) do
-        pin:SetPosition(pin.quantizedX or pin.normalizedX, pin.quantizedY or pin.normalizedY)
+    if self.poiQuantizer then
+        self.poiQuantizer:ClearAndQuantize(pinsToQuantize)
+        for _, pin in ipairs(pinsToQuantize) do
+            pin:SetPosition(pin.quantizedX or pin.normalizedX, pin.quantizedY or pin.normalizedY)
+        end
     end
     wipe(pinsToQuantize)
 
@@ -118,8 +120,10 @@ function module.WorldMapDataProvider:ConnectPins(pin1, pin2, mobid, route)
 end
 
 function module.WorldMapDataProvider:OnCanvasSizeChanged()
-    local ratio = self:GetMap():DenormalizeHorizontalSize(1.0) / self:GetMap():DenormalizeVerticalSize(1.0);
-    self.poiQuantizer:Resize(math.ceil(self.poiQuantizer.size * ratio), self.poiQuantizer.size);
+    if self.poiQuantizer then
+        local ratio = self:GetMap():DenormalizeHorizontalSize(1.0) / self:GetMap():DenormalizeVerticalSize(1.0)
+        self.poiQuantizer:Resize(math.ceil(self.poiQuantizer.size * ratio), self.poiQuantizer.size)
+    end
 end
 
 -- /script SilverDragon:GetModule("Overlay").WorldMapDataProvider:Ping(32487)
@@ -168,8 +172,12 @@ function SilverDragonOverlayRoutePinConnectionMixin:Connect(pin1, pin2)
     pin1.connectionOut = self
     pin2.connectionIn = self
 
-    self.Line:SetAtlas("_AnimaChannel-Channel-Line-horizontal")
-    -- self.Line:SetTexture("Interface\\TaxiFrame\\UI-Taxi-Line")
+    if ns.CLASSIC then
+        -- self.Line:SetTexture("Interface\\TaxiFrame\\UI-Taxi-Line")
+        self.Line:SetAtlas("_UI-Taxi-Line-horizontal")
+    else
+        self.Line:SetAtlas("_AnimaChannel-Channel-Line-horizontal")
+    end
 
     self.Line:SetStartPoint("CENTER", pin1)
     self.Line:SetEndPoint("CENTER", pin2)

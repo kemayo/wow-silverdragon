@@ -1,0 +1,14 @@
+## Interface: 30400
+## Interface-Classic: 11403
+## Title: SilverDragon (Burning Crusade Classic)
+## Notes: Mobs for Burning Crusade Classic
+## Version: @project-version@
+## Author: Kemayo
+## eMail: kemayo at gmail dot com
+## X-Category: Interface Enhancements
+## X-Donate: PayPal:kemayo AT gmail DOT com
+## Dependencies: SilverDragon
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+
+module.lua

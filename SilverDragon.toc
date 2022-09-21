@@ -1,4 +1,6 @@
 ﻿## Interface: 90207
+## Interface-Wrath: 30400
+## Interface-Classic: 11403
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
@@ -54,9 +56,10 @@ mobs.lua
 # working with other addons
 integration\tomtom.lua
 
-#@debug@
 # data imports
 Data\module.xml
+Data_Classic\module.xml
+#@debug@
 # overlay
 Overlay\module.xml
 RangeExtender\module.xml

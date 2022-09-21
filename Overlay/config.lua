@@ -96,7 +96,9 @@ function module:RegisterConfig()
                 set = function(info, v)
                     self.db.profile.worldmap[info[#info]] = v
                     module:Update()
-                    WorldMapFrame:RefreshOverlayFrames()
+                    if WorldMapFrame.RefreshOverlayFrames then
+                        WorldMapFrame:RefreshOverlayFrames()
+                    end
                 end,
                 args = {
                     enabled = {

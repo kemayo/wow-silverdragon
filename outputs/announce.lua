@@ -158,6 +158,41 @@ function module:OnInitialize()
 			color.r, color.g, color.b, color.a = r, g, b, a
 		end
 
+		local fake_args = {
+			-- this is a vanilla mob
+			deathmaw = faker(10077, "Deathmaw (Tame!)", 29, 0.5, 0.5),
+		}
+		if LE_EXPANSION_LEVEL_CURRENT >= LE_EXPANSION_WRATH_OF_THE_LICH_KING then
+			fake_args.time = faker(32491, "Time-Lost Proto Drake (Mount!)", 120, 0.490, 0.362)
+			fake_args.vyragosa = faker(32630, "Vyragosa (Boring)", 120, 0.5, 0.5)
+		end
+		if not ns.CLASSIC then
+			-- id, name, zone, x, y, is_dead, is_new_location, source, unit
+			-- ishak = faker(157134, "Ishak of the Four Winds (Mount!)", 1527, 0.73, 0.83)
+			fake_args.anger = faker(60491, "Sha of Anger (Boss!)", 809, 0.5, 0.5)
+			-- haakun = faker(83008, "Haakun", 946, 0.5, 0.5)
+			fake_args.yiphrim = faker(157473, "Yiphrim the Will Ravager (Toy!)", 1527, 0.5, 0.786)
+			fake_args.amalgamation = faker(157593, "Amalgamation of Flesh (Pet!)", 1527, 0.598, 0.724)
+			-- alash = faker(148787, "Alash'anir", 62, 0.598, 0.724)
+			-- burninator = faker(149141, "Burninator Mk V (Pet!)", 62, 0.414, 0.764)
+			fake_args.worldedge = faker(160821, "Worldedge Gorger (mount)", 1525, 0.5, 0.5)
+			fake_args.tarahna = faker(126900, "Instructor Tarahna (multi-toy)", 882, 0.5, 0.5)
+			fake_args.nerissa = faker(162690, "Nerissa Heartless (mount)", 1536, 0.5, 0.5)
+			-- faeflayer = faker(171688, "Faeflayer", 1536, 0.5, 0.5)
+			fake_args.scrapking = faker(151625, "Scrap King (loot)", 1462, 0.5, 0.5)
+			fake_args.kash = faker(159105, "Collector Kash (lots of loot)", 1536, 0.5, 0.5)
+			-- worldcracker = faker(180032, "Wild Worldcracker", 1961, 0.5, 0.5)
+			-- blanchy = faker(173468, "Dead Blanchy", 1525, 0.5, 0.5)
+			fake_args.chest = {
+				type = "execute", name = "Waterlogged Chest",
+				desc = "Fake seeing a Waterlogged Chest",
+				func = function()
+					-- id, zone, x, y, is_dead, source, unit
+					core.events:Fire("SeenLoot", "Waterlogged Chest", 3341, 37, 0.318, 0.628)
+				end
+			}
+		end
+
 		local options = {
 			general = {
 				type = "group", name = "Announcements", inline = true,
@@ -186,35 +221,7 @@ function module:OnInitialize()
 			test = {
 				type = "group", name = "Test it!",
 				inline =  true,
-				args = {
-					-- id, name, zone, x, y, is_dead, is_new_location, source, unit
-					time = faker(32491, "Time-Lost Proto Drake (Mount!)", 120, 0.490, 0.362),
-					-- ishak = faker(157134, "Ishak of the Four Winds (Mount!)", 1527, 0.73, 0.83),
-					anger = faker(60491, "Sha of Anger (Boss!)", 809, 0.5, 0.5),
-					vyragosa = faker(32630, "Vyragosa (Boring)", 120, 0.5, 0.5),
-					deathmaw = faker(10077, "Deathmaw (Tame!)", 29, 0.5, 0.5),
-					-- haakun = faker(83008, "Haakun", 946, 0.5, 0.5),
-					yiphrim = faker(157473, "Yiphrim the Will Ravager (Toy!)", 1527, 0.5, 0.786),
-					amalgamation = faker(157593, "Amalgamation of Flesh (Pet!)", 1527, 0.598, 0.724),
-					-- alash = faker(148787, "Alash'anir", 62, 0.598, 0.724),
-					-- burninator = faker(149141, "Burninator Mk V (Pet!)", 62, 0.414, 0.764),
-					worldedge = faker(160821, "Worldedge Gorger (mount)", 1525, 0.5, 0.5),
-					tarahna = faker(126900, "Instructor Tarahna (multi-toy)", 882, 0.5, 0.5),
-					nerissa = faker(162690, "Nerissa Heartless (mount)", 1536, 0.5, 0.5),
-					-- faeflayer = faker(171688, "Faeflayer", 1536, 0.5, 0.5),
-					scrapking = faker(151625, "Scrap King (loot)", 1462, 0.5, 0.5),
-					kash = faker(159105, "Collector Kash (lots of loot)", 1536, 0.5, 0.5),
-					-- worldcracker = faker(180032, "Wild Worldcracker", 1961, 0.5, 0.5),
-					-- blanchy = faker(173468, "Dead Blanchy", 1525, 0.5, 0.5),
-					chest = {
-						type = "execute", name = "Waterlogged Chest",
-						desc = "Fake seeing a Waterlogged Chest",
-						func = function()
-							-- id, zone, x, y, is_dead, source, unit
-							core.events:Fire("SeenLoot", "Waterlogged Chest", 3341, 37, 0.318, 0.628)
-						end,
-					},
-				},
+				args = fake_args,
 			},
 			sound = {
 				type = "group", name = "Sounds",

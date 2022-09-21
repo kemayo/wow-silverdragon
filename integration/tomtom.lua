@@ -102,7 +102,7 @@ do
 				zone
 			)
 		end
-		if db.blizzard and C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
+		if db.blizzard and C_Map.CanSetUserWaypointOnMap and C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
 			previous = C_Map.GetUserWaypoint()
 			if previous then
 				previous.wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()

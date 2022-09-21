@@ -63,6 +63,22 @@ do
             mount_done = tex("VignetteKillElite", 0, 1, 0, 1), -- green shiny skull
         }
     }
+    if ns.CLASSIC then
+        icons.circles.loot = tex("WhiteDotCircle-RaidBlips", 1, 0.33, 0.33, 1.3)
+        icons.circles.loot_partial = tex("WhiteDotCircle-RaidBlips", 1, 1, 0.33, 1.3)
+        icons.circles.loot_done = tex("WhiteDotCircle-RaidBlips", 0.33, 1, 0.33, 1)
+        icons.skulls = {
+            default = tex("DungeonSkull", 1, 0.33, 0.33, 1.3), -- red skull
+            partial = tex("DungeonSkull", 1, 1, 0.33, 1.3), -- yellow skull
+            done = tex("DungeonSkull", 0.33, 1, 0.33, 1), -- green skull
+            loot = tex("VignetteKillElite", 1, 0.33, 0.33, 1.3), -- red glowing skull
+            loot_partial = tex("VignetteKillElite", 1, 1, 0.33, 1.3), -- yellow glowing skull
+            loot_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1), -- green glowing skull
+            mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
+            mount_partial = tex("VignetteKillElite", 1, 1, 0.33, 1.8), -- yellow shiny skull
+            mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1), -- green shiny skull
+        }
+    end
     local function should_show_mob(id, uiMapID)
         if module.db.profile.hidden[id] or core:ShouldIgnoreMob(id, uiMapID) then
             return false

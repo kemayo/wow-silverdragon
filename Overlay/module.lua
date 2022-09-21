@@ -250,7 +250,7 @@ function module:ShowTooltip(pin)
 
     if pin:Config().tooltip_help then
         tooltip:AddDoubleLine(ALT_KEY_TEXT .. " + " .. escapes.leftClick, MAP_PIN, 0, 1, 1, 0, 1, 1 )
-        if C_Map.CanSetUserWaypointOnMap(pin.uiMapID) then
+        if C_Map.CanSetUserWaypointOnMap and C_Map.CanSetUserWaypointOnMap(pin.uiMapID) then
             tooltip:AddDoubleLine(SHIFT_KEY_TEXT .. " + " .. escapes.leftClick, TRADESKILL_POST, 0, 1, 1, 0, 1, 1 )
         end
         tooltip:AddDoubleLine(SHIFT_KEY_TEXT .. " + " .. escapes.rightClick, HIDE, 0, 1, 1, 0, 1, 1 )

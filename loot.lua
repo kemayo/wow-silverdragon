@@ -27,6 +27,11 @@ local function any(test, ...)
 	return false
 end
 
+local ATLAS_CHECK, ATLAS_CROSS = "common-icon-checkmark", "common-icon-redx"
+if ns.CLASSIC then
+	ATLAS_CHECK, ATLAS_CROSS = "Tracker-Check", "Objective-Fail"
+end
+
 -- we need non-localized covenant names for atlases
 -- can't use the texturekit value from covenant data, since the atlas I want doesn't conform to it
 local covenants = {
@@ -58,6 +63,7 @@ local function GetAppearanceAndSource(itemLinkOrID)
 end
 local canLearnCache = {}
 local function CanLearnAppearance(itemLinkOrID)
+	if not _G.C_Transmog then return false end
 	local itemID = GetItemInfoInstant(itemLinkOrID)
 	if not itemID then return end
 	if canLearnCache[itemID] ~= nil then
@@ -121,14 +127,18 @@ local function HasAppearance(itemLinkOrID)
 end
 
 local function PlayerHasMount(mountid)
+	-- TODO: GetCompanionInfo somehow for Wrath?
+	if not C_MountJournal then return false end
 	return (select(11, C_MountJournal.GetMountInfoByID(mountid)))
 end
 local function PlayerHasPet(petid)
+	-- TODO: GetCompanionInfo somehow for Wrath?
+	if not C_PetJournal then return false end
 	return (C_PetJournal.GetNumCollectedInfo(petid) > 0)
 end
 local itemRestricted = function(item)
 	if type(item) ~= "table" then return false end
-	if item.covenant and item.covenant ~= C_Covenants.GetActiveCovenantID() then
+	if item.covenant and C_Covenants and item.covenant ~= C_Covenants.GetActiveCovenantID() then
 		return true
 	end
 	if item.class and select(2, UnitClass("player")) ~= item.class then
@@ -137,6 +147,7 @@ local itemRestricted = function(item)
 	return false
 end
 local itemIsKnowable = function(item)
+	if ns.CLASSIC then return true end
 	if type(item) == "table" then
 		return (item.toy or item.mount or item.pet or item.quest or CanLearnAppearance(item[1])) -- and not itemRestricted(item)
 	end
@@ -144,6 +155,12 @@ local itemIsKnowable = function(item)
 end
 local itemIsKnown = function(item)
 	-- returns true/false/nil for yes/no/not-knowable
+	if ns.CLASSIC then
+		if type(item) == "table" and item.quest then
+			return C_QuestLog.IsQuestFlaggedCompleted(item.quest) or C_QuestLog.IsOnQuest(item.quest)
+		end
+		return GetItemCount(type(item) == "table" and item[1] or item, true) > 0
+	end
 	if type(item) == "table" then
 		if item.toy then return PlayerHasToy(item[1]) end
 		if item.mount then return PlayerHasMount(item.mount) end
@@ -366,10 +383,11 @@ local function get_tooltip(tooltip, i)
 end
 
 local Details = {
-	toy = function(tooltip, i, toyid)
+	toy = function(tooltip, i, toyid, itemdata)
 		tooltip:SetHyperlink(("item:%d"):format(toyid))
 	end,
-	mount = function(tooltip, i, mountid)
+	mount = function(tooltip, i, mountid, itemdata)
+		if not C_MountJournal then return ns.Loot.Details.item(tooltip, i, itemdata[1], itemdata) end
 		local name, spellid, texture, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(mountid)
 		if not name then
 			tooltip:AddLine("mount:" .. mountid)
@@ -386,7 +404,8 @@ local Details = {
 			tooltip:AddLine(USED, 1, 0, 0)
 		end
 	end,
-	pet = function(tooltip, i, petid)
+	pet = function(tooltip, i, petid, itemdata)
+		if not C_PetJournal then return ns.Loot.Details.item(tooltip, i, itemdata[1], itemdata) end
 		local name, texture, _, mobid, source, description = C_PetJournal.GetPetInfoBySpeciesID(petid)
 		if not name then
 			tooltip:AddLine("pet:" .. petid)
@@ -400,7 +419,7 @@ local Details = {
 		tooltip:AddLine(source)
 		tooltip:AddLine(ITEM_PET_KNOWN:format(owned, limit))
 	end,
-	item = function(tooltip, i, itemid)
+	item = function(tooltip, i, itemid, itemdata)
 		tooltip:SetHyperlink(("item:%d"):format(itemid))
 	end,
 	restrictions = function(tooltip, itemdata)
@@ -437,7 +456,7 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 
 	if mount then
 		for i, mountid, itemdata in ns.Loot.IterMounts(id) do
-			Details.mount(tooltip, i, mountid)
+			Details.mount(tooltip, i, mountid, itemdata)
 			Details.restrictions(tooltip, itemdata)
 		end
 	end
@@ -446,7 +465,7 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 			tooltip:AddLine("---")
 		end
 		for i, petid, itemdata in ns.Loot.IterPets(id) do
-			Details.pet(tooltip, i, petid)
+			Details.pet(tooltip, i, petid, itemdata)
 			Details.restrictions(tooltip, itemdata)
 		end
 	end
@@ -456,7 +475,7 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 		for i, toyid, itemdata in ns.Loot.IterToys(id) do
 			itemtip = get_tooltip(itemtip or tooltip, n)
 			if not itemtip then return end -- out of comparisons
-			Details.toy(itemtip, n, toyid)
+			Details.toy(itemtip, n, toyid, itemdata)
 			Details.restrictions(itemtip, itemdata)
 			n = n + 1
 		end
@@ -465,7 +484,7 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id) do
 			itemtip = get_tooltip(itemtip or tooltip, n)
 			if not itemtip then return end -- out of comparisons
-			Details.item(itemtip, n, itemid)
+			Details.item(itemtip, n, itemid, itemdata)
 			Details.restrictions(itemtip, itemdata)
 			n = n + 1
 		end
@@ -489,7 +508,7 @@ local function requiresLabel(item)
 		local known = itemIsKnown(item)
 		if known or not itemRestricted(item) then
 			-- don't want to show the x, but might as well show the check
-			ret = ret .. CreateAtlasMarkup(known and "common-icon-checkmark" or "common-icon-redx")
+			ret = ret .. CreateAtlasMarkup(known and ATLAS_CHECK or ATLAS_CROSS)
 		end
 	end
 	return ret == " " and "" or ret
@@ -497,6 +516,7 @@ end
 
 local Summary = {
 	toy = function(tooltip, i, toyid, itemdata)
+		if not C_ToyBox then return ns.Loot.Summary.item(tooltip, i, itemdata[1], itemdata) end
 		local _, name, icon = C_ToyBox.GetToyInfo(toyid)
 		local owned = PlayerHasToy(toyid)
 		if name then
@@ -511,6 +531,7 @@ local Summary = {
 		end
 	end,
 	mount = function(tooltip, i, mountid, itemdata)
+		if not C_MountJournal then return ns.Loot.Summary.item(tooltip, i, itemdata[1], itemdata) end
 		local name, _, icon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(mountid)
 		if name then
 			tooltip:AddDoubleLine(
@@ -524,6 +545,7 @@ local Summary = {
 		end
 	end,
 	pet = function(tooltip, i, petid, itemdata)
+		if not C_PetJournal then return ns.Loot.Summary.item(tooltip, i, itemdata[1], itemdata) end
 		local name, icon = C_PetJournal.GetPetInfoBySpeciesID(petid)
 		local owned, limit = C_PetJournal.GetNumCollectedInfo(petid)
 		if name then
@@ -648,7 +670,7 @@ do
 			frame:Reset()
 		end
 	end)
-	local buttonPool = CreateFramePool("ItemButton", nil, nil, function(framePool, button)
+	local buttonPool = CreateFramePool(ns.CLASSIC and "BUTTON" or "ItemButton", nil, ns.CLASSIC and "ItemButtonTemplate" or nil, function(framePool, button)
 		if button.RestrictionIcon then
 			button.RestrictionIcon:Hide()
 			button.KnownIcon:Hide()
@@ -657,6 +679,23 @@ do
 		button:ClearAllPoints()
 		button:SetParent(nil)
 		button:Hide()
+
+		-- classic
+		if not button.SetItem then
+			function button:SetItem(item)
+				local itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subclassID = GetItemInfoInstant(item)
+				if itemID then
+					self.itemID = itemID
+					SetItemButtonTexture(button, icon)
+				end
+			end
+			function button:GetItemID()
+				return self.itemID
+			end
+			function button:GetItemLink()
+				return select(2, GetItemInfo(self.itemID))
+			end
+		end
 	end)
 	local timerPool = CreateFramePool("Frame", UIParent, nil, function(framePool, frame)
 		frame:Hide()
@@ -812,7 +851,7 @@ do
 					local known = itemIsKnown(item)
 					if known or not itemRestricted(item) then
 						-- don't show the x for restricted items
-						button.KnownIcon:SetAtlas(known and "common-icon-checkmark" or "common-icon-redx")
+						button.KnownIcon:SetAtlas(known and ATLAS_CHECK or ATLAS_CROSS)
 						button.KnownIcon:Show()
 					end
 				end

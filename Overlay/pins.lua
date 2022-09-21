@@ -233,7 +233,7 @@ do
             end
 
             -- Waypoint menu item
-            info.disabled     = nil
+            info.disabled     = not (TomTom or DBM or C_Map.CanSetUserWaypointOnMap)
             info.isTitle      = nil
             info.notCheckable = true
             info.text = "Create waypoint"

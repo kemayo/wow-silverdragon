@@ -164,17 +164,23 @@ function module:GetGeneralID()
 end
 
 function module:SendLink(prefix, uiMapID, x, y)
-	local message = ("%s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
-		prefix and (prefix .. " ") or "",
-		uiMapID,
-		x * 10000,
-		y * 10000,
-		-- Can't do this:
-		-- core:GetMobLabel(self.data.id) or UNKNOWN
-		-- WoW seems to filter out anything which isn't the standard MAP_PIN_HYPERLINK
-		MAP_PIN_HYPERLINK
-	)
-	PlaySound(SOUNDKIT.UI_MAP_WAYPOINT_CHAT_SHARE)
+	local message
+	if MAP_PIN_HYPERLINK then
+		message = ("%s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+			prefix and (prefix .. " ") or "",
+			uiMapID,
+			x * 10000,
+			y * 10000,
+			-- Can't do this:
+			-- core:GetMobLabel(self.data.id) or UNKNOWN
+			-- WoW seems to filter out anything which isn't the standard MAP_PIN_HYPERLINK
+			MAP_PIN_HYPERLINK
+		)
+		PlaySound(SOUNDKIT.UI_MAP_WAYPOINT_CHAT_SHARE)
+	else
+		-- classic
+		message = prefix
+	end
 	-- if you have an open editbox, just paste to it
 	if not ChatEdit_InsertLink(message) then
 		-- then do whatever's configured

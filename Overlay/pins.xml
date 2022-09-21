@@ -8,8 +8,8 @@
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture parentKey="emphasis" hidden="true" atlas="Callings-TopHighlight" alphaMode="ADD">
-                    <Size x="20" y="20"/>
+                <Texture parentKey="emphasis" hidden="true" atlas="worldquest-questmarker-abilityhighlight" alphaMode="ADD">
+                    <Size x="25" y="25"/>
                     <Anchors>
                         <Anchor point="CENTER"/>
                     </Anchors>

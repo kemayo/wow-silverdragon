@@ -33,6 +33,8 @@ function module:OnInitialize()
 		},
 	})
 
+	self.compat_disabled = (LE_EXPANSION_LEVEL_CURRENT < LE_EXPANSION_MISTS_OF_PANDARIA)
+
 	-- migrate!
 	local db = self.db.profile
 	if db.loot == false then
@@ -98,6 +100,7 @@ function module:OnInitialize()
 end
 
 function module:OnEnable()
+	if self.compat_disabled then return end
 	self:RegisterEvent("VIGNETTE_MINIMAP_UPDATED")
 	self:RegisterEvent("VIGNETTES_UPDATED")
 
