@@ -121,7 +121,7 @@ function module:OnInitialize()
 		[69998] = {name="Goda",locations={[504]={53605300},},tameable=132199,},
 		[69999] = {name="God-Hulk Ramuk",locations={[504]={61404940},},},
 		[70000] = {name="Al'tabim the All-Seeing",locations={[504]={44603000},},},
-		[70001] = {name="Backbreaker Uru",locations={[504]={48402540},[505]={33802760,39602540,40603140,42003660,44004180},},},
+		[70001] = {name="Backbreaker Uru",locations={[504]={48402540},[505]={40652760},},},
 		[70002] = {name="Lu-Ban",locations={[504]={54403560},},},
 		[70003] = {name="Molthor",locations={[504]={59403640,62804060},[506]={32003180,33004120,37203300,37802680,38204260,42603720},},},
 		[70096] = {name="War-God Dokah",boss=true,locations={[507]={77608220},},},
