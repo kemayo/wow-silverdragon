@@ -38,9 +38,20 @@ jobs:
           output: RECENT_CHANGES.md
 
       - name: Create Classic Packages
+        if: startsWith(github.ref, 'refs/heads') || startsWith(github.ref, 'refs/tags/v11')
         uses: BigWigsMods/packager@master
         with:
-          args: -S
+          args: -g classic
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Wrath Package
+        if: startsWith(github.ref, 'refs/heads') || startsWith(github.ref, 'refs/tags/v30')
+        uses: BigWigsMods/packager@master
+        with:
+          args: -g wrath
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
           WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
