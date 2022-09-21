@@ -123,7 +123,7 @@ function module:OnInitialize()
 		[70000] = {name="Al'tabim the All-Seeing",locations={[504]={44603000},},},
 		[70001] = {name="Backbreaker Uru",locations={[504]={48402540},[505]={40652760},},},
 		[70002] = {name="Lu-Ban",locations={[504]={54403560},},},
-		[70003] = {name="Molthor",locations={[504]={59403640,62804060},[506]={32003180,33004120,37203300,37802680,38204260,42603720},},},
+		[70003] = {name="Molthor",locations={[504]={62804060},[506]={36003250},},},
 		[70096] = {name="War-God Dokah",boss=true,locations={[507]={77608220},},},
 		[70126] = {name="Willy Wilder",locations={[433]={62407460},},loot={93194},routes={[433]={{62407460, 55607360}}},},
 		[70238] = {name="Unblinking Eye",locations={[508]={66402860,75603940},},},
