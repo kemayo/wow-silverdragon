@@ -31,15 +31,6 @@ externals:
 move-folders:
    SilverDragon/Overlay: SilverDragon_Overlay
    SilverDragon/RangeExtender: SilverDragon_RangeExtender
-   SilverDragon/Data/Vanilla: SilverDragon_Vanilla
-   SilverDragon/Data/BurningCrusade: SilverDragon_BurningCrusade
-   SilverDragon/Data/Wrath: SilverDragon_Wrath
-   SilverDragon/Data/Cataclysm: SilverDragon_Cataclysm
-   SilverDragon/Data/Mists: SilverDragon_Mists
-   SilverDragon/Data/Warlords: SilverDragon_Warlords
-   SilverDragon/Data/Legion: SilverDragon_Legion
-   SilverDragon/Data/BattleForAzeroth: SilverDragon_BattleForAzeroth
-   SilverDragon/Data/Shadowlands: SilverDragon_Shadowlands
 
 ignore:
    - tools
