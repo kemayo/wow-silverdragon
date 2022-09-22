@@ -33,7 +33,7 @@ function module:OnInitialize()
 		},
 	})
 
-	self.compat_disabled = (LE_EXPANSION_LEVEL_CURRENT < LE_EXPANSION_MISTS_OF_PANDARIA)
+	self.compat_disabled = (LE_EXPANSION_LEVEL_CURRENT < (LE_EXPANSION_MISTS_OF_PANDARIA or 999)) -- missing on classic_era
 
 	-- migrate!
 	local db = self.db.profile

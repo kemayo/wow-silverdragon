@@ -596,6 +596,9 @@ function ns:CompletionStatus(id)
 end
 
 function ns:LoadAllAchievementMobs()
+	if not _G.GetAchievementInfo then
+		achievements_loaded = true
+	end
 	if achievements_loaded then
 		return
 	end

@@ -162,7 +162,7 @@ function module:OnInitialize()
 			-- this is a vanilla mob
 			deathmaw = faker(10077, "Deathmaw (Tame!)", 29, 0.5, 0.5),
 		}
-		if LE_EXPANSION_LEVEL_CURRENT >= LE_EXPANSION_WRATH_OF_THE_LICH_KING then
+		if LE_EXPANSION_LEVEL_CURRENT >= (LE_EXPANSION_WRATH_OF_THE_LICH_KING or 999) then
 			fake_args.time = faker(32491, "Time-Lost Proto Drake (Mount!)", 120, 0.490, 0.362)
 			fake_args.vyragosa = faker(32630, "Vyragosa (Boring)", 120, 0.5, 0.5)
 		end
