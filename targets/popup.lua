@@ -436,7 +436,11 @@ PopupMixin.scripts = {
 
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, -60)
-		GameTooltip:AddDoubleLine(escapes.leftClick .. " " .. TARGET, escapes.rightClick .. " " .. CLOSE)
+		if self.data.type == "mob" then
+			GameTooltip:AddDoubleLine(escapes.leftClick .. " " .. TARGET, escapes.rightClick .. " " .. CLOSE)
+		else
+			GameTooltip:AddDoubleLine(" ", escapes.rightClick .. " " .. CLOSE)
+		end
 		local uiMapID, x, y = module:GetPositionFromData(self.data, false)
 		if uiMapID and x and y then
 			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, ("%.1f, %.1f"):format(x * 100, y * 100),
