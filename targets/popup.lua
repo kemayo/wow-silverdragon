@@ -454,7 +454,7 @@ PopupMixin.scripts = {
 		end
 
 		GameTooltip:AddDoubleLine(ALT_KEY_TEXT .. " + " .. escapes.leftClick .. " + " .. DRAG_MODEL, MOVE_FRAME)
-		if uiMapID and C_Map.CanSetUserWaypointOnMap and C_Map.CanSetUserWaypointOnMap(uiMapID) then
+		if module:CanPoint(uiMapID) then
 			GameTooltip:AddDoubleLine(CTRL_KEY_TEXT .. " + " .. escapes.leftClick, MAP_PIN )
 		end
 		if uiMapID and x and y then

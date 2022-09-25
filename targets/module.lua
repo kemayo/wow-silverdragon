@@ -138,6 +138,10 @@ function module:SeenLoot(_, name, vignetteID, uiMapID, x, y, vignetteGUID)
 	})
 end
 
+function module:CanPoint(uiMapID)
+	return core:GetModule("TomTom"):CanPointTo(uiMapID)
+end
+
 function module:Point(data)
 	local uiMapID, x, y = self:GetPositionFromData(data)
 	if uiMapID and x and y then

@@ -69,6 +69,15 @@ function module:Announce(_, id, zone, x, y, is_dead, source, unit)
 	self:PointTo(id, zone, x, y, self.db.profile.duration)
 end
 
+function module:CanPointTo(zone)
+	if not zone then return false end
+	local db = self.db.profile
+	if TomTom and db.tomtom then return true end
+	if DBM and db.dbm then return true end
+	if db.blizzard and C_Map.CanSetUserWaypointOnMap and C_Map.CanSetUserWaypointOnMap(zone) then return true end
+	return false
+end
+
 do
 	local waypoints = {}
 	local previous

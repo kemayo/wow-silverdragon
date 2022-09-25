@@ -249,7 +249,7 @@ function module:ShowTooltip(pin)
     end
 
     if pin:Config().tooltip_help then
-        if C_Map.CanSetUserWaypointOnMap and C_Map.CanSetUserWaypointOnMap(pin.uiMapID) then
+        if core:GetModule("TomTom"):CanPointTo(pin.uiMapID) then
             tooltip:AddDoubleLine(ALT_KEY_TEXT .. " + " .. escapes.leftClick, MAP_PIN, 0, 1, 1, 0, 1, 1 )
         end
         tooltip:AddDoubleLine(SHIFT_KEY_TEXT .. " + " .. escapes.leftClick, TRADESKILL_POST, 0, 1, 1, 0, 1, 1 )
