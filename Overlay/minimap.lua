@@ -184,8 +184,11 @@ function SilverDragonOverlayMinimapRoutePinMixin:OnLoad()
     self:SetParent(Minimap)
     self:SetFrameStrata(Minimap:GetFrameStrata())
     self:SetFrameLevel(Minimap:GetFrameLevel() + 3)
-    -- self.texture:SetTexture("Interface\\TaxiFrame\\UI-Taxi-Line")
-    self.texture:SetAtlas("_AnimaChannel-Channel-Line-horizontal")
+    if ns.CLASSIC then
+        self.texture:SetAtlas("_UI-Taxi-Line-horizontal")
+    else
+        self.texture:SetAtlas("_AnimaChannel-Channel-Line-horizontal")
+    end
 
     self.minimap = true
 end
@@ -198,7 +201,7 @@ function SilverDragonOverlayMinimapRoutePinMixin:OnAcquired(coord1, coord2, uiMa
     local wx1, wy1 = HBD:GetWorldCoordinatesFromZone(x1, y1, uiMapID)
     local wx2, wy2 = HBD:GetWorldCoordinatesFromZone(x2, y2, uiMapID)
     local wmapDistance = math.sqrt((wx2-wx1)^2 + (wy2-wy1)^2)
-    local mmapDiameter = C_Minimap:GetViewRadius() * 2
+    local mmapDiameter = module:GetMinimapViewDiameter()
     local length = Minimap:GetWidth() * (wmapDistance / mmapDiameter)
     self.rotation = -math.atan2(wy2-wy1, wx2-wx1)
 
@@ -238,6 +241,40 @@ SilverDragonOverlayMinimapRoutePinMixin.Config = module.SilverDragonOverlayPinMi
 
 --
 
-function module:UpdateMinimapIcons()
-    self.MiniMapDataProvider:RefreshAllData()
+do
+    local APIfallback = not (C_Minimap and C_Minimap.GetViewRadius)
+    local indoors, zoom
+    function module:UpdateMinimapIcons()
+        -- on PlayerZoneChanged
+        if APIfallback then
+            zoom = Minimap:GetZoom()
+            indoors = GetCVar("minimapZoom")+0 == zoom and "outdoor" or "indoor"
+        end
+        self.MiniMapDataProvider:RefreshAllData()
+    end
+    -- this table is from HereBeDragons:
+    local minimap_size = {
+        indoor = {
+            [0] = 300, -- scale
+            [1] = 240, -- 1.25
+            [2] = 180, -- 5/3
+            [3] = 120, -- 2.5
+            [4] = 80,  -- 3.75
+            [5] = 50,  -- 6
+        },
+        outdoor = {
+            [0] = 466 + 2/3, -- scale
+            [1] = 400,       -- 7/6
+            [2] = 333 + 1/3, -- 1.4
+            [3] = 266 + 2/6, -- 1.75
+            [4] = 200,       -- 7/3
+            [5] = 133 + 1/3, -- 3.5
+        },
+    }
+    function module:GetMinimapViewDiameter()
+        if APIfallback then
+            return minimap_size[indoors][zoom]
+        end
+        return C_Minimap.GetViewRadius() * 2
+    end
 end
