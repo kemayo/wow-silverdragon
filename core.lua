@@ -119,10 +119,18 @@ ns.vignetteMobLookup = vignetteMobLookup
 ns.vignetteTreasureLookup = {
 	-- [vignetteid] = { data },
 }
-function addon:RegisterMobData(source, data)
+function addon:RegisterMobData(source, data, updated)
+	if not updated then
+		if not self.HASWARNEDABOUTOLDDATA then
+			self.HASWARNEDABOUTOLDDATA = true
+			return self:Print("You have an old SilverDragon_[expansion] folder, which can be removed")
+		end
+		return
+	end
 	addon.datasources[source] = data
 end
-function addon:RegisterTreasureData(source, data)
+function addon:RegisterTreasureData(source, data, updated)
+	if not updated then return end
 	addon.treasuresources[source] = data
 end
 do
