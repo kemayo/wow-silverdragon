@@ -194,12 +194,10 @@ function module:CreatePopup(look)
 	popup:SetScale(self.db.profile.anchor.scale)
 	popup:SetMovable(true)
 	popup:SetClampedToScreen(true)
-	popup:RegisterForClicks("AnyUp")
+	popup:RegisterForClicks("AnyDown", "AnyUp") -- dragonflight: anydown+anyup required to function
 
 	popup:SetAttribute("type", "macro")
-	-- popup:SetAttribute("_onshow", "self:Enable()")
-	-- popup:SetAttribute("_onhide", "self:Disable()")
-	-- Can't do type=click + clickbutton=close because then it'd be right-clicking the close button which also ignores the mob
+	-- macrotext is set elsewhere
 	popup:SetAttribute("macrotext2", "/click " .. popup:GetName() .. "CloseButton")
 
 	popup:Hide()
