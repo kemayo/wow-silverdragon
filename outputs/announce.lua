@@ -508,7 +508,7 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zon
 			source = source .. " @ unknown location"
 		else
 			source = source .. (" @ %.1f, %.1f"):format(x * 100, y * 100)
-			if module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" then
+			if module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" and MAP_PIN_HYPERLINK then
 				pin = (" |cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
 					zone, x * 10000, y * 10000, MAP_PIN_HYPERLINK
 				)
@@ -527,7 +527,7 @@ core.RegisterCallback("SD AnnounceLoot Sink", "AnnounceLoot", function(callback,
 	local location = UNKNOWN
 	if x and y and x > 0 and y > 0 then
 		location = ("%.1f, %.1f"):format(x * 100, y * 100)
-		if module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" then
+		if module.db.profile.sink_opts.sink20OutputSink == "ChatFrame" and MAP_PIN_HYPERLINK then
 			pin = (" |cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
 				zone, x * 10000, y * 10000, MAP_PIN_HYPERLINK
 			)
