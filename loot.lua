@@ -662,7 +662,7 @@ do
 		frame:SetParent(UIParent)
 		frame:SetFrameStrata("HIGH")
 		frame:SetMovable(false)
-		frame:RegisterForDrag(false)
+		frame:RegisterForDrag()
 		frame:SetScript("OnDragStart", nil)
 		frame:SetScript("OnDragStop", nil)
 		frame.independent = nil
