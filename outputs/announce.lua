@@ -231,7 +231,7 @@ function module:OnInitialize()
 					about = config.desc("Play sounds to announce rare mobs? Can do special things for special mobs. You *really* don't want to miss, say, the Time-Lost Proto Drake, after all...", 0),
 					channel = {
 						type = "select",
-						name = _G.SOUND_CHANNELS,
+						name = _G.SOUND_CHANNELS or _G.AUDIO_CHANNELS, -- dragonflight
 						descStyle = "inline",
 						values = {
 							Ambience = _G.AMBIENCE_VOLUME,
