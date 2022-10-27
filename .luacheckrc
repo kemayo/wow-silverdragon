@@ -92,6 +92,7 @@ read_globals = {
     "CreateMacro",
     "CursorHasItem",
     "DeleteCursorItem",
+    "EditMacro",
     "EnumerateServerChannels",
     "FlashClientIcon",
     "GetAddOnInfo",
