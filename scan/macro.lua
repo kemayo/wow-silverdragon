@@ -64,7 +64,7 @@ function module:Update()
 		return
 	end
 	if not self.db.profile.enabled then
-		self:GetMacroButton(1):SetAttribute("macrotext", "/print \"Scanning macro disabled\"")
+		self:GetMacroButton(1):SetAttribute("macrotext", "/script print(\"Scanning macro disabled\")")
 		return
 	end
 	Debug("Updating Macro")
@@ -86,9 +86,9 @@ function module:Update()
 		end
 	end
 	if count == 0 then
-		table.insert(macro, "/print \"No mobs known to scan for\"")
+		table.insert(macro, "/script print(\"No mobs known to scan for\")")
 	elseif self.db.profile.verbose then
-		table.insert(macro, 1, ("/print \"Scanning for %d nearby mobs...\""):format(count))
+		table.insert(macro, 1, ("/script print(\"Scanning for %d nearby mobs...\")"):format(count))
 	end
 	local len = 0
 	local n = 1
