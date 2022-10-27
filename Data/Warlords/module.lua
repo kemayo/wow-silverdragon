@@ -300,7 +300,7 @@ core:RegisterMobData("Warlords", {
 	[88210] = {name="Krud the Eviscerator",locations={[550]={58201200},},loot={119384},quest=37398,},
 	[88436] = {name="Vigilant Paarthos",locations={[535]={36804100},},loot={119383},quest=37350,},
 	[88494] = {name="Legion Vanguard",locations={[535]={37802060},},loot={119385},quest=37342,},
-	[88580] = {name="Firestarter Grash",locations={[543]={72803580},},loot={119381},quest=37373,},
+	[88580] = {name="Firestarter Grash",locations={[543]={57803660,72803580},},loot={119381},quest=37373,},
 	[88582] = {name="Swift Onyx Flayer",locations={[543]={59603180},},loot={119367},quest=37374,},
 	[88583] = {name="Grove Warden Yal",locations={[543]={59604300},},loot={119414},quest=37375,},
 	[88586] = {name="Mogamago",locations={[543]={61803930},},loot={119391},quest=37376,tameable=1044490,},
