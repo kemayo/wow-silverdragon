@@ -94,13 +94,15 @@ function module:Update()
 	elseif self.db.profile.verbose then
 		table.insert(macro, 1, ("/script print(\"Scanning for %d nearby mobs...\")"):format(count))
 	end
+	local MAX_MACRO_LENGTH = 1023 -- this goes through RunMacroText, rather than actual-macros limit of 255
 	local len = 0
 	local n = 1
 	local start = 1
+	local BUFFER_FOR_CLICK = #"\n/click SilverDragonMacroButton2 LeftButton" --update if changing below
 	for i, text in ipairs(macro) do
-		len = len + #text + 1 -- for the newline
+		len = len + #text + 2 -- for the newline
 		local next_statement = macro[next(macro, i)]
-		if len > (255 - (math.max(42, #(next_statement or "")))) or not next_statement then -- for the length of the /click
+		if len > (MAX_MACRO_LENGTH - (math.max(BUFFER_FOR_CLICK, #(next_statement or "")))) or not next_statement then
 			local button = self:GetMacroButton(n)
 			n = n + 1
 			local mtext = ("\n"):join(unpack(macro, start, i))
