@@ -51,10 +51,25 @@ function module:ShowFrame(data)
 end
 
 function module:RefreshData(popup)
-	if popup.data.type == "mob" then
-		return self:RefreshMobData(popup)
+	local data = popup.data
+	if data.type == "mob" then
+		self:RefreshMobData(popup)
 	else
-		return self:RefreshLootData(popup)
+		self:RefreshLootData(popup)
+	end
+	local hasLoot, lootCount = ns.Loot.HasLoot(data.id, data.type == "loot")
+	if hasLoot then
+		popup.lootIcon:Show()
+		popup.lootIcon.count:SetText(lootCount)
+		ns.Loot.Cache(data.id, data.type == "loot")
+	else
+		popup.lootIcon:Hide()
+	end
+	if ns.Loot.Status(data.id, true, data.type == "loot") then
+		-- all loot is collected
+		popup.lootIcon.complete:Show()
+	else
+		popup.lootIcon.complete:Hide()
 	end
 end
 
@@ -69,21 +84,6 @@ function module:RefreshMobData(popup)
 	else
 		popup.status:SetText("")
 	end
-
-	local hasLoot, lootCount = ns.Loot.HasLoot(data.id)
-	if hasLoot then
-		popup.lootIcon:Show()
-		popup.lootIcon.count:SetText(lootCount)
-		ns.Loot.Cache(data.id)
-	else
-		popup.lootIcon:Hide()
-	end
-	if ns.Loot.Status(data.id, true) then
-		-- all loot is collected
-		popup.lootIcon.complete:Show()
-	else
-		popup.lootIcon.complete:Hide()
-	end
 end
 function module:RefreshLootData(popup)
 	local data = popup.data
@@ -91,8 +91,6 @@ function module:RefreshLootData(popup)
 	popup.source:SetText("vignette")
 	-- TODO: work out the Treasure of X achievements?
 	popup.status:SetText("")
-	-- TODO: know about loot?
-	popup.lootIcon:Hide()
 	popup.raidIcon:Hide()
 end
 
@@ -214,7 +212,7 @@ function module:CreatePopup(look)
 
 	local model = CreateFrame("PlayerModel", nil, popup)
 	popup.model = model
-	local modelfallback = model:CreateTexture(nil, "OVERLAY")
+	local modelfallback = model:CreateTexture(nil, "ARTWORK")
 	modelfallback:SetAllPoints(model)
 	modelfallback:Hide()
 	model.fallback = modelfallback
@@ -583,15 +581,17 @@ PopupMixin.scripts = {
 		if self:GetParent().waitingToHide then
 			return
 		end
-		local id = self:GetParent().data.id
-		if not ns.mobdb[id] then
-			return
-		end
+		local data = self:GetParent().data
+		if not (data and data.id) then return end
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, 0)
 		GameTooltip:SetFrameStrata("TOOLTIP")
-		GameTooltip:AddDoubleLine(core:GetMobLabel(id), "Loot")
-		ns.Loot.Summary.UpdateTooltip(GameTooltip, id)
+		if data.type == "mob" then
+			GameTooltip:AddDoubleLine(core:GetMobLabel(data.id), "Loot")
+		else
+			GameTooltip:AddDoubleLine(data.name or UNKNOWN, "Loot")
+		end
+		ns.Loot.Summary.UpdateTooltip(GameTooltip, data.id, false, data.type == "loot")
 		GameTooltip:AddLine(CLICK_FOR_DETAILS, 0, 1, 1)
 		GameTooltip:Show()
 	end,
@@ -603,7 +603,8 @@ PopupMixin.scripts = {
 			return
 		end
 		if not self.window then
-			self.window = ns.Loot.Window.ShowForMob(self:GetParent().data.id)
+			local data = self:GetParent().data
+			self.window = ns.Loot.Window.ShowForMob(data.id, false, data.type == "loot")
 			self.window:SetParent(self)
 			self.window:Hide()
 		end

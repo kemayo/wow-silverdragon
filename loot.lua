@@ -175,6 +175,15 @@ end
 ns.Loot = {}
 -- _G.SDLoot = ns.Loot
 
+function ns.Loot.GetLootTable(id, treasure)
+	if not id then return end
+	if treasure then
+		local data = ns.vignetteTreasureLookup[id]
+		return data and data.loot
+	end
+	return ns.mobdb[id] and ns.mobdb[id].loot
+end
+
 local function suitable(item)
 	if not core.db.profile.charloot then
 		return true
@@ -194,12 +203,13 @@ local function suitable(item)
 	if itemRestricted(item) then return false end
 	return true
 end
-function ns.Loot.HasLoot(id)
-	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then
+function ns.Loot.HasLoot(id, ...)
+	local loot = ns.Loot.GetLootTable(id, ...)
+	if not loot then
 		return false
 	end
 	local lootCount = 0
-	for _, item in ipairs(ns.mobdb[id].loot) do
+	for _, item in ipairs(loot) do
 		if suitable(item) then
 			lootCount = lootCount + 1
 		end
@@ -232,25 +242,25 @@ do
 		end
 	end)
 	local noloot = {}
-	function ns.Loot.IterMounts(id)
-		return mount_iter, ns.mobdb[id].loot or noloot, nil
+	function ns.Loot.IterMounts(id, ...)
+		return mount_iter, ns.Loot.GetLootTable(id, ...) or noloot, nil
 	end
-	function ns.Loot.IterPets(id)
-		return pet_iter, ns.mobdb[id].loot or noloot, nil
+	function ns.Loot.IterPets(id, ...)
+		return pet_iter, ns.Loot.GetLootTable(id, ...) or noloot, nil
 	end
-	function ns.Loot.IterToys(id)
-		return toy_iter, ns.mobdb[id].loot or noloot, nil
+	function ns.Loot.IterToys(id, ...)
+		return toy_iter, ns.Loot.GetLootTable(id, ...) or noloot, nil
 	end
-	function ns.Loot.IterQuests(id)
-		return quest_iter, ns.mobdb[id].loot or noloot, nil
+	function ns.Loot.IterQuests(id, ...)
+		return quest_iter, ns.Loot.GetLootTable(id, ...) or noloot, nil
 	end
-	function ns.Loot.IterRegularLoot(id)
+	function ns.Loot.IterRegularLoot(id, ...)
 		-- this includes any transmog loot
-		return regular_iter, ns.mobdb[id].loot or noloot, nil
+		return regular_iter, ns.Loot.GetLootTable(id, ...) or noloot, nil
 	end
 end
-function ns.Loot.HasToys(id, only_knowable)
-	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+function ns.Loot.HasToys(id, only_knowable, ...)
+	if not ns.Loot.GetLootTable(id, ...) then return false end
 	for _, _, item in ns.Loot.IterToys(id) do
 		if (not only_knowable) or (not itemRestricted(item)) then
 			return true
@@ -258,21 +268,21 @@ function ns.Loot.HasToys(id, only_knowable)
 	end
 	return false
 end
-function ns.Loot.HasMounts(id, only_knowable, only_boe)
-	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
-	for _, _, item in ns.Loot.IterMounts(id) do
+function ns.Loot.HasMounts(id, only_knowable, only_boe, ...)
+	if not ns.Loot.GetLootTable(id, ...) then return false end
+	for _, _, item in ns.Loot.IterMounts(id, ...) do
 		if ((not only_knowable) or (not itemRestricted(item)) and ((not only_boe) or item.boe)) then
 			return true
 		end
 	end
 	return false
 end
-function ns.Loot.HasInterestingMounts(id)
+function ns.Loot.HasInterestingMounts(id, ...)
 	-- This comes up a lot: mounts that you don't know, or which are BoE and so can be sold
-	return ns.Loot.Status.Mount(id) == false or ns.Loot.HasMounts(id, true, true)
+	return ns.Loot.Status.Mount(id, ...) == false or ns.Loot.HasMounts(id, true, true, ...)
 end
-function ns.Loot.HasPets(id, only_knowable)
-	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+function ns.Loot.HasPets(id, only_knowable, ...)
+	if not ns.Loot.GetLootTable(id, ...) then return false end
 	for _, _, item in ns.Loot.IterPets(id) do
 		if (not only_knowable) or (not itemRestricted(item)) then
 			return true
@@ -280,56 +290,61 @@ function ns.Loot.HasPets(id, only_knowable)
 	end
 	return false
 end
-function ns.Loot.HasKnowableLoot(id)
-	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+function ns.Loot.HasKnowableLoot(id, ...)
+	if not ns.Loot.GetLootTable(id, ...) then return false end
 	return any(itemIsKnowable, unpack(ns.mobdb[id].loot))
 end
-function ns.Loot.HasRegularLoot(id)
-	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
+function ns.Loot.HasRegularLoot(id, ...)
+	if not ns.Loot.GetLootTable(id, ...) then return false end
 	for _ in ns.Loot.IterRegularLoot(id) do
 		return true
 	end
 	return false
 end
 
-function ns.Loot.Cache(id)
-	if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then return false end
-	for _, item in ipairs(ns.mobdb[id].loot) do
+function ns.Loot.Cache(id, ...)
+	local loot = ns.Loot.GetLootTable(id, ...)
+	if loot then
+		ns.Loot.CacheLootTable(loot)
+	end
+end
+function ns.Loot.CacheLootTable(loot)
+	for _, item in ipairs(loot) do
 		C_Item.RequestLoadItemDataByID(type(item) == "table" and item[1] or item)
 	end
 end
 
-ns.Loot.Status = setmetatable({}, {__call = function(_, id, include_transmog)
+ns.Loot.Status = setmetatable({}, {__call = function(_, id, include_transmog, ...)
 	-- returns nil if there's no knowable loot
 	-- returns true if all knowable loot is collected
 	-- returns false if not all knowable loot is collected
 	-- if knowable loot, also returns the status for mount,toy,pet after the first return
 	-- knowable loot that's restricted from the current character will still return true if collected, but nil if not
-	if not id or not ns.mobdb[id] then
+	if not ns.Loot.GetLootTable(id, ...) then
 		return
 	end
-	local mount = ns.Loot.Status.Mount(id)
-	local toy = ns.Loot.Status.Toy(id)
-	local pet = ns.Loot.Status.Pet(id)
-	local quest = ns.Loot.Status.Quest(id)
+	local mount = ns.Loot.Status.Mount(id, ...)
+	local toy = ns.Loot.Status.Toy(id, ...)
+	local pet = ns.Loot.Status.Pet(id, ...)
+	local quest = ns.Loot.Status.Quest(id, ...)
 	local transmog
-	if include_transmog then transmog = ns.Loot.Status.Transmog(id) end
+	if include_transmog then transmog = ns.Loot.Status.Transmog(id, ...) end
 	if (mount == nil and toy == nil and pet == nil and quest == nil and transmog == nil) then
 		return nil
 	end
 	return (mount ~= false and toy ~= false and pet ~= false and quest ~= false and transmog ~= false), mount, toy, pet, quest, transmog
 end})
-local function restrictedCheck(test, id, item)
-	local known = test(id)
+local function restrictedCheck(test, itemid, item)
+	local known = test(itemid)
 	if known then return true end
 	if known == nil or itemRestricted(item) then return nil end
 	return false
 end
 local function statusChecker(iterator, test)
-	return function(id)
-		if not id or not ns.mobdb[id] then return end
+	return function(id, ...)
+		if not ns.Loot.GetLootTable(id, ...) then return end
 		local ret = nil
-		for _, typeid, item in iterator(id) do
+		for _, typeid, item in iterator(id, ...) do
 			local known = restrictedCheck(test, typeid, item)
 			if known then
 				ret = true
@@ -444,18 +459,16 @@ local Details = {
 }
 ns.Loot.Details = Details
 
-function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
-	if not (id and ns.mobdb[id]) then
-		return
-	end
+function ns.Loot.Details.UpdateTooltip(tooltip, id, only, ...)
+	if not ns.Loot.GetLootTable(id, ...) then return end
 
-	local toy = (not only or only == "toy") and ns.Loot.HasToys(id)
-	local mount = (not only or only == "mount") and ns.Loot.HasMounts(id)
-	local pet = (not only or only == "pet") and ns.Loot.HasPets(id)
-	local regular = (not only or only == "regular") and ns.Loot.HasRegularLoot(id)
+	local toy = (not only or only == "toy") and ns.Loot.HasToys(id, ...)
+	local mount = (not only or only == "mount") and ns.Loot.HasMounts(id, ...)
+	local pet = (not only or only == "pet") and ns.Loot.HasPets(id, ...)
+	local regular = (not only or only == "regular") and ns.Loot.HasRegularLoot(id, ...)
 
 	if mount then
-		for i, mountid, itemdata in ns.Loot.IterMounts(id) do
+		for i, mountid, itemdata in ns.Loot.IterMounts(id, ...) do
 			Details.mount(tooltip, i, mountid, itemdata)
 			Details.restrictions(tooltip, itemdata)
 		end
@@ -464,7 +477,7 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 		if mount then
 			tooltip:AddLine("---")
 		end
-		for i, petid, itemdata in ns.Loot.IterPets(id) do
+		for i, petid, itemdata in ns.Loot.IterPets(id, ...) do
 			Details.pet(tooltip, i, petid, itemdata)
 			Details.restrictions(tooltip, itemdata)
 		end
@@ -472,7 +485,7 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 	local n = (pet or mount) and 2 or 1
 	local itemtip
 	if toy then
-		for i, toyid, itemdata in ns.Loot.IterToys(id) do
+		for i, toyid, itemdata in ns.Loot.IterToys(id, ...) do
 			itemtip = get_tooltip(itemtip or tooltip, n)
 			if not itemtip then return end -- out of comparisons
 			Details.toy(itemtip, n, toyid, itemdata)
@@ -481,7 +494,7 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only)
 		end
 	end
 	if regular then
-		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id) do
+		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id, ...) do
 			itemtip = get_tooltip(itemtip or tooltip, n)
 			if not itemtip then return end -- out of comparisons
 			Details.item(itemtip, n, itemid, itemdata)
@@ -581,30 +594,30 @@ local Summary = {
 }
 ns.Loot.Summary = Summary
 
-function ns.Loot.Summary.UpdateTooltip(tooltip, id, only_knowable)
-	if not (id and ns.mobdb[id]) then
+function ns.Loot.Summary.UpdateTooltip(tooltip, id, only_knowable, ...)
+	if not ns.Loot.GetLootTable(id, ...) then
 		return
 	end
 
 	local offset = 0
 	local n = 0
-	for i, mountid, itemdata in ns.Loot.IterMounts(id) do
+	for i, mountid, itemdata in ns.Loot.IterMounts(id, ...) do
 		n = n + 1
 		Summary.mount(tooltip, i - offset, mountid, itemdata)
 	end
 	offset = n
-	for i, toyid, itemdata in ns.Loot.IterToys(id) do
+	for i, toyid, itemdata in ns.Loot.IterToys(id, ...) do
 		n = n + 1
 		Summary.toy(tooltip, i - offset, toyid, itemdata)
 	end
 	offset = n
-	for i, petid, itemdata in ns.Loot.IterPets(id) do
+	for i, petid, itemdata in ns.Loot.IterPets(id, ...) do
 		n = n + 1
 		Summary.pet(tooltip, i - offset, petid, itemdata)
 	end
 	if not only_knowable then
 		offset = n
-		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id) do
+		for i, itemid, itemdata in ns.Loot.IterRegularLoot(id, ...) do
 			n = n + 1
 			Summary.item(tooltip, i - offset, itemid, itemdata)
 		end
@@ -937,8 +950,8 @@ do
 		core.events:Fire("LootWindowReleased", window)
 	end
 
-	function ns.Loot.Window.ShowForMob(id, independent)
-		if not (id and ns.mobdb[id] and ns.mobdb[id].loot) then
+	function ns.Loot.Window.ShowForMob(id, independent, ...)
+		if not ns.Loot.GetLootTable(id, ...) then
 			-- TODO: error message
 			return false
 		end
@@ -961,7 +974,7 @@ do
 		else
 			window = GetWindow()
 		end
-		window:AddLoot(ns.mobdb[id].loot)
+		window:AddLoot(ns.Loot.GetLootTable(id, ...))
 		window:Show()
 
 		core.events:Fire("LootWindowOpened", window)
@@ -975,7 +988,7 @@ do
 	-- })
 
 	-- /script SilverDragon:ShowLootWindowForMob(160821)
-	function core:ShowLootWindowForMob(id)
-		local window = ns.Loot.Window.ShowForMob(id, true)
+	function core:ShowLootWindowForMob(id, ...)
+		local window = ns.Loot.Window.ShowForMob(id, true, ...)
 	end
 end

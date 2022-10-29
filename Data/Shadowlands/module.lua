@@ -285,5 +285,6 @@ core:RegisterTreasureData("Shadowlands", {
 	[4999] = {name="Ripened Protopear",requires=core.conditions.GarrisonTalent(1931),},
 	[5019] = {name="Torn Ethereal Drape",requires={core.conditions.GarrisonTalent(1902),core.conditions.QuestComplete(65328)},},
 	[5021] = {name="Drowned Broker Supplies",requires=core.conditions.GarrisonTalent(1932),},
+	[4969] = {name="Mawsworn Supply Chest",loot={{190766,mount=1585}},},
 	[4997] = {name="Forgotten Treasure Vault",requires=core.conditions.Achievement(15514),},
 }, true)

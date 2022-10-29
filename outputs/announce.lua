@@ -187,8 +187,16 @@ function module:OnInitialize()
 				type = "execute", name = "Waterlogged Chest",
 				desc = "Fake seeing a Waterlogged Chest",
 				func = function()
-					-- id, zone, x, y, is_dead, source, unit
+					-- id, zone, x, y, instanceid
 					core.events:Fire("SeenLoot", "Waterlogged Chest", 3341, 37, 0.318, 0.628)
+				end
+			}
+			fake_args.mount_chest = {
+				type = "execute", name = "Mawsworn Supply Chest (mount)",
+				desc = "Fake seeing a Mawsworn Supply Chest, which contains a mount",
+				func = function()
+					-- id, zone, x, y, instanceid
+					core.events:Fire("SeenLoot", "Mawsworn Supply Chest", 4969, 1970, 0.318, 0.628)
 				end
 			}
 		end
@@ -406,11 +414,11 @@ function module:OnInitialize()
 	end
 end
 
-function module:HasInterestingMounts(id)
+function module:HasInterestingMounts(id, isloot)
 	if not module.db.profile.known_mounts then
-		return ns.Loot.HasMounts(id)
+		return ns.Loot.HasMounts(id, nil, nil, isloot)
 	end
-	return ns.Loot.HasInterestingMounts(id)
+	return ns.Loot.HasInterestingMounts(id, isloot)
 end
 
 function module:Seen(callback, id, zone, x, y, is_dead, source, ...)
@@ -517,7 +525,7 @@ core.RegisterCallback("SD Announce Sink", "Announce", function(callback, id, zon
 	end
 	module:Pour(("Rare seen: %s%s (%s)%s"):format(core:GetMobLabel(id), dead and "... but it's dead" or '', source or '', pin))
 end)
-core.RegisterCallback("SD AnnounceLoot Sink", "AnnounceLoot", function(callback, name, id, zone, x, y)
+core.RegisterCallback("SD AnnounceLoot Sink", "AnnounceLoot", function(callback, name, id, zone, x, y, instanceid)
 	if not module.db.profile.sink then
 		return
 	end
@@ -628,17 +636,26 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zo
 	end
 	module:PlaySound{soundfile = soundfile, loops = loops}
 end)
-core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback, id, zone, x, y, dead, source)
+core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback, name, id, zone, x, y, instanceid)
 	if not (module.db.profile.sound_loot and LSM) then
 		return
 	end
 	if nowplaying then return end
-	module:PlaySound{soundfile = module.db.profile.soundfile_loot, loops = module.db.profile.sound_loot_loop}
+	local soundfile, loops
+	if module:HasInterestingMounts(id, true) then
+		if not module.db.profile.sound_mount then return end
+		soundfile = module.db.profile.soundfile_mount
+		loops = module.db.profile.sound_mount_loop
+	else
+		soundfile = module.db.profile.soundfile_loot
+		loops = module.db.profile.sound_loot_loop
+	end
+	module:PlaySound{soundfile = soundfile, loops = loops}
 end)
 
 do
 	local flashframe
-	function module:Flash(id)
+	function module:Flash(id, isloot)
 		if not module.db.profile.flash then
 			return
 		end
@@ -679,7 +696,7 @@ do
 				local background = module.db.profile.flash_texture
 				local color = module.db.profile.flash_color
 				if self.id and ns.mobdb[self.id] then
-					if module.db.profile.flash_mount and module:HasInterestingMounts(id) then
+					if module.db.profile.flash_mount and module:HasInterestingMounts(id, isloot) then
 						background = module.db.profile.flash_texture_mount
 						color = module.db.profile.flash_color_mount
 					elseif ns.mobdb[self.id].boss and module.db.profile.flash_boss then
@@ -703,8 +720,8 @@ do
 	core.RegisterCallback("SD Announce Flash", "Announce", function(callback, id)
 		module:Flash(id)
 	end)
-	core.RegisterCallback("SD AnnounceLoot Flash", "AnnounceLoot", function(callback, id)
-		module:Flash(id)
+	core.RegisterCallback("SD AnnounceLoot Flash", "AnnounceLoot", function(callback, name, id)
+		module:Flash(id, true)
 	end)
 end
 
@@ -725,7 +742,7 @@ core.RegisterCallback("SD Announce Controller", "Announce", function(callback, i
 	end
 	C_GamePad.SetVibration(vibrate_type, vibrate_intensity)
 end)
-core.RegisterCallback("SD AnnounceLoot Controller", "AnnounceLoot", function(callback, id, zone, x, y, dead, source)
+core.RegisterCallback("SD AnnounceLoot Controller", "AnnounceLoot", function(callback, name, id, zone, x, y, instanceid)
 	if not module.db.profile.vibrate_loot then
 		return
 	end
