@@ -21,6 +21,12 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, sc
 
     if not minimap then
         self:SetPosition(x, y)
+
+        -- MapCanvasMixin:AcquirePin sets right-click to pass through so zoom-out can happen
+        -- ...but we want it, because we have a right-click menu to show
+        if self.SetPassThroughButtons then
+            self:SetPassThroughButtons("")
+        end
     end
 
     local size = 12
