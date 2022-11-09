@@ -203,7 +203,14 @@ end
 function module:SetupWorldMap()
 	local button
 	if WorldMapFrame.AddOverlayFrame then
-		button = WorldMapFrame:AddOverlayFrame(nil, "Button", "RIGHT", WorldMapFrame.NavBar, "RIGHT", -4, 0)
+		-- This taints currently:
+		-- button = WorldMapFrame:AddOverlayFrame(nil, "Button", "RIGHT", WorldMapFrame.NavBar, "RIGHT", -4, 0)
+		-- so for now just do this:
+		button = CreateFrame("Button", nil, WorldMapFrame.NavBar)
+		button:SetPoint("RIGHT", WorldMapFrame.NavBar, "RIGHT", -4, 0)
+		hooksecurefunc(WorldMapFrame, "OnMapChanged", function()
+			button:Refresh()
+		end)
 	else
 		-- classic!
 		button = CreateFrame("Button", nil, WorldMapFrame)
