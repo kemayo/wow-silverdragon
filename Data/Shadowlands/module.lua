@@ -204,7 +204,7 @@ core:RegisterMobData("Shadowlands", {
 	[178508] = {name="Mother Phestis",locations={[1970]={54103495},},loot={189923,189950,190045,189769},quest=65547,tameable=132196,},
 	[178563] = {name="Hadeon the Stonebreaker",locations={[1970]={52602505},},loot={189919,189942,190000,190051},quest=65581,tameable=133570,},
 	[178778] = {name="Gluttonous Overgrowth",locations={[1970]={53109305},},loot={189929,190008,190049,189953},notes="Break nearby {npc:184048}",quest=65579,},
-	[178963] = {name="Gorkek",locations={[1970]={80404705},},loot={190001,189926,189960},quest=63988,tameable=804969,vignette=4746,},
+	[178963] = {name="Gorkek",locations={[1970]={75376293,76114463,80744880},},loot={190001,189926,189960},quest=63988,tameable=804969,vignette=4746,},
 	[179006] = {name="Akkaris",locations={[1970]={64753370},},loot={189903,189958,190053,190733},quest=65552,vignette=4747,},
 	[179043] = {name="Orixal",locations={[1970]={56406820},},loot={189912,189934,189952},notes="Kill {npc:185487} and it might spawn",quest=65582,tameable=2011146,},
 	[179108] = {name="Kroke the Tormented",locations={[1961]={59203580},},loot={187394,187250,187248},quest=64428,},
