@@ -8,6 +8,8 @@ local ns = core.NAMESPACE
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 
+local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
+
 -- Pin mixin
 
 local SilverDragonOverlayPinMixinBase = {}
@@ -213,77 +215,70 @@ do
         end
     end
 
-    local dropdown = CreateFrame("Frame", nil, UIParent, "UIDropDownMenuTemplate")
+    local dropdown = LibDD:Create_UIDropDownMenu(myname.."PinDropDownMenu", UIParent)
     dropdown.displayMode = "MENU"
 
     dropdown.initialize = function(button, level)
         if (not level) then return end
-        local info = UIDropDownMenu_CreateInfo()
         if (level == 1) then
             -- Create the title of the menu
-            info.isTitle      = 1
-            info.text         = "SilverDragon Overlay"
-            info.notCheckable = 1
-            UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton({
+                isTitle = 1,
+                text = myname,
+                icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01",
+                notCheckable = 1,
+            }, level)
 
             local achievement = button.mobid and ns:AchievementMobStatus(button.mobid)
             if achievement then
-                info.disabled     = nil
-                info.isTitle      = nil
-                info.notCheckable = true
-                info.text = OBJECTIVES_VIEW_ACHIEVEMENT
-                info.notCheckable = 1
-                info.func = showAchievement
-                info.arg1 = achievement
-                UIDropDownMenu_AddButton(info, level)
+                LibDD:UIDropDownMenu_AddButton({
+                    notCheckable = true,
+                    text = OBJECTIVES_VIEW_ACHIEVEMENT,
+                    func = showAchievement,
+                    arg1 = achievement,
+                }, level)
             end
 
             -- Waypoint menu item
-            info.disabled     = not core:GetModule("TomTom"):CanPointTo(button.uiMapID)
-            info.isTitle      = nil
-            info.notCheckable = true
-            info.text = "Create waypoint"
-            info.icon = nil
-            info.func = module.CreateWaypoint
-            info.arg1 = button.uiMapID
-            info.arg2 = button.coord
-            UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton({
+                disabled = not core:GetModule("TomTom"):CanPointTo(button.uiMapID),
+                notCheckable = true,
+                text = "Create waypoint",
+                func = module.CreateWaypoint,
+                arg1 = button.uiMapID,
+                arg2 = button.coord,
+            }, level)
 
-            info.disabled = not TomTom
-            info.isTitle = nil
-            info.notCheckable = true
-            info.text = "Create waypoint for all locations"
-            info.icon = nil
-            info.func = createWaypointForAll
-            info.arg1 = button.uiMapID
-            info.arg2 = button.mobid
-            UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton({
+                disabled = not TomTom,
+                notCheckable = true,
+                text = "Create waypoint for all locations",
+                func = createWaypointForAll,
+                arg1 = button.uiMapID,
+                arg2 = button.mobid,
+            }, level)
 
-            info.disabled = nil
-            info.isTitle = nil
-            info.notCheckable = true
-            info.text = COMMUNITIES_INVITE_MANAGER_LINK_TO_CHAT -- Link to chat
             local mobid, uiMapID, coord = button.mobid, button.uiMapID, button.coord
-            info.func = function() sendToChat(mobid, uiMapID, coord) end
-            UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton({
+                    notCheckable = true,
+                    text = COMMUNITIES_INVITE_MANAGER_LINK_TO_CHAT, -- Link to chat
+                    func = function() sendToChat(mobid, uiMapID, coord) end,
+            }, level)
 
             -- Hide menu item
-            info.disabled     = nil
-            info.isTitle      = nil
-            info.notCheckable = true
-            info.text = "Hide mob"
-            info.icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01"
-            info.func = hideMob
-            info.arg1 = button.mobid
-            UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton({
+                notCheckable = true,
+                text = "Hide mob",
+                func = hideMob,
+                arg1 = button.mobid,
+            }, level)
 
             -- Close menu item
-            info.text         = "Close"
-            info.icon         = nil
-            info.func         = function() CloseDropDownMenus() end
-            info.arg1         = nil
-            info.notCheckable = 1
-            UIDropDownMenu_AddButton(info, level)
+            LibDD:UIDropDownMenu_AddButton({
+                notCheckable = 1,
+                text = "Close",
+                func = function() LibDD:CloseDropDownMenus() end,
+            }, level)
         end
     end
 
@@ -291,6 +286,6 @@ do
         dropdown.uiMapID = uiMapID
         dropdown.coord = coord
         dropdown.mobid = pin.mobid
-        ToggleDropDownMenu(1, nil, dropdown, pin, 0, 0)
+        LibDD:ToggleDropDownMenu(1, nil, dropdown, pin, 0, 0)
     end
 end
