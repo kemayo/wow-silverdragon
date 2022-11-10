@@ -175,17 +175,31 @@ end,})
 
 do
 	local mobNameToId = {}
-
-	local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip", _G.UIParent, "GameTooltipTemplate")
-	cache_tooltip:SetOwner(_G.WorldFrame, "ANCHOR_NONE")
-	local function TextFromHyperlink(link)
-		cache_tooltip:ClearLines()
-		cache_tooltip:SetHyperlink(link)
-		local text = SDCacheTooltipTextLeft1:GetText()
-		if text and text ~= "" and text ~= UNKNOWN then
-			return text
+	local TextFromHyperlink
+	if _G.C_TooltipInfo then
+		function TextFromHyperlink(link)
+			local info = C_TooltipInfo.GetHyperlink(link)
+			-- TooltipUtil.SurfaceArgs(info)
+			if info and info.lines and info.lines[1] then
+				TooltipUtil.SurfaceArgs(info.lines[1])
+				if info.lines[1].type == Enum.TooltipDataType.Unit then
+					return info.lines[1].leftText
+				end
+			end
+		end
+	else
+		local cache_tooltip = CreateFrame("GameTooltip", "SDCacheTooltip", _G.UIParent, "GameTooltipTemplate")
+		cache_tooltip:SetOwner(_G.WorldFrame, "ANCHOR_NONE")
+		function TextFromHyperlink(link)
+			cache_tooltip:ClearLines()
+			cache_tooltip:SetHyperlink(link)
+			local text = SDCacheTooltipTextLeft1:GetText()
+			if text and text ~= "" then
+				return text
+			end
 		end
 	end
+
 	function addon:NameForMob(id, unit)
 		if unit then
 			-- refresh the locale when we actually meet the mob, because blizzard fixes typos occasionally

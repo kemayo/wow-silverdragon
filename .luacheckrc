@@ -73,6 +73,7 @@ read_globals = {
     "C_TaskQuest",
     "C_Texture",
     "C_Timer",
+    "C_TooltipInfo",
     "C_ToyBox",
     "C_Transmog",
     "C_TransmogCollection",
@@ -243,6 +244,7 @@ read_globals = {
     "OpenAchievementFrameToAchievement",
     "ToggleWorldMap",
     "SetItemButtonTexture",
+    "TooltipUtil",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",
