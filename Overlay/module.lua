@@ -235,8 +235,6 @@ function module:ShowTooltip(pin)
             self.lootwindow:SetAutoHideDelay(0.25, {pin, tooltip}, function()
                 self:CleanupTooltip()
             end)
-
-            core.events:Fire("LootWindowOpened", self.lootwindow)
         end
     else
         tooltip:AddLine(UNKNOWN)

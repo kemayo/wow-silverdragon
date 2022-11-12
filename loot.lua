@@ -977,6 +977,9 @@ do
 		window:AddLoot(ns.Loot.GetLootTable(id, ...))
 		window:Show()
 
+		-- get this ready:
+		ns.Tooltip.Get("Loot")
+
 		core.events:Fire("LootWindowOpened", window)
 
 		return window
