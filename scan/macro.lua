@@ -94,11 +94,14 @@ function module:Update()
 	elseif self.db.profile.verbose then
 		table.insert(macro, 1, ("/script print(\"Scanning for %d nearby mobs...\")"):format(count))
 	end
+	-- this is the 10.0.0+ SecureActionButton handler snafu:
+	local clickbutton = GetCVar("ActionButtonUseKeyDown") == "1" and " LeftButton" or ""
+
 	local MAX_MACRO_LENGTH = 1023 -- this goes through RunMacroText, rather than actual-macros limit of 255
 	local len = 0
 	local n = 1
 	local start = 1
-	local BUFFER_FOR_CLICK = #"\n/click SilverDragonMacroButton2 LeftButton" --update if changing below
+	local BUFFER_FOR_CLICK = #("\n/click SilverDragonMacroButton2"..clickbutton) --update if changing below
 	for i, text in ipairs(macro) do
 		len = len + #text + 2 -- for the newline
 		local next_statement = macro[next(macro, i)]
@@ -107,7 +110,7 @@ function module:Update()
 			n = n + 1
 			local mtext = ("\n"):join(unpack(macro, start, i))
 			if next_statement then
-				mtext = mtext .. "\n/click SilverDragonMacroButton"..n.." LeftButton"
+				mtext = mtext .. "\n/click SilverDragonMacroButton"..n..clickbutton
 			end
 			button:SetAttribute("macrotext", mtext)
 			len = 0
@@ -137,7 +140,8 @@ function module:CreateMacro()
 end
 function module:GetMacroArguments()
 	--/script for i=1,GetNumMacroIcons() do if GetMacroIconInfo(i):match("SniperTraining$") then DEFAULT_CHAT_FRAME:AddMessage(i) end end
-	return 132222, "/click SilverDragonMacroButton LeftButton"
+	local clickbutton = GetCVar("ActionButtonUseKeyDown") == "1" and " LeftButton" or ""
+	return 132222, "/click SilverDragonMacroButton"..clickbutton
 end
 
 function module:PLAYER_REGEN_ENABLED()
