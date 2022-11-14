@@ -237,7 +237,9 @@ ns.conditions.CalendarEventStartTexture = Class{
 do
 	local function check(cond) return cond:Matched() end
 	ns.conditions.check = function(conditions)
-		return ns.doTest(check, conditions)
+		if conditions then
+			return ns.doTest(check, conditions)
+		end
 	end
 
 	local t = {}

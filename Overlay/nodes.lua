@@ -86,6 +86,9 @@ do
         if not core:IsMobInPhase(id, uiMapID) then
             return false
         end
+        if ns.mobdb[id] and ns.mobdb[id].requires and not ns.conditions.check(ns.mobdb[id].requires) then
+            return false
+        end
         local quest, achievement, achievement_completed_by_alt = ns:CompletionStatus(id)
         if achievement ~= nil then
             if quest ~= nil then
@@ -161,8 +164,12 @@ do
                 else
                     icon = icon_for_mob(id)
                 end
+                local alpha = icon.alpha
+                if ns.mobdb[id] and ns.mobdb[id].active and not ns.conditions.check(ns.mobdb[id].active) then
+                    alpha = alpha and (alpha * 0.6) or 0.6
+                end
                 for _, coord in ipairs(coords) do
-                    coroutine.yield(coord, id, icon, icon.scale, icon.alpha)
+                    coroutine.yield(coord, id, icon, icon.scale, alpha)
                 end
             end
         end

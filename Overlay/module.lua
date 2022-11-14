@@ -236,6 +236,9 @@ function module:ShowTooltip(pin)
                 self:CleanupTooltip()
             end)
         end
+        if ns.mobdb[id].requires then
+            tooltip:AddLine(core:RenderString(ns.conditions.summarize(ns.mobdb[id].requires), ns.mobdb[id]), 0, 1, 0, true)
+        end
     else
         tooltip:AddLine(UNKNOWN)
         tooltip:AddDoubleLine("At", pin.uiMapID .. ':' .. pin.coord)
