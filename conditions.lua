@@ -171,6 +171,67 @@ ns.conditions.WorldQuestActive = Class{
 	Matched = function(self) return C_TaskQuest.IsActive(self.id) end,
 }
 
+ns.conditions.CalendarEvent = Class{
+	__parent = Condition,
+	type = 'calendarevent',
+	Label = function(self)
+		local event = self:getEvent()
+		if event and event.title then
+			return event.title
+		end
+		return Condition.Label(self)
+	end,
+	Matched = function(self)
+		if self:getEvent() then
+			return true
+		end
+	end,
+	getEvent = function(self)
+		local offset, day = self:getOffsets()
+		for i=1, C_Calendar.GetNumDayEvents(offset, day) do
+			local event = C_Calendar.GetDayEvent(offset, day, i)
+			if event.eventID == self.id then
+				return true
+			end
+		end
+	end,
+	getOffsets = function(self, current)
+		-- we could call C_Calendar.SetMonth, but that'd jump the calendar around if it's open... so instead, work out the actual offset
+		current = current or C_DateAndTime.GetCurrentCalendarTime()
+		local selected = C_Calendar.GetMonthInfo()
+		local offset = (selected.month - current.month) + ((selected.year - current.year) * 12)
+		if offset >= 1 or offset <= -1 then
+			-- calendar APIs only return information on events within the next month either way
+			if not (_G.CalendarFrame and _G.CalendarFrame:IsVisible()) then
+				-- calendar's not visible, so it's fine to move it around
+				-- SetAbsMonth because when the calendar hasn't been opened yet just SetMonth can jump to an incorrect year...
+				C_Calendar.SetAbsMonth(current.month, current.year)
+				offset = 0
+			end
+		end
+		return offset, current.monthDay
+	end,
+}
+ns.conditions.CalendarEventStartTexture = Class{
+	__parent = ns.conditions.CalendarEvent,
+	type = 'calendareventtexture',
+	getEvent = function(self)
+		local offset, day = self:getOffsets()
+		for i=1, C_Calendar.GetNumDayEvents(offset, day) do
+			local event = C_Calendar.GetDayEvent(offset, day, i)
+			if event.startTime then
+				local startoffset, startday = self:getOffsets(event.startTime)
+				for ii=1, C_Calendar.GetNumDayEvents(startoffset, startday) do
+					local startEvent = C_Calendar.GetDayEvent(startoffset, startday, ii)
+					if startEvent and startEvent.iconTexture == self.id then
+						return event
+					end
+				end
+			end
+		end
+	end
+}
+
 -- Helpers:
 
 do

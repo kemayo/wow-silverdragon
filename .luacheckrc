@@ -56,10 +56,12 @@ read_globals = {
 
     -- API functions
     "C_AreaPoiInfo",
+    "C_Calendar",
     "C_ChatInfo",
     "C_Covenants",
     "C_CovenantSanctumUI",
     "C_CurrencyInfo",
+    "C_DateAndTime",
     "C_GamePad",
     "C_Garrison",
     "C_Item",
