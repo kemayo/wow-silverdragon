@@ -210,9 +210,16 @@ function module:WorkOutMobFromVignette(instanceid)
 		if already_notified_loot[vignetteInfo.vignetteID] and time() < (already_notified_loot[vignetteInfo.vignetteID] + core.db.profile.delay) then
 			return -- Debug("skipping notification", "delay not exceeded")
 		end
-		if ns.vignetteTreasureLookup[vignetteInfo.vignetteID] and ns.vignetteTreasureLookup[vignetteInfo.vignetteID].requires and not ns.conditions.check(ns.vignetteTreasureLookup[vignetteInfo.vignetteID].requires) then
-			-- Debug("skipping notification", "vignette requirements not met", ns.conditions.summarize(ns.vignetteTreasureLookup[vignetteInfo.vignetteID].requires))
-			return
+		local treasure = ns.vignetteTreasureLookup[vignetteInfo.vignetteID]
+		if treasure then
+			if treasure.requires and not ns.conditions.check(treasure.requires) then
+				-- Debug("skipping notification", "vignette requirements not met", ns.conditions.summarize(treasure.requires))
+				return
+			end
+			if treasure.active and not ns.conditions.check(treasure.active) then
+				-- Debug("skipping notification", "vignette not active", ns.conditions.summarize(treasure.active))
+				return
+			end
 		end
 		already_notified_loot[vignetteInfo.vignetteID] = time()
 		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x or 0, y or 0, instanceid)
@@ -274,6 +281,17 @@ function module:NotifyIfNeeded(id, current_zone, x, y, variant, instanceid)
 	end
 	if not (current_zone and x and y) then
 		return
+	end
+	local mob = ns.mobdb[id]
+	if mob then
+		if mob.requires and not ns.conditions.check(mob.requires) then
+			-- Debug("skipping notification", "mob requirements not met", ns.conditions.summarize(mob.requires))
+			return
+		end
+		if mob.active and not ns.conditions.check(mob.active) then
+			-- Debug("skipping notification", "mob not active", ns.conditions.summarize(mob.active))
+			return
+		end
 	end
 	already_notified[instanceid] = true
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)

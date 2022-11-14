@@ -241,7 +241,7 @@ core:RegisterMobData("Shadowlands", {
 	[180917] = {name="Destabilized Core",locations={[1970]={53654435},},loot={187837,189153,189910,189985,189999,189930},quest=64716,},
 	[180924] = {name="Garudeon",locations={[1970]={69053660},},loot={187832,189937,189951,190057,190602},notes="Gather {npc:183562} nearby, feed to {npc:183554}",quest=64719,tameable=132192,vignette=4982,},
 	[180978] = {name="Hirukon",locations={[1970]={52307540},},loot={189905,189946,190005,187636,{187676,mount=1434},},quest=65548,
-		requires=core.conditions.Item(187923),
+		active=core.conditions.Item(187923),
 		notes="You have to make a {item:187923}:\n"..
 			"* Fish up {item:187662} nearby\n"..
 			"* Fish up {item:187915} from Coilfang Reservoir in Zangarmarsh\n"..
@@ -276,18 +276,18 @@ core:RegisterMobData("Shadowlands", {
 }, true)
 core:RegisterTreasureData("Shadowlands", {
 	[4925] = {name="Template Archive",loot={{190060,quest=65527}},},
-	[4928] = {name="Provis Cache",loot={{189710,quest=65474}},requires=core.conditions.Item(188231),},
-	[4929] = {name="Prying Eye Discovery",loot={{190096,quest=65534},{189711,quest=65476}},requires={core.conditions.Item(188170),core.conditions.Achievement(15514),any=true},},
-	[4968] = {name="Domination Cache",loot={190638,189863},requires=core.conditions.Item(189704),},
+	[4928] = {name="Provis Cache",loot={{189710,quest=65474}},active=core.conditions.Item(188231),},
+	[4929] = {name="Prying Eye Discovery",loot={{190096,quest=65534},{189711,quest=65476}},active={core.conditions.Item(188170),core.conditions.Achievement(15514),any=true},},
+	[4968] = {name="Domination Cache",loot={190638,189863},active=core.conditions.Item(189704),},
 	[4969] = {name="Mawsworn Supply Chest",loot={{190766,mount=1585}},},
 	[4974] = {name="Discarded Automa Scrap",loot={{189717,quest=65483},{189718,quest=65484}},},
 	[4978] = {name="Pulp-Covered Relic",loot={{189474,quest=65397}},},
-	[4980] = {name="Architect's Reserve",loot={{187833,quest=65528}},requires={core.conditions.GarrisonTalent(1931), core.conditions.QuestComplete(65427)},},
-	[4981] = {name="Mistaken Ovoid",loot={{189435,quest=65333}},requires=core.conditions.Item(190239,5),},
-	[4992] = {name="Protomineral Extractor",loot={190942},requires=core.conditions.QuestComplete(64889),},
-	[4993] = {name="Pilfered Curio",loot={{190098,quest=65538}},requires=core.conditions.Achievement(15514),},
-	[4997] = {name="Forgotten Treasure Vault",requires=core.conditions.Achievement(15514),},
-	[4999] = {name="Protopear",loot={{190058,quest=65525}},requires=core.conditions.GarrisonTalent(1931),},
-	[5019] = {name="Torn Ethereal Drape",loot={188054},requires={core.conditions.GarrisonTalent(1902),core.conditions.QuestComplete(65328)},},
-	[5021] = {name="Drowned Broker Supplies",loot={{190059,quest=65526}},requires=core.conditions.GarrisonTalent(1932),},
+	[4980] = {name="Architect's Reserve",loot={{187833,quest=65528}},active={core.conditions.GarrisonTalent(1931), core.conditions.QuestComplete(65427)},},
+	[4981] = {name="Mistaken Ovoid",loot={{189435,quest=65333}},active=core.conditions.Item(190239,5),},
+	[4992] = {name="Protomineral Extractor",loot={190942},active=core.conditions.QuestComplete(64889),},
+	[4993] = {name="Pilfered Curio",loot={{190098,quest=65538}},active=core.conditions.Achievement(15514),},
+	[4997] = {name="Forgotten Treasure Vault",active=core.conditions.Achievement(15514),},
+	[4999] = {name="Protopear",loot={{190058,quest=65525}},active=core.conditions.GarrisonTalent(1931),},
+	[5019] = {name="Torn Ethereal Drape",loot={188054},active={core.conditions.GarrisonTalent(1902),core.conditions.QuestComplete(65328)},},
+	[5021] = {name="Drowned Broker Supplies",loot={{190059,quest=65526}},active=core.conditions.GarrisonTalent(1932),},
 }, true)
