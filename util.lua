@@ -14,9 +14,11 @@ local function quick_texture_markup(icon)
 end
 local completeColor = CreateColor(0, 1, 0, 1)
 local incompleteColor = CreateColor(1, 0, 0, 1)
-function addon:RenderString(s)
-	if type(s) == "function" then s = s() end
-	return s:gsub("{(%l+):(%d+):?([^}]*)}", function(variant, id, fallback)
+function addon:RenderString(s, context)
+	if type(s) == "function" then s = s(context) end
+	return s:gsub("{(%l+):([^:}]+):?([^}]*)}", function(variant, id, fallback)
+		local mainid, subid = id:match("(%d+)%.(%d+)")
+		mainid, subid = mainid and tonumber(mainid), subid and tonumber(subid)
 		id = tonumber(id)
 		if variant == "item" then
 			local name, link, _, _, _, _, _, _, _, icon = GetItemInfo(id)
@@ -39,9 +41,17 @@ function addon:RenderString(s)
 		elseif variant == "questid" then
 			return CreateAtlasMarkup("questnormal") .. (C_QuestLog.IsQuestFlaggedCompleted(id) and completeColor or incompleteColor):WrapTextInColorCode(id)
 		elseif variant == "achievement" then
-			local _, name, _, completed = GetAchievementInfo(id)
-			if name and name ~= "" then
-				return CreateAtlasMarkup("storyheader-cheevoicon") .. " " .. (completed and completeColor or incompleteColor):WrapTextInColorCode(name)
+			if mainid and subid then
+				local criteria = (subid < 40 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID)(mainid, subid)
+				if criteria then
+					return criteria
+				end
+				id = 'achievement:'..mainid..'.'..subid
+			else
+				local _, name, _, completed = GetAchievementInfo(id)
+				if name and name ~= "" then
+					return CreateAtlasMarkup("storyheader-cheevoicon") .. " " .. (completed and completeColor or incompleteColor):WrapTextInColorCode(name)
+				end
 			end
 		elseif variant == "npc" then
 			local name = self:NameForMob(id)
@@ -53,10 +63,25 @@ function addon:RenderString(s)
 			if info then
 				return quick_texture_markup(info.iconFileID) .. " " .. info.name
 			end
+		elseif variant == "currencyicon" then
+			local info = C_CurrencyInfo.GetCurrencyInfo(id)
+			if info then
+				return quick_texture_markup(info.iconFileID)
+			end
 		elseif variant == "covenant" then
 			local data = C_Covenants.GetCovenantData(id)
 			if data and data.name then
 				return COVENANT_COLORS[id]:WrapTextInColorCode(data.name)
+			end
+		elseif variant == "majorfaction" then
+			local info = C_MajorFactions.GetMajorFactionData(id)
+			if info and info.name then
+				return CreateAtlasMarkup(("majorFactions_icons_%s512"):format(info.textureKit)) .. " " .. info.name
+			end
+		elseif variant == "faction" then
+			local name = GetFactionInfoByID(id)
+			if name then
+				return name
 			end
 		elseif variant == "garrisontalent" then
 			local info = C_Garrison.GetTalentInfo(id)
