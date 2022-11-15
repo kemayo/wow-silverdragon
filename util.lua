@@ -224,25 +224,29 @@ do
 			end
 		end
 	end
-
-	function addon:NameForMob(id, unit)
+	local function mob_name(id, unit, cache)
 		if unit then
 			-- refresh the locale when we actually meet the mob, because blizzard fixes typos occasionally
 			local name = UnitName(unit)
 			if name and name ~= UNKNOWNOBJECT then
-				self.db.locale.mob_name[id] = name
+				cache[id] = name
 			end
 		end
-		if not self.db.locale.mob_name[id] then
+		if not cache[id] then
 			local name = TextFromHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
 			if name and name ~= UNKNOWNOBJECT then
-				self.db.locale.mob_name[id] = name
+				cache[id] = name
 			end
 		end
-		if self.db.locale.mob_name[id] then
-			mobNameToId[self.db.locale.mob_name[id]] = id
+		if cache[id] then
+			mobNameToId[cache[id]] = id
 		end
-		return self.db.locale.mob_name[id] or (ns.mobdb[id] and ns.mobdb[id].name)
+		return cache[id] or (ns.mobdb[id] and ns.mobdb[id].name)
+	end
+
+	local name_cache = {}
+	function addon:NameForMob(id, unit)
+		return mob_name(id, unit, addon.debuggable and name_cache or self.db.locale.mob_name)
 	end
 	function addon:IdForMob(name, zone)
 		if zone then
