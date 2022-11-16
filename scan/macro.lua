@@ -95,7 +95,7 @@ function module:Update()
 		table.insert(macro, 1, ("/script print(\"Scanning for %d nearby mobs...\")"):format(count))
 	end
 	-- this is the 10.0.0+ SecureActionButton handler snafu:
-	local clickbutton = GetCVar("ActionButtonUseKeyDown") == "1" and " LeftButton" or ""
+	local clickbutton = " LeftButton " .. (GetCVar("ActionButtonUseKeyDown") == "1" and "1" or "0")
 
 	local MAX_MACRO_LENGTH = 1023 -- this goes through RunMacroText, rather than actual-macros limit of 255
 	local len = 0
@@ -140,7 +140,7 @@ function module:CreateMacro()
 end
 function module:GetMacroArguments()
 	--/script for i=1,GetNumMacroIcons() do if GetMacroIconInfo(i):match("SniperTraining$") then DEFAULT_CHAT_FRAME:AddMessage(i) end end
-	local clickbutton = GetCVar("ActionButtonUseKeyDown") == "1" and " LeftButton" or ""
+	local clickbutton = " LeftButton " .. (GetCVar("ActionButtonUseKeyDown") == "1" and "1" or "0")
 	return 132222, "/click SilverDragonMacroButton"..clickbutton
 end
 
