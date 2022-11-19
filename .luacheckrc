@@ -81,6 +81,7 @@ read_globals = {
     "C_ToyBox",
     "C_Transmog",
     "C_TransmogCollection",
+    "C_UnitAuras",
     "C_VignetteInfo",
     "TransmogUtil",
     "UiMapPoint",

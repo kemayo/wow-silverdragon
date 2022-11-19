@@ -4,6 +4,8 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 
 -- Keep this in sync with my handynotes handlers...
 
+local GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID or _G.GetPlayerAuraBySpellID
+
 local Base = {
 	Initialize = function() end,
 }
