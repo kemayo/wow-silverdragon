@@ -41,9 +41,9 @@ if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE then
 end
 
 core:RegisterMobData("BurningCrusade", {
-	[16179] = {name="Hyakiss the Lurker",locations={[KARAZHAN_SERVANTS]={48003660,50404320,59602870,65603240},},tameable=true,},
-	[16180] = {name="Shadikith the Glider",locations={[KARAZHAN_SERVANTS]={48602780,59003560,59602870,64802980},},tameable=132182,},
-	[16181] = {name="Rokad the Ravager",locations={[KARAZHAN_SERVANTS]={58201960,59602870,66801820,72001980},},tameable=877481,},
+	[16179] = {name="Hyakiss the Lurker",locations={[KARAZHAN_SERVANTS]={48003660,50404320,59602870,65603240},},loot={30678,30677,30676,30675},tameable=true,},
+	[16180] = {name="Shadikith the Glider",locations={[KARAZHAN_SERVANTS]={48602780,59003560,59602870,64802980},},loot={30683,30682,30681,30680},tameable=132182,},
+	[16181] = {name="Rokad the Ravager",locations={[KARAZHAN_SERVANTS]={58201960,59602870,66801820,72001980},},loot={30687,30686,30685,30684},tameable=877481,},
 	[16854] = {name="Eldinarcus",locations={[EVERSONG]={70804780},},},
 	[16855] = {
 		name="Tregla",
