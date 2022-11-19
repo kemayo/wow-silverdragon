@@ -250,6 +250,7 @@ read_globals = {
     "OpenAchievementFrameToAchievement",
     "ToggleWorldMap",
     "SetItemButtonTexture",
+    "TooltipDataProcessor",
     "TooltipUtil",
 
     -- FrameXML Constants

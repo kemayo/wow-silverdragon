@@ -35,11 +35,17 @@ function module:OnInitialize()
 end
 
 function module:OnEnable()
-	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
-end
-
-function module:UPDATE_MOUSEOVER_UNIT()
-	self:UpdateTooltip(core:UnitID('mouseover'))
+	if _G.TooltipDataProcessor then
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip)
+			if tooltip ~= GameTooltip then return end
+			local name, unit, guid = TooltipUtil.GetDisplayedUnit(tooltip)
+			module:UpdateTooltip(ns.IdFromGuid(guid))
+		end)
+	else
+		GameTooltip:HookScript("OnTooltipSetUnit", function(self)
+			module:UpdateTooltip(core:UnitID(select(2, self:GetUnit())))
+		end)
+	end
 end
 
 -- This is split out entirely so I can test this without having to actually hunt down a rare:
