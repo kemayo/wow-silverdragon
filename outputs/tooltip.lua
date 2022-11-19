@@ -42,8 +42,11 @@ function module:OnEnable()
 			module:UpdateTooltip(ns.IdFromGuid(guid))
 		end)
 	else
-		GameTooltip:HookScript("OnTooltipSetUnit", function(self)
-			module:UpdateTooltip(core:UnitID(select(2, self:GetUnit())))
+		GameTooltip:HookScript("OnTooltipSetUnit", function(tooltip)
+			local name, unit = tooltip:GetUnit()
+			if unit then
+				module:UpdateTooltip(core:UnitID(unit))
+			end
 		end)
 	end
 end
