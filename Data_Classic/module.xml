@@ -1,5 +1,4 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
   <Script file="Classic/module.lua"/>
-  <Script file="BurningCrusadeClassic/module.lua"/>
 </Ui>
