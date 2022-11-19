@@ -6,6 +6,9 @@ local Debug = core.Debug
 
 local LSM = LibStub("LibSharedMedia-3.0")
 
+-- testing snippet:
+-- /script C_Timer.After(2, function() SilverDragon:GetModule("Announce"):Seen("_", 32491, 120, 0.490, 0.362, false, "fake") end)
+
 -- Register some media
 LSM:Register("sound", "Rubber Ducky", 566121)
 LSM:Register("sound", "Cartoon FX", 566543)
