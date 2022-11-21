@@ -106,7 +106,20 @@ core:RegisterMobData("Warlords", {
 	[80868] = {name="Glut",locations={[543]={45605060},},loot={118229},quest=36204,vignette=434,},
 	[81001] = {name="Nok-Karosh",locations={[525]={13805140},},loot={{116794,mount=657,boe=true,}},tameable=132203,},
 	[81038] = {name="Gelgor of the Blue Flame",locations={[543]={29003880,34203800,41804540},},loot={118230},quest=36391,},
-	[81330] = {name="Warleader Tome",locations={[550]={81406040},},loot={{120276,toy=true,}},note="Has a long path all around the zone, but spawns here",},
+	[81330] = {
+		name="Warleader Tome",
+		locations={[550]={81406040},},
+		routes={[550]={
+			{
+	            81406040, 79606620, 77406780, 71806800, 67007300, 63607220, 59806700, 60406100, 60005700, 56805300,
+	            53405200, 51404970, 50204480, 48804160, 43204180, 40803860, 44403100, 45602140, 50001900, 55202280,
+	            63802400, 62603040, 63603480, 70403900, 76804260, 82104990, 80905550,
+	            loop=true, r=0.8, g=0, b=0.8,
+	        }
+		}},
+		loot={{120276,toy=true,}},
+		note="Has a long path clockwise all around the zone, but spawns here",
+	},
 	[81406] = {name="Bahameye",locations={[539]={29600620},},loot={111666},quest=35281,},
 	[81639] = {name="Brambleking Fili",locations={[539]={43807740},},loot={117551},quest=33383,},
 	[82050] = {name="Varasha",locations={[542]={29404140},},loot={{118207,pet=1541,}},quest=35334,tameable=463493,},
