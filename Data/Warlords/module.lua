@@ -288,7 +288,7 @@ core:RegisterMobData("Warlords", {
 	[87661] = {name="Bergruu",locations={[550]={50204120},},hidden=true,},
 	[87666] = {name="Mu'gra",locations={[550]={34005100},},loot={118659},quest=37224,tameable=1044490,},
 	[87667] = {name="Mu'gra",locations={[550]={50204120},},hidden=true,},
-	[87668] = {name="Orumo the Observer",locations={[535]={31404740},},loot={119375,{119170,pet=1576,}},notes="3 people needed to stand on the symbols",quest=37344,},
+	[87668] = {name="Orumo the Observer",locations={[535]={31404740},},loot={119375,{119170,pet=1576,}},notes="5 people needed to stand on the symbols. You *can* solo it by repeatedly teleporting off the symbols and running back to activate another",quest=37344,vignette=572,},
 	[87788] = {name="Durg Spinecrusher",locations={[550]={38602240},},loot={119405},quest=37395,},
 	[87837] = {name="Bonebreaker",locations={[550]={40001600},},loot={119370},quest=37396,},
 	[87846] = {name="Pit Slayer",locations={[550]={38001960},},loot={119389},quest=37397,vignette=559,},
