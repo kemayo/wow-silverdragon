@@ -266,7 +266,7 @@ core:RegisterMobData("Warlords", {
 	[86724] = {name="Hermit Palefur",locations={[542]={59201500},},loot={118279},quest=36887,},
 	[86729] = {name="Direhoof",locations={[550]={60003800},},loot={118657},quest=37222,tameable=1044501,},
 	[86732] = {name="Bergruu",locations={[550]={62601680},},loot={118655},quest=37211,tameable=1044794,},
-	[86743] = {name="Dekorhan",locations={[550]={50204120},},loot={118656},quest=37221,tameable=132254,},
+	[86743] = {name="Dekorhan",locations={[550]={64203040},},loot={118656},quest=37221,tameable=132254,},
 	[86750] = {name="Thek'talon",locations={[550]={49203980,53003420,60402840},},loot={118660},quest=37225,tameable=132192,},
 	[86771] = {name="Gagrog the Brutal",locations={[550]={48202220},},loot={118658},quest=37223,},
 	[86774] = {name="Aogexon",locations={[550]={51001600},},loot={118654},quest=37210,tameable=132201,},
