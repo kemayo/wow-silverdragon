@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2022.26
+
+* Classic: route lines were sometimes being hidden behind explored territory on maps
+
 ## Changed in v2022.25
 
 * Major data improvements to Burning Crusade rares (because I also released [HandyNotes: Burning Crusade](https://www.curseforge.com/wow/addons/handynotes-burning-crusade)...)
