@@ -145,7 +145,7 @@ end
 SilverDragonOverlayRoutePinMixin = CreateFromMixins(MapCanvasPinMixin)
 function SilverDragonOverlayRoutePinMixin:OnLoad()
     -- This is below normal pins
-    self:UseFrameLevelType("PIN_FRAME_LEVEL_EVENT_OVERLAY");
+    self:UseFrameLevelType(ns.CLASSIC and "PIN_FRAME_LEVEL_MAP_LINK" or "PIN_FRAME_LEVEL_EVENT_OVERLAY");
 end
 
 SilverDragonOverlayRoutePinConnectionMixin = {}
