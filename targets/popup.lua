@@ -125,6 +125,7 @@ function module:SetModel(popup)
 	-- reset the model
 	popup.model:ClearModel()
 	popup.model:SetModelScale(1)
+	popup.model:SetModelAlpha(1)
 	popup.model:SetPosition(0, 0, 0)
 	popup.model:SetFacing(0)
 	popup.model.fallback:Hide()
@@ -631,7 +632,13 @@ PopupMixin.scripts = {
 		self:GetParent():Hide()
 	end,
 	AnimationRequestHideParent = function(self)
-		self:GetParent():HideWhenPossible()
+		local parent = self:GetParent()
+		if parent.model:IsVisible() then
+			-- 10.0 bug: the models within a Model don't inherit alpha
+			-- We *can* directly set the interior model alpha, though
+			parent.model:SetModelAlpha(0)
+		end
+		parent:HideWhenPossible()
 	end,
 }
 function PopupMixin:COMBAT_LOG_EVENT_UNFILTERED()
