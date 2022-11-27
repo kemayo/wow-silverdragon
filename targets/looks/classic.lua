@@ -24,6 +24,7 @@ function module.Looks:Classic(popup)
 	popup.close:SetPoint("TOPRIGHT", -3, -3)
 
 	-- popup.modelbg:SetPoint("BOTTOMLEFT", 3, 3)
+	popup.modelbg:SetTexture(false)
 	popup.modelbg:SetSize(popup:GetHeight() - 20, popup:GetHeight() - 20)
 	popup.modelbg:SetPoint("TOPLEFT", popup.title, "BOTTOMLEFT", 0, -2)
 	popup.modelbg:SetPoint("BOTTOMLEFT", popup, "BOTTOMLEFT", 4, 4)

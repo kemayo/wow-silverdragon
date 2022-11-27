@@ -13,8 +13,11 @@ function module.Looks:Transmog(popup)
 
 	popup.close:SetPoint("TOPRIGHT", -12, -12)
 
-	popup.modelbg:SetPoint("LEFT", 10, 0)
-	self:SizeModel(popup, 7)
+	popup.modelbg:SetTexture(false)
+	popup.modelbg:SetPoint("TOPLEFT", 18, -20)
+	popup.modelbg:SetPoint("BOTTOMLEFT", 18, 20)
+	popup.modelbg:SetWidth(36)
+	self:SizeModel(popup, 0, 0)
 
 	popup.source:SetPoint("BOTTOMRIGHT", -18, 18)
 

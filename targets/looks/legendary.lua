@@ -17,7 +17,7 @@ function module.Looks:Legendary(popup)
 	popup.close:SetPoint("TOPRIGHT", -18, -24)
 
 	popup.modelbg:SetPoint("TOPLEFT", 48, -32)
-	self:SizeModel(popup, 4)
+	self:SizeModel(popup, 1)
 
 	popup.title:SetPoint("TOPLEFT", popup.modelbg, "TOPRIGHT", 11, -16)
 	popup.source:SetPoint("BOTTOMRIGHT", -20, 26)

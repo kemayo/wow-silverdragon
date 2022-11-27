@@ -16,8 +16,9 @@ function module.Looks:Minimal(popup, config)
     popup.status:SetFont([[Fonts\ARIALN.TTF]], 12, "OUTLINE")
     popup.status:SetTextColor(1.0, 1.0, 1.0)
 
-    popup.modelbg:SetPoint("TOPLEFT", 1, -1)
-    popup.modelbg:SetPoint("BOTTOMLEFT", 1, 1)
+    popup.modelbg:SetTexture(false)
+    popup.modelbg:SetPoint("TOPLEFT", 1, -2)
+    popup.modelbg:SetPoint("BOTTOMLEFT", 1, 2)
     popup.modelbg:SetWidth(popup:GetHeight())
     self:SizeModel(popup, 0, 0)
 
