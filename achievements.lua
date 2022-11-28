@@ -514,6 +514,10 @@ local achievements = {
 	}, -- Completing the Code
 	[15391] = {}, -- Adventurer of Zereth Mortis
 	[15392] = {}, -- Dune Dominance
+	-- TODO: this has overlap with the adventurer mobs, so I need to improve mobs_to_achievement (also all the mobs in the achievement are kill-credit fake mobs, so I need to dig up the actual IDs)
+	-- [16446] = { -- That's Pretty Neat!
+	-- 	completed = SCREENSHOT_SUCCESS, -- "Screen captured"
+	-- },
 	[16676] = {}, -- Adventurer of the Waking Shores
 	[16677] = {}, -- Adventurer of the Ohn'ahran Plains
 	[16678] = {}, -- Adventurer of the Azure Span
