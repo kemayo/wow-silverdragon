@@ -123,7 +123,7 @@ function addon:RegisterMobData(source, data, updated)
 	if not updated then
 		if not self.HASWARNEDABOUTOLDDATA then
 			self.HASWARNEDABOUTOLDDATA = true
-			return self:Print("You have an old SilverDragon_[expansion] folder, which can be removed")
+			return self:Print(("You have an old SilverDragon_%s folder, which can be removed"):format(source))
 		end
 		return
 	end
