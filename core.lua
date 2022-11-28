@@ -134,6 +134,46 @@ function addon:RegisterTreasureData(source, data, updated)
 	addon.treasuresources[source] = data
 end
 do
+	function addon:RegisterHandyNotesData(source, uiMapID, points, defaults)
+		-- convenience for me, really...
+		addon.datasources[source] = addon.datasources[source] or {}
+		addon.treasuresources[source] = addon.treasuresources[source] or {}
+		for coord, point in pairs(points) do
+			if point.npc or point.vignette then
+				if defaults then
+					for k,v in pairs(defaults) do
+						if k == "note" and point[k] then
+							point[k] = v .. "\n" .. point[k]
+						end
+						point[k] = point[k] or v
+					end
+				end
+				local data = {
+					name=point.label,
+					locations={[uiMapID]={coord}},
+					loot=point.loot,
+					notes=point.note,
+					active=point.active,
+					requires=point.require or point.hide_before,
+					vignette=point.vignette,
+					quest=point.quest,
+				}
+				if point.npc then
+					addon.datasources[source][point.npc] = data
+					if point.achievement and point.criteria then
+						if not ns.achievements[point.achievement] then
+							ns.achievements[point.achievement] = {}
+						end
+						ns.achievements[point.achievement][point.npc] = point.criteria
+					end
+				else
+					addon.treasuresources[source][point.vignette] = data
+				end
+			end
+		end
+	end
+end
+do
 	local function addQuestMobLookup(mobid, quest)
 		if type(quest) == "table" then
 			if quest.alliance then
