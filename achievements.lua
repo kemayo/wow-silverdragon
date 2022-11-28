@@ -514,6 +514,10 @@ local achievements = {
 	}, -- Completing the Code
 	[15391] = {}, -- Adventurer of Zereth Mortis
 	[15392] = {}, -- Dune Dominance
+	[16676] = {}, -- Adventurer of the Waking Shores
+	[16677] = {}, -- Adventurer of the Ohn'ahran Plains
+	[16678] = {}, -- Adventurer of the Azure Span
+	[16679] = {}, -- Adventurer of the Thaldraszus
 }
 ns.achievements = achievements
 local mobs_to_achievement = {
