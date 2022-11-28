@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v2022.27
+
+* Dragonflight data added. It's incomplete (some achievement-rares were never even seen in the beta period), so expect a bunch of releases over the next month or two.
+* Improve the model position/background in a few of the non-default popup skins
+* Workaround for the 10.0 model-interior-alpha bug in the popup models (the model still being visible until combat ended if a popup auto-hid in combat)
+
 ## Changed in v2022.26
 
 * Classic: route lines were sometimes being hidden behind explored territory on maps
