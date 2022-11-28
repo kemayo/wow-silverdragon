@@ -51,19 +51,19 @@ local Condition = Class{
 	Matched = function() return false end,
 }
 local RankedCondition = Class{
-    __parent = Condition,
-    Initialize = function(self, id, rank)
-        self.id = id
-        self.rank = rank
-    end,
-    Label = function(self)
-        -- this relies greatly on render_string working for self.type
-        local label = Condition.Label(self)
-        if self.rank then
-            return AZERITE_ESSENCE_TOOLTIP_NAME_RANK:format(label, self.rank)
-        end
-        return label
-    end
+	__parent = Condition,
+	Initialize = function(self, id, rank)
+		self.id = id
+		self.rank = rank
+	end,
+	Label = function(self)
+		-- this relies greatly on render_string working for self.type
+		local label = Condition.Label(self)
+		if self.rank then
+			return AZERITE_ESSENCE_TOOLTIP_NAME_RANK:format(label, self.rank)
+		end
+		return label
+	end
 }
 local Negated = function(parent) return {
 	__parent = parent,
@@ -83,43 +83,49 @@ ns.conditions.AuraActive = Class{
 }
 ns.conditions.AuraInactive = Class(Negated(ns.conditions.AuraActive))
 
+ns.conditions.SpellKnown = Class{
+	__parent = Condition,
+	type = 'spell',
+	Matched = function(self) return IsSpellKnown(self.id) end,
+}
+
 ns.conditions.Covenant = Class{
-    __parent = RankedCondition,
-    type = 'covenant',
-    Matched = function(self)
-        if self.id ~= C_Covenants.GetActiveCovenantID() then
-            return false
-        end
-        if self.rank then
-            return self.rank <= C_CovenantSanctumUI.GetRenownLevel()
-        end
-        return true
-    end,
+	__parent = RankedCondition,
+	type = 'covenant',
+	Matched = function(self)
+		if self.id ~= C_Covenants.GetActiveCovenantID() then
+			return false
+		end
+		if self.rank then
+			return self.rank <= C_CovenantSanctumUI.GetRenownLevel()
+		end
+		return true
+	end,
 }
 
 ns.conditions.Faction = Class{
-    __parent = RankedCondition,
-    type = 'faction',
-    Matched = function(self)
-        local name, _, standingid = GetFactionInfoByID(self.id)
-        if name and standingid then
-            return self.rank <= standingid
-        end
-    end,
+	__parent = RankedCondition,
+	type = 'faction',
+	Matched = function(self)
+		local name, _, standingid = GetFactionInfoByID(self.id)
+		if name and standingid then
+			return self.rank <= standingid
+		end
+	end,
 }
 
 ns.conditions.MajorFaction = Class{
-    __parent = RankedCondition,
-    type = 'majorfaction',
-    Matched = function(self)
-        local info = C_MajorFactions.GetMajorFactionData(self.id)
-        if info then
-            if self.rank then
-                return self.rank <= info.renownLevel
-            end
-            return info.isUnlocked
-        end
-    end,
+	__parent = RankedCondition,
+	type = 'majorfaction',
+	Matched = function(self)
+		local info = C_MajorFactions.GetMajorFactionData(self.id)
+		if info then
+			if self.rank then
+				return self.rank <= info.renownLevel
+			end
+			return info.isUnlocked
+		end
+	end,
 }
 
 ns.conditions.GarrisonTalent = Class{
@@ -160,6 +166,11 @@ ns.conditions.Item = Class{
 	Matched = function(self) return GetItemCount(self.id, true) >= (self.count or 1) end,
 }
 
+ns.conditions.Toy = Class{
+	__parent = ns.conditions.Item,
+	Matched = function(self) return PlayerHasToy(self.id) end,
+}
+
 ns.conditions.QuestComplete = Class{
 	__parent = Condition,
 	type = 'quest',
@@ -170,7 +181,36 @@ ns.conditions.QuestIncomplete = Class(Negated(ns.conditions.QuestComplete))
 ns.conditions.WorldQuestActive = Class{
 	__parent = Condition,
 	type = 'worldquest',
-	Matched = function(self) return C_TaskQuest.IsActive(self.id) end,
+	Matched = function(self) return C_TaskQuest.IsActive(self.id) or C_QuestLog.IsQuestFlaggedCompleted(self.id) end,
+}
+
+ns.conditions.Vignette = Class{
+	__parent = Condition,
+	type = 'vignette',
+	FindVignette = function(self)
+		local vignettes = C_VignetteInfo.GetVignettes()
+		for _, vignetteGUID in ipairs(vignettes) do
+			local vignetteInfo = C_VignetteInfo.GetVignetteInfo(vignetteGUID)
+			if vignetteInfo and vignetteInfo.vignetteID == self.id then
+				return vignetteInfo
+			end
+		end
+		return false
+	end,
+	Matched = function(self) return self:FindVignette() end,
+	Label = function(self)
+		local vignetteInfo = self:FindVignette()
+		if vignetteInfo and vignetteInfo.name then
+			return vignetteInfo.name
+		end
+		return self.__parent.Label(self)
+	end,
+}
+
+ns.conditions.Level = Class{
+	__parent = Condition,
+	type = 'level',
+	Matched = function(self) return UnitLevel('player') >= self.id end,
 }
 
 ns.conditions.CalendarEvent = Class{
