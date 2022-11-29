@@ -24,6 +24,8 @@ minor transformations applied:
 s/{ -- (.+)/{\n\t\tlabel="$1",/g
 --]]
 
+-- Rares
+
 core:RegisterHandyNotesData("Dragonflight", FORBIDDENREACHINTRO, {
 	[32884100] = {
 		label="Deathrip",
@@ -1458,3 +1460,26 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
         vignette=5437,
     },
 })
+
+-- Treasures
+
+core:RegisterTreasureData("Dragonflight", {
+    [5468] = {
+        label="Expedition Scout's Pack",
+        loot={
+            {192764, mount=1617, note="Renown 25", requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 25)}, -- Verdant Skitterfly
+            {199061, quest=70527}, -- A Guide to Rare Fish
+            {194540, quest=67046}, -- Nokhud Armorer's Notes
+            201387, -- Drakonid Stalker's Halberd
+            201388, -- Dragonspawn Wingtipped Staff
+            201389, -- Wingcrest Battle Staff
+            201390, -- Devastating Drakonid Waraxe
+            201392, -- Drakonid Striker's Cutlass
+            201393, -- Dragonspawn Spellweaver's Focus
+            201394, -- Drakonid's Jade Bulwark
+            201395, -- Wingcrest Scimitar
+            201396, -- Hidepiercing Claw Extensions
+        },
+        requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 2),
+    },
+}, true)
