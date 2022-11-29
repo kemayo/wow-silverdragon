@@ -217,7 +217,7 @@ function ns.Loot.HasLoot(id, ...)
 			lootCount = lootCount + 1
 		end
 	end
-	return lootCount > 0, lootCount
+	return true, #loot, lootCount
 end
 do
 	local function make_iter(test)
@@ -458,7 +458,11 @@ local Details = {
 			)
 		end
 		if itemdata.requires then
-			tooltip:AddLine(core.conditions.summarize(itemdata.requires))
+			local active = core.conditions.check(itemdata.requires)
+			tooltip:AddLine(
+				core:RenderString(core.conditions.summarize(itemdata.requires)),
+				(active and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+			)
 		end
 		tooltip:Show()
 	end,
@@ -675,6 +679,11 @@ do
 		end
 	end
 
+	-- from ItemButtonTemplate.lua
+	local function GetItemButtonIconTexture(button)
+		return button.Icon or button.icon or _G[button:GetName().."IconTexture"]
+	end
+
 	local windowPool = CreateFramePool("Frame", UIParent, "BackdropTemplate", function(framePool, frame)
 		frame:Hide()
 		frame:ClearAllPoints()
@@ -698,6 +707,7 @@ do
 		button:ClearAllPoints()
 		button:SetParent(nil)
 		button:Hide()
+		GetItemButtonIconTexture(button):SetDesaturated(false)
 
 		-- classic
 		if not button.SetItem then
@@ -874,6 +884,9 @@ do
 						button.KnownIcon:Show()
 					end
 				end
+				if not suitable(item) then
+					GetItemButtonIconTexture(button):SetDesaturated(true)
+				end
 			end
 
 			button:Show()
@@ -882,7 +895,7 @@ do
 		AddLoot = function(self, loot)
 			for _, item in ipairs(loot) do
 				local itemid = type(item) == "table" and item[1] or item
-				if itemid and suitable(item) then
+				if itemid then
 					self:AddItem(itemid, item)
 				end
 			end

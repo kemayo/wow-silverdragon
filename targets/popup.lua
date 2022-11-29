@@ -57,10 +57,10 @@ function module:RefreshData(popup)
 	else
 		self:RefreshLootData(popup)
 	end
-	local hasLoot, lootCount = ns.Loot.HasLoot(data.id, data.type == "loot")
+	local hasLoot, lootCount, suitableLootCount = ns.Loot.HasLoot(data.id, data.type == "loot")
 	if hasLoot then
 		popup.lootIcon:Show()
-		popup.lootIcon.count:SetText(lootCount)
+		popup.lootIcon.count:SetText(suitableLootCount)
 		ns.Loot.Cache(data.id, data.type == "loot")
 	else
 		popup.lootIcon:Hide()
