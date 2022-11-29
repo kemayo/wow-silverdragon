@@ -144,6 +144,9 @@ local itemRestricted = function(item)
 	if item.class and select(2, UnitClass("player")) ~= item.class then
 		return true
 	end
+	if item.requires and not core.conditions.check(item.requires) then
+		return true
+	end
 	return false
 end
 local itemIsKnowable = function(item)
@@ -453,6 +456,9 @@ local Details = {
 				ITEM_REQ_SKILL:format(RAID_CLASS_COLORS[itemdata.class]:WrapTextInColorCode(LOCALIZED_CLASS_NAMES_FEMALE[itemdata.class])),
 				(active and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
 			)
+		end
+		if itemdata.requires then
+			tooltip:AddLine(core.conditions.summarize(itemdata.requires))
 		end
 		tooltip:Show()
 	end,
