@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v2022.28
+
+* Changed the behavior of the loot button on the popup a bit: it'll now always show if there's any loot, but loot not suitable for your character will be grayed out
+* Add the Expedition Scout's Pack loot-data for vignettes
+* Fixed an error that would pop up on logging in for people playing Wrath
+
 ## Changed in v2022.27
 
 * Dragonflight data added. It's incomplete (some achievement-rares were never even seen in the beta period), so expect a bunch of releases over the next month or two.
