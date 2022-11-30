@@ -14,7 +14,7 @@ import requests
 import requests_cache
 from requests.adapters import HTTPAdapter, Retry
 
-from npc import lua, petfamilies
+from npc import lua, petfamilies, pack_coords
 try:
     from zones import zones as zones_raw
 except ImportError:
@@ -114,6 +114,15 @@ def fetchnpc(npc):
             print("couldn't find npc data")
             return False
 
+    # var g_mapperData = {"13644":[{"count":1,"coords":[[33,76.4]],"uiMapId":2022,"uiMapName":"The Waking Shores"}]};
+    for locationid, locationdata in re.findall(r"g_mapperData\s*=\s*{\"(\d+)\":\[(.+)\]};", r.text):
+        locationdata = yaml.load(locationdata, Loader=Loader)
+        if int(locationid) in data["location"]:
+            if "locations" not in data:
+                data["locations"] = []
+            locationdata["coords"] = [pack_coords(coord[0]/100, coord[1]/100) for coord in locationdata["coords"]]
+            data["locations"].append(locationdata)
+
     if m := re.search(r"^new Listview\(({template: 'item', id: 'drops',.+})\);$", r.text, re.MULTILINE):
         lootdata = yaml.load(m.group(1).replace("undefined", "null"), Loader=Loader)
         data["loot"] = []
@@ -144,7 +153,8 @@ def cleanloot(item):
 def output_npc(output, coords, data, indentlevel=1):
     indent = "\t" * indentlevel
     output.extend((
-        f"{indent}[{coords[0]}] = {{ -- {data['name']}{len(coords) > 1 and f' +{len(coords)}' or ''}\n",
+        f"{indent}[{coords[0]}] = {{ -- {data['name']}\n",
+        len(coords) > 1 and f"{indent}\t-- {coords}\n" or "",
         f"{indent}\tquest={data.get('quest', 'nil')},\n",
         f"{indent}\tnpc={npcid},\n",
     ))
@@ -267,8 +277,14 @@ if __name__ == '__main__':
             npc = fetchnpc(int(npcid))
             if "loot" in npc:
                 npc["loot"] = [additemdata(item) for item in npc["loot"]]
-            # print(lua.serialize(npc), key=__keysort, trailingcomma=True))
-            output_npc(output, [0], npc, 0)
+            # print(lua.serialize(npc, key=__keysort, trailingcomma=True))
+            if "locations" in npc:
+                for location in npc["locations"]:
+                    output.extend(("-- ", location["uiMapName"], " (", str(location["uiMapId"]), ")\n"))
+                    output_npc(output, location["coords"], npc, 0)
+            else:
+                # no locations
+                output_npc(output, [0], npc, 0)
         print("".join(output))
     else:
         for f in glob.glob(args.input, recursive=True):
