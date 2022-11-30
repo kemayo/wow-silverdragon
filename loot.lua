@@ -208,7 +208,7 @@ local function suitable(item)
 end
 function ns.Loot.HasLoot(id, ...)
 	local loot = ns.Loot.GetLootTable(id, ...)
-	if not loot then
+	if not loot or #loot == 0 then
 		return false
 	end
 	local lootCount = 0
