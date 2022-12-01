@@ -223,6 +223,8 @@ read_globals = {
     "CreateFromMixins",
     "CreateAndInitFromMixin",
     "Mixin",
+    "Item",
+    "ContinuableContainer",
     "InterfaceOptionsFrame_OpenToCategory",
     "CloseDropDownMenus",
     "ToggleDropDownMenu",
