@@ -206,8 +206,8 @@ local function suitable(item)
 	if itemRestricted(item) then return false end
 	return true
 end
-function ns.Loot.HasLoot(id, ...)
-	local loot = ns.Loot.GetLootTable(id, ...)
+function ns.Loot.HasLoot(id, isTreasure)
+	local loot = ns.Loot.GetLootTable(id, isTreasure)
 	if not loot or #loot == 0 then
 		return false
 	end
@@ -218,6 +218,16 @@ function ns.Loot.HasLoot(id, ...)
 		end
 	end
 	return true, #loot, lootCount
+end
+function ns.Loot.OnceAllLootLoaded(id, isTreasure, callback)
+	local loot = ns.Loot.GetLootTable(id, isTreasure)
+	if not loot or #loot == 0 then return callback(loot) end
+	local continuableContainer = ContinuableContainer:Create()
+	for _, item in ipairs(loot) do
+		local itemid = type(item) == "table" and item[1] or item
+		continuableContainer:AddContinuable(Item:CreateFromItemID(itemid))
+	end
+	continuableContainer:ContinueOnLoad(function() callback(loot) end)
 end
 do
 	local function make_iter(test)

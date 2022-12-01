@@ -57,20 +57,30 @@ function module:RefreshData(popup)
 	else
 		self:RefreshLootData(popup)
 	end
-	local hasLoot, lootCount, suitableLootCount = ns.Loot.HasLoot(data.id, data.type == "loot")
-	if hasLoot then
+	local isTreasure = data.type == "loot"
+	local anyLoot = ns.Loot.GetLootTable(data.id, isTreasure)
+	if anyLoot and #anyLoot > 0 then
+		popup.lootIcon.count:SetText("?")
 		popup.lootIcon:Show()
-		popup.lootIcon.count:SetText(suitableLootCount)
-		ns.Loot.Cache(data.id, data.type == "loot")
 	else
 		popup.lootIcon:Hide()
 	end
-	if ns.Loot.Status(data.id, true, data.type == "loot") then
-		-- all loot is collected
-		popup.lootIcon.complete:Show()
-	else
-		popup.lootIcon.complete:Hide()
-	end
+	ns.Loot.OnceAllLootLoaded(data.id, data.type == "loot", function(loot)
+		if popup.waitingToHide then return end
+		local hasLoot, lootCount, suitableLootCount = ns.Loot.HasLoot(data.id, isTreasure)
+		if hasLoot then
+			popup.lootIcon:Show()
+			popup.lootIcon.count:SetText(suitableLootCount)
+		else
+			popup.lootIcon:Hide()
+		end
+		if ns.Loot.Status(data.id, true, data.type == "loot") then
+			-- all loot is collected
+			popup.lootIcon.complete:Show()
+		else
+			popup.lootIcon.complete:Hide()
+		end
+	end)
 end
 
 function module:RefreshMobData(popup)
