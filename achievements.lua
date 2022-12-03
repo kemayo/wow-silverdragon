@@ -522,6 +522,7 @@ local achievements = {
 	[16677] = {}, -- Adventurer of the Ohn'ahran Plains
 	[16678] = {}, -- Adventurer of the Azure Span
 	[16679] = {}, -- Adventurer of the Thaldraszus
+	[16424] = {completed=EMOTE410_CMD1}, -- Who's A Good Bakar
 }
 ns.achievements = achievements
 local mobs_to_achievement = {

@@ -290,6 +290,7 @@ read_globals = {
     "CTRL_KEY_TEXT",
     "DEFAULT",
     "DRAG_MODEL",
+    "EMOTE410_CMD1",
     "ENABLE",
     "ENCOUNTER_JOURNAL_ITEM",
     "ERR_USE_LOCKED_WITH_ITEM_S",
