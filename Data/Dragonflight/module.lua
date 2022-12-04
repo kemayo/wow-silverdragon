@@ -498,7 +498,7 @@ core:RegisterMobData("Dragonflight", {
 			{69205480, 69405940, 67606020, 63605860, r=1, g=1, b=0},
 		}},
 	},
-})
+}, true)
 core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 	-- https://www.wowhead.com/beta/achievement=16677/adventurer-of-the-ohnahran-plains
 	--[[
