@@ -90,1396 +90,1396 @@ core:RegisterHandyNotesData("Dragonflight", FORBIDDENREACHINTRO, {
 core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 	[52535855] = {
 		label="Gushgut the Beaksinker",
-        criteria=56033,
-        quest=70718, -- didn't actually trigger?
-        npc=196056,
-        loot={
-            {197098, quest=69299}, -- Highland Drake: Finned Back
-        },
-        vignette=5380,
-    },
-    --[[
-    [] = {
+		criteria=56033,
+		quest=70718, -- didn't actually trigger?
+		npc=196056,
+		loot={
+			{197098, quest=69299}, -- Highland Drake: Finned Back
+		},
+		vignette=5380,
+	},
+	--[[
+	[] = {
 		label="Nulltheria the Void Gazer",
-        criteria=56034,
-        quest=nil,
-        npc=193256,
-        loot={},
-    },
-    --]]
-    [58774034] = {
+		criteria=56034,
+		quest=nil,
+		npc=193256,
+		loot={},
+	},
+	--]]
+	[58774034] = {
 		label="Anhydros the Tidetaker",
-        criteria=56035,
-        quest=nil,
-        npc=187945,
-        loot={},
-        vignette=5069,
-    },
-    [39654122] = {
+		criteria=56035,
+		quest=nil,
+		npc=187945,
+		loot={},
+		vignette=5069,
+	},
+	[39654122] = {
 		label="Skewersnout",
-        criteria=56036,
-        quest=nil,
-        npc=193181,
-        loot={},
-    },
-    [43427361] = {
+		criteria=56036,
+		quest=nil,
+		npc=193181,
+		loot={},
+	},
+	[43427361] = {
 		label="Helmet Missingway",
-        -- no quest, no loot, it just deaggros and runs away and you get achievement-credit
-        criteria=56037,
-        quest=nil,
-        npc=193263, -- 199645 is the criteria asset
-        loot={},
-        minimap=true, -- just a neutral mob wandering, no vignette
-    },
-    [48436605] = {
+		-- no quest, no loot, it just deaggros and runs away and you get achievement-credit
+		criteria=56037,
+		quest=nil,
+		npc=193263, -- 199645 is the criteria asset
+		loot={},
+		minimap=true, -- just a neutral mob wandering, no vignette
+	},
+	[48436605] = {
 		label="Brundin the Dragonbane",
-        criteria=56038,
-        quest=nil,
-        npc=192738,
-        loot={},
-    },
-    [72824701] = {
+		criteria=56038,
+		quest=nil,
+		npc=192738,
+		loot={},
+	},
+	[72824701] = {
 		label="Drakewing",
-        criteria=56039,
-        quest=nil,
-        npc=193217,
-        loot={},
-    },
-    [45413562] = {
+		criteria=56039,
+		quest=nil,
+		npc=193217,
+		loot={},
+	},
+	[45413562] = {
 		label="Thunderous Matriarch",
-        criteria=56040,
-        quest=69841,
-        npc=193148,
-        loot={},
-        vignette=5174,
-    },
-    [54897110] = {
+		criteria=56040,
+		quest=69841,
+		npc=193148,
+		loot={},
+		vignette=5174,
+	},
+	[54897110] = {
 		label="Azra's Prized Peony",
-        criteria=56041,
-        quest=69839,
-        npc=193135,
-        loot={},
-        vignette=5172,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --[[
-    [] = {
+		criteria=56041,
+		quest=69839,
+		npc=193135,
+		loot={},
+		vignette=5172,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--[[
+	[] = {
 		label="Snappy",
-        criteria=56042,
-        quest=nil,
-        npc=193228,
-        loot={},
-    },
-    --]]
-    [82214945] = {
+		criteria=56042,
+		quest=nil,
+		npc=193228,
+		loot={},
+	},
+	--]]
+	[82214945] = {
 		label="O'nank Shorescour",
-        criteria=56043,
-        quest=70983,
-        npc=193118,
-        loot={},
-        vignette=5167,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [69016482] = {
+		criteria=56043,
+		quest=70983,
+		npc=193118,
+		loot={},
+		vignette=5167,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[69016482] = {
 		label="Smogswog the Firebreather",
-        criteria=56044,
-        quest=69668,
-        npc=193120,
-        loot={},
-        vignette=5169,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --[[
-    [] = {
+		criteria=56044,
+		quest=69668,
+		npc=193120,
+		loot={},
+		vignette=5169,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--[[
+	[] = {
 		label="Amethyzar the Glittering",
-        criteria=56045,
-        quest=69838,
-        npc=193132,
-        loot={},
-        vignette=5171,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [] = {
+		criteria=56045,
+		quest=69838,
+		npc=193132,
+		loot={},
+		vignette=5171,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[] = {
 		label="Magmaton",
-        criteria=56046,
-        quest=70979,
-        npc=186827,
-        loot={},
-        vignette=5116,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [] = {
+		criteria=56046,
+		quest=70979,
+		npc=186827,
+		loot={},
+		vignette=5116,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[] = {
 		label="Massive Magmashell",
-        criteria=56047,
-        quest=69848,
-        npc=193152,
-        loot={},
-        vignette=5175,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --]]
-    [33417637] = {
+		criteria=56047,
+		quest=69848,
+		npc=193152,
+		loot={},
+		vignette=5175,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--]]
+	[33417637] = {
 		label="Forgotten Gryphon",
-        criteria=56048,
-        quest=72130,
-        npc=193154,
-        loot={
-            200858, -- Plume of the Forgotten
-        },
-        vignette=5383,
-    },
-    --[[
-    [] = {
+		criteria=56048,
+		quest=72130,
+		npc=193154,
+		loot={
+			200858, -- Plume of the Forgotten
+		},
+		vignette=5383,
+	},
+	--[[
+	[] = {
 		label="Enkine the Voracious",
-        criteria=56049,
-        quest=72128,
-        npc=193134,
-        loot={},
-        vignette=5382,
-    },
-    --]]
-    [27017601] = {
+		criteria=56049,
+		quest=72128,
+		npc=193134,
+		loot={},
+		vignette=5382,
+	},
+	--]]
+	[27017601] = {
 		label="Captain Lancer",
-        criteria=56050,
-        quest=72127,
-        npc=193198,
-        loot={
-            200286, -- Dragonbane Lance
-        },
-        vignette=5385,
-    },
-    [64456922] = {
+		criteria=56050,
+		quest=72127,
+		npc=193198,
+		loot={
+			200286, -- Dragonbane Lance
+		},
+		vignette=5385,
+	},
+	[64456922] = {
 		label="Possessive Hornswog",
-        criteria=56051,
-        quest=67048, -- 70864 for cave-access
-        npc=192362,
-        loot={
-            {199916, pet=3365}, -- Roseate Hopper
-        },
-        vignette=5139, -- Hidden Hornswog Hoard
-        atlas="VignetteLootElite", scale=1.2,
-        note="Bring {item:200064}, {item:200065}, and {item:200066} here to enter",
-        related={
-            [47738363] = {quest=70864,label="{item:200064}",inbag=200064,atlas="Islands-AzeriteChest",}, -- Marmoni's Prize
-            [39648469] = {quest=70864,label="{item:200065}",inbag=200065,atlas="Islands-AzeriteChest",}, -- Adventurer's Lost Soap Bar
-            [66185530] = {quest=70864,label="{item:200066}",inbag=200066,atlas="Islands-AzeriteChest",}, -- Well-Preserved Bone
-        },
-    },
-    --[[
-    [] = {
+		criteria=56051,
+		quest=67048, -- 70864 for cave-access
+		npc=192362,
+		loot={
+			{199916, pet=3365}, -- Roseate Hopper
+		},
+		vignette=5139, -- Hidden Hornswog Hoard
+		atlas="VignetteLootElite", scale=1.2,
+		note="Bring {item:200064}, {item:200065}, and {item:200066} here to enter",
+		related={
+			[47738363] = {quest=70864,label="{item:200064}",inbag=200064,atlas="Islands-AzeriteChest",}, -- Marmoni's Prize
+			[39648469] = {quest=70864,label="{item:200065}",inbag=200065,atlas="Islands-AzeriteChest",}, -- Adventurer's Lost Soap Bar
+			[66185530] = {quest=70864,label="{item:200066}",inbag=200066,atlas="Islands-AzeriteChest",}, -- Well-Preserved Bone
+		},
+	},
+	--[[
+	[] = {
 		label="Worldcarver A'tir",
-        criteria=56052,
-        quest=70763,
-        npc=186859,
-        loot={},
-        vignette=5110,
-    },
-    --]]
-    [31825440] = {
+		criteria=56052,
+		quest=70763,
+		npc=186859,
+		loot={},
+		vignette=5110,
+	},
+	--]]
+	[31825440] = {
 		label="Death's Shadow",
-        criteria=56053,
-        quest=67027, -- check
-        npc=190985,
-        loot={},
-        note="Give 20x{item:191264:Restored Obsidian Key} to {npc:191640:Sabellian} to trigger {quest:67027}",
-        vignette=5113,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [23825742] = {
+		criteria=56053,
+		quest=67027, -- check
+		npc=190985,
+		loot={},
+		note="Give 20x{item:191264:Restored Obsidian Key} to {npc:191640:Sabellian} to trigger {quest:67027}",
+		vignette=5113,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[23825742] = {
 		label="Shas'ith",
-        criteria=56054,
-        quest=66903, -- check
-        npc=189822,
-        loot={},
-        note="Give 20x{item:191264:Restored Obsidian Key} to {npc:186681:Wrathion} to trigger {quest:66903}",
-        vignette=5108,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [33748639] = {
+		criteria=56054,
+		quest=66903, -- check
+		npc=189822,
+		loot={},
+		note="Give 20x{item:191264:Restored Obsidian Key} to {npc:186681:Wrathion} to trigger {quest:66903}",
+		vignette=5108,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[33748639] = {
 		label="Lepidoralia the Resplendent",
-        criteria=56055,
-        quest=69891,
-        npc=193266,
-        loot={},
-        note="In the Fluttering Cavern",
-        vignette=5209, -- Resplendent Shimmerwing
-        path=35228165,
-    },
-    [25825982] = {
+		criteria=56055,
+		quest=69891,
+		npc=193266,
+		loot={},
+		note="In the Fluttering Cavern",
+		vignette=5209, -- Resplendent Shimmerwing
+		path=35228165,
+	},
+	[25825982] = {
 		label="Cauldronbearer Blakor",
-        criteria=56056,
-        quest=nil,
-        npc=186783,
-        loot={},
-        vignette=5480,
-    },
-    [25286032] = {
+		criteria=56056,
+		quest=nil,
+		npc=186783,
+		loot={},
+		vignette=5480,
+	},
+	[25286032] = {
 		label="Rohzor Forgesmash",
-        criteria=56057,
-        quest=nil,
-        npc=187598,
-        loot={},
-    },
-    [33115569] = {
+		criteria=56057,
+		quest=nil,
+		npc=187598,
+		loot={},
+	},
+	[33115569] = {
 		label="Turboris",
-        criteria=56058,
-        quest=nil,
-        npc=187886,
-        loot={},
-        vignette=5109,
-    },
-    [28635882] = {
+		criteria=56058,
+		quest=nil,
+		npc=187886,
+		loot={},
+		vignette=5109,
+	},
+	[28635882] = {
 		label="Battlehorn Pyrhus",
-        criteria=56059,
-        quest=nil,
-        npc=190986,
-        loot={},
-        vignette=5112, -- and 5114
-    },
-    [29245162] = {
+		criteria=56059,
+		quest=nil,
+		npc=190986,
+		loot={},
+		vignette=5112, -- and 5114
+	},
+	[29245162] = {
 		label="Char",
-        criteria=56060,
-        quest=nil,
-        npc=190991,
-        loot={},
-        vignette=5115,
-    },
-    [30226045] = {
+		criteria=56060,
+		quest=nil,
+		npc=190991,
+		loot={},
+		vignette=5115,
+	},
+	[30226045] = {
 		label="Rasnar the War Ender",
-        criteria=56061,
-        quest=nil,
-        npc=193232,
-        loot={},
-    },
-    [32215221] = {
+		criteria=56061,
+		quest=nil,
+		npc=193232,
+		loot={},
+	},
+	[32215221] = {
 		label="Morchok",
-        criteria=56988,
-        quest=66901, -- check
-        npc=187306,
-        loot={},
-        note="Give 20x{item:191264:Restored Obsidian Key} to {npc:187275:Igys the Believer} to trigger {quest:66901}",
-        vignette=5388, -- 5119 for "Morchock Reformed"?
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [47297386] = {
+		criteria=56988,
+		quest=66901, -- check
+		npc=187306,
+		loot={},
+		note="Give 20x{item:191264:Restored Obsidian Key} to {npc:187275:Igys the Believer} to trigger {quest:66901}",
+		vignette=5388, -- 5119 for "Morchock Reformed"?
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[47297386] = {
 		label="Shadeslash Trakken",
-        criteria=56989,
-        quest=70719,
-        npc=193271,
-        loot={},
-        path=48457426,
-        vignette=5381,
-    },
-    --[[
-    [] = {
+		criteria=56989,
+		quest=70719,
+		npc=193271,
+		loot={},
+		path=48457426,
+		vignette=5381,
+	},
+	--[[
+	[] = {
 		label="Slurpo, the Incredible Snail",
-        criteria=57003,
-        quest=72126,
-        npc=193175,
-        loot={},
-        vignette=5384,
-    },
-    --]]
+		criteria=57003,
+		quest=72126,
+		npc=193175,
+		loot={},
+		vignette=5384,
+	},
+	--]]
 }, {
 	achievement=16676, -- Adventurer
 })
 core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 	[46725013] = {
 		label="Primal Scythid Queen",
-        quest=66074, -- 57559, 62396
-        npc=184853,
-        loot={
-            200563, -- Primal Ritual Shell
-            200445, -- Lucky Hunting Charm
-            200195, -- Thunderscale Legguards
-        },
-        vignette=5055,
-    },
-    [64433340] = {
+		quest=66074, -- 57559, 62396
+		npc=184853,
+		loot={
+			200563, -- Primal Ritual Shell
+			200445, -- Lucky Hunting Charm
+			200195, -- Thunderscale Legguards
+		},
+		vignette=5055,
+	},
+	[64433340] = {
 		label="Dragonhunter Igordan",
-        quest=66956, -- 72838
-        npc=191611,
-        loot={
-            200757, -- Qalashi War-Helm
-            {197005, quest=69205}, -- Cliffside Wylderdrake: Horned Nose
-            {197019, quest=69219}, -- Cliffside Wylderdrake: Blunt Spiked Tail
-            -- 198876, -- Technique: Weathered Explorer's Stave (general drop?)
-        },
-        worldquest=65994,
-        vignette=5126,
-    },
-    [54808220] = {
+		quest=66956, -- 72838
+		npc=191611,
+		loot={
+			200757, -- Qalashi War-Helm
+			{197005, quest=69205}, -- Cliffside Wylderdrake: Horned Nose
+			{197019, quest=69219}, -- Cliffside Wylderdrake: Blunt Spiked Tail
+			-- 198876, -- Technique: Weathered Explorer's Stave (general drop?)
+		},
+		worldquest=65994,
+		vignette=5126,
+	},
+	[54808220] = {
 		label="Klozicc the Ascended",
-        quest=66960, -- also 72841
-        npc=187209,
-        loot={
-            {197023, quest=69223}, -- Cliffside Wylderdrake: Maned Neck
-            {197602, quest=69806}, -- Windborne Velocidrake: Cluster Horns
-            {200198, toy=true}, -- Primalist Prison
-            200246, -- Lost Delving Lamp
-        },
-        vignette=5127,
-    },
-    [77602220] = {
+		quest=66960, -- also 72841
+		npc=187209,
+		loot={
+			{197023, quest=69223}, -- Cliffside Wylderdrake: Maned Neck
+			{197602, quest=69806}, -- Windborne Velocidrake: Cluster Horns
+			{200198, toy=true}, -- Primalist Prison
+			200246, -- Lost Delving Lamp
+		},
+		vignette=5127,
+	},
+	[77602220] = {
 		label="Ancient Hornswog",
-        quest=66076, -- verify; vignette
-        npc=187111,
-        loot={
-            {196992, quest=69192}, -- Cliffside Wylderdrake: Heavy Horns
-            {197403, quest=69604}, -- Renewed Proto-Drake: Club Tail
-            {200249, toy=true}, -- Mage's Chewed Wand
-            200442, -- Basilisk Hide Jerkin
-        },
-        vignette=5057,
-    },
-    [46715715] = {
+		quest=66076, -- verify; vignette
+		npc=187111,
+		loot={
+			{196992, quest=69192}, -- Cliffside Wylderdrake: Heavy Horns
+			{197403, quest=69604}, -- Renewed Proto-Drake: Club Tail
+			{200249, toy=true}, -- Mage's Chewed Wand
+			200442, -- Basilisk Hide Jerkin
+		},
+		vignette=5057,
+	},
+	[46715715] = {
 		label="Monsoo, The Boiling Rage",
-        -- This is rare-flagged, but has no quest, no loot, and no criteria-completion...
-        quest=nil,
-        npc=190718,
-        loot={},
-        vignette=nil,
-        note="Kill {npc:190719:Primalist Arlin} to trigger",
-    },
-    [54512137] = {
+		-- This is rare-flagged, but has no quest, no loot, and no criteria-completion...
+		quest=nil,
+		npc=190718,
+		loot={},
+		vignette=nil,
+		note="Kill {npc:190719:Primalist Arlin} to trigger",
+	},
+	[54512137] = {
 		label="Firava the Rekindler",
-        quest=72839, -- also 70648
-        npc=195915,
-        loot={
-            {197135, quest=69336}, -- Highland Drake: Toothy Mouth
-            200133, -- Volcanic Chakram
-            200217, -- Blazing Essence
-        },
-        vignette=5372,
-    },
-    [60598286] = {
+		quest=72839, -- also 70648
+		npc=195915,
+		loot={
+			{197135, quest=69336}, -- Highland Drake: Toothy Mouth
+			200133, -- Volcanic Chakram
+			200217, -- Blazing Essence
+		},
+		vignette=5372,
+	},
+	[60598286] = {
 		label="Terillod the Devout",
-        quest=72850, -- also 70751, 71240
-        npc=193171,
-        loot={
-            200208, -- Cloud Coalescing Handwraps
-        },
-        vignette=5387,
-    },
-    [28047868] = {
+		quest=72850, -- also 70751, 71240
+		npc=193171,
+		loot={
+			200208, -- Cloud Coalescing Handwraps
+		},
+		vignette=5387,
+	},
+	[28047868] = {
 		label="Beakers",
-        -- no quest, no vignette, just a random rare-flagged mob
-        quest=nil,
-        npc=193177,
-        loot={},
-    },
+		-- no quest, no vignette, just a random rare-flagged mob
+		quest=nil,
+		npc=193177,
+		loot={},
+	},
 })
 core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
-    -- https://www.wowhead.com/beta/achievement=16677/adventurer-of-the-ohnahran-plains
-    --[[
-    [] = {
+	-- https://www.wowhead.com/beta/achievement=16677/adventurer-of-the-ohnahran-plains
+	--[[
+	[] = {
 		label="Sparkspitter Vrak",
-        criteria=56062,
-        quest=nil,
-        npc=193165,
-        loot={},
-    },
-    --]]
-    [50027484] = {
+		criteria=56062,
+		quest=nil,
+		npc=193165,
+		loot={},
+	},
+	--]]
+	[50027484] = {
 		label="Scav Notail",
-        criteria=56063,
-        quest=69863,
-        npc=193136,
-        loot={},
-        vignette=5187,
-    },
-    --[[
-    [] = {
+		criteria=56063,
+		quest=69863,
+		npc=193136,
+		loot={},
+		vignette=5187,
+	},
+	--[[
+	[] = {
 		label="Enraged Sapphire",
-        criteria=56064,
-        quest=69840,
-        npc=193142,
-        loot={},
-        vignette=5173,
-    },
-    [] = {
+		criteria=56064,
+		quest=69840,
+		npc=193142,
+		loot={},
+		vignette=5173,
+	},
+	[] = {
 		label="Seeker Teryx",
-        criteria=56065,
-        quest=nil,
-        npc=193188,
-        loot={},
-    },
-    --]]
-    [31646421] = {
+		criteria=56065,
+		quest=nil,
+		npc=193188,
+		loot={},
+	},
+	--]]
+	[31646421] = {
 		label="Zenet Avis",
-        criteria=56066,
-        quest=nil,
-        npc=193209,
-        loot={
-            {200879, note="Hatches into..."}, -- Zenet Egg
-            {198825, mount=1672}, -- Zenet Hatchling
-        },
-        note="Flying",
-    },
-    [87406140] = {
+		criteria=56066,
+		quest=nil,
+		npc=193209,
+		loot={
+			{200879, note="Hatches into..."}, -- Zenet Egg
+			{198825, mount=1672}, -- Zenet Hatchling
+		},
+		note="Flying",
+	},
+	[87406140] = {
 		label="Liskheszaera",
-        criteria=56067,
-        quest=nil,
-        npc=197009,
-        loot={},
-    },
-    [29426783] = {
+		criteria=56067,
+		quest=nil,
+		npc=197009,
+		loot={},
+	},
+	[29426783] = {
 		label="Deadwaker Ghendish",
-        criteria=56068,
-        quest=nil,
-        npc=189652,
-        loot={},
-    },
-    --[[
-    [] = {
+		criteria=56068,
+		quest=nil,
+		npc=189652,
+		loot={},
+	},
+	--[[
+	[] = {
 		label="Researcher Sneakwing",
-        criteria=56069,
-        quest=70689,
-        npc=196010,
-        loot={},
-        vignette=5378,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [] = {
+		criteria=56069,
+		quest=70689,
+		npc=196010,
+		loot={},
+		vignette=5378,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[] = {
 		label="Mikrin of the Raging Winds",
-        criteria=56070,
-        quest=69857,
-        npc=193173,
-        loot={},
-        vignette=5183,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [] = {
+		criteria=56070,
+		quest=69857,
+		npc=193173,
+		loot={},
+		vignette=5183,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[] = {
 		label="Ronsak the Decimator",
-        criteria=56071,
-        quest=69878,
-        npc=193227,
-        loot={},
-        vignette=5205,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --]]
-    [53627281] = {
+		criteria=56071,
+		quest=69878,
+		npc=193227,
+		loot={},
+		vignette=5205,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--]]
+	[53627281] = {
 		label="Steamgill",
-        criteria=56072,
-        quest=69667,
-        npc=193123,
-        loot={},
-        vignette=5168,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --[[
-    [] = {
+		criteria=56072,
+		quest=69667,
+		npc=193123,
+		loot={},
+		vignette=5168,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--[[
+	[] = {
 		label="Malsegan",
-        criteria=56073,
-        quest=69871,
-        npc=193212,
-        loot={},
-        vignette=5195,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --]]
-    [60812677] = {
+		criteria=56073,
+		quest=69871,
+		npc=193212,
+		loot={},
+		vignette=5195,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--]]
+	[60812677] = {
 		label="Oshigol",
-        criteria=56074,
-        quest=69877,
-        npc=193235,
-        loot={},
-        note="Patrols",
-        vignette=5199,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [74414762] = {
+		criteria=56074,
+		quest=69877,
+		npc=193235,
+		loot={},
+		note="Patrols",
+		vignette=5199,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[74414762] = {
 		label="Fulgurb",
-        criteria=56075,
-        quest=69856,
-        npc=193170,
-        loot={},
-        vignette=5182,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [58596822] = {
+		criteria=56075,
+		quest=69856,
+		npc=193170,
+		loot={},
+		vignette=5182,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[58596822] = {
 		label="Windseeker Avash",
-        criteria=56076,
-        quest=nil,
-        npc=192045,
-        loot={},
-    },
-    [49496663] = {
+		criteria=56076,
+		quest=nil,
+		npc=192045,
+		loot={},
+	},
+	[49496663] = {
 		label="Eaglemaster Niraak",
-        criteria=56077,
-        quest=nil,
-        npc=192020,
-        loot={
-            {197367, quest=69568}, -- Renewed Proto-Drake: Gray Hair
-        },
-        vignette=5138,
-    },
-    --[[
-    [] = {
+		criteria=56077,
+		quest=nil,
+		npc=192020,
+		loot={
+			{197367, quest=69568}, -- Renewed Proto-Drake: Gray Hair
+		},
+		vignette=5138,
+	},
+	--[[
+	[] = {
 		label="Zarizz",
-        criteria=56078,
-        quest=72364,
-        npc=193140,
-        loot={},
-        vignette=5469,
-    },
-    [] = {
+		criteria=56078,
+		quest=72364,
+		npc=193140,
+		loot={},
+		vignette=5469,
+	},
+	[] = {
 		label="Scaleseeker Mezeri",
-        criteria=56079,
-        quest=69865,
-        npc=193215,
-        loot={},
-        vignette=5190,
-    },
-    --]]
-    [29554146] = {
+		criteria=56079,
+		quest=69865,
+		npc=193215,
+		loot={},
+		vignette=5190,
+	},
+	--]]
+	[29554146] = {
 		label="Shade of Grief",
-        criteria=56080,
-        quest=nil, -- ...no quest changed
-        npc=187559,
-        loot={
-            {196985, quest=69185}, -- Cliffside Wylderdrake: Horned Jaw
-        },
-        vignette=5181, -- Solethus' Gravestone
-    },
-    --[[
-    [] = {
+		criteria=56080,
+		quest=nil, -- ...no quest changed
+		npc=187559,
+		loot={
+			{196985, quest=69185}, -- Cliffside Wylderdrake: Horned Jaw
+		},
+		vignette=5181, -- Solethus' Gravestone
+	},
+	--[[
+	[] = {
 		label="Nokhud Warmaster",
-        criteria=56081,
-        quest=nil,
-        npc=187219,
-        loot={},
-        vignette=5062,
-    },
-    --]]
-    [85221544] = {
+		criteria=56081,
+		quest=nil,
+		npc=187219,
+		loot={},
+		vignette=5062,
+	},
+	--]]
+	[85221544] = {
 		label="Hamett",
-        criteria=56082,
-        quest=nil,
-        npc=187781,
-        loot={},
-    },
-    [80364198] = {
+		criteria=56082,
+		quest=nil,
+		npc=187781,
+		loot={},
+	},
+	[80364198] = {
 		label="Hunter of the Deep",
-        criteria=56083,
-        quest=nil, -- no quest tripped
-        npc=188095,
-        loot={}, -- supplies and centaur rep...
-        vignette=5077, -- vignette wasn't actually shown, just a swarm of no-data vignettes
-    },
-    [80413867] = {
+		criteria=56083,
+		quest=nil, -- no quest tripped
+		npc=188095,
+		loot={}, -- supplies and centaur rep...
+		vignette=5077, -- vignette wasn't actually shown, just a swarm of no-data vignettes
+	},
+	[80413867] = {
 		label="Irontree",
-        criteria=56084,
-        quest=66356,
-        npc=188124,
-        loot={},
-        vignette=5078,
-    },
-    [72222321] = {
+		criteria=56084,
+		quest=66356,
+		npc=188124,
+		loot={},
+		vignette=5078,
+	},
+	[72222321] = {
 		label="Zerimek",
-        criteria=56085,
-        quest=nil,
-        npc=188451,
-        loot={},
-        vignette=5087,
-    },
-    --[[
-    [] = {
+		criteria=56085,
+		quest=nil,
+		npc=188451,
+		loot={},
+		vignette=5087,
+	},
+	--[[
+	[] = {
 		label="Sulfurion",
-        criteria=56086,
-        quest=nil,
-        npc=191842,
-        loot={},
-        vignette=5135,
-    },
-    [] = {
+		criteria=56086,
+		quest=nil,
+		npc=191842,
+		loot={},
+		vignette=5135,
+	},
+	[] = {
 		label="Porta the Overgrown",
-        criteria=56087,
-        quest=nil,
-        npc=191950,
-        loot={},
-        vignette=5136,
-    },
-    [] = {
+		criteria=56087,
+		quest=nil,
+		npc=191950,
+		loot={},
+		vignette=5136,
+	},
+	[] = {
 		label="The Jolly Giant",
-        criteria=56088,
-        quest=nil,
-        npc=195204,
-        loot={},
-        vignette=5352,
-    },
-    --]]
-    [84214784] = {
+		criteria=56088,
+		quest=nil,
+		npc=195204,
+		loot={},
+		vignette=5352,
+	},
+	--]]
+	[84214784] = {
 		label="Windscale the Stormborn",
-        criteria=56089,
-        quest=nil,
-        npc=192364,
-        loot={},
-        vignette=5140,
-    },
-    --[[
-    [] = {
+		criteria=56089,
+		quest=nil,
+		npc=192364,
+		loot={},
+		vignette=5140,
+	},
+	--[[
+	[] = {
 		label="Vaniik the Stormtouched",
-        criteria=56090,
-        quest=nil,
-        npc=192453,
-        loot={},
-        vignette=5143, -- Vaniik the Corrupted
-    },
-    [] = {
+		criteria=56090,
+		quest=nil,
+		npc=192453,
+		loot={},
+		vignette=5143, -- Vaniik the Corrupted
+	},
+	[] = {
 		label="Quackers the Terrible",
-        criteria=56091,
-        quest=nil,
-        npc=192557,
-        loot={},
-        vignette=5144,
-    },
-    [] = {
+		criteria=56091,
+		quest=nil,
+		npc=192557,
+		loot={},
+		vignette=5144,
+	},
+	[] = {
 		label="Cinta the Forgotten",
-        criteria=56092,
-        quest=nil,
-        npc=195186,
-        loot={},
-        vignette=5351,
-    },
-    --]]
-    [42804428] = {
+		criteria=56092,
+		quest=nil,
+		npc=195186,
+		loot={},
+		vignette=5351,
+	},
+	--]]
+	[42804428] = {
 		label="Rustlily",
-        criteria=56093,
-        quest=nil,
-        npc=195223,
-        loot={},
-    },
-    [32823817] = {
+		criteria=56093,
+		quest=nil,
+		npc=195223,
+		loot={},
+	},
+	[32823817] = {
 		label="Makhra the Ashtouched",
-        criteria=56094,
-        quest=nil,
-        npc=195409,
-        loot={},
-        vignette=5365,
-    },
-    --[[
-    [] = {
+		criteria=56094,
+		quest=nil,
+		npc=195409,
+		loot={},
+		vignette=5365,
+	},
+	--[[
+	[] = {
 		label="The Great Enla",
-        criteria=56095,
-        quest=nil,
-        npc=196334,
-        loot={},
-    },
-    [] = {
+		criteria=56095,
+		quest=nil,
+		npc=196334,
+		loot={},
+	},
+	[] = {
 		label="Old Stormhide",
-        criteria=56096,
-        quest=nil,
-        npc=196350,
-        loot={},
-    },
-    --]]
+		criteria=56096,
+		quest=nil,
+		npc=196350,
+		loot={},
+	},
+	--]]
 }, {
-    achievement=16677, -- Adventurer
+	achievement=16677, -- Adventurer
 })
 core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
-    [81447834] = {
+	[81447834] = {
 		label="Seereel, the Spring",
-        achievement=16678, -- Adventurer of the *Azure Span*
-        criteria=56118,
-        quest=nil,
-        npc=193710,
-        loot={},
-    },
-    [81207780] = {
+		achievement=16678, -- Adventurer of the *Azure Span*
+		criteria=56118,
+		quest=nil,
+		npc=193710,
+		loot={},
+	},
+	[81207780] = {
 		label="Astray Splasher",
-        achievement=16678, -- Adventurer of the *Azure Span*
-        criteria=56130,
-        quest=nil,
-        npc=197411,
-        loot={},
-    },
-    [59926695] = {
+		achievement=16678, -- Adventurer of the *Azure Span*
+		criteria=56130,
+		quest=nil,
+		npc=197411,
+		loot={},
+	},
+	[59926695] = {
 		label="Prozela Galeshot",
-        quest=69968, -- 72815 also
-        npc=193669,
-        loot={
-            {197383, quest=69584}, -- Renewed Proto-Drake: Heavy Horns
-        },
-        vignette=5240,
-    },
-    [44904923] = {
+		quest=69968, -- 72815 also
+		npc=193669,
+		loot={
+			{197383, quest=69584}, -- Renewed Proto-Drake: Heavy Horns
+		},
+		vignette=5240,
+	},
+	[44904923] = {
 		label="Skaara",
-        quest=70783, -- 72847 also
-        npc=192949,
-        loot={
-            200442, -- Basilisk Hide Jerkin
-            198411, -- Claw of Preparedness
-            {196976, quest=69176}, -- Cliffside Wylderdrake: Head Mane
-        },
-        vignette=5389,
-    },
-    [26356534] = {
+		quest=70783, -- 72847 also
+		npc=192949,
+		loot={
+			200442, -- Basilisk Hide Jerkin
+			198411, -- Claw of Preparedness
+			{196976, quest=69176}, -- Cliffside Wylderdrake: Head Mane
+		},
+		vignette=5389,
+	},
+	[26356534] = {
 		label="Ripsaw the Stalker",
-        quest=69851, -- also 72845
-        npc=193153,
-        loot={
-            200137, -- Chitin Dreadbringer
-        },
-        vignette=5178,
-    },
-    [22996667] = {
+		quest=69851, -- also 72845
+		npc=193153,
+		loot={
+			200137, -- Chitin Dreadbringer
+		},
+		vignette=5178,
+	},
+	[22996667] = {
 		label="Territorial Coastling",
-        quest=69852, -- also 72851
-        npc=193163,
-        loot={
-            200212, -- Sand-Encrusted Greaves
-            200442, -- Basilisk Hide Jerkin
-        },
-        vignette=5179,
-    },
-    [26073414] = {
+		quest=69852, -- also 72851
+		npc=193163,
+		loot={
+			200212, -- Sand-Encrusted Greaves
+			200442, -- Basilisk Hide Jerkin
+		},
+		vignette=5179,
+	},
+	[26073414] = {
 		label="Ty'foon the Ascended",
-        quest=66970, -- also 72852
-        npc=191354,
-        loot={
-            198429, -- Typhoon Bringer
-        },
-        path=24503340,
-        vignette=5131,
-    },
-    [72615598] = {
+		quest=66970, -- also 72852
+		npc=191354,
+		loot={
+			198429, -- Typhoon Bringer
+		},
+		path=24503340,
+		vignette=5131,
+	},
+	[72615598] = {
 		label="Biryuk",
-        quest=nil,
-        npc=193168,
-        loot={}, -- only supplies and commendations
-    }
+		quest=nil,
+		npc=193168,
+		loot={}, -- only supplies and commendations
+	}
 })
 core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
-    -- https://www.wowhead.com/beta/achievement=16678/adventurer-of-the-azure-span
-    [59405520] = {
+	-- https://www.wowhead.com/beta/achievement=16678/adventurer-of-the-azure-span
+	[59405520] = {
 		label="Wilrive",
-        criteria=56097,
-        quest=69948, -- didn't actually trigger
-        npc=193632,
-        loot={
-            200174, -- Bonesigil Shoulderguards
-        },
-        vignette=5224,
-    },
-    [27804580] = {
+		criteria=56097,
+		quest=69948, -- didn't actually trigger
+		npc=193632,
+		loot={
+			200174, -- Bonesigil Shoulderguards
+		},
+		vignette=5224,
+	},
+	[27804580] = {
 		label="Dragonhunter Gorund",
-        criteria=56098,
-        quest=66956, -- ?
-        npc=193157,
-        loot={},
-        vignette=5126, -- ?
-    },
-    [53003560] = {
+		criteria=56098,
+		quest=66956, -- ?
+		npc=193157,
+		loot={},
+		vignette=5126, -- ?
+	},
+	[53003560] = {
 		label="Arcane Devourer",
-        criteria=56099,
-        quest=nil,
-        npc=194270,
-        loot={},
-        vignette=5267,
-    },
-    [40404840] = {
+		criteria=56099,
+		quest=nil,
+		npc=194270,
+		loot={},
+		vignette=5267,
+	},
+	[40404840] = {
 		label="Mange the Outcast",
-        criteria=56100,
-        quest=nil,
-        npc=198004,
-        loot={},
-    },
-    --[[
-    [] = {
+		criteria=56100,
+		quest=nil,
+		npc=198004,
+		loot={},
+	},
+	--[[
+	[] = {
 		label="Frostpaw",
-        criteria=56101,
-        quest=67148,
-        npc=191356,
-        loot={},
-        vignette=5153,
-    },
-    --]]
-    [57685441] = {
+		criteria=56101,
+		quest=67148,
+		npc=191356,
+		loot={},
+		vignette=5153,
+	},
+	--]]
+	[57685441] = {
 		label="Mucka the Raker",
-        -- ...very prone to resetting+evading and healing to full
-        criteria=56102,
-        quest=nil, -- no quest popped
-        npc=193201,
-        loot={
-            {200249, toy=true}, -- Mage's Chewed Wand
-        },
-    },
-    --[[
-    [] = {
+		-- ...very prone to resetting+evading and healing to full
+		criteria=56102,
+		quest=nil, -- no quest popped
+		npc=193201,
+		loot={
+			{200249, toy=true}, -- Mage's Chewed Wand
+		},
+	},
+	--[[
+	[] = {
 		label="Brackle",
-        criteria=56103,
-        quest=70165,
-        npc=194392,
-        loot={},
-        vignette=5269,
-    },
-    --]]
-    [64792998] = {
+		criteria=56103,
+		quest=70165,
+		npc=194392,
+		loot={},
+		vignette=5269,
+	},
+	--]]
+	[64792998] = {
 		label="Frigidpelt Den Mother",
-        criteria=56104,
-        quest=69985,
-        npc=193698,
-        loot={},
-        vignette=5252,
-    },
-    [61213127] = {
+		criteria=56104,
+		quest=69985,
+		npc=193698,
+		loot={},
+		vignette=5252,
+	},
+	[61213127] = {
 		label="Azure Pathfinder",
-        criteria=56105,
-        quest=nil,
-        npc=194210,
-        loot={},
-        note="Patrols the icy area",
-        route={61213127, 59163080, 57562986, 54223190, 52023452, 49283837},
-        minimap=true,
-    },
-    [73002660] = {
+		criteria=56105,
+		quest=nil,
+		npc=194210,
+		loot={},
+		note="Patrols the icy area",
+		route={61213127, 59163080, 57562986, 54223190, 52023452, 49283837},
+		minimap=true,
+	},
+	[73002660] = {
 		label="Beogoka",
-        criteria=56106,
-        quest=nil,
-        npc=193116,
-        loot={},
-        vignette=5189,
-    },
-    [36803580] = {
+		criteria=56106,
+		quest=nil,
+		npc=193116,
+		loot={},
+		vignette=5189,
+	},
+	[36803580] = {
 		label="Notfar the Unbearable",
-        -- also 46603980?
-        criteria=56107,
-        quest=nil,
-        npc=193225,
-        loot={},
-    },
-    --[[
-    [] = {
+		-- also 46603980?
+		criteria=56107,
+		quest=nil,
+		npc=193225,
+		loot={},
+	},
+	--[[
+	[] = {
 		label="Blue Terror",
-        criteria=56108,
-        quest=nil,
-        npc=193259,
-        loot={},
-    },
-    [] = {
+		criteria=56108,
+		quest=nil,
+		npc=193259,
+		loot={},
+	},
+	[] = {
 		label="Mahg the Trampler",
-        criteria=56109,
-        quest=nil,
-        npc=190244,
-        loot={},
-    },
-    [] = {
+		criteria=56109,
+		quest=nil,
+		npc=190244,
+		loot={},
+	},
+	[] = {
 		label="Skag the Thrower",
-        criteria=56110,
-        quest=72154,
-        npc=193149,
-        loot={},
-        vignette=5440,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --]]
-    [32652915] = {
+		criteria=56110,
+		quest=72154,
+		npc=193149,
+		loot={},
+		vignette=5440,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--]]
+	[32652915] = {
 		label="Gruffy",
-        criteria=56111,
-        quest=69885,
-        npc=193251,
-        loot={},
-        vignette=5206,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --[[
-    [] = {
+		criteria=56111,
+		quest=69885,
+		npc=193251,
+		loot={},
+		vignette=5206,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--[[
+	[] = {
 		label="Grumbletrunk",
-        criteria=56112,
-        quest=69892,
-        npc=193269,
-        loot={},
-        vignette=5210,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [] = {
+		criteria=56112,
+		quest=69892,
+		npc=193269,
+		loot={},
+		vignette=5210,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[] = {
 		label="Rusthide",
-        criteria=56113,
-        quest=nil,
-        npc=193693,
-        loot={},
-    },
-    --]]
-    [70202520] = {
+		criteria=56113,
+		quest=nil,
+		npc=193693,
+		loot={},
+	},
+	--]]
+	[70202520] = {
 		label="Trilvarus Loreweaver",
-        criteria=56114,
-        quest=69861,
-        npc=193196,
-        loot={},
-        vignette=5186,
-    },
-    [49463607] = {
+		criteria=56114,
+		quest=69861,
+		npc=193196,
+		loot={},
+		vignette=5186,
+	},
+	[49463607] = {
 		label="Fisherman Tinnak",
-        criteria=56115,
-        quest=70792,
-        npc=193691,
-        loot={},
-        vignette=5475,
-    },
-    --[[
-    [] = {
+		criteria=56115,
+		quest=70792,
+		npc=193691,
+		loot={},
+		vignette=5475,
+	},
+	--[[
+	[] = {
 		label="Snufflegust",
-        criteria=56116,
-        quest=nil,
-        npc=193706,
-        loot={},
-    },
-    --]]
-    [33806440] = {
+		criteria=56116,
+		quest=nil,
+		npc=193706,
+		loot={},
+	},
+	--]]
+	[33806440] = {
 		label="Skald the Impaler",
-        criteria=56117,
-        quest=nil,
-        npc=193708,
-        loot={},
-    },
-    --[[
-    [] = {
+		criteria=56117,
+		quest=nil,
+		npc=193708,
+		loot={},
+	},
+	--[[
+	[] = {
 		label="Moth'go Deeploom",
-        criteria=56119,
-        quest=nil,
-        npc=193735,
-        loot={},
-    },
-    [] = {
+		criteria=56119,
+		quest=nil,
+		npc=193735,
+		loot={},
+	},
+	[] = {
 		label="Swog'ranka",
-        criteria=56120,
-        quest=nil,
-        npc=193634,
-        loot={},
-    },
-    [] = {
+		criteria=56120,
+		quest=nil,
+		npc=193634,
+		loot={},
+	},
+	[] = {
 		label="Swagraal the Swollen",
-        criteria=56121,
-        quest=nil,
-        npc=193167,
-        loot={},
-    },
-    --]]
-    [13604860] = {
+		criteria=56121,
+		quest=nil,
+		npc=193167,
+		loot={},
+	},
+	--]]
+	[13604860] = {
 		label="Bisquius",
-        -- also get achievement 16444, Leftovers' Revenge
-        criteria=55381,
-        quest=nil,
-        npc=197557,
-        loot={
-            200882,
-        },
-        note="Complete {spell:388961:Community Feasts}",
-    },
-    --[[
-    [] = {
+		-- also get achievement 16444, Leftovers' Revenge
+		criteria=55381,
+		quest=nil,
+		npc=197557,
+		loot={
+			200882,
+		},
+		note="Complete {spell:388961:Community Feasts}",
+	},
+	--[[
+	[] = {
 		label="Blightfur",
-        criteria=56122,
-        quest=69858,
-        npc=193178,
-        loot={},
-        vignette=5184,
-    },
-    [] = {
+		criteria=56122,
+		quest=69858,
+		npc=193178,
+		loot={},
+		vignette=5184,
+	},
+	[] = {
 		label="Archmage Cleary",
-        criteria=56123,
-        quest=nil,
-        npc=193255,
-        loot={},
-    },
-    --]]
-    [54803420] = {
+		criteria=56123,
+		quest=nil,
+		npc=193255,
+		loot={},
+	},
+	--]]
+	[54803420] = {
 		label="Spellwrought Snowman",
-        criteria=56124,
-        quest=69879, -- didn't actually trigger?
-        npc=193238,
-        loot={},
-        vignette=5200,
-        note="Collect 10x {npc:193424:Arcane Energy} for {npc:193255: Archmage Cleary} nearby",
-        related={
-            [53913570] = {label="{npc:193255: Archmage Cleary}", atlas="mechagon-projects", note="Gather {npc:193424:Arcane Energy}",},
-        },
-        nearby={
-            54013628, 54083719, 54163467, 53493476, 53393655, 52923710, 52203733, 51683682, 51953565,
-            label="{npc:193424:Arcane Energy}",
-            note="Bring to {npc:193242:Arcane Pedestal}",
-        },
-    },
-    [11093217] = {
+		criteria=56124,
+		quest=69879, -- didn't actually trigger?
+		npc=193238,
+		loot={},
+		vignette=5200,
+		note="Collect 10x {npc:193424:Arcane Energy} for {npc:193255: Archmage Cleary} nearby",
+		related={
+			[53913570] = {label="{npc:193255: Archmage Cleary}", atlas="mechagon-projects", note="Gather {npc:193424:Arcane Energy}",},
+		},
+		nearby={
+			54013628, 54083719, 54163467, 53493476, 53393655, 52923710, 52203733, 51683682, 51953565,
+			label="{npc:193424:Arcane Energy}",
+			note="Bring to {npc:193242:Arcane Pedestal}",
+		},
+	},
+	[11093217] = {
 		label="Snarglebone",
-        criteria=56125,
-        quest=nil,
-        npc=197344,
-        loot={},
-        vignette=5413,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [14483105] = {
+		criteria=56125,
+		quest=nil,
+		npc=197344,
+		loot={},
+		vignette=5413,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[14483105] = {
 		label="Blisterhide",
-        criteria=56126,
-        quest=nil,
-        npc=197353,
-        loot={},
-        vignette=5414,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [14083747] = {
+		criteria=56126,
+		quest=nil,
+		npc=197353,
+		loot={},
+		vignette=5414,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[14083747] = {
 		label="Gnarls",
-        criteria=56127,
-        quest=nil,
-        npc=197354,
-        loot={},
-        vignette=5415,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [16213364] = {
+		criteria=56127,
+		quest=nil,
+		npc=197354,
+		loot={},
+		vignette=5415,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[16213364] = {
 		label="High Shaman Rotknuckle",
-        criteria=56128,
-        quest=nil,
-        npc=197356,
-        loot={},
-        vignette=5416,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --[[
-    [] = {
+		criteria=56128,
+		quest=nil,
+		npc=197356,
+		loot={},
+		vignette=5416,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--[[
+	[] = {
 		label="Ravenous Tundra Bear",
-        criteria=56129,
-        quest=nil,
-        npc=197371,
-        loot={},
-    },
-    --]]
+		criteria=56129,
+		quest=nil,
+		npc=197371,
+		loot={},
+	},
+	--]]
 }, {
-    achievement=16678, -- Adventurer
+	achievement=16678, -- Adventurer
 })
 core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
-    [23443327] = {
+	[23443327] = {
 		label="Cascade",
-        npc=186962,
-        quest=72836, -- 72358?
-        loot={
-            {197098, quest=69299}, -- Highland Drake: Finned Back
-            200135, -- Corroded Greatsword
-        },
-        vignette=5050,
-    },
-    [38185903] = {
+		npc=186962,
+		quest=72836, -- 72358?
+		loot={
+			{197098, quest=69299}, -- Highland Drake: Finned Back
+			200135, -- Corroded Greatsword
+		},
+		vignette=5050,
+	},
+	[38185903] = {
 		label="Forgotten Creation",
-        npc=193214,
-        quest=72840,
-        loot={
-            200210, -- Amnesia
-            200758, -- Breastplate of Storied Antiquity
-        },
-        vignette=5191,
-    },
-    [70063318] = {
+		npc=193214,
+		quest=72840,
+		loot={
+			200210, -- Amnesia
+			200758, -- Breastplate of Storied Antiquity
+		},
+		vignette=5191,
+	},
+	[70063318] = {
 		label="Summoned Destroyer",
-        npc=193288,
-        quest=72848, -- also 69895
-        loot={
-            200163, -- Ring of Embers
-            200868, -- Integrated Primal Fire
-        },
-        vignette=5213,
-    },
-    [17394121] = {
+		npc=193288,
+		quest=72848, -- also 69895
+		loot={
+			200163, -- Ring of Embers
+			200868, -- Integrated Primal Fire
+		},
+		vignette=5213,
+	},
+	[17394121] = {
 		label="Vakril, the Strongest Tuskarr",
-        npc=193223,
-        quest=72853, -- 69872
-        loot={
-            {201728, quest=72853}, -- Vakril's Strongbox
-            {197001, quest=69201}, -- Cliffside Wylderdrake: Finned Cheek
-        },
-        vignette=5194,
-    },
-    [27004840] = {
+		npc=193223,
+		quest=72853, -- 69872
+		loot={
+			{201728, quest=72853}, -- Vakril's Strongbox
+			{197001, quest=69201}, -- Cliffside Wylderdrake: Finned Cheek
+		},
+		vignette=5194,
+	},
+	[27004840] = {
 		label="Breezebiter",
-        npc=195353,
-        quest=nil,
-        loot={
-            {201440, mount=1553},
-        },
-        note="Flying",
-    },
+		npc=195353,
+		quest=nil,
+		loot={
+			{201440, mount=1553},
+		},
+		note="Flying",
+	},
 })
 core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
-    -- https://www.wowhead.com/beta/achievement=16679/adventurer-of-thaldraszus
-    --[[
-    [] = {
+	-- https://www.wowhead.com/beta/achievement=16679/adventurer-of-thaldraszus
+	--[[
+	[] = {
 		label="Razk'vex the Untamed",
-        criteria=56133,
-        quest=69853,
-        npc=193143,
-        loot={},
-        vignette=5180,
-    },
-    --]]
-    [57968158] = {
+		criteria=56133,
+		quest=69853,
+		npc=193143,
+		loot={},
+		vignette=5180,
+	},
+	--]]
+	[57968158] = {
 		label="Innumerable Ruination",
-        criteria=56135,
-        quest=nil,
-        npc=193126,
-        loot={
-            200760, -- Unstable Arcane Cell
-        },
-    },
-    [31737253] = {
+		criteria=56135,
+		quest=nil,
+		npc=193126,
+		loot={
+			200760, -- Unstable Arcane Cell
+		},
+	},
+	[31737253] = {
 		label="Blightpaw the Depraved",
-        -- overlaps a bit with plains @ 90204020
-        criteria=56136,
-        quest=nil,
-        npc=193128,
-        loot={},
-    },
-    --[[
-    [] = {
+		-- overlaps a bit with plains @ 90204020
+		criteria=56136,
+		quest=nil,
+		npc=193128,
+		loot={},
+	},
+	--[[
+	[] = {
 		label="Pleasant Alpha",
-        criteria=56137,
-        quest=72806,
-        npc=193130,
-        loot={},
-        vignette=5479,
-    },
-    [] = {
+		criteria=56137,
+		quest=72806,
+		npc=193130,
+		loot={},
+		vignette=5479,
+	},
+	[] = {
 		label="Goremaul the Gluttonous",
-        criteria=56138,
-        quest=nil,
-        npc=193125,
-        loot={},
-    },
-    [] = {
+		criteria=56138,
+		quest=nil,
+		npc=193125,
+		loot={},
+	},
+	[] = {
 		label="Phenran",
-        criteria=56140,
-        quest=69976,
-        npc=193688,
-        loot={},
-        vignette=5248,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [] = {
+		criteria=56140,
+		quest=69976,
+		npc=193688,
+		loot={},
+		vignette=5248,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[] = {
 		label="Matriarch Remalla",
-        criteria=56141,
-        quest=69883,
-        npc=193246,
-        loot={},
-        vignette=5204,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --]]
-    [57208420] = {
+		criteria=56141,
+		quest=69883,
+		npc=193246,
+		loot={},
+		vignette=5204,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--]]
+	[57208420] = {
 		label="Phleep",
-        criteria=56142,
-        quest=69866,
-        npc=193210,
-        loot={},
-        vignette=5192,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --[[
-    [] = {
+		criteria=56142,
+		quest=69866,
+		npc=193210,
+		loot={},
+		vignette=5192,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--[[
+	[] = {
 		label="Tempestrian",
-        criteria=56144,
-        quest=69886,
-        npc=193258,
-        loot={},
-        vignette=5207,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --]]
-    [35027001] = {
+		criteria=56144,
+		quest=69886,
+		npc=193258,
+		loot={},
+		vignette=5207,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--]]
+	[35027001] = {
 		label="Treasure-Mad Trambladd",
-        criteria=56146,
-        quest=70947,
-        npc=193146,
-        loot={},
-        vignette=5431,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --[[
-    [] = {
+		criteria=56146,
+		quest=70947,
+		npc=193146,
+		loot={},
+		vignette=5431,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--[[
+	[] = {
 		label="Eldoren the Reborn",
-        criteria=56147,
-        quest=69875,
-        npc=193234,
-        loot={},
-        vignette=5198,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    [] = {
+		criteria=56147,
+		quest=69875,
+		npc=193234,
+		loot={},
+		vignette=5198,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	[] = {
 		label="Riverwalker Tamopo",
-        criteria=56148,
-        quest=69880,
-        npc=193240,
-        loot={},
-        vignette=5201,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --]]
-    [59607012] = {
+		criteria=56148,
+		quest=69880,
+		npc=193240,
+		loot={},
+		vignette=5201,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--]]
+	[59607012] = {
 		label="Broodweaver Araznae",
-        criteria=56149,
-        quest=69868,
-        npc=193220,
-        loot={},
-        vignette=5193,
-        -- hide_before=MAXLEVEL, -- TODO
-        -- path=59416977, -- too close to need
-    },
-    --[[
-    [] = {
+		criteria=56149,
+		quest=69868,
+		npc=193220,
+		loot={},
+		vignette=5193,
+		-- hide_before=MAXLEVEL, -- TODO
+		-- path=59416977, -- too close to need
+	},
+	--[[
+	[] = {
 		label="Sandana the Tempest",
-        criteria=56150,
-        quest=69859,
-        npc=193176,
-        loot={},
-        vignette=5185,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --]]
-    [50005180] = {
+		criteria=56150,
+		quest=69859,
+		npc=193176,
+		loot={},
+		vignette=5185,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--]]
+	[50005180] = {
 		label="Rokmur",
-        criteria=56151,
-        quest=69966,
-        npc=193666,
-        loot={},
-        vignette=5238,
-        -- hide_before=MAXLEVEL, -- TODO
-    },
-    --[[
-    [] = {
+		criteria=56151,
+		quest=69966,
+		npc=193666,
+		loot={},
+		vignette=5238,
+		-- hide_before=MAXLEVEL, -- TODO
+	},
+	--[[
+	[] = {
 		label="Woolfang",
-        criteria=56152,
-        quest=69850,
-        npc=193161,
-        loot={},
-        vignette=5177,
-    },
-    --]]
-    [46287298] = {
+		criteria=56152,
+		quest=69850,
+		npc=193161,
+		loot={},
+		vignette=5177,
+	},
+	--]]
+	[46287298] = {
 		label="The Weeping Vilomah",
-        -- TODO: this is the vignette-location, I haven't actually found the route to it yet...
-        criteria=56153,
-        quest=65365,
-        npc=183984,
-        loot={},
-        vignette=4958,
-    },
-    [52806760] = {
+		-- TODO: this is the vignette-location, I haven't actually found the route to it yet...
+		criteria=56153,
+		quest=65365,
+		npc=183984,
+		loot={},
+		vignette=4958,
+	},
+	[52806760] = {
 		label="Craggravated Elemental",
-        criteria=56154,
-        quest=69964,
-        npc=193663,
-        loot={},
-        vignette=5237,
-    },
-    [38436824] = {
+		criteria=56154,
+		quest=69964,
+		npc=193663,
+		loot={},
+		vignette=5237,
+	},
+	[38436824] = {
 		label="The Great Shellkhan",
-        criteria=56155,
-        quest=72121,
-        npc=191305,
-        loot={
-            {200999, toy=true,}, -- The Super Shellkhan Gang
-        },
-        note="Bring a {item:200949:Case of Fresh Gleamfish} from 45.6, 54.8 in Azure Span",
-        vignette=5439,
-        route={38436824, 32009999, highlightOnly=true},
-    },
-    [44806900] = {
+		criteria=56155,
+		quest=72121,
+		npc=191305,
+		loot={
+			{200999, toy=true,}, -- The Super Shellkhan Gang
+		},
+		note="Bring a {item:200949:Case of Fresh Gleamfish} from 45.6, 54.8 in Azure Span",
+		vignette=5439,
+		route={38436824, 32009999, highlightOnly=true},
+	},
+	[44806900] = {
 		label="Corrupted Proto-Dragon",
-        criteria=56156,
-        quest=69962,
-        npc=193658,
-        loot={},
-        vignette=5235,
-        note="Interact with the egg inside the cave",
-    },
-    --[[
-    [] = {
+		criteria=56156,
+		quest=69962,
+		npc=193658,
+		loot={},
+		vignette=5235,
+		note="Interact with the egg inside the cave",
+	},
+	--[[
+	[] = {
 		label="Lord Epochbrgl",
-        criteria=56157,
-        quest=69882,
-        npc=193241,
-        loot={},
-        vignette=5203,
-    },
-    --]]
-    [59545917] = {
+		criteria=56157,
+		quest=69882,
+		npc=193241,
+		loot={},
+		vignette=5203,
+	},
+	--]]
+	[59545917] = {
 		label="Ancient Protector",
-        criteria=56158,
-        quest=69963,
-        npc=193664,
-        loot={},
-        vignette=5236,
-    },
+		criteria=56158,
+		quest=69963,
+		npc=193664,
+		loot={},
+		vignette=5236,
+	},
 }, {
-    achievement=16679, -- Adventurer
+	achievement=16679, -- Adventurer
 })
 core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
-    [37538339] = {
+	[37538339] = {
 		label="Private Shikzar",
-        quest=70986,
-        npc=193127,
-        loot={},
-        vignette=5406,
-    },
-    [36808557] = {
+		quest=70986,
+		npc=193127,
+		loot={},
+		vignette=5406,
+	},
+	[36808557] = {
 		label="Lookout Mordren",
-        quest=72813, -- 69967 on vignette?
-        npc=193668,
-        loot={
-            200182, -- Riveted Drape
-        },
-        vignette=5239,
-        -- despawns without any loot, asks you to help comrades at the South Hold Gate... -- something to remove his debuff first, maybe?
-    },
-    [37777413] = {
+		quest=72813, -- 69967 on vignette?
+		npc=193668,
+		loot={
+			200182, -- Riveted Drape
+		},
+		vignette=5239,
+		-- despawns without any loot, asks you to help comrades at the South Hold Gate... -- something to remove his debuff first, maybe?
+	},
+	[37777413] = {
 		label="Acrosoth",
-        quest=72834, -- 72114
-        npc=193243,
-        loot={
-            {197403, quest=69604}, -- Renewed Proto-Drake: Club Tail
-        },
-        vignette=5436,
-        note="Flying nearby",
-    },
-    [55797732] = {
+		quest=72834, -- 72114
+		npc=193243,
+		loot={
+			{197403, quest=69604}, -- Renewed Proto-Drake: Club Tail
+		},
+		vignette=5436,
+		note="Flying nearby",
+	},
+	[55797732] = {
 		label="Henlare",
-        quest=69873, -- 72814
-        npc=193229,
-        loot={
-            200880, -- Wind-Sealet Mana Capsule
-        },
-        vignette=5196,
-    },
-    [36737280] = {
+		quest=69873, -- 72814
+		npc=193229,
+		loot={
+			200880, -- Wind-Sealet Mana Capsule
+		},
+		vignette=5196,
+	},
+	[36737280] = {
 		label="Liskron the Dazzling",
-        quest=72842, -- vignette 72116
-        npc=193273,
-        loot={
-            {196976, quest=69176}, -- Cliffside Wylderdrake: Head Mane
-        },
-        vignette=5437,
-    },
+		quest=72842, -- vignette 72116
+		npc=193273,
+		loot={
+			{196976, quest=69176}, -- Cliffside Wylderdrake: Head Mane
+		},
+		vignette=5437,
+	},
 })
 
 -- Treasures
 
 core:RegisterTreasureData("Dragonflight", {
-    [5468] = {
-        label="Expedition Scout's Pack",
-        loot={
-            {192764, mount=1617, note="Renown 25", requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 25)}, -- Verdant Skitterfly
-            {199061, quest=70527}, -- A Guide to Rare Fish
-            {194540, quest=67046}, -- Nokhud Armorer's Notes
-            201387, -- Drakonid Stalker's Halberd
-            201388, -- Dragonspawn Wingtipped Staff
-            201389, -- Wingcrest Battle Staff
-            201390, -- Devastating Drakonid Waraxe
-            201392, -- Drakonid Striker's Cutlass
-            201393, -- Dragonspawn Spellweaver's Focus
-            201394, -- Drakonid's Jade Bulwark
-            201395, -- Wingcrest Scimitar
-            201396, -- Hidepiercing Claw Extensions
-        },
-        requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 2),
-    },
+	[5468] = {
+		label="Expedition Scout's Pack",
+		loot={
+			{192764, mount=1617, note="Renown 25", requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 25)}, -- Verdant Skitterfly
+			{199061, quest=70527}, -- A Guide to Rare Fish
+			{194540, quest=67046}, -- Nokhud Armorer's Notes
+			201387, -- Drakonid Stalker's Halberd
+			201388, -- Dragonspawn Wingtipped Staff
+			201389, -- Wingcrest Battle Staff
+			201390, -- Devastating Drakonid Waraxe
+			201392, -- Drakonid Striker's Cutlass
+			201393, -- Dragonspawn Spellweaver's Focus
+			201394, -- Drakonid's Jade Bulwark
+			201395, -- Wingcrest Scimitar
+			201396, -- Hidepiercing Claw Extensions
+		},
+		requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 2),
+	},
 }, true)
