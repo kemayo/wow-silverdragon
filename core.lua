@@ -127,11 +127,13 @@ function addon:RegisterMobData(source, data, updated)
 		end
 		return
 	end
-	addon.datasources[source] = data
+	if not addon.datasources[source] then addon.datasources[source] = {} end
+	MergeTable(addon.datasources[source], data)
 end
 function addon:RegisterTreasureData(source, data, updated)
 	if not updated then return end
-	addon.treasuresources[source] = data
+	if not addon.treasuresources[source] then addon.treasuresources[source] = {} end
+	MergeTable(addon.treasuresources[source], data)
 end
 do
 	function addon:RegisterHandyNotesData(source, uiMapID, points, defaults)
@@ -158,6 +160,12 @@ do
 					vignette=point.vignette,
 					quest=point.quest,
 				}
+				if point.route and type(point.route) == "table" then
+					data.routes = {[uiMapID] = {point.route}}
+				end
+				if point.routes then
+					data.routes = {[uiMapID] = point.routes}
+				end
 				if point.npc then
 					addon.datasources[source][point.npc] = data
 					if point.achievement and point.criteria then

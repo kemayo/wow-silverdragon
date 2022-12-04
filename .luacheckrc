@@ -40,7 +40,7 @@ read_globals = {
     "abs", "mod", "max",
     "sin", "cos", "tan",
     "hooksecurefunc",
-    "table", "tinsert", "tContains", "tAppendAll", "tDeleteItem", "wipe",
+    "table", "tinsert", "tContains", "tAppendAll", "tDeleteItem", "wipe", "MergeTable",
     "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower",
     "time",
 
