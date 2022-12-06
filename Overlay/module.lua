@@ -237,7 +237,18 @@ function module:ShowTooltip(pin)
             end)
         end
         if ns.mobdb[id].requires then
-            tooltip:AddLine(core:RenderString(ns.conditions.summarize(ns.mobdb[id].requires), ns.mobdb[id]), 0, 1, 0, true)
+            local metRequirements = not ns.conditions.check(ns.mobdb[id].requires)
+            tooltip:AddLine(
+                core:RenderString(ns.conditions.summarize(ns.mobdb[id].requires), ns.mobdb[id]),
+                metRequirements and 0 or 1, metRequirements and 1 or 0, 0, true
+            )
+        end
+        if ns.mobdb[id].active then
+            local isActive = not ns.conditions.check(ns.mobdb[id].active)
+            tooltip:AddLine(
+                core:RenderString(ns.conditions.summarize(ns.mobdb[id].active), ns.mobdb[id]),
+                isActive and 0 or 1, isActive and 1 or 0, 0, true
+            )
         end
     else
         tooltip:AddLine(UNKNOWN)
