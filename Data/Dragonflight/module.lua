@@ -242,7 +242,7 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 			200286, -- Dragonbane Lance
 		},
 		vignette=5385,
-        note="Spawns after Dragonbane Keep event",
+		note="Spawns after Dragonbane Keep event",
 	},
 	[64456922] = {
 		label="Possessive Hornswog",
@@ -358,9 +358,9 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		quest=74067,
 		npc=187306,
 		loot={
-            200207, -- Petrified Fungal Spores
-            200244, -- Enchanted Muckstompers, can drop off multiple rares
-        },
+			200207, -- Petrified Fungal Spores
+			200244, -- Enchanted Muckstompers, can drop off multiple rares
+		},
 		note="Give 0x{item:191264:Restored Obsidian Key} to {npc:187275:Igys the Believer} to trigger {quest:66901}",
 		vignette=5388, -- 5119 for "Morchock Reformed"?
 		-- hide_before=MAXLEVEL, -- TODO
@@ -1077,13 +1077,13 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 			200245, -- Leviathan Lure
 			200552, -- Torrent Caller's Shell
 			200164, -- Iceloop
-            200310, -- Stole of the Iron Phantom
-            200187, -- Rod of Glacial Force
-            200256, -- Darkmaul Soul Horn
-            200158, -- Eerie Spectral Ring
+			200310, -- Stole of the Iron Phantom
+			200187, -- Rod of Glacial Force
+			200256, -- Darkmaul Soul Horn
+			200158, -- Eerie Spectral Ring
 		},
 		vignette=5475,
-        note="Requires Renown 7 with Iskaar Tuskarr", -- TODO: Any way to script this?
+		note="Requires Renown 7 with Iskaar Tuskarr", -- TODO: Any way to script this?
 		related={
 			[50523672] = {label="{item:381654:Broken Fishing Pole}", note="Click this first!",},
 			[49973821] = {label="{item:385046:Torn Fishing Net}", note="Click this second!",},
@@ -1193,9 +1193,9 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		quest=73996,
 		npc=197354,
 		loot={
-            200259, -- Forest Dweller's Shield
-            200267, -- Reinforced Garden Tenders
-        },
+			200259, -- Forest Dweller's Shield
+			200267, -- Reinforced Garden Tenders
+		},
 		vignette=5415,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
