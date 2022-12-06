@@ -242,6 +242,7 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 			200286, -- Dragonbane Lance
 		},
 		vignette=5385,
+        note="Spawns after Dragonbane Keep event",
 	},
 	[64456922] = {
 		label="Possessive Hornswog",
@@ -305,7 +306,7 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		label="Cauldronbearer Blakor",
 		-- also 25825982?
 		criteria=56056,
-		quest=nil,
+		quest=74042,
 		npc=186783,
 		loot={},
 		note="Patrols",
@@ -314,14 +315,14 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 	[25286032] = {
 		label="Rohzor Forgesmash",
 		criteria=56057,
-		quest=nil,
+		quest=74052,
 		npc=187598,
 		loot={},
 	},
 	[33115569] = {
 		label="Turboris",
 		criteria=56058,
-		quest=nil,
+		quest=74054,
 		npc=187886,
 		loot={},
 		vignette=5109,
@@ -329,7 +330,7 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 	[28635882] = {
 		label="Battlehorn Pyrhus",
 		criteria=56059,
-		quest=nil,
+		quest=74040,
 		npc=190986,
 		loot={},
 		vignette=5112, -- and 5114
@@ -337,7 +338,7 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 	[29245162] = {
 		label="Char",
 		criteria=56060,
-		quest=nil,
+		quest=74043,
 		npc=190991,
 		loot={
 			{197602, quest=69806}, -- Windborne Velocidrake: Cluster Horns
@@ -354,10 +355,13 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 	[32215221] = {
 		label="Morchok",
 		criteria=56988,
-		quest=66901, -- check
+		quest=74067,
 		npc=187306,
-		loot={},
-		note="Give 20x{item:191264:Restored Obsidian Key} to {npc:187275:Igys the Believer} to trigger {quest:66901}",
+		loot={
+            200207, -- Petrified Fungal Spores
+            200244, -- Enchanted Muckstompers, can drop off multiple rares
+        },
+		note="Give 0x{item:191264:Restored Obsidian Key} to {npc:187275:Igys the Believer} to trigger {quest:66901}",
 		vignette=5388, -- 5119 for "Morchock Reformed"?
 		-- hide_before=MAXLEVEL, -- TODO
 	},
@@ -1065,7 +1069,7 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 	[49463607] = {
 		label="Fisherman Tinnak",
 		criteria=56115,
-		quest=70792,
+		quest=74064,
 		npc=193691,
 		loot={
 			{197382, quest=69583}, -- Renewed Proto-Drake: White Horns
@@ -1073,8 +1077,13 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 			200245, -- Leviathan Lure
 			200552, -- Torrent Caller's Shell
 			200164, -- Iceloop
+            200310, -- Stole of the Iron Phantom
+            200187, -- Rod of Glacial Force
+            200256, -- Darkmaul Soul Horn
+            200158, -- Eerie Spectral Ring
 		},
 		vignette=5475,
+        note="Requires Renown 7 with Iskaar Tuskarr", -- TODO: Any way to script this?
 		related={
 			[50523672] = {label="{item:381654:Broken Fishing Pole}", note="Click this first!",},
 			[49973821] = {label="{item:385046:Torn Fishing Net}", note="Click this second!",},
@@ -1163,7 +1172,7 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 	[11093217] = {
 		label="Snarglebone",
 		criteria=56125,
-		quest=nil,
+		quest=74032,
 		npc=197344,
 		loot={},
 		vignette=5413,
@@ -1172,7 +1181,7 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 	[14483105] = {
 		label="Blisterhide",
 		criteria=56126,
-		quest=nil,
+		quest=73985,
 		npc=197353,
 		loot={},
 		vignette=5414,
@@ -1181,16 +1190,19 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 	[14083747] = {
 		label="Gnarls",
 		criteria=56127,
-		quest=nil,
+		quest=73996,
 		npc=197354,
-		loot={},
+		loot={
+            200259, -- Forest Dweller's Shield
+            200267, -- Reinforced Garden Tenders
+        },
 		vignette=5415,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
 	[16213364] = {
 		label="High Shaman Rotknuckle",
 		criteria=56128,
-		quest=nil,
+		quest=74004,
 		npc=197356,
 		loot={},
 		vignette=5416,
@@ -1438,7 +1450,7 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 		label="The Weeping Vilomah",
 		-- TODO: this is the vignette-location, I haven't actually found the route to it yet...
 		criteria=56153,
-		quest=65365,
+		quest=74086,
 		npc=183984,
 		loot={},
 		note="In cave",
@@ -1467,7 +1479,7 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 	[44806900] = {
 		label="Corrupted Proto-Dragon",
 		criteria=56156,
-		quest=69962,
+		quest=74060,
 		npc=193658,
 		loot={},
 		vignette=5235,
@@ -1486,7 +1498,7 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 	[59545917] = {
 		label="Ancient Protector",
 		criteria=56158,
-		quest=69963,
+		quest=74055,
 		npc=193664,
 		loot={},
 		vignette=5236,
@@ -1538,7 +1550,7 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 	},
 	[36737280] = {
 		label="Liskron the Dazzling",
-		quest=72842, -- vignette 72116
+		quest=72116, -- vignette 72116
 		npc=193273,
 		loot={
 			{196976, quest=69176}, -- Cliffside Wylderdrake: Head Mane
