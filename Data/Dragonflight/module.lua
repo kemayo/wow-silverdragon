@@ -14,6 +14,8 @@ local FORBIDDENREACHINTRO = 2118 -- Dracthyr
 
 local FACTION_MARUUK = 2503
 local FACTION_DRAGONSCALE = 2507
+local FACTION_VALDRAKKEN = 2510
+local FACTION_ISKAARA = 2511
 
 local MAXLEVEL = {core.conditions.QuestComplete(67030), core.conditions.Level(70)}
 local DRAGONRIDING = core.conditions.SpellKnown(376777)
@@ -1069,7 +1071,7 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 	[49463607] = {
 		label="Fisherman Tinnak",
 		criteria=56115,
-		quest=74064,
+		quest=74064, -- 70792?
 		npc=193691,
 		loot={
 			{197382, quest=69583}, -- Renewed Proto-Drake: White Horns
@@ -1083,7 +1085,7 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 			200158, -- Eerie Spectral Ring
 		},
 		vignette=5475,
-		note="Requires Renown 7 with Iskaar Tuskarr", -- TODO: Any way to script this?
+		active=core.conditions.MajorFaction(FACTION_ISKAARA, 7),
 		related={
 			[50523672] = {label="{item:381654:Broken Fishing Pole}", note="Click this first!",},
 			[49973821] = {label="{item:385046:Torn Fishing Net}", note="Click this second!",},
@@ -1450,7 +1452,7 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 		label="The Weeping Vilomah",
 		-- TODO: this is the vignette-location, I haven't actually found the route to it yet...
 		criteria=56153,
-		quest=74086,
+		quest=74086, -- 65365?
 		npc=183984,
 		loot={},
 		note="In cave",
@@ -1479,7 +1481,7 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 	[44806900] = {
 		label="Corrupted Proto-Dragon",
 		criteria=56156,
-		quest=74060,
+		quest=74060, -- 69962?
 		npc=193658,
 		loot={},
 		vignette=5235,
@@ -1498,7 +1500,7 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 	[59545917] = {
 		label="Ancient Protector",
 		criteria=56158,
-		quest=74055,
+		quest=74055, -- 69963?
 		npc=193664,
 		loot={},
 		vignette=5236,
@@ -1550,7 +1552,7 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 	},
 	[36737280] = {
 		label="Liskron the Dazzling",
-		quest=72116, -- vignette 72116
+		quest=72116, -- 72842?
 		npc=193273,
 		loot={
 			{196976, quest=69176}, -- Cliffside Wylderdrake: Head Mane
