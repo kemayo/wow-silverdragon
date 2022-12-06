@@ -115,13 +115,16 @@ def fetchnpc(npc):
             return False
 
     # var g_mapperData = {"13644":[{"count":1,"coords":[[33,76.4]],"uiMapId":2022,"uiMapName":"The Waking Shores"}]};
-    for locationid, locationdata in re.findall(r"g_mapperData\s*=\s*{\"(\d+)\":\[(.+)\]};", r.text):
-        locationdata = yaml.load(locationdata, Loader=Loader)
-        if int(locationid) in data["location"]:
-            if "locations" not in data:
-                data["locations"] = []
-            locationdata["coords"] = [pack_coords(coord[0]/100, coord[1]/100) for coord in locationdata["coords"]]
-            data["locations"].append(locationdata)
+    if mapperDatas := re.findall(r"g_mapperData\s*=\s*({\"\d+\":\[.+\]});", r.text):
+        for mapperData in mapperDatas:
+            locations = yaml.load(mapperData, Loader=Loader)
+            for locationid, locationdatas in locations.items():
+                if int(locationid) in data["location"]:
+                    if "locations" not in data:
+                        data["locations"] = []
+                    for locationdata in locationdatas:
+                        locationdata["coords"] = [pack_coords(coord[0]/100, coord[1]/100) for coord in locationdata["coords"]]
+                        data["locations"].append(locationdata)
 
     if m := re.search(r"^new Listview\(({template: 'item', id: 'drops',.+})\);$", r.text, re.MULTILINE):
         lootdata = yaml.load(m.group(1).replace("undefined", "null"), Loader=Loader)
@@ -260,6 +263,17 @@ def export(inf, outf, hn=False, local=False):
         outfile.writelines(output)
 
 
+def fetch_npcids_from_search(url):
+    # assume this is a wowhead search page and pull down everything included on it
+    r = session.get(url, timeout=5)
+    match = re.search(
+        r'new Listview\({[^{]+?"?data"?:\s*\[(.+?)\]}\);\n', r.text
+    )
+    if not match:
+        return []
+    return map(int, re.findall(r'"id":(\d+)', match.group(1)))
+
+
 if __name__ == '__main__':
     # requests_cache.install_cache()
     # print(fetchnpc(50358))
@@ -269,12 +283,21 @@ if __name__ == '__main__':
     parser.add_argument('--export', nargs="?", type=str, help="Export loot data to another file rather than updating in place")
     parser.add_argument('--export_handynotes', action="store_true", default=False, help="Export in my handynotes format")
     parser.add_argument('--local', action="store_true", default=False, help="Export local data rather than fetching anything")
+    parser.add_argument('--only_with_loot', action="store_true", default=False, help="Only output those with loot")
     args = parser.parse_args()
 
-    if re.match(r"[\d,]", args.input):
+    if re.match(r"(?:[\d,]|^http)", args.input):
+        npcs = []
+        if args.input.startswith("http"):
+            npcs = fetch_npcids_from_search(args.input)
+        else:
+            npcs = map(int, args.input.split(","))
         output = []
-        for npcid in args.input.split(","):
-            npc = fetchnpc(int(npcid))
+        for npcid in npcs:
+            npc = fetchnpc(npcid)
+            if args.only_with_loot and not npc.get("loot", False):
+                print("skipping no-loot")
+                continue
             if "loot" in npc:
                 npc["loot"] = [additemdata(item) for item in npc["loot"]]
             # print(lua.serialize(npc, key=__keysort, trailingcomma=True))
