@@ -225,12 +225,21 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		},
 		vignette=5383,
 	},
-	[59283082] = {
-		label="Enkine the Voracious",
+	[21606478] = { -- Enkine the Voracious
 		criteria=56049,
-		quest=72128,
+		quest=73072, -- 72128
 		npc=193134,
-		loot={},
+		loot={
+			200133, -- Volcanic Chakram
+			200167, -- Regurgitated Stone Handaxe
+			200247, -- Inextinguishable Gavel
+			200252, -- Molten Flak Cannon
+			200163, -- Ring of Embers
+			200563, -- Primal Ritual Shell
+			200217, -- Blazing Essence
+			{197135, quest=69336}, -- Highland Drake: Toothy Mouth
+		},
+		note="Kill nearby mobs for {item:201092:Lava Spices}, then fish here to summon",
 		vignette=5382,
 	},
 	[27017601] = {
