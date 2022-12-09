@@ -502,7 +502,10 @@ do
 				end
 			end
 		end
-		core:GetModule("Tooltip"):UpdateTooltip(mobid, true, true)
+		if not _G.TooltipDataProcessor then
+			-- if that exists it'll already have magically handled the gametooltip
+			core:GetModule("Tooltip"):UpdateTooltip(mobid, true, true)
+		end
 		GameTooltip:AddLine("Left-click to focus on the map", 0, 1, 1)
 		GameTooltip:AddLine("Control-click to set a waypoint", 0, 1, 1)
 		GameTooltip:AddLine("Shift-click to link location in chat", 0, 1, 1)
