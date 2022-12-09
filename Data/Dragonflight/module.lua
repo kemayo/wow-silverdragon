@@ -123,7 +123,9 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		criteria=56036,
 		quest=nil,
 		npc=193181,
-		loot={},
+		loot={
+			200132, -- Skewer's Snout
+		},
 	},
 	[43427361] = {
 		label="Helmet Missingway",
@@ -156,7 +158,9 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		criteria=56041,
 		quest=69839,
 		npc=193135,
-		loot={},
+		loot={
+			200229, -- Slightly Digested Leggings
+		},
 		vignette=5172,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
@@ -172,7 +176,9 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		criteria=56043,
 		quest=70983,
 		npc=193118,
-		loot={},
+		loot={
+			200435, -- Brackish Breeches
+		},
 		vignette=5167,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
@@ -181,7 +187,9 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		criteria=56044,
 		quest=69668,
 		npc=193120,
-		loot={},
+		loot={
+			200209, -- Firebreather's Cowl
+		},
 		vignette=5169,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
@@ -190,7 +198,9 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		criteria=56045,
 		quest=69838,
 		npc=193132,
-		loot={},
+		loot={
+			200156, -- Amethyzarite Geode
+		},
 		vignette=5171,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
@@ -210,6 +220,7 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		quest=69848,
 		npc=193152,
 		loot={
+			200192, -- Handheld Geyser
 			200563, -- Primal Ritual Shell
 		},
 		vignette=5175,
@@ -218,14 +229,16 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 	[33417637] = {
 		label="Forgotten Gryphon",
 		criteria=56048,
-		quest=72130,
+		quest=72130, -- 73073
 		npc=193154,
 		loot={
+			{196985, quest=69185}, -- Cliffside Wylderdrake: Horned Jaw
 			200858, -- Plume of the Forgotten
 		},
 		vignette=5383,
 	},
-	[21606478] = { -- Enkine the Voracious
+	[21606478] = {
+		label="Enkine the Voracious",
 		criteria=56049,
 		quest=73072, -- 72128
 		npc=193134,
@@ -278,7 +291,9 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		criteria=56052,
 		quest=70763,
 		npc=186859,
-		loot={},
+		loot={
+			200213, -- Lava-Splattered Breastplate
+		},
 		nearby={30005520, label="{npc:197395:Wurmling Bones}"},
 		note="Gather 3x {item:191211:Wurmling Bones} from {npc:187366:Worldcarver Wurmling} then click on the {npc:197395:Wurmling Bones}",
 		vignette=5110,
@@ -288,7 +303,9 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		criteria=56053,
 		quest=67027, -- check
 		npc=190985,
-		loot={},
+		loot={
+			200159, -- Blaze Ring
+		},
 		note="Give 20x{item:191264:Restored Obsidian Key} to {npc:191640:Sabellian} to trigger {quest:67027}",
 		vignette=5113,
 		-- hide_before=MAXLEVEL, -- TODO
@@ -328,7 +345,9 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		criteria=56057,
 		quest=74052,
 		npc=187598,
-		loot={},
+		loot={
+			194503, -- Plans: Black Dragon Touched Hammer
+		},
 	},
 	[33115569] = {
 		label="Turboris",
@@ -366,13 +385,13 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 	[32215221] = {
 		label="Morchok",
 		criteria=56988,
-		quest=74067,
+		quest=74067, -- 66901
 		npc=187306,
 		loot={
 			200207, -- Petrified Fungal Spores
 			200244, -- Enchanted Muckstompers, can drop off multiple rares
 		},
-		note="Give 0x{item:191264:Restored Obsidian Key} to {npc:187275:Igys the Believer} to trigger {quest:66901}",
+		note="Give 20x{item:191264:Restored Obsidian Key} to {npc:187275:Igys the Believer} to trigger {quest:66901}",
 		vignette=5388, -- 5119 for "Morchock Reformed"?
 		-- hide_before=MAXLEVEL, -- TODO
 	},
@@ -383,6 +402,8 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		npc=193271,
 		loot={
 			200297, -- Hastily Cobbled Maul
+			200152, -- Gleaming Blade of Insight
+			200689, -- Rimetalon Band
 		},
 		note="Use the three Pilfered objects inside the cave to summon",
 		path=48457426,
@@ -433,6 +454,7 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 			{197023, quest=69223}, -- Cliffside Wylderdrake: Maned Neck
 			{197602, quest=69806}, -- Windborne Velocidrake: Cluster Horns
 			{200198, toy=true}, -- Primalist Prison
+			200253, -- Snowspring Incanter's Knife
 			200246, -- Lost Delving Lamp
 		},
 		vignette=5127,
@@ -496,6 +518,15 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		},
 		note="Under the Obsidian Citadel",
 	},
+	[78405000] = {
+		label="Gorjo the Crab Shackler",
+		-- [78405000, 78405060, 78604920, 78604980]
+		quest=nil,
+		npc=193226,
+		loot={
+			200281, -- Gorjo's Riding Crop
+		},
+	},
 })
 core:RegisterMobData("Dragonflight", {
 	[193217] = {
@@ -516,40 +547,50 @@ core:RegisterMobData("Dragonflight", {
 }, true)
 core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 	-- https://www.wowhead.com/beta/achievement=16677/adventurer-of-the-ohnahran-plains
-	--[[
-	[] = {
+	[20403800] = {
 		label="Sparkspitter Vrak",
 		criteria=56062,
-		quest=nil,
+		quest=73896,
 		npc=193165,
-		loot={},
+		loot={
+			{196999, quest=69199}, -- Cliffside Wylderdrake: Swept Horns
+			200234, -- Vrak's Embossed Aegis
+		},
 	},
-	--]]
 	[50027484] = {
 		label="Scav Notail",
 		criteria=56063,
 		quest=69863,
 		npc=193136,
-		loot={},
+		loot={
+			200168, -- Gnoll Hide Belt
+		},
 		vignette=5187,
 	},
-	--[[
-	[] = {
+	[56408160] = {
 		label="Enraged Sapphire",
 		criteria=56064,
 		quest=69840,
 		npc=193142,
-		loot={},
+		loot={
+			200309, -- Rock Encrusted Chestguard
+		},
 		vignette=5173,
 	},
-	[] = {
+	[61801300] = {
 		label="Seeker Teryx",
 		criteria=56065,
 		quest=nil,
 		npc=193188,
-		loot={},
+		loot={
+			{196970, quest=69170}, -- Cliffside Wylderdrake: Spiked Back
+			{197105, quest=69306}, -- Highland Drake: Spined Chin
+			{197586, quest=69790}, -- Windborne Velocidrake: Spiked Back
+			{197138, quest=69339}, -- Highland Drake: Striped Pattern
+			200875, -- Seeker's Bands
+			200758, -- Breastplate of Storied Antiquity
+		},
 	},
-	--]]
 	[31646421] = {
 		label="Zenet Avis",
 		criteria=56066,
@@ -566,14 +607,21 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		criteria=56067,
 		quest=nil,
 		npc=197009,
-		loot={},
+		loot={
+			{197106, quest=69307}, -- Highland Drake: Finned Head
+			{197400, quest=69601}, -- Renewed Proto-Drake: Shark Snout
+			200434, -- Anund's Mana-Singed Amice
+			200446, -- Crystalized Sigil
+		},
 	},
 	[29426783] = {
 		label="Deadwaker Ghendish",
 		criteria=56068,
 		quest=nil,
 		npc=189652,
-		loot={},
+		loot={
+			189055, -- Ghendish's Backup Talisman
+		},
 	},
 	--[[
 	[] = {
@@ -591,7 +639,9 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		criteria=56070,
 		quest=69857,
 		npc=193173,
-		loot={},
+		loot={
+			200542, -- Breezy Companion
+		},
 		vignette=5183,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
@@ -611,21 +661,23 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		criteria=56072,
 		quest=69667,
 		npc=193123,
-		loot={},
+		loot={
+			200216, -- Water Heating Cord
+		},
 		vignette=5168,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
-	--[[
-	[] = {
+	[71204620] = {
 		label="Malsegan",
 		criteria=56073,
 		quest=69871,
 		npc=193212,
-		loot={},
+		loot={
+			200197, -- Armoredon Herding Crook
+		},
 		vignette=5195,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
-	--]]
 	[60812677] = {
 		label="Oshigol",
 		criteria=56074,
@@ -641,16 +693,20 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		criteria=56075,
 		quest=69856,
 		npc=193170,
-		loot={},
+		loot={
+			200433, -- Footwraps of Subjugation
+		},
 		vignette=5182,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
 	[58596822] = {
 		label="Windseeker Avash",
 		criteria=56076,
-		quest=nil,
+		quest=74088,
 		npc=192045,
-		loot={},
+		loot={
+			200141, -- Wind Generating Band
+		},
 	},
 	[49496663] = {
 		label="Eaglemaster Niraak",
@@ -663,32 +719,45 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		},
 		vignette=5138,
 	},
-	--[[
-	[] = {
+	[29756131] = {
 		label="Zarizz",
 		criteria=56078,
-		quest=72364,
+		quest=72364, -- 74091
 		npc=193140,
-		loot={},
+		loot={
+			200193, -- Manafrond Sandals
+		},
 		vignette=5469,
 	},
-	[] = {
+	[20304370] = {
 		label="Scaleseeker Mezeri",
 		criteria=56079,
-		quest=69865,
+		quest=74073, -- 69865?
 		npc=193215,
-		loot={},
+		loot={
+			200293, -- Primal Scion's Twinblade
+		},
 		vignette=5190,
+		related={
+			[16605120] = {label="{npc:193224:Dawnbell}",note="Bring {item:194681:Sugarwing Cupcakes} from an innkeeper, then follow her to {npc:193215:Scaleseeker Mezeri}"},
+		}
 	},
-	--]]
 	[29554146] = {
 		label="Shade of Grief",
 		criteria=56080,
-		quest=nil, -- ...no quest changed
+		quest=74075,
 		npc=187559,
 		loot={
 			{196985, quest=69185}, -- Cliffside Wylderdrake: Horned Jaw
 			{197382, quest=69583}, -- Renewed Proto-Drake: White Horns
+			{196996, quest=69196}, -- Cliffside Wylderdrake: Branched Horns
+			{197115, quest=69316}, -- Highland Drake: Thorned Jaw
+			200437, -- Dreamsong Censer
+			200444, -- Mantle of the Gatekeeper
+			-- these might all be generic undead-drops:
+			200256, -- Darkmaul Soul Horn
+			200158, -- Eerie Spectral Ring
+			200310, -- Stole of the Iron Phantom
 		},
 		vignette=5181, -- Solethus' Gravestone
 	},
@@ -724,6 +793,7 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		npc=188124,
 		loot={},
 		vignette=5078,
+		path=79383649,
 	},
 	[72222321] = {
 		label="Zerimek",
@@ -830,11 +900,15 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 	[81447834] = {
 		label="Seereel, the Spring",
+		-- TODO: find the spawn point in Azure Span, which presumably exists?
 		achievement=16678, -- Adventurer of the *Azure Span*
 		criteria=56118,
 		quest=nil,
 		npc=193710,
-		loot={},
+		loot={
+			200086, -- Khaz'gorite-infused Resin
+		},
+		note="Throw 5x {item:194701:Ominous Conch} into a Lurker Sighting to summon",
 	},
 	[81207780] = {
 		label="Astray Splasher",
@@ -850,6 +924,7 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		npc=193669,
 		loot={
 			{197383, quest=69584}, -- Renewed Proto-Drake: Heavy Horns
+			200134, -- Ohuna Mass-Binding Totem
 		},
 		vignette=5240,
 	},
@@ -872,6 +947,7 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		npc=193153,
 		loot={
 			200137, -- Chitin Dreadbringer
+			200186, -- Amberquill Shroud
 		},
 		vignette=5178,
 	},
@@ -890,6 +966,7 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		quest=66970, -- also 72852
 		npc=191354,
 		loot={
+			{197372, quest=69573}, -- Renewed Proto-Drake: Purple Hair
 			198429, -- Typhoon Bringer
 		},
 		path=24503340,
@@ -906,7 +983,7 @@ core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 		quest=69837, -- 72849
 		npc=193133,
 		loot={
-			{198409, toy=true},
+			{198409, toy=true}, -- Personal Shell
 		},
 		note="Behind the waterfall",
 	},
@@ -930,6 +1007,10 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		npc=193157,
 		loot={
 			200302, -- Magmaforged Scimitar
+			200169, -- Protector's Molten Cudgel
+			200757, -- Qalashi War-Helm
+			{197005, quest=69205}, -- Cliffside Wylderdrake: Horned Nose
+			{197019, quest=69219}, -- Cliffside Wylderdrake: Blunt Spiked Tail
 		},
 	},
 	[53003560] = {
@@ -1013,52 +1094,61 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		loot={},
 		note="In cave",
 	},
-	[16412781] = {
+	[16622799] = {
 		label="Blue Terror",
 		criteria=56108,
 		quest=nil,
 		npc=193259,
-		loot={},
+		loot={
+			{197595, quest=69799}, -- Windborne Velocidrake: Finned Ears
+		},
+		note="Spawns at the top of a tree",
 	},
 	[36323583] = {
 		label="Mahg the Trampler",
 		criteria=56109,
 		quest=nil,
 		npc=190244,
-		loot={},
+		loot={
+			200157, -- Pathmaker
+		},
 		route={36323583, 46004100, r=0, g=1, b=0}, -- verify
 		minimap=true,
 	},
-	--[[
-	[] = {
+	[26804940] = {
 		label="Skag the Thrower",
 		criteria=56110,
 		quest=72154,
 		npc=193149,
-		loot={},
+		loot={
+			200279, -- Competitive Throwing Gauntlets
+		},
 		vignette=5440,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
-	--]]
 	[32652915] = {
 		label="Gruffy",
 		criteria=56111,
 		quest=69885,
 		npc=193251,
-		loot={},
+		loot={
+			200755, -- Gruffy's Dented Horn
+		},
 		vignette=5206,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
-	--[[
-	[] = {
+	[19204360] = {
 		label="Grumbletrunk",
 		criteria=56112,
 		quest=69892,
 		npc=193269,
-		loot={},
+		loot={
+			200206, -- Behemoth Slayer Greatbow
+		},
 		vignette=5210,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
+	--[[
 	[] = {
 		label="Rusthide",
 		criteria=56113,
@@ -1072,7 +1162,9 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		criteria=56114,
 		quest=69861, -- 74087
 		npc=193196,
-		loot={},
+		loot={
+			200549, -- Restored Titan Artifact
+		},
 		vignette=5186,
 		note="Use crystals in the tower to the North and bring the energies to {npc:193782}",
 		nearby={70402370, label="{spell:382076}"},
@@ -1080,21 +1172,25 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 	[49463607] = {
 		label="Fisherman Tinnak",
 		criteria=56115,
-		quest=74064, -- 70792?
+		quest=74064, -- 70792
 		npc=193691,
 		loot={
 			{197382, quest=69583}, -- Renewed Proto-Drake: White Horns
+			{196985, quest=69185}, -- Cliffside Wylderdrake: Horned Jaw
+			{197098, quest=69299}, -- Highland Drake: Finned Back
+			{197001, quest=69201}, -- Cliffside Wylderdrake: Finned Cheek
 			198070, -- Tattered Seavine
+			200187, -- Rod of Glacial Force
 			200245, -- Leviathan Lure
 			200552, -- Torrent Caller's Shell
 			200164, -- Iceloop
-			200310, -- Stole of the Iron Phantom
-			200187, -- Rod of Glacial Force
+			-- generic undead?
 			200256, -- Darkmaul Soul Horn
 			200158, -- Eerie Spectral Ring
+			200310, -- Stole of the Iron Phantom
 		},
-		vignette=5475,
 		active=core.conditions.MajorFaction(FACTION_ISKAARA, 7),
+		vignette=5475,
 		related={
 			[50523672] = {label="{item:381654:Broken Fishing Pole}", note="Click this first!",},
 			[49973821] = {label="{item:385046:Torn Fishing Net}", note="Click this second!",},
@@ -1151,16 +1247,20 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		},
 		note="Complete {spell:388961:Community Feasts}",
 	},
-	--[[
-	[] = {
+	[13602200] = {
 		label="Blightfur",
 		criteria=56122,
 		quest=69858,
 		npc=193178,
-		loot={},
+		loot={
+			{197404, quest=69605}, -- Renewed Proto-Drake: Finned Tail
+			{197150, quest=69351}, -- Highland Drake: Spiked Club Tail
+			200310, -- Stole of the Iron Phantom
+			200127, -- Gold-Alloy Blade
+			200432, -- Rotguard Cowl
+		},
 		vignette=5184,
 	},
-	--]]
 	[54803420] = {
 		label="Spellwrought Snowman",
 		criteria=56124,
@@ -1185,8 +1285,14 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		criteria=56125,
 		quest=74032,
 		npc=197344,
-		loot={},
+		loot={
+			200283, -- Gnoll-Gnawed Breeches
+			200266, -- Gnollish Chewtoy Launcher
+			{196982, quest=69182}, -- Cliffside Wylderdrake: Ears
+			{197150, quest=69351}, -- Highland Drake: Spiked Club Tail
+		},
 		vignette=5413,
+		note="On ~10 minute rotation with the other Brackenhide Hollow rares ({npc:197344}, {npc:197353}, {npc:197354}, {npc:197356})",
 		-- hide_before=MAXLEVEL, -- TODO
 	},
 	[14483105] = {
@@ -1194,7 +1300,16 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		criteria=56126,
 		quest=73985,
 		npc=197353,
-		loot={},
+		loot={
+			200186, -- Amberquill Shroud
+			200232, -- Raptor Talonglaive
+			200131, -- Reclaimed Survivalist's Dagger
+			200174, -- Bonesigil Shoulderguards
+			200563, -- Primal Ritual Shell
+			200193, -- Manafrond Sandals
+			200445, -- Lucky Hunting Charm
+		},
+		note="On ~10 minute rotation with the other Brackenhide Hollow rares ({npc:197344}, {npc:197353}, {npc:197354}, {npc:197356})",
 		vignette=5414,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
@@ -1204,10 +1319,12 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		quest=73996,
 		npc=197354,
 		loot={
+			{197398, quest=69599}, -- Renewed Proto-Drake: Snub Snout
 			200259, -- Forest Dweller's Shield
 			200267, -- Reinforced Garden Tenders
 		},
 		vignette=5415,
+		note="On ~10 minute rotation with the other Brackenhide Hollow rares ({npc:197344}, {npc:197353}, {npc:197354}, {npc:197356})",
 		-- hide_before=MAXLEVEL, -- TODO
 	},
 	[16213364] = {
@@ -1215,8 +1332,19 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		criteria=56128,
 		quest=74004,
 		npc=197356,
-		loot={},
+		loot={
+			{200178, toy=true}, -- Infected Ichor
+			{197150, quest=69351}, -- Highland Drake: Spiked Club Tail
+			{196986, quest=69186}, -- Cliffside Wylderdrake: Black Hair
+			{196973, quest=69173}, -- Cliffside Wylderdrake: Dual Horned Chin
+			{196982, quest=69182}, -- Cliffside Wylderdrake: Ears
+			200283, -- Gnoll-Gnawed Breeches
+			200266, -- Gnollish Chewtoy Launcher
+			200127, -- Gold-Alloy Blade
+			200432, -- Rotguard Cowl
+		},
 		vignette=5416,
+		note="On ~10 minute rotation with the other Brackenhide Hollow rares ({npc:197344}, {npc:197353}, {npc:197354}, {npc:197356})",
 		-- hide_before=MAXLEVEL, -- TODO
 	},
 	--[[
@@ -1273,14 +1401,14 @@ core:RegisterHandyNotesData("Dragonflight", AZURESPAN, {
 		},
 		vignette=5194,
 	},
-	[27004840] = {
+	[29814613] = {
 		label="Breezebiter",
 		npc=195353,
 		quest=nil,
 		loot={
 			{201440, mount=1553},
 		},
-		note="Flying",
+		note="Spawns in this cave, then flies around the area in a big circle",
 	},
 	[36793249] = {
 		label="Sharpfang",
@@ -1327,7 +1455,14 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 		quest=73869,
 		npc=193128,
 		loot={
+			{200178, toy=true}, -- Infected Ichor
 			{197150, quest=69351}, -- Highland Drake: Spiked Club Tail
+			{196986, quest=69186}, -- Cliffside Wylderdrake: Black Hair
+			{196973, quest=69173}, -- Cliffside Wylderdrake: Dual Horned Chin
+			{196982, quest=69182}, -- Cliffside Wylderdrake: Ears
+			200266, -- Gnollish Chewtoy Launcher
+			200127, -- Gold-Alloy Blade
+			200432, -- Rotguard Cowl
 		},
 		note="Talk to {npc:193222:Archaeologist Koranir} to spawn. Also spawns with {npc:193231:Ancient Tundrafur}. Casts a curse as well.",
 	},
@@ -1348,34 +1483,42 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 		criteria=56138,
 		quest=nil,
 		npc=193125,
-		loot={},
+		loot={
+			200436, -- Gorestained Hauberk
+		},
 	},
-	--[[
-	[] = {
+	[59806100] = {
 		label="Phenran",
 		criteria=56140,
 		quest=69976,
 		npc=193688,
-		loot={},
+		loot={
+			200146, -- Phenran's Discordant Smasher
+		},
 		vignette=5248,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
-	[] = {
+	[52805920] = {
 		label="Matriarch Remalla",
 		criteria=56141,
 		quest=69883,
 		npc=193246,
-		loot={},
+		loot={
+			200257, -- Decay Infused Branch
+		},
 		vignette=5204,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
-	--]]
 	[57208420] = {
 		label="Phleep",
 		criteria=56142,
 		quest=69866,
 		npc=193210,
-		loot={},
+		loot={
+			{197130, quest=69331}, -- Highland Drake: Stag Horns
+			{200148, toy=true,}, -- A Collection Of Me
+			200202, -- Tomorrow's Chains
+		},
 		vignette=5192,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
@@ -1399,16 +1542,18 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 		vignette=5431,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
-	--[[
-	[] = {
+	[47805120] = {
 		label="Eldoren the Reborn",
 		criteria=56147,
 		quest=69875,
 		npc=193234,
-		loot={},
+		loot={
+			200284, -- Phoenix Feather Pendant
+		},
 		vignette=5198,
 		-- hide_before=MAXLEVEL, -- TODO
 	},
+	--[[
 	[] = {
 		label="Riverwalker Tamopo",
 		criteria=56148,
@@ -1459,12 +1604,14 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 	},
 	[46287298] = {
 		label="The Weeping Vilomah",
-		-- TODO: this is the vignette-location, I haven't actually found the route to it yet...
 		criteria=56153,
-		quest=74086, -- 65365?
+		quest=74086, -- 65365
 		npc=183984,
-		loot={},
-		note="In cave",
+		loot={
+			200214, -- Grasp of the Weeping Widow
+		},
+		note="In cave, talk to {npc:193206:Boomhooch the Lost} to summon",
+		path=47537168,
 		vignette=4958,
 	},
 	[52806760] = {
@@ -1472,7 +1619,9 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 		criteria=56154,
 		quest=69964,
 		npc=193663,
-		loot={},
+		loot={
+			200298, -- Stoneshaped Greatbelt
+		},
 		vignette=5237,
 	},
 	[38436824] = {
@@ -1490,26 +1639,28 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 	[44806900] = {
 		label="Corrupted Proto-Dragon",
 		criteria=56156,
-		quest=74060, -- 69962?
+		quest=74060, --69962
 		npc=193658,
-		loot={},
+		loot={
+			200166, -- Corrupted Drake Horn
+		},
 		vignette=5235,
 		note="Interact with the egg inside the cave",
 	},
-	--[[
-	[] = {
+	[62208180] = {
 		label="Lord Epochbrgl",
 		criteria=56157,
 		quest=69882,
 		npc=193241,
-		loot={},
+		loot={
+			200185, -- Grips of the Everflowing Ocean
+		},
 		vignette=5203,
 	},
-	--]]
 	[59545917] = {
 		label="Ancient Protector",
 		criteria=56158,
-		quest=74055, -- 69963?
+		quest=74055, -- 69963
 		npc=193664,
 		loot={},
 		vignette=5236,
@@ -1531,6 +1682,7 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 		quest=72813, -- 69967 on vignette?
 		npc=193668,
 		loot={
+			-- 200122, -- Temporal Spyglass
 			200182, -- Riveted Drape
 			200292, -- Cragforge Pauldrons
 		},
@@ -1561,13 +1713,12 @@ core:RegisterHandyNotesData("Dragonflight", THALDRASZUS, {
 	},
 	[36737280] = {
 		label="Liskron the Dazzling",
-		quest=72116, -- 72842?
+		quest=72116, -- 72842
 		npc=193273,
 		loot={
 			{196976, quest=69176}, -- Cliffside Wylderdrake: Head Mane
 			200193, -- Manafrond Sandals
 			200174, -- Bonesigil Shoulderguards
-			198048, -- Titan Training Matric 1. Random loot??
 		},
 		vignette=5437,
 	},
