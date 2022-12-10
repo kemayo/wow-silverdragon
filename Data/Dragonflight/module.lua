@@ -20,13 +20,37 @@ local FACTION_ISKAARA = 2511
 local MAXLEVEL = {core.conditions.QuestComplete(67030), core.conditions.Level(70)}
 local DRAGONRIDING = core.conditions.SpellKnown(376777)
 
+-- Rares
+
+core:RegisterMobData("Dragonflight", {
+	[193217] = {
+		name="Drakewing",
+		achievement=16676, -- Adventurer
+		criteria=56039,
+		loot={
+			200219, -- Dangerous Drapery
+		},
+		note="Flying",
+		locations={[WAKINGSHORES]={49806960,52205060,69205480,72824701}},
+		routes={[WAKINGSHORES]={
+			{49806960, 49807220, 48007680, 47207700, r=1, g=1, b=0},
+			{52205060, 53605320, 55205820, r=1, g=1, b=0},
+			{69205480, 69405940, 67606020, 63605860, r=1, g=1, b=0},
+		}},
+	},
+	-- War party, except Brundin who's below:
+	[192737] = {name="Qalashi War Mammoth", locations={[WAKINGSHORES]={}},hidden=true,},
+	[192741] = {name="Flamebreaker Grella", locations={[WAKINGSHORES]={}},hidden=true,},
+	[192743] = {name="Stonefist Rejara", locations={[WAKINGSHORES]={}},hidden=true,},
+	[192744] = {name="Scalemelter Dorbane", locations={[WAKINGSHORES]={}},hidden=true,},
+}, true)
+
+-- Handynotes imports
 --[[
 minor transformations applied:
 `ns.conditions` = `core.conditions`
 s/{ -- (.+)/{\n\t\tlabel="$1",/g
 --]]
-
--- Rares
 
 core:RegisterHandyNotesData("Dragonflight", FORBIDDENREACHINTRO, {
 	[32884100] = {
@@ -136,14 +160,22 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		loot={},
 		minimap=true, -- just a neutral mob wandering, no vignette
 	},
-	[48436605] = {
+	[52906590] = {
 		label="Brundin the Dragonbane",
 		criteria=56038,
-		quest=nil,
+		quest=73890,
 		npc=192738,
-		loot={},
-		route={48436605, 47706890, 48007100, 46907360, 45407400, 42607250, 41706940},
+		loot={
+			200133, -- Volcanic Chakram
+			200217, -- Blazing Essence
+		},
+		route={
+			52906590, 53006650, 52006670, 51306660, 49606530, 48706530, 48436605, 47706890,
+			48007100, 46907360, 45407400, 42607250, 41706940, 40306820, 39306830, 37906960,
+			37607070, 36507160, 34607110,
+		},
 		minimap=true,
+		vignette=5386, -- Qalashi War Party
 	},
 	[45413562] = {
 		label="Thunderous Matriarch",
@@ -528,23 +560,6 @@ core:RegisterHandyNotesData("Dragonflight", WAKINGSHORES, {
 		},
 	},
 })
-core:RegisterMobData("Dragonflight", {
-	[193217] = {
-		name="Drakewing",
-		achievement=16676, -- Adventurer
-		criteria=56039,
-		loot={
-			200219, -- Dangerous Drapery
-		},
-		note="Flying",
-		locations={[WAKINGSHORES]={49806960,52205060,69205480,72824701}},
-		routes={[WAKINGSHORES]={
-			{49806960, 49807220, 48007680, 47207700, r=1, g=1, b=0},
-			{52205060, 53605320, 55205820, r=1, g=1, b=0},
-			{69205480, 69405940, 67606020, 63605860, r=1, g=1, b=0},
-		}},
-	},
-}, true)
 core:RegisterHandyNotesData("Dragonflight", OHNAHRANPLAINS, {
 	-- https://www.wowhead.com/beta/achievement=16677/adventurer-of-the-ohnahran-plains
 	[20403800] = {
