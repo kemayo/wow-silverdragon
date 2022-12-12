@@ -226,6 +226,9 @@ function module:WorkOutMobFromVignette(instanceid)
 		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0, instanceid)
 		return true
 	end
+	if ns.vignetteTreasureLookup[vignetteInfo.vignetteID] and ns.vignetteTreasureLookup[vignetteInfo.vignetteID].hidden then
+		return -- Debug("skipping notification", "ignored by vignette-id")
+	end
 	if vignetteInfo.objectGUID then
 		-- this *may* be a mob, but it also may be something which you interact with to summon the mob
 		local mobid = ns.IdFromGuid(vignetteInfo.objectGUID)
