@@ -268,20 +268,11 @@ function addon:OnInitialize()
 			always = {
 			},
 			ignore = {
+				['*'] = false,
 				[64403] = true, -- Alani
 			},
 			ignore_datasource = {
 				-- "BurningCrusade" = true,
-			},
-		},
-		locale = {
-			quest_name = {
-				-- store localized quest names
-				-- [id] = "name"
-			},
-			mob_name = {
-				-- store localized mob names
-				-- [id] = "name"
 			},
 		},
 		profile = {
@@ -294,6 +285,11 @@ function addon:OnInitialize()
 		},
 	}, true)
 	globaldb = self.db.global
+
+	if self.db.locale and self.db.locale.mob_name then
+		self.db.locale.mob_name = nil
+		self.db.locale.quest_name = nil
+	end
 
 	if SilverDragon2DB and SilverDragon2DB.global then
 		-- Migrating some data from v2
