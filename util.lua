@@ -246,7 +246,7 @@ do
 
 	local name_cache = {}
 	function addon:NameForMob(id, unit)
-		return mob_name(id, unit, addon.debuggable and name_cache or self.db.locale.mob_name)
+		return mob_name(id, unit, name_cache)
 	end
 	function addon:IdForMob(name, zone)
 		if zone then

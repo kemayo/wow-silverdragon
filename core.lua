@@ -233,10 +233,6 @@ do
 		for source, data in pairs(addon.datasources) do
 			if addon.db.global.datasources[source] then
 				for mobid, mobdata in pairs(data) do
-					if not addon.debuggable then
-						self:NameForMob(mobid) -- prime cache
-					end
-
 					mobdata.id = mobid
 					mobdata.source = source
 
