@@ -66,6 +66,12 @@ def additemdata(item):
     # });
     if m := re.search(r"new Listview\({\n\s*template: 'quest'.+?id: 'provided-for',.+?data: .+?\"id\":(\d+),", r.text, re.DOTALL):
         item["quest"] = int(m.group(1))
+    elif m := re.search(r"\(WH\.enhanceTooltip\.bind\(tt\)\)\([^\)]+?\[(\d+)\]", r.text, re.DOTALL):
+        print("found a spell, checking for quest")
+        rs = session.get(f"https://wowhead.com/spell={m.group(1)}")
+        # this might be fragile, but...
+        if m2 := re.search(r'Complete Quest.+?href="/quest=(\d+)"', rs.text):
+            item["quest"] = int(m2.group(1))
 
     if '<span class="toycolor">Toy</span>' in r.text:
         item["toy"] = True
@@ -83,20 +89,35 @@ def normalizeitem(item):
         item = {1: item}
     return item
 
-def isvaliddrop(npc, loot):
-    if "sourcemore" not in loot:
-        return False
-    for source in loot["sourcemore"]:
-        if source.get("ti") == npc:
-            # Only drops from this npc
-            return True
-        if source.get("bd"):
-            # Boss drop, which means it's inherently interesting
-            return True
+def isvaliddrop(npc, loot, loot_filter="source"):
+    if loot_filter == "all":
+        return True
+    if loot_filter in ("source", "notable"):
+        # anything that drops from just this source is inherently notable
+        for source in loot.get("sourcemore", []):
+            if source.get("ti") == npc:
+                # Only drops from this npc
+                return True
+            if source.get("bd"):
+                # Boss drop, which means it's inherently interesting
+                return True
+    if loot_filter == "notable":
+        # Basically, is this "interesting"?
+        if loot["quality"] < 3:
+            # Blue and up only
+            return False
+        if loot["classs"] in (7, 12):
+            # Trade goods, quest items
+            return False
+        if drops := loot.get("modes", {}).get("0", False):
+            rate = drops["count"] / drops["outof"]
+            if rate < 0.01:
+                return False
+        return True
     return False
 
 
-def fetchnpc(npc):
+def fetchnpc(npc, loot_filter="source"):
     print("fetchnpc", npc)
     url = f"https://wowhead.com/npc={npc}"
     r = session.get(url, timeout=5)
@@ -130,7 +151,7 @@ def fetchnpc(npc):
         lootdata = yaml.load(m.group(1).replace("undefined", "null"), Loader=Loader)
         data["loot"] = []
         for loot in lootdata["data"]:
-            if isvaliddrop(npc, loot):
+            if isvaliddrop(npc, loot, loot_filter):
                 data["loot"].append(loot["id"])
 
     return data
@@ -159,7 +180,7 @@ def output_npc(output, coords, data, indentlevel=1):
         f"{indent}[{coords[0]}] = {{ -- {data['name']}\n",
         len(coords) > 1 and f"{indent}\t-- {coords}\n" or "",
         f"{indent}\tquest={data.get('quest', 'nil')},\n",
-        f"{indent}\tnpc={npcid},\n",
+        f"{indent}\tnpc={data['id']},\n",
     ))
     if data.get("loot", []):
         output.append(f"{indent}\tloot={{\n")
@@ -284,17 +305,21 @@ if __name__ == '__main__':
     parser.add_argument('--export_handynotes', action="store_true", default=False, help="Export in my handynotes format")
     parser.add_argument('--local', action="store_true", default=False, help="Export local data rather than fetching anything")
     parser.add_argument('--only_with_loot', action="store_true", default=False, help="Only output those with loot")
+    parser.add_argument('--loot_filter', action="store", choices=("source", "notable", "all"), default="source", help="")
     args = parser.parse_args()
 
     if re.match(r"(?:[\d,]|^http)", args.input):
-        npcs = []
+        npcids = []
         if args.input.startswith("http"):
-            npcs = fetch_npcids_from_search(args.input)
+            npcids = fetch_npcids_from_search(args.input)
         else:
-            npcs = map(int, args.input.split(","))
-        output = []
-        for npcid in npcs:
-            npc = fetchnpc(npcid)
+            npcids = map(int, args.input.split(","))
+
+        npcs_byzone = {
+            "UNKNOWN": []
+        }
+        for npcid in npcids:
+            npc = fetchnpc(npcid, args.loot_filter)
             if args.only_with_loot and not npc.get("loot", False):
                 print("skipping no-loot")
                 continue
@@ -303,11 +328,27 @@ if __name__ == '__main__':
             # print(lua.serialize(npc, key=__keysort, trailingcomma=True))
             if "locations" in npc:
                 for location in npc["locations"]:
-                    output.extend(("-- ", location["uiMapName"], " (", str(location["uiMapId"]), ")\n"))
-                    output_npc(output, location["coords"], npc, 0)
+                    if location["uiMapId"] not in npcs_byzone:
+                        npcs_byzone[location["uiMapId"]] = []
+                    npcs_byzone[location["uiMapId"]].append(npc)
             else:
                 # no locations
-                output_npc(output, [0], npc, 0)
+                npcs_byzone["UNKNOWN"].append(npc)
+
+        output = []
+        for uiMapID, npcs in npcs_byzone.items():
+            output_zone = False
+            for npc in npcs:
+                if "locations" in npc:
+                    for location in npc["locations"]:
+                        if not output_zone:
+                            output.extend(("-- ", location["uiMapName"], " (", str(location["uiMapId"]), ")\n"))
+                            output_zone = True
+                        if location["uiMapId"] == uiMapID:
+                            output_npc(output, location["coords"], npc, 0)
+                else:
+                    # no locations
+                    output_npc(output, [0], npc, 0)
         print("".join(output))
     else:
         for f in glob.glob(args.input, recursive=True):
