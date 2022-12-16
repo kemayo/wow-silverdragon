@@ -16,6 +16,7 @@ local function toggle_mob(id)
 	}
 end
 
+local mob_names = {}
 local function input_to_mobid(value)
 	if not value then return end
 	value = value:trim()
@@ -25,7 +26,7 @@ local function input_to_mobid(value)
 	if value:match("^%d+$") then
 		return tonumber(value)
 	end
-	return core:IdForMob(value)
+	return mob_names[value] or core:IdForMob(value)
 end
 ns.input_to_mobid = input_to_mobid
 
@@ -54,19 +55,33 @@ function module:OnEnable()
 	core.RegisterCallback(self, "OptionsRequested")
 	core.RegisterCallback(self, "IgnoreChanged")
 	core.RegisterCallback(self, "CustomChanged")
+	core.RegisterCallback(self, "Seen")
 end
 
-
-function module:IgnoreChanged(callback, id, ignored)
+function module:Seen(callback, id, zone, x, y, dead, source)
+	local name = core:NameForMob(id)
+	if name then
+		mob_names[name] = id
+	end
 	local config = core:GetModule("Config", true)
 	if config and config.options.plugins.mobs then
-		config.options.plugins.mobs.mobs.args.ignore.args.mobs.args["mob"..id] = ignored and toggle_mob(id) or nil
+		local args = config.options.plugins.mobs.mobs.args.ignore.args.mobs.args
+		args["mob"..id] = args["mob"..id] or toggle_mob(id)
+	end
+end
+
+function module:IgnoreChanged(callback, id, ignored)
+	if not ignored then return end
+	local config = core:GetModule("Config", true)
+	if config and config.options.plugins.mobs then
+		config.options.plugins.mobs.mobs.args.ignore.args.mobs.args["mob"..id] = toggle_mob(id)
 	end
 end
 function module:CustomChanged(callback, id, watched)
+	if not watched then return end
 	local config = core:GetModule("Config", true)
 	if config and config.options.plugins.mobs then
-		config.options.plugins.mobs.mobs.args.custom.args.mobs.args["mob"..id] = watched and toggle_mob(id) or nil
+		config.options.plugins.mobs.mobs.args.custom.args.mobs.args["mob"..id] = toggle_mob(id)
 	end
 end
 
@@ -90,9 +105,9 @@ function module:OptionsRequested(callback, options)
 							type = "group",
 							name = REMOVE,
 							inline = true,
-							get = function() return true end,
+							get = function(info) return core.db.global.always[info.arg] end,
 							set = function(info, value)
-								core:SetCustom(info.arg, false)
+								core:SetCustom(info.arg, not core.db.global.always[info.arg])
 							end,
 							args = {},
 						},
@@ -110,11 +125,13 @@ function module:OptionsRequested(callback, options)
 							type = "group",
 							name = REMOVE,
 							inline = true,
-							get = function() return true end,
+							get = function(info) return core.db.global.ignore[info.arg] end,
 							set = function(info, value)
-								core:SetIgnore(info.arg, false)
+								core:SetIgnore(info.arg, not core.db.global.ignore[info.arg])
 							end,
-							args = {},
+							args = {
+								desc = core:GetModule("Config").desc("This will fill in as rare mobs are seen in the current session.", 0),
+							},
 						}
 					},
 					order = 2,
@@ -130,19 +147,24 @@ function module:OptionsRequested(callback, options)
 end
 
 function module:BuildIgnoreList(options)
-	wipe(options.plugins.mobs.mobs.args.ignore.args.mobs.args)
+	-- wipe(options.plugins.mobs.mobs.args.ignore.args.mobs.args)
+	local args = options.plugins.mobs.mobs.args.ignore.args.mobs.args
 	for id, ignored in pairs(core.db.global.ignore) do
 		if ignored then
-			options.plugins.mobs.mobs.args.ignore.args.mobs.args["mob"..id] = toggle_mob(id)
+			args["mob"..id] = args["mob"..id] or toggle_mob(id)
 		end
+	end
+	for name, id in pairs(mob_names) do
+		args["mob"..id] = args["mob"..id] or toggle_mob(id)
 	end
 end
 
 function module:BuildCustomList(options)
-	wipe(options.plugins.mobs.mobs.args.custom.args.mobs.args)
+	-- wipe(options.plugins.mobs.mobs.args.custom.args.mobs.args)
+	local args = options.plugins.mobs.mobs.args.custom.args.mobs.args
 	for id, active in pairs(core.db.global.always) do
 		if active then
-			options.plugins.mobs.mobs.args.custom.args.mobs.args["mob"..id] = toggle_mob(id)
+			args["mob"..id] = args["mob"..id] or toggle_mob(id)
 		end
 	end
 end
