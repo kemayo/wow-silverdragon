@@ -328,6 +328,9 @@ if __name__ == '__main__':
             # print(lua.serialize(npc, key=__keysort, trailingcomma=True))
             if "locations" in npc:
                 for location in npc["locations"]:
+                    if "uiMapId" not in location:
+                        npcs_byzone["UNKNOWN"].append(npc)
+                        continue
                     if location["uiMapId"] not in npcs_byzone:
                         npcs_byzone[location["uiMapId"]] = []
                     npcs_byzone[location["uiMapId"]].append(npc)
@@ -342,9 +345,9 @@ if __name__ == '__main__':
                 if "locations" in npc:
                     for location in npc["locations"]:
                         if not output_zone:
-                            output.extend(("-- ", location["uiMapName"], " (", str(location["uiMapId"]), ")\n"))
+                            output.extend(("-- ", location.get("uiMapName", "Unknown"), " (", str(location.get("uiMapId", "???")), ")\n"))
                             output_zone = True
-                        if location["uiMapId"] == uiMapID:
+                        if (location.get("uiMapId") == uiMapID) or (uiMapID == "UNKNOWN" and "uiMapId" not in location):
                             output_npc(output, location["coords"], npc, 0)
                 else:
                     # no locations
