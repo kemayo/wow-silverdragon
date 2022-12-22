@@ -58,12 +58,10 @@ core:RegisterTreasureData("Dragonflight", {
 			-- all the treasure-prerequisite items
 			{199061, quest=70527}, -- A Guide To Rare Fish
 			{194540, quest=67046}, -- Nokhud Armorer's Notes
-			{195453, quest=67718}, -- Ludo's Stash Map
 			{199065, quest=70534}, -- Sorrowful Letter
 			{199066, quest=70535}, -- Letter of Caution
 			{199068, quest=70537}, -- Time-Lost Memo
 			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
-			{200738, quest=72021, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Onyx Gem Cluster Map
 			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
 			{199067, quest=70536, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Precious Plans
 			{198852, quest=70407, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
@@ -86,12 +84,10 @@ core:RegisterTreasureData("Dragonflight", {
 			-- all the treasure-prerequisite items
 			{199061, quest=70527}, -- A Guide To Rare Fish
 			{194540, quest=67046}, -- Nokhud Armorer's Notes
-			{195453, quest=67718}, -- Ludo's Stash Map
 			{199065, quest=70534}, -- Sorrowful Letter
 			{199066, quest=70535}, -- Letter of Caution
 			{199068, quest=70537}, -- Time-Lost Memo
 			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
-			{200738, quest=72021, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Onyx Gem Cluster Map
 			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
 			{199067, quest=70536, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Precious Plans
 			{198852, quest=70407, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
@@ -107,12 +103,10 @@ core:RegisterTreasureData("Dragonflight", {
 			-- all the treasure-prerequisite items
 			{199061, quest=70527}, -- A Guide To Rare Fish
 			{194540, quest=67046}, -- Nokhud Armorer's Notes
-			{195453, quest=67718}, -- Ludo's Stash Map
 			{199065, quest=70534}, -- Sorrowful Letter
 			{199066, quest=70535}, -- Letter of Caution
 			{199068, quest=70537}, -- Time-Lost Memo
 			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
-			{200738, quest=72021, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Onyx Gem Cluster Map
 			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
 			{199067, quest=70536, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Precious Plans
 			{198852, quest=70407, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
