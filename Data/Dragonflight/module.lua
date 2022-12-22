@@ -35,6 +35,7 @@ core:RegisterMobData("Dragonflight", {
 			{69205480, 69405940, 67606020, 63605860, r=1, g=1, b=0},
 		}},
 	},
+	[190971] = {name="Shas'ith", hidden=true}, -- the locked-up variant which is always there
 	-- War party, except Brundin who's below:
 	[192737] = {name="Qalashi War Mammoth", locations={[WAKINGSHORES]={}},hidden=true,},
 	[192741] = {name="Flamebreaker Grella", locations={[WAKINGSHORES]={}},hidden=true,},
@@ -54,8 +55,19 @@ core:RegisterTreasureData("Dragonflight", {
 		label="Expedition Scout's Pack",
 		loot={
 			{192764, mount=1617, note="Renown 25", requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 25)}, -- Verdant Skitterfly
-			{199061, quest=70527}, -- A Guide to Rare Fish
+			-- all the treasure-prerequisite items
+			{199061, quest=70527}, -- A Guide To Rare Fish
 			{194540, quest=67046}, -- Nokhud Armorer's Notes
+			{195453, quest=67718}, -- Ludo's Stash Map
+			{199065, quest=70534}, -- Sorrowful Letter
+			{199066, quest=70535}, -- Letter of Caution
+			{199068, quest=70537}, -- Time-Lost Memo
+			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
+			{200738, quest=72021, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Onyx Gem Cluster Map
+			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
+			{199067, quest=70536, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Precious Plans
+			{198852, quest=70407, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
+			-- others
 			201387, -- Drakonid Stalker's Halberd
 			201388, -- Dragonspawn Wingtipped Staff
 			201389, -- Wingcrest Battle Staff
@@ -67,6 +79,46 @@ core:RegisterTreasureData("Dragonflight", {
 			201396, -- Hidepiercing Claw Extensions
 		},
 		requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 2),
+	},
+	[5466] = {
+		label="Disturbed Dirt",
+		loot={
+			-- all the treasure-prerequisite items
+			{199061, quest=70527}, -- A Guide To Rare Fish
+			{194540, quest=67046}, -- Nokhud Armorer's Notes
+			{195453, quest=67718}, -- Ludo's Stash Map
+			{199065, quest=70534}, -- Sorrowful Letter
+			{199066, quest=70535}, -- Letter of Caution
+			{199068, quest=70537}, -- Time-Lost Memo
+			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
+			{200738, quest=72021, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Onyx Gem Cluster Map
+			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
+			{199067, quest=70536, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Precious Plans
+			{198852, quest=70407, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
+			-- others
+			192055, -- Dragon Isles Artifact
+			201390, -- Devastating Drakonid Waraxe
+			201391, -- Drakonid Enforcer's Hidesplitter
+		},
+	},
+	[5467] = {
+		label="Magic-Bound Chest",
+		loot={
+			-- all the treasure-prerequisite items
+			{199061, quest=70527}, -- A Guide To Rare Fish
+			{194540, quest=67046}, -- Nokhud Armorer's Notes
+			{195453, quest=67718}, -- Ludo's Stash Map
+			{199065, quest=70534}, -- Sorrowful Letter
+			{199066, quest=70535}, -- Letter of Caution
+			{199068, quest=70537}, -- Time-Lost Memo
+			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
+			{200738, quest=72021, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Onyx Gem Cluster Map
+			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
+			{199067, quest=70536, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Precious Plans
+			{198852, quest=70407, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
+			-- others
+			192055, -- Dragon Isles Artifact
+		},
 	},
 }, true)
 
