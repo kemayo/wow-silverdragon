@@ -436,7 +436,7 @@ PopupMixin.scripts = {
 		self[event](self, event, ...)
 	end,
 	OnEnter = function(self)
-		if self.waitingToHide then
+		if self.waitingToHide or not self.data then
 			-- we're "hidden" via alpha==0 now, so no tooltip
 			return
 		end
@@ -529,7 +529,7 @@ PopupMixin.scripts = {
 	OnShow = function(self)
 		if not self.data then
 			-- Things which show/hide UIParent (cinematics) *might* get us here without data
-			return self:Hide()
+			return self:HideWhenPossible()
 		end
 		module:ResetLook(self)
 
