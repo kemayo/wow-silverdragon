@@ -110,9 +110,12 @@ def isvaliddrop(npc, loot, loot_filter="source"):
             # Trade goods, quest items
             return False
         if drops := loot.get("modes", {}).get("0", False):
-            rate = drops["count"] / drops["outof"]
-            if rate < 0.01:
-                return False
+            count = drops["count"]
+            outof = drops["outof"]
+            if outof != 0:
+                rate = drops["count"] / drops["outof"]
+                if rate < 0.01:
+                    return False
         return True
     return False
 
