@@ -11,6 +11,7 @@ function module:OnInitialize()
 			achievement = true,
 			drop = true,
 			id = false,
+			combatdrop = false,
 		},
 	})
 
@@ -25,9 +26,10 @@ function module:OnInitialize()
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
 					about = config.desc("SilverDragon can put some information about mobs into their tooltips. For rares, that can include whether you actually need to kill them for an achievement.", 0),
-					achievement = config.toggle("Achievements", "Show if you need a rare mob for an achievement"),
-					drop = config.toggle("Drops", "Show if you need a drop from a mob"),
-					id = config.toggle("Unit IDs", "Show mob ids in tooltips"),
+					achievement = config.toggle("Achievements", "Show if you need a rare mob for an achievement", 1),
+					drop = config.toggle("Drops", "Show if you need a drop from a mob", 2),
+					combatdrop = config.toggle("...in combat", "Show the drops while you're in combat", 3),
+					id = config.toggle("Unit IDs", "Show mob ids in tooltips", 4),
 				},
 			},
 		}
@@ -63,7 +65,7 @@ function module:UpdateTooltip(id, force_achievement, force_drop, force_id)
 		ns:UpdateTooltipWithCompletion(GameTooltip, id)
 	end
 
-	if self.db.profile.drop or force_drop == true and not force_drop == false then
+	if (self.db.profile.drop and (self.db.profile.combatdrop or not InCombatLockdown())) or force_drop == true and not force_drop == false then
 		ns.Loot.Summary.UpdateTooltip(GameTooltip, id)
 	end
 
