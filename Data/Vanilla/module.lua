@@ -282,7 +282,7 @@ core:RegisterMobData("Vanilla", {
 	[13896] = {name="Scalebeard",locations={[76]={41804940},},tameable=true,},
 	[14221] = {name="Gravis Slipknot",locations={[25]={55402380},},},
 	[14222] = {name="Araga",locations={[25]={44205400},},tameable=132185,},
-	[14223] = {name="Cranky Benj",locations={[25]={56406220,60405400,60604660,67403420},},tameable=132199,},
+	[14223] = {name="Cranky Benj",locations={[25]={67403420},},routes={[25]={{56406220,60705670,61305030,61304360,63103920,67403420}}},tameable=132199,},
 	[14224] = {name="7:XT",locations={[15]={77803140},},},
 	[14225] = {name="Prince Kellen",locations={[66]={74401240,75401880},},},
 	[14226] = {name="Kaskk",locations={[66]={50007200,50408120,56607420},},},
