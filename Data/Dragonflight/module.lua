@@ -2279,11 +2279,11 @@ ns.RegisterPoints(ns.AZURESPAN, {
 		worldquest=69927,
 		npc=193532,
 		loot={
-				200654, -- Magmatic Vestments
-				200660, -- Cinderfang Wrap
-				200661, -- Basalt Brood Stompers
-				200663, -- Shackles of the Dreaded Flame
-				200761, -- Smoldering Sulfuron Signet
+			200654, -- Magmatic Vestments
+			200660, -- Cinderfang Wrap
+			200661, -- Basalt Brood Stompers
+			200663, -- Shackles of the Dreaded Flame
+			200761, -- Smoldering Sulfuron Signet
 		},
 	},
 })
@@ -2780,20 +2780,18 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 		},
 		vignette=5437,
 	},
-	--[[
-	[] = {
+	[60008190] = {
+		-- also primalist future @ 53686325
 		label="Liskanoth",
-		-- TODO: location, quest
-		quest=nil,
-		worldquest=nil,
+		quest=69928, -- 72057
+		worldquest=69928,
 		npc=193533,
 		loot={
-				200743, -- Frozen Footwraps
-				200744, -- Glacial Bindings
-				200745, -- Horns of the Futurebane
-				200746, -- Icebound Girdle
-				200763, -- Frosted Scale Drape
+			200743, -- Frozen Footwraps
+			200744, -- Glacial Bindings
+			200745, -- Horns of the Futurebane
+			200746, -- Icebound Girdle
+			200763, -- Frosted Scale Drape
 		},
 	},
-	--]]
 })
