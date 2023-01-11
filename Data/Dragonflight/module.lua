@@ -61,7 +61,7 @@ core:RegisterTreasureData("Dragonflight", {
 			{199065, quest=70534}, -- Sorrowful Letter
 			{199066, quest=70535}, -- Letter of Caution
 			{199068, quest=70537}, -- Time-Lost Memo
-			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
+			{199062, quest=70528, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
 			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
 			{199067, quest=70536, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Precious Plans
 			{198852, quest=70407, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
@@ -87,7 +87,7 @@ core:RegisterTreasureData("Dragonflight", {
 			{199065, quest=70534}, -- Sorrowful Letter
 			{199066, quest=70535}, -- Letter of Caution
 			{199068, quest=70537}, -- Time-Lost Memo
-			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
+			{199062, quest=70528, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
 			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
 			{199067, quest=70536, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Precious Plans
 			{198852, quest=70407, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
@@ -106,7 +106,7 @@ core:RegisterTreasureData("Dragonflight", {
 			{199065, quest=70534}, -- Sorrowful Letter
 			{199066, quest=70535}, -- Letter of Caution
 			{199068, quest=70537}, -- Time-Lost Memo
-			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
+			{199062, quest=70528, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
 			{198843, quest=70392, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
 			{199067, quest=70536, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Precious Plans
 			{198852, quest=70407, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
