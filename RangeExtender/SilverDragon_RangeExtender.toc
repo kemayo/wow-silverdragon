@@ -1,4 +1,4 @@
-## Interface: 100002
+## Interface: 100005
 ## Interface-Wrath: 30400
 ## Interface-Classic: 11403
 ## Title: SilverDragon: Range Extender
