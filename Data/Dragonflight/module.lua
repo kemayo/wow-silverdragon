@@ -1137,7 +1137,7 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 	[37005400] = {
 		label="Researcher Sneakwing",
 		criteria=56069,
-		quest=70689,
+		quest=70698, -- 74023
 		npc=196010,
 		loot={
 			{196992,quest=69192,}, -- Cliffside Wylderdrake: Heavy Horns
