@@ -1498,7 +1498,7 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 		label="Astray Splasher",
 		achievement=16678, -- Adventurer of the *Azure Span*
 		criteria=56130,
-		quest=nil,
+		quest=74057,
 		npc=197411,
 		loot={},
 	},
@@ -1770,7 +1770,7 @@ ns.RegisterPoints(ns.AZURESPAN, {
 		label="Mucka the Raker",
 		-- ...very prone to resetting+evading and healing to full
 		criteria=56102,
-		quest=nil, -- no quest popped
+		quest=73885,
 		npc=193201,
 		loot={
 			{196976,quest=69176,}, -- Cliffside Wylderdrake: Head Mane
@@ -1786,6 +1786,7 @@ ns.RegisterPoints(ns.AZURESPAN, {
 			200563, -- Primal Ritual Shell
 			200859, -- Seasoned Hunter's Trophy
 		},
+		note="You may need to kill a stuck {npc:193219:Muckling} nearby to stop this from evading",
 	},
 	[08804860] = {
 		label="Brackle",
@@ -2428,7 +2429,7 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 	[59806100] = {
 		label="Phenran",
 		criteria=56140,
-		quest=69976,
+		quest=74020,
 		npc=193688,
 		loot={
 			{197100,quest=69301,}, -- Highland Drake: Crested Brow
