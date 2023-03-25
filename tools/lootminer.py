@@ -147,8 +147,11 @@ def fetchnpc(npc, loot_filter="source"):
                     if "locations" not in data:
                         data["locations"] = []
                     for locationdata in locationdatas:
-                        locationdata["coords"] = [pack_coords(coord[0]/100, coord[1]/100) for coord in locationdata["coords"]]
-                        data["locations"].append(locationdata)
+                        if "coords" in locationdata:
+                            locationdata["coords"] = [pack_coords(coord[0]/100, coord[1]/100) for coord in locationdata["coords"]]
+                            data["locations"].append(locationdata)
+                        else:
+                            print("No locationdata")
 
     if m := re.search(r"^new Listview\(({template: 'item', id: 'drops',.+})\);$", r.text, re.MULTILINE):
         lootdata = yaml.load(m.group(1).replace("undefined", "null"), Loader=Loader)

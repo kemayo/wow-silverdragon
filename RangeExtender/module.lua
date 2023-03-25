@@ -150,6 +150,10 @@ do
 		[2112] = { -- Valdrakken
 			[58173512] = true,
 		},
+		[2151] = { -- Forbidden Reach
+			[34325998] = true,
+			[34085997] = true,
+		},
 	}
 	function module:ShouldHideVignette(vignetteInfo, uiMapID, x, y)
 		if not inconvenient[uiMapID] then return end
