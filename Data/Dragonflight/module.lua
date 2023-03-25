@@ -36,6 +36,30 @@ core:RegisterMobData("Dragonflight", {
 			{69205480, 69405940, 67606020, 63605860, r=1, g=1, b=0},
 		}},
 	},
+	-- Stormed off
+	-- Storm
+	[193653] = {name="Gaelzion", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Storm Invasions"},
+	[193647] = {name="Karantun", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Storm Invasions"},
+	[193684] = {name="Pipspark Thundersnap", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Storm Invasions"},
+	[193674] = {name="Voraazka", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Storm Invasions"},
+	-- Earth
+	[193644] = {name="Bouldron", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Earth Invasions"},
+	[193680] = {name="Zurgaz Corebreaker", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Earth Invasions"},
+	[193652] = {name="Grizzlerock", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Earth Invasions"},
+	[193654] = {name="Gravlion", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Earth Invasions"},
+	-- Fire
+	[193648] = {name="Infernum", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Fire Invasions"},
+	[193686] = {name="Neela Firebane", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Fire Invasions"},
+	[193675] = {name="Kain Firebrand", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Fire Invasions"},
+	[193650] = {name="Emblazion", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Fire Invasions"},
+	-- Water
+	[193645] = {name="Crystalus", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",},
+	[193682] = {name="Rouen Icewind", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",},
+	[193655] = {name="Frozion", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",},
+	[193677] = {name="Maeleera", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",vignette=5243,},
+	[193678] = {name="Fieraan", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",vignette=5243,},
+	[193679] = {name="Leerain", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",vignette=5243,},
+	-- Assorted hidden things
 	[190971] = {name="Shas'ith", hidden=true}, -- the locked-up variant which is always there
 	-- War party, except Brundin who's below:
 	[192737] = {name="Qalashi War Mammoth", locations={[WAKINGSHORES]={}},hidden=true,},
