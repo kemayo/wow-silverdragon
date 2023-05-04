@@ -1,5 +1,5 @@
-﻿## Interface: 100007
-## Interface-Wrath: 30400
+﻿## Interface: 100100
+## Interface-Wrath: 30401
 ## Interface-Classic: 11403
 ## Title: SilverDragon
 ## Notes: Remember where rares were
@@ -9,6 +9,7 @@
 ## Version: @project-version@
 ## Author: Kemayo
 ## eMail: kemayo at gmail dot com
+## IconTexture: Interface\Icons\INV_Misc_Head_Dragon_01
 ## X-Category: Interface Enhancements
 ## X-Donate: PayPal:kemayo AT gmail DOT com
 ## X-Curse-Project-ID: 14647
