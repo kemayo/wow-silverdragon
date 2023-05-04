@@ -142,6 +142,28 @@ core:RegisterTreasureData("Dragonflight", {
 			192055, -- Dragon Isles Artifact
 		},
 	},
+	[5614] = {
+		label="Forbidden Hoard",
+		loot={
+			{197000, quest=69200}, -- Cliffside Wylderdrake: Coiled Horns
+			{203463, quest=74359}, -- Atrenosh's Journal
+			202667, -- Sealed Artifact Scroll
+			202668, -- Sealed Spirit Scroll
+			202669, -- Sealed Fish Scroll
+			202670, -- Sealed Knowledge Scroll
+		},
+	},
+	[5463] = {
+		label="Forbidden Hoard", -- locked
+		loot={
+			{197000, quest=69200}, -- Cliffside Wylderdrake: Coiled Horns
+			{203463, quest=74359}, -- Atrenosh's Journal
+			202667, -- Sealed Artifact Scroll
+			202668, -- Sealed Spirit Scroll
+			202669, -- Sealed Fish Scroll
+			202670, -- Sealed Knowledge Scroll
+		},
+	},
 }, true)
 
 -- Handynotes imports
