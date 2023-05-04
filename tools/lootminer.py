@@ -121,10 +121,10 @@ def isvaliddrop(npc, loot, loot_filter="source"):
 
 
 def fetchnpc(npc, loot_filter="source"):
-    print("fetchnpc", npc)
     url = f"https://wowhead.com/npc={npc}"
+    print("fetchnpc", npc, url)
     r = session.get(url, timeout=5)
-    print("fetch completed")
+    print("fetch completed", r.url)
 
     data = None
 
@@ -132,26 +132,29 @@ def fetchnpc(npc, loot_filter="source"):
     # override the loader, and the default loader is a lot slower.
 
     # $.extend(g_npcs[50358], {"classification":2,"id":50358,"location":[6507],"maxlevel":38,"minlevel":38,"name":"Haywire Sunreaver Construct","react":[-1,-1],"type":9});
-    if m := re.search(r"^\$.extend\(g_npcs\[\d+], ({.+})\);$", r.text, re.MULTILINE):
+    # $.extend(g_npcs[203625], {"classification":2,"displayName":"Karokta","displayNames":["Karokta"],"id":203625,"name":"Karokta","names":["Karokta"],"type":1});
+    if m := re.search(r"^\$.extend\(g_npcs\[\d+], ?({.+})\);?$", r.text, re.MULTILINE):
         data = yaml.load(m.group(1), Loader=Loader)
         if data["id"] != npc:
-            print("couldn't find npc data")
+            print("couldn't find npc data in g_npcs")
             return False
+    else:
+        print("couldn't find g_npc data")
+        return False
 
     # var g_mapperData = {"13644":[{"count":1,"coords":[[33,76.4]],"uiMapId":2022,"uiMapName":"The Waking Shores"}]};
     if mapperDatas := re.findall(r"g_mapperData\s*=\s*({\"\d+\":\[.+\]});", r.text):
         for mapperData in mapperDatas:
             locations = yaml.load(mapperData, Loader=Loader)
             for locationid, locationdatas in locations.items():
-                if int(locationid) in data["location"]:
-                    if "locations" not in data:
-                        data["locations"] = []
-                    for locationdata in locationdatas:
-                        if "coords" in locationdata:
-                            locationdata["coords"] = [pack_coords(coord[0]/100, coord[1]/100) for coord in locationdata["coords"]]
-                            data["locations"].append(locationdata)
-                        else:
-                            print("No locationdata")
+                if "locations" not in data:
+                    data["locations"] = []
+                for locationdata in locationdatas:
+                    if "coords" in locationdata:
+                        locationdata["coords"] = [pack_coords(coord[0]/100, coord[1]/100) for coord in locationdata["coords"]]
+                        data["locations"].append(locationdata)
+                    else:
+                        print("No locationdata")
 
     if m := re.search(r"^new Listview\(({template: 'item', id: 'drops',.+})\);$", r.text, re.MULTILINE):
         lootdata = yaml.load(m.group(1).replace("undefined", "null"), Loader=Loader)
@@ -326,6 +329,9 @@ if __name__ == '__main__':
         }
         for npcid in npcids:
             npc = fetchnpc(npcid, args.loot_filter)
+            if not npc:
+                print("couldn't fetch", npcid)
+                continue
             if args.only_with_loot and not npc.get("loot", False):
                 print("skipping no-loot")
                 continue
