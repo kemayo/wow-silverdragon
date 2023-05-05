@@ -150,6 +150,9 @@ do
 		[2112] = { -- Valdrakken
 			[58173512] = true,
 		},
+		[2133] = { -- Zalarak Cavern
+			[56535566] = true,
+		},
 		[2151] = { -- Forbidden Reach
 			[34325998] = true,
 			[34085997] = true,
