@@ -444,7 +444,7 @@ do
 			Debug("Skipping notification: seen", id, lastseen[id..zone], time() - self.db.profile.delay, source)
 			return
 		end
-		if (not self.db.profile.taxi) and UnitOnTaxi('player') then
+		if not self:PlayerIsInteractive() then
 			Debug("Skipping notification: taxi", id, source)
 			return
 		end
@@ -487,6 +487,18 @@ do
 			end
 		end
 	end
+end
+
+function addon:PlayerIsInteractive()
+	if (not self.db.profile.taxi) and UnitOnTaxi('player') then
+		return false
+	end
+	if IsInCinematicScene() or InCinematic() then
+		-- TODO: should I repurpose the taxi preference to just apply to any
+		-- not-interactive state?
+		return false
+	end
+	return true
 end
 
 -- Scanning:

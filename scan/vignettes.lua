@@ -204,7 +204,7 @@ function module:WorkOutMobFromVignette(instanceid)
 		return -- Debug("vignette not visible on minimap and we're only alerting for visibles")
 	end
 	if vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite" then
-		if (not core.db.profile.taxi) and UnitOnTaxi('player') then
+		if not core:PlayerIsInteractive() then
 			return -- Debug("skipping notification", "on taxi")
 		end
 		if already_notified_loot[vignetteInfo.vignetteGUID] and time() < (already_notified_loot[vignetteInfo.vignetteGUID] + core.db.profile.delay) then
