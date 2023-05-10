@@ -3236,17 +3236,17 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 	--[[
 	[0] = { -- Lavermix
 		criteria=59201,
-		quest=nil,
+		quest=75338,
 		npc=203630,
 	},
 	[0] = { -- Shadowforge Mole Machine
 		criteria=59211,
-		quest=nil,
+		quest=75576, -- Grim Guzzler Invasion
 		npc=204096,
 	},
 	[0] = { -- Hadexia
 		criteria=59197,
-		quest=nil,
+		quest=75314,
 		npc=203611,
 	},
 	[0] = { -- Kronkapace
@@ -3305,7 +3305,7 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 	},
 	[55841899] = { -- Professor Gastrinax
 		criteria=59189,
-		quest=nil,
+		quest=75291, -- 75292
 		npc=203521,
 		loot={
 			{203331,quest=73820,}, -- Winding Slitherdrake: Cluster Horns
@@ -3316,7 +3316,7 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 	},
 	[46103346] = { -- Invoq (Invohq?)
 		criteria=59200,
-		quest=nil,
+		quest=75335, -- 75336 (70518 also? probably just a curious djardin rune)
 		npc=203627,
 		loot={
 			{203328,quest=73816,}, -- Winding Slitherdrake: White Horns
@@ -3352,7 +3352,7 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 	},
 	[47822342] = { -- Colossian
 		criteria=59212,
-		quest=nil,
+		quest=75475, -- 75476
 		npc=204093,
 		loot={
 			{197364,quest=69565,}, -- Renewed Proto-Drake: Short Spiked Crest
@@ -3390,7 +3390,7 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 	},
 	[42521879] = { -- General Zskorro
 		criteria=59190,
-		quest=75296,
+		quest=75295, -- 75296
 		npc=203592,
 		loot={205321}, -- Brimstone Bracers
 		vignette=5645,
@@ -3479,7 +3479,7 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 	},
 	[37954642] = { -- Subterrax
 		criteria=59208,
-		quest=75360,
+		quest=75359, -- 75360
 		npc=203662,
 		loot={
 			{203338,quest=73829,}, -- Winding Slitherdrake: Antler Horns
