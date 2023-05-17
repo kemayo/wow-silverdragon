@@ -3461,7 +3461,7 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 			{203321,quest=73809,}, -- Winding Slitherdrake: Curled Cheek Horn
 			205294, -- Sandals of Molten Scorn
 			205301, -- Hardened Lava Handwraps
-			{205463, toy=true}, -- Skornak's Lava Ball
+			-- {205463, toy=true}, -- Skornak's Lava Ball
 		},
 		vignette=5659,
 	},
