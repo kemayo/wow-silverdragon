@@ -15,6 +15,9 @@ local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
 local SilverDragonOverlayPinMixinBase = {}
 module.SilverDragonOverlayPinMixinBase = SilverDragonOverlayPinMixinBase
 
+-- 10.1.5 protected SetPassThroughButtons and it's called automatically inside AcquirePin, so we'll break it harder here until Blizzard fixes it:
+SilverDragonOverlayPinMixinBase.SetPassThroughButtons = function() end
+
 function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, scale, alpha, originalCoord, originalMapID, minimap)
     self.mobid = mobid
     self.coord = originalCoord
