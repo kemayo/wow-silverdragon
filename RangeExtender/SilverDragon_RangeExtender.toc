@@ -1,6 +1,6 @@
 ## Interface: 100107
-## Interface-Wrath: 30401
-## Interface-Classic: 11403
+## Interface-Wrath: 30402
+## Interface-Classic: 11404
 ## Title: SilverDragon: Range Extender
 ## Notes: Show map vignettes when they'd normally be out of your range
 ## Version: @project-version@
