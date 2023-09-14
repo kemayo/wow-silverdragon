@@ -609,7 +609,8 @@ function ns:CompletionStatus(id)
 end
 
 function ns:LoadAllAchievementMobs()
-	if not _G.GetAchievementInfo then
+	if ns.CLASSICERA or not _G.GetAchievementInfo then
+		-- with API synchronization, the Classic client now *has* achievement functions, just... uselessly.
 		achievements_loaded = true
 	end
 	if achievements_loaded then
