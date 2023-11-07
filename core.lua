@@ -129,6 +129,16 @@ function addon:RegisterMobData(source, data, updated)
 	end
 	if not addon.datasources[source] then addon.datasources[source] = {} end
 	MergeTable(addon.datasources[source], data)
+	-- pick up achievements if needed
+	for mobid, mobdata in pairs(data) do
+		if mobdata.achievement and mobdata.criteria then
+			if not ns.achievements[mobdata.achievement] then
+				ns.achievements[mobdata.achievement] = {}
+			end
+			ns.achievements[mobdata.achievement][mobdata.npc] = mobdata.criteria
+			ns.mobs_to_achievement[mobdata.npc] = mobdata.achievement
+		end
+	end
 end
 function addon:RegisterTreasureData(source, data, updated)
 	if not updated then return end
@@ -159,6 +169,7 @@ do
 					requires=point.require or point.hide_before,
 					vignette=point.vignette,
 					quest=point.quest,
+					hidden=point.hidden,
 				}
 				if point.route and type(point.route) == "table" then
 					data.routes = {[uiMapID] = {point.route}}
@@ -173,6 +184,7 @@ do
 							ns.achievements[point.achievement] = {}
 						end
 						ns.achievements[point.achievement][point.npc] = point.criteria
+						ns.mobs_to_achievement[point.npc] = point.achievement
 					end
 				else
 					addon.treasuresources[source][point.vignette] = data
