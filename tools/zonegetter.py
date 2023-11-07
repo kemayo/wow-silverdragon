@@ -11,10 +11,10 @@ from npc.zones import zoneid_to_mapid
 def fetch_zone_map():
     # page = requests.get("http://wow.zamimg.com/js/locale/enus.js?1530549634")
     # page = requests.get("https://wow.zamimg.com/js/locale/beta.enus.js?b2f9889")
-    page = requests.get("https://ptr.wowhead.com/data/global?locale=0&dataEnv=2&dv=19&b=38783&versionsSig=363b67d2b229d9a4e6b70940bdbfcd65")
+    page = requests.get("https://nether.wowhead.com/ptr/data/global?dv=48&amp;db=1699385544&amp;versionsSig=0540d367fafe9133bca2d39a04d86ef8")
     assert page, "Couldn't load wowhead zone map"
     # match = re.search(r"g_zones\s*=\s*({[^}]+});", page.text)
-    match = re.search(r"WH\.setPageData\('WH\.Wow\.Area\.names', ({[^}]+})\);", page.text)
+    match = re.search(r"WH\.setPageData\('wow\.area\.names', ({[^}]+})\);", page.text)
     assert match, "Locale JS didn't contain zone names"
     zone_map = {}
     for id, name in re.findall(r'"(\-?\d+)":"([^"]+)"', match.group(1)):

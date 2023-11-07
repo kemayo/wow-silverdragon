@@ -156,10 +156,10 @@ def fetchnpc(npc, loot_filter="source"):
                     else:
                         print("No locationdata")
 
-    if m := re.search(r"^new Listview\(({template: 'item', id: 'drops',.+})\);$", r.text, re.MULTILINE):
+    if m := re.search(r"^new Listview\({template: 'item', id: 'drops',.*data:(\[.+\])}\);$", r.text, re.MULTILINE):
         lootdata = yaml.load(m.group(1).replace("undefined", "null"), Loader=Loader)
         data["loot"] = []
-        for loot in lootdata["data"]:
+        for loot in lootdata:
             if isvaliddrop(npc, loot, loot_filter):
                 data["loot"].append(loot["id"])
 
