@@ -1,5 +1,6 @@
 cache.sqlite
 cache.sqlite-journal
+http_cache.sqlite
 parser.out
 parsetab.py
 zones.py

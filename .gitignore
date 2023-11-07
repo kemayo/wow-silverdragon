@@ -1,3 +1,4 @@
 *.pyc
 *.swp
 RECENT_CHANGES.md
+.DS_Store
