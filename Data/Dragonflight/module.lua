@@ -22,6 +22,8 @@ local FACTION_LOAMM = 2564
 
 -- Rares
 
+local LOC_alldragonisles = {[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},}
+
 core:RegisterMobData("Dragonflight", {
 	[193217] = {
 		name="Drakewing",
@@ -40,27 +42,27 @@ core:RegisterMobData("Dragonflight", {
 	},
 	-- Stormed off
 	-- Storm
-	[193653] = {name="Gaelzion", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Storm Invasions"},
-	[193647] = {name="Karantun", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Storm Invasions"},
-	[193684] = {name="Pipspark Thundersnap", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Storm Invasions"},
-	[193674] = {name="Voraazka", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Storm Invasions"},
+	[193653] = {name="Gaelzion", locations=LOC_alldragonisles,notes="Storm Invasions"},
+	[193647] = {name="Karantun", locations=LOC_alldragonisles,notes="Storm Invasions"},
+	[193684] = {name="Pipspark Thundersnap", locations=LOC_alldragonisles,notes="Storm Invasions"},
+	[193674] = {name="Voraazka", locations=LOC_alldragonisles,notes="Storm Invasions"},
 	-- Earth
-	[193644] = {name="Bouldron", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Earth Invasions"},
-	[193680] = {name="Zurgaz Corebreaker", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Earth Invasions"},
-	[193652] = {name="Grizzlerock", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Earth Invasions"},
-	[193654] = {name="Gravlion", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Earth Invasions"},
+	[193644] = {name="Bouldron", locations=LOC_alldragonisles,notes="Earth Invasions"},
+	[193680] = {name="Zurgaz Corebreaker", locations=LOC_alldragonisles,notes="Earth Invasions"},
+	[193652] = {name="Grizzlerock", locations=LOC_alldragonisles,notes="Earth Invasions"},
+	[193654] = {name="Gravlion", locations=LOC_alldragonisles,notes="Earth Invasions"},
 	-- Fire
-	[193648] = {name="Infernum", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Fire Invasions"},
-	[193686] = {name="Neela Firebane", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Fire Invasions"},
-	[193675] = {name="Kain Firebrand", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Fire Invasions"},
-	[193650] = {name="Emblazion", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Fire Invasions"},
+	[193648] = {name="Infernum", locations=LOC_alldragonisles,notes="Fire Invasions"},
+	[193686] = {name="Neela Firebane", locations=LOC_alldragonisles,notes="Fire Invasions"},
+	[193675] = {name="Kain Firebrand", locations=LOC_alldragonisles,notes="Fire Invasions"},
+	[193650] = {name="Emblazion", locations=LOC_alldragonisles,notes="Fire Invasions"},
 	-- Water
-	[193645] = {name="Crystalus", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",},
-	[193682] = {name="Rouen Icewind", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",},
-	[193655] = {name="Frozion", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",},
-	[193677] = {name="Maeleera", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",vignette=5243,},
-	[193678] = {name="Fieraan", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",vignette=5243,},
-	[193679] = {name="Leerain", locations={[WAKINGSHORES]={},[OHNAHRANPLAINS]={},[AZURESPAN]={},[THALDRASZUS]={},},notes="Water Invasions",vignette=5243,},
+	[193645] = {name="Crystalus", locations=LOC_alldragonisles,notes="Water Invasions",},
+	[193682] = {name="Rouen Icewind", locations=LOC_alldragonisles,notes="Water Invasions",},
+	[193655] = {name="Frozion", locations=LOC_alldragonisles,notes="Water Invasions",},
+	[193677] = {name="Maeleera", locations=LOC_alldragonisles,notes="Water Invasions",vignette=5243,},
+	[193678] = {name="Fieraan", locations=LOC_alldragonisles,notes="Water Invasions",vignette=5243,},
+	[193679] = {name="Leerain", locations=LOC_alldragonisles,notes="Water Invasions",vignette=5243,},
 	-- Assorted hidden things
 	[190971] = {name="Shas'ith", hidden=true}, -- the locked-up variant which is always there
 	-- War party, except Brundin who's below:
@@ -71,6 +73,27 @@ core:RegisterMobData("Dragonflight", {
 	--
 	[201186] = {name="Shimmermaw Jr.", locations={[FORBIDDENREACH]={},},hidden=true,},
 	[201310] = {name="Nidharr", locations={[FORBIDDENREACH]={},},hidden=true,},
+	-- Fyrakk assault rares
+	[200832] = {name="Fyrakk", locations=LOC_alldragonisles,hidden=true,},
+	[203699] = {name="Half-bound Rageflame", locations=LOC_alldragonisles,hidden=true,},
+	[201054] = {name="Crimson Oldblood", locations=LOC_alldragonisles,hidden=true,},
+	[203703] = {name="Flamebringer Rageblood", locations=LOC_alldragonisles,hidden=true,},
+	[203705] = {name="Flamebringer Elementalist", locations=LOC_alldragonisles,hidden=true,},
+	[203707] = {name="Flamebringer Cauterizer", locations=LOC_alldragonisles,hidden=true,},
+	[203698] = {name="Rampant Shadowflame", locations=LOC_alldragonisles,hidden=true,},
+	[203700] = {name="Flamebringer Shaman", locations=LOC_alldragonisles,hidden=true,},
+	-- Researchers Under Fire
+	[203834] = {name="Contaminated Titan Watcher",locations={[ZARALEKCAVERN]={45006200}},achievement=18201,criteria=1,hidden=true,},
+	[202318] = {name="Response Team Watcher",locations={[ZARALEKCAVERN]={47806380}},hidden=true,},
+	[202309] = {name="Cavern Flayer Matriarch",locations={[ZARALEKCAVERN]={47405680}},loot={205276},hidden=true,},
+	[202270] = {name="Animated Contaminant",locations={[ZARALEKCAVERN]={45406180}},hidden=true},
+	[203846] = {name="Elder Magma Serpent",locations={[ZARALEKCAVERN]={44605800}},achievement=18199,criteria=2,loot={205229},hidden=true},
+	[203355] = {name="Captain Reykal",locations={[ZARALEKCAVERN]={49205740}},achievement=18209,criteria=1,hidden=true},
+	-- Sniffenseeking
+	[201747] = {name="Bogg",locations={[ZARALEKCAVERN]={54405220}},hidden=true,},
+	[204426] = {name="Jalgon Stoutburn",locations={[ZARALEKCAVERN]={58005660}},hidden=true,},
+	[205540] = {name="Pahi'rys",locations={[ZARALEKCAVERN]={60005620}},hidden=true},
+	[203606] = {name="Calibrating Scent Matrix",locations={[ZARALEKCAVERN]={58005600}},notes="Making Scents",hidden=true},
 }, true)
 
 -- Treasures
@@ -2907,6 +2930,25 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 			200763, -- Frosted Scale Drape
 		},
 	},
+	[54608580] = { -- Temporal Investi-gator
+		quest=nil,
+		npc=201664,
+		loot={
+			{206993,toy=true,}, -- Investi-gator's Pocketwatch
+			200126, -- Mantle of Copious Chronologies
+		},
+		note="Finish {quest:75935:Time Signature} questline, then:\n*Get a {item:208449:Melly's Metronographer+++} from {npc:204990:Melly Teletone}\n*Use it by {npc:203769:Bartender Bob}\nBuy {item:208448:Infinitea}\n*Drink it here then (quickly!) use the clock",
+	},
+	[59807040] = { -- Zal'kir the Chosen
+		quest=nil,
+		npc=205865,
+		loot={
+			208168, -- Black Blade of K'tanth
+			208170, -- Runeaxe of the Last Resistance
+			208172, -- Bloodstained Runecrook
+		},
+		path=59376968,
+	},
 })
 ns.RegisterPoints(ns.PRIMALISTFUTURE, {
 	[48601740] = {
@@ -3335,7 +3377,7 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 			{203320,quest=73808,}, -- Winding Slitherdrake: Ears
 			205299, -- Rudiment Cuffs
 			205304, -- Snareguard Sash
-			{205419,toy=true,}, -- Jrumm's Drum
+			{205419,toy=true,}, -- Dinn's Drum
 		},
 		vignette=5660,
 	},
@@ -3392,7 +3434,12 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 		criteria=59190,
 		quest=75295, -- 75296
 		npc=203592,
-		loot={205321}, -- Brimstone Bracers
+		loot={
+			{203334,quest=73824,}, -- Winding Slitherdrake: Curled Horns
+			205291, -- Garrison General's Cape
+			205321, -- Brimstone Bracers
+			205331, -- Zskorran Cleaver
+		},
 		vignette=5645,
 	},
 	[32445127] = { -- Emberdusk
@@ -3413,7 +3460,6 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 		loot={
 			{206021, pet=3545}, -- Kob'rok's Luminescent Scale
 			{205152, pet=3546}, -- Skaarn
-			{205147, pet=3541}, -- Ridged Shalewing
 			205307, -- Kob'rok's Scale Sabatons
 		},
 		vignette=5638,
