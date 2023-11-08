@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v2023.8
+
+* Updated for 10.2.0
+* New rares for the Emerald Dream, still missing a few quest IDs so expect another update soon
+* Update some rares from the last few patches, and include various assault rares as hidden-mobs
+
 ## Changed in v2023.7
 
 * Updated for 10.1.5 and then 10.1.7
