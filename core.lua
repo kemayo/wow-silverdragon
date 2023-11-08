@@ -135,8 +135,8 @@ function addon:RegisterMobData(source, data, updated)
 			if not ns.achievements[mobdata.achievement] then
 				ns.achievements[mobdata.achievement] = {}
 			end
-			ns.achievements[mobdata.achievement][mobdata.npc] = mobdata.criteria
-			ns.mobs_to_achievement[mobdata.npc] = mobdata.achievement
+			ns.achievements[mobdata.achievement][mobid] = mobdata.criteria
+			ns.mobs_to_achievement[mobid] = mobdata.achievement
 		end
 	end
 end
