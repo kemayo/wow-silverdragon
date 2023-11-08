@@ -43,11 +43,11 @@ def __keysort(k):
     return k
 
 
-def additemdata(item):
+def additemdata(item, base="https://wowhead.com"):
     print("additemdata", item)
     item = normalizeitem(item)
 
-    url = f"https://wowhead.com/item={item[1]}"
+    url = f"{base}/item={item[1]}"
     print("Fetching", url)
     r = session.get(url, timeout=5)
     print("fetch completed")
@@ -68,7 +68,7 @@ def additemdata(item):
         item["quest"] = int(m.group(1))
     elif m := re.search(r"\(WH\.enhanceTooltip\.bind\(tt\)\)\([^\)]+?\[(\d+)\]", r.text, re.DOTALL):
         print("found a spell, checking for quest")
-        rs = session.get(f"https://wowhead.com/spell={m.group(1)}")
+        rs = session.get(f"{base}/spell={m.group(1)}")
         # this might be fragile, but...
         if m2 := re.search(r'Complete Quest.+?href="/quest=(\d+)"', rs.text):
             item["quest"] = int(m2.group(1))
@@ -120,8 +120,8 @@ def isvaliddrop(npc, loot, loot_filter="source"):
     return False
 
 
-def fetchnpc(npc, loot_filter="source"):
-    url = f"https://wowhead.com/npc={npc}"
+def fetchnpc(npc, loot_filter="source", base="https://wowhead.com"):
+    url = f"{base}/npc={npc}"
     print("fetchnpc", npc, url)
     r = session.get(url, timeout=5)
     print("fetch completed", r.url)
@@ -301,7 +301,10 @@ def fetch_npcids_from_search(url):
     )
     if not match:
         return []
-    return map(int, re.findall(r'"id":(\d+)', match.group(1)))
+    headermatch = re.search(
+        r'<a href="([^"]+)" class="header-logo">', r.text
+    )
+    return map(int, re.findall(r'"id":(\d+)', match.group(1))), headermatch and headermatch.group(1)
 
 
 if __name__ == '__main__':
@@ -319,8 +322,11 @@ if __name__ == '__main__':
 
     if re.match(r"(?:[\d,]|^http)", args.input):
         npcids = []
+        base = "https://www.wowhead.com"
         if args.input.startswith("http"):
-            npcids = fetch_npcids_from_search(args.input)
+            npcids, sub = fetch_npcids_from_search(args.input)
+            if sub and sub != "/wow":
+                base = base + sub
         else:
             npcids = map(int, args.input.split(","))
 
@@ -328,7 +334,7 @@ if __name__ == '__main__':
             "UNKNOWN": []
         }
         for npcid in npcids:
-            npc = fetchnpc(npcid, args.loot_filter)
+            npc = fetchnpc(npcid, args.loot_filter, base)
             if not npc:
                 print("couldn't fetch", npcid)
                 continue
@@ -336,7 +342,7 @@ if __name__ == '__main__':
                 print("skipping no-loot")
                 continue
             if "loot" in npc:
-                npc["loot"] = [additemdata(item) for item in npc["loot"]]
+                npc["loot"] = [additemdata(item, base) for item in npc["loot"]]
             # print(lua.serialize(npc, key=__keysort, trailingcomma=True))
             if "locations" in npc:
                 for location in npc["locations"]:
