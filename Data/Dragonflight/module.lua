@@ -3555,80 +3555,93 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 ns.RegisterPoints(ns.EMERALDDREAM, {
 	[54803680] = { -- Mosa Umbramane
 		criteria=62949,
-		quest=nil,
+		quest=77940,
 		npc=210070,
+		vignette=5822,
 	},
 	[44403920] = { -- Ristar the Rabid
 		criteria=62951,
-		quest=nil,
+		quest=77890,
 		npc=210161,
 		loot={
 			209957, -- Fang of the Frenzied Nightclaw
 		},
+		vignette=5871,
 	},
 	[34806320] = { -- Envoy of Winter
 		criteria=62933,
-		quest=nil,
+		quest=77878,
 		npc=209929, -- also 214131
+		vignette=5816,
 	},
 	[40407220] = { -- Moragh the Slothful
 		criteria=62942,
-		quest=nil,
+		quest=78210,
 		npc=210045,
 		loot={
 			210121, -- Ring of Season's Sunset
 		},
+		vignette=5908,
 	},
 	[51203180] = { -- Bloodstripe Great Ray
 		criteria=62945,
-		quest=nil,
+		quest=77942,
 		npc=210050,
+		vignette=5819,
 	},
 	[53804040] = { -- Greedy Gessie
 		criteria=62932,
-		quest=nil,
+		quest=77982,
 		npc=209936,
+		vignette=5817, -- or 5969? There's two in Vignette.db2...
 	},
 	[41207320] = { -- Matriarch Keevah
 		criteria=62944,
-		quest=nil,
+		quest=78213,
 		npc=210051,
+		vignette=5911,
 	},
 	[62007140] = { -- Nuoberon
 		criteria=62929,
-		quest=nil,
+		quest=77570,
 		npc=209113,
+		vignette=5786, -- Nuoberon, the Wild Dream of a Child
 	},
 	[43404700] = { -- Somnambulant Ori
 		criteria=62944,
-		quest=nil,
+		quest=78212,
 		npc=210047,
 		loot={
 			209956, -- Ori's Verdant Feather
 		},
+		vignette=5910,
 	},
 	[66006280] = { -- Crabtankerous
 		criteria=62937,
-		quest=nil,
+		quest=77862,
 		npc=209909,
 		loot={
 			208341, -- Fire-Runed Spaulders
 		},
+		vignette=5809,
 	},
 	[58405120] = { -- Ignit the Firebranded
 		criteria=62936,
-		quest=nil,
+		quest=77864,
 		npc=209620,
+		vignette=5811,
 	},
 	[61805180] = { -- Splinterlimb
 		criteria=62935,
-		quest=nil,
+		quest=77863,
 		npc=209365, -- also 212410
+		vignette=5810,
 	},
 	[46201920] = { -- Moltenbinder's Disciple
 		criteria=62947,
-		quest=nil,
+		quest=77941,
 		npc=208658,
+		vignette=5818,
 	},
 	[43603100] = { -- Surging Lasher
 		criteria=62941,
@@ -3641,49 +3654,58 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 	},
 	[63803620] = { -- Molten Leadspike
 		criteria=62948,
-		quest=nil,
+		quest=77943,
 		npc=210064,
+		vignette=5821,
 	},
 	[37603180] = { -- Isaqa
 		criteria=62940,
-		quest=nil,
+		quest=77989,
 		npc=209919,
+		vignette=5824,
 	},
 	[38406200] = { -- Voracious Mikanji
 		criteria=64492,
-		quest=nil,
+		quest=78214,
 		npc=210508,
+		vignette=5912,
 	},
 	[40304920] = { -- Keen-eyed Cian
 		criteria=62943,
-		quest=nil,
+		quest=78211,
 		npc=210046,
+		vignette=5909,
 	},
 	[47403030] = { -- Henri Snufftail
 		criteria=62950,
-		quest=nil,
+		quest=77944,
 		npc=210075,
+		vignette=5820,
 	},
 	[35102260] = { -- Talthonei Ashwhisper
 		additional={36902240,61406740,63907010,64406660},
 		criteria=62934,
-		quest=nil,
+		quest=77994,
 		npc=209902, -- also 210413
+		vignette=5828, -- also 5829
 	},
 	[64208400] = { -- Reefbreaker Moruud
 		criteria=62931,
-		quest=nil,
+		quest=77867,
 		npc=209898,
+		vignette=5806, -- also 5814
 	},
 	[63407160] = { -- Fruitface
 		criteria=62938,
-		quest=nil,
+		quest=77846,
 		npc=209913,
+		vignette=5805,
 	},
 	[26002660] = { -- The Apostle
 		criteria=62939,
-		quest=nil,
+		quest=77990,
 		npc=209911,
+		vignette=5825,
 	},
 }, {
 	achievement=19316, -- Adventurer of the Emerald Dream
@@ -3695,8 +3717,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 	},
 	[30002120] = { -- Firebrand Fystia
 		criteria=62930,
-		quest=nil,
+		quest=78015,
 		npc=209893,
+		vignette=5835,
 	},
 	[41202620] = { -- Amalgamation of Dreams
 		additional={39805300,51805740,58205940,62805200},
@@ -3709,21 +3732,24 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 	},
 	[39805120] = { -- Raszageth's Last Breath
 		additional={50403840, 65404340, 67406620},
-		quest=nil,
+		quest=77859,
 		npc=209912,
 		loot={
 			208373, -- Band of Bated Breath
 		},
+		vignette=5808,
 	},
 	[22903240] = { -- Balboan
-		quest=nil,
+		quest=78039,
 		npc=210559,
 		note="In cave",
+		vignette=5837,
 	},
 	--[[
 	[0] = { -- Enormous Dream Moth
 		quest=nil,
 		npc=209864,
+		vignette=5799,
 	},
 	--]]
 })
