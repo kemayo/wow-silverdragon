@@ -527,6 +527,7 @@ local achievements = {
 	[16574] = {need=EMOTE88_CMD1, completed=DONE}, -- Sleeping on the Job
 	[17525] = {}, -- Champion of the Forbidden Reach
 	[17783] = {}, -- Adventurer of Zaralek Cavern
+	[19316] = {}, -- Adventurer of the Emerald Dream
 }
 ns.achievements = achievements
 local mobs_to_achievement = {

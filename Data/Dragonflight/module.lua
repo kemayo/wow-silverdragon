@@ -13,6 +13,7 @@ local FORBIDDENREACH = 2151 -- 2026
 local FORBIDDENREACHINTRO = 2118 -- Dracthyr
 local PRIMALISTFUTURE = 2085
 local ZARALEKCAVERN = 2133
+local EMERALDDREAM = 2200
 
 local FACTION_MARUUK = 2503
 local FACTION_DRAGONSCALE = 2507
@@ -212,6 +213,7 @@ local ns = {
 	FORBIDDENREACH = FORBIDDENREACH,
 	PRIMALISTFUTURE = PRIMALISTFUTURE,
 	ZARALEKCAVERN = ZARALEKCAVERN,
+	EMERALDDREAM = EMERALDDREAM,
 	FACTION_MARUUK = FACTION_MARUUK,
 	FACTION_DRAGONSCALE = FACTION_DRAGONSCALE,
 	FACTION_VALDRAKKEN = FACTION_VALDRAKKEN,
@@ -3548,4 +3550,163 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 	},
 }, {
 	achievement=17783, -- Adventurer of Zaralek Cavern
+})
+
+ns.RegisterPoints(ns.EMERALDDREAM, {
+	[54803680] = { -- Mosa Umbramane
+		quest=nil,
+		npc=210070,
+	},
+	[44403920] = { -- Ristar the Rabid
+		-- [44403920, 44603920]
+		quest=nil,
+		npc=210161,
+		loot={
+			209957, -- Fang of the Frenzied Nightclaw
+		},
+	},
+	[34806320] = { -- Envoy of Winter
+		quest=nil,
+		npc=209929, -- also 214131
+	},
+	[40407220] = { -- Moragh the Slothful
+		quest=nil,
+		npc=210045,
+		loot={
+			210121, -- Ring of Season's Sunset
+		},
+	},
+	[51203180] = { -- Bloodstripe Great Ray
+		quest=nil,
+		npc=210050,
+	},
+	[53804040] = { -- Greedy Gessie
+		-- [53804040, 53804100]
+		quest=nil,
+		npc=209936,
+	},
+	[41207320] = { -- Matriarch Keevah
+		quest=nil,
+		npc=210051,
+	},
+	[62007140] = { -- Nuoberon
+		quest=nil,
+		npc=209113,
+	},
+	[43404700] = { -- Somnambulant Ori
+		quest=nil,
+		npc=210047,
+		loot={
+			209956, -- Ori's Verdant Feather
+		},
+	},
+	[66006280] = { -- Crabtankerous
+		quest=nil,
+		npc=209909,
+		loot={
+			208341, -- Fire-Runed Spaulders
+		},
+	},
+	[58405120] = { -- Ignit the Firebranded
+		-- [58405120, 58605120]
+		quest=nil,
+		npc=209620,
+	},
+	[61805180] = { -- Splinterlimb
+		quest=nil,
+		npc=209365,
+	},
+	[46201920] = { -- Moltenbinder's Disciple
+		quest=nil,
+		npc=208658,
+	},
+	[43603100] = { -- Surging Lasher
+		additional={57805220, 60806400, 59007200},
+		quest=nil,
+		npc=210111,
+		loot={
+			208330, -- Piercing Touch of the Vine
+		},
+	},
+	[63803620] = { -- Molten Leadspike
+		quest=nil,
+		npc=210064,
+	},
+	[37603180] = { -- Isaqa
+		quest=nil,
+		npc=209919,
+	},
+	[38406200] = { -- Voracious Mikanji
+		quest=nil,
+		npc=210508,
+	},
+	[40304920] = { -- Keen-eyed Cian
+		quest=nil,
+		npc=210046,
+	},
+	[47403030] = { -- Henri Snufftail
+		quest=nil,
+		npc=210075,
+	},
+	[35102260] = { -- Talthonei Ashwhisper
+		additional={36902240,61406740,63907010,64406660},
+		quest=nil,
+		npc=209902, -- also 210413
+	},
+	[64208400] = { -- Reefbreaker Moruud
+		quest=nil,
+		npc=209898,
+	},
+	[63407160] = { -- Fruitface
+		quest=nil,
+		npc=209913,
+	},
+	[26002660] = { -- The Apostle
+		quest=nil,
+		npc=209911,
+	},
+	[61805220] = { -- Splinterlimb
+		quest=nil,
+		npc=212410,
+	},
+}, {
+	achievement=19316, -- Adventurer of the Emerald Dream
+})
+ns.RegisterPoints(ns.EMERALDDREAM, {
+	[57803780] = { -- Elusive Verdant Gladewarden
+		quest=nil,
+		npc=212133,
+	},
+	[30002120] = { -- Firebrand Fystia
+		quest=nil,
+		npc=209893,
+	},
+	[41202620] = { -- Amalgamation of Dreams
+		additional={39805300,51805740,58205940,62805200},
+		quest=nil,
+		npc=209915,
+	},
+	[40804280] = { -- Elusive Blooming Brierhide
+		quest=nil,
+		npc=212090,
+	},
+	[39805120] = { -- Raszageth's Last Breath
+		additional={50403840, 65404340, 67406620},
+		quest=nil,
+		npc=209912,
+		loot={
+			208373, -- Band of Bated Breath
+		},
+	},
+	[22903240] = { -- Balboan
+		quest=nil,
+		npc=210559,
+		note="In cave",
+	},
+	--[[
+	[0] = { -- Enormous Dream Moth
+		quest=nil,
+		npc=209864,
+	},
+	--]]
 })
