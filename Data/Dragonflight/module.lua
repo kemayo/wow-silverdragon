@@ -3554,11 +3554,12 @@ ns.RegisterPoints(ns.ZARALEKCAVERN, {
 
 ns.RegisterPoints(ns.EMERALDDREAM, {
 	[54803680] = { -- Mosa Umbramane
+		criteria=62949,
 		quest=nil,
 		npc=210070,
 	},
 	[44403920] = { -- Ristar the Rabid
-		-- [44403920, 44603920]
+		criteria=62951,
 		quest=nil,
 		npc=210161,
 		loot={
@@ -3566,10 +3567,12 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		},
 	},
 	[34806320] = { -- Envoy of Winter
+		criteria=62933,
 		quest=nil,
 		npc=209929, -- also 214131
 	},
 	[40407220] = { -- Moragh the Slothful
+		criteria=62942,
 		quest=nil,
 		npc=210045,
 		loot={
@@ -3577,23 +3580,27 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		},
 	},
 	[51203180] = { -- Bloodstripe Great Ray
+		criteria=62945,
 		quest=nil,
 		npc=210050,
 	},
 	[53804040] = { -- Greedy Gessie
-		-- [53804040, 53804100]
+		criteria=62932,
 		quest=nil,
 		npc=209936,
 	},
 	[41207320] = { -- Matriarch Keevah
+		criteria=62944,
 		quest=nil,
 		npc=210051,
 	},
 	[62007140] = { -- Nuoberon
+		criteria=62929,
 		quest=nil,
 		npc=209113,
 	},
 	[43404700] = { -- Somnambulant Ori
+		criteria=62944,
 		quest=nil,
 		npc=210047,
 		loot={
@@ -3601,6 +3608,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		},
 	},
 	[66006280] = { -- Crabtankerous
+		criteria=62937,
 		quest=nil,
 		npc=209909,
 		loot={
@@ -3608,19 +3616,22 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		},
 	},
 	[58405120] = { -- Ignit the Firebranded
-		-- [58405120, 58605120]
+		criteria=62936,
 		quest=nil,
 		npc=209620,
 	},
 	[61805180] = { -- Splinterlimb
+		criteria=62935,
 		quest=nil,
-		npc=209365,
+		npc=209365, -- also 212410
 	},
 	[46201920] = { -- Moltenbinder's Disciple
+		criteria=62947,
 		quest=nil,
 		npc=208658,
 	},
 	[43603100] = { -- Surging Lasher
+		criteria=62941,
 		additional={57805220, 60806400, 59007200},
 		quest=nil,
 		npc=210111,
@@ -3629,45 +3640,50 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		},
 	},
 	[63803620] = { -- Molten Leadspike
+		criteria=62948,
 		quest=nil,
 		npc=210064,
 	},
 	[37603180] = { -- Isaqa
+		criteria=62940,
 		quest=nil,
 		npc=209919,
 	},
 	[38406200] = { -- Voracious Mikanji
+		criteria=64492,
 		quest=nil,
 		npc=210508,
 	},
 	[40304920] = { -- Keen-eyed Cian
+		criteria=62943,
 		quest=nil,
 		npc=210046,
 	},
 	[47403030] = { -- Henri Snufftail
+		criteria=62950,
 		quest=nil,
 		npc=210075,
 	},
 	[35102260] = { -- Talthonei Ashwhisper
 		additional={36902240,61406740,63907010,64406660},
+		criteria=62934,
 		quest=nil,
 		npc=209902, -- also 210413
 	},
 	[64208400] = { -- Reefbreaker Moruud
+		criteria=62931,
 		quest=nil,
 		npc=209898,
 	},
 	[63407160] = { -- Fruitface
+		criteria=62938,
 		quest=nil,
 		npc=209913,
 	},
 	[26002660] = { -- The Apostle
+		criteria=62939,
 		quest=nil,
 		npc=209911,
-	},
-	[61805220] = { -- Splinterlimb
-		quest=nil,
-		npc=212410,
 	},
 }, {
 	achievement=19316, -- Adventurer of the Emerald Dream
@@ -3678,6 +3694,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		npc=212133,
 	},
 	[30002120] = { -- Firebrand Fystia
+		criteria=62930,
 		quest=nil,
 		npc=209893,
 	},
