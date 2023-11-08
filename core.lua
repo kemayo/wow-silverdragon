@@ -171,6 +171,11 @@ do
 					quest=point.quest,
 					hidden=point.hidden,
 				}
+				if point.additional then
+					for _,acoord in pairs(point.additional) do
+						table.insert(data.locations[uiMapID], acoord)
+					end
+				end
 				if point.route and type(point.route) == "table" then
 					data.routes = {[uiMapID] = {point.route}}
 				end
