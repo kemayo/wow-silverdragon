@@ -3557,6 +3557,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62949,
 		quest=77940,
 		npc=210070,
+		loot={
+			{210647, class="DRUID"}, -- Mark of the Umbramane
+		},
 		vignette=5822,
 	},
 	[44403920] = { -- Ristar the Rabid
@@ -3572,6 +3575,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62933,
 		quest=77878,
 		npc=209929, -- also 214131
+		loot={
+			208365, -- Winter's Stand
+		},
 		vignette=5816,
 	},
 	[40407220] = { -- Moragh the Slothful
@@ -3580,6 +3586,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		npc=210045,
 		loot={
 			210121, -- Ring of Season's Sunset
+			210237, -- Nipping Night's Necklace
 		},
 		vignette=5908,
 	},
@@ -3587,18 +3594,27 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62945,
 		quest=77942,
 		npc=210050,
+		loot={
+			208376, -- Great Ray's Longbow
+		},
 		vignette=5819,
 	},
 	[53804040] = { -- Greedy Gessie
 		criteria=62932,
 		quest=77982,
 		npc=209936,
+		loot={
+			208355, -- String of Delicacies
+		},
 		vignette=5817, -- or 5969? There's two in Vignette.db2...
 	},
 	[41207320] = { -- Matriarch Keevah
 		criteria=62944,
 		quest=78213,
 		npc=210051,
+		loot={
+			{210683, class="DRUID"}, -- Mark of the Dreamtalon Matriarch
+		},
 		vignette=5911,
 	},
 	[62007140] = { -- Nuoberon
@@ -3621,6 +3637,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=77862,
 		npc=209909,
 		loot={
+			208334, -- Legplates of the Krakken
 			208341, -- Fire-Runed Spaulders
 		},
 		vignette=5809,
@@ -3629,18 +3646,28 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62936,
 		quest=77864,
 		npc=209620,
+		loot={
+			208325, -- Ignit's Fiery Heart
+		},
 		vignette=5811,
 	},
 	[61805180] = { -- Splinterlimb
 		criteria=62935,
 		quest=77863,
 		npc=209365, -- also 212410
+		loot={
+			208361, -- Splinterlimb's Branch
+		},
 		vignette=5810,
 	},
 	[46201920] = { -- Moltenbinder's Disciple
 		criteria=62947,
 		quest=77941,
 		npc=208658,
+		loot={
+			{205463, toy=true}, -- Molten Lava Ball
+			208353, -- Djaradin's Molten Band
+		},
 		vignette=5818,
 	},
 	[43603100] = { -- Surging Lasher
@@ -3650,18 +3677,25 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		npc=210111,
 		loot={
 			208330, -- Piercing Touch of the Vine
+			208367, -- Lasher's Red Thorn
 		},
 	},
 	[63803620] = { -- Molten Leadspike
 		criteria=62948,
 		quest=77943,
 		npc=210064,
+		loot={
+			208323, -- Nature's Firebathed Robes
+		},
 		vignette=5821,
 	},
 	[37603180] = { -- Isaqa
 		criteria=62940,
 		quest=77989,
 		npc=209919,
+		loot={
+			208348, -- Binds of the Shatterer
+		},
 		vignette=5824,
 	},
 	[38406200] = { -- Voracious Mikanji
@@ -3674,12 +3708,18 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62943,
 		quest=78211,
 		npc=210046,
+		loot={
+			{210650, class="DRUID"}, -- Mark of the Keen-Eyed Dreamsaber
+		},
 		vignette=5909,
 	},
 	[47403030] = { -- Henri Snufftail
 		criteria=62950,
 		quest=77944,
 		npc=210075,
+		loot={
+			208357, -- Henri's Warm Coat
+		},
 		vignette=5820,
 	},
 	[35102260] = { -- Talthonei Ashwhisper
@@ -3687,6 +3727,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62934,
 		quest=77994,
 		npc=209902, -- also 210413
+		loot={
+			208374, -- Talthornei's Wrath
+		},
 		vignette=5828, -- also 5829
 	},
 	[64208400] = { -- Reefbreaker Moruud
@@ -3699,12 +3742,18 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62938,
 		quest=77846,
 		npc=209913,
+		loot={
+			208344, -- Sash of the Fruit Thief
+		},
 		vignette=5805,
 	},
 	[26002660] = { -- The Apostle
 		criteria=62939,
 		quest=77990,
 		npc=209911,
+		loot={
+			208370, -- The Apostle's Steps
+		},
 		vignette=5825,
 	},
 }, {
@@ -3719,6 +3768,10 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62930,
 		quest=78015,
 		npc=209893,
+		loot={
+			208328, -- Fystia's Deft Hands
+			209881, -- Fystia's Fiery Kris
+		},
 		vignette=5835,
 	},
 	[41202620] = { -- Amalgamation of Dreams
