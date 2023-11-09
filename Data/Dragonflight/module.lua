@@ -858,7 +858,7 @@ ns.RegisterPoints(ns.WAKINGSHORES, {
 	achievement=16676, -- Adventurer
 })
 ns.RegisterPoints(ns.WAKINGSHORES, {
-	[46725013] = {
+	[81213783] = {
 		label="Primal Scythid Queen",
 		quest=66074, -- 57559, 62396
 		npc=184853,
