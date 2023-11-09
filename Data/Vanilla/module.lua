@@ -523,7 +523,7 @@ core:RegisterMobData("Vanilla", {
 	[51028] = {name="The Deep Tunneler",locations={[83]={50607220},},tameable=236197,},
 	[51029] = {name="Parasitus",locations={[22]={61207260},},tameable=236197,},
 	[51031] = {name="Tracker",locations={[22]={62404740},},tameable=877481,},
-	[51037] = {name="Lost Gilnean Wardog",locations={[21]={59004180},[88]={46404660},},tameable=877481,},
+	[51037] = {name="Lost Gilnean Wardog",locations={[21]={59004180},},tameable=877481,},
 	[51040] = {name="Snuffles",locations={[14]={25202740},},art=15,tameable=877481,},
 	[51042] = {name="Bleakheart",locations={[23]={71804540},},tameable=877481,},
 	[51044] = {name="Plague",locations={[18]={57803300},},tameable=877481,},
