@@ -183,7 +183,11 @@ do
 					data.routes = {[uiMapID] = point.routes}
 				end
 				if point.npc then
-					addon.datasources[source][point.npc] = data
+					if not addon.datasources[source][point.npc] then
+						addon.datasources[source][point.npc] = data
+					else
+						addon.datasources[source][point.npc].locations[uiMapID] = data.locations[uiMapID]
+					end
 					if point.achievement and point.criteria then
 						if not ns.achievements[point.achievement] then
 							ns.achievements[point.achievement] = {}
