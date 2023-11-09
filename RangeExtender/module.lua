@@ -157,6 +157,9 @@ do
 			[34325998] = true,
 			[34085997] = true,
 		},
+		[2200] = { -- Emerald Dream
+			[50216158] = true,
+		},
 	}
 	function module:ShouldHideVignette(vignetteInfo, uiMapID, x, y)
 		if not inconvenient[uiMapID] then return end
