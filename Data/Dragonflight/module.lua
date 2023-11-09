@@ -3736,6 +3736,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62931,
 		quest=77867,
 		npc=209898,
+		loot={
+			208327, -- Maruud's Piercing Hands
+		},
 		vignette=5806, -- also 5814
 	},
 	[63407160] = { -- Fruitface
@@ -3744,7 +3747,11 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		npc=209913,
 		loot={
 			208344, -- Sash of the Fruit Thief
+			208372, -- Trickster's Tip Toers
+			208388, -- Leafster's Magic Wand
+			-- 210493, -- Technique: Grotto Netherwing Drake: Spiked Jaw
 		},
+		note="Inside the Barrows of Reverie",
 		vignette=5805,
 	},
 	[26002660] = { -- The Apostle
@@ -3755,6 +3762,26 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 			208370, -- The Apostle's Steps
 		},
 		vignette=5825,
+	},
+}, {
+	achievement=19316, -- Adventurer of the Emerald Dream
+})
+ns.RegisterPoints(2254, { -- Barrows of Reverie
+	[54173749] = { -- Fruitface
+		criteria=62938,
+		quest=77846,
+		npc=209913,
+		loot={
+			208344, -- Sash of the Fruit Thief
+			208372, -- Trickster's Tip Toers
+			208388, -- Leafster's Magic Wand
+			-- 210493, -- Technique: Grotto Netherwing Drake: Spiked Jaw
+		},
+		related={
+			[60226882] = {label="{npc:209950:Mylune}", minimap=true},
+		},
+		note="Talk to {npc:209950:Mylune} for {spell:421446:Mylune's Blessing}. Pick up {item:208837:Missing Fruit} until {npc:209980:Thieving Podling} appears. Chase it here.",
+		vignette=5805,
 	},
 }, {
 	achievement=19316, -- Adventurer of the Emerald Dream
