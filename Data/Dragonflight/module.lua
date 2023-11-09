@@ -1152,7 +1152,7 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 	[31646421] = {
 		label="Zenet Avis",
 		criteria=56066,
-		quest=nil,
+		quest=73901,
 		npc=193209,
 		loot={
 			{200879, note="Hatches into..."}, -- Zenet Egg
