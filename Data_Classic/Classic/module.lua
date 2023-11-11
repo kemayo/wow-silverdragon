@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then return end
 -- if LE_EXPANSION_LEVEL_CURRENT < LE_EXPANSION_BURNING_CLASSIC then return end
 
@@ -108,7 +110,7 @@ core:RegisterMobData("Classic", {
 	[3398] = {name="Gesharahan",locations={[1413]={46503950},},},
 	[3470] = {name="Rathorian",locations={[1413]={48001920},},},
 	[3535] = {name="Blackmoss the Fetid",locations={[1438]={41603700,44003000},},},
-	[3581] = {name="Sewer Beast",locations={[1453]={30006220,35604320,40206040,49406260,49802260,63604860,63605480,64603420},},},
+	[3581] = {name="Sewer Beast",locations={[1453]=ns.CLASSICERA and {30006220,35604320,40206040,49406260,49802260,63604860,63605480,64603420} or {45607180,48006140,53206460,54207280,57607800,58204280,67205300,68406580},},},
 	[3586] = {name="Miner Johnson",},
 	[3652] = {name="Trigore the Lasher",locations={[1413]={52005400},},},
 	[3672] = {name="Boahn",locations={[1413]={49103390},},},
