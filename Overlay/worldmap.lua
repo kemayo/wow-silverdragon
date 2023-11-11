@@ -138,14 +138,14 @@ end
 SilverDragonOverlayWorldMapPinMixin = CreateFromMixins(MapCanvasPinMixin, module.SilverDragonOverlayPinMixinBase)
 
 function SilverDragonOverlayWorldMapPinMixin:OnLoad()
-    self:UseFrameLevelType("PIN_FRAME_LEVEL_VIGNETTE")
+    self:UseFrameLevelType(ns.CLASSIC and "PIN_FRAME_LEVEL_WORLD_QUEST" or "PIN_FRAME_LEVEL_VIGNETTE")
     self:SetScalingLimits(1, 1.0, 1.2)
 end
 
 SilverDragonOverlayRoutePinMixin = CreateFromMixins(MapCanvasPinMixin)
 function SilverDragonOverlayRoutePinMixin:OnLoad()
     -- This is below normal pins
-    self:UseFrameLevelType(ns.CLASSIC and "PIN_FRAME_LEVEL_MAP_LINK" or "PIN_FRAME_LEVEL_EVENT_OVERLAY");
+    self:UseFrameLevelType(ns.CLASSIC and "PIN_FRAME_LEVEL_AREA_POI" or "PIN_FRAME_LEVEL_EVENT_OVERLAY");
 end
 
 SilverDragonOverlayRoutePinConnectionMixin = {}
