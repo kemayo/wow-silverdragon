@@ -77,9 +77,9 @@ def additemdata(item, base="https://wowhead.com"):
         item["toy"] = True
     # Mount and pet both lack the required data, so just leave a flag for me:
     if "mount" not in item and "Teaches you how to summon this mount." in r.text:
-        item["mount"] = None
+        item["mount"] = True
     if "pet" not in item and "Teaches you how to summon this companion." in r.text:
-        item["pet"] = None
+        item["pet"] = True
 
     return item
 
