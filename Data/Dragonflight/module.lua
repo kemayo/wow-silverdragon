@@ -3558,6 +3558,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=77940,
 		npc=210070,
 		loot={
+			208375, -- Owlbear's Decisive Strike
 			{210647, class="DRUID"}, -- Mark of the Umbramane
 		},
 		vignette=5822,
@@ -3568,6 +3569,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		npc=210161,
 		loot={
 			209957, -- Fang of the Frenzied Nightclaw
+			208322, -- Treads of the Nightclaw
+			208359, -- Nightclaw's Bauble
+			{210674,quest=78511,}, -- Mark of the Sable Dreamtalon
 		},
 		vignette=5871,
 	},
@@ -3576,11 +3580,15 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=77878,
 		npc=209929, -- also 214131
 		loot={
+			208332, -- Horns of the Envoy
+			208337, -- Leaf Steward's Leggings
+			208340, -- Stag's Flourishing Mantle
 			208365, -- Winter's Stand
 		},
+		note="Loot nearby {item:208881:Shiversnap Blossom} and throw into the well",
 		vignette=5816,
 	},
-	[40407220] = { -- Moragh the Slothful
+	[40457263] = { -- Moragh the Slothful
 		criteria=62942,
 		quest=78210,
 		npc=210045,
@@ -3621,6 +3629,10 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=62929,
 		quest=77570,
 		npc=209113,
+		loot={
+			209880, -- Curve of Starry Dusks
+			209959, -- Pinch of Dream Magic
+		},
 		vignette=5786, -- Nuoberon, the Wild Dream of a Child
 	},
 	[43404700] = { -- Somnambulant Ori
@@ -3628,6 +3640,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=78212,
 		npc=210047,
 		loot={
+			208381, -- Scepter of Still Waters
 			209956, -- Ori's Verdant Feather
 		},
 		vignette=5910,
@@ -3637,6 +3650,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=77862,
 		npc=209909,
 		loot={
+			208333, -- Fallen Flame's Crown
 			208334, -- Legplates of the Krakken
 			208341, -- Fire-Runed Spaulders
 		},
@@ -3648,6 +3662,8 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		npc=209620,
 		loot={
 			208325, -- Ignit's Fiery Heart
+			208338, -- Furious Flame's Shoulders
+			208383, -- Pommel of Fire
 		},
 		vignette=5811,
 	},
@@ -3656,6 +3672,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=77863,
 		npc=209365, -- also 212410
 		loot={
+			208346, -- Singed Barkbands
 			208361, -- Splinterlimb's Branch
 		},
 		vignette=5810,
@@ -3673,11 +3690,13 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 	[43603100] = { -- Surging Lasher
 		criteria=62941,
 		additional={57805220, 60806400, 59007200},
-		quest=nil,
+		quest=78263,
 		npc=210111,
 		loot={
 			208330, -- Piercing Touch of the Vine
+			208335, -- Vibrant Fall Leggings
 			208367, -- Lasher's Red Thorn
+			207761, -- Technique: Grotto Netherwing Drake: Chin Tendrils
 		},
 	},
 	[63803620] = { -- Molten Leadspike
@@ -3686,6 +3705,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		npc=210064,
 		loot={
 			208323, -- Nature's Firebathed Robes
+			208349, -- Burning Leather Cuffs
 		},
 		vignette=5821,
 	},
@@ -3694,7 +3714,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=77989,
 		npc=209919,
 		loot={
+			208345, -- Forgebreaker's Belt
 			208348, -- Binds of the Shatterer
+			208385, -- Flame Endowed Blade
 		},
 		vignette=5824,
 	},
@@ -3702,6 +3724,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		criteria=64492,
 		quest=78214,
 		npc=210508,
+		loot={
+			208354, -- Cerulean Turtle's Pendant
+		},
 		vignette=5912,
 	},
 	[40304920] = { -- Keen-eyed Cian
@@ -3709,6 +3734,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=78211,
 		npc=210046,
 		loot={
+			208336, -- Legguards of the Dreamsaber
+			208342, -- Girdle of Nature's Fury
+			208363, -- Twinfang of the Cian
 			{210650, class="DRUID"}, -- Mark of the Keen-Eyed Dreamsaber
 		},
 		vignette=5909,
@@ -3728,6 +3756,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=77994,
 		npc=209902, -- also 210413
 		loot={
+			208369, -- Druid's Vengeful Gaze
 			208374, -- Talthornei's Wrath
 		},
 		vignette=5828, -- also 5829
@@ -3760,6 +3789,7 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		npc=209911,
 		loot={
 			208370, -- The Apostle's Steps
+			208389, -- Spear of the Wilds
 		},
 		vignette=5825,
 	},
@@ -3823,6 +3853,9 @@ ns.RegisterPoints(ns.EMERALDDREAM, {
 		quest=78039,
 		npc=210559,
 		note="In cave",
+		loot={
+			208356, -- Earthbound Furbolg's Shroud
+		},
 		vignette=5837,
 	},
 	--[[
