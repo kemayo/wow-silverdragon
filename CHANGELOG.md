@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2023.10
+
+* Fix for an issue that was preventing icons appearing on the world map in Classic for some people
+* Some minor data fixes for past expansions
+
 ## Changed in v2023.9
 
 * More loot and ids for Emerald Dream rares
