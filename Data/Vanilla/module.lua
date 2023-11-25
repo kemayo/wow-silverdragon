@@ -563,5 +563,25 @@ core:RegisterMobData("Vanilla", {
 	[121911] = {name="Taerar",locations={[63]={93904060}},loot={150390,150392,150394,150395,150413,150414,150429,150408,150403,150412,150393,150388,150411,},quest=47463,requires=ANNIVERSARY,},
 	[121912] = {name="Ysondre",locations={[69]={51201160}},loot={150387,150389,150391,150396,150397,150409,150429,150408,150403,150412,150393,150388,150411,},quest=47463,requires=ANNIVERSARY,},
 	[121913] = {name="Emeriss",locations={[47]={46603940}},loot={150404,150405,150406,150410,150415,150416,150429,150408,150403,150412,150393,150388,150411,},quest=47463,requires=ANNIVERSARY,},
-	[167749] = {name="Doomwalker",locations={[71]={63225047}},loot={{186469,mount=293,},{186501,toy=true,},186459,186460,186461,186462,186463,186464,186465,186466,186467,186468,186475,186481,186484,186506,},quest=60214,requires=ANNIVERSARY,},
+	[167749] = {name="Doomwalker",locations={[71]={63225047}},quest=60214,requires=ANNIVERSARY,
+		loot={
+			{186469,mount=293,}, -- Illidari Doomhawk
+			{208572,mount=1798,}, -- Azure Worldchiller
+			{186501,toy=true,}, -- Doomwalker Trophy Stand
+			186459, -- Archaic Charm of Presence
+			186460, -- Anger-Spark Gloves
+			186461, -- Gilded Trousers of Benediction
+			186462, -- Black-Iron Battlecloak
+			186463, -- Terrorweave Tunic
+			186464, -- Fathom-Helm of the Deeps
+			186465, -- Faceguard of the Endless Watch
+			186466, -- Ethereum Nexus-Reaver
+			186467, -- Barrel-Blade Longrifle
+			186468, -- Talon of the Tempest
+			186475, -- Hellstitched Mantle
+			186481, -- Darkcrest Waistguard
+			186484, -- Voidforged Greaves
+			186506, -- Akama's Edge
+		},
+	},
 }, true)
