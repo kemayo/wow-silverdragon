@@ -1452,32 +1452,32 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 		loot={},
 		vignette=5087,
 	},
-	--[[
-	[] = {
+	[77868271] = {
 		label="Sulfurion",
 		criteria=56086,
 		quest=nil,
 		npc=191842,
 		loot={},
 		vignette=5135,
+		path=76768206,
 	},
-	[] = {
+	[59716810] = {
 		label="Porta the Overgrown",
 		criteria=56087,
 		quest=nil,
 		npc=191950,
 		loot={},
 		vignette=5136,
+		active=ns.conditions.Item(194426, 5), -- Enriched Soil
 	},
-	[] = {
+	[27715557] = {
 		label="The Jolly Giant",
 		criteria=56088,
-		quest=nil,
+		quest=73976,
 		npc=195204,
 		loot={},
 		vignette=5352,
 	},
-	--]]
 	[84214784] = {
 		label="Windscale the Stormborn",
 		criteria=56089,
