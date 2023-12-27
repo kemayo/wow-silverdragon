@@ -189,6 +189,24 @@ core:RegisterMobData("BattleForAzeroth", {
 	[137906] = {name="Infused Bedrock",locations={[81]={44403460,48805140},},art=962,},
 	[137983] = {name="Rear Admiral Hainsworth",locations={[1161]={24406480,29807020,30406380},[895]={65003520},},hidden=true,},
 	[138039] = {name="Dark Ranger Clea",locations={[1161]={28406200,31206700},[895]={65003520},},hidden=true,},
+	[138122] = {
+		name="Doom's Howl",locations={[14]={38624107}},faction="Horde",art=1137,quest=53002,worldquest=52847,
+		loot={
+			161464, -- Alliance Bowman's Coif
+			161465, -- Warcaster's Arcane Mantle
+			161466, -- Battlemage's Collar
+			161467, -- Vest of the Veiled Gryphon
+			161468, -- Gilded-Wing Shoulderguards
+			161469, -- Sharpshooter's Chainmail Hauberk
+			161470, -- Polished Shieldbearer's Breastplate
+			161471, -- Lion's Roar Pauldrons
+			161472, -- Lion's Grace
+			161473, -- Lion's Guile
+			161474, -- Lion's Strength
+			163195, -- Schematic: Makeshift Azerite Detector
+			{163828,toy=true,}, -- Toy Siege Tower
+        },
+	},
 	[138279] = {name="Adhara White",locations={[895]={85204340},},quest=54953,hidden=true,},
 	[138288] = {name="Ghost of the Deep",locations={[895]={69404700},},notes="World Quest",quest=51611,hidden=true,},
 	[138299] = {name="Bloodmaw",locations={[895]={58803300},},notes="World Quest",hidden=true,},
@@ -259,20 +277,20 @@ core:RegisterMobData("BattleForAzeroth", {
 	[142435] = {name="Plaguefeather",locations={[14]={37206660},},loot={{163690,pet=2438,}},art=1137,quest={alliance=53020,horde=53519},tameable=132200,},
 	[142436] = {name="Ragebeak",locations={[14]={12005200,18402800},},loot={{163689,pet=2437,}},art=1137,quest={alliance=53016,horde=53522},},
 	[142437] = {name="Skullripper",locations={[14]={56204660},},loot={{163645,mount=1183,}},art=1137,quest={alliance=53022,horde=53526},tameable=132193,},
-	[142438] = {name="Venomarus",locations={[14]={56205460},},loot={{163648,pet=2432,}},art=1137,quest={alliance=53024,horde=53528},tameable=132196,},
+	[142438] = {name="Venomarus",locations={[14]={56205460},},loot={{163648,pet=2432,}},art=1137,quest={alliance=53024,horde=53528},worldquest=54597,tameable=132196,},
 	[142440] = {name="Yogursa",locations={[14]={13203540},},loot={{163684,pet=2436,}},art=1137,quest={alliance=53015,horde=53529},},
 	[142475] = {name="Ka'za the Mezmerizing",locations={[862]={70600820},},hidden=true,},
 	[142508] = {name="Branchlord Aldrus",locations={[14]={21201960},},loot={{163650,pet=2433,}},art=1137,quest={alliance=53013,horde=53505},},
 	[142662] = {name="Geomancer Flintdagger",locations={[14]={79402941},},loot={{163713,toy=true,}},art=1137,quest={alliance=53060,horde=53511},},
 	[142682] = {name="Zalas Witherbark",locations={[14]={62408020},},loot={{163745,toy=true,}},art=1137,quest={alliance=53094,horde=53530},},
-	[142683] = {name="Ruul Onestone",locations={[14]={42805640},},loot={{163741,toy=true,}},art=1137,quest={alliance=53092,horde=53524},},
+	[142683] = {name="Ruul Onestone",locations={[14]={42805640},},loot={{163741,toy=true,}},art=1137,quest={alliance=53092,horde=53524},worldquest=54563,},
 	[142684] = {name="Kovork",locations={[14]={24604740},},loot={{163750,toy=true,}},art=1137,quest={alliance=53089,horde=53514},},
 	[142686] = {name="Foulbelly",locations={[14]={22204940},},loot={{163735,toy=true,}},art=1137,quest={alliance=53086,horde=53509},},
 	[142688] = {name="Darbel Montrose",locations={[14]={50203760,50406100},},loot={{163652,pet=2434,}},art=1137,quest={alliance=53084,horde=53507},},
 	[142690] = {name="Singer",locations={[14]={50605740,50804060},},loot={{163738,toy=true,}},art=1137,quest={alliance=53093,horde=53525},},
 	[142692] = {name="Nimar the Slayer",locations={[14]={67406040},},loot={{163706,mount=1185,}},art=1137,quest={alliance=53091,horde=53517},},
 	[142709] = {name="Beastrider Kama",locations={[14]={64807160,66806540},},loot={{163644,mount=1180,}},art=1137,quest={alliance=53083,horde=53504},},
-	[142716] = {name="Man-Hunter Rog",locations={[14]={51807620},},loot={{163712,pet=2441,}},art=1137,quest={alliance=53090,horde=53515},},
+	[142716] = {name="Man-Hunter Rog",locations={[14]={51807620},},loot={{163712,pet=2441,}},art=1137,quest={alliance=53090,horde=53515},worldquest=54565,},
 	[142725] = {name="Horrific Apparition",locations={[14]={19406140,26203120},},loot={{163736,toy=true,}},art=1137,quest={alliance=53087,horde=53512},},
 	[142739] = {name="Knight-Captain Aldrin",faction="Alliance",locations={[14]={47404120},},loot={{163578,mount=1173,}},art=1137,quest=53088,},
 	[142741] = {name="Doomrider Helgrim",faction="Horde",locations={[14]={53205600},},loot={{163579,mount=1174,}},art=1137,quest=53085,},
