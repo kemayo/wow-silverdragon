@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v2023.11
+
+* Show data on world quest icons if available
+* Ohn'ahran Plains: locations for a few remaining Adventurer rares
+* Arathi Highlands: add Doom's Howl, and a few world quest IDs
+
 ## Changed in v2023.10.1
 
 * Blizzard hotfixed out the range-check API that I was using to only announce rares that nearby group members saw, so I've switched to a different API for that.
