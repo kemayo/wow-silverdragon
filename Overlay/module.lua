@@ -308,3 +308,17 @@ hooksecurefunc(VignettePinMixin, "OnMouseEnter", function(self)
         AddMobToTooltip(GameTooltip, core:IdForMob(vignetteInfo.name))
     end
 end)
+
+if _G.TaskPOI_OnEnter then
+    hooksecurefunc("TaskPOI_OnEnter", function(self)
+        if not self.questID then return end
+        if not ns.worldQuestMobLookup[self.questID] then return end
+        for mobid in pairs(ns.worldQuestMobLookup[self.questID]) do
+            AddMobToTooltip(GameTooltip, mobid, true)
+        end
+    end)
+    hooksecurefunc("TaskPOI_OnLeave", function(self)
+        -- 10.0.2 doesn't hide this by default any more
+        if _G[myname.."ComparisonTooltip"] then _G[myname.."ComparisonTooltip"]:Hide() end
+    end)
+end

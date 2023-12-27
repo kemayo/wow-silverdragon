@@ -112,6 +112,10 @@ local questMobLookup = {
 	-- [questid] = { [mobid] = true, ... }
 }
 ns.questMobLookup = questMobLookup
+local worldQuestMobLookup = {
+	-- [questid] = { [mobid] = true, ... }
+}
+ns.worldQuestMobLookup = worldQuestMobLookup
 local vignetteMobLookup = {
 	-- [name] = { [mobid] = true, ... }
 }
@@ -170,6 +174,7 @@ do
 					vignette=point.vignette,
 					quest=point.quest,
 					hidden=point.hidden,
+					worldquest=point.worldquest,
 				}
 				if point.additional then
 					for _,acoord in pairs(point.additional) do
@@ -203,22 +208,22 @@ do
 	end
 end
 do
-	local function addQuestMobLookup(mobid, quest)
+	local function addQuestMobLookup(lookup, mobid, quest)
 		if type(quest) == "table" then
 			if quest.alliance then
-				return addQuestMobLookup(mobid, faction == "Alliance" and quest.alliance or quest.horde)
+				return addQuestMobLookup(lookup, mobid, faction == "Alliance" and quest.alliance or quest.horde)
 			end
 			for _, questid in ipairs(quest) do
-				if not questMobLookup[quest] then
-					questMobLookup[quest] = {}
+				if not lookup[questid] then
+					lookup[questid] = {}
 				end
-				questMobLookup[quest][mobid] = true
+				lookup[questid][mobid] = true
 			end
 		else
-			if not questMobLookup[quest] then
-				questMobLookup[quest] = {}
+			if not lookup[quest] then
+				lookup[quest] = {}
 			end
-			questMobLookup[quest][mobid] = true
+			lookup[quest][mobid] = true
 		end
 	end
 	local function addMobToLookups(mobid, mobdata)
@@ -235,7 +240,10 @@ do
 		end
 		-- In the olden days, we had one mob per quest and/or vignette. Alas...
 		if mobdata.quest then
-			addQuestMobLookup(mobid, mobdata.quest)
+			addQuestMobLookup(questMobLookup, mobid, mobdata.quest)
+		end
+		if mobdata.worldquest then
+			addQuestMobLookup(worldQuestMobLookup, mobid, mobdata.worldquest)
 		end
 		if mobdata.vignette then
 			local vignetteMobs = vignetteMobLookup[mobdata.vignette]
