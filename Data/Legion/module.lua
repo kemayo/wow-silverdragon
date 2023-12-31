@@ -392,8 +392,8 @@ core:RegisterMobData("Legion", {
 	[127703] = {name="Doomcaster Suprax",locations={[885]={58201260},},loot={{153194,toy=true,}},notes="Need three people to stand on runes",quest=48968,},
 	[127705] = {name="Mother Rosula",locations={[885]={66601780},},loot={{153252,pet=2135,}},notes="Summon with Imp Meat",quest=48970,},
 	[127706] = {name="Rezira the Seer",locations={[885]={65408140},},loot={{153293,toy=true,}},notes="Farm 500 Intact Demon Eyes via Orix the All-Seer to buy a portal up here",},
-	[132578] = {name="Qroshekx",locations={[81]={58611273},},art=962,quest=50255,tameable=236195,},
-	[132580] = {name="Ssinkrix",locations={[81]={54837930},},art=962,quest=50223,tameable=236195,},
-	[132584] = {name="Xaarshej",locations={[81]={29453472},},art=962,quest=50224,tameable=236195,},
+	[132578] = {name="Qroshekx",locations={[81]={58611273},},loot={{156851,pet=2163,}},art=962,quest=50255,tameable=236195,},
+	[132580] = {name="Ssinkrix",locations={[81]={54837930},},loot={{156851,pet=2163,}},art=962,quest=50223,tameable=236195,},
+	[132584] = {name="Xaarshej",locations={[81]={29453472},},loot={{156851,pet=2163,}},art=962,quest=50224,tameable=236195,},
 	[132591] = {name="Ogmot the Mad",locations={[81]={27207600},},loot={156852},art=962,quest=50225,},
 }, true)
