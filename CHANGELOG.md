@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2024.1.1
+
+* Missed some of the separated-addon TOCs
+
 ## Changed in v2024.1
 
 * Updated for 10.2.5

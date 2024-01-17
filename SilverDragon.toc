@@ -1,5 +1,5 @@
 ﻿## Interface: 100205
-## Interface-Wrath: 30404
+## Interface-Wrath: 30403
 ## Interface-Classic: 11500
 ## Title: SilverDragon
 ## Notes: Remember where rares were
