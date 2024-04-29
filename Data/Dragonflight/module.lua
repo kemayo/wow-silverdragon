@@ -71,6 +71,10 @@ core:RegisterMobData("Dragonflight", {
 	[192741] = {name="Flamebreaker Grella", locations={[WAKINGSHORES]={}},hidden=true,},
 	[192743] = {name="Stonefist Rejara", locations={[WAKINGSHORES]={}},hidden=true,},
 	[192744] = {name="Scalemelter Dorbane", locations={[WAKINGSHORES]={}},hidden=true,},
+	-- Dragon hunters
+	[186201] = {name="Groth",locations={[WAKINGSHORES]={}},hidden=true,},
+	[186202] = {name="Voll",locations={[WAKINGSHORES]={}},hidden=true,},
+	[186203] = {name="Snee",locations={[WAKINGSHORES]={}},hidden=true,},
 	--
 	[201186] = {name="Shimmermaw Jr.", locations={[FORBIDDENREACH]={},},hidden=true,},
 	[201310] = {name="Nidharr", locations={[FORBIDDENREACH]={},},hidden=true,},
@@ -1023,51 +1027,20 @@ ns.RegisterPoints(ns.WAKINGSHORES, {
 	[42203940] = {
 		label="Harkyn Grymstone",
 		-- [42203940, 42203960]
-		quest=nil,
+		quest=74003, -- Also: 74000, 74033, 74037
 		npc=186200,
 		loot={
 			{197131,quest=69332,}, -- Highland Drake: Hairy Cheek
 			200171, -- Grymheart Blade
 			200175, -- Repurposed Anvil
-		},
-	},
-	--[[
-	-- rest of the group with Harkyn:
-	[42003940] = {
-		label="Snee",
-		-- [42003940, 42203960]
-		quest=nil,
-		npc=185383,
-		loot={
+			200243, -- Titanic Scholar's Finery
+			-- Rest of the group:
+			200169, -- Protector's Molten Cudgel
+			200757, -- Qalashi War-Helm
 			{197005,quest=69205,}, -- Cliffside Wylderdrake: Horned Nose
 			{197019,quest=69219,}, -- Cliffside Wylderdrake: Blunt Spiked Tail
-			200169, -- Protector's Molten Cudgel
-			200757, -- Qalashi War-Helm
 		},
 	},
-	[42003940] = {
-		label="Voll",
-		quest=nil,
-		npc=185383,
-		loot={
-			{197019,quest=69219,}, -- Cliffside Wylderdrake: Blunt Spiked Tail
-			200169, -- Protector's Molten Cudgel
-			200757, -- Qalashi War-Helm
-		},
-	},
-	[42203940] = {
-		label="Groth",
-		-- [42203940, 42203960]
-		quest=nil,
-		npc=185383,
-		loot={
-			{197005,quest=69205,}, -- Cliffside Wylderdrake: Horned Nose
-			{197019,quest=69219,}, -- Cliffside Wylderdrake: Blunt Spiked Tail
-			200169, -- Protector's Molten Cudgel
-			200757, -- Qalashi War-Helm
-		},
-	},
-	]]
 	[55107740] = {
 		label="Basrikron",
 		quest=69930, -- 72056
