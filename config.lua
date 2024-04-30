@@ -89,7 +89,7 @@ local options = {
 					order = 20,
 				},
 				instances = toggle("Scan in instances", "There aren't that many actual rares in instances, and scanning might slow things down at a time when you'd like the most performance possible.", 50),
-				taxi = toggle("Scan on taxis", "Keep scanning for rares while flying on a taxi. Just hope that it'll still be there after you land and make your way back...", 55),
+				taxi = toggle("Scan on taxis", "Keep scanning for rares while flying on a taxi or in a dragon race. Just hope that it'll still be there after you land and make your way back...", 55),
 			},
 			plugins = {},
 		},

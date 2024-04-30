@@ -10,6 +10,8 @@ addon.events = LibStub("CallbackHandler-1.0"):New(addon)
 ns.CLASSIC = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE -- rolls forward
 ns.CLASSICERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC -- forever vanilla
 
+local GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID or _G.GetPlayerAuraBySpellID
+
 local faction = UnitFactionGroup("player")
 
 local Debug
@@ -525,6 +527,10 @@ function addon:PlayerIsInteractive()
 	if IsInCinematicScene() or InCinematic() then
 		-- TODO: should I repurpose the taxi preference to just apply to any
 		-- not-interactive state?
+		return false
+	end
+	if GetPlayerAuraBySpellID(369968) then
+		-- Dragon race is occurring
 		return false
 	end
 	return true
