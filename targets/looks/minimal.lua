@@ -27,7 +27,7 @@ function module.Looks:Minimal(popup, config)
     popup.title:SetHeight(0)
     popup.source:SetPoint("BOTTOMRIGHT", -2, 2)
 
-    popup.status:SetJustifyH("MIDDLE")
+    popup.status:SetJustifyH("CENTER")
     -- popup.status:SetPoint("BOTTOMLEFT", popup.modelbg, "BOTTOMRIGHT", 2, 2)
     popup.status:SetPoint("TOPLEFT", popup.title, "BOTTOMLEFT")
     popup.status:SetPoint("TOPRIGHT", popup.title, "BOTTOMRIGHT")

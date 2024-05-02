@@ -324,7 +324,8 @@ ns.Tooltip = {
 			return _G[name]
 		end
 		local tooltip = CreateFrame("GameTooltip", name, UIParent, "GameTooltipTemplate")
-		if _G.TooltipDataProcessor then
+		if _G.C_TooltipInfo then
+			-- Cata-classic has TooltipDataProcessor, but doesn't actually use the new tooltips
 			tooltip.shoppingTooltips = {
 				CreateFrame("GameTooltip", name.."Shopping1", tooltip, "ShoppingTooltipTemplate"),
 				CreateFrame("GameTooltip", name.."Shopping2", tooltip, "ShoppingTooltipTemplate"),

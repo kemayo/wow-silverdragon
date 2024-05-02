@@ -280,7 +280,7 @@ function module:CreateAnchor()
 
 	local text = anchor:CreateFontString(nil, "BORDER", "FriendsFont_Normal")
 	text:SetSize(anchor:GetWidth() - 20, 24)
-	text:SetJustifyH("MIDDLE")
+	text:SetJustifyH("CENTER")
 	text:SetJustifyV("TOP")
 	text:SetWordWrap(true)
 	text:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)

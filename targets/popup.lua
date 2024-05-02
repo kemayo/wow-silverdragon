@@ -257,7 +257,7 @@ function module:CreatePopup(look)
 	local title = popup:CreateFontString(nil, "ARTWORK", "GameFontNormalMed3");
 	popup.title = title
 	title:SetSize(167, 33)
-	title:SetJustifyH("MIDDLE")
+	title:SetJustifyH("CENTER")
 	title:SetJustifyV("MIDDLE")
 
 	local source = popup:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
