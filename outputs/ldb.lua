@@ -214,15 +214,9 @@ function module:SetupWorldMap()
 	else
 		-- classic!
 		button = CreateFrame("Button", nil, WorldMapFrame)
-		if WorldMapFrame.AddOverlayFrame then
-			-- cata
-			-- button = CreateFrame("Button", nil, WorldMapFrame.MaximizeMinimizeFrame)
-			button:SetFrameLevel(5)
-			button:SetPoint("RIGHT", WorldMapFrame.MaximizeMinimizeFrame, "LEFT", 4, 0)
-		else
-			-- classic
-			button:SetPoint("TOPRIGHT", -45, -2)
-		end
+		button:SetFrameLevel(5)
+		button:SetPoint("RIGHT", WorldMapFrame.MaximizeMinimizeFrame, "LEFT", 4, 0)
+
 		hooksecurefunc(WorldMapFrame, "OnMapChanged", function()
 			button:Refresh()
 		end)
