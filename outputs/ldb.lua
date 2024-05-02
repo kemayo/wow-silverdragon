@@ -111,7 +111,7 @@ function module:OnInitialize()
 					mounts = {
 						type = "toggle",
 						name = "Show on the mount list",
-						desc = "Toggle showing the icon in the map list",
+						desc = "Toggle showing the icon in the mount list",
 						get = function() return self.db.profile.mounts end,
 						set = function(info, v)
 							self.db.profile.mounts = v
