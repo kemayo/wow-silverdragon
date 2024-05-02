@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2024.2
+
+* Updated to not error in Cataclysm Classic (data adjustments to follow)
+* Taxi setting will now also suppress alerts while you're in a dragon race
+
 ## Changed in v2024.1.1
 
 * Missed some of the separated-addon TOCs
