@@ -739,12 +739,16 @@ do
 				if itemID then
 					self.itemID = itemID
 					SetItemButtonTexture(button, icon)
+				else
+					self.itemID = nil
+					SetItemButtonTexture(button, false)
 				end
 			end
 			function button:GetItemID()
 				return self.itemID
 			end
 			function button:GetItemLink()
+				if not self.itemID then return nil end
 				return select(2, GetItemInfo(self.itemID))
 			end
 		end
