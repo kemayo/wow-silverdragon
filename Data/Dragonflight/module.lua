@@ -44,7 +44,7 @@ core:RegisterMobData("Dragonflight", {
 	-- Stormed off
 	-- Storm
 	[193653] = {name="Gaelzion", locations=LOC_alldragonisles,notes="Storm Invasions"},
-	[193647] = {name="Karantun", locations=LOC_alldragonisles,notes="Storm Invasions"},
+	[193647] = {name="Karantun", locations=LOC_alldragonisles,notes="Storm Invasions", loot={200170}, vignette=5227, quest=74004,},
 	[193684] = {name="Pipspark Thundersnap", locations=LOC_alldragonisles,notes="Storm Invasions"},
 	[193674] = {name="Voraazka", locations=LOC_alldragonisles,notes="Storm Invasions"},
 	-- Earth
@@ -66,6 +66,7 @@ core:RegisterMobData("Dragonflight", {
 	[193679] = {name="Leerain", locations=LOC_alldragonisles,notes="Water Invasions",vignette=5243,},
 	-- Assorted hidden things
 	[190971] = {name="Shas'ith", hidden=true}, -- the locked-up variant which is always there
+	[201563] = {name="Rugren", hidden=true}, -- Accompanies Huntmaster Yrgena
 	-- War party, except Brundin who's below:
 	[192737] = {name="Qalashi War Mammoth", locations={[WAKINGSHORES]={}},hidden=true,},
 	[192741] = {name="Flamebreaker Grella", locations={[WAKINGSHORES]={}},hidden=true,},
@@ -1489,10 +1490,11 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 	[32823817] = {
 		label="Makhra the Ashtouched",
 		criteria=56094,
-		quest=nil,
+		quest=73968,
 		npc=195409,
 		loot={},
 		vignette=5365,
+		note="Only when the Aylaag Camp is in the Western position",
 	},
 	--[[
 	[] = {
@@ -1716,13 +1718,32 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 			66005880, 68805560, 68605160, 67205100, 68805680, 65605980, 65206900, r=1, g=0, b=0, loop=true,
 		},
 	},
+	[36043433] = {
+		label="Lurgan",
+		quest=74546, -- 74464
+		npc=201540,
+		loot={
+			203674, -- Brutal Tramplers
+		},
+		vignette=5570,
+	},
+	[32634184] = {
+		label="Stormcaller Narkena",
+		quest=74547, -- 47465
+		npc=201539,
+		loot={
+			203676, -- Stormcaller's Grounding Shoes
+		},
+		vignette=5571,
+	},
 	[33803840] = {
 		label="Huntmaster Yrgena",
-		quest=74466,
+		quest=74548, -- 74466
 		npc=201538,
 		loot={
 			203672, -- Master Huntmaster's Wristguards
 		},
+		vignette=5572,
 	},
 	--[[
 	-- accompanied by
@@ -2537,7 +2558,7 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 	[35027001] = {
 		label="Treasure-Mad Trambladd",
 		criteria=56146,
-		quest=70947,
+		quest=74036, -- 70947
 		npc=193146,
 		loot={
 			{196994,quest=69194,}, -- Cliffside Wylderdrake: Short Horns
@@ -2550,7 +2571,7 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 	[47805120] = {
 		label="Eldoren the Reborn",
 		criteria=56147,
-		quest=69875,
+		quest=73990, -- 69875
 		npc=193234,
 		loot={
 			{196976,quest=69176,}, -- Cliffside Wylderdrake: Head Mane
@@ -2610,7 +2631,7 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 	[37387792] = {
 		label="Sandana the Tempest",
 		criteria=56150,
-		quest=69859,
+		quest=74029, -- 69859
 		npc=193176,
 		loot={
 			{197008,quest=69208,}, -- Cliffside Wylderdrake: Narrow Stripes Pattern
@@ -2630,7 +2651,7 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 	[50005180] = {
 		label="Rokmur",
 		criteria=56151,
-		quest=69966,
+		quest=74025, -- 69966
 		npc=193666,
 		loot={
 			{196976,quest=69176,}, -- Cliffside Wylderdrake: Head Mane
