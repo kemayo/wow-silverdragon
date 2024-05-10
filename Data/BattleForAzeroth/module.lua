@@ -435,7 +435,7 @@ core:RegisterMobData("BattleForAzeroth", {
 	[149847] = {name="Crazed Trogg",locations={[1462]={81402140},},quest=55812,hidden=true,},
 	[150191] = {name="Avarius",locations={[1355]={37131119},},loot={{169373,pet=2706,},169612,169613},quest=55584,},
 	[150342] = {name="Earthbreaker Gulroc",locations={[1462]={62402640},},loot={{167042,quest=55030,}},quest=55814,},
-	[150394] = {name="Armored Vaultbot",locations={[1462]={53004940,55404380,62603960},},loot={{170072,pet=2766,},{167843,quest=55058,},{167796,quest=55455,}},quest=55546,},
+	[150394] = {name="Armored Vaultbot",locations={[1462]={53004940,55404380,62603960},},loot={{170072,pet=2766,},{167843,quest=55058,},{167796,quest=55455,}},quest=55546,vignette=3586,},
 	[150468] = {name="Vor'koth",locations={[1355]={48202420},},loot={{169376,pet=2709,},{169779,quest=56566,},170066,170067},quest=55603,},
 	[150575] = {name="Rumblerocks",locations={[1462]={38405340},},loot={{168001,quest=55517,}},quest=55368,},
 	[150583] = {name="Rockweed Shambler",locations={[1355]={},},loot={{169374,pet=2707,}},quest=56291,},
