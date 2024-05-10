@@ -141,7 +141,7 @@ core:RegisterMobData("Mists", {
 	[71992] = {name="Moonfang",locations={[407]={39204580},},loot={{101570,pet=1276,},{105898,toy=true,},{101571,toy=true,},101675,{105891,quest=33354,}},},
 	[72045] = {name="Chelon",locations={[554]={25203540},},loot={{86584,toy=true,}},quest=32966,},
 	[72048] = {name="Rattleskew",locations={[554]={60208740},},loot={104321,104219},vignette=61,},
-	[72049] = {name="Cranegnasher",locations={[554]={43606940},},loot={104268},quest=33319,},
+	[72049] = {name="Cranegnasher",locations={[554]={43606940},},loot={104268},quest=32967,notes="Kite a {npc:73297:Fishgorged Crane} here from the south"},
 	[72193] = {name="Karkanos",locations={[554]={33608540},},loot={104035},quest=33292,},
 	[72245] = {name="Zesqua",locations={[554]={47008740},},loot={104303,104225},quest=33316,},
 	[72769] = {name="Spirit of Jadefire",locations={[554]={44003720},[555]={47806180,51207160,55602880,62203560,63204320,64206300,73603220},},loot={{104307,pet=1348,},104258},quest=33293,},
