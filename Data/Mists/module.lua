@@ -161,7 +161,7 @@ core:RegisterMobData("Mists", {
 	[73166] = {name="Monstrous Spineclaw",locations={[554]={18805460},},loot={{104168,pet=1337,},104293},notes="Rare spawn of {npc:72766:Ancient Spineclaw}",quest=33302,tameable=132186,},
 	[73167] = {name="Huolon",
 		locations={[554]={65505730},},
-		routes={[554]={{65505730,71805100,74004500,64404060,60304490,58005840}},},
+		routes={[554]={{65505730,71805100,74004500,64404060,60304490,56505130,58005840}},},
 		loot={{104269,mount=561,},104286},quest=33311,tameable=136040,
 	},
 	[73169] = {name="Jakur of Ordon",locations={[554]={52408240},},loot={{104331,toy=true,},104245},quest=33306,},
