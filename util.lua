@@ -88,6 +88,17 @@ function addon:RenderString(s, context)
 			if info then
 				return quick_texture_markup(info.icon) .. " " .. (info.researched and completeColor or incompleteColor):WrapTextInColorCode(info.name)
 			end
+		elseif variant == "profession" then
+			local info = C_TradeSkillUI.GetProfessionInfoBySkillLineID(id)
+			if (info and info.professionName and info.professionName ~= "") then
+				-- there's also info.parentProfessionName for the general case ("Dragon Isles Inscription" vs "Inscription")
+				return info.professionName
+			end
+		elseif variant == "zone" then
+			local info = C_Map.GetMapInfo(id)
+			if info and info.name then
+				return info.name
+			end
 		end
 		return fallback ~= "" and fallback or (variant .. ':' .. id)
 	end)

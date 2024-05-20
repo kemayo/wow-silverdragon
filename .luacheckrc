@@ -79,6 +79,7 @@ read_globals = {
     "C_Timer",
     "C_TooltipInfo",
     "C_ToyBox",
+    "C_TradeSkillUI",
     "C_Transmog",
     "C_TransmogCollection",
     "C_UnitAuras",
