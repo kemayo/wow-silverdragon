@@ -14,6 +14,14 @@ local achievements = {
 		[63510] = 20527, -- Wulon
 	},
 	[7439] = {}, -- Glorious! (Pandaria mobs)
+	[7932] = { -- I'm In Your Base, Killing Your Dudes (Pandara Krasarang Wilds PvP elites)
+		[68321] = 1, -- Champion of Arms slain (Kar Warmaker)
+		[68318] = 1, -- Champion of Arms slain (Dalan Nightbreaker)
+		[68320] = 2, -- Champion of the Shadows slain (Ubunti the Shade)
+		[68317] = 2, -- Champion of the Shadows slain (Mavis Harms)
+		[68322] = 3, -- Champion of the Light slain (Muerta)
+		[68319] = 3, -- Champion of the Light slain (Disha Fearwarden)
+	},
 	[8103] = {}, -- Champions of Lei Shen (Thunder Isle)
 	[8535] = {}, -- Celestial Challenge (Timeless Isle)
 	[8714] = {}, -- Timeless Champion (Timeless Isle)
