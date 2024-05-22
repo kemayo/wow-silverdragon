@@ -32,7 +32,7 @@ core:RegisterMobData("Mists", {
 	[50733] = {name="Ski'thik",locations={[379]={36407960},},loot={86577},},
 	[50734] = {name="Lith'ik the Stalker",locations={[388]={41807860,47408420},},loot={87221},},
 	[50739] = {name="Gar'lok",locations={[422]={35603060,39204180},},loot={{86578,toy=true,}},},
-	[50749] = {name="Kal'tik the Blight",locations={[390]={14005820},},loot={86579,{134023,toy=true,}},},
+	[50749] = {name="Kal'tik the Blight",locations={[390]={14005820},},loot={{134023,toy=true,}},},
 	[50750] = {name="Aethis",locations={[371]={33405080},},},
 	[50766] = {name="Sele'na",locations={[376]={52402820,54403640,59603840},},loot={86580},},
 	[50768] = {name="Cournith Waterstrider",locations={[418]={30603820},},},
