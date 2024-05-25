@@ -24,6 +24,7 @@ function module:OnInitialize()
 			enabled = true,
 			pointsofinterest = true,
 			visibleOnly = false,
+			zoneInfinite = true,
 			ignore = {
 				-- [id] = "name",
 			},
@@ -54,6 +55,7 @@ function module:OnInitialize()
 				args = {
 					enabled = config.toggle("Enabled", "Scan minimap vignettes (it's what Blizzard calls them, okay?)", 10),
 					pointsofinterest = config.toggle("World points-of-interest", "Show alerts for point of interest vignettes added to world map itself", 20),
+					zoneInfinite = config.toggle("Infinite distance vignettes", "Show alerts for vignettes that can be seen from across the entire zone (this can get really spammy in some zones)", 25),
 					visibleOnly = config.toggle("Wait until visible", "Don't notify until the vignette is actually visible on the minimap", 30),
 					ignore = {
 						type="group",
@@ -155,7 +157,7 @@ local function shouldShowNotVisible(vignetteInfo, zone)
 		-- it results in bursts of alerts when zoning into the Shadowlands area with the daily chests
 		return not module.db.profile.visibleOnly
 	end
-	if vignetteInfo.zoneInfiniteAOI then
+	if vignetteInfo.zoneInfiniteAOI and not module.db.profile.zoneInfinite then
 		-- It can be semi-seen from the entire zone, and so we should wait until it's actually-visible
 		return false
 	end
