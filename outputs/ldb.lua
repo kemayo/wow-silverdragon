@@ -31,7 +31,7 @@ function module:OnInitialize()
 	self:SetupDataObject()
 	self:SetupWorldMap()
 
-	if IsAddOnLoaded("Blizzard_Collections") then
+	if C_AddOns.IsAddOnLoaded("Blizzard_Collections") then
 		self:SetupMounts()
 	else
 		self:RegisterEvent("ADDON_LOADED")

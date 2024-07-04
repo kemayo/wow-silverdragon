@@ -17,7 +17,7 @@ local faction = UnitFactionGroup("player")
 local Debug
 do
 	local TextDump = LibStub("LibTextDump-1.0")
-	local debuggable = GetAddOnMetadata(myname, "Version") == '@'..'project-version@'
+	local debuggable = C_AddOns.GetAddOnMetadata(myname, "Version") == '@'..'project-version@'
 	local _window
 	local function GetDebugWindow()
 		if not _window then

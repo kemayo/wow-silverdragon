@@ -618,7 +618,7 @@ local Summary = {
 				i==1 and ENCOUNTER_JOURNAL_ITEM or " ",
 				"|T" .. icon .. ":0|t " .. name .. requiresLabel(itemdata),
 				1, 1, 0,
-				GetItemQualityColor(quality)
+				C_Item.GetItemQualityColor(quality)
 			)
 		else
 			tooltip:AddDoubleLine(i==1 and ENCOUNTER_JOURNAL_ITEM or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)

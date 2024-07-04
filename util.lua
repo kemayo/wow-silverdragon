@@ -215,9 +215,7 @@ do
 	if _G.C_TooltipInfo then
 		function TextFromHyperlink(link)
 			local info = C_TooltipInfo.GetHyperlink(link)
-			-- TooltipUtil.SurfaceArgs(info)
 			if info and info.lines and info.lines[1] then
-				TooltipUtil.SurfaceArgs(info.lines[1])
 				if info.lines[1].type == Enum.TooltipDataType.Unit then
 					return info.lines[1].leftText
 				end

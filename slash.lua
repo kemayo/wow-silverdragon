@@ -8,7 +8,7 @@ function module:OnInitialize()
     config = core:GetModule("Config", true)
 
     self:RegisterChatCommand("silverdragon", "OnChatCommand")
-    if not select(4, GetAddOnInfo("NPCScan")) then
+    if not select(4, C_AddOns.GetAddOnInfo("NPCScan")) then
         -- NPCScan is either not installed or not loaded
         -- We'd like to borrow the "/npcscan add 12345" and similar command since it's all over sites
         self:RegisterChatCommand("npcscan", "OnChatCommand")
