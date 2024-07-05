@@ -1,6 +1,5 @@
 ## Interface: 100207
 ## Interface-Cata: 40400
-## Interface-Wrath: 30403
 ## Interface-Classic: 11502
 ## Title: SilverDragon: Range Extender
 ## Notes: Show map vignettes when they'd normally be out of your range
