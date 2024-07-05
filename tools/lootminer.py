@@ -93,10 +93,13 @@ def isvaliddrop(npc, loot, loot_filter="source"):
     if loot_filter == "all":
         return True
     if loot_filter in ("source", "notable"):
-        # anything that drops from just this source is inherently notable
+        if sources := loot.get("source"):
+            # Available on the black market
+            if 14 in sources:
+                return True
         for source in loot.get("sourcemore", []):
             if source.get("ti") == npc:
-                # Only drops from this npc
+                # Anything that drops from just this source is inherently notable
                 return True
             if source.get("bd"):
                 # Boss drop, which means it's inherently interesting
