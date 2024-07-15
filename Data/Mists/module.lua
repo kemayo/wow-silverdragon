@@ -187,3 +187,72 @@ core:RegisterMobData("Mists", {
 	[73666] = {name="Archiereus of Flame",locations={[554]={34203140},},loot={86574},quest=33312,},
 	[73704] = {name="Stinkbraid",locations={[554]={71208220},},loot={6657},quest=33305,},
 }, true)
+
+core:RegisterHandyNotesData("Mists", 554, {
+    [55001810] = { -- Ordos
+        achievement=8533,
+        quest=33118,
+        npc=72057,
+        loot={
+            104273, -- Flame-Scarred Cache of Offerings
+            105754, -- Desirae's Dashing Leggings
+            105755, -- Moshne's Keen Kilt
+            105756, -- Poxleitner's Leggings of Lights
+            105757, -- Shipley's Shady Silks
+            105758, -- Arielle's Ancient Legwraps
+            105759, -- Magmaplates of Jian Wu Xi Feng
+            105760, -- Hamlet's Wind-Whipped Leggings
+            105761, -- Partik's Purified Legplates
+            105762, -- Smoldering Eye
+            105763, -- Penate's Perilous Pendant
+            105764, -- Rising New Moon Talisman
+            105765, -- Bladeforger Necklace
+            105766, -- Anafielle's Spiked Choker
+            105767, -- Hoodrych's Bloodied Chestplate
+            105768, -- Pamela's Muuscat Wrap
+            105769, -- Omegal's Crushing Carapace
+            105770, -- Zoo-Per's Superior Chestguard
+            105771, -- Chestguard of Pyrrhic Immolation
+            105772, -- Moonhee's Mean Vest
+            105773, -- Ulmaas' Robes of Crushing Magma
+            105774, -- Catia's Flowing Robes
+            105775, -- Gleaming Eye Spellplate
+            105776, -- Belt of the Burning Soul
+            105777, -- Remnar's Ruinous Girdle
+            105778, -- Derevka's Gleaming Girdle
+            105779, -- Light Kindler Waistguard
+            105780, -- Windflame Girdle
+            105781, -- Venruki's Venerable Sash
+            105782, -- Belt of Glowing Embers
+            105783, -- Greatbelt of the Crendor
+            105784, -- Binkenstein's Burnished Belt
+            105785, -- Vanguard's Burly Bracers
+            105786, -- Ordosian Cultist's Bracers
+            105787, -- Burnseal Bracers
+            105788, -- Paululum's Doodled Wraps
+            105789, -- Bjam's Blasting Bracers
+            105790, -- Firetotem Bracers
+            105791, -- Bracers of Unquestioning Belief
+            105792, -- Bowflight Wristguard
+            105793, -- Bracers of Simmering Fury
+            105794, -- Starry Spaulders of Durability
+            105795, -- Bo He Me's Deathwind Mantle
+            105796, -- Rossi's Rosin-Soaked Shoulderplates
+            105797, -- Shay-Nii's Popping Shoulderpads
+            105798, -- Flame Healer's Shoulderguards
+            105799, -- Fleshsmoke Chain Shoulders
+            105800, -- Firearrow Shoulderpads
+            105801, -- Spaulders of Dominating Dreams
+            105802, -- Yaungol Deathcult Shoulderguards
+            105803, -- Stickney's Grey-Shade Hood
+            105804, -- Aladya's Spiritfire Greathelm
+            105805, -- Dominik's Casque of Raging Flame
+            105806, -- Circlet of the Panser
+            105807, -- Magdalena's Murderous Crown
+            105808, -- Damien's Ice-Vein Mask
+            105809, -- Crest of Burning Deeds
+            105810, -- Buc-Zakai Burning Hood
+            105811, -- Olivia's Graceful Gaze
+        },
+    },
+})
