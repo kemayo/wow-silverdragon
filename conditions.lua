@@ -107,7 +107,16 @@ ns.conditions.Faction = Class{
 	__parent = RankedCondition,
 	type = 'faction',
 	Matched = function(self)
-		local name, _, standingid = GetFactionInfoByID(self.id)
+		local name, standingid, _
+		if C_Reputation and C_Reputation.GetFactionDataByID then
+			local info = C_Reputation.GetFactionDataByID(self.id)
+			if info and info.name then
+				name = info.name
+				standingid = info.currentstanding
+			end
+		elseif GetFactionInfoByID then
+			name, _, standingid = GetFactionInfoByID(self.id)
+		end
 		if name and standingid then
 			return self.rank <= standingid
 		end
