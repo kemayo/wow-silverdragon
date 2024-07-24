@@ -226,7 +226,6 @@ read_globals = {
     "Mixin",
     "Item",
     "ContinuableContainer",
-    "InterfaceOptionsFrame_OpenToCategory",
     "CloseDropDownMenus",
     "ToggleDropDownMenu",
     "UIDropDownMenu_AddButton",
