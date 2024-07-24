@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2024.6
+
+* Updated for 11.0.0
+* Include Ordos' loot in the Mists module
+
 ## Changed in v2024.5
 
 * Vignette scanning: option to alert on zone-wide vignettes. I originally disabled these because it can be really spammy in zones like Timeless Isles / Zereth Mortis. Turn it off in the options at `Scanning > Vignettes`
