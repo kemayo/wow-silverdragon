@@ -234,6 +234,7 @@ function module:ShowTooltip(pin)
             end
             self.lootwindow:SetAutoHideDelay(0.25, {pin, tooltip}, function()
                 self:CleanupTooltip()
+                return false -- cleanup will have released the window, so this signals it doesn't need to happen again
             end)
         end
         if ns.mobdb[id].requires then

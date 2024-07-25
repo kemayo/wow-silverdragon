@@ -687,10 +687,6 @@ do
 	local function timer_onupdate(self, elapsed)
 		self.checkThreshold = self.checkThreshold + elapsed
 		if self.checkThreshold > 0.1 then
-			if not self.watch then
-				-- Saw complaints about this case, but not quite sure how it'd happen
-				return self:Hide()
-			end
 			if isMouseOver(self.watch, self.additional) then
 				self.timeOffFrame = 0
 			else
@@ -994,6 +990,7 @@ do
 	ns.Loot.Window.Get = GetWindow
 
 	ns.Loot.Window.Release = function(window)
+		if not window then return end
 		-- this will hide / clearallpoints / clearloot the window
 		windowPool:Release(window)
 
