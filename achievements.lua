@@ -536,6 +536,10 @@ local achievements = {
 	[17525] = {}, -- Champion of the Forbidden Reach
 	[17783] = {}, -- Adventurer of Zaralek Cavern
 	[19316] = {}, -- Adventurer of the Emerald Dream
+	[40435] = {}, -- Adventurer of the Isle of Dorn
+	[40837] = {}, -- Adventurer of the Ringing Deeps
+	[40840] = {}, -- Adventurer of Azj-Kahet
+	[40851] = {}, -- Adventurer of Hallowfall
 }
 ns.achievements = achievements
 local mobs_to_achievement = {
