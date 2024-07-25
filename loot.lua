@@ -687,6 +687,10 @@ do
 	local function timer_onupdate(self, elapsed)
 		self.checkThreshold = self.checkThreshold + elapsed
 		if self.checkThreshold > 0.1 then
+			if not self.watch then
+				-- Saw complaints about this case, but not quite sure how it'd happen
+				return self:Hide()
+			end
 			if isMouseOver(self.watch, self.additional) then
 				self.timeOffFrame = 0
 			else
