@@ -43,6 +43,10 @@ function module:OnEnable()
 	self:VIGNETTES_UPDATED()
 end
 
+function module:GetVignetteID(vignetteGUID, vignetteInfo)
+    return vignetteInfo and vignetteInfo.vignetteID or tonumber((select(6, strsplit('-', vignetteGUID))))
+end
+
 local vignetteIcons = {
 	-- [instanceid] = icon
 }
@@ -107,7 +111,7 @@ function module:UpdateVignetteOnMinimap(instanceid)
 		return -- Debug("vignette had no position")
 	end
 	local x, y = position:GetXY()
-	if self:ShouldHideVignette(vignetteInfo, uiMapID, x, y) then
+	if self:ShouldHideVignette(instanceid, vignetteInfo, uiMapID, x, y) then
 		return
 	end
 
@@ -136,34 +140,26 @@ end
 do
 	-- These show up for glowing highlights on NPCs in-town a lot, which gets in the way
 	local inconvenient = {
-		[2022] = { -- Waking Shores
-			[47118257] = true,
-			[47318338] = true,
-		},
-		[2023] = { -- Ohn'ahran Plains
-			[60403766] = true,
-		},
-		[2024] = { -- Azure Span
-			[12824918] = true,
-			[13144926] = true,
-		},
-		[2112] = { -- Valdrakken
-			[58173512] = true,
-		},
-		[2133] = { -- Zalarak Cavern
-			[56535566] = true,
-		},
-		[2151] = { -- Forbidden Reach
-			[34325998] = true,
-			[34085997] = true,
-		},
-		[2200] = { -- Emerald Dream
-			[50216158] = true,
-		},
+		-- Valdrakken
+		[5473] = true, -- Unatos, Keeper of Renown
+		-- Ohn'ahran Plains
+		[5472] = true, -- Agari Dotur, Keeper of Renown
+		-- Azure Span
+		[5435] = true, -- Fishing Gear Crafter
+		[5471] = true, -- Murik, Keeper of Renown
+		-- Waking Shores
+		[5273] = true, -- Expedition Supply Kit
+		[5470] = true, -- Cataloger Jakes
+		-- Forbidden Reach
+		[5670] = true, -- Storykeeper Ashekh (x2, strangely)
+		-- Zalarak Cavern
+		[5684] = true, -- Mimeep, Keeper of Renown
+		-- Emerald Dream
+		[5759] = true, -- Amrymn, Keeper of Renown
 	}
-	function module:ShouldHideVignette(vignetteInfo, uiMapID, x, y)
-		if not inconvenient[uiMapID] then return end
-		return inconvenient[uiMapID][core:GetCoord(x, y)]
+	function module:ShouldHideVignette(vignetteGUID, vignetteInfo, uiMapID, x, y)
+		local vignetteID = self:GetVignetteID(vignetteGUID, vignetteInfo)
+		return vignetteID and inconvenient[vignetteID]
 	end
 end
 
