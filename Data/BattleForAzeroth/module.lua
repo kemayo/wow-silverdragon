@@ -557,6 +557,15 @@ core:RegisterMobData("BattleForAzeroth", {
 	[154578] = {name="Aqir Flayer",locations={[1527]={},},requires=ULDUM_AQIR,quest=58612,},
 	[154600] = {name="Teng the Awakened",locations={[1530]={47406420},},requires=VALE_MOGU,quest=56332,},
 	[154604] = {name="Lord Aj'qirai",locations={[1527]={34401840},},loot={{174475,pet=2847,}},requires=ULDUM_AQIR,quest=56340,},
+	[154638] = {name="Grand Empress Shek'zara",locations={[1530]={5405620}},requires={VALE_MOGU,VALE_MANTID,any=true},quest=58705,worldquest=58705,--todo actual quest
+        loot={
+            174234, -- Maniacal Speaker's Cover
+            174243, -- Guise of the Voracious Prowler
+            174255, -- Greaves of Shattered Thoughts
+            174264, -- Chitinous Conqueror's Legplates
+            174268, -- Loop of Abhorrent Celerity
+        },
+    },
 	[154701] = {name="Gorged Gear-Cruncher",locations={[1462]={69205340,73206000,76804720,77405460},},loot={{167846,quest=55061,}},quest=56367,},
 	[154739] = {name="Caustic Mechaslime",locations={[1462]={66505870,73405420},},loot={{169170,quest=55078,}},quest=56368,},
 	[154968] = {name="Armored Vaultbot",locations={[1462]={53404940},},quest=55546,hidden=true,},
@@ -579,10 +588,10 @@ core:RegisterMobData("BattleForAzeroth", {
 	[155958] = {name="Tashara",locations={[1530]={29402220},},loot={{174873,toy=true,}},requires=VALE_MOGU,quest=58507,},
 	[156078] = {name="Magus Rehleth",locations={[1527]={30006500},},requires=ULDUM_AQIR,quest=56952,},
 	[156083] = {name="Sanguifang",locations={[1530]={47605600},},loot={174071},requires=VALE_MOGU,quest=56954,},
-	[156299] = {name="R'khuzj the Unfathomable",locations={[1527]={58006000},},requires={ULDUM_NZOTH,ULDUM_AQIR},quest=57430,routes={[1527]={{50205080,56405240,58006000,58406640,57407820}},},},
+	[156299] = {name="R'khuzj the Unfathomable",locations={[1527]={58006000},},requires={ULDUM_NZOTH,ULDUM_AQIR,any=true},quest=57430,routes={[1527]={{50205080,56405240,58006000,58406640,57407820}},},},
 	[156654] = {name="Shol'thoss the Doomspeaker",locations={[1527]={58408220},},requires=ULDUM_NZOTH,quest=57432,},
 	[156655] = {name="Korzaran the Slaughterer",locations={[1527]={70407440},},loot={174347},requires=ULDUM_NZOTH,quest=57433,},
-	[157120] = {name="Fangtaker Orsa",locations={[1527]={74806820},},requires={ULDUM_AQIR,ULDUM_AMATHET},quest=57258,},
+	[157120] = {name="Fangtaker Orsa",locations={[1527]={74806820},},requires={ULDUM_AQIR,ULDUM_AMATHET,any=true},quest=57258,},
 	[157134] = {name="Ishak of the Four Winds",locations={[1527]={73808340},},loot={{174641,mount=1314,}},quest=57259,},
 	[157146] = {name="Rotfeaster",locations={[1527]={68003140},},loot={{174753,mount=1317,}},requires=ULDUM_AMATHET,quest=57273,},
 	[157153] = {name="Ha-Li",locations={[1530]={33973378},},loot={{173887,mount=1297,}},requires=VALE_MOGU,quest=57344,routes={[1530]={{37323630,33973378,29053930,31524387,37313632,37323630,loop=true,}},},},
@@ -590,7 +599,7 @@ core:RegisterMobData("BattleForAzeroth", {
 	[157160] = {name="Houndlord Ren",locations={[1530]={11603160},},loot={{174841,mount=1327,}},requires=VALE_MOGU,quest=57345,routes={[1530]={{9003520,11603160,12802640}},},},
 	[157162] = {name="Rei Lun",locations={[1530]={20401260},},loot={174230,{174649,mount=1313,}},note="Use the scale to buy the mount",requires=VALE_MOGU,quest=57346,},
 	[157164] = {name="Zealot Tekem",locations={[1527]={80005720},},requires=ULDUM_AMATHET,quest=57279,},
-	[157167] = {name="Champion Sen-mat",locations={[1527]={75205140},},requires={ULDUM_AQIR,ULDUM_AMATHET},quest=57280,},
+	[157167] = {name="Champion Sen-mat",locations={[1527]={75205140},},requires={ULDUM_AQIR,ULDUM_AMATHET,any=true},quest=57280,},
 	[157170] = {name="Acolyte Taspu",locations={[1527]={64402540},},requires=ULDUM_AMATHET,quest=57281,},
 	[157171] = {name="Heixi the Stonelord",locations={[1530]={28404020},},requires=VALE_MOGU,quest=57347,},
 	[157176] = {name="The Forgotten",locations={[1530]={51804100},},loot={{174473,pet=2845,}},requires=VALE_NZOTH,quest=57342,},
@@ -623,7 +632,7 @@ core:RegisterMobData("BattleForAzeroth", {
 	[158633] = {name="Gaze of N'Zoth",locations={[1527]={53205020},},loot={175142,{175140,toy=true,}},requires=ULDUM_NZOTH,quest=57680,},
 	[158636] = {name="The Grand Executor",locations={[1527]={49208260},},loot={{169303,toy=true,}},requires=ULDUM_NZOTH,quest=57688,},
 	[159087] = {name="Corrupted Bonestripper",locations={[1527]={},[1530]={},},quest=57834,},
-	[160532] = {name="Shoth the Darkened",locations={[1527]={60607300},},requires={ULDUM_NZOTH,ULDUM_AQIR},quest=58169,},
+	[160532] = {name="Shoth the Darkened",locations={[1527]={60607300},},requires={ULDUM_NZOTH,ULDUM_AQIR,any=true},quest=58169,},
 	[160623] = {name="Hungering Miasma",locations={[1527]={59203940},},requires=ULDUM_NZOTH,quest=58206,},
 	[160631] = {name="Hungering Miasma",locations={[1527]={60003940},},requires=ULDUM_NZOTH,quest=58206,hidden=true,},
 	[160810] = {name="Harbinger Il'koxik",locations={[1530]={28205260},},requires=VALE_MANTID,quest=58299,},
@@ -641,6 +650,16 @@ core:RegisterMobData("BattleForAzeroth", {
 	[160922] = {name="Needler Zhesalla",locations={[1530]={13403240,14403760},},requires=VALE_MANTID,quest=58311,},
 	[160930] = {name="Infused Amber Ooze",locations={[1530]={17206340},},requires=VALE_MANTID,quest=58312,},
 	[160968] = {name="Jade Colossus",locations={[1530]={14601120,19601460},},requires=VALE_MOGU,quest=58295,},
+	[160970] = {name="Vuk'laz the Earthbreaker",locations={[1527]={45401620}},quest=58510,worldquest=55466,
+		requires={ULDUM_AQIR, ULDUM_AMATHET, any=true},
+        loot={
+            174237, -- Breeches of Faithful Execution
+            174247, -- Grotesque Mutilator's Leggings
+            174250, -- Psyche Tormentor's Visage
+            174258, -- Greathelm of Indiscriminate Brutality
+            174469, -- Band of Insidious Ruminations
+        },
+    },
 	[161033] = {name="Shadowmaw",locations={[1527]={52403740,52404280},},requires=ULDUM_NZOTH,quest=58333,},
 	[162140] = {name="Skikx'traz",locations={[1527]={21256105},},loot={{174476,pet=2848,}},requires=ULDUM_AQIR,quest=58697,tameable=236196,},
 	[162141] = {name="Zuythiz",locations={[1527]={40404300},},requires=ULDUM_AQIR,quest=58695,},
@@ -653,9 +672,9 @@ core:RegisterMobData("BattleForAzeroth", {
 	[162173] = {name="R'krox the Runt",locations={[1527]={25400900},},requires=ULDUM_AQIR,quest=58864,routes={[1527]={{30603200,30202760,28601420,25400900,30800940,33801100,37801000}},},},
 	[162196] = {name="Obsidian Annihilator",locations={[1527]={35001740},},quest=58681,},
 	[162254] = {name="Corrupted Observer",locations={[1527]={},},quest=58691,},
-	[162352] = {name="Spirit of Dark Ritualist Zakahn",locations={[1527]={50004000},},requires={ULDUM_AQIR,ULDUM_AMATHET},quest=58716,},
-	[162370] = {name="Armagedillo",locations={[1527]={43804140},},requires={ULDUM_AQIR,ULDUM_AMATHET},quest=58718,},
-	[162372] = {name="Spirit of Cyrus the Black",locations={[1527]={58006160,58008240,66406800,70807460},},requires={ULDUM_AQIR,ULDUM_AMATHET},quest=58715,},
+	[162352] = {name="Spirit of Dark Ritualist Zakahn",locations={[1527]={50004000},},requires={ULDUM_AQIR,ULDUM_AMATHET,any=true},quest=58716,},
+	[162370] = {name="Armagedillo",locations={[1527]={43804140},},requires={ULDUM_AQIR,ULDUM_AMATHET,any=true},quest=58718,},
+	[162372] = {name="Spirit of Cyrus the Black",locations={[1527]={58006160,58008240,66406800,70807460},},requires={ULDUM_AQIR,ULDUM_AMATHET,any=true},quest=58715,},
 	[162681] = {name="Elusive Quickhoof",locations={[864]={26405250,28006500,31106730,42006000,43006900,51108590,52508900,54008300,54605320,55007300},},loot={{174860,mount=1324,}},notes="Feed it Seaside Leafy Greens Mix",tameable=454771,},
 	[162765] = {name="Friendly Alpaca",locations={[1527]={15006200,24000900,28004900,30002900,39001000,42007000,46004800,53001900,55006900,63005300,63001400,70003900,76006800},},loot={{174859,mount=1329,}},notes="Feed it Gersahl Greens for 7 days",quest=58879,tameable=454771,},
 	[163042] = {name="Ivory Cloud Serpent",locations={[1530]={26805510},},loot={{174752,mount=1311,}},notes="You need a Zan-Tien Lasso to catch it. It spawns fairly high up",requires=VALE_MOGU,tameable=136040,},
