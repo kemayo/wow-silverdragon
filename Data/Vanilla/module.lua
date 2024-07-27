@@ -184,7 +184,7 @@ core:RegisterMobData("Vanilla", {
 	[8201] = {name="Omgorn the Lost",locations={[71]={37805680,39205140},},},
 	[8203] = {name="Kregg Keelhaul",locations={[71]={71204680},},},
 	[8204] = {name="Soriid the Devourer",locations={[71]={35004620,51406260,52407280},},tameable=236195,},
-	[8205] = {name="Haarka the Ravenous",locations={[71]={56406820,58602440},},tameable=236195,},
+	[8205] = {name="Haarka the Ravenous",locations={[71]={56406820},[73]={58602440}},tameable=236195,},
 	[8207] = {name="Emberwing",locations={[71]={48004500},},tameable=132200,},
 	[8208] = {name="Murderous Blisterpaw",locations={[71]={52203400},},tameable=132190,},
 	[8210] = {name="Razortalon",locations={[26]={66005300},},},
