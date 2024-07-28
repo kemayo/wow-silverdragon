@@ -365,3 +365,14 @@ ns.Tooltip = {
 		return tooltip
 	end,
 }
+
+-- Compatibility helpers
+
+function ns.IsCosmeticItem(itemInfo)
+    if _G.C_Item and C_Item.IsCosmeticItem then
+        return C_Item.IsCosmeticItem(itemInfo)
+    elseif _G.IsCosmeticItem then
+        return IsCosmeticItem(itemInfo)
+    end
+    return false
+end

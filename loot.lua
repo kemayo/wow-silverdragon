@@ -32,6 +32,8 @@ if ns.CLASSIC then
 	ATLAS_CHECK, ATLAS_CROSS = "Tracker-Check", "Objective-Fail"
 end
 
+local COSMETIC_COLOR = CreateColor(1, 0.5, 1)
+
 local function PlayerHasTransmogByItemInfo(itemLinkOrID)
 	-- Cata classic is specifically missing C_TransmogCollection.PlayerHasTransmogByItemInfo
 	if C_TransmogCollection.PlayerHasTransmogByItemInfo then
@@ -212,7 +214,7 @@ local function suitable(item)
 	-- could only confirm this for some cosmetic back items but let's play it
 	-- safe and say that any cosmetic item can drop regardless of what the
 	-- spec info says...
-	if specTable and #specTable == 0 and not IsCosmeticItem(id) then
+	if specTable and #specTable == 0 and not ns.IsCosmeticItem(id) then
 		return false
 	end
 	-- then catch covenants / classes / etc
@@ -567,13 +569,13 @@ local Summary = {
 		local owned = PlayerHasToy(toyid)
 		if name then
 			tooltip:AddDoubleLine(
-				i==1 and TOY or " ",
+				TOY,
 				"|T" .. icon .. ":0|t " .. name .. requiresLabel(itemdata),
 				1, 1, 0,
 				owned and 0 or 1, owned and 1 or 0, 0
 			)
 		else
-			tooltip:AddDoubleLine(i==1 and TOY or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
+			tooltip:AddDoubleLine(TOY, SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end,
 	mount = function(tooltip, i, mountid, itemdata)
@@ -581,13 +583,13 @@ local Summary = {
 		local name, _, icon, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(mountid)
 		if name then
 			tooltip:AddDoubleLine(
-				i==1 and MOUNT or " ",
+				MOUNT,
 				"|T" .. icon .. ":0|t " .. name .. requiresLabel(itemdata),
 				1, 1, 0,
 				isCollected and 0 or 1, isCollected and 1 or 0, 0
 			)
 		else
-			tooltip:AddDoubleLine(i==1 and MOUNT or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
+			tooltip:AddDoubleLine(MOUNT, SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end,
 	pet = function(tooltip, i, petid, itemdata)
@@ -602,26 +604,36 @@ local Summary = {
 				r, g, b = 1, 1, 0
 			end
 			tooltip:AddDoubleLine(
-				i==1 and TOOLTIP_BATTLE_PET or " ",
+				TOOLTIP_BATTLE_PET,
 				"|T" .. icon .. ":0|t " .. (ITEM_SET_NAME):format(name, owned, limit) .. requiresLabel(itemdata),
 				1, 1, 0,
 				r, g, b
 			)
 		else
-			tooltip:AddDoubleLine(i==1 and TOOLTIP_BATTLE_PET or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
+			tooltip:AddDoubleLine(TOOLTIP_BATTLE_PET, SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end,
 	item = function(tooltip, i, itemid, itemdata)
 		local name, link, quality, _, _, _, _, _, _, icon = GetItemInfo(itemid)
 		if name then
+			local _, itemType, itemSubtype, equipLoc, _, classID, subclassID = C_Item.GetItemInfoInstant(itemid)
+			local label = ENCOUNTER_JOURNAL_ITEM
+			if classID == Enum.ItemClass.Armor and subclassID ~= Enum.ItemArmorSubclass.Shield then
+			    label = _G[equipLoc] or label
+			else
+			    label = itemSubtype
+			end
+			if ns.IsCosmeticItem(itemid) then
+			    label = TEXT_MODE_A_STRING_VALUE_TYPE:format(label, COSMETIC_COLOR:WrapTextInColorCode(ITEM_COSMETIC))
+			end
 			tooltip:AddDoubleLine(
-				i==1 and ENCOUNTER_JOURNAL_ITEM or " ",
+				label,
 				"|T" .. icon .. ":0|t " .. name .. requiresLabel(itemdata),
 				1, 1, 0,
 				C_Item.GetItemQualityColor(quality)
 			)
 		else
-			tooltip:AddDoubleLine(i==1 and ENCOUNTER_JOURNAL_ITEM or " ", SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
+			tooltip:AddDoubleLine(ENCOUNTER_JOURNAL_ITEM, SEARCH_LOADING_TEXT, 1, 1, 0, 0, 1, 1)
 		end
 	end,
 }
