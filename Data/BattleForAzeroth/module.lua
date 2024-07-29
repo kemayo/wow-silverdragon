@@ -442,6 +442,7 @@ core:RegisterMobData("BattleForAzeroth", {
 	[150786] = {name="Mechanized Crawler",locations={[1462]={},},hidden=true,},
 	[150937] = {name="Seaspit",locations={[1462]={19407940},},loot={{168063,quest=55065,}},quest=55545,},
 	[151124] = {name="Mechagonian Nullifier",locations={[1462]={56805460},},loot={{168490,quest=55069,},{169688,quest=56515,}},quest=55207,},
+	[151159] = {name="OOX-Fleetfoot/MG",locations={[1462]={},},notes="This one runs fast, you may need slows/stuns. When killed, OOX-Avenger MG spawns immediately.",},
 	[151202] = {name="Foul Manifestation",locations={[1462]={65605100},},loot={{167871,quest=55063,},{167042,quest=55030,}},quest=55513,},
 	[151296] = {name="OOX-Avenger MG",locations={[1462]={56803990},},loot={{168492,quest=55071,}},quest=55515,},
 	[151308] = {name="Boggac Skullbash",locations={[1462]={53003300,54202720},},loot={{169688,quest=56515,}},quest=55539,},
