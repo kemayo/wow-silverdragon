@@ -21,7 +21,7 @@ end
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("LDB", {
 		profile = {
-			minimap = {},
+			minimap = {showInCompartment=true},
 			worldmap = true,
 			mounts = true,
 			tooltip = "always",
