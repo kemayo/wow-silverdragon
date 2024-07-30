@@ -17,6 +17,7 @@ function module:OnInitialize()
 	})
 	self:RegisterEvent("ADDON_ACTION_FORBIDDEN")
 	HBD.RegisterCallback(self, "PlayerZoneChanged", "Update")
+	core.RegisterCallback(self, "Scan")
 	core.RegisterCallback(self, "Seen", "Update")
 	core.RegisterCallback(self, "Ready", "Update")
 	core.RegisterCallback(self, "IgnoreChanged", "Update")
@@ -55,6 +56,11 @@ function module:OnInitialize()
 		}
 	end
 
+	self:Update()
+end
+
+function module:Scan()
+	if self.timer then return end
 	self:Update()
 end
 
@@ -117,8 +123,11 @@ function module:Update()
 				coroutine.yield()
 			end
 		end
-		-- ...and go back to the start
-		self:Update()
+		if self.timer then
+			-- Wait for the core Scan callback to resume
+			self.timer:Cancel()
+			self.timer = nil
+		end
 	end)
 	-- interestingly, a coroutine.wrap resumeFunc won't be accepted as a
 	-- function by C_Timer...
