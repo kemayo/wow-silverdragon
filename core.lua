@@ -387,6 +387,9 @@ function addon:GetMobInfo(id)
 		return name, m.vignette or name, m.tameable, globaldb.mob_seen[id], globaldb.mob_count[id]
 	end
 end
+function addon:MobHasVignette(id)
+	return mobdb[id] and mobdb[id].vignette
+end
 function addon:IsMobInZone(id, zone)
 	if mobsByZone[zone] then
 		return mobsByZone[zone][id]

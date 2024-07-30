@@ -12,6 +12,7 @@ function module:OnInitialize()
 		profile = {
 			enabled = false,
 			suppress = false,
+			vignette = false,
 			interval = 0.5,
 		},
 	})
@@ -40,6 +41,9 @@ function module:OnInitialize()
 					enabled = config.toggle("Enabled",
 						"Scan through semi-forbidden means",
 						10),
+					vignette = config.toggle("Include mobs with vignettes",
+						"Include mobs with known vignettes in the scan. Filtering them out will reduce the odds of seeing errors when in modern zones. (But the data about which mobs have vignettes is imperfect.)",
+						15),
 					suppress = config.toggle("Suppress error",
 						"Stop the Blizzard action-forbidden error from appearing, probably tainting your UI in the process. Also hide BugSack if you have it installed.",
 						20),
@@ -91,6 +95,7 @@ function module:Update()
 			local attempted
 			if
 				name and
+				module.db.profile.vignette or not core:MobHasVignette(id) and
 				-- filter out ones we wouldn't notify for anyway
 				core:WouldNotifyForMob(id, zone) and
 				not core:ShouldIgnoreMob(id, zone) and
