@@ -95,7 +95,7 @@ function module:Update()
 			local attempted
 			if
 				name and
-				module.db.profile.vignette or not core:MobHasVignette(id) and
+				(module.db.profile.vignette or not core:MobHasVignette(id)) and
 				-- filter out ones we wouldn't notify for anyway
 				core:WouldNotifyForMob(id, zone) and
 				not core:ShouldIgnoreMob(id, zone) and
