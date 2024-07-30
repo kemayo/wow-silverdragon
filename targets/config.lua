@@ -146,6 +146,7 @@ function module:RegisterConfig()
 								chat = "Chat yells",
 								groupsync = "Group Sync",
 								guildsync = "Guild Sync",
+								darkmagic = "Dark Magic",
 							},
 							order = 10,
 						},

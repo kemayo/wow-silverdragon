@@ -182,6 +182,7 @@ read_globals = {
     "SplitContainerItem",
     "SplitGuildBankItem",
     "StopSound",
+    "TargetUnit",
     "UnitClass",
     "UnitClassification",
     "UnitCreatureType",
@@ -255,6 +256,8 @@ read_globals = {
     "SetItemButtonTexture",
     "TooltipDataProcessor",
     "TooltipUtil",
+    "StaticPopup_FindVisible",
+    "StaticPopup_HideExclusive",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",

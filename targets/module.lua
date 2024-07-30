@@ -32,6 +32,7 @@ module.defaults = {
 			chat = true,
 			groupsync = true,
 			guildsync = false,
+			darkmagic = true,
 			fake = true,
 		},
 		anchor = {

@@ -471,7 +471,7 @@ do
 			Debug("Skipping notification: ignored", id, source)
 			return
 		end
-		if not force and lastseen[id..zone] and time() < lastseen[id..zone] + self.db.profile.delay then
+		if not force and not self:WouldNotifyForMob(id, zone) then
 			Debug("Skipping notification: seen", id, lastseen[id..zone], time() - self.db.profile.delay, source)
 			return
 		end
@@ -484,6 +484,9 @@ do
 		lastseen[id..zone] = time()
 		self.events:Fire("Seen", id, zone, x or 0, y or 0, is_dead, source, unit, vignetteGUID)
 		return true
+	end
+	function addon:WouldNotifyForMob(id, zone)
+		return not (lastseen[id..zone] and time() < (lastseen[id..zone] + self.db.profile.delay))
 	end
 end
 do
