@@ -20,6 +20,7 @@ module.defaults = {
 		closeAfter = 30,
 		closeDead = true,
 		stacksize = 4,
+		model = true,
 		announce = "IMMEDIATELY", -- or "OPENLAST"
 		announceChannel = "CHANNEL",
 		sources = {

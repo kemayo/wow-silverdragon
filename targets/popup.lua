@@ -141,6 +141,11 @@ function module:SetModel(popup)
 	popup.model.fallback:Hide()
 
 	local data = popup.data
+	if not self.db.profile.model then
+		popup.model.fallback:SetAtlas(data.type == "loot" and "BonusLoot-Chest" or "sniper_shot-icon")
+		popup.model.fallback:Show()
+		return
+	end
 	if (data.type == "mob" and data.id or data.unit) and not self:IsModelBlacklisted(data.id, data.unit) then
 		if data.unit then
 			popup.model:SetUnit(data.unit)

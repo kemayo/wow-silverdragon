@@ -49,6 +49,16 @@ function module:RegisterConfig()
 					end,
 					order = 21,
 				},
+				model = {
+					type = "toggle",
+					name = "Show 3d model",
+					desc = "Whether to show the fully 3d model of the mob. In some styles this will fall back to a 2d icon, in others it'll go away entirely.",
+					set = function(info, v)
+						self.db.profile[info[#info]] = v
+						module:Redraw()
+					end,
+					order = 23,
+				},
 				anchor = {
 					type = "execute",
 					name = function() return self.anchor:IsShown() and "Hide Anchor" or "Show Anchor" end,
@@ -58,7 +68,7 @@ function module:RegisterConfig()
 						self.anchor[self.anchor:IsShown() and "Hide" or "Show"](self.anchor)
 						AceConfigRegistry:NotifyChange(myname)
 					end,
-					order = 22,
+					order = 25,
 				},
 				stacksize = {
 					type = "range",
@@ -67,7 +77,7 @@ function module:RegisterConfig()
 					min = 1,
 					max = 6,
 					step = 1,
-					order = 23,
+					order = 30,
 				},
 				scale = {
 					type = "range",
@@ -84,7 +94,7 @@ function module:RegisterConfig()
 							self:SetModel(popup)
 						end
 					end,
-					order = 24,
+					order = 35,
 				},
 				closeAfter = {
 					type = "range",
@@ -94,13 +104,13 @@ function module:RegisterConfig()
 					min = 5,
 					max = 600,
 					step = 1,
-					order = 25,
+					order = 40,
 				},
 				closeDead = config.toggle("Close when dead", "Try to close the click-target frame when the mob dies. We'll only be able to *tell* if it dies if we're nearby and in combat. Might have to wait until you're out of combat to do the hiding.", 30),
 				announceHeader = {
 					type = "header",
 					name = "Chat announcements",
-					order = 40,
+					order = 50,
 				},
 				announceDesc = config.desc("Shift-clicking the target popup will try to send a message about the rare. If you've got it targeted or are near enough to see its nameplate, health will be included.\nIf you have an editbox open, it'll paste the message into that for you to send. If you don't, it'll do whatever these settings say:", 41),
 				announce = {
@@ -110,7 +120,7 @@ function module:RegisterConfig()
 						OPENLAST = "Open last editbox",
 						IMMEDIATELY = "Send immediately",
 					},
-					order = 45,
+					order = 55,
 				},
 				announceChannel = {
 					type = "select",
@@ -124,7 +134,7 @@ function module:RegisterConfig()
 						["GUILD"] = CHAT_MSG_GUILD,
 						["OFFICER"] = CHAT_MSG_OFFICER,
 					},
-					order = 46,
+					order = 60,
 				},
 				sources = {
 					type = "group",
