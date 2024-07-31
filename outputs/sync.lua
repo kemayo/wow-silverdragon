@@ -55,7 +55,7 @@ local function deSAM(val)
 	return val
 end
 
-function module:Seen(callback, id, zone, x, y, dead, source, unit)
+function module:Seen(callback, id, zone, x, y, dead, source, unit, GUID)
 	if source and (source:match("^sync") or source == "fake") then
 		-- No feedback loops, kthxbai
 		return
@@ -65,16 +65,16 @@ function module:Seen(callback, id, zone, x, y, dead, source, unit)
 	end
 	local name = core:NameForMob(id)
 	if IsInGuild() and not IsInInstance() then
-		SAM("GUILD", "seen", id, name, zone, nil, x, y)
+		SAM("GUILD", "seen", id, name, zone, nil, x, y, GUID)
 	end
 	if IsInGroup(LE_PARTY_CATEGORY_HOME) then--Don't send syncs to INSTANCE_CHAT party/raids (ie LFR/LFG)
 		if IsInRaid() then
-			SAM("RAID", "seen", id, name, zone, nil, x, y)
+			SAM("RAID", "seen", id, name, zone, nil, x, y, GUID)
 		else
-			SAM("PARTY", "seen", id, name, zone, nil, x, y)
+			SAM("PARTY", "seen", id, name, zone, nil, x, y, GUID)
 		end
 	elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and IsInInstance() then
-		SAM("INSTANCE_CHAT", "seen", id, name, zone, nil, x, y)
+		SAM("INSTANCE_CHAT", "seen", id, name, zone, nil, x, y, GUID)
 	end
 end
 
@@ -102,8 +102,8 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 		return
 	end
 
-	local ver, msgType, id, name, zone, level, x, y = strsplit("\t", msg)
-	Debug("Message", channel, sender, msgType, id, name, zone, level, x, y)
+	local ver, msgType, id, name, zone, level, x, y, GUID = strsplit("\t", msg)
+	Debug("Message", channel, sender, msgType, id, name, zone, level, x, y, GUID)
 
 	ver = deSAM(ver)
 	level = deSAM(level)
@@ -111,6 +111,7 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	x = deSAM(x)
 	y = deSAM(y)
 	zone = deSAM(zone)
+	GUID = deSAM(GUID)
 
 	if tonumber(ver or "") ~= protocol_version then
 		Debug("Skipping: incompatible version")
@@ -131,6 +132,6 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	-- We had one version which would include the " (Jade)" stuff in the syncs. Let's just strip that out.
 	name = name:gsub("%s+%(.-%)$", "")
 
-	-- id, zone, x, y, dead, source, unit
-	core:NotifyForMob(id, zone, x, y, false, "sync:"..channel..":"..sender, false)
+	-- id, zone, x, y, dead, source, unit, silent, force, GUID
+	core:NotifyForMob(id, zone, x, y, false, "sync:"..channel..":"..sender, false, false, false, GUID)
 end

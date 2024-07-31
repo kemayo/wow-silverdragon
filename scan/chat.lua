@@ -96,5 +96,6 @@ function module:OnChatMessage(event, text, name, ...)
     else
         x, y = 0, 0
     end
-    core:NotifyForMob(id, zone, x, y, false, "chat")
+    -- id, zone, x, y, dead, source, unit, silent, force, GUID
+    core:NotifyForMob(id, zone, x, y, false, "chat", false, false, false, guid)
 end

@@ -123,6 +123,7 @@ function module:ProcessUnit(unit, source)
 			return
 		end
 
-		core:NotifyForMob(id, zone, x, y, UnitIsDead(unit), source or 'target', unit)
+		-- id, zone, x, y, is_dead, source, unit, silent, force, GUID
+		core:NotifyForMob(id, zone, x, y, UnitIsDead(unit), source or 'target', unit, false, false, UnitGUID(unit))
 	end
 end

@@ -119,7 +119,7 @@ function module:Update()
 						end
 					end
 					local x, y = HBD:GetPlayerZonePosition()
-					-- id, zone, x, y, is_dead, source, unit, silent, force, vignetteGUID
+					-- id, zone, x, y, is_dead, source, unit, silent, force, GUID
 					core:NotifyForMob(id, zone, x, y, false, "darkmagic", false)
 				end
 			end

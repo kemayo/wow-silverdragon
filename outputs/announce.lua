@@ -425,7 +425,7 @@ function module:HasInterestingMounts(id, isloot)
 end
 
 function module:Seen(callback, id, zone, x, y, is_dead, source, ...)
-	Debug("Announce:Seen", id, zone, x, y, is_dead, ...)
+	Debug("Announce:Seen", id, zone, x, y, is_dead, source, ...)
 
 	if not self.db.profile.instances and IsInInstance() then
 		return
