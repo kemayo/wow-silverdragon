@@ -60,7 +60,7 @@ local sources = {
 	['point-of-interest'] = true,
 	groupsync = true,
 	fake = true,
-	darkmagic = true,
+	darkmagic = false, -- only know where the player is
 }
 function module:Announce(_, id, zone, x, y, is_dead, source, unit)
 	if not self.db.profile.enabled then return end
