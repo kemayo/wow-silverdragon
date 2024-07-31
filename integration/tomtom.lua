@@ -86,7 +86,7 @@ do
 		Debug("Waypoint.PointTo", id, zone, x, y, duration, force)
 		local db = self.db.profile
 		local title = type(id) == "number" and core:GetMobLabel(id) or id or UNKNOWN
-		if TomTom and db.tomtom then
+		if TomTom and db.tomtom and (db.replace or not waypoints.tomtom or not TomTom:IsValidWaypoint(waypoints.tomtom)) then
 			if waypoints.tomtom then
 				TomTom:RemoveWaypoint(waypoints.tomtom)
 			end
