@@ -86,7 +86,7 @@ end
 function module:RefreshMobData(popup)
 	local data = popup.data
 	popup.title:SetText(core:GetMobLabel(data.id))
-	popup.source:SetText(data.source or "")
+	popup:SetSource(data.source)
 
 	local achievement, achievement_name, completed = ns:AchievementMobStatus(data.id)
 	if achievement then
@@ -98,7 +98,7 @@ end
 function module:RefreshLootData(popup)
 	local data = popup.data
 	popup.title:SetText(data.name or UNKNOWN)
-	popup.source:SetText("vignette")
+	popup:SetSource("vignette")
 	-- TODO: work out the Treasure of X achievements?
 	popup.status:SetText("")
 	popup.raidIcon:Hide()
@@ -342,6 +342,7 @@ function module:CreatePopup(look)
 	shineTranslate:SetOffset(165, 0)
 	shineTranslate:SetDuration(0.425)
 	shineTranslate:SetOrder(2)
+	shine.animIn.translate = shineTranslate
 
 	popup.animFade = popup:CreateAnimationGroup()
 	popup.animFade:SetScript("OnFinished", popup.scripts.AnimationRequestHideParent)
@@ -390,6 +391,10 @@ end
 function PopupMixin:SetRaidIcon(icon)
 	SetRaidTargetIconTexture(self.raidIcon, icon)
 	self.raidIcon:Show()
+end
+
+function PopupMixin:SetSource(source)
+	self.source:SetText(source or "")
 end
 
 function PopupMixin:DoIgnore()
