@@ -276,7 +276,7 @@ function module:CreateAnchor()
 	title:SetWordWrap(true)
 	title:SetPoint("TOPLEFT", anchor, "TOPLEFT", 15, -10)
 	title:SetPoint("RIGHT", anchor, "RIGHT", -20, 10)
-	title:SetText(myname)
+	title:SetText(myname .. " " .. TARGET)
 	title:SetWidth(anchor:GetWidth())
 
 	local text = anchor:CreateFontString(nil, "BORDER", "FriendsFont_Normal")

@@ -61,6 +61,7 @@ Data\module.xml
 Data_Classic\module.xml
 #@debug@
 # overlay
+History\module.xml
 Overlay\module.xml
 RangeExtender\module.xml
 #@end-debug@

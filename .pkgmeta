@@ -32,6 +32,7 @@ externals:
 move-folders:
    SilverDragon/Overlay: SilverDragon_Overlay
    SilverDragon/RangeExtender: SilverDragon_RangeExtender
+   SilverDragon/History: SilverDragon_History
 
 ignore:
    - tools

@@ -37,12 +37,12 @@ read_globals = {
     "bit",
     "math",
     "ceil", "floor",
-    "abs", "mod", "max",
+    "abs", "mod", "max", "min",
     "sin", "cos", "tan",
     "hooksecurefunc",
     "table", "tinsert", "tContains", "tAppendAll", "tDeleteItem", "wipe", "MergeTable",
     "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower",
-    "time",
+    "time", "date",
 
     -- our own globals
 
@@ -219,10 +219,12 @@ read_globals = {
     "ChatFrame_OpenChat",
     "CopyTable",
     "CreateAtlasMarkup",
+    "CreateDataProvider",
     "CreateTextureMarkup",
     "CreateFrame",
     "CreateFramePool",
     "CreateObjectPool",
+    "CreateScrollBoxListLinearView",
     "CreateFromMixins",
     "CreateAndInitFromMixin",
     "Mixin",
@@ -258,6 +260,8 @@ read_globals = {
     "TooltipUtil",
     "StaticPopup_FindVisible",
     "StaticPopup_HideExclusive",
+    "ScrollUtil",
+    "GetRandomTableValue",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",

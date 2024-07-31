@@ -1,0 +1,14 @@
+## Interface: 110000, 110002, 40400, 11502
+## Title: SilverDragon: History
+## Notes: Show the history of seen rares
+## Version: @project-version@
+## Author: Kemayo
+## eMail: kemayo at gmail dot com
+## IconTexture: Interface\Icons\INV_Misc_Head_Dragon_01
+## X-Category: Interface Enhancements
+## X-Donate: PayPal:kemayo AT gmail DOT com
+## Dependencies: SilverDragon
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+
+module.xml
