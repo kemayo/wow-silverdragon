@@ -86,7 +86,6 @@ module:RegisterLookConfig("Minimal", {
 
     popup.title:ClearAllPoints()
     popup.status:ClearAllPoints()
-    popup.source:ClearAllPoints()
 
     if module.db.profile.model then
         popup:SetSize(240, 60)
