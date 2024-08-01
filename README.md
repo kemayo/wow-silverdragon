@@ -24,6 +24,14 @@ SilverDragon can also create a macro to target any rares that are known in the c
 
 Some rares yell in zone chat. If SilverDragon notices those yells, it'll alert you.
 
+### Dark Magic
+
+This abuses detection of when Blizzard blocks attempts to call a protected function (`TargetUnit`) to work out when you're in targetting range of a unit with a given name
+
+This *inherently* causes in-game errors, so it is disabled by default. Enable in the addon config under `Scanning > Dark Magic`.
+
+By default it's less-aggressive, scanning through rares in the zone without known vignettes at a rate of 1/second. However, you can turn that rate way up if you'd like. You can also turn on an option to automatically hide the error messages it causes, but beware that this will potentially cause taint issues that'll leave you needing to `/reload` eventually.
+
 ## How will I know when a rare is seen?
 
 ### Frame
@@ -47,6 +55,10 @@ A notice can be sent to a number of places:
  * a channel in your chat frame (announcing it to your party, for instance)
  * a popup window
  * etc
+
+### History
+
+A log of seen rares will be shown in a window, so you can easily glance over spawn times.
 
 ## Other useful things?
 
@@ -81,7 +93,7 @@ Some rares are part of an achievement. When you mouse over a rare mob, SilverDra
 
 ### Broker
 
-SilverDragon includes a Broker plugin. It'll attach itself to your minimap, or a Broker container you have installed, and show you a list of the mobs it knows about in the current zone.
+SilverDragon includes a Broker plugin. It'll attach itself to the addon compartment and also your minimap, or a Broker container you have installed, and show you a list of the mobs it knows about in the current zone.
 
 ## Other addons you may find useful
 
