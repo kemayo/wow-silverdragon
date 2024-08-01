@@ -18,7 +18,7 @@ function module:OnInitialize()
 			enabled = true,
 			collapsed = false,
 			-- locked = true,
-			-- empty = true,
+			empty = true,
 			combat = false,
 			sources = {
 				target = false,
@@ -93,12 +93,12 @@ function module:OnEnable()
 		}
 	end)
 
-	self:RegisterEvent("PET_BATTLE_OPENING_START")
-	self:RegisterEvent("PET_BATTLE_CLOSE")
-	self:RegisterEvent("PLAYER_REGEN_DISABLED")
-	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	self:RegisterEvent("PET_BATTLE_OPENING_START", "Refresh")
+	self:RegisterEvent("PET_BATTLE_CLOSE", "Refresh")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", "Refresh")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", "Refresh")
 
-	self.window:Show()
+	self:Refresh()
 end
 
 function module:AddData(data)
@@ -115,21 +115,6 @@ function module:OnDisable()
 	core.UnregisterCallback(self, "Seen")
 
 	self.window:Hide()
-end
-
-function module:PET_BATTLE_OPENING_START()
-	self.window:Hide()
-end
-function module:PET_BATTLE_CLOSE()
-	self.window:Show()
-end
-function module:PLAYER_REGEN_DISABLED()
-	if not self.db.profile.combat then
-		self.window:Hide()
-	end
-end
-function module:PLAYER_REGEN_ENABLED()
-	self.window:Show()
 end
 
 function module:GetRares()
@@ -157,6 +142,7 @@ function module:CreateWindow()
 		edgeSize = 1,
 	})
 
+	frame.dataProvider = self.dataProvider
 
 	LibWindow.RegisterConfig(frame, self.db.profile.position)
 	LibWindow.RestorePosition(frame)
@@ -188,25 +174,37 @@ function module:CreateWindow()
 		end
 	end)
 
-	local function sizeFrame()
+	function frame:RefreshForContents()
 		local size = self.dataProvider:GetSize()
+		self.title:SetFormattedText("%d seen", size)
+
 		if size == 0 or db.collapsed then
-			frame.container:Hide()
-			frame:SetHeight(HEADERHEIGHT)
+			self.container:Hide()
+			self:SetHeight(HEADERHEIGHT)
 		else
-			frame.container:Show()
+			self.container:Show()
 			local height = min((size * LINEHEIGHT) + HEADERHEIGHT, MAXHEIGHT)
-			frame:SetHeight(height)
+			self:SetHeight(height)
 			if height == MAXHEIGHT then
-				frame.container.scrollBar:Show()
-				frame.container.scrollBar:SetPoint("TOPRIGHT", -8, 5)
+				self.container.scrollBar:Show()
+				self.container.scrollBar:SetPoint("TOPRIGHT", -8, 5)
 			else
-				frame.container.scrollBar:Hide()
-				frame.container.scrollBar:SetPoint("TOPRIGHT", 12, 5)
+				self.container.scrollBar:Hide()
+				self.container.scrollBar:SetPoint("TOPRIGHT", 12, 5)
 			end
 		end
-		frame.collapseButton:SetEnabled(size > 0)
-		frame.collapseButton:RotateTextures(db.collapsed and math.pi or 0)
+		self.collapseButton:SetEnabled(size > 0)
+		self.collapseButton:RotateTextures(db.collapsed and math.pi or 0)
+
+		if
+			(C_PetBattles and C_PetBattles.IsInBattle()) or
+			(not db.combat and InCombatLockdown()) or
+			size == 0 and not db.empty
+		then
+			self:Hide()
+		else
+			self:Show()
+		end
 	end
 
 	frame:SetBackdropColor(0, 0, 0, .5)
@@ -230,7 +228,7 @@ function module:CreateWindow()
 	collapse:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -2, -2)
 	collapse:SetScript("OnMouseUp", function(button)
 		db.collapsed = not db.collapsed
-		sizeFrame()
+		frame:RefreshForContents()
 	end)
 	frame.collapseButton = collapse
 
@@ -363,22 +361,30 @@ function module:CreateWindow()
 	ScrollUtil.InitScrollBoxWithScrollBar(scrollBox, scrollBar, scrollView)
 
 	self.dataProvider:RegisterCallback("OnSizeChanged", function()
-		local size = self.dataProvider:GetSize()
-		title:SetFormattedText("%d seen", size)
-		sizeFrame()
+		frame:RefreshForContents()
 	end, frame)
 
 	frame.container = container
 
-	-- inital collapsed state
-	sizeFrame()
+	frame:RefreshForContents()
 
 	return frame
+end
+
+function module:Refresh()
+	self.dataProvider:Sort()
+	self.window:RefreshForContents()
 end
 
 local isChecked = function(key) return db[key] end
 local toggleChecked = function(key)
 	db[key] = not db[key]
+	module:Refresh()
+
+	if not module.window:IsVisible() then
+		-- empty and combat could both result in it being hidden
+		return MenuResponse.CloseAll
+	end
 end
 local openConfig = function()
 	local config = core:GetModule("Config", true)
@@ -400,6 +406,7 @@ function module:ShowConfigMenu(frame)
 			return MenuResponse.CloseAll
 		end, "enabled")
 		rootDescription:CreateCheckbox("Show during combat", isChecked, toggleChecked, "combat")
+		rootDescription:CreateCheckbox("Show when empty", isChecked, toggleChecked, "empty")
 		rootDescription:CreateCheckbox("Include treasure vignettes", isChecked, toggleChecked, "loot")
 		rootDescription:CreateDivider()
 		rootDescription:CreateButton(CLEAR_ALL, function()

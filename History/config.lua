@@ -14,6 +14,7 @@ function module:RegisterConfig()
 		get = function(info) return self.db.profile[info[#info]] end,
 		set = function(info, v)
 			self.db.profile[info[#info]] = v
+			self:Refresh()
 		end,
 		args = {
 			about = config.desc("Show a list of recently seen mobs, the easier to work out when future spawns will occur.", 0),
@@ -31,7 +32,8 @@ function module:RegisterConfig()
 				order = 10,
 			},
 			combat = config.toggle("Show in combat", "Whether to hide away when combat starts", 15),
-			loot = config.toggle("Include loot", "Whether to include treasure vignettes", 20),
+			empty = config.toggle("Show when empty", "Whether to show the window before you've seen anything", 20),
+			loot = config.toggle("Include loot", "Whether to include treasure vignettes", 25),
 		},
 	}, }
 end

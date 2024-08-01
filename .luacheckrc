@@ -71,6 +71,7 @@ read_globals = {
     "C_Minimap",
     "C_MountJournal",
     "C_NamePlate",
+    "C_PetBattles",
     "C_PetJournal",
     "C_QuestLog",
     "C_Reputation",
