@@ -1,5 +1,22 @@
 # Changelog
 
+## Changed in v2024.9
+
+* New submodule: History
+    * Shows a window with a log of rares you've seen, and when you saw them
+    * Should make it easier to work out how long it has been since a rare spawned
+* New scanning method: "dark magic"
+    * Abuses detection of when Blizzard blocks attempts to call a protected function (TargetUnit) to work out when you're in targetting range of a unit with a given name
+    * This *inherently* causes in-game errors, so it is disabled by default
+    * Enable in the addon config under "Scanning > Dark Magic"
+    * By default it's less-aggressive, scanning through rares in the zone without known vignettes at a rate of 1/second. However, you can turn that rate way up if you'd like.
+    * You can also turn on an option to automatically hide the error messages it causes, but beware that this will probably cause taint issues that'll leave you needing to `/reload` eventually
+* New option for popups so you can disable 3d models
+    * Addresses a prepatch issues where some people are reporting crashes when certain models are displayed (through the Blizzard dialog popups as well, so this isn't a complete fix)
+    * In most looks will just show a generic texture, but Minimal will aggressively shrink down
+* Waypoints: fix that creating a TomTom waypoint wasn't respecting the replacement setting (so it was always overriding your existing waypoint)
+* Show in the addon compartment
+
 ## Changed in v2024.8
 
 * Show more information about items in tooltips (item type, cosmetic)
