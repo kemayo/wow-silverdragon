@@ -196,6 +196,7 @@ function module:CreateWindow()
 				self.container.scrollBar:SetPoint("TOPRIGHT", 12, 5)
 			end
 		end
+		self.clearButton:SetEnabled(size > 0)
 		self.collapseButton:SetEnabled(size > 0)
 		self.collapseButton:SetButtonMode(db.collapsed and "Plus" or "Minus")
 
@@ -235,6 +236,15 @@ function module:CreateWindow()
 		frame:RefreshForContents()
 	end)
 	frame.collapseButton = collapse
+
+	local clear = CreateRedButton(nil, frame)
+	clear:SetSize(24, 24)
+	clear:SetButtonMode("Delete")
+	clear:SetPoint("RIGHT", collapse, "LEFT", -2, 0)
+	clear:SetScript("OnMouseUp", function(button)
+		frame.dataProvider:Flush()
+	end)
+	frame.clearButton = clear
 
 	local function Line_OnEnter(line)
 		local data = line.data
