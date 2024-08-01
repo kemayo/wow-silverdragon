@@ -380,6 +380,7 @@ local isChecked = function(key) return db[key] end
 local toggleChecked = function(key)
 	db[key] = not db[key]
 	module:Refresh()
+	AceConfigRegistry:NotifyChange(myname)
 
 	if not module.window:IsVisible() then
 		-- empty and combat could both result in it being hidden
