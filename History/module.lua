@@ -12,6 +12,9 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local db
 
+local RedButtonMixin
+local CreateRedButton
+
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("History", {
 		profile = {
@@ -194,7 +197,7 @@ function module:CreateWindow()
 			end
 		end
 		self.collapseButton:SetEnabled(size > 0)
-		self.collapseButton:RotateTextures(db.collapsed and math.pi or 0)
+		self.collapseButton:SetButtonMode(db.collapsed and "Plus" or "Minus")
 
 		if
 			(C_PetBattles and C_PetBattles.IsInBattle()) or
@@ -223,8 +226,9 @@ function module:CreateWindow()
 	icon:SetPoint("TOPLEFT", 2, -2)
 	icon:SetTexture("Interface\\Icons\\INV_Misc_Head_Dragon_01")
 
-	local collapse = CreateFrame("Button", nil, frame, "UIPanelHideButtonNoScripts")
+	local collapse = CreateRedButton(nil, frame)
 	collapse:SetSize(24, 24)
+	collapse:SetButtonMode("Plus")
 	collapse:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -2, -2)
 	collapse:SetScript("OnMouseUp", function(button)
 		db.collapsed = not db.collapsed
@@ -435,3 +439,20 @@ function module:GetPositionFromData(data, allowFallback)
 	end
 	return uiMapID, x, y
 end
+
+--
+
+function CreateRedButton(name, parent, template)
+	local button = CreateFrame("Button", name, parent, template)
+	return Mixin(button, RedButtonMixin)
+end
+
+RedButtonMixin = {
+	SetButtonMode = function(self, mode)
+		-- ArrowUp, ArrowDownGlow, Minus, Plus, Delete, Refresh
+		self:SetNormalAtlas("128-RedButton-" .. mode)
+		self:SetPushedAtlas("128-RedButton-" .. mode .. "-Pressed")
+		self:SetDisabledAtlas("128-RedButton-" .. mode .. "-Disabled")
+		self:SetHighlightAtlas("128-RedButton-" .. mode .. "-Highlight", "ADD")
+	end,
+}
