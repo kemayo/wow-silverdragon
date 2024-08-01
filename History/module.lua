@@ -226,6 +226,7 @@ function module:CreateWindow()
 	icon:SetSize(24, 24)
 	icon:SetPoint("TOPLEFT", 2, -2)
 	icon:SetTexture("Interface\\Icons\\INV_Misc_Head_Dragon_01")
+	icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
 
 	local collapse = CreateRedButton(nil, frame)
 	collapse:SetSize(24, 24)
