@@ -244,6 +244,14 @@ function module:CreateWindow()
 			GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(data.id))
 		else
 			GameTooltip:AddLine(data.name)
+			-- tooltip, id, only_knowable, is_treasure
+			ns.Loot.Summary.UpdateTooltip(GameTooltip, data.id, nil, true)
+		end
+		local uiMapID, x, y = self:GetPositionFromData(data, false)
+		if uiMapID and x and y then
+			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, ("%.1f, %.1f"):format(x * 100, y * 100))
+		else
+			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, UNKNOWN)
 		end
 		GameTooltip:AddLine("Control-click to set a waypoint", 0, 1, 1)
 		GameTooltip:AddLine("Shift-click to link location in chat", 0, 1, 1)
@@ -289,7 +297,6 @@ function module:CreateWindow()
 			line:SetScript("OnLeave", GameTooltip_Hide)
 			line:SetScript("OnMouseUp", Line_OnMouseUp)
 			line:EnableMouse(true)
-
 		end
 
 		line.data = data
@@ -363,4 +370,22 @@ function module:CreateWindow()
 	sizeFrame()
 
 	return frame
+end
+
+function module:GetPositionFromData(data, allowFallback)
+	local x, y, uiMapID = data.x, data.y, data.zone
+	if uiMapID and data.GUID and data.source == "vignette" then
+		local position = C_VignetteInfo.GetVignettePosition(data.GUID, uiMapID)
+		if position then
+			x, y = position:GetXY()
+		end
+	end
+	if not (x and y and x > 0 and y > 0) and data.type == "mob" then
+		uiMapID, x, y = core:GetClosestLocationForMob(data.id)
+	end
+	if allowFallback and not (x and y and x > 0 and y > 0) then
+		-- fall back to sending a link to the current position
+		x, y, uiMapID = HBD:GetPlayerZonePosition()
+	end
+	return uiMapID, x, y
 end
