@@ -1,4 +1,5 @@
 local myname = ...
+local myfullname = C_AddOns.GetAddOnMetadata(myname, "Title")
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("History", "AceEvent-3.0")
@@ -169,7 +170,7 @@ function module:CreateWindow()
 	frame:SetClampedToScreen(true)
 	frame:SetScript("OnMouseUp", function(w, button)
 		if button == "RightButton" then
-			-- return ns:ShowConfigMenu(w)
+			return module:ShowConfigMenu(w)
 		end
 		if core.debuggable and button == "MiddleButton" then
 			core.events:Fire(unpack(GetRandomTableValue{
@@ -204,6 +205,8 @@ function module:CreateWindow()
 				frame.container.scrollBar:SetPoint("TOPRIGHT", 12, 5)
 			end
 		end
+		frame.collapseButton:SetEnabled(size > 0)
+		frame.collapseButton:RotateTextures(db.collapsed and math.pi or 0)
 	end
 
 	frame:SetBackdropColor(0, 0, 0, .5)
@@ -229,6 +232,7 @@ function module:CreateWindow()
 		db.collapsed = not db.collapsed
 		sizeFrame()
 	end)
+	frame.collapseButton = collapse
 
 	local function Line_OnEnter(line)
 		local data = line.data
@@ -370,6 +374,40 @@ function module:CreateWindow()
 	sizeFrame()
 
 	return frame
+end
+
+local isChecked = function(key) return db[key] end
+local toggleChecked = function(key)
+	db[key] = not db[key]
+end
+local openConfig = function()
+	local config = core:GetModule("Config", true)
+	if config then
+		config:ShowConfig()
+		LibStub("AceConfigDialog-3.0"):SelectGroup("SilverDragon", "history")
+	end
+end
+function module:ShowConfigMenu(frame)
+	if not (_G.MenuUtil and MenuUtil.CreateContextMenu) then
+		return openConfig()
+	end
+	MenuUtil.CreateContextMenu(frame, function(owner, rootDescription)
+		rootDescription:SetTag("MENU_SILVERDRAGON_HISTORY_CONTEXT")
+		rootDescription:CreateTitle(myfullname .. " " .. HISTORY)
+		rootDescription:CreateCheckbox("Enabled", isChecked, function()
+			db.enabled = false
+			module:Disable()
+			return MenuResponse.CloseAll
+		end, "enabled")
+		rootDescription:CreateCheckbox("Show during combat", isChecked, toggleChecked, "combat")
+		rootDescription:CreateCheckbox("Include treasure vignettes", isChecked, toggleChecked, "loot")
+		rootDescription:CreateDivider()
+		rootDescription:CreateButton(CLEAR_ALL, function()
+			module.dataProvider:Flush()
+			return MenuResponse.CloseAll
+		end)
+		rootDescription:CreateButton("Open options...", openConfig)
+	end)
 end
 
 function module:GetPositionFromData(data, allowFallback)

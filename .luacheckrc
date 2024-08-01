@@ -262,6 +262,8 @@ read_globals = {
     "StaticPopup_HideExclusive",
     "ScrollUtil",
     "GetRandomTableValue",
+    "MenuUtil",
+    "MenuResponse",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",
@@ -286,6 +288,7 @@ read_globals = {
     "CHAT_MSG_GUILD",
     "CHAT_MSG_OFFICER",
     "CLASS_ICON_TCOORDS",
+    "CLEAR_ALL",
     "CLICK_FOR_DETAILS",
     "CLOSE",
     "COLOR",
@@ -307,6 +310,7 @@ read_globals = {
     "EQUIP_CONTAINER",
     "GREEN_FONT_COLOR",
     "HIDE",
+    "HISTORY",
     "ICON_LIST",
     "ID",
     "IGNORE",

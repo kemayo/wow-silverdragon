@@ -10,15 +10,13 @@ function module:RegisterConfig()
 	if not config then return end
 	config.options.plugins.history = { history = {
 		type = "group",
-		name = "History",
+		name = HISTORY,
 		get = function(info) return self.db.profile[info[#info]] end,
 		set = function(info, v)
 			self.db.profile[info[#info]] = v
-			module:VIGNETTES_UPDATED()
 		end,
 		args = {
 			about = config.desc("Show a list of recently seen mobs, the easier to work out when future spawns will occur.", 0),
-			-- enabled = config.toggle("Enabled", "Extend the range at which minimap vignettes will appear.", 10),
 			enabled = {
 				type = "toggle",
 				name = "Enabled",
