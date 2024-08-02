@@ -387,7 +387,9 @@ function module:CreateWindow()
 end
 
 function module:Refresh()
-	self.dataProvider:Sort()
+	-- Force a redraw of the frames in the scrollbox
+	self.window.container.scrollBox:Rebuild(true) --retainScrollPosition
+	-- Resize the window around the redrawn scrollbox
 	self.window:RefreshForContents()
 end
 
