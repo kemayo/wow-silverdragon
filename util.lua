@@ -21,7 +21,7 @@ function addon:RenderString(s, context)
 		mainid, subid = mainid and tonumber(mainid), subid and tonumber(subid)
 		id = tonumber(id)
 		if variant == "item" then
-			local name, link, _, _, _, _, _, _, _, icon = GetItemInfo(id)
+			local name, link, _, _, _, _, _, _, _, icon = C_Item.GetItemInfo(id)
 			if link and icon then
 				return quick_texture_markup(icon) .. " " .. link:gsub("[%[%]]", "")
 			end

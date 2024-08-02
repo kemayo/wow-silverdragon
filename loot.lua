@@ -39,7 +39,7 @@ local function PlayerHasTransmogByItemInfo(itemLinkOrID)
 	if C_TransmogCollection.PlayerHasTransmogByItemInfo then
 		return C_TransmogCollection.PlayerHasTransmogByItemInfo(itemLinkOrID)
 	end
-	local itemID = GetItemInfoInstant(itemLinkOrID)
+	local itemID = C_Item.GetItemInfoInstant(itemLinkOrID)
 	if itemID then
 		-- this is a bit worse, because of items with varying appearances based on the link-details
 		-- but because this path should only be hit in classic, we should be fine
@@ -62,7 +62,7 @@ local brokenItems = {
 	[153316] = {25123, 90885}, -- Praetor's Ornamental Edge
 }
 local function GetAppearanceAndSource(itemLinkOrID)
-	local itemID = GetItemInfoInstant(itemLinkOrID)
+	local itemID = C_Item.GetItemInfoInstant(itemLinkOrID)
 	if not itemID then return end
 	local appearanceID, sourceID = C_TransmogCollection.GetItemInfo(itemLinkOrID)
 	if not appearanceID then
@@ -79,7 +79,7 @@ end
 local canLearnCache = {}
 local function CanLearnAppearance(itemLinkOrID)
 	if not _G.C_Transmog then return false end
-	local itemID = GetItemInfoInstant(itemLinkOrID)
+	local itemID = C_Item.GetItemInfoInstant(itemLinkOrID)
 	if not itemID then return end
 	if canLearnCache[itemID] ~= nil then
 		return canLearnCache[itemID]
@@ -107,7 +107,7 @@ local function CanLearnAppearance(itemLinkOrID)
 end
 local hasAppearanceCache = {}
 local function HasAppearance(itemLinkOrID)
-	local itemID = GetItemInfoInstant(itemLinkOrID)
+	local itemID = C_Item.GetItemInfoInstant(itemLinkOrID)
 	if not itemID then return end
 	if hasAppearanceCache[itemID] ~= nil and core.db.profile.lootappearances then
 		-- only use the cache if we need the more expensive checks below...
@@ -614,7 +614,7 @@ local Summary = {
 		end
 	end,
 	item = function(tooltip, i, itemid, itemdata)
-		local name, link, quality, _, _, _, _, _, _, icon = GetItemInfo(itemid)
+		local name, link, quality, _, _, _, _, _, _, icon = C_Item.GetItemInfo(itemid)
 		if name then
 			local _, itemType, itemSubtype, equipLoc, _, classID, subclassID = C_Item.GetItemInfoInstant(itemid)
 			local label = ENCOUNTER_JOURNAL_ITEM
@@ -747,7 +747,7 @@ do
 		-- classic
 		if not button.SetItem then
 			function button:SetItem(item)
-				local itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subclassID = GetItemInfoInstant(item)
+				local itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subclassID = C_Item.GetItemInfoInstant(item)
 				if itemID then
 					self.itemID = itemID
 					SetItemButtonTexture(button, icon)
@@ -761,7 +761,7 @@ do
 			end
 			function button:GetItemLink()
 				if not self.itemID then return nil end
-				return select(2, GetItemInfo(self.itemID))
+				return select(2, C_Item.GetItemInfo(self.itemID))
 			end
 		end
 	end)
