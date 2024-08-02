@@ -477,9 +477,30 @@ end
 RedButtonMixin = {
 	SetButtonMode = function(self, mode)
 		-- ArrowUp, ArrowDownGlow, Minus, Plus, Delete, Refresh
-		self:SetNormalAtlas("128-RedButton-" .. mode)
-		self:SetPushedAtlas("128-RedButton-" .. mode .. "-Pressed")
-		self:SetDisabledAtlas("128-RedButton-" .. mode .. "-Disabled")
-		self:SetHighlightAtlas("128-RedButton-" .. mode .. "-Highlight", "ADD")
+		if ns.CLASSIC then
+			-- Doesn't have the redbutton textures
+			-- TODO: add other modes if I use them
+			if mode == "Plus" then
+				self:SetNormalTexture([[Interface\Buttons\UI-PlusButton-UP]])
+				self:SetPushedTexture([[Interface\Buttons\UI-PlusButton-Down]])
+				self:SetHighlightTexture([[Interface\Buttons\UI-PlusButton-Hilight]], "ADD")
+				self:SetDisabledTexture([[Interface\Buttons\UI-PlusButton-Disabled]])
+			elseif mode == "Minus" then
+				self:SetNormalTexture([[Interface\Buttons\UI-MinusButton-UP]])
+				self:SetPushedTexture([[Interface\Buttons\UI-MinusButton-Down]])
+				self:SetHighlightTexture([[Interface\Buttons\UI-MinusButton-Hilight]], "ADD")
+				self:SetDisabledTexture([[Interface\Buttons\UI-MinusButton-Disabled]])
+			elseif mode == "Delete" then
+				self:SetNormalTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Up]])
+				self:SetPushedTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Down]])
+				self:SetHighlightTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Highlight]], "ADD")
+				self:SetDisabledTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Disabled]])
+			end
+		else
+			self:SetNormalAtlas("128-RedButton-" .. mode)
+			self:SetPushedAtlas("128-RedButton-" .. mode .. "-Pressed")
+			self:SetDisabledAtlas("128-RedButton-" .. mode .. "-Disabled")
+			self:SetHighlightAtlas("128-RedButton-" .. mode .. "-Highlight", "ADD")
+		end
 	end,
 }
