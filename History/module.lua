@@ -22,6 +22,7 @@ function module:OnInitialize()
 			enabled = true,
 			collapsed = false,
 			-- locked = true,
+			relative = true,
 			empty = true,
 			combat = false,
 			sources = {
@@ -329,6 +330,7 @@ function module:ShowConfigMenu(frame)
 		end, "enabled")
 		rootDescription:CreateCheckbox("Show during combat", isChecked, toggleChecked, "combat")
 		rootDescription:CreateCheckbox("Show when empty", isChecked, toggleChecked, "empty")
+		rootDescription:CreateCheckbox("Use relative time", isChecked, toggleChecked, "relative")
 		rootDescription:CreateCheckbox("Include treasure vignettes", isChecked, toggleChecked, "loot")
 		rootDescription:CreateDivider()
 		rootDescription:CreateButton(CLEAR_ALL, function()
@@ -357,6 +359,16 @@ function module:GetPositionFromData(data, allowFallback)
 	return uiMapID, x, y
 end
 
+function module:FormatRelativeTime(t)
+	-- return hours:minutes from a timestamp
+	t = tonumber(t)
+	if not t or t == 0 then return NEVER end
+	local currentTime = time()
+	local minutes = math.floor(((currentTime - t) / 60) + 0.5)
+	local hours = math.floor(((currentTime - t) / 3600) + 0.5)
+	return ("%dh %02dm"):format(hours, minutes)
+end
+
 --
 
 LineMixin = {
@@ -383,13 +395,21 @@ LineMixin = {
 		self:EnableMouse(true)
 		self:RegisterForClicks("AnyUp", "AnyDown")
 		self:SetAttribute("type", "macro")
+
+		-- *not* anything that divides into 60:
+		self.ticker = C_Timer.NewTicker(13, self.Scripts.OnTick)
+		self.ticker.line = self
 	end,
 	SetData = function(self, data)
 		self:SetAttribute("macrotext1", "")
 
 		self.data = data
 		self.title:SetText(data.name or core:GetMobLabel(data.id) or data.id)
-		self.time:SetText(date("%H:%M", data.when))
+		if db.relative then
+			self.time:SetText(module:FormatRelativeTime(data.when))
+		else
+			self.time:SetText(date("%H:%M", data.when))
+		end
 		self.source:SetText(data.source)
 
 		if data.mob then
@@ -429,6 +449,9 @@ LineMixin = {
 			self.icon:SetAtlas(data.atlas or "VignetteLoot")
 		end
 	end,
+	Refresh = function(self)
+		self:SetData(self.data)
+	end,
 
 	Scripts = {
 		OnEnter = function(self)
@@ -454,6 +477,7 @@ LineMixin = {
 			else
 				GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, UNKNOWN)
 			end
+			GameTooltip:AddDoubleLine("Seen", core:FormatLastSeen(data.when))
 			if data.mob and not InCombatLockdown() then
 				GameTooltip:AddLine("Click to target if nearby", 0, 1, 1)
 			end
@@ -479,6 +503,12 @@ LineMixin = {
 				core:GetModule("ClickTarget"):SendLinkFromData(self.data)
 				return
 			end
+		end,
+
+		OnTick = function(ticker)
+			local line = ticker and ticker.line
+			if not (line and line.data) then return end
+			line:Refresh()
 		end,
 	}
 }
