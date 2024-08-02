@@ -116,6 +116,7 @@ end
 
 function module:OnDisable()
 	core.UnregisterCallback(self, "Seen")
+	core.UnregisterCallback(self, "SeenLoot")
 
 	self.window:Hide()
 end
