@@ -12,6 +12,7 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 local db
 
+local LineMixin
 local RedButtonMixin
 local CreateRedButton
 
@@ -134,10 +135,10 @@ function module:CreateDataProvider()
 	return dataProvider
 end
 
+local MAXHEIGHT = 250
+local HEADERHEIGHT = 28
+local LINEHEIGHT = 26
 function module:CreateWindow()
-	local MAXHEIGHT = 250
-	local HEADERHEIGHT = 28
-	local LINEHEIGHT = 26
 	local frame = CreateFrame("Frame", "SilverDragonHistoryFrame", UIParent, "BackdropTemplate")
 	frame:SetSize(240, MAXHEIGHT)
 	frame:SetBackdrop({
@@ -248,125 +249,6 @@ function module:CreateWindow()
 	end)
 	frame.clearButton = clear
 
-	local function Line_OnEnter(line)
-		local data = line.data
-		if not data then return end
-
-		GameTooltip:SetOwner(line, "ANCHOR_NONE")
-		if line:GetCenter() < (UIParent:GetWidth() / 2) then
-			GameTooltip:SetPoint("TOPLEFT", line, "TOPRIGHT")
-		else
-			GameTooltip:SetPoint("TOPRIGHT", line, "TOPLEFT")
-		end
-		if data.mob then
-			GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(data.id))
-		else
-			GameTooltip:AddLine(data.name)
-			-- tooltip, id, only_knowable, is_treasure
-			ns.Loot.Summary.UpdateTooltip(GameTooltip, data.id, nil, true)
-		end
-		local uiMapID, x, y = self:GetPositionFromData(data, false)
-		if uiMapID and x and y then
-			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, ("%.1f, %.1f"):format(x * 100, y * 100))
-		else
-			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, UNKNOWN)
-		end
-		if data.mob and not InCombatLockdown() then
-			GameTooltip:AddLine("Click to target if nearby", 0, 1, 1)
-		end
-		GameTooltip:AddLine("Control-click to set a waypoint", 0, 1, 1)
-		GameTooltip:AddLine("Shift-click to link location in chat", 0, 1, 1)
-		GameTooltip:Show()
-	end
-
-	local function Line_OnMouseUp(line, button)
-		if button ~= "LeftButton" then return end
-		if not line.data then return end
-		-- local zone, x, y = core:GetClosestLocationForMob(line.data.id)
-		if IsControlKeyDown() then
-			local idOrName, zone, x, y = line.data.id or line.data.name, line.data.zone, line.data.x, line.data.y
-			if zone and x and y then
-				core:GetModule("TomTom"):PointTo(idOrName, zone, x, y, 0, true)
-			end
-			return
-		end
-		if IsShiftKeyDown() then
-			core:GetModule("ClickTarget"):SendLinkFromData(line.data)
-			return
-		end
-	end
-
-	local initializer = function(line, data)
-		if not line.icon then
-			line:SetHeight(LINEHEIGHT)
-			line.icon = line:CreateTexture()
-			line.icon:SetSize(LINEHEIGHT - 2, LINEHEIGHT - 2)
-			line.icon:SetPoint("LEFT", 4, 0)
-			line.title = line:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-			line.title:SetPoint("LEFT", line.icon, "RIGHT", 4, 0)
-			line.title:SetPoint("RIGHT")
-			line.title:SetJustifyH("LEFT")
-			line.title:SetMaxLines(2)
-			line.time = line:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-			line.time:SetPoint("TOPRIGHT", 0, -2)
-			line.title:SetPoint("RIGHT", line.time, "LEFT")
-			line.source = line:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-			line.source:SetPoint("BOTTOMRIGHT", 0, 2)
-			line.source:SetTextColor(1, 1, 1, 0.6)
-			line.title:SetPoint("RIGHT", line.time, "LEFT")
-			line:SetScript("OnEnter", Line_OnEnter)
-			line:SetScript("OnLeave", GameTooltip_Hide)
-			line:SetScript("OnMouseUp", Line_OnMouseUp)
-			line:EnableMouse(true)
-			line:RegisterForClicks("AnyUp", "AnyDown")
-			line:SetAttribute("type", "macro")
-		end
-
-		line:SetAttribute("macrotext1", "")
-
-		line.data = data
-		line.title:SetText(data.name or core:GetMobLabel(data.id) or data.id)
-		line.time:SetText(date("%H:%M", data.when))
-		line.source:SetText(data.source)
-
-		if data.mob then
-			-- `nil` if completion not knowable, true/false if knowable
-			local quest, achievement, by_alt = ns:CompletionStatus(data.id)
-			if quest or achievement then
-				if (quest and achievement) or (quest == nil or achievement == nil) then
-					-- full completion
-					line.title:SetTextColor(0.33, 1, 0.33) -- green
-				else
-					-- partial completion
-					line.title:SetTextColor(1, 1, 0.33) -- yellow
-				end
-			elseif quest ~= nil or achievement ~= nil then
-				line.title:SetTextColor(1, 0.33, 0.33) -- red
-			else
-				line.title:SetTextColor(1, 1, 1, 1)
-			end
-			if ns.Loot.HasInterestingMounts(data.id) then
-				-- an unknown mount or a BoE mount
-				line.icon:SetAtlas("VignetteKillBoss")
-			elseif ns.Loot.Status.Toy(data.id) == false or ns.Loot.Status.Pet(data.id) == false then
-				-- but toys and pets are only special until you loot them
-				line.icon:SetAtlas("VignetteKillElite")
-			else
-				line.icon:SetAtlas("VignetteKill")
-			end
-
-			-- set up targeting
-			local name = core:NameForMob(data.id)
-			if name then
-				local macrotext = "/cleartarget \n/targetexact " .. name
-				line:SetAttribute("macrotext1", macrotext)
-			end
-		else
-			line.title:SetTextColor(1, 1, 1, 1)
-			line.icon:SetAtlas(data.atlas or "VignetteLoot")
-		end
-	end
-
 	-- scrollframe with dataprovider:
 
 	local container = CreateFrame("Frame", nil, frame)
@@ -385,7 +267,14 @@ function module:CreateWindow()
 	local scrollView = CreateScrollBoxListLinearView()
 	scrollView:SetDataProvider(self.dataProvider)
 	scrollView:SetElementExtent(LINEHEIGHT)  -- Fixed height for each row; required as we're not using XML.
-	scrollView:SetElementInitializer("InsecureActionButtonTemplate", initializer)
+	scrollView:SetElementInitializer("InsecureActionButtonTemplate", function(line, data)
+		if not line.Init then
+			Mixin(line, LineMixin)
+			line:Init()
+		end
+
+		line:SetData(data)
+	end)
 	container.scrollView = scrollView
 
 	ScrollUtil.InitScrollBoxWithScrollBar(scrollBox, scrollBar, scrollView)
@@ -467,6 +356,132 @@ function module:GetPositionFromData(data, allowFallback)
 	end
 	return uiMapID, x, y
 end
+
+--
+
+LineMixin = {
+	Init = function(self)
+		self:SetHeight(LINEHEIGHT)
+		self.icon = self:CreateTexture()
+		self.icon:SetSize(LINEHEIGHT - 2, LINEHEIGHT - 2)
+		self.icon:SetPoint("LEFT", 4, 0)
+		self.title = self:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+		self.title:SetPoint("LEFT", self.icon, "RIGHT", 4, 0)
+		self.title:SetPoint("RIGHT")
+		self.title:SetJustifyH("LEFT")
+		self.title:SetMaxLines(2)
+		self.time = self:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+		self.time:SetPoint("TOPRIGHT", 0, -2)
+		self.title:SetPoint("RIGHT", self.time, "LEFT")
+		self.source = self:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+		self.source:SetPoint("BOTTOMRIGHT", 0, 2)
+		self.source:SetTextColor(1, 1, 1, 0.6)
+		self.title:SetPoint("RIGHT", self.time, "LEFT")
+		self:SetScript("OnEnter", self.Scripts.OnEnter)
+		self:SetScript("OnLeave", self.Scripts.OnLeave)
+		self:SetScript("OnMouseUp", self.Scripts.OnMouseUp)
+		self:EnableMouse(true)
+		self:RegisterForClicks("AnyUp", "AnyDown")
+		self:SetAttribute("type", "macro")
+	end,
+	SetData = function(self, data)
+		self:SetAttribute("macrotext1", "")
+
+		self.data = data
+		self.title:SetText(data.name or core:GetMobLabel(data.id) or data.id)
+		self.time:SetText(date("%H:%M", data.when))
+		self.source:SetText(data.source)
+
+		if data.mob then
+			-- `nil` if completion not knowable, true/false if knowable
+			local quest, achievement, by_alt = ns:CompletionStatus(data.id)
+			if quest or achievement then
+				if (quest and achievement) or (quest == nil or achievement == nil) then
+					-- full completion
+					self.title:SetTextColor(0.33, 1, 0.33) -- green
+				else
+					-- partial completion
+					self.title:SetTextColor(1, 1, 0.33) -- yellow
+				end
+			elseif quest ~= nil or achievement ~= nil then
+				self.title:SetTextColor(1, 0.33, 0.33) -- red
+			else
+				self.title:SetTextColor(1, 1, 1, 1)
+			end
+			if ns.Loot.HasInterestingMounts(data.id) then
+				-- an unknown mount or a BoE mount
+				self.icon:SetAtlas("VignetteKillBoss")
+			elseif ns.Loot.Status.Toy(data.id) == false or ns.Loot.Status.Pet(data.id) == false then
+				-- but toys and pets are only special until you loot them
+				self.icon:SetAtlas("VignetteKillElite")
+			else
+				self.icon:SetAtlas("VignetteKill")
+			end
+
+			-- set up targeting
+			local name = core:NameForMob(data.id)
+			if name then
+				local macrotext = "/cleartarget \n/targetexact " .. name
+				self:SetAttribute("macrotext1", macrotext)
+			end
+		else
+			self.title:SetTextColor(1, 1, 1, 1)
+			self.icon:SetAtlas(data.atlas or "VignetteLoot")
+		end
+	end,
+
+	Scripts = {
+		OnEnter = function(self)
+			local data = self.data
+			if not data then return end
+
+			GameTooltip:SetOwner(self, "ANCHOR_NONE")
+			if self:GetCenter() < (UIParent:GetWidth() / 2) then
+				GameTooltip:SetPoint("TOPLEFT", self, "TOPRIGHT")
+			else
+				GameTooltip:SetPoint("TOPRIGHT", self, "TOPLEFT")
+			end
+			if data.mob then
+				GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(data.id))
+			else
+				GameTooltip:AddLine(data.name)
+				-- tooltip, id, only_knowable, is_treasure
+				ns.Loot.Summary.UpdateTooltip(GameTooltip, data.id, nil, true)
+			end
+			local uiMapID, x, y = module:GetPositionFromData(data, false)
+			if uiMapID and x and y then
+				GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, ("%.1f, %.1f"):format(x * 100, y * 100))
+			else
+				GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, UNKNOWN)
+			end
+			if data.mob and not InCombatLockdown() then
+				GameTooltip:AddLine("Click to target if nearby", 0, 1, 1)
+			end
+			GameTooltip:AddLine("Control-click to set a waypoint", 0, 1, 1)
+			GameTooltip:AddLine("Shift-click to link location in chat", 0, 1, 1)
+			GameTooltip:Show()
+		end,
+
+		OnLeave = GameTooltip_Hide,
+
+		OnMouseUp = function(self, button)
+			if button ~= "LeftButton" then return end
+			if not self.data then return end
+			-- local zone, x, y = core:GetClosestLocationForMob(self.data.id)
+			if IsControlKeyDown() then
+				local idOrName, zone, x, y = self.data.id or self.data.name, self.data.zone, self.data.x, self.data.y
+				if zone and x and y then
+					core:GetModule("TomTom"):PointTo(idOrName, zone, x, y, 0, true)
+				end
+				return
+			end
+			if IsShiftKeyDown() then
+				core:GetModule("ClickTarget"):SendLinkFromData(self.data)
+				return
+			end
+		end,
+	}
+}
 
 --
 
