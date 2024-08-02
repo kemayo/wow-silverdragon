@@ -90,7 +90,7 @@ function module:RefreshMobData(popup)
 
 	local achievement, achievement_name, completed = ns:AchievementMobStatus(data.id)
 	if achievement then
-		popup.status:SetFormattedText("%s%s|r", completed and escapes.green or escapes.red, achievement_name)
+		popup.status:SetFormattedText("%s%s|r", completed and escapes.green or escapes.red, achievement_name or UNKNOWN)
 	else
 		popup.status:SetText("")
 	end
