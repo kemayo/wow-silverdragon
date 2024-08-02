@@ -270,6 +270,9 @@ function module:CreateWindow()
 		else
 			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, UNKNOWN)
 		end
+		if data.mob and not InCombatLockdown() then
+			GameTooltip:AddLine("Click to target if nearby", 0, 1, 1)
+		end
 		GameTooltip:AddLine("Control-click to set a waypoint", 0, 1, 1)
 		GameTooltip:AddLine("Shift-click to link location in chat", 0, 1, 1)
 		GameTooltip:Show()
@@ -314,7 +317,11 @@ function module:CreateWindow()
 			line:SetScript("OnLeave", GameTooltip_Hide)
 			line:SetScript("OnMouseUp", Line_OnMouseUp)
 			line:EnableMouse(true)
+			line:RegisterForClicks("AnyUp", "AnyDown")
+			line:SetAttribute("type", "macro")
 		end
+
+		line:SetAttribute("macrotext1", "")
 
 		line.data = data
 		line.title:SetText(data.name or core:GetMobLabel(data.id) or data.id)
@@ -346,6 +353,13 @@ function module:CreateWindow()
 			else
 				line.icon:SetAtlas("VignetteKill")
 			end
+
+			-- set up targeting
+			local name = core:NameForMob(data.id)
+			if name then
+				local macrotext = "/cleartarget \n/targetexact " .. name
+				line:SetAttribute("macrotext1", macrotext)
+			end
 		else
 			line.title:SetTextColor(1, 1, 1, 1)
 			line.icon:SetAtlas(data.atlas or "VignetteLoot")
@@ -370,7 +384,7 @@ function module:CreateWindow()
 	local scrollView = CreateScrollBoxListLinearView()
 	scrollView:SetDataProvider(self.dataProvider)
 	scrollView:SetElementExtent(LINEHEIGHT)  -- Fixed height for each row; required as we're not using XML.
-	scrollView:SetElementInitializer("Button", initializer)
+	scrollView:SetElementInitializer("InsecureActionButtonTemplate", initializer)
 	container.scrollView = scrollView
 
 	ScrollUtil.InitScrollBoxWithScrollBar(scrollBox, scrollBar, scrollView)
