@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2024.10.1
+
+* Option to show relative times in the history window, on by default
+
 ## Changed in v2024.10
 
 * Clicking the line in the history window will now try to target the mob (so long as you're out-of-combat)
