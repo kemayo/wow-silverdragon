@@ -203,7 +203,7 @@ function module:CreateWindow()
 		if
 			(C_PetBattles and C_PetBattles.IsInBattle()) or
 			(not db.combat and InCombatLockdown()) or
-			size == 0 and not db.empty
+			(size == 0 and not db.empty)
 		then
 			self:Hide()
 		else
