@@ -114,7 +114,8 @@ function module:Update()
 							-- if they ever change `StaticPopupDialogs["ADDON_ACTION_FORBIDDEN"]` I may need to revisit this, but...
 							StaticPopup_HideExclusive()
 						end
-						if _G.BugSack and not bugSackWasOpen then
+						if _G.BugSack and _G.BugSackFrame and not bugSackWasOpen then
+							-- CloseSack will error if the bugsack window isn't created yet
 							_G.BugSack:CloseSack()
 						end
 					end
