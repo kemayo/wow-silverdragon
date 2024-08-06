@@ -25,6 +25,7 @@ function module:OnInitialize()
 			relative = true,
 			empty = true,
 			combat = false,
+			othershard = "dim", -- show / dim / hide
 			sources = {
 				target = false,
 				grouptarget = true,
@@ -49,6 +50,7 @@ function module:OnInitialize()
 	})
 	db = self.db.profile
 
+	self.data = {}
 	self.rares = {}
 	self.dataProvider = self:CreateDataProvider()
 
@@ -57,11 +59,24 @@ function module:OnInitialize()
 	self:SetEnabledState(db.enabled)
 end
 
+local currentShardSources = {
+	target = true,
+	-- grouptarget = true,
+	mouseover = true,
+	nameplate = true,
+	vignette = true,
+	['point-of-interest'] = true,
+	chat = true,
+	groupsync = false,
+	guildsync = false,
+	darkmagic = true,
+	fake = true,
+}
 function module:OnEnable()
 	if not self.window then
 		self.window = self:CreateWindow()
 	end
-	core.RegisterCallback("History", "Seen", function(callback, id, zone, x, y, dead, source)
+	core.RegisterCallback("History", "Seen", function(callback, id, zone, x, y, dead, source, unit, guid)
 		if not self.db.profile.sources[source] then
 			return
 		end
@@ -72,17 +87,15 @@ function module:OnEnable()
 			y = y,
 			source = source,
 			when = time(),
+			guid = guid,
 			mob = true,
 			type = "mob",
 		}
 		table.insert(self.rares, data)
 		self:AddData(data)
 	end)
-	core.RegisterCallback("History", "SeenLoot", function(callback, name, id, zone, x, y, GUID)
-		if not self.db.profile.loot then
-			return
-		end
-		local vignetteInfo = GUID and C_VignetteInfo.GetVignetteInfo(GUID)
+	core.RegisterCallback("History", "SeenLoot", function(callback, name, id, zone, x, y, guid)
+		local vignetteInfo = guid and C_VignetteInfo.GetVignetteInfo(guid)
 		self:AddData{
 			id = id,
 			name = name,
@@ -92,10 +105,21 @@ function module:OnEnable()
 			source = "vignette",
 			when = time(),
 			atlas = vignetteInfo and vignetteInfo.atlasName,
-			guid = GUID,
+			guid = guid,
 			loot = true,
 			type = "loot",
 		}
+	end)
+	core.RegisterCallback("History", "ShardChanged", function(callback, currentShard, previousShard, guid)
+		self.currentShard = currentShard
+		if self.dataProvider and previousShard == "unknown" then
+			for _, data in ipairs(self.dataProvider:GetCollection()) do
+				if currentShardSources[data.source] and not data.shard then
+					data.shard = currentShard
+				end
+			end
+		end
+		self:Refresh()
 	end)
 
 	self:RegisterEvent("PET_BATTLE_OPENING_START", "Refresh")
@@ -107,13 +131,17 @@ function module:OnEnable()
 end
 
 function module:AddData(data)
-	if not self.dataProvider then return end
-	local collection = self.dataProvider:GetCollection()
-	if collection[#collection] and collection[#collection].when == data.when then
+	if self.data[#self.data] and self.data[#self.data].when == data.when then
 		-- time is in seconds, so moments when we see multiples can be a problem
 		data.when = data.when + 0.01
 	end
-	self.dataProvider:Insert(data)
+	-- Fix up the shard if it wasn't available from the source
+	data.shard = core:GUIDShard(data.guid) or (currentShardSources[data.source] and self.currentShard) or nil
+	-- DevTools_Dump(data)
+	table.insert(self.data, data)
+	if self:ShouldAddToDataProvider(data) then
+		self.dataProvider:Insert(data)
+	end
 end
 
 function module:OnDisable()
@@ -128,12 +156,34 @@ function module:GetRares()
 end
 
 function module:CreateDataProvider()
-	local dataProvider = CreateDataProvider(self.vignetteLogOrder)
+	local dataProvider = CreateDataProvider()
 	-- It's stored in an append-table, but I want the new events at the top:
 	dataProvider:SetSortComparator(function(lhs, rhs)
 		return lhs.when > rhs.when
 	end)
 	return dataProvider
+end
+
+function module:RebuildDataProvider()
+	Debug("History: rebuilding data provider")
+	self.dataProvider:Flush()
+	local newdata = {}
+	for _, data in ipairs(self.data) do
+		if self:ShouldAddToDataProvider(data) then
+			table.insert(newdata, data)
+		end
+	end
+	self.dataProvider:Insert(unpack(newdata))
+end
+
+function module:ShouldAddToDataProvider(data)
+	if data.loot and not self.db.profile.loot then
+		return
+	end
+	if db.othershard == "hide" and data.shard ~= self.currentShard then
+		return
+	end
+	return true
 end
 
 local MAXHEIGHT = 250
@@ -292,6 +342,7 @@ function module:CreateWindow()
 end
 
 function module:Refresh()
+	self:RebuildDataProvider()
 	-- Force a redraw of the frames in the scrollbox
 	self.window.container.scrollBox:Rebuild(true) --retainScrollPosition
 	-- Resize the window around the redrawn scrollbox
@@ -332,6 +383,18 @@ function module:ShowConfigMenu(frame)
 		rootDescription:CreateCheckbox("Show when empty", isChecked, toggleChecked, "empty")
 		rootDescription:CreateCheckbox("Use relative time", isChecked, toggleChecked, "relative")
 		rootDescription:CreateCheckbox("Include treasure vignettes", isChecked, toggleChecked, "loot")
+
+		local shardIsSelected = function(val) return db.othershard == val end
+		local shardSelect = function(val)
+			db.othershard = val
+			module:Refresh()
+			AceConfigRegistry:NotifyChange(myname)
+		end
+		local othershard = rootDescription:CreateButton("Mobs from other shards...")
+		othershard:CreateRadio("Show", shardIsSelected, shardSelect, "show")
+		othershard:CreateRadio("Dim", shardIsSelected, shardSelect, "dim")
+		othershard:CreateRadio("Hide", shardIsSelected, shardSelect, "hide")
+
 		rootDescription:CreateDivider()
 		rootDescription:CreateButton(CLEAR_ALL, function()
 			module.dataProvider:Flush()
@@ -402,6 +465,7 @@ LineMixin = {
 	end,
 	SetData = function(self, data)
 		self:SetAttribute("macrotext1", "")
+		self:SetAlpha(1)
 
 		self.data = data
 		self.title:SetText(data.name or core:GetMobLabel(data.id) or data.id)
@@ -448,6 +512,11 @@ LineMixin = {
 			self.title:SetTextColor(1, 1, 1, 1)
 			self.icon:SetAtlas(data.atlas or "VignetteLoot")
 		end
+
+		if db.othershard ~= "show" and data.shard ~= module.currentShard then
+			-- the "hide" case was filtered out earlier
+			self:SetAlpha(0.5)
+		end
 	end,
 	Refresh = function(self)
 		self:SetData(self.data)
@@ -478,6 +547,7 @@ LineMixin = {
 				GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, UNKNOWN)
 			end
 			GameTooltip:AddDoubleLine("Seen", core:FormatLastSeen(data.when))
+			GameTooltip:AddDoubleLine("Shard", core:ColorTextByCompleteness(data.shard == module.currentShard, data.shard or UNKNOWN))
 			if data.mob and not InCombatLockdown() then
 				GameTooltip:AddLine("Click to target if nearby", 0, 1, 1)
 			end
