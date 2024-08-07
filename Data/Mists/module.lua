@@ -37,7 +37,7 @@ core:RegisterMobData("Mists", {
 	[50766] = {name="Sele'na",locations={[376]={52402820,54403640,59603840},},loot={86580},},
 	[50768] = {name="Cournith Waterstrider",locations={[418]={30603820},},},
 	[50769] = {name="Zai the Outcast",locations={[379]={73007660},},loot={{86581,toy=true,}},},
-	[50772] = {name="Eshelon",locations={[388]={65408740},},loot={87222},},
+	[50772] = {name="Eshelon",locations={[388]={65408740},},loot={87222},vignette=130,},
 	[50776] = {name="Nalash Verdantis",locations={[422]={64005860},},loot={{86563,pet=836,}},},
 	[50780] = {name="Sahn Tidehunter",locations={[390]={69203020},},loot={{86582,toy=true,}},},
 	[50782] = {name="Sarnak",locations={[371]={64407400},},},
