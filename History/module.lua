@@ -55,6 +55,7 @@ function module:OnInitialize()
 
 	self.data = {}
 	self.rares = {}
+	self.removed = {}
 	self.dataProvider = self:CreateDataProvider()
 
 	self:RegisterConfig()
@@ -184,6 +185,9 @@ function module:ShouldAddToDataProvider(data)
 		return
 	end
 	if db.othershard == "hide" and data.shard ~= self.currentShard then
+		return
+	end
+	if self.removed[data] then
 		return
 	end
 	return true
@@ -592,14 +596,20 @@ LineMixin = {
 			end
 			GameTooltip:AddLine("Control-click to set a waypoint", 0, 1, 1)
 			GameTooltip:AddLine("Shift-click to link location in chat", 0, 1, 1)
+			GameTooltip:AddLine("Right-click to remove this entry", 1, 0, 1)
 			GameTooltip:Show()
 		end,
 
 		OnLeave = GameTooltip_Hide,
 
 		OnMouseUp = function(self, button)
-			if button ~= "LeftButton" then return end
 			if not self.data then return end
+			if button == "RightButton" then
+				module.removed[self.data] = true
+				module.dataProvider:Remove(self.data)
+				return
+			end
+			if button ~= "LeftButton" then return end
 			-- local zone, x, y = core:GetClosestLocationForMob(self.data.id)
 			if IsControlKeyDown() then
 				local idOrName, zone, x, y = self.data.id or self.data.name, self.data.zone, self.data.x, self.data.y
