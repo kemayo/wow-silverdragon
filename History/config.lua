@@ -35,7 +35,19 @@ function module:RegisterConfig()
 			},
 			combat = config.toggle("Show in combat", "Whether to hide away when combat starts", 15),
 			empty = config.toggle("Show when empty", "Whether to show the window before you've seen anything", 20),
-			loot = config.toggle("Include loot", "Whether to include treasure vignettes", 25),
+			grow = config.toggle("Grow to max height", "Whether to fit the window to its contents until you reach the maximum height", 25),
+			relative = config.toggle("Use relative time", "Whether to show time in the window as relative or absolute", 30),
+			loot = config.toggle("Include loot", "Whether to include treasure vignettes", 35),
+			othershard = {
+				type = "select", name = "Mobs from other shards",
+				desc = "How to treat mobs which are not from your current shard, and so which are probably inaccessible to you right now",
+				values = {
+					show = "Show",
+					dim = "Dim",
+					hide = "Hide",
+				},
+				order = 40,
+			},
 			scale = {
 				type = "range",
 				name = UI_SCALE,
@@ -48,7 +60,7 @@ function module:RegisterConfig()
 					self.db.profile.position.scale = value
 					LibWindow.SetScale(self.window, value)
 				end,
-				order = 40,
+				order = 50,
 			},
 		},
 	}, }
