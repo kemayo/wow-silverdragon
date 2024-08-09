@@ -427,6 +427,7 @@ function module:ShowConfigMenu(frame)
 			db.othershard = val
 			module:Refresh()
 			AceConfigRegistry:NotifyChange(myname)
+			return MenuResponse.Close
 		end
 		local othershard = rootDescription:CreateButton("Mobs from other shards...")
 		othershard:CreateRadio("Show", shardIsSelected, shardSelect, "show")
