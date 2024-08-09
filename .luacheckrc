@@ -219,6 +219,7 @@ read_globals = {
     "ChatEdit_InsertLink",
     "ChatFrame_OpenChat",
     "CopyTable",
+    "CreateAnchor",
     "CreateAtlasMarkup",
     "CreateDataProvider",
     "CreateTextureMarkup",

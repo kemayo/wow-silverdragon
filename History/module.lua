@@ -21,6 +21,7 @@ function module:OnInitialize()
 		profile = {
 			enabled = true,
 			collapsed = false,
+			grow = true,
 			-- locked = true,
 			relative = true,
 			empty = true,
@@ -45,6 +46,8 @@ function module:OnInitialize()
 				x = 50,
 				y =  0,
 				scale = 1,
+				width = 240,
+				height = 250,
 			},
 		},
 	})
@@ -191,7 +194,7 @@ local HEADERHEIGHT = 28
 local LINEHEIGHT = 26
 function module:CreateWindow()
 	local frame = CreateFrame("Frame", "SilverDragonHistoryFrame", UIParent, "BackdropTemplate")
-	frame:SetSize(240, MAXHEIGHT)
+	frame:SetSize(db.position.width, db.position.height)
 	frame:SetBackdrop({
 		edgeFile = [[Interface\Buttons\WHITE8X8]],
 		bgFile = [[Interface\Buttons\WHITE8X8]],
@@ -210,6 +213,9 @@ function module:CreateWindow()
 
 	frame:EnableMouse(true)
 	frame:SetClampedToScreen(true)
+	frame:SetResizable(true)
+	frame:SetResizeBounds(160, 100, 320, 600)
+
 	frame:SetScript("OnMouseUp", function(w, button)
 		if button == "RightButton" then
 			return module:ShowConfigMenu(w)
@@ -234,19 +240,19 @@ function module:CreateWindow()
 		local size = self.dataProvider:GetSize()
 		self.title:SetFormattedText("%d seen", size)
 
-		if size == 0 or db.collapsed then
+		if db.collapsed then
 			self.container:Hide()
+			self.resize:Hide()
 			self:SetHeight(HEADERHEIGHT)
 		else
 			self.container:Show()
-			local height = min((size * LINEHEIGHT) + HEADERHEIGHT, MAXHEIGHT)
-			self:SetHeight(height)
-			if height == MAXHEIGHT then
-				self.container.scrollBar:Show()
-				self.container.scrollBar:SetPoint("TOPRIGHT", -8, 5)
+			self.resize:Show()
+			if db.grow then
+				-- self.container.scrollBox:GetExtent() doesn't play well here, sadly
+				local scrollHeight = size * LINEHEIGHT
+				self:SetHeight(min(scrollHeight + HEADERHEIGHT, db.position.height))
 			else
-				self.container.scrollBar:Hide()
-				self.container.scrollBar:SetPoint("TOPRIGHT", 12, 5)
+				self:SetHeight(db.position.height)
 			end
 		end
 		self.clearButton:SetEnabled(size > 0)
@@ -300,20 +306,41 @@ function module:CreateWindow()
 	end)
 	frame.clearButton = clear
 
+	local resize = CreateFrame("Button", nil, frame)
+	resize:EnableMouse(true)
+	resize:SetPoint("BOTTOMRIGHT", 1, -1)
+	resize:SetSize(16,16)
+	resize:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Down")
+	resize:SetHighlightTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight", "ADD")
+	resize:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
+	resize:SetScript("OnMouseDown", function()
+		-- to counter grow:
+		frame:SetHeight(db.position.height)
+		frame:StartSizing("BOTTOMRIGHT")
+	end)
+	resize:SetScript("OnMouseUp", function()
+		frame:StopMovingOrSizing("BOTTOMRIGHT")
+		db.position.width = frame:GetWidth()
+		db.position.height = frame:GetHeight()
+		frame:RefreshForContents()
+	end)
+	frame.resize = resize
+
 	-- scrollframe with dataprovider:
 
 	local container = CreateFrame("Frame", nil, frame)
 	container:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, -HEADERHEIGHT)
 	container:SetPoint("BOTTOMRIGHT")
 
-	local scrollBar = CreateFrame("EventFrame", nil, container, "MinimalScrollBar")
-	scrollBar:SetPoint("BOTTOMRIGHT")
-	container.scrollBar = scrollBar
-
 	local scrollBox = CreateFrame("Frame", nil, container, "WowScrollBoxList")
-	scrollBox:SetPoint("TOPLEFT")
-	scrollBox:SetPoint("BOTTOMRIGHT", scrollBar, "BOTTOMLEFT", -6, 0)
+	-- setpoint handled by manager below
 	container.scrollBox = scrollBox
+
+	local scrollBar = CreateFrame("EventFrame", nil, container, "MinimalScrollBar")
+	scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT", 4, -3)
+	scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT", 4, 3)
+	scrollBar:SetHideTrackIfThumbExceedsTrack(true)
+	container.scrollBar = scrollBar
 
 	local scrollView = CreateScrollBoxListLinearView()
 	scrollView:SetDataProvider(self.dataProvider)
@@ -329,6 +356,16 @@ function module:CreateWindow()
 	container.scrollView = scrollView
 
 	ScrollUtil.InitScrollBoxWithScrollBar(scrollBox, scrollBar, scrollView)
+	ScrollUtil.AddManagedScrollBarVisibilityBehavior(scrollBox, scrollBar,
+		{  -- with bar
+			CreateAnchor("TOPLEFT", container),
+			CreateAnchor("BOTTOMRIGHT", container, "BOTTOMRIGHT", -18, 0),
+		},
+		{ -- without bar
+			CreateAnchor("TOPLEFT", container),
+			CreateAnchor("BOTTOMRIGHT", container, "BOTTOMRIGHT", -4, 0),
+		}
+	)
 
 	self.dataProvider:RegisterCallback("OnSizeChanged", function()
 		frame:RefreshForContents()
@@ -381,6 +418,7 @@ function module:ShowConfigMenu(frame)
 		end, "enabled")
 		rootDescription:CreateCheckbox("Show during combat", isChecked, toggleChecked, "combat")
 		rootDescription:CreateCheckbox("Show when empty", isChecked, toggleChecked, "empty")
+		rootDescription:CreateCheckbox("Grow to max height", isChecked, toggleChecked, "grow")
 		rootDescription:CreateCheckbox("Use relative time", isChecked, toggleChecked, "relative")
 		rootDescription:CreateCheckbox("Include treasure vignettes", isChecked, toggleChecked, "loot")
 
