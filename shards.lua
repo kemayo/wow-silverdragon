@@ -8,8 +8,11 @@ function module:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 	self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
-	self:RegisterEvent("VIGNETTE_MINIMAP_UPDATED")
-	self:RegisterEvent("VIGNETTES_UPDATED")
+	if C_EventUtils.IsEventValid("VIGNETTE_MINIMAP_UPDATED") then
+		-- this needs to run in Classic, which doesn't have these
+		self:RegisterEvent("VIGNETTE_MINIMAP_UPDATED")
+		self:RegisterEvent("VIGNETTES_UPDATED")
+	end
 	-- todo: combat log as well?
 
 	-- Can't know it until we see an event

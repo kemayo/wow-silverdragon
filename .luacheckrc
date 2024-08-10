@@ -63,6 +63,7 @@ read_globals = {
     "C_CovenantSanctumUI",
     "C_CurrencyInfo",
     "C_DateAndTime",
+    "C_EventUtils",
     "C_GamePad",
     "C_Garrison",
     "C_Item",
