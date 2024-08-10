@@ -306,7 +306,10 @@ function module:CreateWindow()
 	clear:SetButtonMode("Delete")
 	clear:SetPoint("RIGHT", collapse, "LEFT", -2, 0)
 	clear:SetScript("OnMouseUp", function(button)
-		frame.dataProvider:Flush()
+		for _, data in ipairs(self.data) do
+			self.removed[data] = true
+		end
+		self:RebuildDataProvider()
 	end)
 	frame.clearButton = clear
 
