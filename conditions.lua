@@ -67,7 +67,7 @@ local RankedCondition = Class{
 }
 local Negated = function(parent) return {
 	__parent = parent,
-	Matched = function(self) return not self.__parent.Matched(self) end,
+	Matched = function(self) return not parent.Matched(self) end,
 } end
 
 ns.conditions.Achievement = Class{
@@ -75,6 +75,7 @@ ns.conditions.Achievement = Class{
 	type = 'achievement',
 	Matched = function(self) return (select(4, GetAchievementInfo(self.id))) end,
 }
+ns.conditions.AchievementIncomplete = Class(Negated(ns.conditions.Achievement))
 
 ns.conditions.AuraActive = Class{
 	__parent = Condition,
@@ -87,6 +88,50 @@ ns.conditions.SpellKnown = Class{
 	__parent = Condition,
 	type = 'spell',
 	Matched = function(self) return IsSpellKnown(self.id) end,
+}
+
+ns.conditions.Profession = Class{
+	-- See https://wowpedia.fandom.com/wiki/TradeSkillLineID for IDs
+	-- TODO: make work in Classic? Whole different API.
+	__parent = RankedCondition,
+	type = "profession",
+	Matched = function(self)
+		-- The problem: this is only reliable for skill levels after the trade skill has been opened
+		local info = C_TradeSkillUI.GetProfessionInfoBySkillLineID(self.id)
+		if not (info and info.skillLevel) then return false end
+		if info.skillLevel > 0 then
+			-- we have good data
+			return info.skillLevel >= (self.rank or 1)
+		end
+		-- we need to start making guesses
+		return self:CheckProfessions(info, GetProfessions())
+	end,
+	CheckProfessions = function(self, info, ...)
+		for i = 1, select("#", ...) do
+			if self:CheckProfession(info, select(i, ...)) then
+				return true
+			end
+		end
+		return false
+	end,
+	CheckProfession = function(self, info, professionid)
+		if not professionid then return end
+		local skillName, _, skillLevel, maxSkillLevel, _, _, skillLineID, _, _, _, displayName = GetProfessionInfo(professionid)
+		if info.professionID == skillLineID then
+			-- This is the exact skill!
+			return skillLevel >= (self.rank or 1)
+		end
+		if info.parentProfessionID == skillLineID then
+			-- The overall skill is known
+			if displayName == info.professionName then
+				-- This is the highest expansion skill currently, so the reported skill level is correct
+				return skillLevel >= (self.rank or 1)
+			end
+			-- This is the wrong expansion skill... so ignore the rank check and just claim we know it
+			-- TODO: this the worst case, improve it somehow?
+			return true
+		end
+	end,
 }
 
 ns.conditions.Covenant = Class{
@@ -149,9 +194,8 @@ ns.conditions.GarrisonTalent = Class{
 		local name = info and info.name and ("{garrisontalent:%d}"):format(self.id) or UNKNOWN
 		if self.rank then
 			return AZERITE_ESSENCE_TOOLTIP_NAME_RANK:format(name, self.rank)
-		else
-			return name
 		end
+		return name
 	end,
 	Matched = function(self)
 		local info = C_Garrison.GetTalentInfo(self.id)
@@ -170,9 +214,9 @@ ns.conditions.Item = Class{
 		if self.count and self.count > 1 then
 			return ("{item:%d} x%d"):format(self.id, self.count)
 		end
-		return self.__parent.Label(self)
+		return Condition.Label(self)
 	end,
-	Matched = function(self) return GetItemCount(self.id, true) >= (self.count or 1) end,
+	Matched = function(self) return C_Item.GetItemCount(self.id, true) >= (self.count or 1) end,
 }
 
 ns.conditions.Toy = Class{
@@ -191,6 +235,12 @@ ns.conditions.WorldQuestActive = Class{
 	__parent = Condition,
 	type = 'worldquest',
 	Matched = function(self) return C_TaskQuest.IsActive(self.id) or C_QuestLog.IsQuestFlaggedCompleted(self.id) end,
+}
+
+ns.conditions.OnQuest = Class{
+	__parent = Condition,
+	type = 'quest',
+	Matched = function(self) return C_QuestLog.IsOnQuest(self.id) end,
 }
 
 ns.conditions.Vignette = Class{
@@ -212,14 +262,28 @@ ns.conditions.Vignette = Class{
 		if vignetteInfo and vignetteInfo.name then
 			return vignetteInfo.name
 		end
-		return self.__parent.Label(self)
+		return Condition.Label(self)
 	end,
 }
 
 ns.conditions.Level = Class{
 	__parent = Condition,
 	type = 'level',
+	Label = function(self) return UNIT_LEVEL_TEMPLATE:format(self.id) end,
 	Matched = function(self) return UnitLevel('player') >= self.id end,
+}
+
+ns.conditions.Class = Class{
+	__parent = Condition,
+	type = 'class',
+	Label = function(self)
+		local className = ((UnitSex("player") == 2) and LOCALIZED_CLASS_NAMES_MALE or LOCALIZED_CLASS_NAMES_FEMALE)[self.id] or self.id
+		if RAID_CLASS_COLORS[self.id] then
+			return RAID_CLASS_COLORS[self.id]:WrapTextInColorCode(className)
+		end
+		return className
+	end,
+	Matched = function(self) return select(2, UnitClass("player")) == self.id end,
 }
 
 ns.conditions.CalendarEvent = Class{
@@ -281,6 +345,30 @@ ns.conditions.CalendarEventStartTexture = Class{
 			end
 		end
 	end
+}
+
+ns.conditions.DayOfWeek = Class{
+	__parent = Condition,
+	type = "weekday",
+	Label = function(self)
+		if self.DAYS[self.id] then
+			return _G["WEEKDAY_" .. self.DAYS[self.id]]
+		end
+		return "day " .. self.id
+	end,
+	Matched = function(self)
+		return tonumber(date('%w')) == self.id
+	end,
+
+	DAYS = {
+		[0] = "SUNDAY",
+		[1] = "MONDAY",
+		[2] = "TUESDAY",
+		[3] = "WEDNESDAY",
+		[4] = "THURSDAY",
+		[5] = "FRIDAY",
+		[6] = "SATURDAY",
+	},
 }
 
 -- Helpers:

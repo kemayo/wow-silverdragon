@@ -145,6 +145,8 @@ read_globals = {
     "GetNumMacros",
     "GetPlayerAuraBySpellID",
     "GetPlayerFacing",
+    "GetProfessionInfo",
+    "GetProfessions",
     "GetRaidTargetIndex",
     "GetScreenHeight",
     "GetScreenWidth",
@@ -202,6 +204,7 @@ read_globals = {
     "UnitName",
     "UnitOnTaxi",
     "UnitPlayerControlled",
+    "UnitSex",
     "UseContainerItem",
 
     -- FrameXML frames
@@ -399,6 +402,7 @@ read_globals = {
     "TRADESKILL_POST",
     "UIDROPDOWNMENU_MENU_VALUE",
     "UI_SCALE",
+    "UNIT_LEVEL_TEMPLATE",
     "UNKNOWN",
     "UNKNOWNOBJECT",
     "USED",
