@@ -26,30 +26,42 @@ function addon:RenderString(s, context)
 				return quick_texture_markup(icon) .. " " .. link:gsub("[%[%]]", "")
 			end
 		elseif variant == "spell" then
-			local name, _, icon = GetSpellInfo(id)
+			local name, icon, _
+			if C_Spell and C_Spell.GetSpellInfo then
+				local info = C_Spell.GetSpellInfo(id)
+				if info then
+					name, icon = info.name, info.iconID
+				end
+			else
+				name, _, icon = GetSpellInfo(id)
+			end
 			if name and icon then
 				return quick_texture_markup(icon) .. " " .. name
 			end
-		elseif variant == "quest" or variant == "worldquest" then
+		elseif variant == "quest" or variant == "worldquest" or variant == "questname" then
 			local name = C_QuestLog.GetTitleForQuestID(id)
 			if not (name and name ~= "") then
-				name = tostring(id)
+				-- we bypass the normal fallback mechanism because we want the quest completion status
+				name = fallback ~= "" and fallback or (variant .. ':' .. id)
 			end
+			if variant == "questname" then return name end
 			local completed = C_QuestLog.IsQuestFlaggedCompleted(id)
 			return CreateAtlasMarkup(variant == "worldquest" and "worldquest-tracker-questmarker" or "questnormal") ..
 				(completed and completeColor or incompleteColor):WrapTextInColorCode(name)
 		elseif variant == "questid" then
 			return CreateAtlasMarkup("questnormal") .. (C_QuestLog.IsQuestFlaggedCompleted(id) and completeColor or incompleteColor):WrapTextInColorCode(id)
-		elseif variant == "achievement" then
+		elseif variant == "achievement" or variant == "achievementname" then
 			if mainid and subid then
-				local criteria = (subid < 40 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID)(mainid, subid)
+				local criteria, _, completed = ns.GetCriteria(mainid, subid)
 				if criteria then
-					return criteria
+					if variant == "achievementname" then return criteria end
+					return (completed and completeColor or incompleteColor):WrapTextInColorCode(criteria)
 				end
 				id = 'achievement:'..mainid..'.'..subid
 			else
 				local _, name, _, completed = GetAchievementInfo(id)
 				if name and name ~= "" then
+					if variant == "achievementname" then return name end
 					return CreateAtlasMarkup("storyheader-cheevoicon") .. " " .. (completed and completeColor or incompleteColor):WrapTextInColorCode(name)
 				end
 			end
@@ -70,9 +82,7 @@ function addon:RenderString(s, context)
 			end
 		elseif variant == "covenant" then
 			local data = C_Covenants.GetCovenantData(id)
-			if data and data.name then
-				return COVENANT_COLORS[id]:WrapTextInColorCode(data.name)
-			end
+			return COVENANT_COLORS[id]:WrapTextInColorCode(data and data.name or ns.covenants[id])
 		elseif variant == "majorfaction" then
 			local info = C_MajorFactions.GetMajorFactionData(id)
 			if info and info.name then
@@ -106,6 +116,12 @@ function addon:RenderString(s, context)
 			local info = C_Map.GetMapInfo(id)
 			if info and info.name then
 				return info.name
+			end
+		elseif variant == "area" then
+			-- See: https://wago.tools/db2/AreaTable or C_MapExplorationInfo.GetExploredAreaIDsAtPosition
+			local name = C_Map.GetAreaInfo(id)
+			if name then
+				return name
 			end
 		end
 		return fallback ~= "" and fallback or (variant .. ':' .. id)
@@ -391,10 +407,10 @@ ns.Tooltip = {
 -- Compatibility helpers
 
 function ns.IsCosmeticItem(itemInfo)
-    if _G.C_Item and C_Item.IsCosmeticItem then
-        return C_Item.IsCosmeticItem(itemInfo)
-    elseif _G.IsCosmeticItem then
-        return IsCosmeticItem(itemInfo)
-    end
-    return false
+	if _G.C_Item and C_Item.IsCosmeticItem then
+		return C_Item.IsCosmeticItem(itemInfo)
+	elseif _G.IsCosmeticItem then
+		return IsCosmeticItem(itemInfo)
+	end
+	return false
 end
