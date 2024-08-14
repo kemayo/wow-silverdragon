@@ -297,7 +297,15 @@ function module:CreateWindow()
 	collapse:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -2, -2)
 	collapse:SetScript("OnMouseUp", function(button)
 		db.collapsed = not db.collapsed
-		frame:RefreshForContents()
+		-- Goal: have the frame's top-left point still be in the exact same
+		-- Needed because LibWindow does tricks with the points to keep it
+		-- in a sensible place (which it will restore when we call save)
+		local frameMinX, frameMinY, frameWidth, frameHeight = frame:GetRect()
+		local frameMaxX, frameMaxY = frameMinX + frameWidth, frameMinY + frameHeight
+		frame:RefreshForContents() -- does the resizing
+		frame:ClearAllPoints()
+		frame:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", frameMinX, frameMaxY)
+		LibWindow.SavePosition(frame)
 	end)
 	frame.collapseButton = collapse
 
