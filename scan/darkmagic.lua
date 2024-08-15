@@ -79,10 +79,15 @@ function module:Update()
 	if not core.db.profile.instances and IsInInstance() then
 		return self.timer and self.timer:Cancel()
 	end
-	-- build a cached table of mobs
+
 	local zone = HBD:GetPlayerZone()
-	local mobs = zone and ns.mobsByZone[zone]
-	if not mobs then
+	local hasMobs = false
+	-- Mobs from data, and custom mobs specific to the zone
+	for _ in core:IterateRelevantMobs(zone, true) do
+		hasMobs = true
+		break
+	end
+	if not hasMobs then
 		-- Moving into a different zone that has mobs will have us try again
 		return
 	end
@@ -90,7 +95,7 @@ function module:Update()
 	-- later, so wrap gives us something more identifiable than just
 	-- coroutine.resume...
 	local SDTargetUnitWasForbidden = coroutine.wrap(function()
-		for id in pairs(mobs) do
+		for id in core:IterateRelevantMobs(zone, true) do
 			local name = core:NameForMob(id)
 			local attempted
 			if

@@ -388,6 +388,37 @@ function addon:SetCustom(uiMapID, id, watch, quiet)
 	return true
 end
 
+do
+	local empty = {}
+	local function mobsForZone(uiMapID, suppressAnyZone)
+		local mobs = ns.mobsByZone[uiMapID] or empty
+		for id, coords in pairs(mobs) do
+			coroutine.yield(id, #coords > 0)
+		end
+		if globaldb.custom[uiMapID] then
+			for id in pairs(globaldb.custom[uiMapID]) do
+				if not mobs[id] then
+					coroutine.yield(id, false)
+				end
+			end
+		end
+		if not suppressAnyZone then
+			for id in pairs(globaldb.custom.any) do
+				if not mobs[id] then
+					coroutine.yield(id, false)
+				end
+			end
+		end
+	end
+	-- Get mobs that're relevant to the a given map; this means known rares, custom mobs for that map, and custom mobs for all maps
+	-- iterator returns: id, hasCoords
+	function addon:IterateRelevantMobs(uiMapID, suppressAnyZone)
+		return coroutine.wrap(function()
+			return mobsForZone(uiMapID, suppressAnyZone)
+		end)
+	end
+end
+
 -- returns name, vignette, tameable, last_seen, times_seen
 function addon:GetMobInfo(id)
 	if mobdb[id] then
@@ -435,7 +466,7 @@ do
 	end
 	function addon:IsMobInPhase(id, zone)
 		local phased, poi = true, true
-		if not mobdb[id] then return end
+		if not mobdb[id] then return true end
 		if mobdb[id].art then
 			phased = mobdb[id].art == C_Map.GetMapArtID(zone)
 		end
