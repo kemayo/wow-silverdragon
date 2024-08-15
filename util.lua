@@ -261,10 +261,8 @@ do
 	if _G.C_TooltipInfo then
 		function TextFromHyperlink(link)
 			local info = C_TooltipInfo.GetHyperlink(link)
-			if info and info.lines and info.lines[1] then
-				if info.lines[1].type == Enum.TooltipDataType.Unit then
-					return info.lines[1].leftText
-				end
+			if info and info.lines and info.lines[1] and info.lines[1].type == Enum.TooltipDataLineType.UnitName then
+				return info.lines[1].leftText
 			end
 		end
 	else
