@@ -388,6 +388,13 @@ function addon:SetCustom(uiMapID, id, watch, quiet)
 	return true
 end
 
+function addon:IsCustom(id, uiMapID, suppressAnyZone)
+	if not id then return false end
+	if uiMapID and globaldb.custom[uiMapID] and globaldb.custom[uiMapID][id] then return true end
+	if not suppressAnyZone and globaldb.custom.any[id] then return true end
+	return false
+end
+
 do
 	local empty = {}
 	local function mobsForZone(uiMapID, suppressAnyZone)
@@ -430,10 +437,12 @@ end
 function addon:MobHasVignette(id)
 	return mobdb[id] and mobdb[id].vignette
 end
-function addon:IsMobInZone(id, zone)
-	if mobsByZone[zone] then
-		return mobsByZone[zone][id]
+function addon:IsMobInZone(id, uiMapID, suppressAnyZone)
+	-- returns isInZone, hasCoords
+	if uiMapID and mobsByZone[uiMapID] and mobsByZone[uiMapID][id] then
+		return true, #mobsByZone[uiMapID][id] > 0
 	end
+	return self:IsCustom(id, uiMapID, suppressAnyZone), false
 end
 do
 	local poi_expirations = {}
@@ -542,7 +551,7 @@ do
 		if globaldb.ignore[id] then
 			return true
 		end
-		if globaldb.custom.any[id] or globaldb.custom[zone][id] then
+		if self:IsCustom(id, zone) then
 			-- If you've manually added a mob we should take that a signal that you always want it announced
 			-- (Unless you've also, weirdly, manually told it to be ignored as well.)
 			return false

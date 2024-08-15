@@ -6,15 +6,12 @@ local Debug = core.Debug
 
 local HBD = LibStub("HereBeDragons-2.0")
 
-local globaldb
-
 function module:OnInitialize()
     self.db = core.db:RegisterNamespace("Scan_Chat", {
         profile = {
             enabled = true,
         },
     })
-    globaldb = core.db.global
 
     local config = core:GetModule("Config", true)
     if config then
@@ -80,8 +77,7 @@ function module:OnChatMessage(event, text, name, ...)
             id = redirects[id]
         end
     end
-    if not id or not (ns.mobdb[id] or globaldb.custom.any[id] or globaldb.custom[zone][id]) then return end
-    if not (globaldb.custom.any[id] or globaldb.custom[zone][id]) and not (ns.mobsByZone[zone] and ns.mobsByZone[zone][id]) then
+    if not (id and core:IsMobInZone(id, zone)) then
         -- Only announce from chat message in zones that a rare is known to
         -- exist in (or if they're manually-added rares). Avoids issues like
         -- the Shadowlands pre-event where a lot of boss names got reused and
