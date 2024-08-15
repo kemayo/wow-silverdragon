@@ -86,7 +86,6 @@ function module:ProcessUnit(unit, source)
 	local id = core:UnitID(unit)
 	if not id then return end
 	local zone = HBD:GetPlayerZone()
-	print("ProcessUnit", unit, source, id, zone, core:IsCustom(id, zone))
 	if not zone then return end -- there are only a few places where this will happen
 	if UnitPlayerControlled(unit) and not core:IsCustom(id, zone) then return end -- helps filter out player-pets
 	local unittype = UnitClassification(unit)
