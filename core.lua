@@ -296,7 +296,10 @@ function addon:OnInitialize()
 			datasources = {
 				['*'] = true,
 			},
-			always = {
+			custom = {
+				-- [uiMapID] = {}
+				any = {},
+				['*'] = {},
 			},
 			ignore = {
 				['*'] = false,
@@ -342,6 +345,11 @@ function addon:OnInitialize()
 
 		_G["SilverDragon2DB"] = nil
 	end
+
+	if globaldb.always then
+		MergeTable(globaldb.custom.any, globaldb.always)
+		globaldb.always = nil
+	end
 end
 
 function addon:OnEnable()
@@ -366,15 +374,16 @@ function addon:SetIgnore(id, ignore, quiet)
 end
 
 -- returns true if the change had an effect
-function addon:SetCustom(id, watch, quiet)
+function addon:SetCustom(uiMapID, id, watch, quiet)
+	-- uiMapID can be 'any' as a special wildcard all-zones scanner
 	if not id then return false end
-	if (watch and globaldb.always[id]) or (not watch and not globaldb.always[id]) then
+	if (watch and globaldb.custom[uiMapID][id]) or (not watch and not globaldb.custom[uiMapID][id]) then
 		-- to avoid the nil/false issue
 		return false
 	end
-	globaldb.always[id] = watch or nil
+	globaldb.custom[uiMapID][id] = watch or nil
 	if not quiet then
-		self.events:Fire("CustomChanged", id, globaldb.always[id])
+		self.events:Fire("CustomChanged", id, globaldb.custom[uiMapID][id], uiMapID)
 	end
 	return true
 end
@@ -502,7 +511,7 @@ do
 		if globaldb.ignore[id] then
 			return true
 		end
-		if globaldb.always[id] then
+		if globaldb.custom.any[id] or globaldb.custom[zone][id] then
 			-- If you've manually added a mob we should take that a signal that you always want it announced
 			-- (Unless you've also, weirdly, manually told it to be ignored as well.)
 			return false

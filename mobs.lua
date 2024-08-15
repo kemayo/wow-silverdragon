@@ -1,5 +1,7 @@
 local myname, ns = ...
 
+local HBD = LibStub("HereBeDragons-2.0")
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Mobs", "AceConsole-3.0")
 local Debug = core.Debug
@@ -77,11 +79,15 @@ function module:IgnoreChanged(callback, id, ignored)
 		config.options.plugins.mobs.mobs.args.ignore.args.mobs.args["mob"..id] = toggle_mob(id)
 	end
 end
-function module:CustomChanged(callback, id, watched)
+function module:CustomChanged(callback, id, watched, uiMapID)
 	if not watched then return end
 	local config = core:GetModule("Config", true)
 	if config and config.options.plugins.mobs then
-		config.options.plugins.mobs.mobs.args.custom.args.mobs.args["mob"..id] = toggle_mob(id)
+		if not config.options.plugins.mobs.mobs.args.custom.args["map"..uiMapID] then
+			self:BuildCustomList(config.options)
+		else
+			config.options.plugins.mobs.mobs.args.custom.args["map"..uiMapID].args["mob"..id] = toggle_mob(id)
+		end
 	end
 end
 
@@ -98,18 +104,34 @@ function module:OptionsRequested(callback, options)
 					name = "Custom",
 					order = 1,
 					args = {
-						add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)
-							core:SetCustom(id, true)
-						end),
-						mobs = {
-							type = "group",
-							name = REMOVE,
-							inline = true,
-							get = function(info) return core.db.global.always[info.arg] end,
+						add = {
+							type = "input",
+							name = ADD,
+							desc = "Add a new zone to watch by entering its id or 'current'",
+							get = function() return "" end,
 							set = function(info, value)
-								core:SetCustom(info.arg, not core.db.global.always[info.arg])
+								if value == "current" then
+									value = HBD:GetPlayerZone()
+								end
+								value = tonumber(value)
+								if value and not core.db.global.custom[value] then
+									core.db.global.custom[value] = {}
+								end
+								self:BuildCustomList(options)
 							end,
+							validate = function(info, value)
+								if value == "current" then return true end
+								return tonumber(value)
+							end,
+							order = 1,
+						},
+						zones = {
+							type = "group",
+							name = ZONE,
+							inline = false,
+							childGroups = "tree",
 							args = {},
+							order = 10,
 						},
 					},
 				},
@@ -161,10 +183,30 @@ end
 
 function module:BuildCustomList(options)
 	-- wipe(options.plugins.mobs.mobs.args.custom.args.mobs.args)
-	local args = options.plugins.mobs.mobs.args.custom.args.mobs.args
-	for id, active in pairs(core.db.global.always) do
-		if active then
-			args["mob"..id] = args["mob"..id] or toggle_mob(id)
+	local args = options.plugins.mobs.mobs.args.custom.args.zones.args
+	for uiMapID, mobs in pairs(core.db.global.custom) do
+		args["map"..uiMapID] = {
+			type = "group",
+			get = function(info)
+				return core.db.global.custom[uiMapID][info.arg]
+			end,
+			set = function(info, value)
+				core:SetCustom(uiMapID, info.arg, value)
+			end,
+			inline = false,
+			name = uiMapID == "any" and ALL or core.zone_names[uiMapID] or ("map"..uiMapID),
+			desc = "ID: " .. uiMapID,
+			args = {
+				add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'", 1, function(info, id)
+					core:SetCustom(uiMapID, id, true)
+				end),
+			},
+			order = uiMapID == "any" and 0 or uiMapID,
+		}
+		for mobid, enabled in pairs(mobs) do
+			if enabled then
+				args["map"..uiMapID].args["mob"..mobid] = toggle_mob(mobid)
+			end
 		end
 	end
 end

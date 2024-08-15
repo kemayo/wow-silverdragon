@@ -88,12 +88,13 @@ function module:ProcessUnit(unit, source)
 	if not UnitIsVisible(unit) then return end
 	local id = core:UnitID(unit)
 	if not id then return end
-	if UnitPlayerControlled(unit) and not globaldb.always[id] then return end -- helps filter out player-pets
+	local zone = HBD:GetPlayerZone()
+	if UnitPlayerControlled(unit) and not (globaldb.custom.any[id] or globaldb.custom.any[zone][id]) then return end -- helps filter out player-pets
 	local unittype = UnitClassification(unit)
 	local is_rare = (id and rare_nonflags[id]) or (unittype == 'rare' or unittype == 'rareelite')
 	local should_process = false
 
-	if globaldb.always[id] then
+	if globaldb.custom.any[id] or globaldb.custom[zone][id] then
 		-- Manually-added mobs: always get announced
 		should_process = true
 	elseif is_rare then
@@ -109,7 +110,7 @@ function module:ProcessUnit(unit, source)
 		-- Prime the name cache
 		core:NameForMob(id, unit)
 
-		local x, y, zone = HBD:GetPlayerZonePosition()
+		local x, y = HBD:GetPlayerZonePosition()
 		if not zone then
 			-- there are only a few places where this will happen
 			return

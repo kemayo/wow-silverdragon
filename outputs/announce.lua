@@ -457,7 +457,7 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		Debug("ShouldAnnounce", false, "dead")
 		return false
 	end
-	if core.db.global.always[id] then
+	if core.db.global.custom.any[id] or core.db.global.custom[zone][id] then
 		-- If you've manually added a mob, bypass any other checks
 		Debug("ShouldAnnounce", true, "always")
 		return true

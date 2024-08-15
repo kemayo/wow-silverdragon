@@ -19,7 +19,7 @@ local commands = {
     add = function(self, arg)
         local npcid = ns.input_to_mobid(arg)
         if npcid then
-            if not core:SetCustom(npcid, true) then
+            if not core:SetCustom('any', npcid, true) then
                 return self:Printf("%s (%d) was already on the custom watch list", core:NameForMob(npcid) or UNKNOWN, npcid)
             end
             return self:Printf("Added %s (%d) to the custom watch list", core:NameForMob(npcid) or UNKNOWN, npcid)
@@ -29,7 +29,7 @@ local commands = {
     remove = function(self, arg)
         local npcid = ns.input_to_mobid(arg)
         if npcid then
-            if not core:SetCustom(npcid, false) then
+            if not core:SetCustom('any', npcid, false) then
                 return self:Printf("%s (%d) wasn't on the custom watch list", core:NameForMob(npcid) or UNKNOWN, npcid)
             end
             return self:Printf("Removed %s (%d) from the custom watch list", core:NameForMob(npcid) or UNKNOWN, npcid)
