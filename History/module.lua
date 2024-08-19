@@ -481,8 +481,8 @@ function module:FormatRelativeTime(t)
 	t = tonumber(t)
 	if not t or t == 0 then return NEVER end
 	local currentTime = time()
-	local minutes = math.floor(((currentTime - t) / 60) + 0.5)
-	local hours = math.floor(((currentTime - t) / 3600) + 0.5)
+	local hours = math.max(math.floor((currentTime - t) / 3600), 0)
+	local minutes = math.max(math.floor(math.fmod(currentTime - t, 3600) / 60), 0)
 	return ("%dh %02dm"):format(hours, minutes)
 end
 
