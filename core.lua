@@ -178,6 +178,51 @@ do
 					hidden=point.hidden,
 					worldquest=point.worldquest,
 				}
+				-- variations on "also register this elsewhere":
+				if point.translate or point.parent or point.levels then
+					local translateTo = {}
+					if point.translate then
+						for tzone in pairs(point.translate) do
+							if tzone ~= uiMapID then
+								translateTo[tzone] = true
+							end
+						end
+					end
+					if point.parent then
+						local mapinfo = C_Map.GetMapInfo(uiMapID)
+						if mapinfo and mapinfo.parentMapID and mapinfo.parentMapID ~= 0 then
+							local pzone = mapinfo.parentMapID
+							translateTo[pzone] = true
+						end
+					end
+					if point.levels then
+						-- Show on other levels of the same zone
+						local groupID = C_Map.GetMapGroupID(uiMapID)
+						if groupID then
+							local members = C_Map.GetMapGroupMembersInfo(groupID)
+							if members then
+								for _, member in pairs(members) do
+									if member.mapID ~= uiMapID then
+										translateTo[member.mapID] = true
+									end
+								end
+							end
+						end
+					end
+					local x, y = addon:GetXY(coord)
+					for tzone in pairs(translateTo) do
+						local tx, ty = HBD:TranslateZoneCoordinates(x, y, uiMapID, tzone)
+						if tx and ty then
+							if not data.locations[tzone] then
+								data.locations[tzone] = {}
+							end
+							local tcoord = addon:GetCoord(tx, ty)
+							table.insert(data.locations[tzone], tcoord)
+						else
+							Debug("translation failed", x, y, uiMapID, tzone)
+						end
+					end
+				end
 				if point.additional then
 					for _,acoord in pairs(point.additional) do
 						table.insert(data.locations[uiMapID], acoord)
