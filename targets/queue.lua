@@ -25,7 +25,10 @@ function module:Acquire(look)
 end
 
 function module:Release(popup)
-	self:GetPopupLookPool(popup.look):Release(popup)
+	local pool = self:GetPopupLookPool(popup.look)
+	if pool:IsActive(popup) then
+		pool:Release(popup)
+	end
 end
 
 do
