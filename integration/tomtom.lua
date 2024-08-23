@@ -86,7 +86,6 @@ function module:Announce(_, id, zone, x, y, is_dead, source, unit)
 end
 
 function module:AnnounceLoot(_, name, id, zone, x, y, vignetteGUID)
-	print("AnnounceLoot", name, id, zone, x, y, vignetteGUID)
 	if not (self.db.profile.enabled and self.db.profile.loot) then return end
 	if not self.db.profile.whiledead and UnitIsDead("player") then return end
 	-- if not sources.vignette then return end
