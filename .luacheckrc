@@ -53,6 +53,7 @@ read_globals = {
     "GetAuctionBuyout",
     "TomTom",
     "DBM",
+    "MapPinEnhanced",
 
     -- API functions
     "C_AddOns",
