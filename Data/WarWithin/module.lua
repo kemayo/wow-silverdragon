@@ -72,7 +72,6 @@ local LOC_allkhazalgar = {[ns.KHAZALGAR]={},[ns.DORNOGAL]={},[ns.ISLEOFDORN]={},
 
 -- Isle of Dorn
 
-
 ns.RegisterPoints(ns.ISLEOFDORN, {
 	[22985829] = {
 		label="Alunira",
@@ -90,6 +89,10 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68229,
 		quest=81923,
 		npc=221126,
+			loot={
+			223922, -- Cinder Pollen Cloak
+			223937, -- Honey Deliverer's Leggings
+		},
 		-- tameable=true, -- wasp
 		vignette=6112,
 	},
@@ -112,6 +115,11 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68220,
 		quest=81902,
 		npc=219270,
+		loot={
+			221210, -- Grips of the Earth
+			221254, -- Earthshatter Lance
+			221507, -- Earth Golem's Wrap
+		},
 		vignette=6051,
 	},
 	[74082756] = {
@@ -119,6 +127,11 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68221,
 		quest=81903,
 		npc=219278,
+		loot={
+			221224, -- Bouldershell Waistguard
+			221233, -- Deephunter's Bloody Hook
+			221255, -- Sharpened Scalepiercer
+		},
 		vignette=6052,
 	},
 	[41137679] = {
@@ -142,7 +155,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		loot={
 			223356, -- Shoulderpads of the Steamsurger
 			223357, -- Spaulders of the Steamsurger
-			-- 223358, -- Mantle of the Steamsurger (name matches, but not listed?)
+			223358, -- Mantle of the Steamsurger (name matches, but not listed?)
 			223359, -- Epaulets of the Steamsurger
 		},
 		vignette=6043,
@@ -163,6 +176,9 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68224,
 		quest=81920,
 		npc=221128,
+		loot={
+			223140, -- Formula: Enchant Cloak - Chant of Burrowing Rapidity
+		},
 		vignette=6115,
 	},
 	[47946014] = {
@@ -191,6 +207,10 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68231,
 		quest=81921,
 		npc=220890,
+		loot={
+			223948, -- Stubborn Wolf's Greathelm
+			221247, -- Cavernous Critter Shooter
+		},
 		vignette=6114,
 	},
 	[57461625] = {
@@ -198,6 +218,10 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68219,
 		quest=81901,
 		npc=219269,
+		loot={
+			221230, -- Storm Bindings
+			221236, -- Stormbreaker's Shield
+		},
 		vignette=6050,
 	},
 	[53348006] = {
@@ -205,6 +229,10 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68217,
 		quest=81899,
 		npc=219268,
+		loot={
+			221222, -- Water-Imbued Spaulders
+			221234, -- Tidal Pendant
+		},
 		vignette=6048,
 	},
 	[57072279] = {
@@ -212,6 +240,11 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68222,
 		quest=81904,
 		npc=219271,
+		loot={
+			221219, -- Silkwing Trousers
+			221239, -- Spider Blasting Blunderbuss
+			221506, -- Arachnid's Web-Sown Guise
+		},
 		-- tameable=true, -- blood beast
 		vignette=6053,
 	},
@@ -236,6 +269,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		npc=219279,
 		loot={
 			221244, -- Flamekeeper's Footpads
+			221249, -- Kobold Rodent Squasher
 		},
 		vignette=6054,
 	},
@@ -246,6 +280,9 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		npc=219267,
 		loot={
 			221213, -- Shawl of the Plagued
+			221265, -- Charm of the Underground Beast
+			221246, -- Fierce Beast Staff
+			221251, -- Bestial Underground Cleaver
 			221247, -- Cavernous Critter Shooter
 		},
 		--tameable=true, -- stag
@@ -256,6 +293,9 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68230,
 		quest=81922,
 		npc=220883,
+		loot={
+			223929, -- Honey Sweetener's Squeezers
+		},
 		vignette=6113,
 	},
 	-- Violet Hold prisoners:
@@ -268,6 +308,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		loot={
 			226111, -- Arakkoan Ritual Staff
 			226113, -- Kereke's Flourishing Sabre
+			226114, -- Windslicer's Lance
 		},
 		vignette=6215,
 		note="Violet Hold Prisoner",
@@ -291,8 +332,9 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		quest=82205,
 		npc=222380,
 		loot={
-			-- Going by the name, but not currently in the drops on wowhead...
 			226112, -- Rotfist Flesh Carver
+			226115, -- Contaminating Cleaver
+			226116, -- Coagulating Phlegm Churner
 		},
 		vignette=6216,
 		note="Violet Hold Prisoner",
