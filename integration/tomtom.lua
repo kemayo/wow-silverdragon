@@ -8,6 +8,8 @@ function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("TomTom", {
 		profile = {
 			enabled = true,
+			mob = true,
+			loot = true,
 			duration = 120,
 			mappinenhanced = true,
 			blizzard = true,
@@ -29,7 +31,17 @@ function module:OnInitialize()
 				set = function(info, v) self.db.profile[info[#info]] = v end,
 				args = {
 					about = config.desc("When we see a mob via its minimap icon, we can ask an arrow to point us to it", 0),
-					enabled = config.toggle("Automatically", "Make a waypoint for the mob as soon as it's seen", 20),
+					enabled = config.toggle("Automatically", "Make a waypoint as soon as something is seen", 20),
+					types = {
+						type = "group",
+						inline = true,
+						name = "Make a waypoint for...",
+						order = 25,
+						args = {
+							mob = config.toggle("Mobs", "Make a waypoint for mobs", 23),
+							loot = config.toggle("Loot", "Make a waypoint for loot", 27),
+						},
+					},
 					whiledead = config.toggle("While dead", "...even when you're dead", 30),
 					blizzard = config.toggle("Use built-in", "Use the built-in Blizzard waypoints", 40),
 					mappinenhanced = config.toggle("Use MapPinEnhanced", "If MapPinEnhanced is installed, use it", 50, nil, function() return not MapPinEnhanced end),
@@ -52,6 +64,7 @@ end
 
 function module:OnEnable()
 	core.RegisterCallback(self, "Announce")
+	core.RegisterCallback(self, "AnnounceLoot")
 	core.RegisterCallback(self, "PopupHide")
 end
 
@@ -65,11 +78,20 @@ local sources = {
 	darkmagic = false, -- only know where the player is
 }
 function module:Announce(_, id, zone, x, y, is_dead, source, unit)
-	if not self.db.profile.enabled then return end
+	if not (self.db.profile.enabled and self.db.profile.mob) then return end
 	if not self.db.profile.whiledead and UnitIsDead("player") then return end
 	if not (source and sources[source]) then return end
 	if not (zone and x and y and x > 0 and y > 0) then return end
 	self:PointTo(id, zone, x, y, self.db.profile.duration)
+end
+
+function module:AnnounceLoot(_, name, id, zone, x, y, vignetteGUID)
+	print("AnnounceLoot", name, id, zone, x, y, vignetteGUID)
+	if not (self.db.profile.enabled and self.db.profile.loot) then return end
+	if not self.db.profile.whiledead and UnitIsDead("player") then return end
+	-- if not sources.vignette then return end
+	if not (zone and x and y and x > 0 and y > 0) then return end
+	self:PointTo(name, zone, x, y, self.db.profile.duration)
 end
 
 function module:CanPointTo(zone)
