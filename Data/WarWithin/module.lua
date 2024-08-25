@@ -66,6 +66,17 @@ ns.PROF_WW_MINING = 2881
 ns.PROF_WW_SKINNING = 2882
 ns.PROF_WW_TAILORING = 2883 -- spell:
 
+-- Treasures
+
+core:RegisterTreasureData("WarWithin", {
+	[6286] = {
+		name="Dusty Prospector's Chest",
+		loot={212495, 212505, 212508}, -- some gems
+		requires={ns.conditions.Level(71), ns.conditions.Item(223878), ns.conditions.Item(223879), ns.conditions.Item(223880), ns.conditions.Item(223881), ns.conditions.Item(223882)},
+		notes="At the back of the inn; gather the five shards first",
+	},
+}, true)
+
 -- Rares
 
 local LOC_allkhazalgar = {[ns.KHAZALGAR]={},[ns.DORNOGAL]={},[ns.ISLEOFDORN]={},[ns.RINGINGDEEPS]={},[ns.HALLOWFALL]={},[ns.AZJKAHET]={},}
