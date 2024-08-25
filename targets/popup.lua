@@ -566,12 +566,12 @@ PopupMixin.scripts = {
 
 		self.elapsed = 0
 
-		core.events:Fire("PopupShow", self.data.id, self.data.zone, self.data.x, self.data.y, self)
+		core.events:Fire("PopupShow", self.data, self)
 	end,
 	OnHide = function(self)
 		if self.data then
 			-- Things which show/hide UIParent (cinematics) *might* get us here without data
-			core.events:Fire("PopupHide", self.data.id, self.data.zone, self.data.x, self.data.y, self.automaticClose)
+			core.events:Fire("PopupHide", self.data, self.automaticClose)
 		end
 
 		if not InCombatLockdown() then

@@ -104,7 +104,7 @@ function module:CanPointTo(zone)
 end
 
 do
-	local waypoints = {}
+	local waypoints = {tomtom={}}
 	local previous
 	function module:PointTo(id, zone, x, y, duration, force)
 		Debug("Waypoint.PointTo", id, zone, x, y, duration, force)
@@ -120,19 +120,15 @@ do
 			}
 		end
 		if TomTom and db.tomtom then
-			if waypoints.tomtom then
-				TomTom:RemoveWaypoint(waypoints.tomtom)
-			end
-			waypoints.tomtom = TomTom:AddWaypoint(zone, x, y, {
+			-- Tomtom has multiple waypoints, so we'll interpret the "don't replace" as "don't push onto the crazy arrow"
+			waypoints.tomtom[id] = TomTom:AddWaypoint(zone, x, y, {
 				title = title,
 				persistent = false,
 				minimap = false,
-				world = false,
-				-- Tomtom has multiple waypoints, so we'll interpret the "don't replace" as "don't push onto the crazy arrow"
-				crazy = force or db.replace or not (waypoints.tomtom and TomTom:IsValidWaypoint(waypoints.tomtom)),
+				world = true,
+				crazy = force or db.replace or TomTom:IsCrazyArrowEmpty(),
 				cleardistance = 25
 			})
-			waypoints.tomtom.mobid = id
 		end
 		if DBM and db.dbm and (db.replace or not DBM.Arrow:IsShown()) then
 			waypoints.dbm = {mobid = id}
@@ -184,12 +180,18 @@ do
 				waypoints.blizzard = nil
 			end
 		end
-		if TomTom and db.tomtom and waypoints.tomtom then
-			if waypoints.tomtom.mobid == id then
-				Debug("Hiding TomTom")
-				TomTom:RemoveWaypoint(waypoints.tomtom)
-				-- tomtom doesn't need to restore a waypoint, because it has a stack
-				waypoints.tomtom = nil
+		if TomTom and db.tomtom then
+			for wid, waypoint in pairs(waypoints.tomtom) do
+				if wid == id then
+					Debug("Hiding TomTom")
+					TomTom:RemoveWaypoint(waypoints.tomtom[wid])
+					-- tomtom doesn't need to restore a waypoint, because it has a stack
+					waypoints.tomtom[wid] = nil
+				end
+				if not TomTom:IsValidWaypoint(waypoint) then
+					-- cleanup
+					waypoints.tomtom[wid] = nil
+				end
 			end
 		end
 		if DBM and db.dbm and waypoints.dbm then
@@ -202,10 +204,10 @@ do
 		end
 	end
 
-	function module:PopupHide(_, id, zone, x, y, automatic)
-		Debug("Waypoint.PopupHide", id, zone, x, y, automatic)
+	function module:PopupHide(_, data, automatic)
+		Debug("Waypoint.PopupHide", data, automatic)
 		if self.db.profile.popup and not automatic then
-			self:Hide(id, zone, x, y)
+			self:Hide(data.type == "mob" and data.id or data.name)
 		end
 	end
 end
