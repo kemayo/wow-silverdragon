@@ -1009,6 +1009,12 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69659,
 		quest=81702,
 		npc=221327,
+		loot={
+			221206, -- Reinforced Chitin Chestpiece
+			221240, -- Nerubian Stagshell Gouger
+			221252, -- Nerubian Slayer's Claymore
+			221263, -- Nerubian Venom-Tipped Dart
+		},
 		vignette=6134,
 		route={65201896, 65142033, 63122532, 62492877, 61882919},
 		note="Slowly wanders back and forth",
@@ -1018,6 +1024,10 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69660,
 		quest=81703,
 		npc=216034,
+		loot={
+			221231, -- Steam-Powered Wristwatch
+			221232, -- Polished Goblin Bling
+		},
 		vignette=6131,
 	},
 	[47204320] = {
@@ -1027,8 +1037,10 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		quest=81695,
 		npc=216031,
 		loot={
+			223389, -- Legplates of Dark Hunger
 			223390, -- Leggings of Dark Hunger
 			223391, -- Legguards of Dark Hunger
+			223392, -- Trousers of Dark Hunger
 		},
 		vignette=6129,
 	},
@@ -1037,6 +1049,12 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69663,
 		quest=81706,
 		npc=216044,
+		loot={
+			221217, -- Nerubian Bomber's Leggings
+			221240, -- Nerubian Stagshell Gouger
+			221252, -- Nerubian Slayer's Claymore
+			221263, -- Nerubian Venom-Tipped Dart
+		},
 		vignette=6138,
 		route={
 			68876480, 69006715, 67206730, 65596605, 63576530, 61636444, 61006640,
@@ -1064,7 +1082,9 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69655,
 		quest=81699,
 		npc=216041,
-		loot={223369}, -- Webspeaker's Spiritual Cloak
+		loot={
+			223369, -- Webspeaker's Spiritual Cloak
+		},
 		vignette=6135,
 	},
 	[70732146] = {
@@ -1072,6 +1092,9 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69661,
 		quest=81704,
 		npc=216042,
+		loot={
+			221212, -- Death Burrower Handguards
+		},
 		vignette=6136,
 		note="Cave behind the waterfall",
 	},
@@ -1080,6 +1103,11 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69664,
 		quest=81707,
 		npc=216045,
+		loot={
+			221233, -- Deephunter's Bloody Hook
+			221234, -- Tidal Pendant
+			221243, -- Slippers of Delirium
+		},
 		vignette=6139,
 	},
 	[69996920] = {
@@ -1087,8 +1115,30 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69662,
 		quest=81705,
 		npc=216043,
+		loot={
+			221227, -- Monstrous Fungal Cord
+			221250, -- Creeping Lasher Machete
+			221253, -- Cultivator's Plant Puncher
+			221264, -- Fungarian Mystic's Cluster
+			223005, -- String of Fungal Fruits
+		},
 		vignette=6137,
 	},
+	[44803980] = {
+		label="Khak'ik",
+		criteria=69653,
+		quest=81694,
+		npc=216032,
+		loot={
+			223378, -- Footguards of the Nerubian Twins
+			223406, -- Slippers of the Nerubian Twins
+			223407, -- Sabatons of the Nerubian Twins
+			223408, -- Treads of the Nerubian Twins
+		},
+		vignette=6130,
+		note="Patrols with {npc:221032:Rhak'ik}",
+	},
+	--[[ -- with Khak'ik:
 	[43763953] = {
 		label="Rhak'ik",
 		-- [44803880, 44803980, 45204440]
@@ -1098,21 +1148,15 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		vignette=6130, -- Stronghold Scouts
 		note="Patrols with {npc:216032:Khak'ik}",
 	},
-	--[[ -- with Rhak'ik:
-	[44803980] = {
-		label="Khak'ik",
-		-- [44803980, 45003780, 45403660]
-		criteria=69653,
-		quest=81694,
-		npc=216032,
-		vignette=6130,
-	},
 	--]]
 	[37944285] = {
 		label="Ahg'zagall",
 		criteria=69654,
 		quest=78905,
 		npc=214151,
+		loot={
+			223375, -- Clattering Chitin Necklace
+		},
 		vignette=5973,
 	},
 	[64600352] = {
@@ -1120,6 +1164,10 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69668,
 		quest=82037,
 		npc=216051,
+		loot={
+			221240, -- Nerubian Stagshell Gouger
+			223930, -- Monstrous Chain Pincers
+		},
 		vignette=6186,
 	},
 	[62940509] = {
@@ -1127,6 +1175,11 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69670,
 		quest=82078,
 		npc=216052, -- Skirmisher Sa'ztyk
+		loot={
+			223915, -- Nerubian Orator's Stiletto
+			223916, -- Nerubian Cutthroat's Reach
+			223939, -- Esteemed Nerubian's Mantle
+		},
 		vignette=6204,
 		note="Patrols the area",
 	},
@@ -1135,6 +1188,10 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		criteria=69669,
 		quest=82077,
 		npc=222624,
+		loot={
+			223916, -- Nerubian Cutthroat's Reach
+			223923, -- Gilded Cryptlord's Sabatons
+		},
 		vignette=6203,
 	},
 }, {
@@ -1149,6 +1206,10 @@ ns.RegisterPoints(2256, {
 		criteria=69667,
 		quest=82036,
 		npc=216050,
+		loot={
+			223915, -- Nerubian Orator's Stiletto
+			223941, -- Nerubian Cultivator's Girdle
+		},
 		vignette=6185,
 	},
 	[61938973] = {
@@ -1156,6 +1217,9 @@ ns.RegisterPoints(2256, {
 		criteria=69666,
 		quest=82035,
 		npc=216049,
+		loot={
+			223931, -- Black Blood Cowl
+		},
 		vignette=6184,
 	},
 	[67458318] = {
@@ -1163,7 +1227,24 @@ ns.RegisterPoints(2256, {
 		criteria=69665,
 		quest=82034,
 		npc=216048,
+		loot={
+			223916, -- Nerubian Cutthroat's Reach
+			223917, -- Nerubian Covert's Cloak
+			223950, -- Corruption Sifter's Treads
+		},
 		vignette=6183,
+	},
+	[63409500] = {
+		label="The One Left",
+		quest=nil,
+		npc=216047,
+		loot={
+			221246, -- Fierce Beast Staff
+			221247, -- Cavernous Critter Shooter
+			221251, -- Bestial Underground Cleaver
+			225998, -- Earthen Adventurer's Cloak
+		},
+		path=65269328,
 	},
 }, {
 	achievement=40840, -- Adventurer
@@ -1176,6 +1257,11 @@ ns.RegisterPoints(ns.CITYOFTHREADS, {
 		criteria=69657,
 		quest=81634,
 		npc=216038,
+		loot={
+			221214, -- Chitin Chain Headpiece
+			221240, -- Nerubian Stagshell Gouger
+			221263, -- Nerubian Venom-Tipped Dart
+		},
 		vignette=6111,
 	},
 	[67165840] = {
@@ -1183,6 +1269,10 @@ ns.RegisterPoints(ns.CITYOFTHREADS, {
 		criteria=69658,
 		quest=81701,
 		npc=216039,
+		loot={
+			221221, -- Venomous Lurker's Greathelm
+			221506, -- Arachnid's Web-Sown Guise
+		},
 		vignette=6133,
 	},
 }, {
@@ -1198,6 +1288,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		loot={
 			{225952, quest=83627}, -- Vial of Tka'ktath's Bloo
 			-- {224150, mount=2222}, -- Siesbarg
+			221240, -- Nerubian Stagshell Gouger
 		},
 		vignette=6265,
 		note="Begins a quest chain leading to the mount {item:224150:Siesbarg}",
