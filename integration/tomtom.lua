@@ -110,15 +110,6 @@ do
 		Debug("Waypoint.PointTo", id, zone, x, y, duration, force)
 		local db = self.db.profile
 		local title = type(id) == "number" and core:GetMobLabel(id) or id or UNKNOWN
-		if MapPinEnhanced and MapPinEnhanced.AddPin and db.mappinenhanced then
-			MapPinEnhanced:AddPin{
-				mapID = zone,
-				x = x,
-				y = y,
-				setTracked = db.replace,
-				title = title,
-			}
-		end
 		if TomTom and db.tomtom then
 			-- Tomtom has multiple waypoints, so we'll interpret the "don't replace" as "don't push onto the crazy arrow"
 			waypoints.tomtom[id] = TomTom:AddWaypoint(zone, x, y, {
@@ -143,7 +134,16 @@ do
 				zone
 			)
 		end
-		if db.blizzard and C_Map.CanSetUserWaypointOnMap and C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
+		if MapPinEnhanced and MapPinEnhanced.AddPin and db.mappinenhanced then
+			MapPinEnhanced:AddPin{
+				mapID = zone,
+				x = x,
+				y = y,
+				setTracked = db.replace,
+				title = title,
+			}
+		elseif db.blizzard and C_Map.CanSetUserWaypointOnMap and C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
+			-- MapPinEnhanced takes over from blizzard waypoints, so don't try to set them both
 			previous = C_Map.GetUserWaypoint()
 			if previous then
 				previous.wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
