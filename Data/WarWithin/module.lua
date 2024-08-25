@@ -613,6 +613,10 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69710,
 		quest=81756,
 		npc=221534,
+		loot={
+			221246, -- Fierce Beast Staff
+			221265, -- Charm of the Underground Beast
+		},
 		vignette=6145,
 	},
 	[63402880] = {
@@ -622,6 +626,8 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=206203,
 		loot={
 			211973, -- Spider-Touched Bag
+			221252, -- Nerubian Slayer's Claymore
+			223924, -- Chitin-Inscribed Vest
 		},
 		vignette=5958,
 	},
@@ -640,6 +646,10 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69708,
 		quest=80009,
 		npc=218444,
+		loot={
+			221215, -- Taskmaster's Mining Cap
+			221240, -- Nerubian Stagshell Gouger
+		},
 		vignette=6033,
 	},
 	[31205464] = {
@@ -649,7 +659,6 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=221551,
 		loot={
 			223397, -- Abyssal Hunter's Girdle
-			-- assumed:
 			223398, -- Abyssal Hunter's Sash
 			223399, -- Abyssal Hunter's Chain
 			223400, -- Abyssal Hunter's Cinch
@@ -668,6 +677,12 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69713,
 		quest=81849,
 		npc=221690, -- Rage of Beledar
+		loot={
+			221216, -- Bruin Strength Legplates
+			221251, -- Bestial Underground Cleaver
+			221265, -- Charm of the Underground Beast
+			221508, -- Pelt of Beledar's Strength
+		},
 		vignette=6153,
 	},
 	[57046436] = {
@@ -680,6 +695,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 			223379, -- Nerubian Weaver's Chestplate
 			223380, -- Nerubian Weaver's Chainmail
 			223381, -- Nerubian Weaver's Vest
+			223100, -- Pattern: Vambraces of Deepening Darkness
 		},
 		vignette=6032, -- Ixlorb the Weaver
 	},
@@ -697,6 +713,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=206184,
 		loot={
 			211967, -- Large Sealed Crate
+			223927, -- Vinewrapped Leather Tunic
 		},
 		vignette=6078,
 	},
@@ -718,6 +735,9 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69724,
 		quest=82562,
 		npc=221179,
+		loot={
+			223936, -- Shadow Bog Trousers
+		},
 		vignette=6122,
 	},
 	[36687172] = {
@@ -735,6 +755,10 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69714,
 		quest=81853,
 		npc=221708,
+		loot={
+			221241, -- Priestly Agent's Knife
+			221245, -- Righteous Path Treads
+		},
 		vignette=6154,
 	},
 	[43410990] = {
@@ -744,6 +768,8 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=221668,
 		loot={
 			221211, -- Grasp of the Shallows
+			221234, -- Tidal Pendant
+			221255, -- Sharpened Scalepiercer
 		},
 		vignette=6152,
 		note="Very long patrol",
@@ -757,6 +783,12 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69709,
 		quest=79271,
 		npc=215805,
+		loot={
+			221223, -- Bog Beast Mantle
+			221253, -- Cultivator's Plant Puncher
+			221264, -- Fungarian Mystic's Cluster
+			223005, -- String of Fungal Fruits
+		},
 		vignette=5988,
 	},
 	[52132682] = {
@@ -778,6 +810,10 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69722,
 		quest=82560,
 		npc=214757,
+		loot={
+			221247, -- Cavernous Critter Shooter
+			223938, -- Marsh Hopper's Spaulders
+		},
 		vignette=6125,
 		--tameable=true, -- hopper
 	},
@@ -786,43 +822,63 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69715,
 		quest=81882,
 		npc=221786,
+		loot={
+			221225, -- Benevolent Hornstag Cinch
+			221246, -- Fierce Beast Staff
+			221247, -- Cavernous Critter Shooter
+			221251, -- Bestial Underground Cleaver
+			223007, -- Lance of Beledar's Pride
+		},
 		vignette=6159,
 		-- tameable=true, -- stag
 	},
-	-- UNKNOWN LOCATION
-	[70001500] = {
-		label="Crazed Cabbage Smacker",
-		criteria=69720,
-		quest=82558,
-		npc=206514,
-		vignette=6120,
-		note="UNKNOWN LOCATION. Objective of {questname:76588}, so presumably in the NE near the keyflames",
-	},
-	[71501500] = {
+	[66202340] = {
 		label="Toadstomper",
 		criteria=69723,
 		quest=82561,
 		npc=207803,
+		loot={
+			223933, -- Slime Goliath's Cap
+		},
 		vignette=6084,
-		note="UNKNOWN LOCATION. Objective of {questname:76588}, so presumably in the NE near the keyflames",
+		note="Objective of {questname:76588}",
 	},
-	[73001500] = {
+	[64802920] = {
+		label="Crazed Cabbage Smacker",
+		criteria=69720,
+		quest=82558,
+		npc=206514,
+		loot={
+			211968, -- Blueprint Bundle
+			221238, -- Pillar of Constructs
+			223928, -- Crop Cutter's Gauntlets
+		},
+		vignette=6120,
+		note="Objective of {questname:76588}",
+	},
+	[60201860] = {
 		label="Finclaw Bloodtide",
 		criteria=69727,
 		quest=82564,
 		npc=207780, -- also 220492?
 		loot={},
 		vignette=6085,
-		note="UNKNOWN LOCATION. Objective of {questname:76588}, so presumably in the NE near the keyflames",
+		note="Objective of {questname:76588}",
 	},
-	[74501500] = {
+	[61603360] = {
 		label="Ravageant",
 		criteria=69726,
 		quest=82566,
 		npc=207826,
+		loot={
+			221240, -- Nerubian Stagshell Gouger
+			221252, -- Nerubian Slayer's Claymore
+			223932, -- Scarab's Carapace Cap
+		},
 		vignette=6124,
-		note="UNKNOWN LOCATION. Objective of {questname:76588}, so presumably in the NE near the keyflames",
+		note="Objective of {questname:76588}",
 	},
+	-- UNKNOWN LOCATION
 	--[[
 	[] = {
 		label="Brineslash",
@@ -922,6 +978,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 	minimap=true,
 	note="Take to {npc:221753} @ 44.7,42.4",
 })
+
 
 ns.RegisterPoints(ns.HALLOWFALL, {
 	[62650611] = {
