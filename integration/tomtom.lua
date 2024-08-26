@@ -116,7 +116,7 @@ do
 				title = title,
 				persistent = false,
 				minimap = false,
-				world = true,
+				world = false,
 				crazy = force or db.replace or TomTom:IsCrazyArrowEmpty(),
 				cleardistance = 25
 			})
