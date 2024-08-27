@@ -593,6 +593,13 @@ LineMixin = {
 				GameTooltip:AddLine(data.name)
 				-- tooltip, id, only_knowable, is_treasure
 				ns.Loot.Summary.UpdateTooltip(GameTooltip, data.id, nil, true)
+				if ns.vignetteTreasureLookup[data.id] and ns.vignetteTreasureLookup[data.id].notes then
+					GameTooltip:AddLine(core:RenderString(ns.vignetteTreasureLookup[data.id].notes), 1, 1, 1, true)
+				end
+			end
+			if data.source == "vignette" and data.guid then
+				local _, vignetteID = core:GUIDShard(data.guid)
+				GameTooltip:AddDoubleLine("Vignette ID",  vignetteID, 0, 1, 1, 0, 1, 1)
 			end
 			local uiMapID, x, y = module:GetPositionFromData(data, false)
 			if uiMapID and x and y then

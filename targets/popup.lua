@@ -450,15 +450,23 @@ PopupMixin.scripts = {
 			-- we're "hidden" via alpha==0 now, so no tooltip
 			return
 		end
+		local data = self.data
 
 		local anchor = (self:GetCenter() < (UIParent:GetWidth() / 2)) and "ANCHOR_RIGHT" or "ANCHOR_LEFT"
 		GameTooltip:SetOwner(self, anchor, 0, -60)
-		if self.data.type == "mob" then
+		if data.type == "mob" then
 			GameTooltip:AddDoubleLine(escapes.leftClick .. " " .. TARGET, escapes.rightClick .. " " .. CLOSE)
+			core:GetModule('Tooltip'):UpdateTooltip(data.id)
 		else
 			GameTooltip:AddDoubleLine(" ", escapes.rightClick .. " " .. CLOSE)
+			-- GameTooltip:AddLine(data.name)
+			-- tooltip, id, only_knowable, is_treasure
+			ns.Loot.Summary.UpdateTooltip(GameTooltip, data.id, nil, true)
+			if ns.vignetteTreasureLookup[data.id] and ns.vignetteTreasureLookup[data.id].notes then
+				GameTooltip:AddLine(core:RenderString(ns.vignetteTreasureLookup[data.id].notes), 1, 1, 1, true)
+			end
 		end
-		local uiMapID, x, y = module:GetPositionFromData(self.data, false)
+		local uiMapID, x, y = module:GetPositionFromData(data, false)
 		if uiMapID and x and y then
 			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, ("%.1f, %.1f"):format(x * 100, y * 100),
 				0, 1, 0,
@@ -470,7 +478,7 @@ PopupMixin.scripts = {
 				1, 0, 0
 			)
 		end
-		if self.data.vignetteID then
+		if data.vignetteID then
 			GameTooltip:AddDoubleLine("Vignette ID", self.data.vignetteID, 0, 1, 1, 0, 1, 1)
 		end
 

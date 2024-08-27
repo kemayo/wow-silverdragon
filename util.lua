@@ -214,7 +214,7 @@ do
 		-- local unitType, _, serverID, instanceID, zoneUID, mobID, spawnUID = strsplit("-", guid)
 		local guidType, _, serverID, instanceID, zoneUID, id, spawnUID = strsplit("-", guid)
 		if not (guidType and valid_types[guidType]) then return end
-		return tonumber(zoneUID)
+		return tonumber(zoneUID), tonumber(id)
 	end
 	function addon:UnitShard(unit)
 		return self:GUIDShard(UnitGUID(unit))
