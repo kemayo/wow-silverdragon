@@ -100,7 +100,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		criteria=68229,
 		quest=81923,
 		npc=221126,
-			loot={
+		loot={
 			223922, -- Cinder Pollen Cloak
 			223937, -- Honey Deliverer's Leggings
 		},
@@ -136,12 +136,14 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 	[74082756] = {
 		label="Shallowshell the Clacker",
 		criteria=68221,
-		quest=81903,
+		quest=81903, -- 84032
 		npc=219278,
 		loot={
 			221224, -- Bouldershell Waistguard
 			221233, -- Deephunter's Bloody Hook
 			221255, -- Sharpened Scalepiercer
+			221234, -- Tidal Pendant
+			221248, -- Deep Terror Carver
 		},
 		vignette=6052,
 	},
@@ -185,7 +187,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		label="Clawbreaker K'zithix",
 		-- [80003500]
 		criteria=68224,
-		quest=81920,
+		quest=81920, -- 84036
 		npc=221128,
 		loot={
 			223140, -- Formula: Enchant Cloak - Chant of Burrowing Rapidity
@@ -212,6 +214,10 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		quest=81907,
 		npc=219266,
 		vignette=6049,
+		loot={
+			221208, -- Unseen Cutthroat's Tunic
+			221235, -- Dark Agent's Cloak
+		},
 	},
 	[73004010] = {
 		label="Matriarch Charfuria",
@@ -221,6 +227,9 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		loot={
 			223948, -- Stubborn Wolf's Greathelm
 			221247, -- Cavernous Critter Shooter
+			221251, -- Bestial Underground Cleaver
+			221265, -- Charm of the Underground Beast
+			221246, -- Fierce Beast Staff
 		},
 		vignette=6114,
 	},
@@ -243,13 +252,16 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		loot={
 			221222, -- Water-Imbued Spaulders
 			221234, -- Tidal Pendant
+			221248, -- Deep Terror Carver
+			221255, -- Sharpened Scalepiercer
+			221233, -- Deephunter's Bloody Hook
 		},
 		vignette=6048,
 	},
 	[57072279] = {
 		label="Twice-Stinger the Wretched",
 		criteria=68222,
-		quest=81904,
+		quest=81904, -- 84033
 		npc=219271,
 		loot={
 			221219, -- Silkwing Trousers
@@ -287,7 +299,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 	[50876984] = {
 		label="Plaguehart",
 		criteria=68216,
-		quest=81897,
+		quest=81897, -- also 84026?
 		npc=219267,
 		loot={
 			221213, -- Shawl of the Plagued
@@ -306,6 +318,8 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		npc=220883,
 		loot={
 			223929, -- Honey Sweetener's Squeezers
+			223921, -- Ever-Oozing Signet
+			223920, -- Slime Deflecting Stopper
 		},
 		vignette=6113,
 	},
@@ -359,6 +373,12 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		label="Malfunctioning Spire",
 		quest=81891,
 		npc=220068,
+		loot={
+			210931, -- Bismuth
+			210934, -- Aqirite
+			210937, -- Ironclaw Ore
+			210939, -- Null Stone
+		},
 		vignette=6073,
 	},
 	[46003180] = {
@@ -479,6 +499,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 			221220, -- Basilisk Scale Pauldrons
 			221246, -- Fierce Beast Staff
 			221247, -- Cavernous Critter Shooter
+			221251, -- Bestial Underground Cleaver
 			221265, -- Charm of the Underground Beast
 		},
 		vignette=6079,
@@ -509,7 +530,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		vignette=6081,
 		note="Walking in the lava",
 	},
-	[47074696] = {
+	[47224696] = {
 		label="Kelpmire",
 		criteria=69635,
 		quest=81485,
@@ -543,7 +564,9 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		npc=220268,
 		loot={
 			221228, -- Infested Fungal Wristwraps
+			221253, -- Cultivator's Plant Puncher
 			221264, -- Fungarian Mystic's Cluster
+			223005, -- String of Fungal Fruits
 		},
 		note="Kill the {npc:220615:Root of Trungal} to spawn",
 		path={72534569, 72844444},
@@ -555,6 +578,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		quest=81652,
 		npc=221217,
 		loot={
+			223918, -- Specter Stalker's Shotgun
 			223919, -- Abducted Lawman's Gavel
 			223942, -- Spore-Encrusted Ribbon
 		},
@@ -580,6 +604,11 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		criteria=69640,
 		quest=80003,
 		npc=218393,
+		loot={
+			221237, -- Lamentable Vagrant's Lantern
+			223926, -- Earthgorger's Chain Bib
+			223943, -- Cord of the Earthbreaker
+		},
 		vignette=6031,
 	},
 	[66716881] = {
@@ -601,6 +630,10 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		npc=220285,
 		loot={
 			{223501, mount=2205}, -- Regurgitated Mole Reins
+			221233, -- Deephunter's Bloody Hook
+			221234, -- Tidal Pendant
+			221248, -- Deep Terror Carver
+			221255, -- Sharpened Scalepiercer
 		},
 		vignette=6110,
 		note="Pull 5 levers across the zone at the same time to summon; they stay activated for ~10 seconds, so you'll need a group",
@@ -625,7 +658,9 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=81756,
 		npc=221534,
 		loot={
+			221207, -- Den Mother's Chestpiece
 			221246, -- Fierce Beast Staff
+			221251, -- Bestial Underground Cleaver
 			221265, -- Charm of the Underground Beast
 		},
 		vignette=6145,
@@ -637,10 +672,13 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=206203,
 		loot={
 			211973, -- Spider-Touched Bag
+			221240, -- Nerubian Stagshell Gouger
 			221252, -- Nerubian Slayer's Claymore
+			221263, -- Nerubian Venom-Tipped Dart
 			223924, -- Chitin-Inscribed Vest
 		},
 		vignette=5958,
+		note="Objective of {questname:76588}",
 	},
 	[44011639] = {
 		label="The Perchfather",
@@ -649,6 +687,10 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=221648,
 		loot={
 			221229, -- Perchfather's Cuffs
+			221246, -- Fierce Beast Staff
+			221247, -- Cavernous Critter Shooter
+			221251, -- Bestial Underground Cleaver
+			221265, -- Charm of the Underground Beast
 		},
 		vignette=6151,
 	},
@@ -660,6 +702,8 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		loot={
 			221215, -- Taskmaster's Mining Cap
 			221240, -- Nerubian Stagshell Gouger
+			221252, -- Nerubian Slayer's Claymore
+			221263, -- Nerubian Venom-Tipped Dart
 		},
 		vignette=6033,
 	},
@@ -690,6 +734,8 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=221690, -- Rage of Beledar
 		loot={
 			221216, -- Bruin Strength Legplates
+			221246, -- Fierce Beast Staff
+			221247, -- Cavernous Critter Shooter
 			221251, -- Bestial Underground Cleaver
 			221265, -- Charm of the Underground Beast
 			221508, -- Pelt of Beledar's Strength
@@ -715,7 +761,15 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69728,
 		quest=82565,
 		npc=220771,
+		loot={
+			221233, -- Deephunter's Bloody Hook
+			221234, -- Tidal Pendant
+			221248, -- Deep Terror Carver
+			221255, -- Sharpened Scalepiercer
+			223934, -- Makrura's Foreboding Legplates
+		},
 		vignette=6123,
+		note="Objective of {questname:76588}",
 	},
 	[63643204] = {
 		label="Deathpetal",
@@ -723,10 +777,14 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=82559,
 		npc=206184,
 		loot={
-			211967, -- Large Sealed Crate
+			221250, -- Creeping Lasher Machete
+			221253, -- Cultivator's Plant Puncher
+			221264, -- Fungarian Mystic's Cluster
+			223005, -- String of Fungal Fruits
 			223927, -- Vinewrapped Leather Tunic
 		},
 		vignette=6078,
+		note="Objective of {questname:76588}",
 	},
 	[72136436] = {
 		label="Deepfiend Azellix",
@@ -747,9 +805,12 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=82562,
 		npc=221179,
 		loot={
+			223918, -- Specter Stalker's Shotgun
+			223919, -- Abducted Lawman's Gavel
 			223936, -- Shadow Bog Trousers
 		},
 		vignette=6122,
+		note="Objective of {questname:76588}",
 	},
 	[36687172] = {
 		label="Funglour",
@@ -779,13 +840,19 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=221668,
 		loot={
 			221211, -- Grasp of the Shallows
+			221233, -- Deephunter's Bloody Hook
 			221234, -- Tidal Pendant
+			221248, -- Deep Terror Carver
 			221255, -- Sharpened Scalepiercer
 		},
 		vignette=6152,
 		note="Very long patrol",
 		route={
-			43410990,43870879,44520774,45250767,45970726,45540662,44870677,44270749,43710858,43230977,42781094,42351213,41981324,41631452,41391580,41051714,40501821,39731909,38871990,38132054,37392117,36652173,35992256,35292353,34632446,33992545,33422650,32912763,32492891,32153010,31783130,30933154,29993162,29123191,28213204,27343238,26553287,26513416,26813550,27393654,27983757,28633853,29403934,30173998,30764092,30984221,30594339,29814381,28934419,28064452,27194486,26364534,25664611,24954700,24144768,23314830,23274858,22464885,21604925,20774968,19904976,19565105,20285138,20865040,21614971,22474926,
+			43410990, 43870879, 44520774, 45250767, 45970726, 45540662, 44870677, 44270749, 43710858, 41631452,
+			41391580, 41051714, 40501821, 39731909, 36652173, 33992545, 33422650, 32912763, 31783130, 30933154,
+			29993162, 29123191, 28213204, 27343238, 26553287, 26513416, 26813550, 27983757, 28633853, 29403934,
+			30173998, 30764092, 30984221, 30594339, 29814381, 27194486, 26364534, 25664611, 24954700, 23314830,
+			23274858, 22464885, 20774968, 19904976, 19565105, 20285138, 20865040, 21614971, 22474926,
 			r=0,g=0,b=1,
 		},
 	},
@@ -796,6 +863,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=215805,
 		loot={
 			221223, -- Bog Beast Mantle
+			221250, -- Creeping Lasher Machete
 			221253, -- Cultivator's Plant Puncher
 			221264, -- Fungarian Mystic's Cluster
 			223005, -- String of Fungal Fruits
@@ -822,11 +890,15 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=82560,
 		npc=214757,
 		loot={
+			221246, -- Fierce Beast Staff
 			221247, -- Cavernous Critter Shooter
+			221251, -- Bestial Underground Cleaver
+			221265, -- Charm of the Underground Beast
 			223938, -- Marsh Hopper's Spaulders
 		},
 		vignette=6125,
 		--tameable=true, -- hopper
+		note="Objective of {questname:76588}",
 	},
 	[57304858] = {
 		label="Pride of Beledar",
@@ -838,6 +910,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 			221246, -- Fierce Beast Staff
 			221247, -- Cavernous Critter Shooter
 			221251, -- Bestial Underground Cleaver
+			221265, -- Charm of the Underground Beast
 			223007, -- Lance of Beledar's Pride
 		},
 		vignette=6159,
@@ -849,6 +922,8 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=82561,
 		npc=207803,
 		loot={
+			223920, -- Slime Deflecting Stopper
+			223921, -- Ever-Oozing Signet
 			223933, -- Slime Goliath's Cap
 		},
 		vignette=6084,
@@ -863,6 +938,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 			211968, -- Blueprint Bundle
 			221238, -- Pillar of Constructs
 			223928, -- Crop Cutter's Gauntlets
+			223935, -- Cabbage Harvester's Pantaloons
 		},
 		vignette=6120,
 		note="Objective of {questname:76588}",
@@ -872,7 +948,10 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		criteria=69727,
 		quest=82564,
 		npc=207780, -- also 220492?
-		loot={},
+		loot={
+			221234, -- Tidal Pendant
+			223925, -- Blood Hungerer's Chestplate
+		},
 		vignette=6085,
 		note="Objective of {questname:76588}",
 	},
@@ -884,9 +963,21 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		loot={
 			221240, -- Nerubian Stagshell Gouger
 			221252, -- Nerubian Slayer's Claymore
+			221263, -- Nerubian Venom-Tipped Dart
 			223932, -- Scarab's Carapace Cap
 		},
 		vignette=6124,
+		note="Objective of {questname:76588}",
+	},
+	[61403220] = {
+		label="Parasidious",
+		criteria=69725,
+		quest=82563,
+		npc=206977,
+		loot={
+			221250, -- Creeping Lasher Machete
+		},
+		vignette=6361,
 		note="Objective of {questname:76588}",
 	},
 	-- UNKNOWN LOCATION
@@ -897,13 +988,6 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=80486,
 		npc=220159,
 		vignette=6075,
-	},
-	[] = {
-		label="Parasidious",
-		criteria=69725,
-		quest=82563,
-		npc=206977,
-		vignette=6361,
 	},
 	--]]
 }, {
@@ -936,7 +1020,10 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 	criteria=69716,
 	quest=81763,
 	npc=207802,
-	loot={{223315, mount=2192}}, -- Beledar's Spawn
+	loot={
+		{223315, mount=2192,}, -- Beledar's Spawn
+		223006, -- Signet of Dark Horizons
+	},
 	requires=ns.conditions.MajorFaction(ns.FACTION_ARATHI, 23),
 	active=ns.conditions.QuestComplete(82998), -- attunement
 	note="Buy and use {item:224553:Beledar's Attunement} from {majorfaction:2570:Hallowfall Arathi} to access",
@@ -955,8 +1042,9 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		label="Deathtide",
 		npc=221753,
 		loot={
+			223920, -- Slime Deflecting Stopper
 			223921, -- Ever-Oozing Signet
-			225997, -- Earthen Adventurer's Spaulders (zone-wide?)
+			225997, -- Earthen Adventurer's Spaulders
 		},
 		vignette=6156,
 		active=ns.conditions.Item(220123), -- Ominous Offering
@@ -997,6 +1085,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=nil, -- 76588 defender of the flame
 		npc=214905,
 		vignette=5984,
+		note="Objective of {questname:76588}",
 	},
 })
 
@@ -1094,6 +1183,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		npc=216042,
 		loot={
 			221212, -- Death Burrower Handguards
+			221237, -- Lamentable Vagrant's Lantern
 		},
 		vignette=6136,
 		note="Cave behind the waterfall",
@@ -1107,6 +1197,8 @@ ns.RegisterPoints(ns.AZJKAHET, {
 			221233, -- Deephunter's Bloody Hook
 			221234, -- Tidal Pendant
 			221243, -- Slippers of Delirium
+			221248, -- Deep Terror Carver
+			221255, -- Sharpened Scalepiercer
 		},
 		vignette=6139,
 	},
@@ -1166,6 +1258,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		npc=216051,
 		loot={
 			221240, -- Nerubian Stagshell Gouger
+			221252, -- Nerubian Slayer's Claymore
 			223930, -- Monstrous Chain Pincers
 		},
 		vignette=6186,
@@ -1189,6 +1282,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		quest=82077,
 		npc=222624,
 		loot={
+			223915, -- Nerubian Orator's Stiletto
 			223916, -- Nerubian Cutthroat's Reach
 			223923, -- Gilded Cryptlord's Sabatons
 		},
@@ -1208,6 +1302,7 @@ ns.RegisterPoints(2256, {
 		npc=216050,
 		loot={
 			223915, -- Nerubian Orator's Stiletto
+			223916, -- Nerubian Cutthroat's Reach
 			223941, -- Nerubian Cultivator's Girdle
 		},
 		vignette=6185,
@@ -1218,6 +1313,7 @@ ns.RegisterPoints(2256, {
 		quest=82035,
 		npc=216049,
 		loot={
+			223006, -- Signet of Dark Horizons
 			223931, -- Black Blood Cowl
 		},
 		vignette=6184,
@@ -1228,12 +1324,19 @@ ns.RegisterPoints(2256, {
 		quest=82034,
 		npc=216048,
 		loot={
+			223915, -- Nerubian Orator's Stiletto
 			223916, -- Nerubian Cutthroat's Reach
 			223917, -- Nerubian Covert's Cloak
 			223950, -- Corruption Sifter's Treads
 		},
 		vignette=6183,
 	},
+}, {
+	achievement=40840, -- Adventurer
+	levels=true,
+})
+
+ns.RegisterPoints(ns.AZJKAHET, {
 	[63409500] = {
 		label="The One Left",
 		quest=nil,
@@ -1242,14 +1345,12 @@ ns.RegisterPoints(2256, {
 			221246, -- Fierce Beast Staff
 			221247, -- Cavernous Critter Shooter
 			221251, -- Bestial Underground Cleaver
+			221265, -- Charm of the Underground Beast
 			225998, -- Earthen Adventurer's Cloak
 		},
 		path=65269328,
 	},
-}, {
-	achievement=40840, -- Adventurer
-	levels=true,
-})
+}, {levels=true})
 
 ns.RegisterPoints(ns.CITYOFTHREADS, {
 	[36404160] = {
@@ -1271,6 +1372,7 @@ ns.RegisterPoints(ns.CITYOFTHREADS, {
 		npc=216039,
 		loot={
 			221221, -- Venomous Lurker's Greathelm
+			221239, -- Spider Blasting Blunderbuss
 			221506, -- Arachnid's Web-Sown Guise
 		},
 		vignette=6133,
@@ -1289,6 +1391,8 @@ ns.RegisterPoints(ns.AZJKAHET, {
 			{225952, quest=83627}, -- Vial of Tka'ktath's Bloo
 			-- {224150, mount=2222}, -- Siesbarg
 			221240, -- Nerubian Stagshell Gouger
+			221252, -- Nerubian Slayer's Claymore
+			221263, -- Nerubian Venom-Tipped Dart
 		},
 		vignette=6265,
 		note="Begins a quest chain leading to the mount {item:224150:Siesbarg}",
