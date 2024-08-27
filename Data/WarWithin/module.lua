@@ -69,11 +69,216 @@ ns.PROF_WW_TAILORING = 2883 -- spell:
 -- Treasures
 
 core:RegisterTreasureData("WarWithin", {
+	-- Isle of Dorn
+	[6210] = {
+		name="Tree's Treasure",
+		achievement=40434, criteria=68197,
+		quest=83242, -- 82160 when treasure appears
+		loot={{224585, toy=true}}, -- Hanna's Locket
+		notes="In cave; talk to {npc:222940:Freysworn Letitia} for a {item:224185:Crab-Guiding Branch}, then go find {npc:222941:Pearlescent Shellcrab} around the zone",
+	},
+	[6224] = {
+		name="Magical Treasure Chest",
+		achievement=40434, criteria=68199,
+		quest=83243, -- 82212 for giving Lionel crabs
+		loot={{224579, pet=3362}}, -- Sapphire Crab
+		notes="Push {npc:223104:Lionel} into the water, talk to it, then go gather 5x {item:223159:Plump Snapcrab} nearby",
+	},
+	[6208] = {
+		name="Mysterious Orb",
+		achievement=40434, criteria=68201,
+		quest=83244, -- 82047 after talking, 82134 after giving, also 82252 when looted
+		loot={224373}, -- Waterlord's Iridescent Gem
+		notes="Talk to {npc:222847:Weary Water Elemental}, then go fetch its {item:221504:Elemental Pearl}",
+	},
+	[6209] = {
+		name="Mushroom Cap",
+		achievement=40434, criteria=68202,
+		quest=83245, -- 82142 after giving cap, 82253 as well on loot
+		loot={210796}, -- Mycobloom
+		notes="Talk to {npc:222894:U'llort the Self-Exiled} then fetch a {item:221550:Boskroot Cap} from the nearby woods",
+	},
+	[6236] = {
+		name="Thak's Treasure",
+		achievement=40434, criteria=68203,
+		quest=82246,
+		loot={
+			212498, -- Ambivalent Amber
+			212511, -- Ostentatious Onyx
+		},
+		notes="Talk to {npc:223227:One-Eyed Thak} and follow him to the treasure",
+	},
+	[6212] = {
+		name="Lost Mosswool (Mosswool Flower)",
+		achievement=40434, criteria=68204,
+		quest=82145, -- when flower spawns
+		loot={{224450, pet=4527}}, -- Lil' Moss Rosy
+		notes="Chase {npc:222956:Lost Mosswool} to the flower",
+	},
+	[6238] = {
+		name="Mosswool Flower",
+		achievement=40434, criteria=68204,
+		quest=83246, -- 82251 also when looted
+		loot={{224450, pet=4527}}, -- Lil' Moss Rosy
+		requires=ns.conditions.QuestComplete(82145),
+		notes="Chase {npc:222956:Lost Mosswool} to the flower; if another player has recently looted if you may have to wait for it to appear",
+	},
+	[6273] = {
+		name="Kobold Pickaxe",
+		achievement=40434, criteria=68205,
+		quest=82325,
+		loot={223484}, -- Kobold Mastermind's "Pivel"
+		notes="Despawns for a while after someone loots it, so you might need to wait around",
+	},
+	[6262] = {
+		name="Jade Pearl",
+		achievement=40434, criteria=68206,
+		quest=82287,
+		loot={223280}, -- Jade Pearl
+		note="Despawns for a while after someone loots it, so you might need to wait around",
+	},
+	[6274] = {
+		name="Shimmering Opal Lily",
+		achievement=40434, criteria=68207,
+		quest=82326,
+		loot={
+			213197, -- Null Lotus
+			210800, -- Luredrop
+		},
+		path=47316149,
+		notes="At the bottom of the cave; despawns for a while after someone loots it, so you might need to wait around",
+	},
+	[6292] = {
+		name="Infused Cinderbrew",
+		achievement=40434, criteria=68208,
+		quest=82714,
+		loot={224263}, -- Infused Fire-Honey Milk
+		notes="On the desk; despawns for a while after someone loots it, so you might need to wait around"
+	},
+	[6293] = {
+		name="Web-Wrapped Axe",
+		achievement=40434, criteria=68209,
+		quest=82715,
+		loot={224290}, -- Storm Defender's Axe
+		notes="Inside the building; despawns for a while after someone loots it, so you might need to wait around",
+	},
+
+	-- Turtle's Thanks
+	[6244] = {
+		name="Dalaran Sewer Turtle",
+		achievement=40434, criteria=68198,
+		quest=79585, -- pike
+		loot={{224549,pet=4594}}, -- Sewer Turtle Whistle
+		notes="Give {npc:223338:Dalaran Sewer Turtle} 5x {item:220143:Dornish Pike}, then leave the area and return to give it 1x {item:222533:Goldengill Trout}. Then go find it again in Dornegal.",
+		active=ns.conditions.Item(220143, 5),
+	},
+	[6245] = {
+		name="Dalaran Sewer Turtle",
+		achievement=40434, criteria=68198,
+		quest=79586, -- trout
+		loot={{224549,pet=4594}}, -- Sewer Turtle Whistle
+		note="Give {npc:223338:Dalaran Sewer Turtle} 1x {item:222533:Goldengill Trout}. Then go find it again in Dornegal.",
+		active=ns.conditions.Item(222533),
+	},
+	[6246] = {
+		name="Dalaran Sewer Turtle",
+		achievement=40434, criteria=68198,
+		quest=82255,
+		loot={{224549,pet=4594}}, -- Sewer Turtle Whistle
+		requires=ns.conditions.QuestComplete(79586), -- moves here
+		notes="Talk to the turtle to spawn the treasure",
+	},
+	[6579] = {
+		name="Turtle's Thanks",
+		achievement=40434, criteria=68198,
+		quest=82716, -- final!, also  when treasure spawns
+		loot={{224549,pet=4594}}, -- Sewer Turtle Whistle
+		requires=ns.conditions.QuestComplete(79586), -- moves here
+		notes="Talk to the turtle to spawn the treasure",
+	},
+
+	-- Ringing Deeps
 	[6286] = {
 		name="Dusty Prospector's Chest",
+		achievement=40724, criteria=69312,
+		quest=82464,
 		loot={212495, 212505, 212508}, -- some gems
 		requires={ns.conditions.Level(71), ns.conditions.Item(223878), ns.conditions.Item(223879), ns.conditions.Item(223880), ns.conditions.Item(223881), ns.conditions.Item(223882)},
 		notes="At the back of the inn; gather the five shards first",
+	},
+	[5994] = {
+		name="Webbed Knapsack",
+		achievement=40724, criteria=69280,
+		quest=79308,
+		loot={
+			213254, -- Big Gold Nugget
+			213251, -- Cinderbee Wax Jar
+			213250, -- Cracked Gem
+			213253, -- Gilded Candle
+			213255, -- Wax Canary
+			213252, -- Stolen Earthen Contraption
+			213257, -- Wax Shovel
+		},
+		level=71,
+		notes="In cave",
+	},
+	[6232] = {
+		name="Cursed Pickaxe",
+		achievement=40724, criteria=69281,
+		quest=82230,
+		loot={224837}, -- Cursed Pickaxe
+		level=71,
+	},
+	[6233] = {
+		name="Munderut's Forgotten Stash",
+		achievement=40724, criteria=69282,
+		quest=82235,
+		loot={212498}, -- Ambivalent Amber + commendations
+		level=71,
+	},
+	[6235] = {
+		name="Discarded Toolbox",
+		achievement=40724, criteria=69283,
+		quest=82239,
+		loot={224644}, -- Lava-Forged Cogwhee
+		level=73,
+	},
+	[6356] = {
+		name="Waterlogged Refuse",
+		achievement=40724, criteria=69304,
+		quest=83030,
+		loot={213250, 213255, 213253, 213254}, -- various grays
+		level=71,
+	},
+	[6277] = {
+		name="Scary Dark Chest",
+		achievement=40724, criteria=69307,
+		quest=82818,
+		loot={{224439, pet=4470}}, -- Oop'lajax
+		level=71,
+	},
+	[6241] = {
+		name="Kaja'Cola Machine",
+		achievement=40724, criteria=69308,
+		quest=82819,
+		loot={220774}, -- Goblin Mini Fridge
+		notes="Order four drinks in the right order: Bluesberry, Orange, Oyster, Mangoro (BOOM!)",
+	},
+	[6284] = {
+		name="Dislodged Blockage",
+		achievement=40724, criteria=69311,
+		quest=82820,
+		loot={{221548, pet=4536}}, -- Blightbud
+		notes="Solve a sliding-tiles puzzle",
+		level=71, -- can solve the puzzle, but not loot the chest
+	},
+	[6074] = {
+		name="Forgotten Treasure",
+		achievement=40724, criteria=69313,
+		quest=80485, -- chests: 80488, 80489, 80490, 80487
+		loot={{224783, toy=true}},
+		notes="Cave behind the waterfall; open chests until you find the key",
+		level=71,
 	},
 }, true)
 
