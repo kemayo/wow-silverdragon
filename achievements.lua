@@ -537,8 +537,30 @@ local achievements = {
 	[17783] = {}, -- Adventurer of Zaralek Cavern
 	[19316] = {}, -- Adventurer of the Emerald Dream
 	[40435] = {}, -- Adventurer of the Isle of Dorn
+	[40475] = { -- To All the Slimes I Love
+		need=EMOTE152_CMD1, completed=DONE, -- /love
+		[226626] = 68670, -- Spring Mole
+		[217756] = 68673, -- Snake
+		[220173] = 68674, -- Lightdarter
+		[221146] = 68676, -- Tiny Sporbit
+		[220369] = 68677, -- Dustcrawler Beetle
+		[219581] = 68675, -- Mass of Worms (less-common variant, not sure it works)
+		[219585] = 68675, -- Mass of Worms
+		[217461] = 68731, -- Grottoscale Hatchling
+		[220177] = 68729, -- Crackcreeper
+		[214726] = 68730, -- Lava Slug
+		[220370] = 68732, -- Earthenwork Stoneskitterer
+		[223663] = 68733, -- Cavern Skiplet
+		[217316] = 68734, -- Moss Sludglet
+		[219366] = 68747, -- Cavern Mote
+		[220168] = 68748, -- Stumblegrub
+		[219842] = 69805, -- Darkgrotto Hopper
+		[220413] = 68749, -- Oozeling
+		[217559] = 68750, -- Pebble Scarab
+		[216058] = 68751, -- Rock Snail
+	},
 	[40625] = { -- The Missing Lynx
-		need=EMOTE410_CMD1, completed=DONE,
+		need=EMOTE410_CMD1, completed=DONE, -- /pet
 		-- The rest have IDs associated, and are picked up fine
 		[216549] = 7, -- Nightclaw
 		[215590] = 8, -- Shadowpouncer

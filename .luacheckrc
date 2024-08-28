@@ -310,6 +310,7 @@ read_globals = {
     "DRAG_MODEL",
     "DONE",
     "EMOTE88_CMD1",
+    "EMOTE152_CMD1",
     "EMOTE410_CMD1",
     "ENABLE",
     "ENCOUNTER_JOURNAL_ITEM",
