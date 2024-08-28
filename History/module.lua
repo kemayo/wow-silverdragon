@@ -53,6 +53,14 @@ function module:OnInitialize()
 	})
 	db = self.db.profile
 
+	-- sanity-check for some data that people reported being off-kilter:
+	if type(db.position.width) ~= "number" then
+		db.position.width = 240
+	end
+	if type(db.position.height) ~= "number" then
+		db.position.width = 250
+	end
+
 	self.data = {}
 	self.rares = {}
 	self.removed = {}
