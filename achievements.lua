@@ -537,6 +537,17 @@ local achievements = {
 	[17783] = {}, -- Adventurer of Zaralek Cavern
 	[19316] = {}, -- Adventurer of the Emerald Dream
 	[40435] = {}, -- Adventurer of the Isle of Dorn
+	[40625] = { -- The Missing Lynx
+		need=EMOTE410_CMD1, completed=DONE,
+		-- The rest have IDs associated, and are picked up fine
+		[216549] = 7, -- Nightclaw
+		[215590] = 8, -- Shadowpouncer
+		[215606] = 9, -- Purrlock
+		[215041] = 10, -- Miral Murder-Mittens
+		[219412] = 11, -- Fuzzy
+		[218887] = 12, -- Furball
+		[221106] = 13, -- Dander
+	},
 	[40837] = {}, -- Adventurer of the Ringing Deeps
 	[40840] = {}, -- Adventurer of Azj-Kahet
 	[40851] = {}, -- Adventurer of Hallowfall
