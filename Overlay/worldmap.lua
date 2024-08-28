@@ -146,7 +146,13 @@ SilverDragonOverlayRoutePinMixin = CreateFromMixins(MapCanvasPinMixin)
 function SilverDragonOverlayRoutePinMixin:OnLoad()
     -- This is below normal pins
     self:UseFrameLevelType(ns.CLASSIC and "PIN_FRAME_LEVEL_AREA_POI" or "PIN_FRAME_LEVEL_EVENT_OVERLAY");
+
+    self:SetMouseMotionEnabled(false)
+    self:SetMouseClickEnabled(false)
 end
+
+-- 10.1.5 protected SetPassThroughButtons and it's called automatically inside AcquirePin, so we'll break it harder here until Blizzard fixes it:
+SilverDragonOverlayRoutePinMixin.SetPassThroughButtons = function() end
 
 SilverDragonOverlayRoutePinConnectionMixin = {}
 
