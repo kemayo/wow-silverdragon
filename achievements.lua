@@ -536,6 +536,7 @@ local achievements = {
 	[17525] = {}, -- Champion of the Forbidden Reach
 	[17783] = {}, -- Adventurer of Zaralek Cavern
 	[19316] = {}, -- Adventurer of the Emerald Dream
+	[40222] = {}, -- Echoes of Danger
 	[40435] = {}, -- Adventurer of the Isle of Dorn
 	[40475] = { -- To All the Slimes I Love
 		need=EMOTE152_CMD1, completed=DONE, -- /love
