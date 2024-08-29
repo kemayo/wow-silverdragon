@@ -388,9 +388,8 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		},
 		vignette=6026,
 	},
-	[76403620] = {
+	[55712727] = {
 		label="Clawbreaker K'zithix",
-		-- [80003500]
 		criteria=68224,
 		quest=81920, -- 84036
 		npc=221128,
@@ -493,7 +492,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 	[63994055] = {
 		label="Flamekeeper Graz",
 		criteria=68223,
-		quest=81905,
+		quest=81905, -- 84034
 		npc=219279,
 		loot={
 			221244, -- Flamekeeper's Footpads
@@ -586,16 +585,18 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		},
 		vignette=6073,
 	},
-	[46003180] = {
+	-- [46003180] = {
 		label="Rowdy Rubble",
-		quest=81515,
-		npc=220846,
-		vignette=6102,
-	},
+	--     quest=81515,
+	--     npc=220846,
+	--     vignette=6102,
+	-- },
 	[69204960] = {
 		label="Elusive Ironhide Maelstrom Wolf",
 		quest=nil,
 		npc=224515,
+		requires=ns.conditions.Profession(ns.PROF_WW_SKINNING),
+		active=ns.conditions.Item(219007), -- Elusive Creature Lure
 	},
 })
 
@@ -655,7 +656,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 	[50864651] = {
 		label="Cragmund",
 		criteria=69630,
-		quest=80560, -- 84042?
+		quest=80560, -- 84042
 		npc=220269,
 		loot={
 			221205, -- Vest of the River
@@ -667,7 +668,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 	[55060843] = {
 		label="Deepflayer Broodmother",
 		criteria=69636,
-		quest=80536,
+		quest=80536, -- 85162
 		npc=220286,
 		loot={
 			221254, -- Earthshatter Lance
@@ -723,7 +724,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 	[46701209] = {
 		label="Terror of the Forge",
 		criteria=69628,
-		quest=80507,
+		quest=80507, -- 84040
 		npc=220271,
 		loot={
 			221233, -- Deephunter's Bloody Hook
@@ -738,7 +739,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 	[47224696] = {
 		label="Kelpmire",
 		criteria=69635,
-		quest=81485,
+		quest=81485, -- 84047
 		npc=220287,
 		loot={
 			221204, -- Spore Giant's Stompers
@@ -769,6 +770,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		npc=220268,
 		loot={
 			221228, -- Infested Fungal Wristwraps
+			221250, -- Creeping Lasher Machete
 			221253, -- Cultivator's Plant Puncher
 			221264, -- Fungarian Mystic's Cluster
 			223005, -- String of Fungal Fruits
@@ -777,7 +779,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		path={72534569, 72844444},
 		vignette=6126,
 	},
-	[68224378] = {
+	[68404754] = {
 		label="Spore-infused Shalewing",
 		criteria=69638,
 		quest=81652,
@@ -788,12 +790,18 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 			223942, -- Spore-Encrusted Ribbon
 		},
 		vignette=6121,
-		note="Flies around",
+		note="Flies around clockwise",
+		route={
+			68604852, 68735012, 68675047, 68215137, 68055156, 67745171, 67535176, 67225176, 67075174, 66585120, 66244896,
+			66264870, 66404840, 66234817, 65724779, 65564760, 65474737, 65534711, 65724669, 65834655, 66044644, 66944640,
+			67624608, 67774620, 68094659, 68214680, 68404754,
+			loop=true,
+		},
 	},
 	[65364949] = {
 		label="Hungerer of the Deeps",
 		criteria=69639,
-		quest=81648,
+		quest=81648, -- 84048
 		npc=221199,
 		loot={
 			221233, -- Deephunter's Bloody Hook
@@ -828,10 +836,10 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		note="In cave",
 		path=67056796,
 	},
-	[60717630] = {
+	[60887682] = {
 		label="Lurker of the Deeps",
 		criteria=69637,
-		quest=81633,
+		quest=81633, -- 85163
 		npc=220285,
 		loot={
 			{223501, mount=2205}, -- Regurgitated Mole Reins
@@ -852,6 +860,16 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 	},
 }, {
 	achievement=40837, -- Adventurer
+})
+
+ns.RegisterPoints(ns.RINGINGDEEPS, {
+	[62805000] = {
+		label="Slatefang",
+		quest=nil,
+		npc=228439,
+		requires=ns.conditions.Profession(ns.PROF_WW_SKINNING),
+		active=ns.conditions.Item(219008), -- Supreme Beast Lure
+	},
 })
 
 -- Hallowfall
@@ -876,7 +894,6 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=82557,
 		npc=206203,
 		loot={
-			211973, -- Spider-Touched Bag
 			221240, -- Nerubian Stagshell Gouger
 			221252, -- Nerubian Slayer's Claymore
 			221263, -- Nerubian Venom-Tipped Dart
@@ -1154,7 +1171,9 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=82564,
 		npc=207780, -- also 220492?
 		loot={
+			221233, -- Deephunter's Bloody Hook
 			221234, -- Tidal Pendant
+			221248, -- Deep Terror Carver
 			223925, -- Blood Hungerer's Chestplate
 		},
 		vignette=6085,
@@ -1181,6 +1200,9 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		npc=206977,
 		loot={
 			221250, -- Creeping Lasher Machete
+			221264, -- Fungarian Mystic's Cluster
+			223005, -- String of Fungal Fruits
+			223940, -- Deranged Fungarian's Epaulets
 		},
 		vignette=6361,
 		note="Objective of {questname:76588}",
@@ -1464,6 +1486,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		loot={
 			221240, -- Nerubian Stagshell Gouger
 			221252, -- Nerubian Slayer's Claymore
+			221263, -- Nerubian Venom-Tipped Dart
 			223930, -- Monstrous Chain Pincers
 		},
 		vignette=6186,
@@ -1476,6 +1499,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		loot={
 			223915, -- Nerubian Orator's Stiletto
 			223916, -- Nerubian Cutthroat's Reach
+			223917, -- Nerubian Covert's Cloak
 			223939, -- Esteemed Nerubian's Mantle
 		},
 		vignette=6204,
@@ -1489,6 +1513,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		loot={
 			223915, -- Nerubian Orator's Stiletto
 			223916, -- Nerubian Cutthroat's Reach
+			223917, -- Nerubian Covert's Cloak
 			223923, -- Gilded Cryptlord's Sabatons
 		},
 		vignette=6203,
@@ -1566,6 +1591,7 @@ ns.RegisterPoints(ns.CITYOFTHREADS, {
 		loot={
 			221214, -- Chitin Chain Headpiece
 			221240, -- Nerubian Stagshell Gouger
+			221252, -- Nerubian Slayer's Claymore
 			221263, -- Nerubian Venom-Tipped Dart
 		},
 		vignette=6111,
@@ -1601,5 +1627,12 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		},
 		vignette=6265,
 		note="Begins a quest chain leading to the mount {item:224150:Siesbarg}",
+	},
+	[39804100] = {
+		label="Elusive Razormouth Steelhide",
+		quest=nil,
+		npc=226232,
+		requires=ns.conditions.Profession(ns.PROF_WW_SKINNING),
+		active=ns.conditions.Item(219007), -- Elusive Creature Lure
 	},
 }, {levels=true,})
