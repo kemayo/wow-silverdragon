@@ -323,7 +323,7 @@ zoneid_to_mapid = {
     8568: 1161,  # Boralus
     8574: 830,  # Krokuun
     8670: 1165,  # Dazar'alor
-    8701: 882,  # Mac'Aree
+    8701: 882,  # Eredath
     8721: 896,  # Drustvar
     8899: 885,  # Antoran Wastes
     9042: 942,  # Stormsong Valley
@@ -370,7 +370,7 @@ zoneid_to_mapid = {
     981: False,  # The Gaping Chasm
     982: False,  # The Noxious Lair
     1477: False,  # Sunken Temple
-    2057: False,  # ScholomanceOLD
+    2057: False,  # Scholomance
     2257: False,  # Deeprun Tram
     2300: False,  # Caverns of Time
     3446: False,  # Twilight's Run
@@ -411,6 +411,8 @@ zoneid_to_mapid = {
     6298: False,  # Brawl'gar Arena
     6311: False,  # Niuzao Catacombs
     6376: False,  # The Ancient Passage
+    6384: False,  # Forlorn Cloister
+    6386: False,  # Chapel Gardens
     6389: False,  # Howlingwind Cavern
     6419: False,  # Peak of Serenity
     6449: False,  # Temple of Kotmogu
@@ -926,6 +928,7 @@ zoneid_to_mapid = {
     10887: False,  # Solesa naksu [DNT]
     10920: False,  # The Veiled Stair
     10986: False,  # Sinfall
+    11012: False,  # Elysian Hold
     11024: False,  # The Jade Forest
     11025: False,  # Valley of the Four Winds
     11026: False,  # Kun-Lai Summit
@@ -964,6 +967,7 @@ zoneid_to_mapid = {
     12848: False,  # Bastion - Treasures
     12857: False,  # Blackrock Depths
     12858: False,  # Heart of the Forest
+    12876: False,  # Seat of the Primus
     12882: False,  # Val'sharah
     12883: False,  # Temple of Elune
     12905: False,  # Chamber of Heart
@@ -983,9 +987,11 @@ zoneid_to_mapid = {
     13400: False,  # Skoldus Hall
     13403: False,  # The Fracture Chambers
     13404: False,  # The Soulforges
+    13409: False,  # Progenitor Zone Area 1
     13411: False,  # Coldheart Interstitia
     13412: False,  # Mort'regar
     13413: False,  # The Upper Reaches
+    13416: False,  # DEV Lowlands (DO NOT USE)
     13428: False,  # Empyrean Domain
     13433: False,  # The In-Between
     13462: False,  # Ascension Coliseum
@@ -995,19 +1001,211 @@ zoneid_to_mapid = {
     13497: False,  # The Fracture Chambers
     13506: False,  # awood_dev1
     13507: False,  # sbenyona_dev1
+    13532: False,  # Zone2lDoodadtest
+    13536: False,  # Zereth Mortis
     13546: False,  # Torghast, Tower of the Damned
     13548: False,  # Boralus Harbor
+    13549: False,  # Stormheim
     13553: False,  # Escape from the Maw
+    13554: False,  # 10 Canyon
     13556: False,  # Revendreth
     13561: False,  # Sanctum of Domination
     13574: False,  # PTH Test Area
+    13575: False,  # The Adamant Vaults
+    13576: False,  # Zone2lDoodadtest2
     13580: False,  # Fungal Wasteland
     13581: False,  # Overgrown Canopy
     13582: False,  # Edge of Darkness
     13583: False,  # Lug'thun's Crater
+    13585: False,  # Interactive World - Night Test
     13587: False,  # The Maw
     13619: False,  # Ardenweald
     13633: False,  # 9.1 Campaign
+    13635: False,  # Zone4TyrholdTest
+    13636: False,  # 10 Highlands
     13637: False,  # Skyhold
+    13642: False,  # Dragon Isles
+    13643: False,  # The Great Sea
+    13644: False,  # The Waking Shores
+    13645: False,  # Ohn'ahran Plains
+    13646: False,  # The Azure Span
+    13647: False,  # Thaldraszus
     13699: False,  # Seat of the Archon
+    13708: False,  # Plain of Actualization
+    13742: False,  # Sepulcher of the First Ones
+    13753: False,  # Crypts of the Eternal
+    13769: False,  # The Forbidden Reach
+    13790: False,  # zsewell
+    13802: False,  # Tyrhold Reservoir
+    13844: False,  # Traitor's Rest
+    13862: False,  # Valdrakken
+    13863: False,  # Oribos
+    13870: False,  # mesten_dev1
+    13891: False,  # Gravid Repose
+    13898: False,  # Catalyst Wards
+    13928: False,  # Blooming Foundry
+    13936: False,  # Marie Lazar Land
+    13946: False,  # Marie Lazar Land Panda Farm
+    13952: False,  # Locrian Esper
+    13954: False,  # The Azure Vault
+    13955: False,  # LDNewHire
+    13968: False,  # Uldaman
+    13970: False,  # Enigma Arena
+    13971: False,  # Maldraxxus Coliseum
+    13972: False,  # Maldraxxus Coliseum
+    13975: False,  # Tirisfal Glades
+    13982: False,  # The Nokhud Offensive
+    13983: False,  # Tirisfal Glades
+    13991: False,  # Brackenhide Hollow
+    13992: False,  # The Primalist Future
+    13993: False,  # The Gnoll War
+    13994: False,  # War of the Shifting Sands
+    13995: False,  # Pandaren Revolution
+    13996: False,  # The Black Empire
+    14009: False,  # The Waking Shores [DNT]
+    14011: False,  # Neltharus
+    14014: False,  # Content Playground
+    14022: False,  # Zaralek Cavern
+    14023: False,  # JrzTest
+    14030: False,  # Vault of the Incarnates
+    14032: False,  # Algeth'ar Academy
+    14038: False,  # Env Art Land - Detail Doodad Test
+    14045: False,  # Tirisfal Glades
+    14063: False,  # Ruby Life Pools
+    14082: False,  # Halls of Infusion
+    14083: False,  # Enigma Crucible
+    14084: False,  # Emerald Dreamway
+    14092: False,  # Azmerloth
+    14098: False,  # Azmerloth - Timeless Area
+    14143: False,  # The Dig
+    14144: False,  # Hall of the Keepers
+    14149: False,  # Pandaren Revolution - No Man's Land
+    14151: False,  # The Gnoll War- No Man's Land
+    14152: False,  # War of the Shifting Sands - No Man's Land
+    14357: False,  # Arathi Highlands
+    14433: False,  # The Forbidden Reach
+    14436: False,  # Nokhudon Proving Grounds
+    14457: False,  # Sully Test Start
+    14459: False,  # Sully Test Plains
+    14460: False,  # Sully Test Desert
+    14461: False,  # Sully Test Forest
+    14484: False,  # 10.2 Devland
+    14510: False,  # The Great Sea
+    14512: False,  # RebornTree
+    14513: False,  # The Rugged Dragonscale
+    14514: False,  # Dawn of the Infinite
+    14517: False,  # 11Test1
+    14518: False,  # The Eastern Glades
+    14519: False,  # 10Zone6-Devland
+    14523: False,  # 11 Zone3
+    14525: False,  # Alterac Valley
+    14529: False,  # Emerald Dream
+    14615: False,  # 11Test2
+    14616: False,  # Darkglow Hollows
+    14617: False,  # The Seat of the Aspects
+    14618: False,  # Azure Vault (delete me)
+    14620: False,  # Blue Dragon Choice
+    14643: False,  # Amirdrassil, the Dream's Hope
+    14657: False,  # WB New Hires
+    14658: False,  # 11Test3
+    14661: False,  # 11Test4
+    14662: False,  # 11Test5
+    14663: False,  # Aberrus, the Shadowed Crucible
+    14665: False,  # Khaz Algar
+    14667: False,  # The Throughway
+    14668: False,  # ZZ_AlexandraDD
+    14686: False,  # Professions Land
+    14705: False,  # Aberrus, the Shadowed Crucible
+    14706: False,  # The Maelstrom
+    14707: False,  # Amy Test Forest
+    14708: False,  # Amy Test Town
+    14709: False,  # Shane Test Area
+    14717: False,  # Isle of Dorn
+    14723: False,  # 11Test6
+    14727: False,  # The Azure Vault
+    14730: False,  # Abandoned Creche
+    14747: False,  # Zone 4 Dev Land
+    14748: False,  # Khaz Algar
+    14750: False,  # Dragon Isles
+    14751: False,  # The Waking Shores
+    14752: False,  # Azj-Kahet
+    14753: False,  # City of Threads
+    14765: False,  # Twitching Gorge
+    14769: False,  # The Maddening Deep
+    14770: False,  # Azmerloth
+    14771: False,  # Dornogal
+    14776: False,  # The Proscenium
+    14795: False,  # The Ringing Deeps
+    14838: False,  # Hallowfall
+    14840: False,  # A.Z.E.R.O.T.H.
+    14841: False,  # Azq'roth
+    14842: False,  # Ulderoth
+    14843: False,  # Azewrath
+    14844: False,  # Azmourne
+    14845: False,  # The Warlands
+    14846: False,  # Ulderoth
+    14849: False,  # Halls of Valor
+    14853: False,  # Test Dungeon
+    14855: False,  # 11Test7
+    14872: False,  # Scarlet Monastery
+    14882: False,  # Darkflame Cleft
+    14883: False,  # The Stonevault
+    14908: False,  # 11.0 - Underground Test
+    14936: False,  # The Nighthold
+    14938: False,  # The Rookery
+    14954: False,  # Priory of the Sacred Flame
+    14957: False,  # Fungal Folly
+    14962: False,  # De Other Side
+    14963: False,  # Dev Map - Quest Training
+    14966: False,  # Dev Map - Exile's Reach
+    14967: False,  # Dev Map - Zereth Mortis
+    14968: False,  # Dev Map - Mechagon
+    14969: False,  # Amirdrassil
+    14970: False,  # The Black Empire
+    14971: False,  # The Dawnbreaker
+    14979: False,  # City of Threads
+    14980: False,  # Nerub-ar Palace
+    14987: False,  # James's Dynamic Mount Testground
+    14990: False,  # Deephaul Ravine
+    14998: False,  # Mycomancer Cavern
+    14999: False,  # Earthcrawl Mines
+    15000: False,  # Kriegval's Rest
+    15001: False,  # Zekvir's Lair
+    15002: False,  # The Waterworks
+    15003: False,  # The Dread Pit
+    15004: False,  # Skittering Breach
+    15005: False,  # Nightfall Sanctum
+    15006: False,  # The Sinkhole
+    15007: False,  # The Spiral Weave
+    15008: False,  # Tak-Rethan Abyss
+    15009: False,  # The Underkeep
+    15010: False,  # The Timeways
+    15011: False,  # FX - Test Dungeon
+    15027: False,  # 2510 Coreway
+    15028: False,  # Aberrus, the Shadowed Crucible
+    15041: False,  # Felwood
+    15048: False,  # Hall of Awakening
+    15051: False,  # Chamber of Heart
+    15052: False,  # Darkflame Cleft
+    15055: False,  # zzoldPriory of the Sacred Flame
+    15058: False,  # Arathi Highlands
+    15083: False,  # Brew Bay
+    15093: False,  # Ara-Kara, City of Echoes
+    15098: False,  # The High Gate
+    15103: False,  # Cinderbrew Meadery
+    15105: False,  # Amirdrassil
+    15109: False,  # Sound Room - Audio Smoketest
+    15133: False,  # Awakening The Machine
+    15134: False,  # The Burrows
+    15145: False,  # Hallowfall
+    15175: False,  # The Sinkhole
+    15177: False,  # Dalaran
+    15180: False,  # 11.0 warband camp
+    15327: False,  # Tak-Rethan Abyss
+    15342: False,  # Hall of Awakening
+    15343: False,  # KVigue Test
+    15387: False,  # Warband Camp
+    15513: False,  # Pocket Dimension
+    15525: False,  # The Great Sea
+    15667: False,  # Delves
 }

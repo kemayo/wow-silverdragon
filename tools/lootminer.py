@@ -322,6 +322,7 @@ if __name__ == '__main__':
     parser.add_argument('--export_handynotes', action="store_true", default=False, help="Export in my handynotes format")
     parser.add_argument('--local', action="store_true", default=False, help="Export local data rather than fetching anything")
     parser.add_argument('--only_with_loot', action="store_true", default=False, help="Only output those with loot")
+    parser.add_argument('--only_with_location', action="store_true", default=False, help="Only output those with locations")
     parser.add_argument('--loot_filter', action="store", choices=("source", "notable", "all"), default="source", help="")
     args = parser.parse_args()
 
@@ -345,6 +346,9 @@ if __name__ == '__main__':
                 continue
             if args.only_with_loot and not npc.get("loot", False):
                 print("skipping no-loot")
+                continue
+            if args.only_with_location and not npc.get("locations", False):
+                print("skipping no-location")
                 continue
             if "loot" in npc:
                 npc["loot"] = [additemdata(item, base) for item in npc["loot"]]
