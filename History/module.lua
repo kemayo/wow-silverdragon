@@ -136,10 +136,18 @@ function module:OnEnable()
 
 	self:RegisterEvent("PET_BATTLE_OPENING_START", "Refresh")
 	self:RegisterEvent("PET_BATTLE_CLOSE", "Refresh")
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", "Refresh")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", "Refresh")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 
 	self:Refresh()
+end
+
+function module:PLAYER_REGEN_DISABLED()
+	-- InCombatLockdown starts returning true *after* this event, so we can't
+	-- just hook this up to Refresh.
+	if not db.combat then
+		self.window:Hide()
+	end
 end
 
 function module:AddData(data)
@@ -273,7 +281,7 @@ function module:CreateWindow()
 
 		if
 			(C_PetBattles and C_PetBattles.IsInBattle()) or
-			(not db.combat and InCombatLockdown()) or
+			((not db.combat) and InCombatLockdown()) or
 			(size == 0 and not db.empty)
 		then
 			self:Hide()
