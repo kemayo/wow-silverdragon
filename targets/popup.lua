@@ -389,8 +389,12 @@ function CreateAnimationAlpha(animationGroup, fromAlpha, toAlpha, duration, star
 end
 
 function PopupMixin:SetRaidIcon(icon)
-	SetRaidTargetIconTexture(self.raidIcon, icon)
-	self.raidIcon:Show()
+	if icon then
+		SetRaidTargetIconTexture(self.raidIcon, icon)
+		self.raidIcon:Show()
+	else
+		self.raidIcon:Hide()
+	end
 end
 
 function PopupMixin:SetSource(source)

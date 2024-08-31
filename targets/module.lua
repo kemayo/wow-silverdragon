@@ -165,9 +165,7 @@ end
 
 function module:Marked(callback, id, marker, unit)
 	for popup in self:EnumerateActive() do
-		if popup.data and popup.data.id == id then
-			popup:SetRaidIcon(marker)
-		end
+		popup:SetRaidIcon(popup.data and popup.data.id == id and marker)
 	end
 end
 
