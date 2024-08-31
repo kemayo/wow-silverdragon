@@ -51,15 +51,9 @@ function module:OnInitialize()
 			},
 		},
 	})
-	db = self.db.profile
-
-	-- sanity-check for some data that people reported being off-kilter:
-	if type(db.position.width) ~= "number" then
-		db.position.width = 240
-	end
-	if type(db.position.height) ~= "number" then
-		db.position.width = 250
-	end
+	self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
+	self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
+	self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
 
 	self.data = {}
 	self.rares = {}
@@ -67,8 +61,20 @@ function module:OnInitialize()
 	self.dataProvider = self:CreateDataProvider()
 
 	self:RegisterConfig()
+	self:RefreshConfig()
 
-	self:SetEnabledState(db.enabled)
+	self:SetEnabledState(self.db.profile.enabled)
+end
+
+function module:RefreshConfig()
+	db = self.db.profile
+	if self.window then
+		-- already loaded
+		LibWindow.RegisterConfig(self.window, db.position)
+		LibWindow.RestorePosition(self.window)
+		self:Refresh()
+		self[db.enabled and "Enable" or "Disable"](self)
+	end
 end
 
 local currentShardSources = {
@@ -410,6 +416,7 @@ function module:CreateWindow()
 end
 
 function module:Refresh()
+	if not self.window then return end
 	self:RebuildDataProvider()
 	-- Force a redraw of the frames in the scrollbox
 	self.window.container.scrollBox:Rebuild(true) --retainScrollPosition

@@ -58,9 +58,20 @@ function module:OnInitialize()
 	core.RegisterCallback(self, "SeenLoot")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", "ProcessQueue")
 
+	self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
+	self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
+	self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
+
 	self.anchor = self:CreateAnchor()
 
 	self:RegisterConfig()
+end
+
+function module:RefreshConfig()
+	LibWindow.RegisterConfig(self.anchor, self.db.profile.anchor)
+	LibWindow.RestorePosition(self.anchor)
+	self:Redraw()
+	-- self[db.enabled and "Enable" or "Disable"](self)
 end
 
 local pending
