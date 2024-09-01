@@ -23,10 +23,13 @@
 embeds.xml
 #@end-no-lib-strip@
 
+systems\class.lua
+systems\conditions.lua
+
 # the core
 core.lua
+
 shards.lua
-conditions.lua
 achievements.lua
 loot.lua
 slash.lua
