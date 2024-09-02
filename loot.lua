@@ -109,7 +109,7 @@ local hasAppearanceCache = {}
 local function HasAppearance(itemLinkOrID)
 	local itemID = C_Item.GetItemInfoInstant(itemLinkOrID)
 	if not itemID then return end
-	if hasAppearanceCache[itemID] ~= nil and core.db.profile.lootappearances then
+	if hasAppearanceCache[itemID] ~= nil and not core.db.profile.transmog_specific then
 		-- only use the cache if we need the more expensive checks below...
 		-- and so we don't need to care about clearing it when someone
 		-- changes their settings.
@@ -120,7 +120,7 @@ local function HasAppearance(itemLinkOrID)
 		hasAppearanceCache[itemID] = true
 		return true
 	end
-	if not core.db.profile.lootappearances then
+	if not core.db.profile.transmog_specific then
 		-- No fallback checks, only whether the specific item is known counts
 		return false
 	end

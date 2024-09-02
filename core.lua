@@ -364,7 +364,7 @@ function addon:OnInitialize()
 			instances = false,
 			taxi = true,
 			charloot = false,
-			lootappearances = true,
+			transmog_specific = false,
 		},
 	}, true)
 	globaldb = self.db.global
@@ -372,6 +372,10 @@ function addon:OnInitialize()
 	if self.db.locale and self.db.locale.mob_name then
 		self.db.locale.mob_name = nil
 		self.db.locale.quest_name = nil
+	end
+
+	if self.db.profile.lootappearances ~= nil then
+		self.db.profile.transmog_specific = not self.db.profile.lootappearances
 	end
 
 	if globaldb.always then
