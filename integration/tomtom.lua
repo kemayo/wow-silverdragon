@@ -158,6 +158,7 @@ do
 
 		if duration and duration > 0 then
 			C_Timer.After(duration, function()
+				Debug("Waypoint.AutoHide", id)
 				self:Hide(id)
 			end)
 		end

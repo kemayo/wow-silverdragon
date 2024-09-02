@@ -138,7 +138,7 @@ function module:OnInitialize()
 			return {
 				type = "select", dialogControl = "LSM30_Sound",
 				name = "Sound to Play", desc = "Choose a sound file to play",
-				values = AceGUIWidgetLSMlists.sound,
+				values = LSM:HashTable("sound"),
 				disabled = function() return not self.db.profile[enabled_key] end,
 				order = order,
 			}
@@ -248,9 +248,21 @@ function module:OnInitialize()
 							Ambience = _G.AMBIENCE_VOLUME,
 							Master = _G.MASTER,
 							Music = _G.MUSIC_VOLUME,
-							SFX = _G.SOUND_VOLUME,
+							SFX = _G.SOUND_VOLUME or _G.FX_VOLUME,
 							Dialog = _G.DIALOG_VOLUME,
 						},
+						order = 11,
+					},
+					test = {
+						type = "execute",
+						name = "Test it!",
+						image = "interface/common/voicechat-speaker",
+						func = function()
+							module:PlaySound{
+								soundfile = module.db.profile.soundfile,
+								loops = module.db.profile.sound_loop
+							}
+						end,
 						order = 11,
 					},
 					unmute = toggle("Ignore mute", "Play sounds even when muted", 12),
