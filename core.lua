@@ -374,27 +374,6 @@ function addon:OnInitialize()
 		self.db.locale.quest_name = nil
 	end
 
-	if SilverDragon2DB and SilverDragon2DB.global then
-		-- Migrating some data from v2
-
-		for mobid, when in pairs(SilverDragon2DB.global.mob_seen or {}) do
-			if when > 0 then
-				globaldb.mob_seen[mobid] = when
-			end
-		end
-		for mobid, count in pairs(SilverDragon2DB.global.mob_count or {}) do
-			globaldb.mob_count[mobid] = count
-		end
-		for mobid, watching in pairs(SilverDragon2DB.global.always or {}) do
-			globaldb.always[mobid] = watching
-		end
-		for mobid, ignored in pairs(SilverDragon2DB.global.ignore or {}) do
-			globaldb.ignore[mobid] = ignored
-		end
-
-		_G["SilverDragon2DB"] = nil
-	end
-
 	if globaldb.always then
 		MergeTable(globaldb.custom.any, globaldb.always)
 		globaldb.always = nil
