@@ -71,6 +71,54 @@ if ns.CLASSIC then
 	addon.escapes.rightClick = [[|TInterface\TUTORIALFRAME\UI-TUTORIAL-FRAME:20:12:0:-1:512:512:9:66:332:411|t]]
 end
 
+local upgradeloot
+do
+	local available = {}
+	local function upgradelootitem(item)
+		if ns.IsObject(item) then
+			return item
+		end
+		if type(item) == "number" then
+			return ns.rewards.Item(item)
+		end
+		local upgrade
+		if item.toy then
+			upgrade = ns.rewards.Toy(item[1])
+		elseif item.mount then
+			upgrade = ns.rewards.Mount(item[1], type(item.mount) == "number" and item.mount)
+		elseif item.pet then
+			upgrade = ns.rewards.Pet(item[1], type(item.pet) == "number" and item.pet)
+		elseif item.set then
+			upgrade = ns.rewards.Set(item[1], item.set)
+		else
+			upgrade = ns.rewards.Item(item[1])
+		end
+		upgrade.quest = item.quest
+		upgrade.questComplete = item.questComplete
+		upgrade.spell = item.spell
+		if item.class then
+			upgrade.class = item.class
+			table.insert(available, ns.conditions.Class(item.class))
+		end
+		if item.covenant then
+			upgrade.covenant = item.covenant
+			table.insert(available, ns.conditions.Covenant(item.covenant))
+		end
+		if #available > 0 then
+			upgrade.requires = available
+			available = {}
+		end
+		return upgrade
+	end
+	function upgradeloot(loot)
+		if not loot then return loot end
+		for i, item in ipairs(loot) do
+			loot[i] = upgradelootitem(item)
+		end
+		return loot
+	end
+end
+
 
 addon.datasources = {
 	--[[
@@ -148,12 +196,16 @@ function addon:RegisterMobData(source, data, updated)
 			ns.achievements[mobdata.achievement][mobid] = mobdata.criteria
 			ns.mobs_to_achievement[mobid] = mobdata.achievement
 		end
+		mobdata.loot = upgradeloot(mobdata.loot)
 	end
 end
 function addon:RegisterTreasureData(source, data, updated)
 	if not updated then return end
 	if not addon.treasuresources[source] then addon.treasuresources[source] = {} end
 	MergeTable(addon.treasuresources[source], data)
+	for vignetteid, vignettedata in pairs(data) do
+		vignettedata.loot = upgradeloot(vignettedata.loot)
+	end
 end
 do
 	function addon:RegisterHandyNotesData(source, uiMapID, points, defaults)
@@ -173,7 +225,7 @@ do
 				local data = {
 					name=point.label,
 					locations={[uiMapID]={coord}},
-					loot=point.loot,
+					loot=upgradeloot(point.loot),
 					notes=point.note,
 					active=point.active,
 					requires=point.require or point.hide_before,

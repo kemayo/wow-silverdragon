@@ -9,4 +9,6 @@ ns.db = setmetatable({}, {__index = function(self, key)
 	return core.db.profile[key]
 end})
 
+ns.render_string = function(...) return core:RenderString(...) end
+
 ns.run_caches = {}

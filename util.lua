@@ -12,6 +12,7 @@ local function quick_texture_markup(icon)
 	-- needs less than CreateTextureMarkup
 	return '|T' .. icon .. ':0:0:1:-1|t'
 end
+ns.quick_texture_markup = quick_texture_markup
 local completeColor = CreateColor(0, 1, 0, 1)
 local incompleteColor = CreateColor(1, 0, 0, 1)
 function addon:RenderString(s, context)

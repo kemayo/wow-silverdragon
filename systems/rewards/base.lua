@@ -74,6 +74,9 @@ function Reward:AddToTooltip(tooltip)
 		r, g, b
 	)
 end
+function Reward:AddToItemButton(button)
+	SetItemButtonTexture(button, self:Icon())
+end
 function Reward:TooltipName()
 	local name = self:Name(true)
 	local icon = self:Icon()
@@ -140,4 +143,11 @@ function ns.rewards.Currency:Icon()
 end
 function ns.rewards.Currency:TooltipLabel()
 	return self.faction and REPUTATION or CURRENCY
+end
+function ns.rewards.Currency:SetTooltip(tooltip)
+	if tooltip.SetCurrencyByID then
+		tooltip:SetCurrencyByID(self.id, self.amount)
+	else
+		tooltip:SetHyperlink(C_CurrencyInfo.GetCurrencyLink(self.id, self.amount))
+	end
 end

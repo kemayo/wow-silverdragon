@@ -18,7 +18,6 @@ function ns.rewards.Item:Name(color)
 end
 function ns.rewards.Item:TooltipLabel()
 	local _, itemType, itemSubtype, equipLoc, icon, classID, subclassID = C_Item.GetItemInfoInstant(self.id)
-	local _, link = C_Item.GetItemInfo(self.id)
 	local label = ENCOUNTER_JOURNAL_ITEM
 	if classID == Enum.ItemClass.Armor and subclassID ~= Enum.ItemArmorSubclass.Shield then
 		label = _G[equipLoc] or label
@@ -48,7 +47,7 @@ function ns.rewards.Item:Obtained(for_tooltip)
 		end
 		result = false
 	end
-	if ns.CLASSIC then return result and GetItemCount(self.id, true) > 0 end
+	if ns.CLASSICERA then return result and GetItemCount(self.id, true) > 0 end
 	if (for_tooltip or ns.db.transmog_notable) and self.CanLearnAppearance(self.id) then
 		return self.HasAppearance(self.id, ns.db.transmog_specific)
 	end
@@ -72,6 +71,12 @@ function ns.rewards.Item:MightDrop()
 end
 function ns.rewards.Item:SetTooltip(tooltip)
 	tooltip:SetItemByID(self.id)
+end
+function ns.rewards.Item:AddToItemButton(button)
+	button:SetItem(self.id)
+	if self.count or self.amount then
+		button:SetItemButtonCount(self.count or self.amount)
+	end
 end
 function ns.rewards.Item:Cache()
 	C_Item.RequestLoadItemDataByID(self.id)
@@ -196,7 +201,7 @@ end
 ns.rewards.Toy = ns.rewards.Item:extends({classname="Toy"})
 function ns.rewards.Toy:TooltipLabel() return TOY end
 function ns.rewards.Toy:Obtained(...)
-	if ns.CLASSIC then return GetItemCount(self.id, true) > 0 end
+	if ns.CLASSICERA then return GetItemCount(self.id, true) > 0 end
 	return self:super("Obtained", ...) ~= false and PlayerHasToy(self.id)
 end
 function ns.rewards.Toy:Notable(...) return ns.db.toy_notable and self:super("Notable", ...) end
@@ -204,35 +209,76 @@ function ns.rewards.Toy:Notable(...) return ns.db.toy_notable and self:super("No
 ns.rewards.Mount = ns.rewards.Item:extends({classname="Mount"})
 function ns.rewards.Mount:init(id, mountid, ...)
 	self:super("init", id, ...)
-	self.mountid = mountid
+	self.mountid = mountid or (C_MountJournal and C_MountJournal.GetMountFromItem and C_MountJournal.GetMountFromItem(self.id))
 end
 function ns.rewards.Mount:TooltipLabel() return MOUNT end
 function ns.rewards.Mount:Obtained(...)
 	if self:super("Obtained", ...) == false then return false end
-	if ns.CLASSIC then return GetItemCount(self.id, true) > 0 end
+	if ns.CLASSICERA then return GetItemCount(self.id, true) > 0 end
 	if not _G.C_MountJournal then return false end
-	if not self.mountid then
-		self.mountid = C_MountJournal.GetMountFromItem and C_MountJournal.GetMountFromItem(self.id)
-	end
 	return self.mountid and (select(11, C_MountJournal.GetMountInfoByID(self.mountid)))
 end
 function ns.rewards.Mount:Notable(...) return ns.db.mount_notable and self:super("Notable", ...) end
+function ns.rewards.Mount:SetTooltip(tooltip, ...)
+	if not C_MountJournal then
+		return self:super("SetTooltip", tooltip, ...)
+	end
+	local name, spellid, texture, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(self.mountid)
+	if not name then
+		tooltip:AddLine("mount:" .. self.mountid)
+		tooltip:AddLine(SEARCH_LOADING_TEXT, 0, 1, 1)
+		return
+	end
+	local _, description, source = C_MountJournal.GetMountInfoExtraByID(self.mountid)
+
+	tooltip:AddLine(name)
+	tooltip:AddTexture(texture)
+	tooltip:AddLine(description, 1, 1, 1, true)
+	tooltip:AddLine(source)
+	if isCollected then
+		tooltip:AddLine(USED, 1, 0, 0)
+	end
+end
 
 ns.rewards.Pet = ns.rewards.Item:extends({classname="Pet"})
 function ns.rewards.Pet:init(id, petid, ...)
 	self:super("init", id, ...)
-	self.petid = petid
+	self.petid = petid or (C_PetJournal and select(13, C_PetJournal.GetPetInfoByItemID(self.id)))
 end
 function ns.rewards.Pet:TooltipLabel() return TOOLTIP_BATTLE_PET end
 function ns.rewards.Pet:Obtained(...)
 	if self:super("Obtained", ...) == false then return false end
-	if ns.CLASSIC then return GetItemCount(self.id, true) > 0 end
-	if not self.petid then
-		self.petid = select(13, C_PetJournal.GetPetInfoByItemID(self.id))
-	end
+	if ns.CLASSICERA then return GetItemCount(self.id, true) > 0 end
 	return self.petid and C_PetJournal.GetNumCollectedInfo(self.petid) > 0
 end
 function ns.rewards.Pet:Notable(...) return ns.db.pet_notable and self:super("Notable", ...) end
+function ns.rewards.Pet:ObtainedTag(...)
+	if self.petid then
+		local owned, limit = C_PetJournal.GetNumCollectedInfo(self.petid)
+		if owned ~= 0 and owned ~= limit then
+			-- ITEM_PET_KNOWN is "Collected (%d/%d)" which is a bit long for this
+			return " " .. GENERIC_FRACTION_STRING:format(owned, limit) .. self:super("ObtainedTag", ...)
+		end
+	end
+	return self:super("ObtainedTag", ...)
+end
+function ns.rewards.Pet:SetTooltip(tooltip, ...)
+	if not C_PetJournal then
+		return self:super("SetTooltip", tooltip, ...)
+	end
+	local name, texture, _, mobid, source, description = C_PetJournal.GetPetInfoBySpeciesID(self.petid)
+	if not name then
+		tooltip:AddLine("pet:" .. self.petid)
+		tooltip:AddLine(SEARCH_LOADING_TEXT, 0, 1, 1)
+		return
+	end
+	local owned, limit = C_PetJournal.GetNumCollectedInfo(self.petid)
+	tooltip:AddLine(name)
+	tooltip:AddTexture(texture)
+	tooltip:AddLine(description, 1, 1, 1, true)
+	tooltip:AddLine(source)
+	tooltip:AddLine(ITEM_PET_KNOWN:format(owned, limit))
+end
 
 ns.rewards.Set = ns.rewards.Item:extends({classname="Set"})
 function ns.rewards.Set:init(id, setid, ...)

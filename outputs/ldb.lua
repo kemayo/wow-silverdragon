@@ -364,7 +364,9 @@ do
 
 	local ItemsCellProvider, ItemsCellPrototype = LibQTip:CreateCellProvider(CompletableCellProvider)
 	ItemsCellPrototype.atlas = "banker"
-	ItemsCellPrototype.completion_function = function(id) return ns.Loot.Status.Quest(id) ~= false and ns.Loot.Status.Transmog(id) ~= false end
+	ItemsCellPrototype.completion_function = function(id)
+		return ns.Loot.Status.Quest(id) ~= false and ns.Loot.Status.Transmog(id) ~= false
+	end
 	local TameableCellProvider, TameableCellPrototype = LibQTip:CreateCellProvider(TextureCellProvider)
 	function TameableCellPrototype:SetupTexture(id)
 		-- ClassHall-Circle-Hunter? classicon-hunter? groupfinder-icon-class-hunter? GarrMission_ClassIcon-Hunter? GarrMission_ClassIcon-Hunter-BeastMastery? ClassTrial-Hunter-Ring?
