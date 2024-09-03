@@ -23,11 +23,16 @@
 embeds.xml
 #@end-no-lib-strip@
 
-systems\class.lua
-systems\conditions.lua
-
 # the core
 core.lua
+
+# systems
+systems\_scaffolding.lua
+systems\class.lua
+systems\conditions.lua
+systems\rewards\base.lua
+systems\rewards\item.lua
+systems\_glue.lua
 
 shards.lua
 achievements.lua
