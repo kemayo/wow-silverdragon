@@ -213,15 +213,15 @@ do
 		addon.datasources[source] = addon.datasources[source] or {}
 		addon.treasuresources[source] = addon.treasuresources[source] or {}
 		for coord, point in pairs(points) do
-			if point.npc or point.vignette then
-				if defaults then
-					for k,v in pairs(defaults) do
-						if k == "note" and point[k] then
-							point[k] = v .. "\n" .. point[k]
-						end
-						point[k] = point[k] or v
+			if defaults then
+				for k,v in pairs(defaults) do
+					if k == "note" and point[k] then
+						point[k] = v .. "\n" .. point[k]
 					end
+					point[k] = point[k] or v
 				end
+			end
+			if point.npc or point.vignette then
 				local data = {
 					name=point.label,
 					locations={[uiMapID]={coord}},
@@ -294,7 +294,13 @@ do
 					if not addon.datasources[source][point.npc] then
 						addon.datasources[source][point.npc] = data
 					else
-						addon.datasources[source][point.npc].locations[uiMapID] = data.locations[uiMapID]
+						if not addon.datasources[source][point.npc].locations[uiMapID] then
+							addon.datasources[source][point.npc].locations[uiMapID] = data.locations[uiMapID]
+						else
+							for _, pcoord in ipairs(data.locations[uiMapID]) do
+								tInsertUnique(addon.datasources[source][point.npc].locations[uiMapID], pcoord)
+							end
+						end
 					end
 					if point.achievement and point.criteria then
 						if not ns.achievements[point.achievement] then
