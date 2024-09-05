@@ -197,6 +197,7 @@ end
 
 -- /script SilverDragon:GetModule("Overlay"):Update()
 function module:Update()
+    ns.ClearRunCaches()
     self:UpdateMinimapIcons()
     self:UpdateWorldMapIcons()
 end

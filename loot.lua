@@ -217,6 +217,7 @@ ns.Loot.Status = setmetatable({}, {__call = function(_, id, include_transmog, ..
 	if not ns.Loot.GetLootTable(id, ...) then
 		return
 	end
+	ns.ClearRunCaches()
 	local mount = ns.Loot.Status.Mount(id, ...)
 	local toy = ns.Loot.Status.Toy(id, ...)
 	local pet = ns.Loot.Status.Pet(id, ...)

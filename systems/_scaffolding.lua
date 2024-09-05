@@ -12,3 +12,8 @@ end})
 ns.render_string = function(...) return core:RenderString(...) end
 
 ns.run_caches = {}
+ns.ClearRunCaches = function()
+	for _, cache in pairs(ns.run_caches) do
+		table.wipe(cache)
+	end
+end
