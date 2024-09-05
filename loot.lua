@@ -5,7 +5,7 @@ local Debug = core.Debug
 local DebugF = core.DebugF
 
 local function safeunpack(table_or_value)
-	if type(table_or_value) == "table" then
+	if ns.xtype(table_or_value) == "table" then
 		return unpack(table_or_value)
 	end
 	return table_or_value

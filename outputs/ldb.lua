@@ -684,7 +684,7 @@ do
 		if options.help then
 			tooltip:AddSeparator()
 			local index
-			for _, line in ipairs(type(options.help) == "table" and options.help or default_help) do
+			for _, line in ipairs(ns.xtype(options.help) == "table" and options.help or default_help) do
 				index = tooltip:AddLine(line)
 				tooltip:SetLineTextColor(index, 0, 1, 1)
 			end

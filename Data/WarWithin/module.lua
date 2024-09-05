@@ -625,7 +625,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		vignette=6073,
 	},
 	-- [46003180] = {
-		label="Rowdy Rubble",
+	--     label="Rowdy Rubble",
 	--     quest=81515,
 	--     npc=220846,
 	--     vignette=6102,

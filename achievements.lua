@@ -621,7 +621,7 @@ do
 		return false
 	end
 	local function doTest(test, input, ...)
-		if type(input) == "table" and not input.__parent then
+		if ns.xtype(input) == "table" then
 			if input.alliance then
 				return doTest(test, faction == "Alliance" and input.alliance or input.horde, ...)
 			end

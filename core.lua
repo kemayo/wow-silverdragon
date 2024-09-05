@@ -228,7 +228,7 @@ do
 					loot=upgradeloot(point.loot),
 					notes=point.note,
 					active=point.active,
-					requires=point.require or point.hide_before,
+					requires=point.requires or point.hide_before,
 					vignette=point.vignette,
 					quest=point.quest,
 					hidden=point.hidden,
@@ -284,7 +284,7 @@ do
 						table.insert(data.locations[uiMapID], acoord)
 					end
 				end
-				if point.route and type(point.route) == "table" then
+				if point.route and ns.xtype(point.route) == "table" then
 					data.routes = {[uiMapID] = {point.route}}
 				end
 				if point.routes then
@@ -318,7 +318,7 @@ do
 end
 do
 	local function addQuestMobLookup(lookup, mobid, quest)
-		if type(quest) == "table" then
+		if ns.xtype(quest) == "table" then
 			if quest.alliance then
 				return addQuestMobLookup(lookup, mobid, faction == "Alliance" and quest.alliance or quest.horde)
 			end

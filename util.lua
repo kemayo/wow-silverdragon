@@ -148,7 +148,7 @@ do
 	local out = {}
 	function addon:RenderStringList(variant, ...)
 		if not ... then return "" end
-		if type(...) == "table" then return self:RenderStringList(variant, unpack(...)) end
+		if ns.xtype(...) == "table" then return self:RenderStringList(variant, unpack(...)) end
 		wipe(out)
 		for i=1,select("#", ...) do
 			table.insert(out, ("{%s:%d}"):format(variant, (select(i, ...))))
