@@ -151,3 +151,12 @@ function ns.rewards.Currency:SetTooltip(tooltip)
 		tooltip:SetHyperlink(C_CurrencyInfo.GetCurrencyLink(self.id, self.amount))
 	end
 end
+function ns.rewards.Currency:AddToItemButton(button, ...)
+	self:super("AddToItemButton", button, ...)
+	local info = C_CurrencyInfo.GetBasicCurrencyInfo(self.id, self.amount)
+	if info then
+		SetItemButtonQuality(button, info.quality)
+	end
+	-- could use info.displayAmount here, but I think this makes more sense:
+	SetItemButtonCount(button, self.amount)
+end

@@ -455,6 +455,8 @@ do
 				return select(2, C_Item.GetItemInfo(self.itemID))
 			end
 		end
+
+		button:SetItem(nil)
 	end)
 	local timerPool = CreateFramePool("Frame", UIParent, nil, function(framePool, frame)
 		frame:Hide()
@@ -616,9 +618,7 @@ do
 		end,
 		AddLoot = function(self, loot)
 			for _, item in ipairs(loot) do
-				if ns.IsA(item, ns.rewards.Item) then
-					self:AddItem(item)
-				end
+				self:AddItem(item)
 			end
 		end,
 		SizeForButtons = function(self)
