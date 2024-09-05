@@ -239,17 +239,19 @@ function module:ShowTooltip(pin)
             end)
         end
         if ns.mobdb[id].requires then
-            local metRequirements = not ns.conditions.check(ns.mobdb[id].requires)
+            local metRequirements = ns.conditions.check(ns.mobdb[id].requires)
+            local r, g, b = (metRequirements and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
             tooltip:AddLine(
                 core:RenderString(ns.conditions.summarize(ns.mobdb[id].requires), ns.mobdb[id]),
-                metRequirements and 0 or 1, metRequirements and 1 or 0, 0, true
+                r, g, b, true
             )
         end
         if ns.mobdb[id].active then
-            local isActive = not ns.conditions.check(ns.mobdb[id].active)
+            local isActive = ns.conditions.check(ns.mobdb[id].active)
+            local r, g, b = (isActive and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
             tooltip:AddLine(
                 core:RenderString(ns.conditions.summarize(ns.mobdb[id].active), ns.mobdb[id]),
-                isActive and 0 or 1, isActive and 1 or 0, 0, true
+                r, g, b, true
             )
         end
     else
