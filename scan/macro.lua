@@ -34,8 +34,9 @@ function module:OnInitialize()
 				end,
 				args = {
 					about = config.desc("Creates a button that can be used in a macro to target rares that might be nearby.\n\n"..
-							"Either create a macro that says: /click SilverDragonMacroButton\n\n"..
-							"...or click the \"Create Macro\" button below. It'll make a new macro called SilverDragon. Drag it to your bars and click it to target rares that might be nearby.",
+							"Either create a macro called \"SilverDragon\" or click the \"Create Macro\" button below, which will "..
+							"try to make it for you. Drag it to your bars and click it to target rares that might be nearby. There "..
+							"are strict limits on macro-length, so only the closest rares will be included.",
 							0),
 					verbose = {
 						type = "toggle",
@@ -57,68 +58,68 @@ function module:OnInitialize()
 	end
 end
 
-local macro = {}
 function module:Update()
 	if InCombatLockdown() then
 		self.waiting = true
 		return
 	end
 	if not self.db.profile.enabled then
-		self:GetMacroButton(1):SetAttribute("macrotext", "/script print(\"Scanning macro disabled\")")
 		return
 	end
 	Debug("Updating Macro")
 	-- Make sure the core macro is up to date
 	if GetMacroIndexByName("SilverDragon") then
-		EditMacro(GetMacroIndexByName("SilverDragon"), nil, self:GetMacroArguments())
+		-- 1023 for macrotext on a button, but...
+		EditMacro(GetMacroIndexByName("SilverDragon"), nil, self:GetMacroArguments(255))
 	end
+end
+
+local macro = {}
+function module:BuildTargetMacro(limit)
+	local VERBOSE_ANNOUNCE = "/run print(\"Checking %d nearby mobs\")"
 	-- first, create the macro text on the button:
 	local zone = HBD:GetPlayerZone()
-	local mobs = zone and ns.mobsByZone[zone]
-	local count = 0
-	if mobs then
-		for id in pairs(mobs) do
-			local name = core:NameForMob(id)
-			if
-				name and
-				not core:ShouldIgnoreMob(id, zone) and
-				core:IsMobInPhase(id, zone)
-			then
-				table.insert(macro, "/targetexact " .. name)
-				count = count + 1
+	local mobs = {}
+	local distances = {}
+	local length = self.db.profile.verbose and (#VERBOSE_ANNOUNCE + 1) or 0
+	for id in pairs(zone and ns.mobsByZone[zone] or {}) do
+		if
+			not core:ShouldIgnoreMob(id, zone) and
+			core:IsMobInPhase(id, zone) and
+			not ns:CompletionStatus(id)
+		then
+			local _, _, _, distance = core:GetClosestLocationForMob(id)
+			if distance then
+				distances[id] = distance
+				table.insert(mobs, id)
 			end
 		end
 	end
-	if count == 0 then
+	table.sort(mobs, function(a, b)
+		return distances[a] < distances[b]
+	end)
+	for _, id in ipairs(mobs) do
+		local name = core:NameForMob(id)
+		if name then
+			local line = "/targetexact " .. name
+			length = length + 1 + #line
+			if length > limit then
+				break
+			end
+			table.insert(macro, line)
+		end
+	end
+	if #macro == 0 then
 		table.insert(macro, "/script print(\"No mobs known to scan for\")")
 	elseif self.db.profile.verbose then
-		table.insert(macro, 1, ("/script print(\"Scanning for %d nearby mobs...\")"):format(count))
+		table.insert(macro, 1, VERBOSE_ANNOUNCE:format(#macro))
 	end
-	-- this is the 10.0.0+ SecureActionButton handler snafu:
-	local clickbutton = " LeftButton " .. (GetCVar("ActionButtonUseKeyDown") == "1" and "1" or "0")
 
-	local MAX_MACRO_LENGTH = 1023 -- this goes through RunMacroText, rather than actual-macros limit of 255
-	local len = 0
-	local n = 1
-	local start = 1
-	local BUFFER_FOR_CLICK = #("\n/click SilverDragonMacroButton2"..clickbutton) --update if changing below
-	for i, text in ipairs(macro) do
-		len = len + #text + 2 -- for the newline
-		local next_statement = macro[next(macro, i)]
-		if len > (MAX_MACRO_LENGTH - (math.max(BUFFER_FOR_CLICK, #(next_statement or "")))) or not next_statement then
-			local button = self:GetMacroButton(n)
-			n = n + 1
-			local mtext = ("\n"):join(unpack(macro, start, i))
-			if next_statement then
-				mtext = mtext .. "\n/click SilverDragonMacroButton"..n..clickbutton
-			end
-			button:SetAttribute("macrotext", mtext)
-			len = 0
-			start = i
-		end
-	end
-	DebugF("Updated macro: %d mobs, %d statements, %d buttons", count, #macro, n - 1)
+	local mtext = ("\n"):join(unpack(macro))
+	DebugF("Updated macro: %d statements, %d characters", #macro, #mtext)
+
 	table.wipe(macro)
+	return mtext
 end
 
 function module:CreateMacro()
@@ -138,10 +139,9 @@ function module:CreateMacro()
 		self:Print("|cffff0000A macro named SilverDragon already exists.|r")
 	end
 end
-function module:GetMacroArguments()
+function module:GetMacroArguments(limit)
 	--/script for i=1,GetNumMacroIcons() do if GetMacroIconInfo(i):match("SniperTraining$") then DEFAULT_CHAT_FRAME:AddMessage(i) end end
-	local clickbutton = " LeftButton " .. (GetCVar("ActionButtonUseKeyDown") == "1" and "1" or "0")
-	return 132222, "/click SilverDragonMacroButton"..clickbutton
+	return 132222, self:BuildTargetMacro(limit or 255)
 end
 
 function module:PLAYER_REGEN_ENABLED()
