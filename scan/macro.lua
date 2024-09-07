@@ -11,6 +11,7 @@ function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Macro", {
 		profile = {
 			enabled = true,
+			custom = true,
 			verbose = true,
 		},
 	})
@@ -42,6 +43,14 @@ function module:OnInitialize()
 						type = "toggle",
 						name = "Announce",
 						desc = "Output a little more, so you know what the macro is looking for",
+						order = 10,
+					},
+					custom = {
+						type = "toggle",
+						name = CUSTOM,
+						desc = "Include custom mobs in the macro. Because we don't know locations for them, they'll get priority "..
+							"for being added and might push actually-close mobs out of the macro if you have too many.",
+						order = 20,
 					},
 					create = {
 						type = "execute",
@@ -49,7 +58,8 @@ function module:OnInitialize()
 						desc = "Click this to create the macro",
 						func = function()
 							self:CreateMacro()
-						end
+						end,
+						order = 50,
 					},
 				},
 				-- order = 99,
@@ -82,13 +92,14 @@ function module:BuildTargetMacro(limit)
 	local mobs = {}
 	local distances = {}
 	local length = self.db.profile.verbose and (#VERBOSE_ANNOUNCE + 1) or 0
-	for id in pairs(zone and ns.mobsByZone[zone] or {}) do
+	for id, hasCoords, isCustom in core:IterateRelevantMobs(zone, true) do
 		if
+			(self.db.profile.custom or not isCustom) and
 			not core:ShouldIgnoreMob(id, zone) and
 			core:IsMobInPhase(id, zone) and
 			not ns:CompletionStatus(id)
 		then
-			local _, _, _, distance = core:GetClosestLocationForMob(id)
+			local distance = hasCoords and select(4, core:GetClosestLocationForMob(id)) or 0
 			if distance then
 				distances[id] = distance
 				table.insert(mobs, id)
