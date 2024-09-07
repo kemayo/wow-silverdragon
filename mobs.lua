@@ -101,7 +101,7 @@ function module:OptionsRequested(callback, options)
 			args = {
 				custom = {
 					type = "group",
-					name = "Custom",
+					name = CUSTOM,
 					order = 1,
 					args = {
 						add = {
@@ -137,7 +137,7 @@ function module:OptionsRequested(callback, options)
 				},
 				ignore = {
 					type = "group",
-					name = "Ignore",
+					name = IGNORE,
 					desc = "Mobs you just want to ignore, already",
 					args = {
 						add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'.", 1, function(info, id)

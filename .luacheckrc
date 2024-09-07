@@ -314,6 +314,7 @@ read_globals = {
     "CRITERIA_COMPLETED",
     "CTRL_KEY_TEXT",
     "CURRENCY",
+    "CUSTOM",
     "DEFAULT",
     "DRAG_MODEL",
     "DONE",
