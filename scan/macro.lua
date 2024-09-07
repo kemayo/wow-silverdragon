@@ -13,6 +13,7 @@ function module:OnInitialize()
 			enabled = true,
 			custom = true,
 			verbose = true,
+			relaxed = false,
 		},
 	})
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -51,6 +52,12 @@ function module:OnInitialize()
 						desc = "Include custom mobs in the macro. Because we don't know locations for them, they'll get priority "..
 							"for being added and might push actually-close mobs out of the macro if you have too many.",
 						order = 20,
+					},
+					relaxed = {
+						type = "toggle",
+						name = "Relaxed targeting",
+						desc = "Target with /tar instead of /targetexact. This will sometimes target the wrong mob, but it'll also let you fit more mobs into the macro.",
+						order = 30,
 					},
 					create = {
 						type = "execute",
@@ -112,7 +119,7 @@ function module:BuildTargetMacro(limit)
 	for _, id in ipairs(mobs) do
 		local name = core:NameForMob(id)
 		if name then
-			local line = "/targetexact " .. name
+			local line = (self.db.profile.relaxed and "/tar " or "/targetexact ") .. name
 			length = length + 1 + #line
 			if length > limit then
 				break
