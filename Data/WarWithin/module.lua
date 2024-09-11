@@ -49,7 +49,9 @@ ns.ISLEOFDORN = 2248
 ns.RINGINGDEEPS = 2214
 ns.HALLOWFALL = 2215
 ns.AZJKAHET = 2255
+ns.AZJKAHETLOWER = 2256
 ns.CITYOFTHREADS = 2213
+ns.CITYOFTHREADSLOWER = 2216
 
 -- ns.MAXLEVEL = {ns.conditions.QuestComplete(67030), ns.conditions.Level(70)}
 -- ns.DRAGONRIDING = ns.conditions.SpellKnown(376777)
@@ -304,6 +306,94 @@ core:RegisterTreasureData("WarWithin", {
 -- Rares
 
 local LOC_allkhazalgar = {[ns.KHAZALGAR]={},[ns.DORNOGAL]={},[ns.ISLEOFDORN]={},[ns.RINGINGDEEPS]={},[ns.HALLOWFALL]={},[ns.AZJKAHET]={},}
+
+-- World Bosses
+
+core:RegisterMobData("WarWithin", {
+	[229334] = {
+		name="Kordac",
+		quest=nil,
+		worldquest=nil,
+		locations={
+			-- [ns.ISLEOFDORN]={50005880},
+			[ns.ISLEOFDORN]={},
+		},
+		loot={
+			225730, -- Stone Gaze Ceinture
+			225731, -- Lightseeker's Robes
+			225732, -- Deep Dweller's Tabi
+			225733, -- Abyssal Tendril Tights
+			225734, -- Sturdy Chitinous Striders
+			225735, -- Dornish Warden's Coat
+			225745, -- Crystal Star Cuisses
+			225746, -- Girdle of the Gleaming Dawn
+			225748, -- Seal of the Silent Vigil
+		},
+	},
+	[220999] = {
+		name="Aggregation of Horrors",
+		quest=83466,
+		worldquest=82653,
+		locations={
+			-- [ns.RINGINGDEEPS]={65008760},
+			[ns.RINGINGDEEPS]={},
+		},
+		loot={
+			225730, -- Stone Gaze Ceinture
+			225731, -- Lightseeker's Robes
+			225732, -- Deep Dweller's Tabi
+			225733, -- Abyssal Tendril Tights
+			225734, -- Sturdy Chitinous Striders
+			225735, -- Dornish Warden's Coat
+			225745, -- Crystal Star Cuisses
+			225746, -- Girdle of the Gleaming Dawn
+			225749, -- Seal of the Void-Touched
+		},
+	},
+	[221224] = {
+		name="Shurrai",
+		quest=nil,
+		worldquest=nil,
+		locations={
+			-- [ns.HALLOWFALL]={45401740},
+			[ns.HALLOWFALL]={},
+		},
+		loot={
+			225730, -- Stone Gaze Ceinture
+			225731, -- Lightseeker's Robes
+			225732, -- Deep Dweller's Tabi
+			225733, -- Abyssal Tendril Tights
+			225734, -- Sturdy Chitinous Striders
+			225735, -- Dornish Warden's Coat
+			225745, -- Crystal Star Cuisses
+			225746, -- Girdle of the Gleaming Dawn
+			225750, -- Seal of the Abyssal Terror
+		},
+	},
+	[221067] = {
+		name="Orta",
+		quest=nil,
+		worldquest=nil,
+		locations={
+			-- [ns.CITYOFTHREADS]={17103340},
+			[ns.CITYOFTHREADS]={},
+			[ns.AZJKAHET]={},
+			[ns.AZJKAHETLOWER]={},
+			[ns.CITYOFTHREADSLOWER]={},
+		},
+		loot={
+			225730, -- Stone Gaze Ceinture
+			225731, -- Lightseeker's Robes
+			225732, -- Deep Dweller's Tabi
+			225733, -- Abyssal Tendril Tights
+			225734, -- Sturdy Chitinous Striders
+			225735, -- Dornish Warden's Coat
+			225745, -- Crystal Star Cuisses
+			225746, -- Girdle of the Gleaming Dawn
+			225751, -- Seal of the Broken Mountain
+		},
+	},
+}, true)
 
 -- Isle of Dorn
 
