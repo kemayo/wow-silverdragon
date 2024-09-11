@@ -23,6 +23,10 @@ function module:OnInitialize()
 	core.RegisterCallback(self, "IgnoreChanged", "Update")
 	core.RegisterCallback(self, "CustomChanged", "Update")
 
+	C_Timer.NewTicker(5, function()
+		self:Update()
+	end)
+
 	local config = core:GetModule("Config", true)
 	if config then
 		config.options.args.scanning.plugins.macro = {
@@ -76,11 +80,11 @@ function module:OnInitialize()
 end
 
 function module:Update()
-	if InCombatLockdown() then
-		self.waiting = true
+	if not self.db.profile.enabled then
 		return
 	end
-	if not self.db.profile.enabled then
+	if InCombatLockdown() then
+		self.waiting = true
 		return
 	end
 	Debug("Updating Macro")
