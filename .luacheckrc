@@ -9,6 +9,7 @@ ignore = {
     "211", -- Unused local variable
     "212", -- Unused argument
     "213", -- Unused loop variable
+    "231", -- Local variable is set but never accessed
     "311", -- Value assigned to a local variable is unused
     "432", -- Shadowing an upvalue argument
     "512", -- Loop is executed at most once
