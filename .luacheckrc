@@ -222,6 +222,7 @@ read_globals = {
     "MountJournal",
     "DEFAULT_CHAT_FRAME",
     "GameFontHighlightSmall",
+    "MacroFrame",
 
     -- FrameXML API
     "ChatEdit_InsertLink",

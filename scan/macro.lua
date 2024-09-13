@@ -87,6 +87,10 @@ function module:Update()
 		self.waiting = true
 		return
 	end
+	if MacroFrame and MacroFrame:IsVisible() then
+		-- EditMacro will reset any manual editing in the macro frame
+		return
+	end
 	Debug("Updating Macro")
 	-- Make sure the core macro is up to date
 	if GetMacroIndexByName("SilverDragon") then
