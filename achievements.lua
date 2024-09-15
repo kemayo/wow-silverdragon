@@ -565,6 +565,7 @@ local achievements = {
 		-- The rest have IDs associated, and are picked up fine
 		[216549] = 7, -- Nightclaw
 		[215590] = 8, -- Shadowpouncer
+		[215593] = 9, -- Purrlock
 		[215606] = 9, -- Purrlock
 		[215041] = 10, -- Miral Murder-Mittens
 		[219412] = 11, -- Fuzzy

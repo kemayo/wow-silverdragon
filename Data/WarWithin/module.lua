@@ -53,6 +53,7 @@ ns.AZJKAHETLOWER = 2256
 ns.CITYOFTHREADS = 2213
 ns.CITYOFTHREADSLOWER = 2216
 
+ns.WORLDQUESTS = ns.conditions.QuestComplete(79573)
 -- ns.MAXLEVEL = {ns.conditions.QuestComplete(67030), ns.conditions.Level(70)}
 -- ns.DRAGONRIDING = ns.conditions.SpellKnown(376777)
 
@@ -676,6 +677,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		quest=82203,
 		npc=219284,
 		loot={
+			ns.rewards.Currency(ns.CURRENCY_DORNOGAL, 150, {quest=85159}),
 			226117, -- Dalaran Guardian's Arcanotool
 			226118, -- Arcane Prisoner's Puncher
 			226119, -- Arcane Sharpshooter's Crossbow
@@ -689,6 +691,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 		quest=82205,
 		npc=222380,
 		loot={
+			ns.rewards.Currency(ns.CURRENCY_DORNOGAL, 150, {quest=85161}),
 			226112, -- Rotfist Flesh Carver
 			226115, -- Contaminating Cleaver
 			226116, -- Coagulating Phlegm Churner
@@ -1399,6 +1402,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		quest=82563,
 		npc=206977, -- Disturbed Dirt (206978) > Fungus Growth (206980) > Fungus Mound (206981) > Fungal Mass (206993) > Parasidious
 		loot={
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150, {quest=84057}),
 			221250, -- Creeping Lasher Machete
 			221264, -- Fungarian Mystic's Cluster
 			223005, -- String of Fungal Fruits
@@ -1447,7 +1451,6 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 	[61380753] = {},
 	[62823857] = {},
 	[68123014] = {},
-	[72066566] = {},
 	[72804152] = {},
 }, {
 	label="Beledar's Spawn",
@@ -1479,6 +1482,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		label="Deathtide",
 		npc=221753,
 		loot={
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150, {quest=85165}),
 			223920, -- Slime Deflecting Stopper
 			223921, -- Ever-Oozing Signet
 			225997, -- Earthen Adventurer's Spaulders
@@ -1577,7 +1581,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		}, true),
 		vignette=6129,
 	},
-	[68876480] = {
+	[66536946] = {
 		label="Maddened Siegebomber",
 		criteria=69663,
 		quest=81706, -- 84075
@@ -1590,8 +1594,10 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		}),
 		vignette=6138,
 		route={
-			68876480, 69006715, 67206730, 65596605, 63576530, 61636444, 61006640,
-			62106844, 64256750, 65356414, 66936243,
+			66536946, 66056803, 65616706, 65096620, 64446559, 63706526, 62926513, 62146530,
+			61486584, 61396696, 61826791, 62536809, 63166813, 63746786, 64146720, 65386409,
+			65706345, 66026301, 66606247, 67206246, 67696278, 68086319, 68356370, 68806483,
+			69006550, 69096626, 69076707, 68876785, 68436846, 67866891,
 			loop=true,
 		},
 		note="Patrols around the area, fighting other mobs",
@@ -1712,7 +1718,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 		label="Kaheti Bladeguard",
 		criteria=69670,
 		quest=82078,
-		npc=216052, -- Skirmisher Sa'ztyk
+		npc=216052, -- Skirmisher Sa'zryk
 		loot=addThreadsRep(50, 84082, {
 			223915, -- Nerubian Orator's Stiletto
 			223916, -- Nerubian Cutthroat's Reach
@@ -1720,7 +1726,8 @@ ns.RegisterPoints(ns.AZJKAHET, {
 			223939, -- Esteemed Nerubian's Mantle
 		}),
 		vignette=6204,
-		note="Patrols the area",
+		note="Spawns at the top, teleports to the bottom of the path, walks back to the top, then repeats",
+		route={62940509, 62430707, 62270757, 61930840, 61740856, 61520848, 61330831, 61210803, 61210771},
 	},
 	[64590667] = {
 		label="Deepcrawler Tx'kesh",
@@ -1793,7 +1800,7 @@ ns.RegisterPoints(2256, {
 ns.RegisterPoints(ns.AZJKAHET, {
 	[63409500] = {
 		label="The One Left",
-		quest=nil,
+		quest=82290,
 		npc=216047,
 		loot=addThreadsRep(50, 85167, {
 			221246, -- Fierce Beast Staff
@@ -1803,6 +1810,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 			225998, -- Earthen Adventurer's Cloak
 		}),
 		path={63489512, 63959536, 64129539, 65349489, 65429466, 65279345},
+		vignette=6266,
 	},
 }, {levels=true})
 
