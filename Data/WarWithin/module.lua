@@ -88,6 +88,14 @@ ns.PROF_WW_MINING = 2881
 ns.PROF_WW_SKINNING = 2882
 ns.PROF_WW_TAILORING = 2883 -- spell:
 
+local addThreadsRep = function(amount, quest, loot, append)
+	local extra = quest and {quest=quest}
+	table.insert(loot, append and #loot+1 or 1, ns.rewards.Currency(ns.CURRENCY_SEVERED_WEAVER, amount, extra))
+	table.insert(loot, append and #loot+1 or 2, ns.rewards.Currency(ns.CURRENCY_SEVERED_GENERAL, amount, extra))
+	table.insert(loot, append and #loot+1 or 3, ns.rewards.Currency(ns.CURRENCY_SEVERED_VIZIER, amount, extra))
+	return loot
+end
+
 -- Treasures
 
 core:RegisterTreasureData("WarWithin", {
@@ -301,6 +309,226 @@ core:RegisterTreasureData("WarWithin", {
 		loot={{224783, toy=true}},
 		notes="Cave behind the waterfall; open chests until you find the key",
 		level=71,
+	},
+
+	-- Hallowfall
+	[6367] = {
+		name="Caesper",
+		achievement=40848, criteria=69692,
+		quest=83263,
+		loot={
+			225639, -- Recipe: Exquisitely Eviscerated Muscle
+			225592, -- Exquisitely Eviscerated Muscle
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		notes="Bring {item:225238:Meaty Haunch} from {npc:217645:Torran Dellain}, give to {npc:225948:Caesper}, follow to the treasure",
+		level=73,
+	},
+	[6366] = {hidden=true}, -- Disturbed Lynx Treasure
+	[6368] = {hidden=true}, -- Caesper post-feeding
+	[6370] = {
+		name="Smuggler's Treasure",
+		achievement=40848, criteria=69693,
+		quest=83273,
+		loot={
+			226021, -- Jar of Pickles
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		notes="Get the key from the {npc:226025:Dead Arathi} below",
+		level=73,
+	},
+	[6372] = {
+		name="Dark Ritual",
+		achievement=40848, criteria=69694,
+		quest=83284,
+		loot={
+			225693, -- Shadowed Essence
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		notes="In cave; use the book, defeat the summoned monsters",
+		level=73,
+	},
+	[6371] = {hidden=true}, -- post-defeat
+	[6373] = {
+		name="Arathi Loremaster",
+		achievement=40848, criteria=69695,
+		quest=83298, -- questions trip 83300, 83301, 83302, 83303, 83304, 83305
+		loot={
+			{225659, toy=true}, -- Arathi Book Collection
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		notes="Answer riddles from {npc:221630:Ryfus Sacredpyr}; you need to find the books for {achievement:40622:Biblo Archivist} for the correct answers to appear",
+		level=73, -- not to talk to him, but to get any of the books for answers...
+	},
+	[6174] = {
+		name="Jewel of the Cliffs",
+		achievement=40848, criteria=69697,
+		quest=81971,
+		loot={
+			224580, -- Massive Sapphire Chunk
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		notes="High up on the rocks",
+		level=75,
+	},
+	[6175] = {
+		name="Priory Satchel",
+		achievement=40848, criteria=69698,
+		quest=81972,
+		loot={
+			224578, -- Arathor Courier's Satchel
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		level=75,
+		notes="Hanging from the cathedral",
+	},
+	[6177] = {
+		name="Lost Necklace", -- Lost Memento
+		achievement=40848, criteria=69699,
+		quest=81978,
+		loot={
+			224575, -- Lightbearer's Pendant
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		level=75,
+	},
+	[6098] = {
+		name="Illuminated Footlocker",
+		achievement=40848, criteria=69701,
+		quest=81468,
+		loot={
+			{224552, toy=true}, -- Cave Spelunker's Torch
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		notes="In cave. Catch falling glimmers from {npc:220703:Starblessed Glimmerfly} until you get {spell:442529:Glimmering Illumination}",
+		level=73,
+	},
+	[5989] = {
+		name="Spore-covered Coffer",
+		achievement=40848, criteria=69702,
+		quest=79275,
+		loot={
+			-- alchemy mats
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		notes="In cave",
+		level=73,
+	},
+	[6181] = {
+		name="Sky-Captains' Sunken Cache",
+		achievement=40848, criteria=69700,
+		quest=82005,
+		loot={
+			{224554, toy=true}, -- Silver Linin' Scepter
+			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150),
+		},
+		active={ns.conditions.QuestComplete(82012), ns.conditions.QuestComplete(82026), ns.conditions.QuestComplete(82024), ns.conditions.QuestComplete(82025)},
+		notes="Talk to four skyship captains flying around the zone to make this appear",
+	},
+
+	-- Azj-Kahet
+	[6288] = {
+		name="Concealed Contraband",
+		achievement=40828, criteria=70381,
+		quest=82525,
+		loot=addThreadsRep(50, false, {
+			220228, -- Quartz Growth
+			220237, -- Shining Amethyst Cluster
+			220224, -- Iridescent Integument
+		}, true),
+		level=74,
+		path={33846068, 33796026, 34015980, 34365949, 35555918},
+	},
+	[6289] = {
+		name="\"Weaving Supplies\"",
+		achievement=40828, criteria=69643,
+		quest=82527,
+		loot=addThreadsRep(50, false, {{225347, toy=true}}, true), -- Web-Vandal's Spinning Wheel
+		level=74,
+		notes="Collect {item:223901:Violet Silk Scrap}, {item:223902:Crimson Silk Scrap}, {item:223903:Gold Silk Scrap} from the edges of the nearby platform to unlock",
+		nearby={
+			74794282, -- Violet Silk Scrap
+			72683967, -- Crimson Silk Scrap
+			74183772, -- Gold Silk Scrap
+		},
+	},
+	[6291] = {
+		name="Nest Egg",
+		achievement=40828, criteria=69645,
+		quest=82529,
+		loot=addThreadsRep(50, false, {{221760, pet=4513}}, true), -- Bonedrinker
+		level=74,
+		notes="Webbed to the ceiling",
+	},
+	[6280] = {
+		name="Disturbed Soil",
+		achievement=40828, criteria=69646,
+		quest=82718,
+		loot=addThreadsRep(50, false, {224816}, true), -- Nerubian Almanac
+	},
+	[6283] = {
+		name="Missing Scout's Pack",
+		achievement=40828, criteria=69650,
+		quest=82722,
+		loot=addThreadsRep(50, false, {
+			220222, -- Everburning Lump
+			211879, -- Algari Healing Potion
+		}, true), -- grays and commendations
+	},
+	[6282] = {
+		name="Niffen Stash",
+		-- didn't appear until after I hit 73? Could just be a despawn-when-looted though...
+		achievement=40828, criteria=69649,
+		quest=82721,
+		loot=addThreadsRep(50, false, {
+			204730, -- Grub Grub
+			204790, -- Strong Sniffin' Soup for Niffen
+			204838, -- Discarded Toy
+			204842, -- Red Sparklepretty
+			213261, -- Niffen Smell Pouch
+		}, true),
+		notes="Hanging under the bridge",
+	},
+	[6285] = {
+		name="Silk-spun Supplies",
+		-- Wasn't around for ages; despawn-when-looted?
+		achievement=40828, criteria=69647,
+		quest=82719,
+		loot=addThreadsRep(50, false, {
+			224828, -- Weavercloth
+			224441, -- Weavercloth Bandage
+		}, true),
+		path={67462755, 66882761, 66692773, 66342805, 66142810, 65582772},
+	},
+
+	-- Azj-Kahet (Lower)
+	[6287] = {
+		name="Memory Cache",
+		achievement=40828, criteria=69615,
+		quest=82520,
+		loot=addThreadsRep(50, false, {{225544, pet=4599}}, true), -- Mind Slurp
+		notes="Get {spell:420847:Unseeming Shift} from a nearby Extractor Storage, then kill {npc:223908:Corrupted Memory} here for a {item:223870:Cache Key}",
+	},
+
+	-- City of Threads
+	[6290] = {
+		name="Trapped Trove",
+		achievement=40828, criteria=69644,
+		quest=82727,
+		loot=addThreadsRep(50, false, {{222966, pet=4473}}, true), -- Spinner
+		level=74,
+		notes="In the hanging building; navigate through the web traps",
+	},
+	[6281] = {
+		name="Nerubian Offerings",
+		achievement=40828, criteria=69648,
+		quest=82720,
+		loot=addThreadsRep(50, false, {
+			225543, -- Bloodied Idol
+			220236, -- Sanguineous Sac
+			223899, -- Shadowed Appendage
+		}, true),
+		notes="In a nook beneath the platform",
 	},
 }, true)
 
@@ -1532,14 +1760,6 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 -- })
 
 -- Azj-Kahet
-
-local addThreadsRep = function(amount, quest, loot, append)
-	local extra = quest and {quest=quest}
-	table.insert(loot, append and #loot+1 or 1, ns.rewards.Currency(ns.CURRENCY_SEVERED_WEAVER, amount, extra))
-	table.insert(loot, append and #loot+1 or 2, ns.rewards.Currency(ns.CURRENCY_SEVERED_GENERAL, amount, extra))
-	table.insert(loot, append and #loot+1 or 3, ns.rewards.Currency(ns.CURRENCY_SEVERED_VIZIER, amount, extra))
-	return loot
-end
 
 ns.RegisterPoints(ns.AZJKAHET, {
 	[61712962] = {
