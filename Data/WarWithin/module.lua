@@ -426,6 +426,27 @@ core:RegisterTreasureData("WarWithin", {
 		notes="Talk to four skyship captains flying around the zone to make this appear",
 	},
 
+	-- Hallowfall (non-achievement)
+	[6537] = {
+		label="Crabber Supplies",
+		quest=84342,
+		loot={
+			226018, -- Darkened Arathi Cape (cosmetic)
+			206350, -- Radiant Remnant
+			ns.rewards.Currency(ns.CURRENCY_RESONANCE, 5),
+		},
+		locations={[ns.HALLOWFALL]={62551633}},
+	},
+	[6103] = {
+		label="Fisherman's Pouch",
+		quest=81518,
+		loot={
+			206350, -- Radiant Remnant
+			ns.rewards.Currency(ns.CURRENCY_RESONANCE, 3),
+		},
+		locations={[ns.HALLOWFALL]={56091455}},
+	},
+
 	-- Azj-Kahet
 	[6288] = {
 		name="Concealed Contraband",
@@ -531,6 +552,78 @@ core:RegisterTreasureData("WarWithin", {
 		notes="In a nook beneath the platform",
 	},
 }, true)
+
+-- Hallowfall treasures with shared loot:
+do
+	local standard = {
+		loot={
+			226019, -- Darkened Arathi Shoulderguards (cosmetic)
+			206350, -- Radiant Remnant
+			ns.rewards.Currency(ns.CURRENCY_RESONANCE, 3),
+		},
+		notes="Only visible with a light source ({item:211872:Patrol Torch}, {item:220756:Flickering Torch}, {item:217344:Sentry Flare Launcher}, etc)",
+		hide_before=ns.WORLDQUESTS,
+	}
+	local function point(data)
+		MergeTable(data, standard)
+		return data
+	end
+	core:RegisterTreasureData("WarWithin", {
+		[6352] = point{
+			label="Hillhelm Lunchbox",
+			quest=82996,
+			locations={[ns.HALLOWFALL]={62013176, 65193399}},
+		},
+		[6536] = point{
+			label="Surveyor's Box",
+			quest=34341,
+			locations={[ns.HALLOWFALL]={65432715}},
+		},
+		[6071] = point{
+			label="Harvest Box",
+			quest=80420,
+			locations={[ns.HALLOWFALL]={65652946}},
+		},
+		[6533] = point{
+			label="Fieldhand Stash",
+			quest=84337,
+			locations={[ns.HALLOWFALL]={64492879}},
+		},
+	}, true)
+end
+do
+	local standard = {
+		loot={
+			226016, -- Darkened Tabard of the Arathi (cosmetic)
+			206350, -- Radiant Remnant
+			ns.rewards.Currency(ns.CURRENCY_RESONANCE, 3),
+		},
+		note="Only visible with a light source ({item:211872:Patrol Torch}, {item:220756:Flickering Torch}, {item:217344:Sentry Flare Launcher}, etc)",
+		hide_before=ns.WORLDQUESTS,
+	}
+	local function point(data)
+		MergeTable(data, standard)
+		return data
+	end
+	core:RegisterTreasureData("WarWithin", {
+		[6108] = point{
+			label="Captain Lancekat's Discretionary Funds",
+			quest=81612,
+			path=66011863,
+			locations={[ns.HALLOWFALL]={66561514}},
+		},
+		[6092] = point{
+			label="Farmhand Stash",
+			quest=80590,
+			locations={[ns.HALLOWFALL]={61633265, 63073074}},
+		},
+		[6534] = point{
+			label="Old Rotting Crate",
+			quest=84339,
+			locations={[ns.HALLOWFALL]={64513159, 64903330}},
+		},
+	}, true)
+end
 
 -- Rares
 
