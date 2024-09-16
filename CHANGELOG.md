@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2024.23
+
+* War Within data updates: added a few missing weekly reputation quests, filled out the loot in Treasures vignettes for Hallowfall and Azj-Kahet
+
 ## Changed in v2024.22
 
 * Don't update the macro if the Blizzard macro frame is visible -- it resets edits you're making to macros.
