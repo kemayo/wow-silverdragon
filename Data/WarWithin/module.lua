@@ -674,8 +674,8 @@ core:RegisterMobData("WarWithin", {
 	},
 	[221224] = {
 		name="Shurrai",
-		quest=nil,
-		worldquest=nil,
+		quest=83467,
+		worldquest=81653,
 		locations={
 			-- [ns.HALLOWFALL]={45401740},
 			[ns.HALLOWFALL]={},
