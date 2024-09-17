@@ -1792,15 +1792,11 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 })
 
 -- Deathtide
-local deathtide = ns.nodeMaker{
-	achievement=40851,
-	criteria=69717,
-	quest=81880,
-	level=80, -- required to loot the offering/jar
-}
 ns.RegisterPoints(ns.HALLOWFALL, {
 	[44744241] = {
 		label="Deathtide",
+		achievement=40851, criteria=69717,
+		quest=81880,
 		npc=221753,
 		loot={
 			ns.rewards.Currency(ns.CURRENCY_ARATHI, 150, {quest=85165}),
@@ -1812,34 +1808,7 @@ ns.RegisterPoints(ns.HALLOWFALL, {
 		active=ns.conditions.Item(220123), -- Ominous Offering
 		note="Create an {item:220123:Ominous Offering} from {item:220124:Jar of Mucus} (|A:playerpartyblip:::::0:255:127|a) + {item:220122} (|A:playerpartyblip:::::0:0:255|a) to summon",
 	},
-}, deathtide{})
-ns.RegisterPoints(ns.HALLOWFALL, {
-	-- Jar of Mucus
-	[48001668] = {route={48001668, 44744241, highlightOnly=true}},
-}, deathtide{
-	label="{item:220124}",
-	loot={220124},
-	texture=ns.atlas_texture("playerpartyblip",{r=0,g=1,b=0.5,}),
-	minimap=true,
-	note="Take to {npc:221753} @ 44.7,42.4",
 })
-ns.RegisterPoints(ns.HALLOWFALL, {
-	 -- Offering of Pure Water
-	[28925120] = {route={28925120, 44744241, highlightOnly=true}},
-	[34185782] = {route={34185782, 44744241, highlightOnly=true}},
-	[34365357] = {route={34365357, 44744241, highlightOnly=true}},
-	[43451413] = {route={43451413, 44744241, highlightOnly=true}},
-	[50094966] = {route={50094966, 44744241, highlightOnly=true}},
-	[53771913] = {route={53771913, 44744241, highlightOnly=true}},
-	[55142344] = {route={55142344, 44744241, highlightOnly=true}},
-}, deathtide{
-	label="{item:220122}",
-	loot={220122},
-	texture=ns.atlas_texture("playerpartyblip",{r=0,g=0,b=1,}),
-	minimap=true,
-	note="Take to {npc:221753} @ 44.7,42.4",
-})
-
 
 -- ns.RegisterPoints(ns.HALLOWFALL, {
 --     [62650611] = {
