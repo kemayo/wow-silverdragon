@@ -629,9 +629,8 @@ end
 
 local LOC_allkhazalgar = {[ns.KHAZALGAR]={},[ns.DORNOGAL]={},[ns.ISLEOFDORN]={},[ns.RINGINGDEEPS]={},[ns.HALLOWFALL]={},[ns.AZJKAHET]={},}
 
--- World Bosses
-
 core:RegisterMobData("WarWithin", {
+	-- World Bosses
 	[229334] = {
 		name="Kordac",
 		quest=nil,
@@ -715,6 +714,12 @@ core:RegisterMobData("WarWithin", {
 			225751, -- Seal of the Broken Mountain
 		},
 	},
+
+	-- Xal'atath appears sometimes to monologue at you, but she's just a non-interactable story/dungeon element:
+	[229244] = {name="Xal'atath", hidden=true},
+	[229536] = {name="Xal'atath", hidden=true},
+	[229635] = {name="Xal'atath", hidden=true},
+	[230937] = {name="Xal'atath", hidden=true},
 }, true)
 
 -- Isle of Dorn
