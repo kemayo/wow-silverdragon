@@ -143,7 +143,7 @@ function dataProvider:DrawSegment(coord1, coord2, ...)
 
     -- find an appropriate number of segments
     local distance = math.sqrt(((x2-x1) * 1.85)^2 + (y2-y1)^2)
-    local segments = floor(distance / 0.015)
+    local segments = max(floor(distance / 0.015), 1)
 
     for i=0, segments do
         segmented[#segmented + 1] = core:GetCoord(
