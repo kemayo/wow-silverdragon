@@ -129,8 +129,9 @@ do
 	local mount_iter = make_class_iter(ns.rewards.Mount)
 	local pet_iter = make_class_iter(ns.rewards.Pet)
 	local toy_iter = make_class_iter(ns.rewards.Toy)
+	local handledClasses = {[ns.rewards.Mount]=true, [ns.rewards.Pet]=true, [ns.rewards.Toy]=true}
 	local regular_iter = make_iter(function(item)
-		return item:getClass() == ns.rewards.Item
+		return not handledClasses[item:getClass()]
 	end)
 	local quest_iter = make_iter(function(item) return item.quest end)
 
