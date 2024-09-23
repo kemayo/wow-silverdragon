@@ -1,6 +1,5 @@
 local myname, ns = ...
 
-local COSMETIC_COLOR = CreateColor(1, 0.5, 1)
 local materials = {
 	[Enum.ItemArmorSubclass.Cloth] = true,
 	[Enum.ItemArmorSubclass.Leather] = true,
@@ -8,7 +7,10 @@ local materials = {
 	[Enum.ItemArmorSubclass.Plate] = true,
 }
 
-ns.rewards.Item = ns.rewards.Reward:extends({classname="Item", spell=false})
+ns.rewards.Item = ns.rewards.Reward:extends({classname="Item"})
+
+ns.rewards.Item.COSMETIC_COLOR = CreateColor(1, 0.5, 1)
+ns.rewards.Item.NOTABLE_TRANSMOG_COLOR = CreateColor(1, 0, 1)
 
 function ns.rewards.Item:Name(color)
 	local name, link = C_Item.GetItemInfo(self.id)
@@ -28,30 +30,27 @@ function ns.rewards.Item:TooltipLabel()
 		label = itemSubtype
 	end
 	if label and ns.IsCosmeticItem(self.id) then
-		label = TEXT_MODE_A_STRING_VALUE_TYPE:format(label, COSMETIC_COLOR:WrapTextInColorCode(ITEM_COSMETIC))
+		label = TEXT_MODE_A_STRING_VALUE_TYPE:format(label, self.COSMETIC_COLOR:WrapTextInColorCode(ITEM_COSMETIC))
 	end
 	return label
 end
-function ns.rewards.Item:Icon() return (select(5, C_Item.GetItemInfoInstant(self.id))) end
-function ns.rewards.Item:Obtained(for_tooltip)
-	local result = self:super("Obtained", for_tooltip)
-	if self.spell then
-		-- can't use the tradeskill functions + the recipe-spell because that data's only available after the tradeskill window has been opened...
-		local info = C_TooltipInfo.GetItemByID(self.id)
-		if info then
-			for _, line in ipairs(info.lines) do
-				if line.leftText and string.match(line.leftText, _G.ITEM_SPELL_KNOWN) then
-					return true
-				end
-			end
-		end
-		result = false
+function ns.rewards.Item:TooltipLabelColor()
+	if ns.db.show_npcs_emphasizeNotable and self:Notable() and self.CanLearnAppearance(self.id) then
+		return self.NOTABLE_TRANSMOG_COLOR
 	end
+	return self:super('TooltipLabelColor')
+end
+function ns.rewards.Item:Icon() return (select(5, C_Item.GetItemInfoInstant(self.id))) end
+function ns.rewards.Item:Obtained(ignore_notable, ...)
+	local result = self:super("Obtained", ignore_notable, ...)
 	if ns.CLASSICERA then return result and GetItemCount(self.id, true) > 0 end
-	if (for_tooltip or ns.db.transmog_notable) and self.CanLearnAppearance(self.id) then
+	if not result and (ignore_notable or ns.db.transmog_notable) and self.CanLearnAppearance(self.id) then
 		return self.HasAppearance(self.id, ns.db.transmog_specific)
 	end
 	return result
+end
+function ns.rewards.Item:IsTransmog()
+	return self.CanLearnAppearance(self.id)
 end
 function ns.rewards.Item:MightDrop()
 	-- We think an item might drop if it either has no spec information, or
@@ -205,31 +204,41 @@ function ns.rewards.Toy:Obtained(...)
 	return self:super("Obtained", ...) ~= false and PlayerHasToy(self.id)
 end
 function ns.rewards.Toy:Notable(...) return ns.db.toy_notable and self:super("Notable", ...) end
+function ns.rewards.Toy:Cache()
+	self:super("Cache")
+	PlayerHasToy(self.id)
+end
 
 ns.rewards.Mount = ns.rewards.Item:extends({classname="Mount"})
 function ns.rewards.Mount:init(id, mountid, ...)
 	self:super("init", id, ...)
-	self.mountid = mountid or (C_MountJournal and C_MountJournal.GetMountFromItem and C_MountJournal.GetMountFromItem(self.id))
+	self.mountid = mountid
+end
+function ns.rewards.Mount:MountID()
+	if not self.mountid then
+		self.mountid = C_MountJournal and C_MountJournal.GetMountFromItem and C_MountJournal.GetMountFromItem(self.id)
+	end
+	return self.mountid
 end
 function ns.rewards.Mount:TooltipLabel() return MOUNT end
 function ns.rewards.Mount:Obtained(...)
 	if self:super("Obtained", ...) == false then return false end
 	if ns.CLASSICERA then return GetItemCount(self.id, true) > 0 end
 	if not _G.C_MountJournal then return false end
-	return self.mountid and (select(11, C_MountJournal.GetMountInfoByID(self.mountid)))
+	return self:MountID() and (select(11, C_MountJournal.GetMountInfoByID(self:MountID())))
 end
 function ns.rewards.Mount:Notable(...) return ns.db.mount_notable and self:super("Notable", ...) end
 function ns.rewards.Mount:SetTooltip(tooltip, ...)
-	if not C_MountJournal then
+	if not (C_MountJournal and self:MountID()) then
 		return self:super("SetTooltip", tooltip, ...)
 	end
-	local name, spellid, texture, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(self.mountid)
+	local name, spellid, texture, _, _, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(self:MountID())
 	if not name then
-		tooltip:AddLine("mount:" .. self.mountid)
+		tooltip:AddLine("mount:" .. self:MountID())
 		tooltip:AddLine(SEARCH_LOADING_TEXT, 0, 1, 1)
 		return
 	end
-	local _, description, source = C_MountJournal.GetMountInfoExtraByID(self.mountid)
+	local _, description, source = C_MountJournal.GetMountInfoExtraByID(self:MountID())
 
 	tooltip:AddLine(name)
 	tooltip:AddTexture(texture)
@@ -239,22 +248,32 @@ function ns.rewards.Mount:SetTooltip(tooltip, ...)
 		tooltip:AddLine(USED, 1, 0, 0)
 	end
 end
+function ns.rewards.Mount:Cache()
+	self:super("Cache")
+	if C_MountJournal and self:MountID() then C_MountJournal.GetMountInfoByID(self:MountID()) end
+end
 
 ns.rewards.Pet = ns.rewards.Item:extends({classname="Pet"})
 function ns.rewards.Pet:init(id, petid, ...)
 	self:super("init", id, ...)
-	self.petid = petid or (C_PetJournal and select(13, C_PetJournal.GetPetInfoByItemID(self.id)))
+	self.petid = petid
+end
+function ns.rewards.Pet:PetID()
+	if not self.petid then
+		self.petid = C_PetJournal and select(13, C_PetJournal.GetPetInfoByItemID(self.id))
+	end
+	return self.petid
 end
 function ns.rewards.Pet:TooltipLabel() return TOOLTIP_BATTLE_PET end
 function ns.rewards.Pet:Obtained(...)
 	if self:super("Obtained", ...) == false then return false end
 	if ns.CLASSICERA then return GetItemCount(self.id, true) > 0 end
-	return self.petid and C_PetJournal.GetNumCollectedInfo(self.petid) > 0
+	return self:PetID() and C_PetJournal.GetNumCollectedInfo(self:PetID()) > 0
 end
 function ns.rewards.Pet:Notable(...) return ns.db.pet_notable and self:super("Notable", ...) end
 function ns.rewards.Pet:ObtainedTag(...)
-	if self.petid then
-		local owned, limit = C_PetJournal.GetNumCollectedInfo(self.petid)
+	if self:PetID() then
+		local owned, limit = C_PetJournal.GetNumCollectedInfo(self:PetID())
 		if owned ~= 0 and owned ~= limit then
 			-- ITEM_PET_KNOWN is "Collected (%d/%d)" which is a bit long for this
 			return " " .. GENERIC_FRACTION_STRING:format(owned, limit) .. self:super("ObtainedTag", ...)
@@ -263,21 +282,25 @@ function ns.rewards.Pet:ObtainedTag(...)
 	return self:super("ObtainedTag", ...)
 end
 function ns.rewards.Pet:SetTooltip(tooltip, ...)
-	if not C_PetJournal then
+	if not (C_PetJournal and self:PetID()) then
 		return self:super("SetTooltip", tooltip, ...)
 	end
-	local name, texture, _, mobid, source, description = C_PetJournal.GetPetInfoBySpeciesID(self.petid)
+	local name, texture, _, mobid, source, description = C_PetJournal.GetPetInfoBySpeciesID(self:PetID())
 	if not name then
-		tooltip:AddLine("pet:" .. self.petid)
+		tooltip:AddLine("pet:" .. self:PetID())
 		tooltip:AddLine(SEARCH_LOADING_TEXT, 0, 1, 1)
 		return
 	end
-	local owned, limit = C_PetJournal.GetNumCollectedInfo(self.petid)
+	local owned, limit = C_PetJournal.GetNumCollectedInfo(self:PetID())
 	tooltip:AddLine(name)
 	tooltip:AddTexture(texture)
 	tooltip:AddLine(description, 1, 1, 1, true)
 	tooltip:AddLine(source)
 	tooltip:AddLine(ITEM_PET_KNOWN:format(owned, limit))
+end
+function ns.rewards.Pet:Cache()
+	self:super("Cache")
+	if self:PetID() and C_PetJournal then C_PetJournal.GetPetInfoBySpeciesID(self:PetID()) end
 end
 
 ns.rewards.Set = ns.rewards.Item:extends({classname="Set"})
@@ -319,4 +342,30 @@ function ns.rewards.Set:ObtainedTag()
 		end
 	end
 	return self:super("ObtainedTag")
+end
+
+ns.rewards.Recipe = ns.rewards.Item:extends{classname="Recipe"}
+function ns.rewards.Recipe:init(id, spellid, ...)
+	self:super("init", id, ...)
+	self.spellid = spellid
+end
+function ns.rewards.Recipe:Obtained(...)
+	if self:super("Obtained", ...) then
+		-- covers quests etc
+		return true
+	end
+	-- can't use the tradeskill functions + the recipe-spell because that data's only available after the tradeskill window has been opened...
+	local info = C_TooltipInfo.GetItemByID(self.id)
+	if info then
+		for _, line in ipairs(info.lines) do
+			if line.leftText and string.match(line.leftText, _G.ITEM_SPELL_KNOWN) then
+				return true
+			end
+		end
+	end
+	return false
+end
+function ns.rewards.Recipe:Cache()
+	self:super("Cache")
+	C_Spell.RequestLoadSpellData(self.spellid)
 end

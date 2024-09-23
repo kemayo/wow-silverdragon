@@ -16,6 +16,9 @@ ns.rewards.Reward = ns.Class({
 })
 local Reward = ns.rewards.Reward
 
+Reward.NOTABLE_COLOR = CreateColor(0, 0.8, 1)
+Reward.SEARCHING_COLOR = CreateColor(0, 1, 1)
+
 function Reward:init(id, extra)
 	self.id = id
 	if extra then
@@ -28,7 +31,7 @@ function Reward:init(id, extra)
 end
 function Reward:Name(color) return UNKNOWN end
 function Reward:Icon() return 134400 end -- question mark
-function Reward:Obtained(for_tooltip)
+function Reward:Obtained(ignore_notable)
 	local result
 	if self.quest then
 		if C_QuestLog.IsQuestFlaggedCompleted(self.quest) or C_QuestLog.IsOnQuest(self.quest) then
@@ -37,7 +40,7 @@ function Reward:Obtained(for_tooltip)
 		if self.warband and C_QuestLog.IsQuestFlaggedCompletedOnAccount(self.quest) then
 			return true
 		end
-		if for_tooltip or ns.db.quest_notable then
+		if ignore_notable or ns.db.quest_notable then
 			result = false
 		end
 	end
@@ -45,7 +48,7 @@ function Reward:Obtained(for_tooltip)
 		if C_QuestLog.IsQuestFlaggedCompleted(self.questComplete) then
 			return true
 		end
-		if for_tooltip or ns.db.quest_notable then
+		if ignore_notable or ns.db.quest_notable then
 			result = false
 		end
 	end
@@ -65,8 +68,8 @@ end
 function Reward:MightDrop() return self:Available() end
 function Reward:SetTooltip(tooltip) return false end
 function Reward:AddToTooltip(tooltip)
-	local r, g, b = self:TooltipNameColor()
-	local lr, lg, lb = self:TooltipLabelColor()
+	local r, g, b = self:TooltipNameColor():GetRGB()
+	local lr, lg, lb = self:TooltipLabelColor():GetRGB()
 	tooltip:AddDoubleLine(
 		self:TooltipLabel(),
 		self:TooltipName(),
@@ -97,19 +100,19 @@ function Reward:TooltipName()
 end
 function Reward:TooltipNameColor()
 	if not self:Name() then
-		return 0, 1, 1
+		return self.SEARCHING_COLOR
 	end
-	return NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b
+	return NORMAL_FONT_COLOR
 end
 function Reward:TooltipLabel() return UNKNOWN end
 function Reward:TooltipLabelColor()
 	if ns.db.show_npcs_emphasizeNotable and self:Notable() then
-		return 1, 0, 1
+		return self.NOTABLE_COLOR
 	end
-	return NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b
+	return NORMAL_FONT_COLOR
 end
 function Reward:ObtainedTag()
-	local known = self:Obtained(true) -- for_tooltip
+	local known = self:Obtained(true) -- ignore_notable
 	if known == nil then return end
 	return " " .. CreateAtlasMarkup(known and ATLAS_CHECK or ATLAS_CROSS)
 end
