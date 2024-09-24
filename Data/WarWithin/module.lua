@@ -693,8 +693,8 @@ core:RegisterMobData("WarWithin", {
 	},
 	[221067] = {
 		name="Orta",
-		quest=nil,
-		worldquest=nil,
+		quest=81624, -- this is the worldquest; a separate one didn't trip
+		worldquest=81624,
 		locations={
 			-- [ns.CITYOFTHREADS]={17103340},
 			[ns.CITYOFTHREADS]={},
