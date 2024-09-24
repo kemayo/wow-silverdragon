@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2024.26
+
+* Added quests for this week's world boss Orta
+* Ignore Xal'atath in mythics, even though she's flagged as a rare
+
 ## Changed in v2024.25
 
 * Fix particularly short minimap route segments not being displayed
