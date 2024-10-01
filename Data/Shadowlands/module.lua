@@ -241,7 +241,7 @@ core:RegisterMobData("Shadowlands", {
 	[180917] = {name="Destabilized Core",locations={[1970]={53654435},},loot={187837,189153,189910,189985,189999,189930},quest=64716,},
 	[180924] = {name="Garudeon",locations={[1970]={69053660},},loot={187832,189937,189951,190057,190602},notes="Gather {npc:183562} nearby, feed to {npc:183554}",quest=64719,tameable=132192,vignette=4982,},
 	[180978] = {name="Hirukon",locations={[1970]={52307540},},loot={189905,189946,190005,187636,{187676,mount=1434},},quest=65548,
-		active=core.conditions.Item(187923),
+		active=core.conditions.Item(187923), -- Aurelid Lure
 		notes="You have to make a {item:187923}:\n"..
 			"* Fish up {item:187662} nearby\n"..
 			"* Fish up {item:187915} from Coilfang Reservoir in Zangarmarsh\n"..
