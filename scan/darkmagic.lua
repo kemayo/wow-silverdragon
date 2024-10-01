@@ -33,7 +33,7 @@ function module:OnInitialize()
 				get = function(info) return self.db.profile[info[#info]] end,
 				set = function(info, v)
 					self.db.profile[info[#info]] = v
-					self:Update()
+					self:Update(true)
 				end,
 				args = {
 					about = config.desc("Scan for rares by trying to target them with a protected function and watching out for whether Blizzard blocks us. This might cause taint issues for your UI, so it's disabled by default.",
@@ -63,92 +63,80 @@ function module:OnInitialize()
 	self:Update()
 end
 
-function module:Scan()
-	if self.timer then return end
-	self:Update()
-end
-
-function module:Update()
-	if self.timer then
-		-- Throw this away
-		self.timer:Cancel()
-	end
-	if not self.db.profile.enabled then
-		return self.timer and self.timer:Cancel()
-	end
-	if not core.db.profile.instances and IsInInstance() then
-		return self.timer and self.timer:Cancel()
-	end
-
-	local zone = HBD:GetPlayerZone()
-	local hasMobs = false
-	-- Mobs from data, and custom mobs specific to the zone
-	for _ in core:IterateRelevantMobs(zone, true) do
-		hasMobs = true
-		break
-	end
-	if not hasMobs then
-		-- Moving into a different zone that has mobs will have us try again
-		return
-	end
-	-- The name we use here is what's going to be passed as the event arg
-	-- later, so wrap gives us something more identifiable than just
-	-- coroutine.resume...
-	local SDTargetUnitWasForbidden = coroutine.wrap(function()
-		for id in core:IterateRelevantMobs(zone, true) do
-			local name = core:NameForMob(id)
-			local attempted
-			if
-				name and
-				(module.db.profile.vignette or not core:MobHasVignette(id)) and
-				-- filter out ones we wouldn't notify for anyway
-				core:WouldNotifyForMob(id, zone) and
-				not core:ShouldIgnoreMob(id, zone) and
-				core:IsMobInPhase(id, zone)
-			then
-				attempted = true
-				local bugSackWasOpen = _G.BugSackFrame and _G.BugSackFrame:IsVisible()
-				self.currentlyscanning = true
-				TargetUnit(name)
-				self.currentlyscanning = false
-				if self.forbidden then
-					self.forbidden = false
-					if self.db.profile.suppress then
-						local alert = StaticPopup_FindVisible("ADDON_ACTION_FORBIDDEN", myname)
-						if alert then
-							-- if they ever change `StaticPopupDialogs["ADDON_ACTION_FORBIDDEN"]` I may need to revisit this, but...
-							StaticPopup_HideExclusive()
-						end
-						if _G.BugSack and _G.BugSackFrame and not bugSackWasOpen then
-							-- CloseSack will error if the bugsack window isn't created yet
-							_G.BugSack:CloseSack()
-						end
-					end
-					local x, y = HBD:GetPlayerZonePosition()
-					-- id, zone, x, y, is_dead, source, unit, silent, force, GUID
-					core:NotifyForMob(id, zone, x, y, false, "darkmagic", false)
+local mobs = {}
+local index = nil
+local AttemptTargetUnit = function()
+	local newindex, id = next(mobs, index)
+	if not id then return false end
+	index = newindex
+	local name = core:NameForMob(id)
+	-- print("considered", id, name)
+	if name then
+		local bugSackWasOpen = _G.BugSackFrame and _G.BugSackFrame:IsVisible()
+		module.currentlyscanning = true
+		TargetUnit(name)
+		module.currentlyscanning = false
+		if module.forbidden then
+			module.forbidden = false
+			if module.db.profile.suppress then
+				local alert = StaticPopup_FindVisible("ADDON_ACTION_FORBIDDEN", myname)
+				if alert then
+					-- if they ever change `StaticPopupDialogs["ADDON_ACTION_FORBIDDEN"]` I may need to revisit this, but...
+					StaticPopup_HideExclusive()
+				end
+				if _G.BugSack and _G.BugSackFrame and not bugSackWasOpen then
+					-- CloseSack will error if the bugsack window isn't created yet
+					_G.BugSack:CloseSack()
 				end
 			end
-			-- yield away because we shouldn't just spam this
-			if attempted then
-				coroutine.yield()
-			end
+			local x, y, zone = HBD:GetPlayerZonePosition()
+			-- id, zone, x, y, is_dead, source, unit, silent, force, GUID
+			core:NotifyForMob(id, zone, x, y, nil, "darkmagic", false)
 		end
-		if self.timer then
-			-- Wait for the core Scan callback to resume
-			self.timer:Cancel()
-			self.timer = nil
+	end
+	return true
+end
+
+function module:Scan()
+	if not next(mobs, index) then
+		index = nil
+	end
+end
+
+function module:Update(force)
+	if (not self.db.profile.enabled) or (not core.db.profile.instances and IsInInstance()) then
+		if self.timer then self.timer:Cancel() end
+		self.timer = nil
+		return
+	end
+	if force and self.timer then
+		self.timer:Cancel()
+		self.timer = nil
+	end
+
+	wipe(mobs)
+	index = nil
+	local zone = HBD:GetPlayerZone()
+	-- Mobs from data, and custom mobs specific to the zone
+	for id in core:IterateRelevantMobs(zone, true) do
+		if
+			(module.db.profile.vignette or not core:MobHasVignette(id)) and
+			-- filter out ones we wouldn't notify for anyway
+			core:WouldNotifyForMob(id, zone) and
+			not core:ShouldIgnoreMob(id, zone) and
+			core:IsMobInPhase(id, zone)
+		then
+			table.insert(mobs, id)
 		end
-	end)
-	-- interestingly, a coroutine.wrap resumeFunc won't be accepted as a
-	-- function by C_Timer...
-	self.timer = C_Timer.NewTicker(self.db.profile.interval, function()
-		SDTargetUnitWasForbidden()
-	end)
+	end
+
+	if not self.timer then
+		self.timer = C_Timer.NewTicker(self.db.profile.interval, AttemptTargetUnit)
+	end
 end
 
 function module:ADDON_ACTION_FORBIDDEN(_, addon, blockedFunction)
-	if addon == myname and blockedFunction == "SDTargetUnitWasForbidden()" and self.currentlyscanning then
+	if addon == myname and blockedFunction == "TargetUnit()" and self.currentlyscanning then
 		self.forbidden = true
 	end
 end
