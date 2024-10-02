@@ -434,7 +434,7 @@ do
 		-- classic
 		if not button.SetItem then
 			function button:SetItem(item)
-				local itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subclassID = C_Item.GetItemInfoInstant(item)
+				local itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subclassID
 				if item then
 					itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subclassID = C_Item.GetItemInfoInstant(item)
 				end
