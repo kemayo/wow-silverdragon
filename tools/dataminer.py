@@ -103,6 +103,7 @@ def write_output(expansion, data):
                         "tameable",
                         "notes",
                         "locations",
+                        "routes",
                         "mount",
                         "pet",
                         "toy",
