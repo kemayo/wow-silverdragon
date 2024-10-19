@@ -110,7 +110,10 @@ function ns.Loot.OnceAllLootLoaded(id, isTreasure, callback)
 	end
 	if #continuableLoot == 0 then return callback(loot) end
 	local continuableContainer = ContinuableContainer:Create()
-	continuableContainer:AddContinuables(continuableLoot)
+	-- AddContinuables isn't available in classic, so we need to do this:
+	for _, continuable in pairs(continuableLoot) do
+		continuableContainer:AddContinuable(continuable)
+	end
 	continuableContainer:ContinueOnLoad(function() callback(loot) end)
 end
 do
