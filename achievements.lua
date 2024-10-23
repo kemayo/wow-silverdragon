@@ -575,6 +575,7 @@ local achievements = {
 	[40837] = {}, -- Adventurer of the Ringing Deeps
 	[40840] = {}, -- Adventurer of Azj-Kahet
 	[40851] = {}, -- Adventurer of Hallowfall
+	[40997] = {}, -- The Gatecrashers (Anniversary)
 }
 ns.achievements = achievements
 local mobs_to_achievement = {
