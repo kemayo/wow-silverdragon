@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2024.31
+
+* Add vignettes and achievement status for The Originals
+* Avoid a potential error when checking achievement status for some unusual criteria
+
 ## Changed in v2024.30
 
 * Add new world bosses in the 20th anniversary celebration
