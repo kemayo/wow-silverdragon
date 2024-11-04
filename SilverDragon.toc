@@ -1,4 +1,4 @@
-﻿## Interface: 110005, 40400, 11504
+﻿## Interface: 110005, 40401, 11504
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
