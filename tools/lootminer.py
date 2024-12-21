@@ -138,6 +138,7 @@ def fetchnpc(npc, loot_filter="source", base="https://wowhead.com"):
 
     # $.extend(g_npcs[50358], {"classification":2,"id":50358,"location":[6507],"maxlevel":38,"minlevel":38,"name":"Haywire Sunreaver Construct","react":[-1,-1],"type":9});
     # $.extend(g_npcs[203625], {"classification":2,"displayName":"Karokta","displayNames":["Karokta"],"id":203625,"name":"Karokta","names":["Karokta"],"type":1});
+    # $.extend(g_npcs[231368], {"classification":4,"displayName":"Ksvir the Forgotten","displayNames":["Ksvir the Forgotten"],"id":231368,"location":[15827],"maxlevel":80,"minlevel":80,"name":"Ksvir the Forgotten","names":["Ksvir the Forgotten"],"react":[-1,-1],"type":6});
     if m := re.search(r"^\$.extend\(g_npcs\[\d+], ?({.+})\);?$", r.text, re.MULTILINE):
         data = yaml.load(m.group(1), Loader=Loader)
         if data["id"] != npc:
@@ -167,6 +168,8 @@ def fetchnpc(npc, loot_filter="source", base="https://wowhead.com"):
         for loot in lootdata:
             if isvaliddrop(npc, loot, loot_filter):
                 data["loot"].append(loot["id"])
+    else:
+        print("No drops")
 
     return data
 
@@ -225,7 +228,7 @@ def update(f):
 
             print("Loading", npcid, data["name"])
             remote = fetchnpc(int(npcid))
-            
+
             loot = data.get("loot", [])
             if remote and "loot" in remote and len(remote["loot"]) > 0:
                 mergeloot(loot, remote["loot"])
@@ -302,10 +305,10 @@ def fetch_npcids_from_search(url):
     # assume this is a wowhead search page and pull down everything included on it
     r = session.get(url, timeout=5)
     match = re.search(
-        r'new Listview\({[^{]+?"?data"?:\s*\[(.+?)\]}\);\n', r.text
+        r'new Listview\({[^{]+?"?data"?:\s*\[(.+?)\]}\);(?:\n|</script>)', r.text
     )
     if not match:
-        return []
+        return [], False
     headermatch = re.search(
         r'<a href="([^"]+)" class="header-logo">', r.text
     )
