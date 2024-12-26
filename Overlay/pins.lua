@@ -1,4 +1,5 @@
 local myname = ...
+local _, myfullname = C_AddOns.GetAddOnInfo("SilverDragon")
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:GetModule("Overlay")
@@ -7,8 +8,6 @@ local ns = core.NAMESPACE
 
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDPins = LibStub("HereBeDragons-Pins-2.0")
-
-local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
 
 -- Pin mixin
 
@@ -109,7 +108,7 @@ function SilverDragonOverlayPinMixinBase:OnMouseUp(button)
     end
     if button == "LeftButton" then
         if IsAltKeyDown() then
-           module.CreateWaypoint(self, self.uiMapID, self.coord)
+           module.CreateWaypoint(self.uiMapID, self.coord)
            return
         end
         if IsShiftKeyDown() then
@@ -176,21 +175,21 @@ end
 do
     local clicked_zone, clicked_coord
 
-    local function hideMob(button, mobid)
+    local function hideMob(mobid)
         if mobid then
             module.db.profile.hidden[mobid] = true
             module:Update()
         end
     end
 
-    function module.CreateWaypoint(button, uiMapID, coord)
+    function module.CreateWaypoint(uiMapID, coord)
         -- point to it, without a timeout, and ignoring whether it'll be replacing an existing waypoint
         local id, name = core:GetMobByCoord(uiMapID, coord)
         local x, y = core:GetXY(coord)
         core:GetModule("TomTom"):PointTo(id, uiMapID, x, y, 0, true)
     end
 
-    local function createWaypointForAll(button, uiMapID, mobid)
+    local function createWaypointForAll(uiMapID, mobid)
         if not TomTom then return end
         if not (ns.mobsByZone[uiMapID] and ns.mobsByZone[uiMapID][mobid]) then return end
         for _, mob_coord in ipairs(ns.mobsByZone[uiMapID][mobid]) do
@@ -204,7 +203,7 @@ do
         end
     end
 
-    local function showAchievement(button, achievement)
+    local function showAchievement(achievement)
         OpenAchievementFrameToAchievement(achievement)
     end
 
@@ -218,77 +217,40 @@ do
         end
     end
 
-    local dropdown = LibDD:Create_UIDropDownMenu(myname.."PinDropDownMenu", UIParent)
-    dropdown.displayMode = "MENU"
+    local generateMenu = function(owner, rootDescription, uiMapID, coord, pin)
+        local mobid = pin.mobid
+        rootDescription:SetTag("MENU_WORLD_MAP_CONTEXT_SILVERDRAGON")
+        rootDescription:CreateTitle(myfullname)
 
-    dropdown.initialize = function(button, level)
-        if (not level) then return end
-        if (level == 1) then
-            -- Create the title of the menu
-            LibDD:UIDropDownMenu_AddButton({
-                isTitle = 1,
-                text = myname,
-                icon = "Interface\\Icons\\INV_Misc_Head_Dragon_01",
-                notCheckable = 1,
-            }, level)
-
-            local achievement = button.mobid and ns:AchievementMobStatus(button.mobid)
-            if achievement then
-                LibDD:UIDropDownMenu_AddButton({
-                    notCheckable = true,
-                    text = OBJECTIVES_VIEW_ACHIEVEMENT,
-                    func = showAchievement,
-                    arg1 = achievement,
-                }, level)
-            end
-
-            -- Waypoint menu item
-            LibDD:UIDropDownMenu_AddButton({
-                disabled = not core:GetModule("TomTom"):CanPointTo(button.uiMapID),
-                notCheckable = true,
-                text = "Create waypoint",
-                func = module.CreateWaypoint,
-                arg1 = button.uiMapID,
-                arg2 = button.coord,
-            }, level)
-
-            LibDD:UIDropDownMenu_AddButton({
-                disabled = not TomTom,
-                notCheckable = true,
-                text = "Create waypoint for all locations",
-                func = createWaypointForAll,
-                arg1 = button.uiMapID,
-                arg2 = button.mobid,
-            }, level)
-
-            local mobid, uiMapID, coord = button.mobid, button.uiMapID, button.coord
-            LibDD:UIDropDownMenu_AddButton({
-                    notCheckable = true,
-                    text = COMMUNITIES_INVITE_MANAGER_LINK_TO_CHAT, -- Link to chat
-                    func = function() sendToChat(mobid, uiMapID, coord) end,
-            }, level)
-
-            -- Hide menu item
-            LibDD:UIDropDownMenu_AddButton({
-                notCheckable = true,
-                text = "Hide mob",
-                func = hideMob,
-                arg1 = button.mobid,
-            }, level)
-
-            -- Close menu item
-            LibDD:UIDropDownMenu_AddButton({
-                notCheckable = 1,
-                text = "Close",
-                func = function() LibDD:CloseDropDownMenus() end,
-            }, level)
+        local achievement = mobid and ns:AchievementMobStatus(mobid)
+        if achievement then
+            rootDescription:CreateButton(OBJECTIVES_VIEW_ACHIEVEMENT, showAchievement, achievement)
         end
+        rootDescription:CreateButton("Create waypoint", function() module.CreateWaypoint(uiMapID, coord) end)
+            :SetEnabled(core:GetModule("TomTom"):CanPointTo(uiMapID))
+
+        -- Specifically for TomTom, since it supports multiples:
+        rootDescription:CreateButton(
+            "Create waypoint for all locations",
+            function() createWaypointForAll(uiMapID, mobid) end
+        ):SetEnabled(TomTom and true or false) -- can't be nil
+
+        -- Link to chat
+        if _G.MAP_PIN_HYPERLINK then
+            rootDescription:CreateButton(
+                COMMUNITIES_INVITE_MANAGER_LINK_TO_CHAT,
+                function() sendToChat(mobid, uiMapID, coord) end
+            )
+        end
+
+        -- Hide menu item
+        rootDescription:CreateButton("Hide mob", hideMob, mobid)
+
+        -- Close menu item
+        rootDescription:CreateButton(CLOSE, function() return MenuResponse.CloseAll end)
     end
 
     function module:ShowPinDropdown(pin, uiMapID, coord)
-        dropdown.uiMapID = uiMapID
-        dropdown.coord = coord
-        dropdown.mobid = pin.mobid
-        LibDD:ToggleDropDownMenu(1, nil, dropdown, pin, 0, 0)
+        MenuUtil.CreateContextMenu(pin, generateMenu, uiMapID, coord, pin)
     end
 end

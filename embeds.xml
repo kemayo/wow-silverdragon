@@ -25,7 +25,6 @@
 <Script file="lib\HereBeDragons\HereBeDragons-2.0.lua"/>
 <Script file="lib\HereBeDragons\HereBeDragons-Pins-2.0.lua"/>
 <Script file="lib\HereBeDragons\HereBeDragons-Migrate.lua"/>
-<Include file="lib\LibUIDropDownMenu\LibUIDropDownMenu.xml"/>
 
 <Include file="lib\LibTextDump-1.0\lib.xml"/>
 @end-non-debug@-->

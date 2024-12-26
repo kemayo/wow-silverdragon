@@ -27,7 +27,6 @@ externals:
    lib/HereBeDragons: https://repos.wowace.com/wow/herebedragons
    lib/LibTextDump-1.0: https://repos.wowace.com/wow/libtextdump-1-0
    lib/LibWindow-1.1: https://repos.wowace.com/wow/libwindow-1-1/trunk/LibWindow-1.1
-   lib/LibUIDropDownMenu: https://repos.curseforge.com/wow/libuidropdownmenu/trunk/LibUIDropDownMenu
 
 move-folders:
    SilverDragon/Overlay: SilverDragon_Overlay
