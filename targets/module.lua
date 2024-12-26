@@ -65,6 +65,13 @@ function module:OnInitialize()
 	self.anchor = self:CreateAnchor()
 
 	self:RegisterConfig()
+
+	EventUtil.ContinueOnAddOnLoaded("AddOnSkins", function()
+		if _G.AddOnSkins and _G.AddOnSkins[1] and _G.AddOnSkins[1].SetOption and _G.AddOnSkins[1].CheckOption and _G.AddOnSkins[1]:CheckOption("SilverDragon") then
+			print("Disabling AddOnSkins for SilverDragon")
+			_G.AddOnSkins[1]:SetOption("SilverDragon", false)
+		end
+	end)
 end
 
 function module:RefreshConfig()

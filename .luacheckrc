@@ -278,6 +278,7 @@ read_globals = {
     "GetRandomTableValue",
     "MenuUtil",
     "MenuResponse",
+    "EventUtil",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",
