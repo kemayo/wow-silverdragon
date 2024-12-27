@@ -2209,7 +2209,7 @@ ns.RegisterPoints(ns.SIRENISLE, {
 	[26236548] = {
 		label="Nerathor",
 		criteria=70791,
-		quest=85760, -- <- drowned lair, also 85938; second time 84845 + 85762 (drowned lair)
+		quest=85938, -- also 85760 (drowned lair); second time 84845 + 85762 (drowned lair)
 		npc=229982,
 		loot={
 			231118, -- Runecaster's Stormbound Rune
@@ -2243,21 +2243,21 @@ ns.RegisterPoints(ns.SIRENISLE, {
 	[63938735] = {
 		label="Asbjorn the Bloodsoaked",
 		criteria=70806,
-		quest=84839, -- 84805
+		quest=84805, -- 84839 first time?
 		npc=230137,
 		loot={
 			234972, -- Bloodwake Missive
 		},
 		vignette=6590,
 	},
-	--[[
-	[0] = {
+	[31757154] = {
 		label="Bloodbrine",
 		criteria=70794,
-		quest=nil,
+		quest=84795, -- 84875
 		npc=228154,
 		vignette=6530,
 	},
+	--[[
 	[0] = {
 		label="Chef Chum Platter",
 		criteria=70803,
@@ -2265,13 +2265,15 @@ ns.RegisterPoints(ns.SIRENISLE, {
 		npc=228583,
 		vignette=6580,
 	},
-	[0] = {
+	--]]
+	[61708967] = {
 		label="Coralweaver Calliso",
 		criteria=70801,
-		quest=nil,
+		quest=84802,
 		npc=229852,
 		vignette=6581,
 	},
+	--[[
 	[0] = {
 		label="Plank-Master Bluebelly",
 		criteria=70804,
@@ -2279,14 +2281,14 @@ ns.RegisterPoints(ns.SIRENISLE, {
 		npc=228580,
 		vignette=6577,
 	},
-	[0] = {
+	--]]
+	[55808381] = {
 		label="Siris the Sea Scorpion",
 		criteria=70802,
-		quest=nil,
+		quest=84803,
 		npc=229853,
 		vignette=6582,
 	},
-	--]]
 }, {
 	achievement=41046, -- Clean Up On Isle Siren
 })
