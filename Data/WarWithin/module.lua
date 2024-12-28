@@ -1,4 +1,3 @@
-if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then return end -- classic misses expansion variables
 if LE_EXPANSION_LEVEL_CURRENT < (LE_EXPANSION_WAR_WITHIN or math.huge) then return end
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
