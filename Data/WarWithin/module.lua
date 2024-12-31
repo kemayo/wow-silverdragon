@@ -552,6 +552,13 @@ core:RegisterTreasureData("WarWithin", {
 		}, true),
 		notes="In a nook beneath the platform",
 	},
+
+	-- Siren Isle
+	[6683] = {
+		name="Bilge Rat Supply Chest",
+		quest=84529, -- 84873
+		notes="Get the {item:228621:Bilge Rat Supply Key} from {npc:228582:First Mate Shellshock}",
+	},
 }, true)
 
 -- Hallowfall treasures with shared loot:
@@ -2158,6 +2165,7 @@ ns.RegisterPoints(ns.AZJKAHET, {
 }, {levels=true,})
 
 ns.RegisterPoints(ns.SIRENISLE, {
+	-- Always
 	[35791339] = {
 		label="Grimgull",
 		criteria=70797,
@@ -2192,6 +2200,7 @@ ns.RegisterPoints(ns.SIRENISLE, {
 		npc=228151,
 		vignette=6526,
 	},
+	-- Project quests
 	[37105499] = {
 		label="Stalagnarok",
 		criteria=70793,
@@ -2216,17 +2225,6 @@ ns.RegisterPoints(ns.SIRENISLE, {
 		vignette=6754,
 		path=32456476,
 	},
-	[32327408] = {
-		label="Ikir the Flotsurge",
-		criteria=70805,
-		quest=84792, -- 84847
-		npc=227545,
-		loot={
-			231117, -- Darktide Wavebender's Orb
-			231118, -- Runecaster's Stormbound Rune
-		},
-		vignette=6525,
-	},
 	[55206840] = {
 		label="Gravesludge (The Drain)",
 		criteria=70792,
@@ -2239,6 +2237,19 @@ ns.RegisterPoints(ns.SIRENISLE, {
 		vignette=6517,
 		path=62607519,
 	},
+	-- Storm
+	[32327408] = {
+		label="Ikir the Flotsurge",
+		criteria=70805,
+		quest=84792, -- 84847
+		npc=227545,
+		loot={
+			231117, -- Darktide Wavebender's Orb
+			231118, -- Runecaster's Stormbound Rune
+		},
+		vignette=6525,
+	},
+	-- Vrykul phase
 	[63938735] = {
 		label="Asbjorn the Bloodsoaked",
 		criteria=70806,
@@ -2249,6 +2260,7 @@ ns.RegisterPoints(ns.SIRENISLE, {
 		},
 		vignette=6590,
 	},
+	-- Naga phase
 	[31757154] = {
 		label="Bloodbrine",
 		criteria=70794,
@@ -2256,15 +2268,6 @@ ns.RegisterPoints(ns.SIRENISLE, {
 		npc=228154,
 		vignette=6530,
 	},
-	--[[
-	[0] = {
-		label="Chef Chum Platter",
-		criteria=70803,
-		quest=nil,
-		npc=228583,
-		vignette=6580,
-	},
-	--]]
 	[61708967] = {
 		label="Coralweaver Calliso",
 		criteria=70801,
@@ -2272,21 +2275,27 @@ ns.RegisterPoints(ns.SIRENISLE, {
 		npc=229852,
 		vignette=6581,
 	},
-	--[[
-	[0] = {
-		label="Plank-Master Bluebelly",
-		criteria=70804,
-		quest=nil,
-		npc=228580,
-		vignette=6577,
-	},
-	--]]
 	[55808381] = {
 		label="Siris the Sea Scorpion",
 		criteria=70802,
 		quest=84803,
 		npc=229853,
 		vignette=6582,
+	},
+	-- Pirate phase
+	[66128506] = {
+		label="Chef Chum Platter",
+		criteria=70803,
+		quest=84800,
+		npc=228583,
+		vignette=6580,
+	},
+	[60568904] = {
+		label="Plank-Master Bluebelly",
+		criteria=70804,
+		quest=84799,
+		npc=228580,
+		vignette=6577,
 	},
 }, {
 	achievement=41046, -- Clean Up On Isle Siren
