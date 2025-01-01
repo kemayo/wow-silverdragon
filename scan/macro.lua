@@ -79,6 +79,7 @@ function module:OnInitialize()
 	end
 end
 
+local lastmacrotext
 function module:Update()
 	if not self.db.profile.enabled then
 		return
@@ -91,11 +92,16 @@ function module:Update()
 		-- EditMacro will reset any manual editing in the macro frame
 		return
 	end
-	Debug("Updating Macro")
+	-- Debug("Updating Macro")
 	-- Make sure the core macro is up to date
 	if GetMacroIndexByName("SilverDragon") then
 		-- 1023 for macrotext on a button, but...
-		EditMacro(GetMacroIndexByName("SilverDragon"), nil, self:GetMacroArguments(255))
+		local macroicon, macrotext = self:GetMacroArguments(255)
+		if lastmacrotext ~= macrotext then
+			EditMacro(GetMacroIndexByName("SilverDragon"), nil, macroicon, macrotext)
+			lastmacrotext = macrotext
+			DebugF("Updated macro: %d characters", #macrotext)
+		end
 	end
 end
 
@@ -142,8 +148,8 @@ function module:BuildTargetMacro(limit)
 	end
 
 	local mtext = ("\n"):join(unpack(macro))
-	DebugF("Updated macro: %d statements, %d characters", #macro, #mtext)
 
+	-- DebugF("Updated macro: %d statements, %d characters", #macro, #mtext)
 	table.wipe(macro)
 	return mtext
 end
