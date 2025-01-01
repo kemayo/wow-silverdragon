@@ -2383,7 +2383,7 @@ ns.RegisterPoints(ns.FORGOTTENVAULT, {
 	[26402300] = {
 		label="Shardsong",
 		criteria=70795,
-		quest=nil,
+		quest=86779,
 		npc=227550,
 		loot={
 			{235017,toy=true,}, -- Glittering Vault Shard
