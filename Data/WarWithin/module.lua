@@ -2393,7 +2393,7 @@ ns.RegisterPoints(ns.FORGOTTENVAULT, {
 	[64805460] = {
 		label="Gunnlod the Sea-Drinker",
 		criteria=70798,
-		quest=nil,
+		quest=84797,
 		npc=228159,
 		loot={
 			229019, -- Earthen Deckhand's Cape
