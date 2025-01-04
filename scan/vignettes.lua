@@ -200,6 +200,17 @@ function module:WorkOutMobFromVignette(instanceid)
 		local position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, current_zone)
 		if position then
 			x, y = position:GetXY()
+		else
+			-- Some zones give vignette data for the parent zone, but without position information because they're
+			-- off the edge of the child zone map. (E.g. Siren Isle's Forgotten Vault.)
+			local mapInfo = C_Map.GetMapInfo(current_zone)
+			if mapInfo and mapInfo.parentMapID then
+				position = C_VignetteInfo.GetVignettePosition(vignetteInfo.vignetteGUID, mapInfo.parentMapID)
+				if position then
+					x, y = position:GetXY()
+					current_zone = mapInfo.parentMapID
+				end
+			end
 		end
 	end
 	if not vignetteInfo.onMinimap and not shouldShowNotVisible(vignetteInfo, current_zone) then
