@@ -164,7 +164,7 @@ end
 
 function module:Point(data)
 	local uiMapID, x, y = self:GetPositionFromData(data)
-	if uiMapID and x and y then
+	if uiMapID and x and y and x ~= 0 and y ~= 0 then
 		-- point to it, without a timeout, and ignoring whether it'll be replacing an existing waypoint
 		core:GetModule("TomTom"):PointTo(data.type == "mob" and data.id or data.name, uiMapID, x, y, 0, true)
 	end
@@ -187,7 +187,7 @@ end
 
 function module:SendLink(prefix, uiMapID, x, y)
 	local message
-	if MAP_PIN_HYPERLINK then
+	if MAP_PIN_HYPERLINK and uiMapID and x and y and x ~=0 and y ~= 0 then
 		message = ("%s|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
 			prefix and (prefix .. " ") or "",
 			uiMapID,

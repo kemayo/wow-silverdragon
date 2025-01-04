@@ -472,7 +472,7 @@ PopupMixin.scripts = {
 		end
 		local uiMapID, x, y = module:GetPositionFromData(data, false)
 		if uiMapID and x and y then
-			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, ("%.1f, %.1f"):format(x * 100, y * 100),
+			GameTooltip:AddDoubleLine(core.zone_names[uiMapID] or UNKNOWN, (x ~= 0 and y ~= 0) and ("%.1f, %.1f"):format(x * 100, y * 100) or UNKNOWN,
 				0, 1, 0,
 				0, 1, 0
 			)
