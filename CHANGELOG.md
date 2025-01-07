@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2025.2
+
+* Siren Isle: update the storm phase mobs
+
 ## Changed in v2025.1
 
 * Siren Isle: quest updates, add the Proper Parrot to pirate rares
