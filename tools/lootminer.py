@@ -310,7 +310,7 @@ def fetch_npcids_from_search(url):
     if not match:
         return [], False
     headermatch = re.search(
-        r'<a href="([^"]+)" class="header-logo">', r.text
+        r'<a href="([^"]+)" class="header-logo"', r.text
     )
     return map(int, re.findall(r'"id":(\d+)', match.group(1))), headermatch and headermatch.group(1)
 
