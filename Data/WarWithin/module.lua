@@ -729,6 +729,8 @@ core:RegisterMobData("WarWithin", {
 	[229536] = {name="Xal'atath", hidden=true},
 	[229635] = {name="Xal'atath", hidden=true},
 	[230937] = {name="Xal'atath", hidden=true},
+	-- Random things that are flagged as rare for no particular reason
+	[209780] = {name="Abandoned Restoration Stone", hidden=true},
 }, true)
 
 -- Isle of Dorn
