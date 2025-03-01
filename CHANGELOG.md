@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2025.4
+
+* Undermine: update rare coordinates, add loot to the treasure vignettes
+* Bump the TOC for the SilverDragon_History plugin specifically (thanks Adal!)
+
 ## Changed in v2025.3
 
 * Updated for 11.1.0
