@@ -560,6 +560,112 @@ core:RegisterTreasureData("WarWithin", {
 		quest=84529, -- 84873
 		notes="Get the {item:228621:Bilge Rat Supply Key} from {npc:228582:First Mate Shellshock}",
 	},
+
+	-- Undermine
+	[6657] = {
+		name="Unexploded Fireworks",
+		achievement=41217, criteria=71613,
+		quest=85683,
+		loot={235042}, -- Imminently Exploding Fireworks
+		note="On the roof; there's a door you can click to open",
+	},
+	[6679] = {
+		name="Suspicious Book",
+		achievement=41217, criteria=71624,
+		quest=85868,
+		loot={235283}, -- Bashful Book
+		note="Pick it up three times",
+	},
+	[6677] = {
+		name="Fireworks Hat",
+		achievement=41217, criteria=71614,
+		quest=85856, -- first attempt 85838 @ 57845269, second attempt 85839 @ 56015172
+		loot={{235220, toy=true}}, -- Fireworks Hat
+		note="Pick it up twice",
+	},
+	[6658] = {
+		name="Inert Plunger?",
+		achievement=41217, criteria=71615,
+		quest=85698, -- 85694 first press
+		loot={235238}, -- Exploded Plunder
+	},
+	[6672] = {
+		name="Exploded Plunder",
+		achievement=41217, criteria=71615,
+		quest=85698,
+		loot={235238}, -- Exploded Plunder
+	},
+	[6671] = {
+		name="Blackened Dice",
+		achievement=41217, criteria=71625,
+		quest=85814, -- 84813 for the valve
+		loot={235255}, -- Durable Dice
+		note="Use the Pipe Valve",
+	},
+	[6678] = {
+		name="Lonely Tub",
+		achievement=41217, criteria=71626,
+		quest=85858, -- 85860 extinguished
+		loot={235279}, -- Scorched Shorts
+		note="Use the {spell:471345:Fire Extinguisher}",
+	},
+	[6646] = {
+		name="Potent Potable",
+		achievement=41217, criteria=71627,
+		quest=85426,
+		loot={235230}, -- Impotent Potable
+	},
+	[6643] = {
+		name="Abandoned Toolbox",
+		achievement=41217, criteria=71628,
+		quest=85422,
+		loot={}, -- assorted engineering items
+	},
+	[6644] = {
+		name="Papa's Prized Putter",
+		achievement=41217, criteria=71629,
+		quest=85424,
+		loot={234821}, -- Papa's Prized Putter
+	},
+	[6645] = {
+		name="Unsupervised Takeout",
+		achievement=41217, criteria=71630,
+		quest=85425,
+		loot={
+			7341, -- Cubic Zirconia Ring
+			233118, -- Incontinental Takeout
+		},
+	},
+	[6651] = {
+		name="Particularly Nice Lamp",
+		achievement=41217, criteria=71631,
+		quest=85492,
+		loot={235221}, -- Particularly Bright Lightbulb
+	},
+	[6654] = {
+		name="Uncracked Cold Ones",
+		achievement=41217, criteria=71632,
+		quest=85495,
+		loot={{234951, toy=true}}, -- Uncracked Cold Ones
+	},
+	[6653] = {
+		name="Marooned Floatmingo",
+		achievement=41217, criteria=71633,
+		quest=85494,
+		loot={235273}, -- Distracting Floatmingo
+	},
+	[6655] = {
+		name="Trick Deck of Cards",
+		achievement=41217, criteria=71634,
+		quest=85496,
+		loot={235268}, -- Misprinted Card
+	},
+	[6713] = {
+		name="Crumpled Schematics",
+		achievement=41217, criteria=71635,
+		quest=86487,
+		loot={235038}, -- Crumpled Schematic
+	},
 }, true)
 
 -- Hallowfall treasures with shared loot:
