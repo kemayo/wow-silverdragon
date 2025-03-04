@@ -29,7 +29,13 @@ function module:OnInitialize()
 	compat_disabled = C_AddOns.IsAddOnLoaded("MinimapRangeExtender") or (LE_EXPANSION_LEVEL_CURRENT < (LE_EXPANSION_MISTS_OF_PANDARIA or 999))
 	self.compat_disabled = compat_disabled
 
-	self.pool = CreateFramePool("FRAME", Minimap, "SilverDragonVignetteStretchPinTemplate")
+	self.pool = CreateFramePool("FRAME", Minimap, "SilverDragonVignetteStretchPinTemplate", function(_, icon)
+		-- this behavior is copied from HandyNotes, on the assumption that it knows what it's doing for minimap icons
+		local frameLevel = Minimap:GetFrameLevel() + 5
+		local frameStrata = Minimap:GetFrameStrata()
+		icon:SetFrameStrata(frameStrata)
+		icon:SetFrameLevel(frameLevel)
+	end)
 
 	self:RegisterConfig()
 end
