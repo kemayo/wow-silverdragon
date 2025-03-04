@@ -334,7 +334,7 @@ if __name__ == '__main__':
         base = "https://www.wowhead.com"
         if args.input.startswith("http"):
             npcids, sub = fetch_npcids_from_search(args.input)
-            if sub and sub != "/wow":
+            if sub and sub != "/wow" and sub != "/wow/retail":
                 base = base + sub
         else:
             npcids = map(int, args.input.split(","))
