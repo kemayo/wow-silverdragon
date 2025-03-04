@@ -197,6 +197,7 @@ function SilverDragonVignetteStretchPinMixin:OnMouseEnter()
 			GameTooltip:AddDoubleLine(LOCATION_COLON, self.coord)
 		end
 	end
+	GameTooltip:AddDoubleLine(" ", "RangeExtender", 1, 1, 1, 1, 0.5, 0.5)
 	GameTooltip:Show()
 end
 function SilverDragonVignetteStretchPinMixin:OnMouseLeave()
