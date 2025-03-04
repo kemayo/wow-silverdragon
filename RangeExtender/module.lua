@@ -44,7 +44,7 @@ function module:OnEnable()
 end
 
 function module:GetVignetteID(vignetteGUID, vignetteInfo)
-    return vignetteInfo and vignetteInfo.vignetteID or tonumber((select(6, strsplit('-', vignetteGUID))))
+	return vignetteInfo and vignetteInfo.vignetteID or tonumber((select(6, strsplit('-', vignetteGUID))))
 end
 
 local vignetteIcons = {
@@ -65,8 +65,10 @@ function module:VIGNETTE_MINIMAP_UPDATED(event, instanceid, onMinimap, ...)
 
 	if onMinimap then
 		icon.texture:Hide()
+		icon:EnableMouse(false)
 	else
 		icon.texture:Show()
+		icon:EnableMouse(true)
 	end
 end
 function module:VIGNETTES_UPDATED()
@@ -78,6 +80,7 @@ function module:VIGNETTES_UPDATED()
 			HBDPins:RemoveMinimapIcon(self, icon)
 			icon:Hide()
 			icon.info = nil
+			icon.instanceid = nil
 			vignetteIcons[instanceid] = nil
 			self.pool:Release(icon)
 		end
@@ -123,15 +126,17 @@ function module:UpdateVignetteOnMinimap(instanceid)
 		icon.texture:SetDesaturated(true)
 		vignetteIcons[instanceid] = icon
 		HBDPins:AddMinimapIconMap(self, icon, uiMapID, x, y, false, true)
-		-- icon.instanceid = instanceid
+		icon.instanceid = instanceid
 		icon.info = vignetteInfo
 		icon.coord = core:GetCoord(x, y)
 	end
 
 	if vignetteInfo and vignetteInfo.onMinimap then
 		icon.texture:Hide()
+		icon:EnableMouse(false)
 	else
 		icon.texture:Show()
+		icon:EnableMouse(true)
 	end
 
 	self:UpdateEdge(icon)
