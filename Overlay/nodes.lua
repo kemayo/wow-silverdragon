@@ -47,20 +47,20 @@ do
             loot = tex("nazjatar-nagaevent", 1, 0.33, 0.33, 1.8), -- red glowing skull
             loot_partial = tex("nazjatar-nagaevent", 1, 1, 0.33, 1.8), -- yellow glowing skull
             loot_done = tex("nazjatar-nagaevent", 0.33, 1, 0.33, 1.5), -- green glowing skull
-            mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.3), -- red shiny skull
-            mount_partial = tex("VignetteKillElite", 1, 1, 0.33, 1.3), -- yellow shiny skull
-            mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1), -- green shiny skull
+            mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
+            mount_partial = tex("VignetteKillElite", 1, 1, 0.33, 1.8), -- yellow shiny skull
+            mount_done = tex("VignetteKillElite", 0.33, 1, 0.33, 1.4), -- green shiny skull
         },
         stars = {
-            default = tex("VignetteKill", 1, 0.33, 1, 1.3), -- red star
-            partial = tex("VignetteKill", 1, 1, 1, 1.3), -- gold star
-            done = tex("VignetteKill", 0, 1, 1), -- green star
-            loot = tex("VignetteLootElite", 1, 0.33, 1, 1.3), -- red shiny skull
-            loot_partial = tex("VignetteLootElite", 0, 1, 1, 1.3), -- yellow shiny skull
-            loot_done = tex("VignetteLootElite", 0, 1, 0, 1), -- green shiny skull
-            mount = tex("VignetteKillElite", 1, 0.33, 1, 1.3), -- red shiny skull
-            mount_partial = tex("VignetteKillElite", 0, 1, 1, 1.3), -- yellow shiny skull
-            mount_done = tex("VignetteKillElite", 0, 1, 0, 1), -- green shiny skull
+            default = tex("VignetteKill", 1, 0.33, 1, 1.6), -- red star
+            partial = tex("VignetteKill", 1, 1, 1, 1.6), -- gold star
+            done = tex("VignetteKill", 0, 1, 1, 1.3), -- green star
+            loot = tex("VignetteLootElite", 1, 0.33, 1, 1.6), -- red shiny skull
+            loot_partial = tex("VignetteLootElite", 0, 1, 1, 1.6), -- yellow shiny skull
+            loot_done = tex("VignetteLootElite", 0, 1, 0, 1.3), -- green shiny skull
+            mount = tex("VignetteKillElite", 1, 0.33, 1, 1.8), -- red shiny skull
+            mount_partial = tex("VignetteKillElite", 0, 1, 1, 1.8), -- yellow shiny skull
+            mount_done = tex("VignetteKillElite", 0, 1, 0, 1.4), -- green shiny skull
         }
     }
     if ns.CLASSIC then
