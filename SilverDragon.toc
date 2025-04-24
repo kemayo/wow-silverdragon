@@ -45,7 +45,7 @@ scan\targets.lua
 scan\macro.lua
 scan\vignettes.lua
 scan\chat.lua
-scan\darkmagic.lua
+#scan\darkmagic.lua
 
 # optional bits
 outputs\tooltip.lua
