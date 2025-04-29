@@ -285,7 +285,7 @@ function module:SetupMounts()
 	for source, data in pairs(core.datasources) do
 		if core.db.global.datasources[source] then
 			for id, mobdata in pairs(data) do
-				if ns.Loot.HasMounts(id) and not core:ShouldIgnoreMob(id) then
+				if ns.Loot.HasMounts(id) and core:ShouldShowMob(id) then
 					table.insert(list, id)
 				end
 			end
@@ -546,7 +546,7 @@ do
 		local zone = options.nearby
 		if zone and ns.mobsByZone[zone] then
 			for id in pairs(ns.mobsByZone[zone]) do
-				if core:IsMobInPhase(id, zone) and not core:ShouldIgnoreMob(id, zone) then
+				if core:IsMobInPhase(id, zone) and core:ShouldShowMob(id, zone) then
 					table.insert(sorted_mobs, id)
 				end
 			end
@@ -568,11 +568,15 @@ do
 			table.sort(sorted_mobs, mob_sorter)
 
 			local notes = CreateAtlasMarkup("poi-workorders")
+			local ignored = CreateAtlasMarkup("Map-MarkedDefeated")
 
 			for _, id in ipairs(sorted_mobs) do
 				ns.Loot.Cache(id)
 				local name, vignette, tameable, last_seen, times_seen = core:GetMobInfo(id)
 				local label = core:GetMobLabel(id)
+				if core:ShouldIgnoreMob(id, zone) then
+					label = label .. " " .. ignored
+				end
 				local index, col = tooltip:AddLine(
 					(ns.mobdb[id] and ns.mobdb[id].notes) and (label .. " " .. notes) or label,
 					times_seen,

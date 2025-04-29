@@ -637,6 +637,22 @@ do
 			[32491] = true, -- Time-Lost
 		},
 	}
+	function addon:ShouldShowMob(id, zone)
+		if zone and zone_ignores[zone] and zone_ignores[zone][id] then
+			return false
+		end
+		if mobdb[id] then
+			if mobdb[id].hidden then
+				return false
+			end
+			if mobdb[id].faction == faction then
+				--This checks unit faction and ignores mobs your faction cannot do anything with.
+				--TODO: add an option for this?
+				return false
+			end
+		end
+		return true
+	end
 	function addon:ShouldIgnoreMob(id, zone)
 		if globaldb.ignore[id] then
 			return true
@@ -646,22 +662,10 @@ do
 			-- (Unless you've also, weirdly, manually told it to be ignored as well.)
 			return false
 		end
-		if zone and zone_ignores[zone] and zone_ignores[zone][id] then
+		if mobdb[id] and mobdb[id].source and globaldb.ignore_datasource[mobdb[id].source] then
 			return true
 		end
-		if mobdb[id] then
-			if mobdb[id].hidden then
-				return true
-			end
-			if mobdb[id].faction == faction then
-				--This checks unit faction and ignores mobs your faction cannot do anything with.
-				--TODO: add an option for this?
-				return true
-			end
-			if mobdb[id].source and globaldb.ignore_datasource[mobdb[id].source] then
-				return true
-			end
-		end
+		return not self:ShouldShowMob(id, zone)
 	end
 end
 

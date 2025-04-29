@@ -4,7 +4,6 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Tooltip", "AceEvent-3.0")
 local Debug = core.Debug
 
-local globaldb
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Tooltip", {
 		profile = {
@@ -68,6 +67,10 @@ function module:UpdateTooltip(id, force_achievement, force_drop, force_id)
 
 	if (self.db.profile.drop and (self.db.profile.combatdrop or not InCombatLockdown())) or force_drop == true and force_drop ~= false then
 		ns.Loot.Summary.UpdateTooltip(GameTooltip, id)
+	end
+
+	if core:ShouldIgnoreMob(id) then
+		GameTooltip:AddLine("SilverDragon is ignoring this mob", 1, 0.5, 0)
 	end
 
 	if self.db.profile.id or force_id and force_id ~= false then
