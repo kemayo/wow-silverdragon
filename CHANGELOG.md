@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2025.7
+
+* Undermine: updated some changed quest IDs (thanks ywi!)
+* Show ignored mobs in the LDB dropdown
+
 ## Changed in v2025.6
 
 * Updated for 11.1.5 and 1.15.7
