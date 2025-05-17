@@ -2700,7 +2700,7 @@ ns.RegisterPoints(ns.UNDERMINE, {
 	[57207860] = {
 		label="Scrapchewer",
 		criteria=71610,
-		quest=85778, --v
+		quest=90491, -- 85778 pre-11.1.5
 		npc=233471,
 		loot={
 			--234741, -- Miscellaneous Mechanica
@@ -2789,7 +2789,7 @@ ns.RegisterPoints(ns.UNDERMINE, {
 	[39602200] = {
 		label="M.A.G.N.O.",
 		criteria=71608,
-		quest=86298, --v
+		quest=90488, -- 86298 pre-11.1.5
 		npc=234480,
 		loot={
 			--234741, -- Miscellaneous Mechanica
@@ -2818,7 +2818,7 @@ ns.RegisterPoints(ns.UNDERMINE, {
 	[32027652] = {
 		label="Giovante",
 		criteria=71609,
-		quest=86307, -- v + 90489
+		quest=90489, -- 86307 pre-11.1.5
 		npc=234499,
 		loot={
 			--234741, -- Miscellaneous Mechanica
@@ -2835,7 +2835,7 @@ ns.RegisterPoints(ns.UNDERMINE, {
 	[61472520] = {
 		label="Voltstrike the Charged",
 		criteria=71611,
-		quest=85777, --v
+		quest=90490, -- 85777 pre-11.1.5
 		npc=233472,
 		loot={
 			--234741, -- Miscellaneous Mechanica
@@ -2852,7 +2852,7 @@ ns.RegisterPoints(ns.UNDERMINE, {
 	[40209190] = {
 		label="Darkfuse Precipitant",
 		criteria=71612,
-		quest=85010, --v
+		quest=90492, -- 85010 pre-11.1.5
 		npc=231310,
 		loot={
 			{229955, mount=true,}, -- Darkfuse Spy-Eye
