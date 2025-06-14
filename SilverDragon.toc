@@ -16,6 +16,17 @@
 ## OptionalDependencies: Ace3, LibSharedMedia-3.0, TomTom, LibSink-2.0, LibQTip-1.0, LibDBIcon-1.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons, LibTextDump-1.0, LibWindow-1.1
 ## SavedVariables: SilverDragon3DB
 ## LoadOnDemand: 0
+## Category: Collections
+## Category-deDE: Kriegsmeutesammlungen
+## Category-esES: Colecciones de banda guerrera
+## Category-esMX: Colecciones de tropa
+## Category-frFR: Collections du bataillon
+## Category-itIT: Collezioni della Brigata
+## Category-koKR: 전투부대 수집품
+## Category-ptBR: Coleções do Bando de Guerra
+## Category-ruRU: Коллекции отряда
+## Category-zhCN: 战团藏品
+## Category-zhTW: 戰隊收藏
 
 ## X-Embeds: Ace3, LibSink-2.0, LibSharedMedia-3.0, ChatThrottleLib, AceGUI-3.0-SharedMediaWidgets, HereBeDragons-2.0, LibTextDump-1.0
 
