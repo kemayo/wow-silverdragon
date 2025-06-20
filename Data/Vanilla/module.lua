@@ -66,7 +66,7 @@ core:RegisterMobData("Vanilla", {
 	[1920] = {name="Ambermill Spellscribe",locations={[21]={63465825},},loot={4437,4436},},
 	[1936] = {name="Farmer Solliden",locations={[18]={34205200},},loot={4261},},
 	[1944] = {name="Rot Hide Bruiser",locations={[18]={56204260},},loot={5975,4439},},
-	[1948] = {name="Snarlmane",locations={[18]={65802360},},loot={4445},},
+	[1948] = {name="Snarlmane",locations={[21]={65802360},},loot={4445},},
 	[2090] = {name="Ma'ruk Wyrmscale",locations={[56]={48007420},},loot={5749,5750},},
 	[2108] = {name="Garneg Charskull",locations={[56]={38204580},},loot={6200,3392},},
 	[2162] = {name="Agal",locations={[57]={47204460},},},
