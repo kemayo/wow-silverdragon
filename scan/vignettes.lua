@@ -34,7 +34,8 @@ function module:OnInitialize()
 		},
 	})
 
-	self.compat_disabled = (LE_EXPANSION_LEVEL_CURRENT < (LE_EXPANSION_MISTS_OF_PANDARIA or 999)) -- missing on classic_era
+	-- missing before the last patch of Mists
+	self.compat_disabled = not C_EventUtils.IsEventValid("VIGNETTE_MINIMAP_UPDATED")
 
 	-- migrate!
 	local db = self.db.profile

@@ -26,7 +26,7 @@ function module:OnInitialize()
 		},
 	})
 
-	compat_disabled = C_AddOns.IsAddOnLoaded("MinimapRangeExtender") or (LE_EXPANSION_LEVEL_CURRENT < (LE_EXPANSION_MISTS_OF_PANDARIA or 999))
+	compat_disabled = C_AddOns.IsAddOnLoaded("MinimapRangeExtender") or not C_EventUtils.IsEventValid("VIGNETTE_MINIMAP_UPDATED")
 	self.compat_disabled = compat_disabled
 
 	self.pool = CreateFramePool("FRAME", Minimap, "SilverDragonVignetteStretchPinTemplate", function(_, icon)
