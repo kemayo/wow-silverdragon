@@ -536,13 +536,13 @@ PopupMixin.scripts = {
 			module:Point(self.data)
 		elseif IsShiftKeyDown() then
 			module:SendLinkFromData(self.data)
-		elseif IsAltKeyDown() then
+		elseif IsAltKeyDown() and not InCombatLockdown() then
 			module.anchor:StartMoving()
 		end
 	end,
 	OnMouseUp = function(self, button)
-		module.anchor:StopMovingOrSizing()
 		if not InCombatLockdown() then
+			module.anchor:StopMovingOrSizing()
 			LibWindow.SavePosition(module.anchor)
 			module:Reflow()
 		end
