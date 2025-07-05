@@ -3,6 +3,7 @@ name = "silverdragon-tools"
 version = "0.1.0"
 description = "Tools for updating SilverDragon"
 authors = ["David Lynch <kemayo@gmail.com>"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.7"
