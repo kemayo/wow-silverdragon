@@ -171,7 +171,7 @@ local worldQuestMobLookup = {
 }
 ns.worldQuestMobLookup = worldQuestMobLookup
 local vignetteMobLookup = {
-	-- [name] = { [mobid] = true, ... }
+	-- [vignetteid] = { [mobid] = true, ... }
 }
 ns.vignetteMobLookup = vignetteMobLookup
 ns.vignetteTreasureLookup = {
@@ -335,6 +335,15 @@ do
 			lookup[quest][mobid] = true
 		end
 	end
+	local function addVignetteMobLookups(mobid, ...)
+		for i=1, select("#", ...) do
+			local vignetteID = select(i, ...)
+			if not vignetteMobLookup[vignetteID] then
+				vignetteMobLookup[vignetteID] = {}
+			end
+			vignetteMobLookup[vignetteID][mobid] = true
+		end
+	end
 	local function addMobToLookups(mobid, mobdata)
 		if mobdata.hidden then
 			return
@@ -355,12 +364,7 @@ do
 			addQuestMobLookup(worldQuestMobLookup, mobid, mobdata.worldquest)
 		end
 		if mobdata.vignette then
-			local vignetteMobs = vignetteMobLookup[mobdata.vignette]
-			if not vignetteMobs then
-				vignetteMobs = {}
-				vignetteMobLookup[mobdata.vignette] = vignetteMobs
-			end
-			vignetteMobs[mobid] = true
+			addVignetteMobLookups(mobid, ns.safe_unpack(mobdata.vignette))
 		end
 	end
 	function addon:BuildLookupTables()

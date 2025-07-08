@@ -161,6 +161,16 @@ function addon:ColorTextByCompleteness(complete, text)
 	return (complete and completeColor or incompleteColor):WrapTextInColorCode(text)
 end
 
+-- Tables
+
+function ns.safe_unpack(val)
+	-- When a value could be a table or a single value
+	if ns.xtype(val) == "table" then
+		return unpack(val)
+	end
+	return val
+end
+
 -- GUID / unit
 
 do
