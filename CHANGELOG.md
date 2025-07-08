@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2025.10
+
+* Add a new Events data module that contains the Anniversary event mobs, and the Treasure Goblins for the current event
+
 ## Changed in v2025.9
 
 * Blizzard hotfixed in protection for stopping dragging for some frames during combat, so I've disabled moving the target popups during combat
