@@ -298,7 +298,7 @@ core:RegisterMobData("Legion", {
 	[117136] = {name="Doombringer Zar'thoz",locations={[646]={49803620},},loot={151814},quest=46097,},
 	[117140] = {name="Salethan the Broodwalker",locations={[646]={64403100,69603080,70602540},},quest=46091,},
 	[117141] = {name="Malgrazoth",locations={[646]={57402740},},quest=46090,},
-	[117239] = {name="Brutallus",locations={[646]={58402800},},},
+	[117239] = {name="Brutallus",locations={[646]={59682873},},},
 	[117303] = {name="Malificus",locations={[646]={58202820},},},
 	[117470] = {name="Si'vash",locations={[646]={88003300},},quest=46945,},
 	[117850] = {name="Simone the Seductress",locations={[634]={37404020},},notes="Invasion world quest",hidden=true,},
