@@ -91,7 +91,15 @@ core:RegisterMobData("Events", {
             --]]
         },
         -- quest=76215, 76216, 91091, 91092
-        vignette=5732, -- also 5748 Shrouded Portal, 6987 Blood Circus Portal, 6985 Lava Labrynth Portal, 6986 Poison Forest Portal, 6984 Frigid Frostlands Portal, 6983 Maggot City Portal
+        vignette={
+            5732, -- Treasure Goblin
+            5748, -- Shrouded Portal
+            6983, -- Maggot City Portal
+            6984, -- Frigid Frostlands Portal
+            6985, -- Lava Labrynth Portal,
+            6986, -- Poison Forest Portal
+            6987, -- Blood Circus Portal
+        },
         -- notes="First daily kill quest: {quest:}",
     },
 }, true)
