@@ -44,4 +44,54 @@ core:RegisterMobData("Events", {
         quest=84256, -- 84312?
         loot={},
     },
+
+    -- Greedy Emissary
+    [205490] = {
+        name="Treasure Goblin",
+        locations={
+            [84] = {33833434}, -- Stormwind
+            -- [85] = {}, -- Orgrimmar
+            [1] = {44041934}, -- Durotar
+            [2339] = {69879162}, -- Dornogal
+            [2248] = {54575484}, -- Isle of Dorn
+            [2346] = {}, -- Undermine (any rare)
+        },
+        loot={
+            {245589,quest=91170}, -- Hellcaller Chest (91079, 91080, 91081, 91082, 91083, 91166, 91167, 91168, 91169, 91170, )
+            {246264,mount=true,}, -- Inarius' Charger
+            {142542,toy=true,}, -- Tome of Town Portal
+            {206008,toy=true,}, -- Nightmare Banner
+            {206018,pet=true,}, -- Baa'lial Soulstone
+            206007, -- Treasure Nabbin' Bag
+            246242, -- Blood-Wrapped Treasure Bag
+            -- 206039, -- Enmity Bundle:
+            206004, -- Enmity Cloak (Bundle)
+            206020, -- Enmity Hood (Bundle)
+            206005, -- Wirt's Fightin' Leg
+            206275, -- Wirt's Haunted Leg
+            206276, -- Wirt's Last Leg
+            143327, -- Livestock Lochaber Axe
+            206003, -- Horadric Haversack (quest=76215?)
+            --[[
+            245635, -- Rich Elixir
+            245636, -- Deafening Elixir
+            245749, -- Large Charm of Intelligence
+            245887, -- Stalwart's Grand Charm
+            245888, -- Serpent's Grand Charm
+            245889, -- Large Charm of Dexterity
+            245890, -- Large Charm of Strength
+            245891, -- Small Charm of Inertia
+            245892, -- Small Charm of Life
+            245893, -- Small Charm of Alacrity
+            245894, -- Small Charm of Proficiency
+            245895, -- Small Charm of Savagery
+            245896, -- Small Charm of Adaptability
+            245899, -- Bat's Grand Charm
+            245924, -- Mongoose's Grand Charm
+            --]]
+        },
+        -- quest=76215, 76216, 91091, 91092
+        vignette=5732, -- also 5748 Shrouded Portal, 6987 Blood Circus Portal, 6985 Lava Labrynth Portal, 6986 Poison Forest Portal, 6984 Frigid Frostlands Portal, 6983 Maggot City Portal
+        -- notes="First daily kill quest: {quest:}",
+    },
 }, true)
