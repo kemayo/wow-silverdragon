@@ -829,6 +829,24 @@ core:RegisterMobData("WarWithin", {
 			225751, -- Seal of the Broken Mountain
 		},
 	},
+	[231821] = {
+		name="The Gobfather",
+		quest=85088, -- 89401 is the account-loot weekly, I think?
+		worldquest=85088, -- The Main Event, also
+		-- locations={[ns.UNDERMINE]={49601720}},
+		locations={[ns.UNDERMINE]={}},
+		loot={
+			232725, -- Pilot's Oiled Trousers
+			232726, -- Well-Trodden Mechanic's Shoes
+			232727, -- Cavern Stalker's Trophy Girdle
+			232728, -- Darkfuse Dinner Jacket
+			232729, -- Horn-Adorned Chausses
+			232730, -- Cauldron Master Cleats
+			232731, -- Steadfast Contender's Breastplate
+			232732, -- Champion's Gilded Stompers
+			232733, -- Gobfather's Gold Medal
+		},
+	},
 
 	-- Xal'atath appears sometimes to monologue at you, but she's just a non-interactable story/dungeon element:
 	[229244] = {name="Xal'atath", hidden=true},
