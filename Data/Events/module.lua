@@ -100,6 +100,7 @@ core:RegisterMobData("Events", {
             6986, -- Poison Forest Portal
             6987, -- Blood Circus Portal
         },
+        requires=GREEDY,
         -- notes="First daily kill quest: {quest:}",
     },
 }, true)
