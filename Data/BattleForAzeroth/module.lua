@@ -672,7 +672,7 @@ core:RegisterMobData("BattleForAzeroth", {
 	[162173] = {name="R'krox the Runt",locations={[1527]={25400900},},requires=ULDUM_AQIR,quest=58864,routes={[1527]={{30603200,30202760,28601420,25400900,30800940,33801100,37801000}},},},
 	[162196] = {name="Obsidian Annihilator",locations={[1527]={35001740},},quest=58681,},
 	[162254] = {name="Corrupted Observer",locations={[1527]={},},quest=58691,},
-	[162352] = {name="Spirit of Dark Ritualist Zakahn",locations={[1527]={50004000},},requires={ULDUM_AQIR,ULDUM_AMATHET,any=true},quest=58716,},
+	[162352] = {name="Spirit of Dark Ritualist Zakahn",locations={[1527]={50004000},},requires={ULDUM_AQIR,ULDUM_AMATHET,any=true},quest=58716,notes="Underwater cave @ 52,40"},
 	[162370] = {name="Armagedillo",locations={[1527]={43804140},},requires={ULDUM_AQIR,ULDUM_AMATHET,any=true},quest=58718,},
 	[162372] = {name="Spirit of Cyrus the Black",locations={[1527]={58006160,58008240,66406800,70807460},},requires={ULDUM_AQIR,ULDUM_AMATHET,any=true},quest=58715,},
 	[162681] = {name="Elusive Quickhoof",locations={[864]={26405250,28006500,31106730,42006000,43006900,51108590,52508900,54008300,54605320,55007300},},loot={{174860,mount=1324,}},notes="Feed it Seaside Leafy Greens Mix",tameable=454771,},
