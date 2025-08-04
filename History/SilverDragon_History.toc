@@ -1,4 +1,4 @@
-## Interface: 110107, 50500, 30404, 11507
+## Interface: 110200, 110107, 50500, 30404, 11507
 ## Title: SilverDragon: History
 ## Notes: Show the history of seen rares
 ## Version: @project-version@
