@@ -476,6 +476,7 @@ do
 	end
 	local locations = {}
 	local function show_mob_tooltip(cell, mobid)
+		-- TODO: this should get combined with the near-identical code in Overlay...
 		tooltip:SetFrameStrata("DIALOG")
 		GameTooltip:SetOwner(cell, "ANCHOR_NONE")
 		GameTooltip:SetPoint("TOPLEFT", cell, "BOTTOMLEFT")
@@ -496,6 +497,22 @@ do
 					end
 					GameTooltip:AddLine((SUBTITLE_FORMAT):format(core.zone_names[zone], (", "):join(unpack(locations))), nil, nil, nil, true)
 				end
+			end
+			if ns.mobdb[mobid].requires then
+			    local metRequirements = ns.conditions.check(ns.mobdb[mobid].requires)
+			    local r, g, b = (metRequirements and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+			    GameTooltip:AddLine(
+			        core:RenderString(ns.conditions.summarize(ns.mobdb[mobid].requires), ns.mobdb[mobid]),
+			        r, g, b, true
+			    )
+			end
+			if ns.mobdb[mobid].active then
+			    local isActive = ns.conditions.check(ns.mobdb[mobid].active)
+			    local r, g, b = (isActive and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+			    GameTooltip:AddLine(
+			        core:RenderString(ns.conditions.summarize(ns.mobdb[mobid].active), ns.mobdb[mobid]),
+			        r, g, b, true
+			    )
 			end
 		end
 		if not _G.C_TooltipInfo then
