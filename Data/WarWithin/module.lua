@@ -687,6 +687,253 @@ core:RegisterTreasureData("WarWithin", {
 		quest=86487,
 		loot={235038}, -- Crumpled Schematic
 	},
+
+	-- K'aresh
+	[6682] = {
+		name="Gift of the Brothers",
+		achievement=42741, criteria=106270,
+		quest=85959, -- Brothers are 86065, 86066, 86067; turning it in is 85958
+		loot={
+			248199, -- The Brothers' Final Gift
+			248200, -- The Brothers' Not-So-Final Present
+		},
+		note="Get {spell:471549:Flickering Lantern} and find the three brothers",
+	},
+	[6702] = {
+		name="Ancient Coffer",
+		achievement=42741, criteria=106271,
+		quest=86416,
+		loot={
+			{245269, pet=true}, -- Mr. Long-Legs
+		},
+		note="Bring the {item:233794} and {item:233799}",
+	},
+	[6675] = {
+		name="Forlorn Wind Chime",
+		achievement=42741, criteria=106272,
+		quest=85837,
+		loot={
+			243144, -- Reshii Crystal Fragments
+			-- ns.rewards.Currency(ns.CURRENCY_VALORSTONE, 5), ns.rewards.Currency(ns.CURRENCY_RESONANCE, 4),
+		},
+	},
+	[6724] = {
+		name="Ixthar's Favorite Crystal",
+		achievement=42741, criteria=106244,
+		quest=86492,
+		loot={
+			243144, -- Reshii Crystal Fragments
+			-- ns.rewards.Currency(ns.CURRENCY_VALORSTONE, 5), ns.rewards.Currency(ns.CURRENCY_RESONANCE, 3),
+		},
+	},
+	[6690] = {
+		name="Wastelander Stash",
+		achievement=42741, criteria=106274,
+		quest=86301,
+		loot={
+			243145, -- Well-Preserved Wrappings
+			-- ns.rewards.Currency(ns.CURRENCY_VALORSTONE, 5), ns.rewards.Currency(ns.CURRENCY_RESONANCE, 4),
+		},
+	},
+	[6692] = {
+		name="Tumbled Package",
+		achievement=42741, criteria=106275,
+		quest=86304,
+		loot={
+			ns.rewards.Item(238201, 10), -- Desolate Talus
+			243160, -- Tazavesh Shipping Manifest
+			-- ns.rewards.Currency(ns.CURRENCY_VALORSTONE, 5), ns.rewards.Currency(ns.CURRENCY_RESONANCE, 4),
+		},
+	},
+	[6693] = {
+		name="Rashaal's Vase",
+		achievement=42741, criteria=106276,
+		quest=86306,
+		loot={
+			ns.rewards.Item(239690, 10), -- Phantom Bloom
+			243161, -- Long-Pressed Flowers
+			-- ns.rewards.Currency(ns.CURRENCY_RESONANCE, 5),
+		},
+		path=68834794,
+	},
+	[6695] = {
+		name="Shattered Crystals",
+		achievement=42741, criteria=108722,
+		quest=86308,
+		loot={
+			243144, -- Reshii Crystal Fragments
+			-- ns.rewards.Currency(ns.CURRENCY_VALORSTONE, 5), ns.rewards.Currency(ns.CURRENCY_RESONANCE, 4),
+		},
+	},
+	[6696] = {
+		name="Skeletal Tail Bones",
+		achievement=42741, criteria=106277,
+		quest=86322,
+		loot={
+			{243158, pet=true}, -- Ixthal the Observling
+			-- ns.rewards.Currency(ns.CURRENCY_VALORSTONE, 5), ns.rewards.Currency(ns.CURRENCY_RESONANCE, 5),
+		},
+	},
+	[6697] = {
+		name="Crudely Stitched Sack",
+		achievement=42741, criteria=106278,
+		quest=86323,
+		loot={
+			246295, -- Tazavesh Lookout's Mace
+			246296, -- Off-Balance Mace of the Tazavesh Lookout
+			-- ns.rewards.Currency(ns.CURRENCY_VALORSTONE, 5), ns.rewards.Currency(ns.CURRENCY_RESONANCE, 4),
+		},
+	},
+	[6673] = {
+		name="Abandoned Lockbox (multiple spawn points?)",
+		achievement=42741, criteria=108723,
+		quest=92348,
+		loot={
+			246299, -- Blade of Lost Hope
+			246301, -- Pitted Blade of Lost Hope
+			-- ns.rewards.Currency(ns.CURRENCY_VALORSTONE, 5), ns.rewards.Currency(ns.CURRENCY_RESONANCE, 5),
+		},
+	},
+	[6674] = {
+		name="Lightly-Dented Luggage (multiple spawn points?)",
+		achievement=42741, criteria=106279,
+		quest=91352,
+		loot={},
+	},
+	[6676] = {
+		name="Sand-Worn Coffer",
+		achievement=42741, criteria=106280,
+		quest=85840,
+		loot={
+			246297, -- Desperate Defender's Bladed Staff
+			246298, -- Cracked Staff of the Desperate Defender
+			-- ns.rewards.Currency(ns.CURRENCY_VALORSTONE, 5), ns.rewards.Currency(ns.CURRENCY_RESONANCE, 5),
+		},
+	},
+	[6712] = {
+		name="Mailroom Distribution",
+		achievement=42741, criteria=106273,
+		quest=86467,
+		loot={{245970, toy=true}}, -- P.O.S.T. Master's Express Hearthstone
+	},
+	[6889] = {
+		name="Ethereal Voidforged Container",
+		achievement=42741, criteria=106224,
+		quest=89378,
+		loot={
+			246293, -- Buckler of the Last Stand
+			246294, -- Shattered Buckler of the Last Stand
+		},
+	},
+	[6919] = {
+		name="Light-Soaked Cleaver",
+		achievement=42741, criteria=106281,
+		quest=90511,
+		loot={
+			243002, -- Light-Soaked Cleaver
+			243014, -- Light-Dimmed Cleaver
+		},
+	},
+	[6921] = {
+		name="Efrat's Forgotten Bulwark",
+		achievement=42741, criteria=106283,
+		quest=90514,
+		loot={
+			243004, -- Efrat's Forgotten Bulwark
+			243016, -- Efrat's Totally Abandonded Bulwark
+		},
+	},
+	[6925] = {
+		name="Tulwar of the Golden Guard",
+		achievement=42741, criteria=106284,
+		quest=90522,
+		loot={
+			243005, -- Tulwar of the Golden Guard
+			243017, -- Tulwar of the Pyrite Guard
+		},
+	},
+	[6922] = {
+		name="Petrified Branch of Janaa",
+		achievement=42741, criteria=106285,
+		quest=90515,
+		loot={
+			243006, -- Petrified Branch of Janaa
+			243018, -- Petrified Twig of the Fennad
+		},
+	},
+	[6926] = {
+		name="Shadowguard Crusher",
+		achievement=42741, criteria=106286,
+		quest=90527,
+		loot={
+			243008, -- Shadowguard Crusher
+			243021, -- Shadowguard Bonker
+		},
+	},
+	[6923] = {
+		name="Sufaadi Skiff Lantern",
+		achievement=42741, criteria=106287,
+		quest=90521,
+		loot={
+			243009, -- Sufaadi Skiff Lantern
+			243022, -- Sufaadi Skiff Candle
+		},
+	},
+	[6927] = {
+		name="Korgorath's Talon",
+		achievement=42741, criteria=106288,
+		quest=90532,
+		loot={
+			243153, -- Korgorath's Talon
+			243154, -- Korgorath's Broken Nail
+		},
+	},
+	[6967] = {
+		name="Warglaive of the Audacious Hunter",
+		achievement=42741, criteria=106289,
+		quest=91055,
+		loot={
+			245667, -- Warglaive of the Audacious Hunter
+			245668, -- Warglaive of the Subdued Tracker
+		},
+		vignette=6965, --
+		--path=56802410,
+	},
+	[50803530] = { -- Phaseblade of the Void Marches
+		criteria=106291,
+		quest=91057,
+		loot={
+			245671, -- Phaseblade of the Void Marches
+			245672, -- Blade of the Void Swamp
+		},
+	},
+	[6968] = {
+		name="Bladed Rifle of Unfettered Momentum",
+		achievement=42741, criteria=106292,
+		quest=91058,
+		loot={
+			245673, -- Bladed Rifle of Unfettered Momentum
+			245674, -- Rifle of Leaden Movement
+		},
+	},
+	[6920] = {
+		name="Spear of Fallen Memories",
+		achievement=42741, criteria=106296,
+		quest=90512,
+		loot={
+			243003, -- Spear of Fallen Memories
+			243015, -- Spear of Forgotten Memories
+		},
+	},
+	[6966] = {
+		name="P.O.S.T. Master's Prototype Parcel and Postage Presser",
+		achievement=42741, criteria=106290,
+		quest=91056,
+		loot={
+			245669, -- P.O.S.T. Master's Prototype Parcel and Postage Presser
+			245670, -- P.O.S.T. Employee's Backup Stamp
+		},
+	},
 }, true)
 
 -- Hallowfall treasures with shared loot:
