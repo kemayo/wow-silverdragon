@@ -144,6 +144,23 @@ function ns.rewards.Currency:Icon()
 		return info.icon
 	end
 end
+function ns.rewards.Currency:Notable()
+	if self.faction then
+		-- if this is faction-reputation, consider it non-notable once your reputation is maxed out
+		-- TODO: revisit this for paragon reps later?
+		if C_Reputation.IsMajorFaction(self.faction) then
+			if C_MajorFactions.HasMaximumRenown(self.faction) then
+				return false
+			end
+		else
+			local data = C_Reputation.GetFactionDataByID(self.faction)
+			if data and data.currentReactionThreshold == data.nextReactionThreshold then
+				return false
+			end
+		end
+	end
+	return self:super("Notable")
+end
 function ns.rewards.Currency:TooltipLabel()
 	return self.faction and REPUTATION or CURRENCY
 end
@@ -162,4 +179,69 @@ function ns.rewards.Currency:AddToItemButton(button, ...)
 	end
 	-- could use info.displayAmount here, but I think this makes more sense:
 	SetItemButtonCount(button, self.amount)
+end
+
+ns.rewards.BattlePet = Reward:extends({classname="BattlePet",
+	COLORS={
+		[1] = CreateColor(0, 0.66, 1), -- Humanoid
+		[2] = CreateColor(0, 0.66, 0), -- Dragonkin
+		[3] = CreateColor(0.8, 0.8, 0.3), -- Flying
+		[4] = CreateColor(0.6, 0.4, 0.4), -- Undead
+		[5] = CreateColor(0.5, 0.33, 0.25), -- Critter
+		[6] = CreateColor(0.75, 0.5, 1), -- Magic
+		[7] = CreateColor(1, 0.5, 0), -- Elemental
+		[8] = CreateColor(0.8, 0.15, 0.15), -- Beast
+		[9] = CreateColor(0, 0.6, 0.66), -- Aquatic
+		[10] = CreateColor(0.6, 0.6, 0.5), -- Mechanical
+	},
+})
+function ns.rewards.BattlePet:Name(color)
+	local name, texture, battlePetTypeID, mobID, source, description = C_PetJournal.GetPetInfoBySpeciesID(self.id)
+	if name then
+		if color and self.COLORS[battlePetTypeID] then
+			name = self.COLORS[battlePetTypeID]:WrapTextInColorCode(name)
+		end
+		return name
+	end
+	return self:super("Name", color)
+end
+function ns.rewards.BattlePet:Icon()
+	local name, texture, battlePetTypeID, mobID, source, description = C_PetJournal.GetPetInfoBySpeciesID(self.id)
+	if battlePetTypeID and PET_TYPE_SUFFIX[battlePetTypeID] then
+		return "Interface\\Icons\\Pet_Type_"..PET_TYPE_SUFFIX[battlePetTypeID]
+	end
+	return texture
+end
+function ns.rewards.BattlePet:TooltipLabel() return TOOLTIP_BATTLE_PET end
+function ns.rewards.BattlePet:Obtained(...)
+	if self:super("Obtained", ...) == false then return false end
+	return C_PetJournal.GetNumCollectedInfo(self.id) > 0
+end
+function ns.rewards.BattlePet:Notable(...) return ns.db.pet_notable and self:super("Notable", ...) end
+function ns.rewards.BattlePet:ObtainedTag(...)
+	local owned, limit = C_PetJournal.GetNumCollectedInfo(self.id)
+	if owned ~= 0 and owned ~= limit then
+		-- ITEM_PET_KNOWN is "Collected (%d/%d)" which is a bit long for this
+		return " " .. GENERIC_FRACTION_STRING:format(owned, limit) .. self:super("ObtainedTag", ...)
+	end
+	return self:super("ObtainedTag", ...)
+end
+function ns.rewards.BattlePet:SetTooltip(tooltip, ...)
+	local name, texture, battlePetTypeID, mobID, source, description = C_PetJournal.GetPetInfoBySpeciesID(self.id)
+	if not name then
+		tooltip:AddLine("pet:" .. self.id)
+		tooltip:AddLine(SEARCH_LOADING_TEXT, 0, 1, 1)
+		return
+	end
+	local owned, limit = C_PetJournal.GetNumCollectedInfo(self.id)
+	local r, g, b = (self.COLORS[battlePetTypeID] or NORMAL_FONT_COLOR):GetRGB()
+	tooltip:AddDoubleLine(name, PET_TYPE_SUFFIX[battlePetTypeID] or UNKNOWN, r, g, b, r, g, b)
+	tooltip:AddTexture(texture)
+	tooltip:AddLine(description, 1, 1, 1, true)
+	tooltip:AddLine(source)
+	tooltip:AddLine(ITEM_PET_KNOWN:format(owned, limit))
+end
+function ns.rewards.BattlePet:Cache()
+	self:super("Cache")
+	if C_PetJournal then C_PetJournal.GetPetInfoBySpeciesID(self.id) end
 end

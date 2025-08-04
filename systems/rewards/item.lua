@@ -8,6 +8,10 @@ local materials = {
 }
 
 ns.rewards.Item = ns.rewards.Reward:extends({classname="Item"})
+function ns.rewards.Item:init(id, amount, ...)
+	self:super("init", id, ...)
+	self.amount = amount
+end
 
 ns.rewards.Item.COSMETIC_COLOR = CreateColor(1, 0.5, 1)
 ns.rewards.Item.NOTABLE_TRANSMOG_COLOR = CreateColor(1, 0, 1)
@@ -15,7 +19,10 @@ ns.rewards.Item.NOTABLE_TRANSMOG_COLOR = CreateColor(1, 0, 1)
 function ns.rewards.Item:Name(color)
 	local name, link = C_Item.GetItemInfo(self.id)
 	if link then
-		return color and link:gsub("[%[%]]", "") or name
+		name = color and link:gsub("[%[%]]", "") or name
+		return (self.amount and self.amount > 1) and
+			("%s x %d"):format(name, self.amount) or
+			name
 	end
 end
 function ns.rewards.Item:TooltipLabel()
@@ -73,8 +80,8 @@ function ns.rewards.Item:SetTooltip(tooltip)
 end
 function ns.rewards.Item:AddToItemButton(button)
 	button:SetItem(self.id)
-	if self.count or self.amount then
-		button:SetItemButtonCount(self.count or self.amount)
+	if self.amount then
+		button:SetItemButtonCount(self.amount)
 	end
 end
 function ns.rewards.Item:Cache()
@@ -253,6 +260,7 @@ function ns.rewards.Mount:Cache()
 	if C_MountJournal and self:MountID() then C_MountJournal.GetMountInfoByID(self:MountID()) end
 end
 
+-- TODO: consolidate this with BattlePet a bit?
 ns.rewards.Pet = ns.rewards.Item:extends({classname="Pet"})
 function ns.rewards.Pet:init(id, petid, ...)
 	self:super("init", id, ...)
