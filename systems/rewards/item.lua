@@ -9,8 +9,13 @@ local materials = {
 
 ns.rewards.Item = ns.rewards.Reward:extends({classname="Item"})
 function ns.rewards.Item:init(id, amount, ...)
-	self:super("init", id, ...)
-	self.amount = amount
+	if ns.xtype(amount) == 'table' then
+		-- backwards compatible
+		self:super("init", id, amount, ...)
+	else
+		self:super("init", id, ...)
+		self.amount = amount
+	end
 end
 
 ns.rewards.Item.COSMETIC_COLOR = CreateColor(1, 0.5, 1)
