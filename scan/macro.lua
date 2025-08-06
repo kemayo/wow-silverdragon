@@ -8,12 +8,15 @@ local DebugF = core.DebugF
 local HBD = LibStub("HereBeDragons-2.0")
 
 function module:OnInitialize()
+	self.vignettesExist = C_EventUtils.IsEventValid("VIGNETTE_MINIMAP_UPDATED")
 	self.db = core.db:RegisterNamespace("Macro", {
 		profile = {
 			enabled = true,
 			custom = true,
 			verbose = true,
 			relaxed = false,
+			skipcomplete = true,
+			skipvignette = false,
 		},
 	})
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -62,6 +65,19 @@ function module:OnInitialize()
 						name = "Relaxed targeting",
 						desc = "Target with /tar instead of /targetexact. This will sometimes target the wrong mob, but it'll also let you fit more mobs into the macro.",
 						order = 30,
+					},
+					skipcomplete = {
+						type = "toggle",
+						name = "Skip completed mobs",
+						desc = "Don't even try to target mobs that you have completed",
+						order = 35,
+					},
+					skipvignette = {
+						type = "toggle",
+						name = "Skip known vignettes",
+						desc = "Don't even try to target mobs that have known vignettes, because we can be pretty sure that other scanning methods will catch them",
+						order = 40,
+						disabled = not self.vignettesExist,
 					},
 					create = {
 						type = "execute",
@@ -112,24 +128,27 @@ function module:BuildTargetMacro(limit)
 	local zone = HBD:GetPlayerZone()
 	local mobs = {}
 	local distances = {}
-	local length = self.db.profile.verbose and (#VERBOSE_ANNOUNCE + 1) or 0
+	local relevant_count = 0
 	for id, hasCoords, isCustom in core:IterateRelevantMobs(zone, true) do
+		-- Debug("Considering", id, (not self.vignettesExist), (not self.db.profile.skipvignette), ns.mobdb[id] and not ns.mobdb[id].vignette)
+		relevant_count = relevant_count + 1
 		if
 			(self.db.profile.custom or not isCustom) and
+			-- there's no vignettes in this game version OR the skip-vignette config is disabled OR the mob doesn't have a vignette
+			((not self.vignettesExist) or (not self.db.profile.skipvignette) or (ns.mobdb[id] and not ns.mobdb[id].vignette)) and
 			not core:ShouldIgnoreMob(id, zone) and
 			core:IsMobInPhase(id, zone) and
-			not ns:CompletionStatus(id)
+			not (self.db.profile.skipcomplete and ns:CompletionStatus(id))
 		then
 			local distance = hasCoords and select(4, core:GetClosestLocationForMob(id)) or 0
-			if distance then
-				distances[id] = distance
-				table.insert(mobs, id)
-			end
+			distances[id] = distance
+			table.insert(mobs, id)
 		end
 	end
 	table.sort(mobs, function(a, b)
 		return distances[a] < distances[b]
 	end)
+	local length = self.db.profile.verbose and (#(VERBOSE_ANNOUNCE:format(#mobs)) + 1) or 0
 	for _, id in ipairs(mobs) do
 		local name = core:NameForMob(id)
 		if name then
@@ -142,14 +161,14 @@ function module:BuildTargetMacro(limit)
 		end
 	end
 	if #macro == 0 then
-		table.insert(macro, "/script print(\"No mobs known to scan for\")")
+		table.insert(macro, ("/script print(\"No mobs to scan for, of %s in zone\")"):format(relevant_count == 0 and NONE or relevant_count))
 	elseif self.db.profile.verbose then
 		table.insert(macro, 1, VERBOSE_ANNOUNCE:format(#macro))
 	end
 
 	local mtext = ("\n"):join(unpack(macro))
 
-	-- DebugF("Updated macro: %d statements, %d characters", #macro, #mtext)
+	-- DebugF("Updated macro: %d statements, %d characters, %d mobs", #macro, #mtext, #mobs)
 	table.wipe(macro)
 	return mtext
 end
