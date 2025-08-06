@@ -3349,7 +3349,7 @@ ns.RegisterPoints(ns.KARESH_TAZAVESH, {
 	[71245702] = {
 		label="Grubber",
 		criteria=106333,
-		quest=90698,
+		quest=90698, -- 90699
 		npc=238540,
 		vignette=6914, -- also 6774?
 		note="Complete {quest:87405:Warrant Grubber} to summon",
@@ -3362,15 +3362,40 @@ ns.RegisterPoints(ns.KARESH_TAZAVESH, {
 ns.RegisterPoints(ns.KARESH, {
 	[50555406] = {
 		label="Miasmawrath",
-		quest=86447,
+		quest=86447, -- 91287, 91310, 91434
 		npc=234970,
+		loot={
+			246240, -- Devoured Energy-Pod
+			{238663, quest=89061}, -- Crystallized Anima
+		},
 		vignette=6705, -- Devourer Attack: Eco-Dome Primus (not sure if multiples spawn?)
 	},
 	[49386418] = {
 		label="The Harvester",
-		quest=86464,
+		quest=86464, -- 91289, 91311, 91435
 		npc=235087, -- 246366
+		loot={
+			246240, -- Devoured Energy-Pod
+			{238664, quest=89062}, -- Crystallized Anima
+		},
 		vignette=6707, -- Devourer Attack: The Atrium
+	},
+	[42505755] = {
+		label="Purple Peat",
+		quest=90692, -- 90693 (90578 is on the vignette, but didn't trigger...)
+		npc=241920, -- 241919
+		vignette=6917, -- also 6891?
+		note="Complete {quest:87546:Warrant Purple Peat} to summon",
+	},
+	[71792823] = {
+		label="Korgoth the Hungerer",
+		quest=84993, -- 91286, 91309, 91433
+		npc=231229,
+		loot={
+			246240, -- Devoured Energy-Pod
+			{232467, quest=85722}, -- Crystalized Anima
+		},
+		vignette=6608, -- Devourer Attack: The Oasis
 	},
 	-- not yet vignette-coords:
 	--[[
@@ -3393,13 +3418,6 @@ ns.RegisterPoints(ns.KARESH, {
 		quest=86550,
 		npc=235422,
 		vignette=6727,
-	},
-	[0] = {
-		label="Purple Peat",
-		quest=90578,
-		npc=241920, -- 241919
-		vignette=6917, -- also 6891?
-		note="Complete {quest:87546:Warrant Purple Peat} to summon",
 	},
 	[0] = {
 		label="Shatterpulse",
