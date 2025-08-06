@@ -1115,6 +1115,23 @@ core:RegisterMobData("WarWithin", {
 			232733, -- Gobfather's Gold Medal
 		},
 	},
+	[238319] = {
+		name="Reshanor",
+		quest=90783, -- 87352 tripped as well, account-wide
+		worldquest=87354,
+		locations={[ns.KARESH]={}}, -- 71854851
+		loot={
+			243038, -- Gaze of the Untethered Doom
+			243039, -- Devoured Magi's Cinch
+			243040, -- Crystalblight Legguards
+			243041, -- Umbral Stalker's Footpads
+			243042, -- Void-Bound Hauberk
+			243043, -- Shadowguard's Rift Wrap
+			243044, -- Feasting Fiend's Barbute
+			243045, -- Bygone Wastelander's Girdle
+			243046, -- Band of Boundless Hunger
+		},
+	},
 
 	-- Xal'atath appears sometimes to monologue at you, but she's just a non-interactable story/dungeon element:
 	[229244] = {name="Xal'atath", hidden=true},
