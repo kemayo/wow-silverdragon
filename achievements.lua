@@ -577,6 +577,8 @@ local achievements = {
 	[40851] = {}, -- Adventurer of Hallowfall
 	[40995] = {}, -- The Originals
 	[40997] = {}, -- The Gatecrashers (Anniversary)
+	[42729] = {need=EMOTE410_CMD1, completed=DONE}, -- Dangerous Prowlers of K'aresh, /pet
+	[42761] = {}, -- Remnants of a Shattered World
 }
 ns.achievements = achievements
 local mobs_to_achievement = {
