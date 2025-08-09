@@ -95,14 +95,25 @@ do
 		end
 		upgrade.quest = item.quest
 		upgrade.questComplete = item.questComplete
+		upgrade.warband = item.warband
 		upgrade.spell = item.spell
+		upgrade.note = item.note
 		if item.class then
-			upgrade.class = item.class
+			upgrade.class = item.class -- for icon display in the loot popup
 			table.insert(available, ns.conditions.Class(item.class))
 		end
 		if item.covenant then
-			upgrade.covenant = item.covenant
+			upgrade.covenant = item.covenant -- for icon display in the loot popup
 			table.insert(available, ns.conditions.Covenant(item.covenant))
+		end
+		if item.requires then
+			if ns.IsObject(item.requires) then
+				table.insert(available, item.requires)
+			else
+				for i,v in ipairs(item.requires) do
+					table.insert(available, v)
+				end
+			end
 		end
 		if #available > 0 then
 			upgrade.requires = available
