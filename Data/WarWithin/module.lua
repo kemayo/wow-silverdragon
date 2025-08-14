@@ -3212,7 +3212,7 @@ ns.RegisterPoints(ns.KARESH, {
 		},
 		vignette=6981,
 		note="Gather {spell:1240235}, {spell:1240217}, {spell:1240233}, {spell:1240237} nearby",
-		nearby={76983175, 72023077, 72713330, 71783464, 72582845, 72713472, color={r=0,g=1,b=0}, worldmap=false},
+		nearby={75553340, 72853131, 76983175, 72023077, 72713330, 71783464, 72582845, 72713472, color={r=0,g=1,b=0}, worldmap=false},
 	},
 	[54055884] = {
 		label="Malek'ta",
@@ -3234,7 +3234,7 @@ ns.RegisterPoints(ns.KARESH, {
 	[74043254] = {
 		label="Sthaarbs",
 		criteria=106346,
-		quest=91293,
+		quest=91293, -- 91431
 		npc=234845, -- 234848
 		loot={
 			240171, -- Observer's Soul Fetters
@@ -3511,7 +3511,7 @@ ns.RegisterPoints(ns.KARESH, {
 	},
 	[71792823] = {
 		label="Korgoth the Hungerer",
-		quest=84993, -- 91286, 91309, 91433
+		quest=84993, -- 91286; these didn't trip after the Energy-Pod: 91309, 91433
 		npc=231229,
 		loot={
 			{246240, mount=2602, note="needs 20"}, -- Devoured Energy-Pod
@@ -3604,10 +3604,9 @@ ns.RegisterPoints(ns.KARESH, {
 	--]]
 })
 ns.RegisterPoints(ns.KARESH_TAZAVESH, {
-	-- not yet vignette-coords:
-	[31405740] = {
+	[31225813] = {
 		label="Xy'vox the Twisted",
-		quest=90580,
+		quest=90694, -- 90695 (90580 on vignette but didn't flip)
 		npc=238384,
 		loot={
 			239455, -- Reshii Magi's Bands
@@ -3620,9 +3619,9 @@ ns.RegisterPoints(ns.KARESH_TAZAVESH, {
 		vignette=6772, -- also 6770?
 		note="Complete {quest:87345:Warrant Xy'vox the Twisted} to summon",
 	},
-	[25807120] = {
+	[27557044] = {
 		label="The Wallbreaker",
-		quest=nil,
+		quest=86465, -- 91436, 91312, 91290
 		npc=235104,
 		loot={
 			{246240, mount=2602, note="needs 20"}, -- Devoured Energy-Pod
