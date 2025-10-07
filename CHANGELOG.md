@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2025.15
+
+* Updated for 11.2.5
+
 ## Changed in v2025.14
 
 * K'aresh:
