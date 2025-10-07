@@ -380,7 +380,6 @@ function module:CreateWindow()
 	container.scrollBar = scrollBar
 
 	local scrollView = CreateScrollBoxListLinearView()
-	scrollView:SetDataProvider(self.dataProvider)
 	scrollView:SetElementExtent(LINEHEIGHT)  -- Fixed height for each row; required as we're not using XML.
 	scrollView:SetElementInitializer("InsecureActionButtonTemplate", function(line, data)
 		if not line.Init then
@@ -390,6 +389,7 @@ function module:CreateWindow()
 
 		line:SetData(data)
 	end)
+	scrollView:SetDataProvider(self.dataProvider)
 	container.scrollView = scrollView
 
 	ScrollUtil.InitScrollBoxWithScrollBar(scrollBox, scrollBar, scrollView)
