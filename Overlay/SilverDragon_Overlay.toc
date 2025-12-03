@@ -1,4 +1,4 @@
-## Interface: 110200, 110205, 50500, 30404, 11507
+## Interface: 110207, 50500, 30404, 11507
 ## Title: SilverDragon: Map Overlays
 ## Notes: Mobs on the maps
 ## Version: @project-version@
