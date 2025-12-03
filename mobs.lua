@@ -262,9 +262,9 @@ function module:BuildMobList(options)
 		local mob_toggle_disabled = function(info)
 			return not core.db.global.datasources[info[#info - 3]]
 		end
+		local empty = {}
 		for id, mob in pairs(data) do
-			if ns.mobs_to_achievement[id] then
-				local achievement = ns.mobs_to_achievement[id]
+			for _, achievement in ipairs(ns.mobs_to_achievement[id] or empty) do
 				if not group.args.achievements then
 					group.args.achievements = {
 						type = "group",

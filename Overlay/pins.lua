@@ -222,9 +222,14 @@ do
         rootDescription:SetTag("MENU_WORLD_MAP_CONTEXT_SILVERDRAGON")
         rootDescription:CreateTitle(myfullname)
 
-        local achievement = mobid and ns:AchievementMobStatus(mobid)
-        if achievement then
-            rootDescription:CreateButton(OBJECTIVES_VIEW_ACHIEVEMENT, showAchievement, achievement)
+        if mobid then
+            for _, achievement in ns:AchievementMobStatus(mobid) do
+                rootDescription:CreateButton(
+                    -- core:RenderString(TEXT_MODE_A_STRING_VALUE_TYPE:format(OBJECTIVES_VIEW_ACHIEVEMENT, "{achievement:" .. achievement .. "}")),
+                    core:RenderString("Show {achievement:" .. achievement .. "}"),
+                    showAchievement, achievement
+                )
+            end
         end
         rootDescription:CreateButton("Create waypoint", function() module.CreateWaypoint(uiMapID, coord) end)
             :SetEnabled(core:GetModule("TomTom"):CanPointTo(uiMapID))

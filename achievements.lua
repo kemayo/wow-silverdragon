@@ -587,21 +587,41 @@ local mobs_to_achievement = {
 ns.mobs_to_achievement = mobs_to_achievement
 local achievements_loaded = false
 
-function ns:AchievementMobStatus(id)
-	if not achievements_loaded then
-		self:LoadAllAchievementMobs()
+function ns:RegisterMobAchievement(mobid, achievementid)
+	if type(achievementid) ~= "number" or type(mobid) ~= "number" then return end
+	if not mobs_to_achievement[mobid] then
+		mobs_to_achievement[mobid] = {achievementid, id=mobid}
+	elseif not tContains(mobs_to_achievement[mobid], achievementid) then
+		table.insert(mobs_to_achievement[mobid], achievementid)
 	end
-	local achievement = mobs_to_achievement[id]
-	if not achievement then
-		return
+end
+
+do
+	local function aIter(mob_achievements, i)
+		i = i + 1
+		-- TODO: cope with multiples
+		local achievement = mob_achievements and mob_achievements[i]
+		if not achievement then
+			return
+		end
+		local criteria = achievements[achievement][mob_achievements.id]
+		local _, name, _, achievement_completed, _, _, _, _, _, _, _, _, completedByMe = GetAchievementInfo(achievement)
+		local retOK, _, _, completed = pcall(criteria < 100 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID, achievement, criteria, true)
+		if not retOK then
+			return
+		end
+		return i, achievement, name, completed, achievement_completed and not completedByMe
 	end
-	local criteria = achievements[achievement][id]
-	local _, name, _, achievement_completed, _, _, _, _, _, _, _, _, completedByMe = GetAchievementInfo(achievement)
-	local retOK, _, _, completed = pcall(criteria < 100 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID, achievement, criteria, true)
-	if not retOK then
-		return
+	function ns:AchievementMobStatus(id)
+		if not achievements_loaded then
+			self:LoadAllAchievementMobs()
+		end
+		local mob_achievements = mobs_to_achievement[id]
+		if not mob_achievements then
+			return aIter, nil, 0
+		end
+		return aIter, mob_achievements, 0
 	end
-	return achievement, name, completed, achievement_completed and not completedByMe
 end
 
 local allQuestsComplete
@@ -646,16 +666,20 @@ do
 	ns.doTest = doTest
 end
 
--- return quest_complete, criteria_complete, achievement_completed_by_alt
+-- return quest_complete, all_criteria_complete, any_achievement_completed_by_alt
 -- `nil` if completion not knowable, true/false if knowable
 function ns:CompletionStatus(id)
 	if not ns.mobdb[id] then return end
-	local _, _, criteria_complete, achievement_completed_by_alt = ns:AchievementMobStatus(id)
 	local quest_complete
 	if ns.mobdb[id].quest then
 		quest_complete = allQuestsComplete(ns.mobdb[id].quest)
 	end
-	return quest_complete, criteria_complete, achievement_completed_by_alt
+	local all_criteria_complete, any_achievement_completed_by_alt
+	for _, _, _, criteria_complete, achievement_completed_by_alt in ns:AchievementMobStatus(id) do
+		all_criteria_complete = (all_criteria_complete or all_criteria_complete == nil) and criteria_complete
+		any_achievement_completed_by_alt = any_achievement_completed_by_alt or achievement_completed_by_alt
+	end
+	return quest_complete, all_criteria_complete, any_achievement_completed_by_alt
 end
 
 function ns:LoadAllAchievementMobs()
@@ -676,7 +700,7 @@ function ns:LoadAllAchievementMobs()
 		for i = 1, num_criteria do
 			local description, ctype, completed, _, _, _, _, id, _, criteriaid = GetAchievementCriteriaInfo(achievement, i)
 			if not known[criteriaid] then
-				if ctype == 0 and id then
+				if ctype == 0 and id and id ~= 0 then
 					-- "kill a mob"
 					achievements[achievement][id] = criteriaid
 				-- elseif ctype == 27 then
@@ -694,7 +718,7 @@ function ns:LoadAllAchievementMobs()
 			achievements_loaded = true
 		end
 		for mobid, criteriaid in pairs(achievements[achievement]) do
-			mobs_to_achievement[mobid] = achievement
+			ns:RegisterMobAchievement(mobid, achievement)
 		end
 		if missing > 0 then
 			DebugF('} -- Got %d of %d', num_criteria - missing, num_criteria)
@@ -708,17 +732,16 @@ function ns:UpdateTooltipWithCompletion(tooltip, id)
 		return
 	end
 
-	local achievement, name, completed = ns:AchievementMobStatus(id)
-	if achievement then
+	for _, achievement, name, completed in ns:AchievementMobStatus(id) do
 		tooltip:AddDoubleLine(
 			name,
-			completed and (achievements[achievement].completed or BOSS_DEAD) or (achievements[achievement].need or ACTION_PARTY_KILL),
+			core:RenderString(completed and (achievements[achievement].completed or BOSS_DEAD) or (achievements[achievement].need or ACTION_PARTY_KILL)),
 			1, 1, 0,
 			completed and 0 or 1, completed and 1 or 0, 0
 		)
 	end
 	if ns.mobdb[id] and ns.mobdb[id].quest then
-		completed = allQuestsComplete(ns.mobdb[id].quest)
+		local completed = allQuestsComplete(ns.mobdb[id].quest)
 		tooltip:AddDoubleLine(
 			QUESTS_COLON:gsub(":", ""),
 			completed and COMPLETE or INCOMPLETE,

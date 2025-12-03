@@ -88,11 +88,10 @@ function module:RefreshMobData(popup)
 	popup.title:SetText(core:GetMobLabel(data.id))
 	popup:SetSource(data.source)
 
-	local achievement, achievement_name, completed = ns:AchievementMobStatus(data.id)
-	if achievement then
+	popup.status:SetText("")
+	for _, achievement, achievement_name, completed in ns:AchievementMobStatus(data.id) do
 		popup.status:SetFormattedText("%s%s|r", completed and escapes.green or escapes.red, achievement_name or UNKNOWN)
-	else
-		popup.status:SetText("")
+		break
 	end
 end
 function module:RefreshLootData(popup)

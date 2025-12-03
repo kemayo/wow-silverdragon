@@ -467,12 +467,13 @@ do
 		end
 	end
 	local function show_achievement_tooltip(cell, mobid)
-		local achievementid = ns:AchievementMobStatus(mobid)
-
-		tooltip:SetFrameStrata("DIALOG")
-		GameTooltip:SetOwner(cell, cell:GetCenter() > UIParent:GetCenter() and "ANCHOR_LEFT" or "ANCHOR_RIGHT")
-		GameTooltip:SetHyperlink(GetAchievementLink(achievementid))
-		GameTooltip:Show()
+		for _, achievementid in ns:AchievementMobStatus(mobid) do
+			tooltip:SetFrameStrata("DIALOG")
+			GameTooltip:SetOwner(cell, cell:GetCenter() > UIParent:GetCenter() and "ANCHOR_LEFT" or "ANCHOR_RIGHT")
+			GameTooltip:SetHyperlink(GetAchievementLink(achievementid))
+			GameTooltip:Show()
+			break
+		end
 	end
 	local locations = {}
 	local function show_mob_tooltip(cell, mobid)

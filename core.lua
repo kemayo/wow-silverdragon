@@ -205,7 +205,7 @@ function addon:RegisterMobData(source, data, updated)
 				ns.achievements[mobdata.achievement] = {}
 			end
 			ns.achievements[mobdata.achievement][mobid] = mobdata.criteria
-			ns.mobs_to_achievement[mobid] = mobdata.achievement
+			ns:RegisterMobAchievement(mobid, mobdata.achievement)
 		end
 		mobdata.loot = upgradeloot(mobdata.loot)
 	end
@@ -318,7 +318,7 @@ do
 							ns.achievements[point.achievement] = {}
 						end
 						ns.achievements[point.achievement][point.npc] = point.criteria
-						ns.mobs_to_achievement[point.npc] = point.achievement
+						ns:RegisterMobAchievement(point.npc, point.achievement)
 					end
 				else
 					addon.treasuresources[source][point.vignette] = data
