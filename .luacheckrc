@@ -409,6 +409,7 @@ read_globals = {
     "REMOVE",
     "REPUTATION",
     "RETRIEVING_ITEM_INFO",
+    "SCREENSHOT_SUCCESS",
     "SEARCH_LOADING_TEXT",
     "SHIFT_KEY_TEXT",
     "SOUNDKIT",

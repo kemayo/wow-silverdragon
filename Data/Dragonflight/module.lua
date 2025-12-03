@@ -1495,16 +1495,16 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 		vignette=5365,
 		note="Only when the Aylaag Camp is in the Western position",
 	},
-	--[[
-	[] = {
+	[68207920] = {
 		label="Quackers the Terrible",
-		-- Spawns during the Aylaag Caravan escort from Eaglewatch Outpost to Aylaag Outpost
 		criteria=56091,
 		quest=nil,
 		npc=192557,
 		loot={},
 		vignette=5144,
+		note="Spawns during the Aylaag Caravan escort from Eaglewatch Outpost to Aylaag Outpost",
 	},
+	--[[
 	[] = {
 		label="The Great Enla",
 		-- Spawns during the Aylaag Caravan escort from Eaglewatch Outpost to Aylaag Outpost

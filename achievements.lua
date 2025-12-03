@@ -522,10 +522,32 @@ local achievements = {
 	}, -- Completing the Code
 	[15391] = {}, -- Adventurer of Zereth Mortis
 	[15392] = {}, -- Dune Dominance
-	-- TODO: this has overlap with the adventurer mobs, so I need to improve mobs_to_achievement (also all the mobs in the achievement are kill-credit fake mobs, so I need to dig up the actual IDs)
-	-- [16446] = { -- That's Pretty Neat!
-	-- 	completed = SCREENSHOT_SUCCESS, -- "Screen captured"
-	-- },
+	[16446] = { -- That's Pretty Neat!
+		-- need=BINDING_NAME_SCREENSHOT, -- "Screen Shot"
+		need="{spell:181842:Take Selfie}",
+		completed = SCREENSHOT_SUCCESS, -- "Screen captured"
+		-- The built-in ones are kill-credit fake mobs, so we want to also have the real ones
+		[193291] = 55392, -- Apex Blazewing (credit: 197621)
+		[193356] = 55384, -- Avis Gryphonheart (credit: 193356)
+		[193259] = 55397, -- Blue Terror (credit: 197646)
+		[187280] = 55388, -- Chef Fry-Aerie (credit: 197614)
+		[193217] = 55387, -- Drakewing (credit: 197613)
+		[193234] = 55398, -- Eldoren the Reborn (credit: 197648)
+		[190960] = 55401, -- Feasting Buzzard (credit: 197655)
+		[193154] = 55394, -- Forgotten Gryphon (credit: 197634)
+		[187496] = 55402, -- Glade Ohuna (credit: 197658)
+		[193354] = 55383, -- Halia Cloudfeather (credit: 193354)
+		[190218] = 55393, -- Horned Filcher (credit: 197622)
+		[192383] = 55389, -- Iridescent Peafowl (credit: 197616)
+		[193273] = 55399, -- Liskron the Dazzling (credit: 197649)
+		[195895] = 55400, -- Nergazurai (credit: 197653)
+		[194796] = 55386, -- Ohn'ahra (credit: 197612)
+		[193357] = 55385, -- Palla of the Wing (credit: 193357)
+		[190221] = 55390, -- Pine Flicker (credit: 197618)
+		[192557] = 55396, -- Quackers the Terrible (credit: 197639)
+		[192186] = 55391, -- Territorial Axebeak (credit: 197619)
+		[193209] = 55395, -- Zenet Avis (credit: 197638)
+	},
 	[16676] = {}, -- Adventurer of the Waking Shores
 	[16677] = {}, -- Adventurer of the Ohn'ahran Plains
 	[16678] = {}, -- Adventurer of the Azure Span
