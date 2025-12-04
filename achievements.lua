@@ -621,18 +621,21 @@ end
 do
 	local function aIter(mob_achievements, i)
 		i = i + 1
-		-- TODO: cope with multiples
-		local achievement = mob_achievements and mob_achievements[i]
-		if not achievement then
+		local achievementid = mob_achievements and mob_achievements[i]
+		if not achievementid then
 			return
 		end
-		local criteria = achievements[achievement][mob_achievements.id]
-		local _, name, _, achievement_completed, _, _, _, _, _, _, _, _, completedByMe = GetAchievementInfo(achievement)
-		local retOK, _, _, completed = pcall(criteria < 100 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID, achievement, criteria, true)
+		local achievement = achievements[achievementid]
+		if achievement.requires and not ns.conditions.check(achievement.requires) then
+			return aIter(mob_achievements, i)
+		end
+		local criteria = achievements[achievementid][mob_achievements.id]
+		local _, name, _, achievement_completed, _, _, _, _, _, _, _, _, completedByMe = GetAchievementInfo(achievementid)
+		local retOK, _, _, completed = pcall(criteria < 100 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID, achievementid, criteria, true)
 		if not retOK then
 			return
 		end
-		return i, achievement, name, completed, achievement_completed and not completedByMe
+		return i, achievementid, name, completed, achievement_completed and not completedByMe
 	end
 	function ns:AchievementMobStatus(id)
 		if not achievements_loaded then
