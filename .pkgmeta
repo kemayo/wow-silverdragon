@@ -38,7 +38,6 @@ ignore:
    - lib/ChatThrottleLib/ChatThrottleLib.toc
    - lib/ChatThrottleLib/ChatThrottleStats.lua
    - lib/ChatThrottleLib/README.txt
-   - lib/LibBabble-CreatureType-3.0/LibBabble-CreatureType-3.0.toc
    - lib/LibDataBroker-1.1/README.textile
    - lib/LibQTip-1.0/LibQTip-1.0.toc
    - lib/LibQTip-1.0/LICENSE.txt

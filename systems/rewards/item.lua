@@ -126,6 +126,23 @@ do
 			return C_TransmogCollection.PlayerHasTransmog(itemID)
 		end
 	end
+	local function CanTransmogItem(itemLink)
+		local itemID = C_Item.GetItemInfoInstant(itemLink)
+		if itemID then
+			if C_Transmog.CanTransmogItem then
+				local canBeChanged, noChangeReason, canBeSource, noSourceReason = C_Transmog.CanTransmogItem(itemID)
+				return canBeSource, noSourceReason
+			else
+				-- Midnight
+				local appearanceID, sourceID = C_TransmogCollection.GetItemInfo(itemLink)
+				if sourceID then
+					local info = C_TransmogCollection.GetSourceInfo(sourceID)
+					 -- info.isValidSourceForPlayer also exists, seems to be whether the current character could actually transmog it
+					return info and info.playerCanCollect, info and info.useErrorType
+				end
+			end
+		end
+	end
 
 	local canLearnCache = {}
 	function ns.rewards.Item.CanLearnAppearance(itemLinkOrID)
@@ -136,7 +153,8 @@ do
 			return canLearnCache[itemID]
 		end
 		-- First, is this a valid source at all?
-		local canBeChanged, noChangeReason, canBeSource, noSourceReason = C_Transmog.CanTransmogItem(itemID)
+
+		local canBeSource, noSourceReason = CanTransmogItem(itemID)
 		if canBeSource == nil or noSourceReason == 'NO_ITEM' then
 			-- data loading, don't cache this
 			return

@@ -440,7 +440,9 @@ function PopupMixin:Reset()
 	self.dead:SetAlpha(0)
 	self.model:ClearModel()
 
-	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	if CombatLogGetCurrentEventInfo then
+		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	end
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 end
 
@@ -572,7 +574,9 @@ PopupMixin.scripts = {
 			self.dead.animIn:Play()
 		end
 
-		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		if CombatLogGetCurrentEventInfo then
+			self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		end
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 
 		self.elapsed = 0
