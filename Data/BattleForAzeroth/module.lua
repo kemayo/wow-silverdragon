@@ -292,7 +292,7 @@ core:RegisterMobData("BattleForAzeroth", {
 	[142716] = {name="Man-Hunter Rog",locations={[14]={51807620},},loot={{163712,pet=2441,}},art=1137,quest={alliance=53090,horde=53515},worldquest=54565,},
 	[142725] = {name="Horrific Apparition",locations={[14]={19406140,26203120},},loot={{163736,toy=true,}},art=1137,quest={alliance=53087,horde=53512},},
 	[142739] = {name="Knight-Captain Aldrin",faction="Alliance",locations={[14]={47404120},},loot={{163578,mount=1173,}},art=1137,quest=53088,},
-	[142741] = {name="Doomrider Helgrim",faction="Horde",locations={[14]={53205600},},loot={{163579,mount=1174,}},art=1137,quest=53085,},
+	[142741] = {name="Doomrider Helgrim",faction="Horde",locations={[14]={53205600},},loot={{163579,mount=1174,}},art=1137,quest=53085,worldquest=54540,},
 	[143311] = {name="Toadcruel",locations={[863]={73404900},},},
 	[143313] = {name="Portakillo",locations={[864]={61001820},},},
 	[143314] = {name="Bane of the Woods",locations={[862]={45407920},},},
