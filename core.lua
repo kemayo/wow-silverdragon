@@ -693,7 +693,7 @@ function addon:PlayerIsInteractive()
 		-- not-interactive state?
 		return false
 	end
-	if GetPlayerAuraBySpellID(369968) then
+	if not InCombatLockdown() and GetPlayerAuraBySpellID(369968) then
 		-- Dragon race is occurring
 		return false
 	end

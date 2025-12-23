@@ -757,6 +757,11 @@ local achievements = {
 	[60818] = { -- Elusive Foes: Argus
 		requires=ns.conditions.AuraActive(1213439),
 	},
+	-- Midnight
+	[61507] = {}, -- Eversong Woods: A Bloody Song
+	[62122] = {}, -- Zul'Aman: Tallest Tree in the Forest
+	[61264] = {}, -- Harandar: Leaf None Behind
+	[62130] = {}, -- Voidstorm: The Ultimate Predator
 }
 ns.achievements = achievements
 local mobs_to_achievement = {

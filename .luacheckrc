@@ -63,6 +63,7 @@ read_globals = {
     "C_ChatInfo",
     "C_Covenants",
     "C_CovenantSanctumUI",
+    "C_CreatureInfo",
     "C_CurrencyInfo",
     "C_DateAndTime",
     "C_EventUtils",
