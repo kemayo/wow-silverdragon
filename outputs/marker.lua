@@ -1,5 +1,10 @@
 local myname, ns = ...
 
+if LE_EXPANSION_LEVEL_CURRENT >= (LE_EXPANSION_MIDNIGHT or math.huge) then
+	-- Midnight protected these, so we can't do this any more
+	return
+end
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Marker")
 local Debug = core.Debug
