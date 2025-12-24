@@ -17,6 +17,7 @@ function module:OnInitialize()
 			relaxed = false,
 			skipcomplete = true,
 			skipvignette = false,
+			marker = 0,
 		},
 	})
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -78,6 +79,24 @@ function module:OnInitialize()
 						desc = "Don't even try to target mobs that have known vignettes, because we can be pretty sure that other scanning methods will catch them",
 						order = 40,
 						disabled = not self.vignettesExist,
+					},
+					marker = {
+						type = "select",
+						name = "Mark the mob",
+						desc = "This adds some length to the macro, so you'll be able to scan for less mobs",
+						values = {
+							[0] = NONE,
+							[1] = ICON_LIST[1] .. "0|t Star",
+							[2] = ICON_LIST[2] .. "0|t Circle",
+							[3] = ICON_LIST[3] .. "0|t Diamond",
+							[4] = ICON_LIST[4] .. "0|t Triangle",
+							[5] = ICON_LIST[5] .. "0|t Moon",
+							[6] = ICON_LIST[6] .. "0|t Square",
+							[7] = ICON_LIST[7] .. "0|t Cross",
+							[8] = ICON_LIST[8] .. "0|t Skull",
+						},
+						disabled = LE_EXPANSION_LEVEL_CURRENT < (LE_EXPANSION_MIDNIGHT or 0),
+						order=45,
 					},
 					create = {
 						type = "execute",
@@ -148,7 +167,15 @@ function module:BuildTargetMacro(limit)
 	table.sort(mobs, function(a, b)
 		return distances[a] < distances[b]
 	end)
-	local length = self.db.profile.verbose and (#(VERBOSE_ANNOUNCE:format(#mobs)) + 1) or 0
+	local length = 0
+	local domark = false
+	if self.db.profile.verbose then length = length + (#(VERBOSE_ANNOUNCE:format(#mobs)) + 1) end
+	if self.db.profile.marker ~= 0 then
+		length = length + #SLASH_CLEARTARGET1 + 1
+		-- this will toggle, but it's significantly shorter than *not* toggling*
+		domark = ("/tm [exists] %d"):format(self.db.profile.marker)
+		length = length + #domark + 1
+	end
 	for _, id in ipairs(mobs) do
 		local name = core:NameForMob(id)
 		if name then
@@ -162,8 +189,14 @@ function module:BuildTargetMacro(limit)
 	end
 	if #macro == 0 then
 		table.insert(macro, ("/script print(\"No mobs to scan for, of %s in zone\")"):format(relevant_count == 0 and NONE or relevant_count))
-	elseif self.db.profile.verbose then
-		table.insert(macro, 1, VERBOSE_ANNOUNCE:format(#macro))
+	else
+		if domark then
+			table.insert(macro, 1, SLASH_CLEARTARGET1)
+			table.insert(macro, domark)
+		end
+		if self.db.profile.verbose then
+			table.insert(macro, 1, VERBOSE_ANNOUNCE:format(#macro))
+		end
 	end
 
 	local mtext = ("\n"):join(unpack(macro))
