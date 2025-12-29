@@ -511,7 +511,7 @@ ns.RegisterPoints(ns.ZULAMAN, {
 		},
 		vignette=6906,
 	},
-	[395922097] = {
+	[39592097] = {
 		label="The Devouring Invader",
 		criteria=111849, quest=89583,
 		npc=242035,
