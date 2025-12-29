@@ -90,6 +90,8 @@ do
 			upgrade = ns.rewards.Pet(item[1], type(item.pet) == "number" and item.pet)
 		elseif item.set then
 			upgrade = ns.rewards.Set(item[1], item.set)
+		elseif item.decor then
+			upgrade = ns.rewards.Decor(item[1])
 		else
 			upgrade = ns.rewards.Item(item[1])
 		end
