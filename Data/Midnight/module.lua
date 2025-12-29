@@ -71,6 +71,149 @@ ns.CURRENCY_SILVERMOONCOURT = 3365 -- renown:3371
 
 -- Treasures
 
+local COURT = ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50)
+local AMANI = ns.rewards.Currency(ns.CURRENCY_AMANI, 50)
+local HARATI = ns.rewards.Currency(ns.CURRENCY_HARATI, 50)
+local SINGULARITY = ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50)
+
+core:RegisterTreasureData("Midnight", {
+	-- Eversong Woods
+	[7365] = {
+		name="Triple-Locked Safebox", -- Gemmed Eversong Lantern
+		achievement=61960, criteria=111472,
+		quest=93456,
+		loot={{243106, decor=true}, COURT},
+		notes="Pick up the torch, and find three keys in the village",
+	},
+	[7395] = {
+		name="Gift of the Phoenix",
+		achievement=61960, criteria=111473, quest=93544, -- 93545 for placing
+		loot={{263211, decor=true}, COURT}, -- Gilded Eversong Cup
+		note="Take {spell:1264567:Sunstrider Vessel}, catch 5x{spell:1264565:Phoenix Cinders}",
+	},
+	[7424] = {name="Forgotten Ink and Quill", achievement=61960, criteria=111474, quest=93893, loot={{262616, decor=true}, COURT}, notes="Upper floor",},
+	[7429] = {name="Gilded Armillary Sphere", achievement=61960, criteria=111475, quest=93908, loot={265828, COURT}, notes="Upper floor",},
+	[7364] = {name="Antique Nobleman's Signet Ring", achievement=61960, criteria=111476, quest=93455, loot={265814, COURT}, notes="Ground floor",},
+	[7366] = {name="Farstrider's Lost Quiver", achievement=61960, criteria=111477, quest=93457, loot={265816, COURT},},
+	[7344] = {name="Stone Vat of Wine", achievement=61960, criteria=111478, quest=93061, loot={{251912, decor=true}, COURT}, notes="On floating platform; pick 10x{item:256232:Bunch of Ripe Grapes}, then get {item:256397:Packet of Instant Yeast} from {npc:251405:Sheri} nearby"},
+	[7041] = {name="Burbling Paint Pot", achievement=61960, criteria=111479, quest=91358, loot={{246314, pet=4974}, COURT},},
+	[7437] = {
+		name="Rookery Cache",
+		achievement=61960, criteria=111471, quest=93967, -- 94626 for giving the meat
+		loot={{267838, pet=true}, COURT}, -- Sunwing Hatchling
+		notes="In floating building; buy {item:265674:Tasty Meat} from {npc:258550:Farstrider Aerieminder}, give it to the {npc:257049:Mischevious Chick}; may need to relog to be able to place it",
+	},
+
+	-- Zul'Aman
+	[6938] = {name="Abandoned Ritual Skull", achievement=62125, criteria=111854, quest=90794, loot={{257444, mount=true}}, notes="In cave on the lower level; gather 1000x{item:259361:Vile Essence} nearby"},
+	[6937] = {
+		name="Honored Warrior's Cache",
+		achievement=62125, criteria=111855, quest=90793, -- 93560 for interacting with the cache
+		loot={{257223, mount=true}}, -- Ancestral War Bear
+		notes="Fetch the four tokens",
+		related={
+			[32698350] = {label="{npc:255171:Nalorakk's Chosen}", loot={259219}, inbag=259219}, -- Bear Tooth
+			[34553346] = {label="{npc:255232:Halazzi's Chosen}", loot={259223}, inbag=259223}, -- Lynx Claw
+			[54782239] = {label="{npc:255233:Jan'alai's Chosen}", loot={259220}, inbag=259220}, -- Dragonhawk Feather
+			-- This one is looting-bugged, and there's no sign of the item on wowhead via https://www.wowhead.com/beta/items?filter=104;0;Honored+Warrior%27s+Cache
+			[51588492] = {label="{npc:255231:Akil'zon's Chosen}", loot={}, inbag=nil}, -- Akil'zon's Chosen 255231
+			hide_before=ns.conditions.QuestComplete(93560), -- interacted with the cache for the first time
+			note="Use the Honored Warrior's Urn",
+			minimap=true,
+		},
+	},
+	[7419] = {
+		name="Sealed Twilight Blade Bounty",
+		achievement=62125, criteria=111856, quest=93871,
+		loot={{265362, quest=94570}}, -- Arsenal: Twilight Blade
+		notes="Solve the {spell:1270357:Sealing Orb} puzzle in each of the nearby towers",
+		related={
+			[26098074] = {quest=93916, label="{spell:1270357:Sealing Orb}", color={r=0.5,g=0,b=1}, minimap=true},
+			[23957895] = {quest=93917, label="{spell:1270357:Sealing Orb}", color={r=0.5,g=0,b=1}, minimap=true},
+			[24027566] = {quest=93918, label="{spell:1270357:Sealing Orb}", color={r=0.5,g=0,b=1}, minimap=true},
+			[26097401] = {quest=93919, label="{spell:1270357:Sealing Orb}", color={r=0.5,g=0,b=1}, minimap=true},
+		},
+	},
+	[6939] = {
+		name="Bait and Tackle",
+		achievement=62125, criteria=111857, quest=90795,
+		loot={
+			255157, -- Abyss Angler's Fish Log
+			241145, -- Lucky Loa Lure
+			255688, -- Achor of the Abyss
+		},
+	},
+	[6940] = {name="Burrow Bounty", achievement=62125, criteria=111858, quest=90796, loot={254749}},
+	[6941] = {name="Mrruk's Mangy Trove", achievement=62125, criteria=111859, quest=90797, loot={255428}},
+	[6942] = {name="Secret Formula", achievement=62125, criteria=111860, quest=90798, loot={256326}},
+	[6943] = {name="Abandoned Nest", achievement=62125, criteria=111861, quest=90799, loot={{255008, pet=4906}}, notes="Atop the tree"},
+
+	[6934] = {name="Ruz'avalt's Prized Tackle", quest=90790},
+
+	-- Harandar
+	[7308] = {name="Failed Shroom Jumper's Satchel", achievement=61263, criteria=109033, quest=92424, loot={{258963, toy=true}, HARATI}},
+	[7309] = {name="Burning Branch of the World Tree", achievement=61263, criteria=109034, quest=92426, loot={258900, ns.rewards.Currency(ns.CURRENCY_VOIDLIGHT, 150), HARATI}},
+	[7311] = {name="Sporelord's Fight Prize", achievement=61263, criteria=109035, quest=92427, loot={263289, HARATI}},
+	[7312] = {name="Reliquary's Lost Paintbrush", achievement=61263, criteria=109036, quest=92431, loot={263287, HARATI}},
+	[7313] = {name="Kemet's Simmering Cauldron", achievement=61263, criteria=109037, quest=92436, loot={{258903, pet=true}, HARATI}},
+	[7351] = {name="Gift of the Cycle", achievement=61263, criteria=110254, quest=93144, loot={{259084, toy=true}, HARATI}},
+	[7394] = {
+		name="Impenatrably Sealed Gourd",
+		achievement=61263, criteria=110255, quest=93508,
+		loot={{260730, pet=true}, HARATI}, -- Perturbed Sporebat
+		notes="Collect {item:260250:Mysterious Purple Fluid}, {item:260251:Mysterious Red Fluid}, combine in the Durable Vase, use to open the Gourd",
+	},
+	[7411] = {name="Sporespawned Cache", achievement=61263, criteria=110256, quest=93650, loot={{256423, mount=true}, HARATI}},
+	[7410] = {name="Peculiar Cauldron", achievement=61263, criteria=110257, quest=93587, loot={{252017, mount=true}, HARATI}, notes="Gather 150x {item:260531:Crystallized Resin Fragment} in the water nearby"},
+
+	-- Voidstorm
+	[7355] = {
+		name="Final Clutch of Predaxas",
+		achievement=62126, criteria=111863, quest=93237,
+		loot={{257446, mount=true}, SINGULARITY}, -- Reins of the Insatiable Shredclaw
+		path=48927833
+	},
+	[7498] = {
+		name="Void-Shielded Tomb",
+		achievement=62126, criteria=111864, quest=92414,
+		loot={246951, SINGULARITY}, -- Stormarion Core x20
+		notes="Drink the potion, then fetch {item:251519:Key of Fused Darkness} from the adjacent building",
+		nearby={25976863, worldmap=false, label="{item:251519:Key of Fused Darkness}"},
+	},
+	[7359] = {
+		name="Forgotten Oubliette", -- then 7360 Bloody Sack
+		achievement=62126, criteria=111866, quest=93431,
+		loot={{267139, toy=true}, SINGULARITY}, -- Hungry Black Hole
+		notes="Feed it meat",
+	},
+	[7418] = {
+		name="Malignant Chest",
+		achievement=62126, criteria=111867, quest=93840,
+		loot={{264482, decor=true}},
+		related={
+			[53474321] = {quest=93812}, -- 1
+			[52944333] = {quest=93813, hide_before=ns.conditions.QuestComplete(93812)}, -- 2
+			[53534388] = {quest=93814, hide_before=ns.conditions.QuestComplete(93813)}, -- 3
+			[53234271] = {quest=93815, hide_before=ns.conditions.QuestComplete(93814)}, -- 4
+			texture=ns.atlas_texture("playerpartyblip", {r=0.4, g=0, b=1}), worldmap=false, minimap=true,
+		},
+	},
+	[7397] = {name="Embedded Spear", achievement=62126, criteria=111871, quest=93553, loot={266075, SINGULARITY}},
+	[7393] = {name="Quivering Egg", achievement=62126, criteria=111872, quest=93500, loot={{266076, pet=true}, SINGULARITY}},
+	[7392] = {name="Exaliburn", achievement=62126, criteria=111873, quest=93498, loot={266099, SINGULARITY}, notes="Drink the potion, loot the sword"},
+	[7391] = {name="Discarded Energy Pike", achievement=62126, criteria=111874, quest=93496, loot={266100, SINGULARITY}},
+	[7368] = {name="Slain Scout's Quiver", achievement=62126, criteria=111875, quest=93493, loot={266098, SINGULARITY}},
+	[7367] = {name="Half-Digested Viscera", achievement=62126, criteria=111876, quest=93467, loot={{264303, pet=true}, SINGULARITY}, path=38076874, notes="In cave; on upper level"},
+	[7455] = {name="Forgotten Researcher's Cache", achievement=62126, criteria=111869, quest=94454, loot={{250319, toy=true}, SINGULARITY}},
+	[7441] = {
+		name="Stellar Stash",
+		achievement=62126, criteria=111868, quest=93996, -- 94005 after pulling out
+		loot={{262467, decor=true}, SINGULARITY}, -- Void Elf Round Table
+		notes="Inside the building; drag objects out 3x",
+	},
+	[7447] = {name="Scout's Pack", achievement=62126, criteria=111870, quest=94387, loot={266101, SINGULARITY}},
+}, true)
+
 -- Rares
 
 ns.RegisterPoints(ns.ISLEOFQUELDANAS, {
