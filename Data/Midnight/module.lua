@@ -626,19 +626,21 @@ ns.RegisterPoints(ns.HARANDAR, {
 		},
 		vignette=7159,
 	},
-	[64604800] = {
+	[64904810] = {
 		label="Chlorokyll",
-		criteria=109044, quest=92161,
+		criteria=109044, quest=92161, -- 94717
 		npc=249997,
 		loot={
 			264626, -- Scepter of Radiant Conversion
 		},
+		vignette=7161,
 	},
-	-- [0] = {
-	--	label="Stumpy",
-	-- 	criteria=109045, quest=92168,
-	-- 	npc=250086,
-	-- },
+	[65653279] = {
+		label="Stumpy",
+		criteria=109045, quest=92168,
+		npc=250086,
+		vignette=7162,
+	},
 	[56783422] = {
 		label="Serrasa",
 		criteria=109046, quest=92170,
@@ -709,11 +711,12 @@ ns.RegisterPoints(ns.HARANDAR, {
 		},
 		vignette=7171,
 	},
-	-- [] = {
-	--	label="Annulus the Worldshaker",
-	-- 	criteria=109053, quest=92194,
-	-- 	npc=250358,
-	-- },
+	[44501610] = {
+		label="Annulus the Worldshaker",
+		criteria=109053, quest=92194,
+		npc=250358,
+		vignette=7172,
+	},
 }, {
 	achievement=61264,
 })
