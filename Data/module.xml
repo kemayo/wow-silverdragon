@@ -12,4 +12,5 @@
   <Script file="Shadowlands/module.lua"/>
   <Script file="Dragonflight/module.lua"/>
   <Script file="WarWithin/module.lua"/>
+  <Script file="Midnight/module.lua"/>
 </Ui>
