@@ -11,7 +11,7 @@ s/(?<= ){ -- (.+)$/{\n\t\tlabel="$1",/g",
 -- Stub time!
 local ns = {
 	RegisterPoints = function(...)
-		core:RegisterHandyNotesData("WarWithin", ...)
+		core:RegisterHandyNotesData("Midnight", ...)
 	end,
 	rewards = core.rewards,
 	conditions = core.conditions,
