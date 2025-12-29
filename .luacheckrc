@@ -324,6 +324,7 @@ read_globals = {
     "DEFAULT",
     "DRAG_MODEL",
     "DONE",
+    "EMOTE59_CMD1",
     "EMOTE88_CMD1",
     "EMOTE152_CMD1",
     "EMOTE410_CMD1",

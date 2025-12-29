@@ -762,6 +762,9 @@ local achievements = {
 	[62122] = {}, -- Zul'Aman: Tallest Tree in the Forest
 	[61264] = {}, -- Harandar: Leaf None Behind
 	[62130] = {}, -- Voidstorm: The Ultimate Predator
+	[62201] = { -- The Frog and the Princesses
+		need=EMOTE59_CMD1, completed=DONE, -- /love
+	},
 }
 ns.achievements = achievements
 local mobs_to_achievement = {
