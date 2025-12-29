@@ -137,8 +137,10 @@ do
 				local appearanceID, sourceID = C_TransmogCollection.GetItemInfo(itemLink)
 				if sourceID then
 					local info = C_TransmogCollection.GetSourceInfo(sourceID)
-					 -- info.isValidSourceForPlayer also exists, seems to be whether the current character could actually transmog it
-					return info and info.playerCanCollect, info and info.useErrorType
+					if info then
+						-- info.isValidSourceForPlayer also exists, seems to be whether the current character could actually transmog it
+						return info.playerCanCollect or info.isCollected or info.canDisplayOnPlayer, info.useErrorType
+					end
 				end
 			end
 		end
@@ -167,9 +169,14 @@ do
 			canLearnCache[itemID] = false
 			return false
 		end
-		local hasData, canCollect = C_TransmogCollection.PlayerCanCollectSource(sourceID)
-		if hasData then
-			canLearnCache[itemID] = canCollect
+		if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+			-- Retail made it so everything is learnable
+			canLearnCache[itemID] = true
+		else
+			local hasData, canCollect = C_TransmogCollection.PlayerCanCollectSource(sourceID)
+			if hasData then
+				canLearnCache[itemID] = canCollect
+			end
 		end
 		return canLearnCache[itemID]
 	end
