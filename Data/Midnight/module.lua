@@ -672,7 +672,7 @@ ns.RegisterPoints(ns.HARANDAR, {
 		criteria=109049, quest=92183, -- 94722
 		npc=250246,
 		loot={
-			{246735,mount=true,}, -- Rootstalker Grimlynx
+			-- {246735,mount=true,}, -- Rootstalker Grimlynx (all zone rares?)
 			264633, -- Treetop Battlestave
 			264968, -- Telluric Leyblossom
 			264581, -- Bloombark Spaulders
