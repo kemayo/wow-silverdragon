@@ -43,7 +43,7 @@ read_globals = {
     "hooksecurefunc",
     "table", "tinsert", "tInsertUnique", "tContains", "tAppendAll", "tDeleteItem", "wipe", "MergeTable",
     "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower",
-    "time", "date",
+    "time", "date", "issecretvalue",
 
     -- our own globals
 

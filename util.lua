@@ -181,6 +181,7 @@ do
 	local function npcIdFromGuid(guid)
 		if not guid then return end
 		if C_CreatureInfo and C_CreatureInfo.GetCreatureID then
+			if issecretvalue and issecretvalue(guid) then return end
 			return C_CreatureInfo.GetCreatureID(guid)
 		end
 		local unit_type, id = guid:match("(%a+)-%d+-%d+-%d+-%d+-(%d+)-.+")
