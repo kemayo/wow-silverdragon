@@ -37,7 +37,11 @@ local achievements = {
 	[9678] = {}, -- Ancient No More (Gorgrond)
 	[10061] = {}, -- Hellbane (Tanaan)
 	[10070] = {}, -- Jungle Stalker (Tanaan)
-	[11160] = {}, -- Unleashed Monstrosities
+	[11160] = { -- Unleashed Monstrosities
+		[106981] = 8, -- Soultakers (Captain Hring)
+		[106982] = 8, -- Soultakers (Reaver Jdorn)
+		[106984] = 8, -- Soultakers (Soultrapper Mevra)
+	},
 	[11261] = { -- Adventurer of Azsuna
 		[89016] = 33377, -- Ravyn-Drath
 		[90244] = 33262, --Arcavellus
