@@ -561,7 +561,7 @@ core:RegisterMobData("Vanilla", {
 	[107477] = {name="N.U.T.Z.",locations={[76]={43407700},},tameable=true,requires=core.conditions.Expansion(LE_EXPANSION_LEGION),},
 	[107595] = {name="Grimrot",locations={[77]={38204560},},loot={137643},tameable=132183,notes="Light skin, daytime",requires=core.conditions.Expansion(LE_EXPANSION_LEGION),},
 	[107596] = {name="Grimrot",locations={[77]={38204560},},loot={137644},tameable=132183,notes="Rotten skin, nighttime",requires=core.conditions.Expansion(LE_EXPANSION_LEGION),},
-	[107617] = {name="Ol' Muddle",locations={[26]={43805700,45606240,49205720,53004820,60205240,63404220,69606100,71205140},},tameable=132183,requires=core.conditions.Expansion(LE_EXPANSION_LEGION),},
+	[107617] = {name="Ol' Muddle",locations={[26]={43006380},},routes={[26]={{43006380,44005520,49805720,54804620,61005040,65405840},{61005040,64604200,70205120,72805000}}},tameable=132183,requires=core.conditions.Expansion(LE_EXPANSION_LEGION),},
 	[111122] = {name="Large Vile Slime",locations={[22]={69004580},},loot={139623},notes="Paladin Corrupted Ashbringer",requires=core.conditions.Expansion(LE_EXPANSION_LEGION),},
 	[118244] = {name="Lightning Paw",locations={[47]={16695444,16406040,23002900,23587666,24313969,30234171},},tameable=236165,requires=core.conditions.Expansion(LE_EXPANSION_LEGION),},
 }, true)
