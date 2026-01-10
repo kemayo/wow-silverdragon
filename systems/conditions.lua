@@ -359,6 +359,11 @@ do
 	end
 end
 
+ns.conditions.Expansion = Condition:extends{classname = "Expansion", type = "expansion"}
+function ns.conditions.Expansion:Matched()
+	return self.id <= LE_EXPANSION_LEVEL_CURRENT
+end
+
 -- Helpers:
 
 do
