@@ -197,7 +197,7 @@ core:RegisterMobData("Vanilla", {
 	[8212] = {name="The Reak",locations={[26]={57404300},},},
 	[8213] = {name="Ironback",locations={[26]={79605780},},loot={62536},tameable=132199,},
 	[8214] = {name="Jalinde Summerdrake",faction="Alliance",locations={[26]={34405500},},},
-	[8215] = {name="Grimungous",locations={[26]={71406100,74805500},},},
+	[8215] = {name="Grimungous",locations={[26]={71606260},},routes={[26]={{71606260,72005980,73005760,73805520,78405020},},},},
 	[8216] = {name="Retherokk the Berserker",locations={[26]={47606660},},},
 	[8217] = {name="Mith'rethis the Enchanter",locations={[26]={64808140},},loot={17050},},
 	[8218] = {name="Witherheart the Stalker",locations={[26]={39606640},},},
