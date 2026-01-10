@@ -667,6 +667,9 @@ do
 				--TODO: add an option for this?
 				return false
 			end
+			if mobdb[id].requires and not ns.conditions.check(mobdb[id].requires) then
+				return false
+			end
 		end
 		return true
 	end
