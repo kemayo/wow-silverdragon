@@ -6,13 +6,22 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Mobs", "AceConsole-3.0")
 local Debug = core.Debug
 
+local function toggle_mob_desc(id)
+	if ns.mobdb[id] and ns.mobdb[id].requires then
+		return core:RenderString(
+			string.format("ID: %d, %s", id, core.conditions.summarize(ns.mobdb[id].requires))
+		)
+	end
+	return "ID: " .. id
+end
+
 local function toggle_mob(id)
 	return {
 		arg = id,
 		name = core:GetMobLabel(id),
-		desc = "ID: " .. id,
+		desc = toggle_mob_desc(id),
 		type = "toggle",
-		-- width = "double",
+		width = "double",
 		descStyle = "inline",
 		order = id,
 	}
