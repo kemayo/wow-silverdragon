@@ -1485,7 +1485,7 @@ ns.RegisterPoints(ns.ISLEOFDORN, {
 -- Ringing Deeps
 
 ns.RegisterPoints(ns.RINGINGDEEPS, {
-	[49241991] = {
+	[48431991] = {
 		label="Automaxor",
 		criteria=69634,
 		quest=81674, -- 84046
@@ -1497,7 +1497,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6128,
 	},
-	[38731692] = {
+	[37201692] = {
 		label="Charmonger",
 		criteria=69632,
 		quest=81562, -- 84044
@@ -1509,7 +1509,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6104,
 	},
-	[40053508] = {
+	[38613508] = {
 		label="King Splash",
 		criteria=69624,
 		quest=80547,
@@ -1524,7 +1524,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		--tameable=true, -- hopper
 		vignette=6088,
 	},
-	[61802840] = {
+	[61842840] = {
 		label="Candleflyer Captain",
 		criteria=69623,
 		quest=80505,
@@ -1539,7 +1539,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		note="Patrols the area",
 		vignette=6080,
 	},
-	[47624651] = {
+	[46704651] = {
 		label="Cragmund",
 		criteria=69630,
 		quest=80560, -- 84042
@@ -1552,7 +1552,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6090,
 	},
-	[51560843] = {
+	[50900843] = {
 		label="Deepflayer Broodmother",
 		criteria=69636,
 		quest=80536, -- 85162
@@ -1565,13 +1565,13 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		note="Flys around anticlockwise",
 		route={
-			51560843, 49630880, 46410836, 45991007, 42410955, 41000822, 39940871, 41410973, 41511083, 42281312,
-			40421750, 45581919, 49652244, 50331761, 52521023,
+			50900843, 48840880, 45400836, 44961007, 41130955, 39630822, 38490871, 40060973, 40171083, 40991312,
+			39011750, 44521919, 48862244, 49591761, 51931023,
 			loop=true,
 		},
 		vignette=6082,
 	},
-	[46406619] = {
+	[45396619] = {
 		label="Aquellion",
 		criteria=69625,
 		quest=80557,
@@ -1585,7 +1585,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6089,
 	},
-	[48712657] = {
+	[47862657] = {
 		label="Zilthara",
 		criteria=69629,
 		quest=80506, -- 84041
@@ -1600,7 +1600,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6079,
 	},
-	[54213813] = {
+	[53743813] = {
 		label="Coalesced Monstrosity",
 		criteria=69633,
 		quest=81511, -- 84045
@@ -1612,7 +1612,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6101,
 	},
-	[43731209] = {
+	[42541209] = {
 		label="Terror of the Forge",
 		criteria=69628,
 		quest=80507, -- 84040
@@ -1628,7 +1628,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		vignette=6081,
 		note="Walking in the lava",
 	},
-	[44214696] = {
+	[43064696] = {
 		label="Kelpmire",
 		criteria=69635,
 		quest=81485, -- 84047
@@ -1643,7 +1643,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6099,
 	},
-	[53395480] = {
+	[52865480] = {
 		label="Rampaging Blight",
 		criteria=69626,
 		quest=81563,
@@ -1657,7 +1657,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6105,
 	},
-	[67094629] = {
+	[67494629] = {
 		label="Trungal",
 		criteria=69631,
 		quest=80574, -- 84043
@@ -1671,10 +1671,10 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 			223005, -- String of Fungal Fruits
 		},
 		note="Kill the {npc:220615:Root of Trungal} to spawn",
-		path={67914569, 68204444},
+		path={68374569, 68684444},
 		vignette=6126,
 	},
-	[64054754] = {
+	[64244754] = {
 		label="Spore-infused Shalewing",
 		criteria=69638,
 		quest=81652, -- 84049
@@ -1688,9 +1688,9 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		vignette=6121,
 		note="Flies around clockwise",
 		route={
-			64234852, 64365012, 64305047, 63875137, 63725156, 63435171, 63235176, 62945176, 62805174, 62345120, 62024896,
-			62044870, 62174840, 62014817, 61544779, 61394760, 61304737, 61364711, 61544669, 61644655, 61844644, 62684640,
-			63324608, 63464620, 63764659, 63874680, 64054754,
+			64444852, 64575012, 64515047, 64055137, 63895156, 63585171, 63375176, 63065176, 62915174, 62425120, 62084896,
+			62104870, 62244840, 62074817, 61564779, 61404760, 61314737, 61374711, 61564669, 61674655, 61884644, 62784640,
+			63464608, 63614620, 63934659, 64054680, 64244754,
 			loop=true,
 		},
 	},
@@ -1709,7 +1709,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6119,
 	},
-	[62815262] = {
+	[62925262] = {
 		label="Disturbed Earthgorger",
 		criteria=69640,
 		quest=80003,
@@ -1723,7 +1723,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		note="Stand in the dust cloud and use {spell:437003:Stomp} several times",
 		vignette=6031,
 	},
-	[62466881] = {
+	[62556881] = {
 		label="Deathbound Husk",
 		criteria=69627,
 		quest=81566,
@@ -1734,9 +1734,9 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		},
 		vignette=6106,
 		note="In cave",
-		path=62786796,
+		path=62896796,
 	},
-	[57017682] = {
+	[56727682] = {
 		label="Lurker of the Deeps",
 		criteria=69637,
 		quest=81633, -- 85163
@@ -1752,11 +1752,11 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 		vignette=6110,
 		note="Pull 5 levers across the zone at the same time to summon; they stay activated for ~10 seconds, so you'll need a group",
 		related={
-			[46320882] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
-			[50482530] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
-			[53942358] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
-			[55319239] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
-			[58854464] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
+			[45310882] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
+			[49752530] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
+			[53452358] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
+			[54919239] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
+			[58694464] = {label="Inconspicuous Lever", note="Pull all 5 levers simultaneously to summon {npc:220285:Lurker of the Deeps}"},
 		},
 	},
 }, {
@@ -1764,7 +1764,7 @@ ns.RegisterPoints(ns.RINGINGDEEPS, {
 })
 
 ns.RegisterPoints(ns.RINGINGDEEPS, {
-	[58805000] = {
+	[58645000] = {
 		label="Slatefang",
 		quest=nil,
 		npc=228439,
