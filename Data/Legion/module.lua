@@ -381,7 +381,7 @@ core:RegisterMobData("Legion", {
 	[110832] = {name="Gorgroth",locations={[680]={27206580},},loot={121747},quest=43992,},
 	[110870] = {name="Apothecary Faldren",locations={[634]={12609900},[680]={42255658},},loot={121754},quest=43580,vignette=1511},
 	[110944] = {name="Guardian Thor'el",locations={[680]={56405040},},loot={140404},quest=43597,},
-	[111007] = {name="Randril",locations={[680]={49407900},},loot={140396},quest=43602,},
+	[111007] = {name="Randril",locations={[680]={49407900},},loot={140396},quest=43603,}, -- or 43602?
 	[111063] = {name="Randril",locations={[680]={49607920},},quest=43603,hidden=true,},
 	[111069] = {name="Saepher",locations={[680]={49607900},},hidden=true,},
 	[111197] = {name="Anax",locations={[680]={33665177},},loot={{140934,pet=1934,}},quest=43954,tameable=804969,vignette=1541},
