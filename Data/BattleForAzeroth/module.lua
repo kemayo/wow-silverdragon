@@ -10,6 +10,13 @@ local VALE_NZOTH = core.conditions.WorldQuestActive(56064)
 local VALE_MOGU = core.conditions.WorldQuestActive(57008)
 local VALE_MANTID = core.conditions.WorldQuestActive(57728)
 
+local darkshoreDecor = {
+    {241066, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Forsaken Spiked Brazier
+    {245462, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Banshee Queen's Banner
+    {245627, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Elven Temple Brazier
+    {246110, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Filigree Moon Sconce
+}
+
 core:RegisterMobData("BattleForAzeroth", {
 	[120899] = {name="Kul'krazahn",locations={[1165]={55008200},[862]={59605640},},loot={160947},quest=48333,},
 	[121242] = {name="Glompmaw",locations={[863]={68405700},},loot={160985},quest=50361,},
@@ -333,8 +340,8 @@ core:RegisterMobData("BattleForAzeroth", {
 	[147240] = {name="Hydrath",locations={[62]={52403200},},loot={{166452,pet=2547,}},art=1176,quest={alliance=54227,horde=54228},},
 	[147241] = {name="Cyclarus",locations={[62]={43805340},},loot={{166448,pet=2545,}},art=1176,quest={alliance=54229,horde=54230},},
 	[147260] = {name="Conflagros",locations={[62]={39206180},},loot={{166451,pet=2546,}},art=1176,quest={alliance=54232,horde=54233},},
-	[147261] = {name="Granokk",locations={[62]={47405580},},art=1176,quest={alliance=54234,horde=54235},},
-	[147332] = {name="Stonebinder Ssra'vess",locations={[62]={45405880},},art=1176,quest={alliance=54247,horde=54248},},
+	[147261] = {name="Granokk",locations={[62]={47405580},},loot=darkshoreDecor,art=1176,quest={alliance=54234,horde=54235},},
+	[147332] = {name="Stonebinder Ssra'vess",locations={[62]={45405880},},loot=darkshoreDecor,art=1176,quest={alliance=54247,horde=54248},},
 	[147435] = {name="Thelar Moonstrike",faction="Alliance",locations={[62]={62001640},},loot={{166790,toy=true,}},art=1176,quest=54252,},
 	[147489] = {name="Captain Greensails",faction="Alliance",locations={[1161]={77208060},[895]={76003940},},poi={876,5896},},
 	[147562] = {name="Mortar Master Zapfritz",faction="Horde",locations={[942]={42804660},},poi={876,5966},},
@@ -343,7 +350,7 @@ core:RegisterMobData("BattleForAzeroth", {
 	[147708] = {name="Athrikus Narassin",locations={[62]={58402440},},loot={{166784,toy=true,}},art=1176,quest={alliance=54278,horde=54279},},
 	[147744] = {name="Amberclaw",locations={[62]={57401540},},art=1176,quest={alliance=54285,horde=54286},},
 	[147750] = {name="Artillery Master Goodwin",faction="Alliance",locations={[895]={83004040},},poi={876,5896},},
-	[147751] = {name="Shattershard",locations={[62]={43402920},},art=1176,quest={alliance=54289,horde=54290},},
+	[147751] = {name="Shattershard",locations={[62]={43402920},},loot=darkshoreDecor,art=1176,quest={alliance=54289,horde=54290},},
 	[147758] = {name="Onu",faction="Alliance",locations={[62]={45207500},},loot={{166453,pet=2548,}},art=1176,quest=54291,},
 	[147845] = {name="Commander Drald",faction="Horde",locations={[62]={46408600},},loot={{166790,toy=true,}},art=1176,quest=54309,},
 	[147897] = {name="Soggoth the Slitherer",locations={[62]={40408440},},loot={{166454,pet=2549,}},art=1176,quest={alliance=54320,horde=54321},},
@@ -351,8 +358,8 @@ core:RegisterMobData("BattleForAzeroth", {
 	[147941] = {name="Tidesage Clarissa",faction="Alliance",locations={[942]={41405200},},poi={876,5966},},
 	[147942] = {name="Twilight Prophet Graeme",locations={[62]={40408240},},loot={{166455,pet=2550,}},art=1176,quest={alliance=54397,horde=54398},},
 	[147951] = {name="Alkalinius",faction="Alliance",locations={[942]={41405200},},poi={876,5966},},
-	[147966] = {name="Aman",locations={[62]={37408420},},art=1176,quest={alliance=54405,horde=54406},},
-	[147970] = {name="Mrggr'marr",locations={[62]={35408140},},art=1176,quest={alliance=54408,horde=54409},},
+	[147966] = {name="Aman",locations={[62]={37408420},},loot=darkshoreDecor,art=1176,quest={alliance=54405,horde=54406},},
+	[147970] = {name="Mrggr'marr",locations={[62]={35408140},},loot=darkshoreDecor,art=1176,quest={alliance=54408,horde=54409},},
 	[147998] = {name="Voidmaster Evenshade",faction="Alliance",locations={[942]={41205400},},poi={876,5966},},
 	[148025] = {name="Commander Ral'esh",locations={[62]={37407620},},loot={{166787,toy=true,}},art=1176,quest={alliance=54426,horde=54427},},
 	[148031] = {name="Gren Tornfur",locations={[62]={40805640},},loot={{166785,toy=true,}},art=1176,quest={alliance=54428,horde=54429},},
@@ -418,10 +425,10 @@ core:RegisterMobData("BattleForAzeroth", {
 	[149651] = {name="Blackpaw",faction="Alliance",locations={[62]={49412481},},loot={{166438,mount=1199,}},art=1176,quest=54890,hidden=true,},
 	[149652] = {name="Agathe Wyrmwood",faction="Horde",locations={[62]={49402480},},loot={{166438,mount=1199,}},art=1176,quest=54883,},
 	[149653] = {name="Carnivorous Lasher",locations={[1355]={54804180},},loot={{169375,pet=2708,},169611},quest=55366,},
-	[149654] = {name="Glimmerspine",locations={[62]={43401980},},art=1176,quest={alliance=54884,horde=54885},tameable=132186,},
+	[149654] = {name="Glimmerspine",locations={[62]={43401980},},loot=darkshoreDecor,art=1176,quest={alliance=54884,horde=54885},tameable=132186,},
 	[149655] = {name="Croz Bloodrage",faction="Horde",locations={[62]={50403240},},loot={{166437,mount=1205,}},art=1176,quest=54886,},
 	[149656] = {name="Grimhorn",faction="Alliance",locations={[62]={50603240},},loot={{166528,pet=2563,}},art=1176,quest=54891,},
-	[149657] = {name="Madfeather",locations={[62]={44004840},},art=1176,quest={alliance=54887,horde=54888},},
+	[149657] = {name="Madfeather",locations={[62]={44004840},},loot=darkshoreDecor,art=1176,quest={alliance=54887,horde=54888},},
 	[149658] = {name="Shadowclaw",faction="Alliance",locations={[62]={39403280},},loot={{166437,mount=1205,}},art=1176,quest=54892,},
 	[149659] = {name="Orwell Stevenson",faction="Horde",locations={[62]={39403340},},loot={{166528,pet=2563,}},art=1176,quest=54889,},
 	[149660] = {name="Blackpaw",faction="Alliance",locations={[62]={49402480},},loot={{166428,mount=1199,}},art=1176,quest=54890,},
@@ -429,7 +436,7 @@ core:RegisterMobData("BattleForAzeroth", {
 	[149662] = {name="Grimhorn",faction="Alliance",locations={[62]={50403240},},loot={{166528,pet=2563,}},art=1176,quest=54891,hidden=true,},
 	[149663] = {name="Shadowclaw",faction="Alliance",locations={[62]={39803240},},loot={{166435,mount=1205,}},art=1176,quest=54892,tameable=132185,hidden=true,},
 	[149664] = {name="Orwell Stevenson",faction="Horde",locations={[62]={39803280},},loot={{166528,pet=2563,}},art=1176,quest=54889,hidden=true,},
-	[149665] = {name="Scalefiend",locations={[62]={47404460},},art=1176,quest={alliance=54893,horde=54894},},
+	[149665] = {name="Scalefiend",locations={[62]={47404460},},loot=darkshoreDecor,art=1176,quest={alliance=54893,horde=54894},},
 	[149746] = {name="Rusty Mechaspider",locations={[1462]={},},hidden=true,},
 	[149847] = {name="Crazed Trogg",locations={[1462]={81402140},},quest=55812,hidden=true,},
 	[150191] = {name="Avarius",locations={[1355]={37131119},},loot={{169373,pet=2706,},169612,169613},quest=55584,},
