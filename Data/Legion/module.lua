@@ -184,7 +184,7 @@ core:RegisterMobData("Legion", {
 	[104524] = {name="Ormagrogg",locations={[650]={52205860},},loot={151809},quest=45510,},
 	[104698] = {name="Colerian",locations={[680]={},},quest=45503,hidden=true,},
 	[105547] = {name="Rauren",locations={[680]={23982553},},loot={121759},quest=43484,tameable=929300,vignette=1508},
-	[105632] = {name="Broodmother Shu'malis",locations={[680]={25204420},[685]={64405060},},hidden=true,},
+	[105632] = {name="Broodmother Shu'malis",locations={[680]={25204420},[685]={64405060},},quest=93441,vignette=7361},
 	[105728] = {name="Scythemaster Cil'raman",locations={[680]={23804580},},quest=45505,hidden=true,},
 	[105739] = {name="Sanaar",locations={[680]={19004020},[685]={36603280,41803540},},},
 	[105899] = {name="Oglok the Furious",locations={[680]={67405620},},quest=45506,},
