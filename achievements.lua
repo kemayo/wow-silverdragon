@@ -889,7 +889,7 @@ function ns:LoadAllAchievementMobs()
 		for k,v in pairs(achievements[achievement]) do
 			known[v] = k
 		end
-		local num_criteria = GetAchievementNumCriteria(achievement)
+		local num_criteria = GetAchievementNumCriteria(achievement) or 0
 		for i = 1, num_criteria do
 			local description, ctype, completed, _, _, _, _, id, _, criteriaid = GetAchievementCriteriaInfo(achievement, i)
 			if not known[criteriaid] then
