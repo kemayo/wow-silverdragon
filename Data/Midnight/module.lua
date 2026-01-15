@@ -266,6 +266,22 @@ core:RegisterMobData("Midnight", {
 			250462, -- Forgotten Farstrider's Insignia
 		},
 	},
+	[248864] = {
+		name="Predaxas",
+		quest=92636,
+		worldquest=92636,
+		locations={[ns.VOIDSTORM]={}}, -- 49078651
+		loot={
+			250448, -- Voidbender's Spire
+			250454, -- Devouring Vanguard's Soulcleaver
+			250456, -- Wretched Scholar's Gilded Robe
+			250457, -- Devouring Outrider's Chausses
+			250458, -- Host Commander's Casque
+			250459, -- Bramblestalker's Feathered Cowl
+			250460, -- Encroaching Shadow Signet
+			250462, -- Forgotten Farstrider's Insignia
+		},
+	},
 }, true)
 
 ns.RegisterPoints(ns.ISLEOFQUELDANAS, {
