@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v2026.4
+
+* Avoid a secret value issue when scanning chat
+* Midnight: add Predaxas world boss in Voidstorm
+* Add the Enclave Aspirant's Hatchet to the broken transmog items list
+
 ## Changed in v2026.3
 
 * Updated for Burning Crusade Anniversary (2.5.5)
