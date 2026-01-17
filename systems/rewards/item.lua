@@ -96,6 +96,8 @@ end
 do
 	local brokenItems = {
 		-- itemid : {appearanceid, sourceid}
+		[253520] = {21670, 298859}, -- Enclave Aspirant's Hatchet
+		[153267] = {21670, 90806}, -- Enclave Aspirant's Hatchet
 		[153268] = {25124, 90807}, -- Enclave Aspirant's Axe
 		[153316] = {25123, 90885}, -- Praetor's Ornamental Edge
 	}
