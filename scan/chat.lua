@@ -56,6 +56,7 @@ local type_restriction = {
 function module:OnChatMessage(event, text, name, ...)
     if not self.db.profile.enabled then return end
     if not core.db.profile.instances and IsInInstance() then return end
+    if issecretvalue and (issecretvalue(text) or issecretvalue(name)) then return end
     local zone = HBD:GetPlayerZone()
     local guid = select(10, ...)
     local id, x, y
