@@ -93,13 +93,19 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if channel == "PARTY" and not self.db.profile.party then
 		return
 	end
-	if self.db.profile.nearby and not UnitInRange(sender) then
+	if issecretvalue and issecretvalue(msg) then
+		return
+	end
+	if self.db.profile.nearby then
 		-- note: will only ever detect group members as being nearby
 		-- could enhance to include guild members via roster scanning to compare zones,
 		-- or by using some guild member position lib.
 		-- TODO: second return of UnitInRange is whether a check was performed; decide
 		-- whether to treat unperformed checks as nearby.
-		return
+		local inRange = UnitInRange(sender)
+		if not (issecretvalue or issecretvalue(inRange)) and not inRange then
+			return
+		end
 	end
 
 	local ver, msgType, id, name, zone, level, x, y, GUID = strsplit("\t", msg)
