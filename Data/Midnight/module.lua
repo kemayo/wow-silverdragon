@@ -282,6 +282,9 @@ core:RegisterMobData("Midnight", {
 			250462, -- Forgotten Farstrider's Insignia
 		},
 	},
+
+	-- Ignored
+	[250788] = {name="Lovely Sunflower", hidden=true}, -- Waverly's spawn
 }, true)
 
 ns.RegisterPoints(ns.ISLEOFQUELDANAS, {
