@@ -230,6 +230,7 @@ do
 	-- See: https://warcraft.wiki.gg/wiki/GUID#Creature
 	function addon:GUIDShard(guid)
 		if not guid then return end
+		if issecretvalue and issecretvalue(guid) then return end
 		-- local unitType, _, serverID, instanceID, zoneUID, mobID, spawnUID = strsplit("-", guid)
 		local guidType, _, serverID, instanceID, zoneUID, id, spawnUID = strsplit("-", guid)
 		if not (guidType and valid_types[guidType]) then return end
