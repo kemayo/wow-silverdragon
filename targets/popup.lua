@@ -440,7 +440,9 @@ function PopupMixin:Reset()
 	self.dead:SetAlpha(0)
 	self.model:ClearModel()
 
-	if CombatLogGetCurrentEventInfo then
+	if C_EventUtils.IsEventValid("UNIT_DIED") then
+		self:UnregisterEvent("UNIT_DIED")
+	else
 		self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	end
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
@@ -574,7 +576,9 @@ PopupMixin.scripts = {
 			self.dead.animIn:Play()
 		end
 
-		if CombatLogGetCurrentEventInfo then
+		if C_EventUtils.IsEventValid("UNIT_DIED") then
+			self:RegisterEvent("UNIT_DIED")
+		else
 			self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 		end
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -682,17 +686,20 @@ function PopupMixin:COMBAT_LOG_EVENT_UNFILTERED()
 	if subevent ~= "UNIT_DIED" then
 		return
 	end
+	return self:UNIT_DIED("UNIT_DIED", destGUID)
+end
+function PopupMixin:UNIT_DIED(_, unitGUID)
+	if issecretvalue and issecretvalue(unitGUID) then return end
+	if not unitGUID then return end
+	if ns.IdFromGuid(unitGUID) ~= self.data.id then return end
+	self.data.dead = true
+	self.dead.animIn:Play()
 
-	if destGUID and ns.IdFromGuid(destGUID) == self.data.id then
-		self.data.dead = true
-		self.dead.animIn:Play()
+	-- might have changed things like achievement status
+	module:RefreshMobData(self)
 
-		-- might have changed things like achievement status
-		module:RefreshMobData(self)
-
-		if module.db.profile.closeDead then
-			self:HideWhenPossible()
-		end
+	if module.db.profile.closeDead then
+		self:HideWhenPossible()
 	end
 end
 function PopupMixin:PLAYER_REGEN_ENABLED()
