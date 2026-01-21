@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2026.5
+
+* Midnight: restore the disabled death-detection for popups
+* Minor data tweaks
+
 ## Changed in v2026.4
 
 * Avoid a secret value issue when scanning chat
