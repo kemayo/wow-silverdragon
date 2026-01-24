@@ -255,7 +255,7 @@ core:RegisterMobData("Shadowlands", {
 	[182155] = {name="High Reaver Damaris",locations={[1970]={63202605},},loot={190459,190460,190105,190106,190050,190104,190107,190124,190463},quest=65586,vignette=4951,},
 	[182158] = {name="Reanimatrox Marzan",locations={[1970]={63202605},},loot={190108,190109,190127,190461,190050,190104,190107,190124,190463},quest=65587,vignette=4952,},
 	[182318] = {name="General Zarathura",locations={[1970]={59852110},},loot={189968,189948,190125,190731},quest=65583,vignette=4909,},
-	[183516] = {name="The Engulfer",locations={[1970]={43957530},},loot={190006,189913,189921},notes="Protect {npc:183505} until this appears",quest=65580,},
+	[183516] = {name="The Engulfer",locations={[1970]={43957530},},loot={190006,189913,189921},notes="Protect {npc:183505} until this appears",quest=65580,vignette=4931,},
 	[183596] = {name="Chitali the Eldest",locations={[1970]={49556750},},loot={189906,189947,189994,190729},quest=65553,tameable=1044501,vignette=4948,},
 	[183646] = {name="Furidian",locations={[1970]={64605865},},loot={189920,189932,189963,190004},notes="Find 3x Empowered Keys nearby then unlock the Suspiciously Angry Vault",quest=65544,},
 	[183722] = {name="Sorranos",locations={[1970]={35857120},},loot={189911,189944,189962,190582,187826},quest=65240,tameable=644001,},
