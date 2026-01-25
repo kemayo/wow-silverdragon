@@ -73,19 +73,23 @@ function module:ProcessQueue()
 	if module.PAUSED or InCombatLockdown() then return end
 	while #self.queue > 0 do
 		local data = table.remove(self.queue)
-		Debug("Showing queued popup")
-		table.insert(self.stack, 1, self:ShowFrame(data))
-		-- overflow off the end:
-		if #self.stack > self.db.profile.stacksize then
-			local stacked = table.remove(self.stack)
-			table.insert(module.overflow, 1, stacked.data)
-			stacked:Hide()
+		if data then
+			Debug("Showing queued popup")
+			table.insert(self.stack, 1, self:ShowFrame(data))
+			-- overflow off the end:
+			if #self.stack > self.db.profile.stacksize then
+				local stacked = table.remove(self.stack)
+				table.insert(module.overflow, 1, stacked.data)
+				stacked:Hide()
+			end
 		end
 	end
 	while #self.overflow > 0 and #self.stack < self.db.profile.stacksize do
 		-- overflow data was previously pushed off the end of the stack, and so should be put back in at the end
 		local data = table.remove(self.overflow)
-		table.insert(self.stack, self:ShowFrame(data))
+		if data then
+			table.insert(self.stack, self:ShowFrame(data))
+		end
 	end
 	self:Reflow()
 end
@@ -136,7 +140,9 @@ function module:Redraw()
 	module.PAUSED = true
 	-- need to loop twice and bypass the duplicate checks
 	for i, popup in ipairs(self.stack) do
-		table.insert(self.queue, popup.data)
+		if popup.data then
+			table.insert(self.queue, popup.data)
+		end
 	end
 	while #self.stack > 0 do
 		-- this will release and reset the existing frame
