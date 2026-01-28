@@ -555,41 +555,51 @@ do
 	local poi_expirations = {}
 	local poi_zone_expirations = {}
 	local pois_byzone = {}
+	local poi_methods = {"GetAreaPOIForMap", "GetEventsForMap", "GetQuestHubsForMap", "GetDelvesForMap", "GetDragonridingRacesForMap"}
 	local function refreshPois(zone)
 		local now = time()
 		if not poi_zone_expirations[zone] or now > poi_zone_expirations[zone] then
 			Debug("Refreshing zone POIs", zone)
 			pois_byzone[zone] = wipe(pois_byzone[zone] or {})
-			for _, poi in ipairs(C_AreaPoiInfo.GetAreaPOIForMap(zone)) do
-				pois_byzone[zone][poi] = true
-				poi_expirations[poi] = now + (C_AreaPoiInfo.GetAreaPOISecondsLeft(poi) or 60)
+			for _, method in ipairs(poi_methods) do
+				if C_AreaPoiInfo[method] then
+					for _, poiID in ipairs(C_AreaPoiInfo[method](zone)) do
+						Debug("Found POI", poiID)
+						pois_byzone[zone][poiID] = true
+						if C_AreaPoiInfo.IsAreaPOITimed(poiID) then
+							poi_expirations[poiID] = now + (C_AreaPoiInfo.GetAreaPOISecondsLeft(poiID) or 60)
+						else
+							poi_expirations[poiID] = now + 600
+						end
+					end
+				end
 			end
-			poi_zone_expirations[zone] = now + 1
+			poi_zone_expirations[zone] = now + 10
 		end
 	end
 	local function checkPois(...)
 		for i=1, select("#", ...), 2 do
-			local zone, poi = select(i, ...)
+			local zone, poiID = select(i, ...)
 			local now = time()
-			if now > (poi_expirations[poi] or 0) then
+			if now > (poi_expirations[poiID] or 0) then
 				refreshPois(zone)
-				poi_expirations[poi] = poi_expirations[poi] or (now + 60)
+				poi_expirations[poiID] = poi_expirations[poiID] or (now + 60)
 			end
-			if pois_byzone[zone][poi] then
+			if pois_byzone[zone][poiID] then
 				return true
 			end
 		end
 	end
 	function addon:IsMobInPhase(id, zone)
-		local phased, poi = true, true
+		local phased, poiPresent = true, true
 		if not mobdb[id] then return true end
 		if mobdb[id].art then
 			phased = mobdb[id].art == C_Map.GetMapArtID(zone)
 		end
 		if mobdb[id].poi then
-			poi = checkPois(unpack(mobdb[id].poi))
+			poiPresent = checkPois(unpack(mobdb[id].poi))
 		end
-		return phased and poi
+		return phased and poiPresent
 	end
 end
 -- Returns id, addon:GetMobInfo(id)
