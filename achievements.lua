@@ -607,6 +607,7 @@ local achievements = {
 	[40997] = {}, -- The Gatecrashers (Anniversary)
 	[42729] = {need=EMOTE410_CMD1, completed=DONE}, -- Dangerous Prowlers of K'aresh, /pet
 	[42761] = {}, -- Remnants of a Shattered World
+	--[[
 	-- Remix
 	[42518] = { -- Elusive Foes: Azsuna
 		requires=ns.conditions.AuraActive(1213439),
@@ -761,6 +762,7 @@ local achievements = {
 	[60818] = { -- Elusive Foes: Argus
 		requires=ns.conditions.AuraActive(1213439),
 	},
+	--]]
 	-- Midnight
 	[61507] = {}, -- Eversong Woods: A Bloody Song
 	[62122] = {}, -- Zul'Aman: Tallest Tree in the Forest
