@@ -764,6 +764,7 @@ local achievements = {
 	},
 	--]]
 	-- Midnight
+	[42300] = {}, -- Two Minutes to Midnight (prepatch event)
 	[61507] = {}, -- Eversong Woods: A Bloody Song
 	[62122] = {}, -- Zul'Aman: Tallest Tree in the Forest
 	[61264] = {}, -- Harandar: Leaf None Behind
