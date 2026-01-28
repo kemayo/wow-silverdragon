@@ -88,7 +88,7 @@ function module:OnInitialize()
 			already_drop = true,
 			already_transmog = false,
 			already_alt = true,
-			sink_opts = {},
+			sink_opts = {sink20OutputSink="UIErrorsFrame"},
 			channel = "Master",
 			unmute = false,
 			background = false,
@@ -99,9 +99,24 @@ function module:OnInitialize()
 
 	self:SetSinkStorage(self.db.profile.sink_opts)
 
+	local removeSinks = {Channel=true}
 	if self.db.profile.sink_opts.sink20OutputSink == "Channel" then
 		-- 8.2.5 / Classic removed the ability to output to channels, outside of hardware-driven events
-		self.db.profile.sink_opts.sink20OutputSink = "Default"
+		self.db.profile.sink_opts.sink20OutputSink = "UIErrorsFrame"
+	end
+	if LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_MIDNIGHT then
+		removeSinks.Blizzard = true
+		removeSinks.Default = true
+		-- 12.0.0 has given Blizzard SCT extreme breakage
+		if
+			-- Default uses Blizzard scrolling combat if it's available
+			not self.db.profile.sink_opts.sink20OutputSink or
+			self.db.profile.sink_opts.sink20OutputSink == "Default" or
+			-- ...and this is just directly saying to send it to Blizzard's scrolling combat
+			self.db.profile.sink_opts.sink20OutputSink == "Blizzard"
+		then
+			self.db.profile.sink_opts.sink20OutputSink = "UIErrorsFrame"
+		end
 	end
 
 	core.RegisterCallback(self, "Seen")
@@ -116,14 +131,13 @@ function module:OnInitialize()
 		local sink_config = self:GetSinkAce3OptionsDataTable()
 		local sink_args = {}
 		for k,v in pairs(sink_config.args) do
-			if k ~= "Channel" then
+			if not removeSinks[k] then
 				sink_args[k] = v
 			end
 		end
 		sink_config.args = sink_args
 		sink_config.inline = true
 		sink_config.order = 15
-		sink_config.args.Channel = nil
 
 		local faker = function(id, name, zone, x, y)
 			return {
