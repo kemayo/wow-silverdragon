@@ -80,6 +80,7 @@ read_globals = {
     "C_PetJournal",
     "C_QuestLog",
     "C_Reputation",
+    "C_Secrets",
     "C_Spell",
     "C_SuperTrack",
     "C_TaskQuest",

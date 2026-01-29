@@ -231,7 +231,7 @@ end
 function module:SendLinkToMob(id, uiMapID, x, y)
 	local unit = core:FindUnitWithID(id)
 	local prefix = core:NameForMob(id, unit)
-	if unit then
+	if unit and not (C_Secrets and C_Secrets.ShouldUnitHealthMaxBeSecret(unit)) then
 		prefix = ("%s %s"):format(prefix, ('(' .. math.ceil(UnitHealth(unit) / UnitHealthMax(unit) * 100) .. '%)'))
 	end
 	self:SendLink(prefix, uiMapID, x, y)
