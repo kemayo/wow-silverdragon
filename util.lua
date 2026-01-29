@@ -196,6 +196,7 @@ do
 	end
 	ns.IdFromGuid = npcIdFromGuid
 	function addon:UnitID(unit)
+		if not unit then return end
 		return npcIdFromGuid(UnitGUID(unit))
 	end
 	function addon:FindUnitWithID(id)
@@ -206,8 +207,8 @@ do
 			return 'mouseover'
 		end
 		for _, nameplate in ipairs(C_NamePlate.GetNamePlates()) do
-			if self:UnitID(nameplate.namePlateUnitToken) == id then
-				return nameplate.namePlateUnitToken
+			if self:UnitID(nameplate.unitToken or nameplate.namePlateUnitToken) == id then
+				return nameplate.unitToken or nameplate.namePlateUnitToken
 			end
 		end
 		if IsInGroup() then
