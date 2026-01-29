@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2026.10
+
+* Slightly better coords for Twilight Ascension
+* Fixed some errors when sharing links due to Midnight secrets
+
 ## Changed in v2026.9
 
 * Rares for the Twilight Ascension event
