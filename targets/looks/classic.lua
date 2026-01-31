@@ -58,5 +58,6 @@ function module.Looks:Classic(popup)
 
 	popup.lootIcon:SetSize(24, 24)
 	popup.lootIcon:SetPoint("CENTER", popup.background, "BOTTOMLEFT", -2, 2)
+	popup.noteIcon:SetPoint("CENTER", popup.background, "TOPLEFT", 0, 0)
 	popup.dead:SetAllPoints(popup.modelbg)
 end

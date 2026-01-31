@@ -31,6 +31,8 @@ function module.Looks:Loot_LessAwesome(popup)
 	popup.shine:SetSize(171, 60)
 	popup.shine:SetPoint("BOTTOMLEFT", -10, 12)
 
-	popup.raidIcon:SetPoint("BOTTOM", popup.modelbg, "TOP", 0, -8)
+	popup.raidIcon:SetPoint("CENTER", popup.modelbg, "TOP", 0, -8)
+	popup.lootIcon:SetPoint("CENTER", popup.modelbg, "BOTTOMLEFT", 0, 0)
+	popup.noteIcon:SetPoint("CENTER", popup.modelbg, "TOPLEFT", 0, 0)
 	popup.dead:SetAllPoints(popup.modelbg)
 end

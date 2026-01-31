@@ -24,6 +24,8 @@ function module.Looks:Minimal(popup, config)
 
     popup.lootIcon.texture:SetAtlas("VignetteLoot")
 
+    popup.noteIcon:SetPoint("TOPLEFT", popup.modelbg, "TOPLEFT", 0, 0)
+
     popup.shine:SetPoint("TOPLEFT", 0, 0)
     popup.shine:SetPoint("BOTTOMLEFT", 0, 0)
     popup.shine:SetWidth(32)

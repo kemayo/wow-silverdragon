@@ -33,6 +33,7 @@ local function Loot(self, popup)
 
     popup.raidIcon:SetPoint("BOTTOM", popup.modelbg, "TOP", 0, -8)
     popup.lootIcon:SetPoint("CENTER", popup.modelbg, "BOTTOMLEFT", 0, 0)
+    popup.noteIcon:SetPoint("CENTER", popup.modelbg, "TOPLEFT", 0, 0)
 
     popup.dead:SetAllPoints(popup.modelbg)
 end
