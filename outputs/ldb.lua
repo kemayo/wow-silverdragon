@@ -638,7 +638,7 @@ do
 		return tooltip
 	end
 
-	local notes_icon = CreateAtlasMarkup("poi-workorders")
+	local notes_icon = CreateAtlasMarkup("profession") -- poi-workorders
 	local ignored_icon = CreateAtlasMarkup("Map-MarkedDefeated")
 
 	function module:AddMobLine(id, zone)
