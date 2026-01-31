@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2026.11
+
+* Improve the visibility of notes (yes, so it's easier to notice them to see the Twilight Ascension rare order)
+
 ## Changed in v2026.10
 
 * Slightly better coords for Twilight Ascension
