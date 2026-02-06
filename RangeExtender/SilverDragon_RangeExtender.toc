@@ -1,3 +1,4 @@
+## AllowLoadGameType: mainline, mists
 ## Interface: 120001, 120000, 110207, 50503
 ## Title: SilverDragon: Range Extender
 ## Notes: Show map vignettes when they'd normally be out of your range

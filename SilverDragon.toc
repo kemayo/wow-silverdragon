@@ -83,5 +83,5 @@ Data_Classic\module.xml
 # overlay
 History\module.xml
 Overlay\module.xml
-RangeExtender\module.xml
+RangeExtender\module.xml [AllowLoadGameType mainline,mists]
 #@end-debug@
