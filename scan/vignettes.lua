@@ -104,10 +104,15 @@ end
 
 function module:OnEnable()
 	if self.compat_disabled then return end
-	self:RegisterEvent("VIGNETTE_MINIMAP_UPDATED")
-	self:RegisterEvent("VIGNETTES_UPDATED")
+	-- Vignettes are often missing data right on initial load, so delay this first scan by a second
+	C_Timer.After(1.5, function()
+		self:RegisterEvent("VIGNETTE_MINIMAP_UPDATED")
+		self:RegisterEvent("VIGNETTES_UPDATED")
 
-	core.RegisterCallback(self, "SeenVignette")
+		core.RegisterCallback(self, "SeenVignette")
+
+		self:VIGNETTES_UPDATED()
+	end)
 end
 
 function module:SeenVignette(event, name, vignetteid, atlas)
