@@ -481,9 +481,6 @@ PopupMixin.scripts = {
 		if data.type == "mob" then
 			GameTooltip:AddDoubleLine(escapes.leftClick .. " " .. TARGET, escapes.rightClick .. " " .. CLOSE)
 			core:GetModule('Tooltip'):UpdateTooltip(data.id)
-			if ns.mobdb[data.id] and ns.mobdb[data.id].notes then
-				GameTooltip:AddLine(core:RenderString(ns.mobdb[data.id].notes), 1, 1, 1, true)
-			end
 		else
 			GameTooltip:AddDoubleLine(" ", escapes.rightClick .. " " .. CLOSE)
 			-- GameTooltip:AddLine(data.name)

@@ -69,6 +69,10 @@ function module:UpdateTooltip(id, force_achievement, force_drop, force_id)
 		ns.Loot.Summary.UpdateTooltip(GameTooltip, id)
 	end
 
+	if ns.mobdb[id] and ns.mobdb[id].notes then
+		GameTooltip:AddLine(core:RenderString(ns.mobdb[id].notes), 1, 1, 1, true)
+	end
+
 	if core:ShouldIgnoreMob(id) then
 		GameTooltip:AddLine("SilverDragon is ignoring this mob", 1, 0.5, 0)
 	end
