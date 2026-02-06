@@ -112,7 +112,7 @@ core:RegisterTreasureData("Dragonflight", {
 	[5468] = {
 		label="Expedition Scout's Pack",
 		loot={
-			{192764, mount=1617, note="Renown 25", requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 25)}, -- Verdant Skitterfly
+			{192764, mount=1617, requires=core.conditions.MajorFaction(FACTION_DRAGONSCALE, 25)}, -- Verdant Skitterfly
 			-- all the treasure-prerequisite items
 			{199061, quest=70527}, -- A Guide To Rare Fish
 			{194540, quest=67046}, -- Nokhud Armorer's Notes
