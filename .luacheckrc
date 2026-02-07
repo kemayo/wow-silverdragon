@@ -266,6 +266,8 @@ read_globals = {
     "MapCanvasPinMixin",
     "Vector2DMixin",
     "VignettePinMixin",
+    "VignettePinBaseMixin",
+    "AreaPOIPinMixin",
     "WorldMapPOIQuantizerMixin",
     "RegionUtil",
     "OpenAchievementFrameToAchievement",
@@ -283,6 +285,7 @@ read_globals = {
     "MenuUtil",
     "MenuResponse",
     "EventUtil",
+    "EventRegistry",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",

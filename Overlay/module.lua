@@ -298,31 +298,58 @@ local function AddMobToTooltip(tooltip, mobid, name)
     tooltip:Show()
 end
 
-hooksecurefunc(VignettePinMixin, "OnMouseEnter", function(self)
-    -- _G.PIN = self
-    if not self.hasTooltip then return end
-    local vignetteInfo = self.vignetteInfo
-    if vignetteInfo.vignetteID and ns.vignetteMobLookup[vignetteInfo.vignetteID] then
-        for mobid in pairs(ns.vignetteMobLookup[vignetteInfo.vignetteID]) do
-            AddMobToTooltip(GameTooltip, mobid, true)
-        end
-        return
-    end
-    if vignetteInfo.name then
-        AddMobToTooltip(GameTooltip, core:IdForMob(vignetteInfo.name))
-    end
-end)
+do
+    -- This is a "only do this update once a tick" gate
+    local already
+    local gateFrame = CreateFrame("Frame")
+    gateFrame:SetScript("OnShow", function() already = true end)
+    gateFrame:SetScript("OnHide", function() already = false end)
+    gateFrame:SetScript("OnUpdate", function(self) self:Hide() end)
 
-if _G.TaskPOI_OnEnter then
-    hooksecurefunc("TaskPOI_OnEnter", function(self)
-        if not self.questID then return end
-        if not ns.worldQuestMobLookup[self.questID] then return end
-        for mobid in pairs(ns.worldQuestMobLookup[self.questID]) do
-            AddMobToTooltip(GameTooltip, mobid, true)
+    local handleWorldMapPin = function(pin)
+        if not pin then return end
+        if already then return end
+        gateFrame:Show()
+        local point
+        if pin.vignetteID then
+            if pin.vignetteID and ns.vignetteMobLookup[pin.vignetteID] then
+                for mobid in pairs(ns.vignetteMobLookup[pin.vignetteID]) do
+                    AddMobToTooltip(GameTooltip, mobid, true)
+                end
+                return
+            end
+            if pin.vignetteInfo and pin.vignetteInfo.name then
+                AddMobToTooltip(GameTooltip, core:IdForMob(pin.vignetteInfo.name))
+            end
+        elseif pin.worldQuest and pin.questID then
+            if not ns.worldQuestMobLookup[pin.questID] then return end
+            for mobid in pairs(ns.worldQuestMobLookup[pin.questID]) do
+                AddMobToTooltip(GameTooltip, mobid, true)
+            end
+        elseif pin.poiInfo and pin.poiInfo.areaPoiID then
+            -- point = ns.POIsToPoints[pin.poiInfo.areaPoiID]
         end
-    end)
-    hooksecurefunc("TaskPOI_OnLeave", function(self)
+    end
+    local hideComparison = function()
         -- 10.0.2 doesn't hide this by default any more
         if _G[myname.."ComparisonTooltip"] then _G[myname.."ComparisonTooltip"]:Hide() end
+        gateFrame:Hide()
+    end
+
+    hooksecurefunc(AreaPOIPinMixin, "TryShowTooltip", handleWorldMapPin)
+    hooksecurefunc(AreaPOIPinMixin, "OnMouseLeave", hideComparison)
+    hooksecurefunc(VignettePinBaseMixin or VignettePinMixin, "OnMouseEnter", handleWorldMapPin)
+    hooksecurefunc(VignettePinBaseMixin or VignettePinMixin, "OnMouseLeave", hideComparison)
+    if _G.TaskPOI_OnEnter then
+        hooksecurefunc("TaskPOI_OnEnter", handleWorldMapPin)
+        hooksecurefunc("TaskPOI_OnLeave", function(self) hideComparison() end)
+    end
+    EventRegistry:RegisterCallback("MapLegendPinOnEnter", function(self, pin)
+        -- This wants to catch pins like the vignettes on the Dragon Isles,
+        -- which appear for events but which aren't a VignettePinMixin.
+        -- Regular VignettePinMixin will also trigger this, depending on
+        -- client branch, but the gate frame will avoid issues.
+        handleWorldMapPin(pin)
     end)
+    EventRegistry:RegisterCallback("MapLegendPinOnLeave", hideComparison)
 end
