@@ -298,6 +298,18 @@ local function AddMobToTooltip(tooltip, mobid, name)
     tooltip:Show()
 end
 
+local function AddTreasureToTooltip(tooltip, vignetteID)
+    if not (vignetteID and ns.vignetteTreasureLookup[vignetteID]) then return end
+    if module.db.profile.worldmap.tooltip_completion then
+        -- ns:UpdateTooltipWithCompletion(tooltip, mobid)
+        ns.Loot.Summary.UpdateTooltip(tooltip, vignetteID, not module.db.profile.worldmap.tooltip_regularloot, true)
+    end
+    if ns.vignetteTreasureLookup[vignetteID].notes then
+        tooltip:AddLine(core:RenderString(ns.vignetteTreasureLookup[vignetteID].notes), 1, 1, 1, true)
+    end
+    tooltip:Show()
+end
+
 do
     -- This is a "only do this update once a tick" gate
     local already
@@ -312,13 +324,13 @@ do
         gateFrame:Show()
         local point
         if pin.vignetteID then
-            if pin.vignetteID and ns.vignetteMobLookup[pin.vignetteID] then
+            if ns.vignetteTreasureLookup[pin.vignetteID] then
+                AddTreasureToTooltip(GameTooltip, pin.vignetteID)
+            elseif ns.vignetteMobLookup[pin.vignetteID] then
                 for mobid in pairs(ns.vignetteMobLookup[pin.vignetteID]) do
-                    AddMobToTooltip(GameTooltip, mobid, true)
+                    AddMobToTooltip(GameTooltip, mobid)
                 end
-                return
-            end
-            if pin.vignetteInfo and pin.vignetteInfo.name then
+            elseif pin.vignetteInfo and pin.vignetteInfo.name then
                 AddMobToTooltip(GameTooltip, core:IdForMob(pin.vignetteInfo.name))
             end
         elseif pin.worldQuest and pin.questID then
