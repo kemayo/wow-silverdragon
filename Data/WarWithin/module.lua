@@ -687,6 +687,34 @@ core:RegisterTreasureData("WarWithin", {
 		quest=86487,
 		loot={235038}, -- Crumpled Schematic
 	},
+	-- S.C.R.A.P. jobs:
+	[6687] = { -- starting
+		name="S.C.R.A.P. Heap",
+		loot={
+			ns.rewards.Achievement(41590), -- Really No Littering
+			ns.rewards.Achievement(41591), -- Really No Littering
+			ns.rewards.Achievement(41593), -- Cleanin' the Streets
+			{229953, mount=true}, -- Salvaged Goblin Gazillionaire's Flying Machine (from Garbage)
+			236161, -- Broiler Supreme 300
+			236178, -- Gammy's Hand-Me-Down Bow
+			236181, -- Center-Stage Remover
+			236191, -- Mechanic's Best Motivator
+		},
+	},
+	[6757] = { -- active
+		name="S.C.R.A.P. Heap",
+		achievement=41593,
+		loot={
+			ns.rewards.Achievement(41590), -- Really No Littering
+			ns.rewards.Achievement(41591), -- Really No Littering
+			ns.rewards.Achievement(41593), -- Cleanin' the Streets
+			{229953, mount=true}, -- Salvaged Goblin Gazillionaire's Flying Machine (from Garbage)
+			236161, -- Broiler Supreme 300
+			236178, -- Gammy's Hand-Me-Down Bow
+			236181, -- Center-Stage Remover
+			236191, -- Mechanic's Best Motivator
+		},
+	},
 
 	-- K'aresh
 	[6682] = {
