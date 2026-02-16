@@ -8,6 +8,8 @@ local HBD = LibStub("HereBeDragons-2.0")
 
 -- Strings
 
+local mob_name
+
 local function quick_texture_markup(icon)
 	-- needs less than CreateTextureMarkup
 	return '|T' .. icon .. ':0:0:1:-1|t'
@@ -17,13 +19,19 @@ local completeColor = CreateColor(0, 1, 0, 1)
 local incompleteColor = CreateColor(1, 0, 0, 1)
 function addon:RenderString(s, context)
 	if type(s) == "function" then s = s(context) end
-	return s:gsub("{(%l+):([^:}]+):?([^}]*)}", function(variant, id, fallback)
+	return s:gsub("{([^:}]+):([^:}]+):?([^}]*)}", function(variant, id, fallback)
 		local mainid, subid = id:match("(%d+)%.(%d+)")
 		mainid, subid = mainid and tonumber(mainid), subid and tonumber(subid)
-		id = tonumber(id)
+		id = mainid or tonumber(id)
+		-- TODO: multiple variants?
+		local mainvariant, subvariant = variant:match("(%l+)%.(%l+)")
+		if subvariant then
+			variant = mainvariant
+		end
 		if variant == "item" then
 			local name, link, _, _, _, _, _, _, _, icon = C_Item.GetItemInfo(id)
 			if link and icon then
+				if subvariant == "plain" then return name end
 				return quick_texture_markup(icon) .. " " .. link:gsub("[%[%]]", "")
 			end
 		elseif variant == "spell" then
@@ -37,6 +45,7 @@ function addon:RenderString(s, context)
 				name, _, icon = GetSpellInfo(id)
 			end
 			if name and icon then
+				if subvariant == "plain" then return name end
 				return quick_texture_markup(icon) .. " " .. name
 			end
 		elseif variant == "quest" or variant == "worldquest" or variant == "questname" then
@@ -45,35 +54,43 @@ function addon:RenderString(s, context)
 				-- we bypass the normal fallback mechanism because we want the quest completion status
 				name = fallback ~= "" and fallback or (variant .. ':' .. id)
 			end
-			if variant == "questname" then return name end
+			if variant == "questname" or subvariant == "plain" then return name end
 			local completed = C_QuestLog.IsQuestFlaggedCompleted(id)
 			return CreateAtlasMarkup(variant == "worldquest" and "worldquest-tracker-questmarker" or "questnormal") ..
 				(completed and completeColor or incompleteColor):WrapTextInColorCode(name)
 		elseif variant == "questid" then
+			if subvariant == "plain" then return id end
 			return CreateAtlasMarkup("questnormal") .. (C_QuestLog.IsQuestFlaggedCompleted(id) and completeColor or incompleteColor):WrapTextInColorCode(id)
 		elseif variant == "achievement" or variant == "achievementname" then
 			if mainid and subid then
-				local criteria, _, completed = ns.GetCriteria(mainid, subid)
+				local criteria, _, completed, _, _, completedBy = ns.GetCriteria(mainid, subid)
 				if criteria then
-					if variant == "achievementname" then return criteria end
+					if variant == "achievementname" or subvariant == "plain" then return criteria end
+					if subvariant == "character" then
+						completed = completedBy == ns.playerName
+					end
 					return (completed and completeColor or incompleteColor):WrapTextInColorCode(criteria)
 				end
 				id = 'achievement:'..mainid..'.'..subid
 			else
-				local _, name, _, completed = GetAchievementInfo(id)
+				local _, name, _, completed, _, _, _, _, _, _, _, _, wasEarnedByMe = GetAchievementInfo(id)
 				if name and name ~= "" then
-					if variant == "achievementname" then return name end
+					if variant == "achievementname" or subvariant == "plain" then return name end
+					if subvariant == "character" then
+						completed = wasEarnedByMe
+					end
 					return CreateAtlasMarkup("storyheader-cheevoicon") .. " " .. (completed and completeColor or incompleteColor):WrapTextInColorCode(name)
 				end
 			end
 		elseif variant == "npc" then
-			local name = self:NameForMob(id)
+			local name = mob_name(id)
 			if name then
 				return name
 			end
 		elseif variant == "currency" then
 			local info = C_CurrencyInfo.GetCurrencyInfo(id)
 			if info then
+				if subvariant == "plain" then return info.name end
 				return quick_texture_markup(info.iconFileID) .. " " .. info.name
 			end
 		elseif variant == "currencyicon" then
@@ -83,10 +100,13 @@ function addon:RenderString(s, context)
 			end
 		elseif variant == "covenant" then
 			local data = C_Covenants.GetCovenantData(id)
-			return COVENANT_COLORS[id]:WrapTextInColorCode(data and data.name or ns.covenants[id])
+			local name = data and data.name or ns.covenants[id]
+			if subvariant == "plain" then return name end
+			return COVENANT_COLORS[id]:WrapTextInColorCode(name)
 		elseif variant == "majorfaction" then
 			local info = C_MajorFactions.GetMajorFactionData(id)
 			if info and info.name then
+				if subvariant == "plain" then return info.name end
 				return CreateAtlasMarkup(("majorFactions_icons_%s512"):format(info.textureKit)) .. " " .. info.name
 			end
 		elseif variant == "faction" then
@@ -100,12 +120,38 @@ function addon:RenderString(s, context)
 				name = GetFactionInfoByID(id)
 			end
 			if name then
+				if subid then
+					return TEXT_MODE_A_STRING_VALUE_TYPE:format(name, GetText("FACTION_STANDING_LABEL"..subid, UnitSex("player")) or string(subid))
+				end
 				return name
 			end
 		elseif variant == "garrisontalent" then
 			local info = C_Garrison.GetTalentInfo(id)
 			if info then
+				if subvariant == "plain" then return info.name end
 				return quick_texture_markup(info.icon) .. " " .. (info.researched and completeColor or incompleteColor):WrapTextInColorCode(info.name)
+			end
+		elseif variant == "trait" then
+			local treeID, nodeID = mainid, subid
+			local configID = C_Traits.GetConfigIDByTreeID(treeID)
+			local nodeInfo = configID and C_Traits.GetNodeInfo(configID, nodeID)
+			if nodeInfo and nodeInfo.ID ~= 0 then
+				local known = nodeInfo.ranksPurchased > 0
+				local entryID = nodeInfo.activeEntry and nodeInfo.activeEntry.entryID
+				local entryInfo = entryID and C_Traits.GetEntryInfo(configID, entryID)
+				if entryInfo and entryInfo.definitionID then
+					local definitionInfo = C_Traits.GetDefinitionInfo(entryInfo.definitionID)
+					local name = TalentUtil.GetTalentNameFromInfo(definitionInfo)
+					if name and name ~= "" then
+						if subvariant == "plain" then return name end
+						name = (known and completeColor or incompleteColor):WrapTextInColorCode(name)
+						local texture = TalentButtonUtil.CalculateIconTextureFromInfo(definitionInfo)
+						if texture then
+							return quick_texture_markup(texture) .. " " .. name
+						end
+						return name
+					end
+				end
 			end
 		elseif variant == "profession" then
 			local info = C_TradeSkillUI.GetProfessionInfoBySkillLineID(id)
@@ -277,6 +323,7 @@ end,})
 -- Names
 
 do
+	local mobIdToName = {}
 	local mobNameToId = {}
 	local TextFromHyperlink
 	if _G.C_TooltipInfo then
@@ -298,7 +345,8 @@ do
 			end
 		end
 	end
-	local function mob_name(id, unit, cache)
+	function mob_name(id, unit, cache)
+		cache = cache or mobIdToName
 		if unit then
 			-- refresh the locale when we actually meet the mob, because blizzard fixes typos occasionally
 			local name = UnitName(unit)
@@ -318,9 +366,8 @@ do
 		return cache[id] or (ns.mobdb[id] and ns.mobdb[id].name)
 	end
 
-	local name_cache = {}
 	function addon:NameForMob(id, unit)
-		return mob_name(id, unit, name_cache)
+		return mob_name(id, unit)
 	end
 	function addon:IdForMob(name, zone)
 		if zone then

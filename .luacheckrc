@@ -89,6 +89,7 @@ read_globals = {
     "C_TooltipInfo",
     "C_ToyBox",
     "C_TradeSkillUI",
+    "C_Traits",
     "C_Transmog",
     "C_TransmogCollection",
     "C_TransmogSets",
@@ -158,6 +159,7 @@ read_globals = {
     "GetScreenHeight",
     "GetScreenWidth",
     "GetSpellInfo",
+    "GetText",
     "GetTime",
     "GetZoneText",
     "InCinematic",
@@ -286,6 +288,8 @@ read_globals = {
     "MenuResponse",
     "EventUtil",
     "EventRegistry",
+    "TalentUtil",
+    "TalentButtonUtil",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",
@@ -302,6 +306,7 @@ read_globals = {
     "BANK",
     "BANK_BAG_PURCHASE",
     "BANK_CONTAINER",
+    "BATTLE_PET_SOURCE_6",
     "BOSS_DEAD",
     "CHAT_MSG_SAY",
     "CHAT_MSG_YELL",

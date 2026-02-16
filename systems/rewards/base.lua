@@ -136,7 +136,7 @@ function ns.rewards.Currency:Name(color)
 			("%s x %d"):format(name, self.amount) or
 			name
 	end
-	return self:Super("Name", color)
+	return self:super("Name", color)
 end
 function ns.rewards.Currency:Icon()
 	local info = C_CurrencyInfo.GetBasicCurrencyInfo(self.id)
@@ -179,6 +179,30 @@ function ns.rewards.Currency:AddToItemButton(button, ...)
 	end
 	-- could use info.displayAmount here, but I think this makes more sense:
 	SetItemButtonCount(button, self.amount)
+end
+
+ns.rewards.Achievement = Reward:extends{classname="Achievement"}
+function ns.rewards.Achievement:init(id, criteria, ...)
+	self:super("init", id, ...)
+	self.criteria = criteria
+
+	self.name = string.format("{achievementname:%d%s%s}", id, criteria and "." or "", criteria or "")
+end
+function ns.rewards.Achievement:Name(color)
+	return ns.render_string(self.name)
+end
+function ns.rewards.Achievement:Icon()
+	return (select(10, GetAchievementInfo(self.id)))
+end
+function ns.rewards.Achievement:Obtained(...)
+	if self:super("Obtained", ...) == false then return false end
+	return (select(4, GetAchievementInfo(self.id))) -- 13 is for this character
+end
+function ns.rewards.Achievement:TooltipLabel()
+	return BATTLE_PET_SOURCE_6 -- "Achievement"
+end
+function ns.rewards.Achievement:SetTooltip(tooltip)
+	tooltip:SetHyperlink(GetAchievementLink(self.id))
 end
 
 ns.rewards.BattlePet = Reward:extends({classname="BattlePet",
