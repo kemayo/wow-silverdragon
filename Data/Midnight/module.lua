@@ -310,6 +310,7 @@ core:RegisterMobData("Midnight", {
 
 	-- Ignored
 	[250788] = {name="Lovely Sunflower", hidden=true}, -- Waverly's spawn
+	[209781] = {name="Empowered Restoration Stone", hidden=true},
 }, true)
 
 ns.RegisterPoints(ns.ISLEOFQUELDANAS, {
