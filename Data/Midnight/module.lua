@@ -336,15 +336,17 @@ ns.RegisterPoints(ns.ISLEOFQUELDANAS, {
 
 -- A Bloody Song
 ns.RegisterPoints(ns.EVERSONGWOODS, {
-	[52627532] = {
+	[51397502] = {
 		label="Warden of Weeds",
-		criteria=110166, quest=91280, -- 94681
+		criteria=110166, quest=91280,
 		npc=246332,
 		loot={
 			264520, -- Warden's Leycrook
 			264613, -- Steelbark Bulwark
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94681}),
 		},
 		vignette=7363,
+		note="Wanders",
 	},
 	[45097760] = {
 		label="Harried Hawkstrider",
@@ -355,11 +357,12 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 			264521, -- Striderplume Focus
 			264522, -- Striderplume Armbands
 			258912, -- Tarnished Dawnlit Spellbinder's Robe
+			-- ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94682 or 94683}), --v
 		},
 		vignette=7002,
 		note="Runs around nearby",
 	},
-	[54806020] = {
+	[54716019] = {
 		label="Overfester Hydra",
 		criteria=110168, quest=92392,
 		npc=240129,
@@ -367,17 +370,20 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 			-- 251791, -- Holy Retributor's Order
 			264523, -- Hydrafang Blade
 			264524, -- Lightblighted Verdant Vest
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94684}),
 		},
+		vignette=7300, -- Dormant Lightbloom Hydra
 	},
 	[36566407] = {
 		label="Bloated Snapdragon",
-		criteria=110169, quest=92366, -- 94685
+		criteria=110169, quest=92366,
 		npc=250582,
 		loot={
 			-- 251788, -- Gift of Light
 			264543, -- Snapdragon Pantaloons
 			264560, -- Sharpclaw Gauntlets
 			260647, -- Digested Human Hand
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94685}),
 		},
 		vignette=7294,
 	},
@@ -390,6 +396,7 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 			264573, -- Taskmaster's Sadistic Shoulderguards
 			264647, -- Cre'van's Punisher
 			265803, -- Bazaar Bites
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94686}), --v
 		},
 		vignette=7299, -- Cre'van, Cruel Taskmaster
 		note="Wanders the camp a bit",
@@ -401,18 +408,20 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 		loot={
 			264602, -- Abyss Coral Band
 			264629, -- Coralfang's Hefty Fin
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94687}),
 		},
 		vignette=7298,
 	},
 	[36657719] = {
 		label="Lady Liminus",
-		criteria=110172, quest=92393, -- 94688
+		criteria=110172, quest=92393,
 		npc=250754,
 		loot={
 			-- 251791, -- Holy Retributor's Order
 			264612, -- Tarnished Gold Locket
 			264645, -- Aged Farstrider Bow
 			260655, -- Decaying Humanoid Flesh
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94688}),
 		},
 		vignette=7301,
 	},
@@ -423,18 +432,20 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 		loot={
 			264537, -- Winged Terror Gloves
 			264546, -- Bat Fur Boots
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94689}), --v
 		},
 		vignette=7306,
 	},
 	[49048777] = {
 		label="Bad Zed",
-		criteria=110174, quest=92404, -- 94690
+		criteria=110174, quest=92404,
 		npc=250841,
 		loot={
 			-- 251791, -- Holy Retributor's Order
 			-- 251788, -- Gift of Light
 			264621, -- Bad Zed's Worst Channeler
 			265803, -- Bazaar Bites
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94690}),
 		},
 		vignette=7305,
 	},
@@ -447,38 +458,42 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 			260694, -- Foul Kelp
 			264608, -- String of Lovely Blossoms
 			264910, -- Shell-Cleaving Poleaxe
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94691}), --v
 		},
 		vignette=7302,
 	},
 	[56427760] = {
 		label="Banuran",
-		criteria=110176, quest=92403, -- 94692
+		criteria=110176, quest=92403,
 		npc=250826,
 		loot={
 			-- 251788, -- Gift of Light
 			264526, -- Supremely Slimy Sash
 			264552, -- Frogskin Grips
 			-- 265027, -- Lucky Lynx Locket
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94692}),
 		},
 		vignette=7304,
 	},
 	[59107924] = {
 		label="Lost Guardian",
-		criteria=110177, quest=92399, -- 94693
+		criteria=110177, quest=92399,
 		npc=250806,
 		loot={
 			264555, -- Splintered Hexwood Clasps
 			264575, -- Hexwood Helm
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94693}),
 		},
 		vignette=7303,
 	},
-	[42176897] = {
+	[42436906] = {
 		label="Duskburn",
-		criteria=110178, quest=93550, -- 94694
+		criteria=110178, quest=93550,
 		npc=255302,
 		loot={
 			264569, -- Void-Gorged Kickers
 			264594, -- Netherscale Cloak
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94694}),
 		},
 		vignette=7396,
 	},
@@ -489,18 +504,20 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 		loot={
 			264584, -- Stonecarved Smashers
 			264603, -- Guardian's Gemstone Loop
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94695}), --v
 		},
 		vignette=7399,
 	},
 	[44573817] = {
 		label="Dame Bloodshed",
-		criteria=110180, quest=93561, -- 94696
+		criteria=110180, quest=93561,
 		npc=255348,
 		loot={
 			-- 251788, -- Gift of Light
 			-- 251791, -- Holy Retributor's Order
 			264595, -- Lynxhide Shawl
 			264624, -- Fang of the Dame
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94696}),
 		},
 		note="Wanders",
 		vignette=7404,
@@ -513,29 +530,31 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 ns.RegisterPoints(ns.ZULAMAN, {
 	[34393304] = {
 		label="Necrohexxer Raz'ka",
-		criteria=111839, quest=89569, -- 94683
+		criteria=111839, quest=89569,
 		npc=242023,
 		loot={
 			251783, -- Lost Idol of the Hash'ey
 			264527, -- Vile Hexxer's Mantle
 			264611, -- Pendant of Siphoned Vitality
 			265543, -- Tempered Amani Spearhead
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94683}),
 		},
 		vignette=6895,
 	},
 	[51881875] = {
 		label="The Snapping Scourge",
-		criteria=111840, quest=89570, -- 94697
+		criteria=111840, quest=89570,
 		npc=242024,
 		loot={
 			264585, -- Snapper Steppers
 			264617, -- Scourge's Spike
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94697}),
 		},
 		vignette=6896,
 	},
 	[51847292] = {
 		label="Skullcrusher Harak",
-		criteria=111841, quest=89571, -- 94698
+		criteria=111841, quest=89571,
 		npc=242025,
 		loot={
 			251783, -- Lost Idol of the Hash'ey
@@ -543,48 +562,53 @@ ns.RegisterPoints(ns.ZULAMAN, {
 			264542, -- Skullcrusher's Mantle
 			264631, -- Harak's Skullcutter
 			265560, -- Toughened Amani Leather Wrap
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94698}),
 		},
 		vignette=6897,
 	},
 	[28832450] = {
 		label="Lightwood Borer",
-		criteria=111842, quest=89575, -- 94699
+		criteria=111842, quest=89575,
 		npc=242028,
 		loot={
 			251784, -- Sylvan Wakrapuku
 			264640, -- Sharpened Borer Claw
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94699}),
 		},
 		vignette=6900,
 	},
 	[50866517] = {
 		label="Mrrlokk",
-		criteria=111843, quest=91174, -- 94700
+		criteria=111843, quest=91174,
 		npc=245975,
 		loot={
 			251783, -- Lost Idol of the Hash'ey
 			264570, -- Reinforced Chainmrrl
 			264580, -- Mrrlokk's Mrgl Grrdle
 			265543, -- Tempered Amani Spearhead
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94700}),
 		},
 		vignette=6977,
 	},
 	[30574456] = {
 		label="Spinefrill",
-		criteria=111845, quest=89578, -- 94702
+		criteria=111845, quest=89578,
 		npc=242031,
 		loot={
 			264554, -- Frilly Leather Vest
 			264620, -- Pufferspine Spellpierce
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94702}),
 		},
 		vignette=6903,
 	},
 	[46555127] = {
 		label="Oophaga",
-		criteria=111846, quest=89579, -- 94703
+		criteria=111846, quest=89579,
 		npc=242032,
 		loot={
 			264528, -- Goop-Coated Leggings
 			264541, -- Egg-Swaddling Sash
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94703}),
 		},
 		vignette=6904,
 	},
@@ -596,15 +620,17 @@ ns.RegisterPoints(ns.ZULAMAN, {
 			251784, -- Sylvan Wakrapuku
 			264648, -- Verminscale Gavel
 			264597, -- Leechtooth Band
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94704}),
 		},
 		vignette=6905,
 	},
 	[21547051] = {
 		label="Voidtouched Crustacean",
-		criteria=111848, quest=89581, --94705
+		criteria=111848, quest=89581,
 		npc=242034,
 		loot={
 			264586, -- Crustacean Carapace Chestguard
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94705}),
 		},
 		vignette=6906,
 	},
@@ -615,27 +641,30 @@ ns.RegisterPoints(ns.ZULAMAN, {
 		loot={
 			264559, -- Devourer's Visage
 			264638, -- Fangs of the Invader
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94706}),
 		},
 		note="In cave at the bottom of the chasm",
 		vignette=6907,
 	},
 	[33688897] = {
 		label="Elder Oaktalon",
-		criteria=111850, quest=89572, -- 94707
+		criteria=111850, quest=89572,
 		npc=242026,
 		loot={
 			264547, -- Worn Furbolg Bindings
 			264529, -- Cover of the Furbolg Elder
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94707}),
 		},
 		vignette=6898,
 	},
 	[47662052] = {
 		label="Depthborn Eelamental",
-		criteria=111851, quest=89573, -- 94708
+		criteria=111851, quest=89573,
 		npc=242027,
 		loot={
 			251784, -- Sylvan Wakrapuku
 			264618, -- Strangely Eelastic Blade
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94708}),
 		},
 		vignette=6899,
 	},
@@ -658,11 +687,12 @@ ns.RegisterPoints(ns.ZULAMAN, {
 ns.RegisterPoints(ns.ATALAMAN, {
 	[82972145] = {
 		label="Poacher Rav'ik",
-		criteria=111844, quest=91634, -- 94701
+		criteria=111844, quest=91634,
 		npc=247976,
 		loot={
 			264627, -- Rav'ik's Spare Hunting Spear
 			264911, -- Forest Hunter's Arc
+			ns.rewards.Currency(ns.CURRENCY_AMANI, 50, {quest=94701}),
 		},
 		vignette=7117,
 	},
@@ -676,59 +706,65 @@ ns.RegisterPoints(ns.ATALAMAN, {
 ns.RegisterPoints(ns.HARANDAR, {
 	[51174530] = {
 		label="Rhazul",
-		criteria=109039, quest=91832, -- 94712
+		criteria=109039, quest=91832,
 		npc=248741,
 		loot={
 			264530, -- Grimfur Mittens
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94712}),
 		},
 		vignette=7139,
 	},
 	[68014033] = {
 		label="Chironex",
-		criteria=109040, quest=92137, -- 94713
+		criteria=109040, quest=92137,
 		npc=249844,
 		loot={
 			264538, -- Translucent Membrane Slippers
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94713}),
 		},
 		vignette=7156,
 	},
 	[67696228] = {
 		label="Ha'kalawe",
-		criteria=109041, quest=92142, -- 94714
+		criteria=109041, quest=92142,
 		npc=249849,
 		loot={
 			252957, -- Tangle of Vibrant Vines
 			264553, -- Deepspore Leather Galoshes
 			264592, -- Ka'kalawe's Flawless Wing
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94714}),
 		},
 		note="Wanders",
 		vignette=7157,
 	},
 	[72636926] = {
 		label="Tallcap the Truthspreader",
-		criteria=109042, quest=92148, -- 94715
+		criteria=109042, quest=92148,
 		npc=249902,
 		loot={
 			264650, -- Truthspreader's Truth Spreader
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94715}),
 		},
 		vignette=7158,
 	},
 	[60104701] = {
 		label="Queen Lashtongue",
-		criteria=109043, quest=92154, -- 94716
+		criteria=109043, quest=92154,
 		npc=249962,
 		loot={
 			251782, -- Withered Saptor's Paw
 			264895, -- Trials of the Florafaun Hunter
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94716}),
 		},
 		vignette=7159,
 	},
 	[64904810] = {
 		label="Chlorokyll",
-		criteria=109044, quest=92161, -- 94717
+		criteria=109044, quest=92161,
 		npc=249997,
 		loot={
 			264626, -- Scepter of Radiant Conversion
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94717}),
 		},
 		vignette=7161,
 	},
@@ -736,6 +772,11 @@ ns.RegisterPoints(ns.HARANDAR, {
 		label="Stumpy",
 		criteria=109045, quest=92168,
 		npc=250086,
+		loot={
+			264635, -- Stumpy's Stump
+			264578, -- Stumpy's Terrorplate
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94718}), --v
+		},
 		vignette=7162,
 	},
 	[56783422] = {
@@ -744,37 +785,42 @@ ns.RegisterPoints(ns.HARANDAR, {
 		npc=250180,
 		loot={
 			264568, -- Serrated Scale Gauntlets
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94719}), --v
 		},
 		vignette=7163,
 	},
 	[46353284] = {
 		label="Mindrot",
-		criteria=109047, quest=92172, -- 94720
+		criteria=109047, quest=92172,
 		npc=250226,
 		loot={
 			264649, -- Mindrot Claw-Hammer
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94720}),
 		},
 		vignette=7164,
 	},
 	[40654299] = {
 		label="Dracaena",
-		criteria=109048, quest=92176, -- 94721
+		criteria=109048, quest=92176,
 		npc=250231,
 		loot={
 			264562, -- Plated Grove Vest
 			264644, -- Crawler's Mindscythe
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94721}),
 		},
 		vignette=7165,
 	},
 	[36597516] = {
 		label="Treetop",
-		criteria=109049, quest=92183, -- 94722
+		criteria=109049, quest=92183,
 		npc=250246,
 		loot={
 			-- {246735,mount=true,}, -- Rootstalker Grimlynx (all zone rares?)
+			-- 251782, -- Withered Saptor's Paw
 			264633, -- Treetop Battlestave
 			264968, -- Telluric Leyblossom
 			264581, -- Bloombark Spaulders
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94722}),
 		},
 		vignette=7166,
 	},
@@ -785,26 +831,29 @@ ns.RegisterPoints(ns.HARANDAR, {
 		loot={
 			264591, -- Radiant Petalwing's Feather
 			264616, -- Lightblighted Sapdrinker
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94723}), --v
 		},
 		vignette=7167,
 	},
 	[27197021] = {
 		label="Pterrock",
-		criteria=109051, quest=92191, -- 94724
+		criteria=109051, quest=92191,
 		npc=250321,
 		loot={
 			259896, -- Bark of the Guardian Tree
 			264576, -- Slatescale Grips
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94724}),
 		},
 		vignette=7168,
 	},
 	[39696070] = {
 		label="Ahl'ua'huhi",
-		criteria=109052, quest=92193, -- 94725
+		criteria=109052, quest=92193,
 		npc=250347,
 		loot={
 			264534, -- Bogvine Shoulderguards
 			264540, -- Mirevine Wristguards
+			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94725}),
 		},
 		vignette=7171,
 	},
@@ -818,34 +867,38 @@ ns.RegisterPoints(ns.HARANDAR, {
 	achievement=61264,
 })
 
+
 -- The Ultimate Predator
 ns.RegisterPoints(ns.VOIDSTORM, {
 	[29515008] = {
 		label="Sundereth the Caller",
-		criteria=111877, quest=90805, -- 94728
+		criteria=111877, quest=90805,
 		npc=244272,
 		loot={
 			264619, -- Nethersteel Spellblade
 			264539, -- Robes of the Voidcaller
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94728}),
 		},
 		vignette=6949,
 	},
 	[34028218] = {
 		label="Territorial Voidscythe",
-		criteria=111878, quest=91050, -- 94729
+		criteria=111878, quest=91050,
 		npc=238498,
 		loot={
 			264565, -- Voidscale Shoulderpads
 			264642, -- Carving Voidscythe
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94729}),
 		},
 		vignette=6961,
 	},
 	[36308373] = {
 		label="Tremora",
-		criteria=111879, quest=91048, -- 94730
+		criteria=111879, quest=91048,
 		npc=241443,
 		loot={
 			251786, -- Ever-Collapsing Void Fissure
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94730}),
 		},
 		path=37498452, -- or 35678113
 		note="In the tunnel",
@@ -853,92 +906,101 @@ ns.RegisterPoints(ns.VOIDSTORM, {
 	},
 	[43685151] = {
 		label="Screammaxa the Matriarch",
-		criteria=111880, quest=93966, -- 94731
+		criteria=111880, quest=93966,
 		npc=256922,
 		loot={
 			264583, -- Barbute of the Winged Hunter
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94731}),
 		},
 		vignette=7436,
 	},
 	[47058063] = {
 		label="Bane of the Vilebloods",
-		criteria=111881, quest=93946, -- 94732
+		criteria=111881, quest=93946,
 		npc=256923,
 		loot={
 			264572, -- Netherplate Clasp
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94732}),
 		},
 		note="In cave",
 		vignette=7433,
 	},
 	[39246394] = {
 		label="Aeonelle Blackstar",
-		criteria=111882, quest=93944, -- 94751
+		criteria=111882, quest=93944,
 		npc=256924,
 		loot={
 			264549, -- Ever-Devouring Shoulderguards
 			264637, -- Cosmic Hunter's Glaive
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94751}),
 		},
 		note="In cave at lowest level",
 		vignette=7432,
 	},
 	[37887178] = {
 		label="Lotus Darkblossom",
-		criteria=111883, quest=93947, -- 94758
+		criteria=111883, quest=93947,
 		npc=256925,
 		loot={
 			251786, -- Ever-Collapsing Void Fissure
 			264632, -- Darkblossom's Crook
 			264548, -- Sash of Cosmic Tranquility
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94758}),
 		},
 		vignette=7434,
 	},
 	[55727945] = {
 		label="Queen o' War",
-		criteria=111884, quest=93934, -- 94761
+		criteria=111884, quest=93934,
 		npc=256926,
 		loot={
 			251786, -- Ever-Collapsing Void Fissure
 			264533, -- Queen's Tentacle Sash
 			264601, -- Queen's Eye Band
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94761}),
 		},
 		note="Use the Crown",
 		vignette=7430,
 	},
 	[48815317] = {
 		label="Ravengerus",
-		criteria=111885, quest=93895, -- 94763
+		criteria=111885, quest=93895,
 		npc=256808,
 		loot={
 			264535, -- Leggings of the Cosmic Harrower
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94763}),
 		},
 		vignette=7426,
 	},
 	[35485023] = {
 		label="Bilemaw the Gluttonous",
-		criteria=111887, quest=93884, -- 94752
+		criteria=111887, quest=93884,
 		npc=256770,
 		loot={
 			264623, -- Shredding Fang
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94752}),
 		},
 		path=35604931,
 		vignette=7422,
 	},
 	[40154119] = {
 		label="Nightbrood",
-		criteria=111889, quest=91051, -- 94759
+		criteria=111889, quest=91051,
 		npc=245044,
 		loot={
 			251786, -- Ever-Collapsing Void Fissure
 			264574, -- Netherterror's Legplates
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94759}),
 		},
 		vignette=6964,
 	},
 	[53946272] = {
 		label="Far'thana the Mad",
-		criteria=111890, quest=93896, -- 94755
+		criteria=111890, quest=93896,
 		npc=256821,
 		loot={
 			251786, -- Ever-Collapsing Void Fissure
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94755}),
 		},
 		vignette=7428,
 	},
@@ -949,19 +1011,21 @@ ns.RegisterPoints(ns.VOIDSTORM, {
 ns.RegisterPoints(ns.SLAYERSRISE, {
 	[41268981] = {
 		label="Eruundi",
-		criteria=111888, quest=91047, -- 94754
+		criteria=111888, quest=91047,
 		npc=245182,
 		loot={
 			264701, -- Cosmic Bell
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94754}),
 		},
 		vignette=6963, -- vignette position APIs don't work on this one...
 	},
 	[46384093] = {
 		label="Rakshur the Bonegrinder",
-		criteria=111886, quest=93953, -- 94762
+		criteria=111886, quest=93953,
 		npc=257027,
 		loot={
 			264630, -- Colossal Voidsunderer
+			ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94762}),
 		},
 		vignette=7435,
 	},
