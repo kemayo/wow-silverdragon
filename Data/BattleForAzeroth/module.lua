@@ -507,7 +507,27 @@ core:RegisterMobData("BattleForAzeroth", {
 	[152677] = {name="Nebet the Ascended",locations={[1527]={61402580},},requires=ULDUM_AMATHET,quest=55684,},
 	[152681] = {name="Prince Typhonus",locations={[1355]={42408740,44207160},},loot={{169367,pet=2701,}},quest=56289,},
 	[152682] = {name="Prince Vortran",locations={[1355]={42407440},},loot={{169368,pet=2702,}},quest=56290,},
+	[152697] = {
+		name="Ulmath",
+	    quest=56057, -- The Soulbinder
+	    worldquest=56057, -- The Soulbinder
+	    locations={[1355]={83913611}},
+	    loot={
+	        168603, -- Cloak of Restless Spirits
+	        169317, -- Enthraller's Bindstone
+	        170088, -- Ulmath's Soulseeker
+	        170089, -- Liara's Spire
+	        170090, -- Merciless Pincher
+	        170091, -- Willbinder's Halberd
+	        170092, -- Netherdancer's Knife
+	        170093, -- Tyr'mar's Greatsword
+	        170094, -- Temple Guardian's Saber
+	        170095, -- Moon Priestess' Baton
+	    },
+	},
 	[152712] = {name="Blindlight",locations={[1355]={37208260},},loot={{169372,pet=2682,}},quest=56269,},
+	[152729] = {name="Moon Priestess Liara",locations={[1355]={}},quest=56057,hidden=true},
+	[152736] = {name="Guardian Tannin",locations={[1355]={}},quest=56057,hidden=true},
 	[152756] = {name="Daggertooth Terror",locations={[1355]={26002820,38805800,40008340,40402840,47807680,48001940,57204000,70004240,70403280,71402760},},loot={{169361,pet=2695,}},quest=56271,},
 	[152757] = {name="Atekhramun",locations={[1527]={65005140},},requires=ULDUM_AMATHET,quest=55710,},
 	[152764] = {name="Oxidized Leachbeast",locations={[1462]={53406040,59205940},},loot={{167794,quest=55454,}},quest=55856,},
