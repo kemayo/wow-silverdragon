@@ -84,7 +84,7 @@ do
 	local function copperToPrettyMoney(c, coins)
 		local G, S, C = GOLD_AMOUNT_SYMBOL, SILVER_AMOUNT_SYMBOL, COPPER_AMOUNT_SYMBOL
 		if c >= 10000 then
-			return ("|cffffffff%d|r|cffffd700%s|r |cffffffff%d|r|cffc7c7cf%s|r |cffffffff%d|r|cffeda55f%s|r"):format(
+			return ("|cffffffff%s|r|cffffd700%s|r |cffffffff%d|r|cffc7c7cf%s|r |cffffffff%d|r|cffeda55f%s|r"):format(
 				BreakUpLargeNumbers(c/10000), G, (c/100)%100, S, c%100, C
 			)
 		elseif c >= 100 then
