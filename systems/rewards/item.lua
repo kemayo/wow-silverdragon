@@ -80,8 +80,43 @@ function ns.rewards.Item:MightDrop()
 	-- parent catches covenants / classes / etc
 	return self:super("MightDrop")
 end
-function ns.rewards.Item:SetTooltip(tooltip)
-	tooltip:SetItemByID(self.id)
+do
+	local function copperToPrettyMoney(c, coins)
+		local G, S, C = GOLD_AMOUNT_SYMBOL, SILVER_AMOUNT_SYMBOL, COPPER_AMOUNT_SYMBOL
+		if c >= 10000 then
+			return ("|cffffffff%d|r|cffffd700%s|r |cffffffff%d|r|cffc7c7cf%s|r |cffffffff%d|r|cffeda55f%s|r"):format(
+				BreakUpLargeNumbers(c/10000), G, (c/100)%100, S, c%100, C
+			)
+		elseif c >= 100 then
+			return ("|cffffffff%d|r|cffc7c7cf%s|r |cffffffff%d|r|cffeda55f%s|r"):format((c/100)%100, S, c%100, C)
+		else
+			return ("|cffffffff%d|r|cffeda55f%s|r"):format(c%100, C)
+		end
+	end
+	local function cleanTooltipMoney(tooltip, lineData)
+		-- see: TooltipDataRules.SellPrice and GameTooltip_OnTooltipAddMoney
+		if lineData.type == Enum.TooltipDataLineType.SellPrice and lineData.price then
+			if lineData.maxPrice and lineData.maxPrice >= 1 then
+				GameTooltip_AddColoredLine(tooltip, ("%s:"):format(SELL_PRICE), HIGHLIGHT_FONT_COLOR)
+				local indent = string.rep(" ", 4)
+				GameTooltip_AddHighlightLine(tooltip, string.format("%s%s", MINIMUM, copperToPrettyMoney(lineData.price)))
+				GameTooltip_AddHighlightLine(tooltip, string.format("%s%s", MAXIMUM, copperToPrettyMoney(lineData.maxPrice)))
+			else
+				GameTooltip_AddHighlightLine(tooltip, string.format("%s: %s", SELL_PRICE, copperToPrettyMoney(lineData.price)))
+			end
+			return true
+		end
+	end
+	function ns.rewards.Item:SetTooltip(tooltip)
+		if C_TooltipInfo then
+			-- secrets are enough of a problem that I feel this has become necessary...
+			local tooltipInfo = CreateBaseTooltipInfo("GetItemByID", self.id)
+			tooltipInfo.linePreCall = cleanTooltipMoney
+			tooltip:ProcessInfo(tooltipInfo)
+			return
+		end
+		tooltip:SetItemByID(self.id)
+	end
 end
 function ns.rewards.Item:AddToItemButton(button)
 	button:SetItem(self.id)
