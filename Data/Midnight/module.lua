@@ -348,7 +348,7 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 		vignette=7363,
 		note="Wanders",
 	},
-	[45097760] = {
+	[44767846] = {
 		label="Harried Hawkstrider",
 		criteria=110167, quest=91315,
 		npc=246633,
@@ -357,7 +357,7 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 			264521, -- Striderplume Focus
 			264522, -- Striderplume Armbands
 			258912, -- Tarnished Dawnlit Spellbinder's Robe
-			-- ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94682 or 94683}), --v
+			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94682}),
 		},
 		vignette=7002,
 		note="Runs around nearby",
