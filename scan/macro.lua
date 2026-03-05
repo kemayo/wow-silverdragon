@@ -172,8 +172,8 @@ function module:BuildTargetMacro(limit)
 	if self.db.profile.verbose then length = length + (#(VERBOSE_ANNOUNCE:format(#mobs)) + 1) end
 	if self.db.profile.marker ~= 0 then
 		length = length + #SLASH_CLEARTARGET1 + 1
-		-- this will toggle, but it's significantly shorter than *not* toggling*
-		domark = ("/tm [exists] %d"):format(self.db.profile.marker)
+		local notoggle = ns.CLASSIC and "" or "!"
+		domark = ("/stopmacro [noexists]\n/tm [exists] %s%d"):format(notoggle, self.db.profile.marker)
 		length = length + #domark + 1
 	end
 	for _, id in ipairs(mobs) do
