@@ -18,6 +18,18 @@ local function vignetteToggle(vignetteid, name)
 	}
 end
 
+local function vignetteTypeToggle(atlas, name, order)
+	return {
+		type = "toggle",
+		name = name,
+		desc = "ID: " .. atlas,
+		arg = atlas,
+		-- width = "double",
+		descStyle = "inline",
+		order = order,
+	}
+end
+
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Scan_Vignettes", {
 		profile = {
@@ -64,20 +76,20 @@ function module:OnInitialize()
 						args={
 							desc = config.desc("These lists will fill in as vignettes are announced. Check a box, and we'll remember to never announce that specific vignette again.", 0),
 							type = {
-								type = "multiselect",
-								name = "Types",
-								get = function(info, key) return self.db.profile.ignore_type[key] end,
-								set = function(info, key, value)
-									self.db.profile.ignore_type[key] = value
-								end,
-								values = {
-									vignettekill = CreateAtlasMarkup("vignettekill", 20, 20) .. " Kill",
-									vignettekillelite = CreateAtlasMarkup("vignettekillelite", 24, 24) .. " Kill elite",
-									vignetteloot = CreateAtlasMarkup("vignetteloot", 20, 20) .. " Loot",
-									vignettelootelite = CreateAtlasMarkup("vignettelootelite", 24, 24) .. " Loot elite",
-									vignetteevent = CreateAtlasMarkup("vignetteevent", 20, 20) .. " Event",
-									vignetteeventelite = CreateAtlasMarkup("vignetteeventelite", 24, 24) .. " Event elite",
-									["warfront-neutralhero"] = CreateAtlasMarkup("warfront-neutralhero", 20, 20) .. " Bonus boss",
+								type="group",
+								name="Types",
+								inline=true,
+								get=function(info) return self.db.profile.ignore_type[info.arg] end,
+								set=function(info, value) self.db.profile.ignore_type[info.arg] = value end,
+								args={
+									vignettekill = vignetteTypeToggle("vignettekill", CreateAtlasMarkup("vignettekill", 20, 20) .. " Kill", 10),
+									vignettekillelite = vignetteTypeToggle("vignettekillelite", CreateAtlasMarkup("vignettekillelite", 24, 24) .. " Kill elite", 20),
+									vignetteloot = vignetteTypeToggle("vignetteloot", CreateAtlasMarkup("vignetteloot", 20, 20) .. " Loot", 30),
+									vignettelootelite = vignetteTypeToggle("vignettelootelite", CreateAtlasMarkup("vignettelootelite", 24, 24) .. " Loot elite", 40),
+									vignetteevent = vignetteTypeToggle("vignetteevent", CreateAtlasMarkup("vignetteevent", 20, 20) .. " Event", 50),
+									vignetteeventelite = vignetteTypeToggle("vignetteeventelite", CreateAtlasMarkup("vignetteeventelite", 24, 24) .. " Event elite", 60),
+									["warfront-neutralhero"] = vignetteTypeToggle("warfront-neutralhero", CreateAtlasMarkup("warfront-neutralhero", 20, 20) .. " Bonus boss", 70),
+									glowingmoth = vignetteTypeToggle("glowingmoth", CreateAtlasMarkup("vignetteloot", 20, 20) .. " Glowing Moth", 100),
 								},
 								order=10,
 							},
@@ -98,6 +110,12 @@ function module:OnInitialize()
 		local vignettes = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.specific.args
 		for vignetteid, name in pairs(self.db.profile.ignore) do
 			vignettes['vignette:'..vignetteid] = vignetteToggle(vignetteid, name)
+		end
+		local types = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.type.args
+		for atlas in pairs(self.db.profile.ignore_type) do
+			if not types[atlas:lower()] then
+				types[atlas:lower()] = vignetteTypeToggle(atlas:lower(), CreateAtlasMarkup(atlas, 20, 20) .. " " .. atlas)
+			end
 		end
 	end
 end
@@ -122,9 +140,9 @@ function module:SeenVignette(event, name, vignetteid, atlas)
 	if not vignetteconfig["vignette:"..vignetteid] then
 		vignetteconfig["vignette:"..vignetteid] = vignetteToggle(vignetteid, name)
 	end
-	local typeconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.type.values
+	local typeconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.type.args
 	if not typeconfig[atlas:lower()] then
-		typeconfig[atlas:lower()] = CreateAtlasMarkup(atlas, 20, 20) .. " " .. atlas
+		typeconfig[atlas:lower()] = vignetteTypeToggle(atlas:lower(), CreateAtlasMarkup(atlas, 20, 20) .. " " .. atlas)
 	end
 end
 
@@ -187,10 +205,14 @@ function module:WorkOutMobFromVignette(instanceid)
 	if not vignetteInfo then
 		return -- Debug("vignette had no info")
 	end
-	if vignette_denylist[vignetteInfo.vignetteID or 0] then
+	local vignetteID = vignetteInfo.vignetteID or 0
+	if vignette_denylist[vignetteID] then
 		return -- Debug("Vignette was on the denylist", vignetteInfo.vignetteID)
 	end
-	if self.db.profile.ignore[vignetteInfo.vignetteID] then
+	if self.db.profile.ignore[vignetteID] then
+		return -- Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
+	end
+	if self.db.profile.ignore_type.glowingmoth and vignetteID >= 7173 and vignetteID <= 7293 then
 		return -- Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
 	end
 	if self.db.profile.ignore_type[vignetteInfo.atlasName:lower()] then
