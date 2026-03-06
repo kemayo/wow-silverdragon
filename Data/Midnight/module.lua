@@ -497,7 +497,7 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 		},
 		vignette=7399,
 	},
-	[44573817] = {
+	[45873904] = {
 		label="Dame Bloodshed",
 		criteria=110180, quest=93561,
 		npc=255348,
