@@ -105,7 +105,7 @@ core:RegisterTreasureData("Midnight", {
 	},
 
 	-- Zul'Aman
-	[6938] = {name="Abandoned Ritual Skull", achievement=62125, criteria=111854, quest=90794, loot={{257444, mount=true}}, notes="In cave on the lower level; gather 1000x{item:259361:Vile Essence} nearby"},
+	[6938] = {name="Abandoned Ritual Skull", --[[achievement=62125, criteria=111854,--]] quest=90794, loot={{257444, mount=true}}, notes="In cave on the lower level; gather 1000x{item:259361:Vile Essence} nearby"},
 	[6937] = {
 		name="Honored Warrior's Cache",
 		achievement=62125, criteria=111855, quest=90793, -- 93560 for interacting with the cache
