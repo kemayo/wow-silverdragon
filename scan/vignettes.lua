@@ -244,7 +244,10 @@ function module:WorkOutMobFromVignette(instanceid)
 	if not vignetteInfo.onMinimap and not shouldShowNotVisible(vignetteInfo, current_zone) then
 		return -- Debug("vignette not visible on minimap and we're only alerting for visibles")
 	end
-	if vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite" then
+	if vignetteInfo.atlasName == "VignetteLoot" or vignetteInfo.atlasName == "VignetteLootElite" or ns.vignetteTreasureLookup[vignetteInfo.vignetteID] then
+		if ns.vignetteTreasureLookup[vignetteInfo.vignetteID] and ns.vignetteTreasureLookup[vignetteInfo.vignetteID].hidden then
+			return -- Debug("skipping notification", "ignored by vignette-id")
+		end
 		if not core:PlayerIsInteractive() then
 			return -- Debug("skipping notification", "on taxi")
 		end
@@ -267,9 +270,6 @@ function module:WorkOutMobFromVignette(instanceid)
 		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0, instanceid)
 		return true
 	end
-	if ns.vignetteTreasureLookup[vignetteInfo.vignetteID] and ns.vignetteTreasureLookup[vignetteInfo.vignetteID].hidden then
-		return -- Debug("skipping notification", "ignored by vignette-id")
-	end
 	if vignetteInfo.objectGUID then
 		-- this *may* be a mob, but it also may be something which you interact with to summon the mob
 		local mobid = ns.IdFromGuid(vignetteInfo.objectGUID)
@@ -280,7 +280,7 @@ function module:WorkOutMobFromVignette(instanceid)
 	end
 	-- And now, comparatively uncommon fallbacks:
 	if vignetteInfo.vignetteID and ns.vignetteMobLookup[vignetteInfo.vignetteID] then
-		-- IDs are based on https://bnet.marlam.in/dbc.php?dbc=vignette.db2
+		-- IDs are based on https://wago.tools/db2/Vignette
 		--Debug("vignetteMobLookup", vignetteInfo.name, vignetteInfo.vignetteID, ns.vignetteMobLookup[vignetteInfo.vignetteID])
 		return self:NotifyForMobs(ns.vignetteMobLookup[vignetteInfo.vignetteID], current_zone, x, y, source, instanceid)
 	end
