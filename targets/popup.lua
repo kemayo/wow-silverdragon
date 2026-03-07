@@ -97,15 +97,33 @@ function module:RefreshMobData(popup)
 		popup.noteIcon:Show()
 	end
 end
-function module:RefreshLootData(popup)
-	local data = popup.data
-	popup.title:SetText(data.name or UNKNOWN)
-	popup:SetSource("vignette")
-	-- TODO: work out the Treasure of X achievements?
-	popup.status:SetText("")
-	popup.raidIcon:Hide()
-	if ns.vignetteTreasureLookup[data.id] and ns.vignetteTreasureLookup[data.id].notes then
-		popup.noteIcon:Show()
+do
+	local completionStatus = function(data)
+		if not (data and data.achievement) then return end
+		local _, name, _, achievement_completed, _, _, _, _, _, _, _, _, completedByMe = GetAchievementInfo(data.achievement)
+		if data.criteria then
+			local retOK, _, _, completed = pcall(data.criteria < 100 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID, data.achievement, data.criteria, true)
+			if retOK then
+				return name, completed
+			end
+		end
+		return name, achievement_completed
+	end
+	function module:RefreshLootData(popup)
+		local data = popup.data
+		popup.title:SetText(data.name or UNKNOWN)
+		popup:SetSource("vignette")
+		popup.status:SetText("")
+		popup.raidIcon:Hide()
+		if ns.vignetteTreasureLookup[data.id] then
+			local completionName, completed = completionStatus(ns.vignetteTreasureLookup[data.id])
+			if completionName then
+				popup.status:SetFormattedText("%s%s|r", completed and escapes.green or escapes.red, completionName or UNKNOWN)
+			end
+			if ns.vignetteTreasureLookup[data.id].notes then
+				popup.noteIcon:Show()
+			end
+		end
 	end
 end
 
