@@ -214,6 +214,13 @@ core:RegisterTreasureData("Midnight", {
 	[7447] = {name="Scout's Pack", achievement=62126, criteria=111870, quest=94387, loot={266101, SINGULARITY}},
 }, true)
 
+local moth = {name="Glowing Moth", achievement=61052, loot={ns.rewards.Currency(3385)}}
+local moths = {}
+for i=7173,7293 do
+	moths[i] = moth
+end
+core:RegisterTreasureData("Midnight", moths, true)
+
 -- Rares
 
 core:RegisterMobData("Midnight", {
