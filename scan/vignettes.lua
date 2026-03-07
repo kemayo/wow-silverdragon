@@ -89,7 +89,7 @@ function module:OnInitialize()
 									vignetteevent = vignetteTypeToggle("vignetteevent", CreateAtlasMarkup("vignetteevent", 20, 20) .. " Event", 50),
 									vignetteeventelite = vignetteTypeToggle("vignetteeventelite", CreateAtlasMarkup("vignetteeventelite", 24, 24) .. " Event elite", 60),
 									["warfront-neutralhero"] = vignetteTypeToggle("warfront-neutralhero", CreateAtlasMarkup("warfront-neutralhero", 20, 20) .. " Bonus boss", 70),
-									glowingmoth = vignetteTypeToggle("glowingmoth", CreateAtlasMarkup("vignetteloot", 20, 20) .. " Glowing Moth", 100),
+									glowingmoth = vignetteTypeToggle("glowingmoth", CreateAtlasMarkup("ancientmana", 20, 20) .. " Glowing Moth", 100),
 								},
 								order=10,
 							},
