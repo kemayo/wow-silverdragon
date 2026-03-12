@@ -339,6 +339,7 @@ read_globals = {
     "DONE",
     "EMOTE59_CMD1",
     "EMOTE88_CMD1",
+    "EMOTE118_CMD1",
     "EMOTE152_CMD1",
     "EMOTE410_CMD1",
     "ENABLE",

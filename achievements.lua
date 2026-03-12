@@ -769,6 +769,10 @@ local achievements = {
 	[62122] = {}, -- Zul'Aman: Tallest Tree in the Forest
 	[61264] = {}, -- Harandar: Leaf None Behind
 	[62130] = {}, -- Voidstorm: The Ultimate Predator
+	[61961] = {}, -- Runestone Rush
+	[62188] = { -- More Than Just Their Roots
+		need=EMOTE118_CMD1, completed=DONE, -- /listen
+	},
 	[62201] = { -- The Frog and the Princesses
 		need=EMOTE59_CMD1, completed=DONE, -- /love
 	},
