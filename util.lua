@@ -232,12 +232,12 @@ do
 	}
 	local function npcIdFromGuid(guid)
 		if not guid then return end
+		if issecretvalue and issecretvalue(guid) then return end
 		if C_CreatureInfo and C_CreatureInfo.GetCreatureID then
-			if issecretvalue and issecretvalue(guid) then return end
 			return C_CreatureInfo.GetCreatureID(guid)
 		end
 		local unit_type, id = guid:match("(%a+)-%d+-%d+-%d+-%d+-(%d+)-.+")
-		if not (unit_type and valid_unit_types[unit_type]) then
+		if not (id and unit_type and valid_unit_types[unit_type]) then
 			return
 		end
 		return tonumber(id)
@@ -245,7 +245,13 @@ do
 	ns.IdFromGuid = npcIdFromGuid
 	function addon:UnitID(unit)
 		if not unit then return end
-		return npcIdFromGuid(UnitGUID(unit))
+		-- In some situations some units will cause a "bad argument #1
+		-- to 'UnitGUID' (Compound unit tokens (example: boss1targetpet) are
+		-- not allowed for this call", and detecting those situations is
+		-- opaque. As such, pcall this.
+		local _, guid = pcall(UnitGUID, unit)
+		if not guid then return end
+		return npcIdFromGuid(guid)
 	end
 	function addon:FindUnitWithID(id)
 		if self:UnitID('target') == id then
