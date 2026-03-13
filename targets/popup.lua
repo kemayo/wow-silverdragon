@@ -440,7 +440,7 @@ function PopupMixin:DoIgnore()
 	if self.data.type == "loot" then
 		local vignette = core:GetModule("Scan_Vignettes", true)
 		if vignette then
-			vignette.db.profile.ignore[self.data.id] = self.data.name
+			vignette:SetIgnore(self.data.id, self.data.name)
 		end
 	else
 		core:SetIgnore(self.data.id, true)

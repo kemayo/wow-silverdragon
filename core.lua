@@ -398,6 +398,9 @@ do
 		for source, data in pairs(addon.treasuresources) do
 			if addon.db.global.datasources[source] then
 				for vignetteid, vignettedata in pairs(data) do
+					vignettedata.id = vignetteid
+					vignettedata.source = source
+
 					ns.vignetteTreasureLookup[vignetteid] = vignettedata
 				end
 			end

@@ -9,7 +9,7 @@ local HBD = LibStub("HereBeDragons-2.0")
 local function vignetteToggle(vignetteid, name)
 	return {
 		type = "toggle",
-		name = name,
+		name = type(name) == "string" and name or tostring(vignetteid),
 		desc = "ID: " .. vignetteid,
 		arg = vignetteid,
 		-- width = "double",
@@ -80,7 +80,7 @@ function module:OnInitialize()
 								name="Types",
 								inline=true,
 								get=function(info) return self.db.profile.ignore_type[info.arg] end,
-								set=function(info, value) self.db.profile.ignore_type[info.arg] = value end,
+								set=function(info, value) self:SetIgnoreType(info.arg, value) end,
 								args={
 									vignettekill = vignetteTypeToggle("vignettekill", CreateAtlasMarkup("vignettekill", 20, 20) .. " Kill", 10),
 									vignettekillelite = vignetteTypeToggle("vignettekillelite", CreateAtlasMarkup("vignettekillelite", 24, 24) .. " Kill elite", 20),
@@ -98,7 +98,7 @@ function module:OnInitialize()
 								name="Specific",
 								inline=true,
 								get=function(info) return self.db.profile.ignore[info.arg] end,
-								set=function(info, v) self.db.profile.ignore[info.arg] = v and info.option.name or nil end,
+								set=function(info, value) self:SetIgnore(info.arg, value and info.option.name or nil) end,
 								args={},
 								order=20,
 							},
@@ -131,6 +131,52 @@ function module:OnEnable()
 
 		self:VIGNETTES_UPDATED()
 	end)
+end
+
+function module:SetIgnore(id, ignore, quiet)
+	if not id then return false end
+	if id >= 7173 and id <= 7293 then
+		return module:SetIgnoreType("glowingmoth", ignore, quiet)
+	end
+	if (ignore and self.db.profile.ignore[id]) or (not ignore and not self.db.profile.ignore[id]) then
+		-- to avoid the nil/false issue
+		return false
+	end
+	self.db.profile.ignore[id] = ignore
+	if not quiet then
+		core.events:Fire("IgnoreVignetteChanged", id, ignore)
+	end
+	return true
+end
+
+function module:SetIgnoreType(atlas, ignore, quiet)
+	if not atlas then return end
+	atlas = atlas:lower()
+	if (ignore and self.db.profile.ignore_type[atlas]) or (not ignore and not self.db.profile.ignore_type[atlas]) then
+		-- to avoid the nil/false issue
+		return false
+	end
+	self.db.profile.ignore_type[atlas] = ignore
+	if not quiet then
+		core.events:Fire("IgnoreVignetteTypeChanged", atlas, ignore)
+	end
+	return true
+end
+
+function module:ShouldIgnoreVignette(id, atlas)
+	if self.db.profile.ignore[id] then
+		return true
+	end
+	if ns.vignetteTreasureLookup[id] and ns.vignetteTreasureLookup[id].source and core.db.global.ignore_datasource[ns.vignetteTreasureLookup[id].source] then
+		return true
+	end
+	if self.db.profile.ignore_type.glowingmoth and id >= 7173 and id <= 7293 then
+		return true
+	end
+	if atlas and self.db.profile.ignore_type[atlas:lower()] then
+		return true
+	end
+	return false
 end
 
 function module:SeenVignette(event, name, vignetteid, atlas)
@@ -209,14 +255,8 @@ function module:WorkOutMobFromVignette(instanceid)
 	if vignette_denylist[vignetteID] then
 		return -- Debug("Vignette was on the denylist", vignetteInfo.vignetteID)
 	end
-	if self.db.profile.ignore[vignetteID] then
+	if self:ShouldIgnoreVignette(vignetteID, vignetteInfo.atlasName) then
 		return -- Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
-	end
-	if self.db.profile.ignore_type.glowingmoth and vignetteID >= 7173 and vignetteID <= 7293 then
-		return -- Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
-	end
-	if self.db.profile.ignore_type[vignetteInfo.atlasName:lower()] then
-		return -- Debug("Vignette type not enabled", vignetteInfo.atlasName, vignetteInfo.vignetteID, vignetteInfo.name)
 	end
 	local current_zone = HBD:GetPlayerZone()
 	if not current_zone or current_zone == 0 then
