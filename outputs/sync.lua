@@ -2,6 +2,8 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Sync", "AceEvent-3.0")
 local Debug = core.Debug
 
+local HBD = LibStub("HereBeDragons-2.0")
+
 function module:OnInitialize()
 	self.db = core.db:RegisterNamespace("Sync", {
 		profile = {
@@ -32,7 +34,7 @@ function module:OnInitialize()
 					party = config.toggle("Party", "Accept syncs from party members", 20),
 					raid = config.toggle("Raid", "Accept syncs from raid members", 30),
 					guild = config.toggle("Guild Sync", "Accept syncs from guild members", 40),
-					nearby = config.toggle("Nearby only", "Only accept syncs from people who are nearby. Information about guild members isn't available, so they'll only count as nearby if they're in your group.", 50),
+					nearby = config.toggle("Nearby only", "Only accept syncs from people who are nearby. For people in your group this can be exact, but otherwise it'll be based on whether they're in the same zone as you", 50),
 				},
 			},
 		}
@@ -96,17 +98,6 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if issecretvalue and issecretvalue(msg) then
 		return
 	end
-	if self.db.profile.nearby then
-		-- note: will only ever detect group members as being nearby
-		-- could enhance to include guild members via roster scanning to compare zones,
-		-- or by using some guild member position lib.
-		-- TODO: second return of UnitInRange is whether a check was performed; decide
-		-- whether to treat unperformed checks as nearby.
-		local inRange = UnitInRange(sender)
-		if not (issecretvalue or issecretvalue(inRange)) and not inRange then
-			return
-		end
-	end
 
 	local ver, msgType, id, name, zone, level, x, y, GUID = strsplit("\t", msg)
 	Debug("Message", channel, sender, msgType, id, name, zone, level, x, y, GUID)
@@ -133,6 +124,29 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 	if not (msgType and name and zone and id) then
 		Debug("Skipping: insufficient data")
 		return
+	end
+
+	if self.db.profile.nearby then
+		local inRangeKnowable
+		if channel == "RAID" or channel == "PARTY" then
+			-- Only group members can be checked with this API
+			-- TODO: second return of UnitInRange is whether a check was performed; decide
+			-- whether to treat unperformed checks as nearby.
+			local inRange, checkPerformed = UnitInRange(sender)
+			inRangeKnowable = checkPerformed and not (issecretvalue and issecretvalue(inRange))
+			if inRangeKnowable and not inRange then
+				Debug("Skipping: not nearby, UnitInRange")
+				return
+			end
+		end
+		if not inRangeKnowable then
+			-- can do a second check on nearby-ness based on zone now
+			local playerZone = HBD:GetPlayerZone()
+			if zone ~= playerZone then
+				Debug("Skipping: not nearby, zones", zone, playerZone)
+				return
+			end
+		end
 	end
 
 	-- We had one version which would include the " (Jade)" stuff in the syncs. Let's just strip that out.
