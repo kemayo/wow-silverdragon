@@ -93,9 +93,7 @@ function module:RefreshMobData(popup)
 		popup.status:SetFormattedText("%s%s|r", completed and escapes.green or escapes.red, achievement_name or UNKNOWN)
 		break
 	end
-	if ns.mobdb[data.id] and ns.mobdb[data.id].notes then
-		popup.noteIcon:Show()
-	end
+	popup.noteIcon:SetShown(ns.mobdb[data.id] and ns.mobdb[data.id].notes)
 end
 do
 	local completionStatus = function(data)
@@ -115,13 +113,11 @@ do
 		popup:SetSource("vignette")
 		popup.status:SetText("")
 		popup.raidIcon:Hide()
+		popup.noteIcon:SetShown(ns.vignetteTreasureLookup[data.id] and ns.vignetteTreasureLookup[data.id].notes)
 		if ns.vignetteTreasureLookup[data.id] then
 			local completionName, completed = completionStatus(ns.vignetteTreasureLookup[data.id])
 			if completionName then
 				popup.status:SetFormattedText("%s%s|r", completed and escapes.green or escapes.red, completionName or UNKNOWN)
-			end
-			if ns.vignetteTreasureLookup[data.id].notes then
-				popup.noteIcon:Show()
 			end
 		end
 	end
