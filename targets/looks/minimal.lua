@@ -60,15 +60,18 @@ module:RegisterLookConfig("Minimal", {
         type = "toggle",
         name = "Class colored border",
         desc = "Color the border of the popup by your class color",
+        order = 1,
     },
     background = {
         type = "color",
         name = "Background color",
         hasAlpha = true,
+        order = 2,
     },
     showSource = {
         type = "toggle",
         name = "Show source",
+        order = 3,
     },
     titleFontSize = {
         type = "range",
@@ -77,14 +80,7 @@ module:RegisterLookConfig("Minimal", {
         min = 4,
         max = 32,
         step = 1,
-    },
-    sourceFontSize = {
-        type = "range",
-        name = "Source font size",
-        width = "full",
-        min = 4,
-        max = 32,
-        step = 1,
+        order = 4,
     },
     statusFontSize = {
         type = "range",
@@ -93,14 +89,24 @@ module:RegisterLookConfig("Minimal", {
         min = 4,
         max = 32,
         step = 1,
+        order = 5,
+    },
+    sourceFontSize = {
+        type = "range",
+        name = "Source font size",
+        width = "full",
+        min = 4,
+        max = 32,
+        step = 1,
+        order = 6,
     },
 }, {
     classcolor = false,
     background = {0, 0, 0, 0.7},
     showSource = true,
     titleFontSize = 12,
-    sourceFontSize = 12,
     statusFontSize = 12,
+    sourceFontSize = 12,
 }, function(_, popup, config)
     local r, g, b, a = unpack(config.background)
     popup:SetBackdropColor(r, g, b, a)
@@ -120,14 +126,14 @@ module:RegisterLookConfig("Minimal", {
         -- Title
         popup.title:SetFont([[Fonts\ARIALN.TTF]], config.titleFontSize, "OUTLINE")
 
+        -- Status
+        popup.status:SetFont([[Fonts\ARIALN.TTF]], config.statusFontSize, "OUTLINE")
+        popup.status:SetTextColor(1.0, 1.0, 1.0)
+
         -- Source
         popup.source:SetFont([[Fonts\ARIALN.TTF]], config.sourceFontSize, "OUTLINE")
         popup.source:SetTextColor(1.0, 1.0, 1.0)
         popup.source:SetShown(config.showSource)
-
-        -- Status
-        popup.status:SetFont([[Fonts\ARIALN.TTF]], config.statusFontSize, "OUTLINE")
-        popup.status:SetTextColor(1.0, 1.0, 1.0)
     end
 
     if module.db.profile.model then
