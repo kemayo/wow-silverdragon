@@ -66,6 +66,10 @@ module:RegisterLookConfig("Minimal", {
         name = "Background color",
         hasAlpha = true,
     },
+    showSource = {
+        type = "toggle",
+        name = "Show source",
+    },
     titleFontSize = {
         type = "range",
         name = "Title font size",
@@ -93,6 +97,7 @@ module:RegisterLookConfig("Minimal", {
 }, {
     classcolor = false,
     background = {0, 0, 0, 0.7},
+    showSource = true,
     titleFontSize = 12,
     sourceFontSize = 12,
     statusFontSize = 12,
@@ -110,11 +115,20 @@ module:RegisterLookConfig("Minimal", {
     popup.title:ClearAllPoints()
     popup.status:ClearAllPoints()
 
-    popup.title:SetFont([[Fonts\ARIALN.TTF]], config.titleFontSize, "OUTLINE")
-    popup.source:SetFont([[Fonts\ARIALN.TTF]], config.sourceFontSize, "OUTLINE")
-    popup.source:SetTextColor(1.0, 1.0, 1.0)
-    popup.status:SetFont([[Fonts\ARIALN.TTF]], config.statusFontSize, "OUTLINE")
-    popup.status:SetTextColor(1.0, 1.0, 1.0)
+    -- Handle texts
+    do
+        -- Title
+        popup.title:SetFont([[Fonts\ARIALN.TTF]], config.titleFontSize, "OUTLINE")
+
+        -- Source
+        popup.source:SetFont([[Fonts\ARIALN.TTF]], config.sourceFontSize, "OUTLINE")
+        popup.source:SetTextColor(1.0, 1.0, 1.0)
+        popup.source:SetShown(config.showSource)
+
+        -- Status
+        popup.status:SetFont([[Fonts\ARIALN.TTF]], config.statusFontSize, "OUTLINE")
+        popup.status:SetTextColor(1.0, 1.0, 1.0)
+    end
 
     if module.db.profile.model then
         popup:SetSize(240, 60)
