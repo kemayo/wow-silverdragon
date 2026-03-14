@@ -1,5 +1,11 @@
 # Changelog
 
+## Changed in v2026.18
+
+* Add achievements to tooltips: Runestone Rush, More Than Just Their Roots
+* Sync: made it so that being in the same zone counts as "nearby", not just UnitInRange
+* Vignettes: make ignoring glowing moths from the popup ignore the whole group, because this is probably what you really meant
+
 ## Changed in v2026.17
 
 * Another hotfix-reaction: Blizzard made giving compound unit tokens (e.g. `party2target`) to some APIs sometimes cause an error, particularly in PvP groups. Try to avoid this.
