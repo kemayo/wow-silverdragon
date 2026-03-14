@@ -10,12 +10,6 @@ function module.Looks:Minimal(popup, config)
         edgeFile = [[Interface\Buttons\WHITE8X8]], bgFile = [[Interface\Buttons\WHITE8X8]], edgeSize = 1
     })
 
-    popup.title:SetFont([[Fonts\ARIALN.TTF]], 12, "OUTLINE")
-    popup.source:SetFont([[Fonts\ARIALN.TTF]], 12, "OUTLINE")
-    popup.source:SetTextColor(1.0, 1.0, 1.0)
-    popup.status:SetFont([[Fonts\ARIALN.TTF]], 12, "OUTLINE")
-    popup.status:SetTextColor(1.0, 1.0, 1.0)
-
     popup.title:SetHeight(0)
 
     popup.status:SetJustifyH("CENTER")
@@ -72,9 +66,36 @@ module:RegisterLookConfig("Minimal", {
         name = "Background color",
         hasAlpha = true,
     },
+    titleFontSize = {
+        type = "range",
+        name = "Title font size",
+        width = "full",
+        min = 4,
+        max = 32,
+        step = 1,
+    },
+    sourceFontSize = {
+        type = "range",
+        name = "Source font size",
+        width = "full",
+        min = 4,
+        max = 32,
+        step = 1,
+    },
+    statusFontSize = {
+        type = "range",
+        name = "Status font size",
+        width = "full",
+        min = 4,
+        max = 32,
+        step = 1,
+    },
 }, {
     classcolor = false,
     background = {0, 0, 0, 0.7},
+    titleFontSize = 12,
+    sourceFontSize = 12,
+    statusFontSize = 12,
 }, function(_, popup, config)
     local r, g, b, a = unpack(config.background)
     popup:SetBackdropColor(r, g, b, a)
@@ -88,6 +109,12 @@ module:RegisterLookConfig("Minimal", {
 
     popup.title:ClearAllPoints()
     popup.status:ClearAllPoints()
+
+    popup.title:SetFont([[Fonts\ARIALN.TTF]], config.titleFontSize, "OUTLINE")
+    popup.source:SetFont([[Fonts\ARIALN.TTF]], config.sourceFontSize, "OUTLINE")
+    popup.source:SetTextColor(1.0, 1.0, 1.0)
+    popup.status:SetFont([[Fonts\ARIALN.TTF]], config.statusFontSize, "OUTLINE")
+    popup.status:SetTextColor(1.0, 1.0, 1.0)
 
     if module.db.profile.model then
         popup:SetSize(240, 60)
