@@ -488,3 +488,13 @@ function ns.IsCosmeticItem(itemInfo)
 	end
 	return false
 end
+
+local issecretvalue = _G.issecretvalue or function() return false end
+function ns.isanyvaluesecret(...)
+    for i=1, select("#", ...) do
+        if issecretvalue((select(i, ...))) then
+            return true
+        end
+    end
+    return false
+end

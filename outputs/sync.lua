@@ -1,3 +1,5 @@
+local myname, ns = ...
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:NewModule("Sync", "AceEvent-3.0")
 local Debug = core.Debug
@@ -133,10 +135,13 @@ function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
 			-- TODO: second return of UnitInRange is whether a check was performed; decide
 			-- whether to treat unperformed checks as nearby.
 			local inRange, checkPerformed = UnitInRange(sender)
-			inRangeKnowable = checkPerformed and not (issecretvalue and issecretvalue(inRange))
-			if inRangeKnowable and not inRange then
-				Debug("Skipping: not nearby, UnitInRange")
-				return
+			if not ns.isanyvaluesecret(inRange, checkPerformed) then
+				-- This is secret in combat
+				inRangeKnowable = checkPerformed
+				if inRangeKnowable and not inRange then
+					Debug("Skipping: not nearby, UnitInRange")
+					return
+				end
 			end
 		end
 		if not inRangeKnowable then
