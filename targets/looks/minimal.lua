@@ -102,11 +102,6 @@ module:RegisterLookConfig("Minimal", {
         step = 1,
         order = 4,
     },
-    showSource = {
-        type = "toggle",
-        name = "Show source",
-        order = 5,
-    },
     titleFontSize = {
         type = "range",
         name = "Title font size",
@@ -114,7 +109,7 @@ module:RegisterLookConfig("Minimal", {
         min = 4,
         max = 32,
         step = 1,
-        order = 6,
+        order = 5,
     },
     statusFontSize = {
         type = "range",
@@ -123,6 +118,11 @@ module:RegisterLookConfig("Minimal", {
         min = 4,
         max = 32,
         step = 1,
+        order = 6,
+    },
+    showSource = {
+        type = "toggle",
+        name = "Show source",
         order = 7,
     },
     sourceFontSize = {
@@ -139,9 +139,9 @@ module:RegisterLookConfig("Minimal", {
     background = {0, 0, 0, 0.7},
     width = 240,
     height = 60,
-    showSource = true,
     titleFontSize = 12,
     statusFontSize = 12,
+    showSource = true,
     sourceFontSize = 12,
 }, function(_, popup, config)
     local r, g, b, a = unpack(config.background)
