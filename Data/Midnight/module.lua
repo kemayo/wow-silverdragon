@@ -509,6 +509,7 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 		criteria=110180, quest=93561,
 		npc=255348,
 		loot={
+			{265609, pet=true}, -- Princess Bloodshed
 			264595, -- Lynxhide Shawl
 			264624, -- Fang of the Dame
 			ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94696}),
