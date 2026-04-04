@@ -70,13 +70,14 @@ end
 ns.Loot = {}
 -- _G.SDLoot = ns.Loot
 
-function ns.Loot.GetLootTable(id, treasure)
+function ns.Loot.GetLootTable(id, treasure, shared)
 	if not id then return end
-	if treasure then
-		local data = ns.vignetteTreasureLookup[id]
-		return data and data.loot
+	local data = ns[treasure and "vignetteTreasureLookup" or "mobdb"][id]
+	if not data then return end
+	if shared then
+		return data.loot_shared
 	end
-	return ns.mobdb[id] and ns.mobdb[id].loot
+	return data.loot
 end
 
 local function suitable(item)
@@ -85,10 +86,10 @@ local function suitable(item)
 	end
 	return item:MightDrop()
 end
-function ns.Loot.HasLoot(id, isTreasure)
-	local loot = ns.Loot.GetLootTable(id, isTreasure)
+function ns.Loot.HasLoot(id, isTreasure, shared)
+	local loot = ns.Loot.GetLootTable(id, isTreasure, shared)
 	if not loot or #loot == 0 then
-		return false
+		return false, 0, 0
 	end
 	local lootCount = 0
 	for _, item in ipairs(loot) do
@@ -623,9 +624,9 @@ do
 			button:Show()
 			return button
 		end,
-		AddLoot = function(self, loot)
+		AddLoot = function(self, loot, label)
 			for _, item in ipairs(loot) do
-				self:AddItem(item)
+				self:AddItem(item, label)
 			end
 		end,
 		SizeForButtons = function(self)
@@ -658,7 +659,7 @@ do
 				self.timer.allowedTimeOffFrame = delay
 				self.timer.additional = additional
 				self.timer.callback = callback
-				self.timer.watch = self
+				self.timer.watch = self.sharedWindow and {self, self.sharedWindow} or self
 				self.timer:Show()
 			elseif self.timer then
 				timerPool:Release(self.timer)
@@ -692,14 +693,21 @@ do
 
 	ns.Loot.Window.Release = function(window)
 		if not window then return end
+		if window.sharedWindow then
+			windowPool:Release(window.sharedWindow)
+			core.events:Fire("LootWindowReleased", window.sharedWindow)
+			window.sharedWindow = nil
+		end
 		-- this will hide / clearallpoints / clearloot the window
 		windowPool:Release(window)
 
 		core.events:Fire("LootWindowReleased", window)
 	end
 
-	function ns.Loot.Window.ShowForMob(id, independent, ...)
-		if not ns.Loot.GetLootTable(id, ...) then
+	function ns.Loot.Window.ShowForMob(id, independent, treasure, shared)
+		local loot = ns.Loot.GetLootTable(id, treasure)
+		local sharedLoot = shared and ns.Loot.GetLootTable(id, treasure, true)
+		if not (loot or sharedLoot) then
 			-- TODO: error message
 			return false
 		end
@@ -722,7 +730,17 @@ do
 		else
 			window = GetWindow()
 		end
-		window:AddLoot(ns.Loot.GetLootTable(id, ...))
+		window:AddLoot(loot or sharedLoot)
+		if loot and sharedLoot then
+			local sharedWindow = GetWindow()
+			window.sharedWindow = sharedWindow
+			sharedWindow:SetParent(window)
+			sharedWindow:SetPoint("TOPLEFT", window, "BOTTOMLEFT")
+			sharedWindow:SetTitle("Shared loot")
+			sharedWindow:AddLoot(sharedLoot, "shared")
+			sharedWindow:Show()
+			core.events:Fire("LootWindowOpened", sharedWindow)
+		end
 		window:Show()
 
 		-- get this ready:

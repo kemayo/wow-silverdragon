@@ -447,23 +447,25 @@ do
 			if lootwindow then
 				ns.Loot.Window.Release(lootwindow)
 			end
-			lootwindow = ns.Loot.Window.ShowForMob(mobid)
-			-- lootwindow:SetParent(cell)
-			lootwindow:SetFrameStrata(cell:GetFrameStrata())
-			lootwindow:SetFrameLevel(cell:GetFrameLevel() + 1)
-			if cell:GetCenter() > UIParent:GetCenter() then
-				lootwindow:SetPoint("TOPRIGHT", cell, "BOTTOMLEFT")
-			else
-				lootwindow:SetPoint("TOPLEFT", cell, "BOTTOMRIGHT")
+			lootwindow = ns.Loot.Window.ShowForMob(mobid, false, false, true)
+			if lootwindow then
+				-- lootwindow:SetParent(cell)
+				lootwindow:SetFrameStrata(cell:GetFrameStrata())
+				lootwindow:SetFrameLevel(cell:GetFrameLevel() + 1)
+				if cell:GetCenter() > UIParent:GetCenter() then
+					lootwindow:SetPoint("TOPRIGHT", cell, "BOTTOMLEFT")
+				else
+					lootwindow:SetPoint("TOPLEFT", cell, "BOTTOMRIGHT")
+				end
+				lootwindow:SetAutoHideDelay(0.25, cell, cleanup_lootwindow)
 			end
-			lootwindow:SetAutoHideDelay(0.25, cell, cleanup_lootwindow)
 		end
 		function click_items_tooltip(cell, mobid)
 			if lootwindow then
 				ns.Loot.Window.Release(lootwindow)
 				lootwindow = nil
 			end
-			ns.Loot.Window.ShowForMob(mobid, true)
+			ns.Loot.Window.ShowForMob(mobid, true, false, true)
 		end
 	end
 	local function show_achievement_tooltip(cell, mobid)
