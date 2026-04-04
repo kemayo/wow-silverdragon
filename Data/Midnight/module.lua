@@ -154,7 +154,7 @@ core:RegisterTreasureData("Midnight", {
 	[7308] = {name="Failed Shroom Jumper's Satchel", achievement=61263, criteria=109033, quest=92424, loot={{258963, toy=true}, HARATI}},
 	[7309] = {name="Burning Branch of the World Tree", achievement=61263, criteria=109034, quest=92426, loot={258900, ns.rewards.Currency(ns.CURRENCY_VOIDLIGHT, 150), HARATI}},
 	[7311] = {name="Sporelord's Fight Prize", achievement=61263, criteria=109035, quest=92427, loot={263289, HARATI}},
-	[7312] = {name="Reliquary's Lost Paintbrush", achievement=61263, criteria=109036, quest=92431, loot={263287, HARATI}},
+	[7312] = {name="Reliquary's Lost Paintbrush", achievement=61263, criteria=109036, quest=92431, loot={263287, {246416, decor=true}, HARATI}},
 	[7313] = {name="Kemet's Simmering Cauldron", achievement=61263, criteria=109037, quest=92436, loot={{258903, pet=true}, HARATI}},
 	[7351] = {name="Gift of the Cycle", achievement=61263, criteria=110254, quest=93144, loot={{259084, toy=true}, HARATI}},
 	[7394] = {
@@ -782,7 +782,7 @@ ns.RegisterPoints(ns.HARANDAR, {
 		},
 		vignette=7159,
 	},
-	[64904810] = {
+	[64894814] = {
 		label="Chlorokyll",
 		criteria=109044, quest=92161,
 		npc=249997,
