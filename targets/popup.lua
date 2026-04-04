@@ -68,9 +68,10 @@ function module:RefreshData(popup)
 	ns.Loot.OnceAllLootLoaded(data.id, data.type == "loot", function(loot)
 		if popup.waitingToHide then return end
 		local hasLoot, lootCount, suitableLootCount = ns.Loot.HasLoot(data.id, isTreasure)
-		if hasLoot then
+		local hasSharedLoot, sharedLootCount, sharedSuitableLootCount = ns.Loot.HasLoot(data.id, isTreasure, true)
+		if hasLoot or hasSharedLoot then
 			popup.lootIcon:Show()
-			popup.lootIcon.count:SetText(suitableLootCount)
+			popup.lootIcon.count:SetText(suitableLootCount + sharedSuitableLootCount)
 		else
 			popup.lootIcon:Hide()
 		end
@@ -675,7 +676,8 @@ PopupMixin.scripts = {
 		end
 		if not self.window then
 			local data = self:GetParent().data
-			self.window = ns.Loot.Window.ShowForMob(data.id, false, data.type == "loot")
+			self.window = ns.Loot.Window.ShowForMob(data.id, false, data.type == "loot", true)
+			if not self.window then return end
 			self.window:SetParent(self)
 			self.window:Hide()
 		end

@@ -226,17 +226,19 @@ function module:ShowTooltip(pin)
             tooltip:AddLine(core:RenderString(ns.mobdb[id].notes), 1, 1, 1, true)
         end
         if pin:Config().tooltip_lootwindow and pin:Config().tooltip_regularloot and ns.Loot.HasRegularLoot(id) then
-            self.lootwindow = ns.Loot.Window.ShowForMob(id)
-            self.lootwindow:SetParent(tooltip)
-            if pin:GetCenter() > UIParent:GetCenter() then
-                self.lootwindow:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
-            else
-                self.lootwindow:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
+            self.lootwindow = ns.Loot.Window.ShowForMob(id, false, false, true)
+            if self.lootwindow then
+                self.lootwindow:SetParent(tooltip)
+                if pin:GetCenter() > UIParent:GetCenter() then
+                    self.lootwindow:SetPoint("TOPRIGHT", tooltip, "BOTTOMRIGHT")
+                else
+                    self.lootwindow:SetPoint("TOPLEFT", tooltip, "BOTTOMLEFT")
+                end
+                self.lootwindow:SetAutoHideDelay(0.25, {pin, tooltip}, function()
+                    self:CleanupTooltip()
+                    return false -- cleanup will have released the window, so this signals it doesn't need to happen again
+                end)
             end
-            self.lootwindow:SetAutoHideDelay(0.25, {pin, tooltip}, function()
-                self:CleanupTooltip()
-                return false -- cleanup will have released the window, so this signals it doesn't need to happen again
-            end)
         end
         if ns.mobdb[id].requires then
             local metRequirements = ns.conditions.check(ns.mobdb[id].requires)

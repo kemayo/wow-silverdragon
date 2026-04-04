@@ -210,6 +210,7 @@ function addon:RegisterMobData(source, data, updated)
 			ns:RegisterMobAchievement(mobid, mobdata.achievement)
 		end
 		mobdata.loot = upgradeloot(mobdata.loot)
+		mobdata.loot_shared = upgradeloot(mobdata.loot_shared)
 	end
 end
 function addon:RegisterTreasureData(source, data, updated)
@@ -218,6 +219,7 @@ function addon:RegisterTreasureData(source, data, updated)
 	MergeTable(addon.treasuresources[source], data)
 	for vignetteid, vignettedata in pairs(data) do
 		vignettedata.loot = upgradeloot(vignettedata.loot)
+		vignettedata.loot_shared = upgradeloot(vignettedata.loot_shared)
 	end
 end
 do
@@ -239,6 +241,7 @@ do
 					name=point.label,
 					locations={[uiMapID]={coord}},
 					loot=upgradeloot(point.loot),
+					loot_shared=upgradeloot(point.loot_shared),
 					notes=point.note,
 					active=point.active,
 					requires=point.requires or point.hide_before,
