@@ -457,7 +457,7 @@ do
 				else
 					lootwindow:SetPoint("TOPLEFT", cell, "BOTTOMRIGHT")
 				end
-				lootwindow:SetAutoHideDelay(0.25, cell, cleanup_lootwindow)
+				lootwindow:SetAutoHideDelay(0.25, {cell}, cleanup_lootwindow)
 			end
 		end
 		function click_items_tooltip(cell, mobid)

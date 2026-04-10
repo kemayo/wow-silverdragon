@@ -659,7 +659,11 @@ do
 				self.timer.allowedTimeOffFrame = delay
 				self.timer.additional = additional
 				self.timer.callback = callback
-				self.timer.watch = self.sharedWindow and {self, self.sharedWindow} or self
+				self.timer.watch = self
+				if self.sharedWindow then
+					self.timer.additional = self.timer.additional or {}
+					tinsert(self.timer.additional, self.sharedWindow)
+				end
 				self.timer:Show()
 			elseif self.timer then
 				timerPool:Release(self.timer)
