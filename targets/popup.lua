@@ -166,7 +166,7 @@ function module:SetModel(popup)
 		popup.model.fallback:Show()
 		return
 	end
-	if (data.type == "mob" and data.id or data.unit) and not self:IsModelBlacklisted(data.id, data.unit) then
+	if data and (data.type == "mob" and data.id or data.unit) and not self:IsModelBlacklisted(data.id, data.unit) then
 		if data.unit then
 			popup.model:SetUnit(data.unit)
 		else
@@ -174,7 +174,7 @@ function module:SetModel(popup)
 		end
 
 		popup.model:SetPortraitZoom(1)
-	elseif data.type == "loot" then
+	elseif data and data.type == "loot" then
 		popup.model.fallback:SetAtlas("BonusLoot-Chest")
 		popup.model.fallback:Show()
 		-- I could do a 3d model, but since I can't get the right model for the treasure, it's arguably confusing
