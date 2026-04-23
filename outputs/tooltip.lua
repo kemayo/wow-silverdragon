@@ -38,10 +38,9 @@ end
 function module:OnEnable()
 	if _G.C_TooltipInfo then
 		-- Cata-classic has TooltipDataProcessor, but doesn't actually use the new tooltips
-		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip)
+		TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip, tooltipData)
 			if tooltip ~= GameTooltip then return end
-			local name, unit, guid = TooltipUtil.GetDisplayedUnit(tooltip)
-			module:UpdateTooltip(ns.IdFromGuid(guid))
+			module:UpdateTooltip(ns.IdFromGuid(tooltipData and tooltipData.guid))
 		end)
 	else
 		GameTooltip:HookScript("OnTooltipSetUnit", function(tooltip)
