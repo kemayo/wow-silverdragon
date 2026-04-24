@@ -6,6 +6,8 @@ local DebugF = addon.DebugF
 
 local HBD = LibStub("HereBeDragons-2.0")
 
+local issecretvalue = _G.issecretvalue or function() return false end
+
 -- Strings
 
 local mob_name
@@ -232,7 +234,7 @@ do
 	}
 	local function npcIdFromGuid(guid)
 		if not guid then return end
-		if issecretvalue and issecretvalue(guid) then return end
+		if issecretvalue(guid) then return end
 		if C_CreatureInfo and C_CreatureInfo.GetCreatureID then
 			return C_CreatureInfo.GetCreatureID(guid)
 		end
@@ -285,7 +287,7 @@ do
 	-- See: https://warcraft.wiki.gg/wiki/GUID#Creature
 	function addon:GUIDShard(guid)
 		if not guid then return end
-		if issecretvalue and issecretvalue(guid) then return end
+		if issecretvalue(guid) then return end
 		-- local unitType, _, serverID, instanceID, zoneUID, mobID, spawnUID = strsplit("-", guid)
 		local guidType, _, serverID, instanceID, zoneUID, id, spawnUID = strsplit("-", guid)
 		if not (guidType and valid_types[guidType]) then return end
@@ -358,13 +360,13 @@ do
 		if unit then
 			-- refresh the locale when we actually meet the mob, because blizzard fixes typos occasionally
 			local name = UnitName(unit)
-			if name and name ~= UNKNOWNOBJECT then
+			if not issecretvalue(name) and name and name ~= UNKNOWNOBJECT then
 				cache[id] = name
 			end
 		end
 		if not cache[id] then
 			local name = TextFromHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
-			if name and name ~= UNKNOWNOBJECT then
+			if not issecretvalue(name) and name and name ~= UNKNOWNOBJECT then
 				cache[id] = name
 			end
 		end
@@ -489,7 +491,6 @@ function ns.IsCosmeticItem(itemInfo)
 	return false
 end
 
-local issecretvalue = _G.issecretvalue or function() return false end
 function ns.isanyvaluesecret(...)
     for i=1, select("#", ...) do
         if issecretvalue((select(i, ...))) then
