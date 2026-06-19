@@ -776,6 +776,9 @@ local achievements = {
 	[62201] = { -- The Frog and the Princesses
 		need=EMOTE59_CMD1, completed=DONE, -- /love
 	},
+	[62881] = {}, -- Showdown Slugger: Val
+	[62883] = {}, -- Showdown Slugger: Naigtal
+	[63348] = {}, -- Heroic Slugger
 }
 ns.achievements = achievements
 local mobs_to_achievement = {
