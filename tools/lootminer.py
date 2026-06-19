@@ -17,6 +17,7 @@ import requests_cache
 from requests.adapters import HTTPAdapter, Retry
 
 from npc import lua, petfamilies, pack_coords
+from npc.zones import zoneid_to_mapid as locationid_to_uimapid
 try:
     from zones import zones as zones_raw
 except ImportError:
@@ -148,7 +149,7 @@ def fetchnpc(npc, loot_filter="source", base="https://wowhead.com"):
         print("couldn't find g_npc data")
         return False
 
-    # var g_mapperData = {"13644":[{"count":1,"coords":[[33,76.4]],"uiMapId":2022,"uiMapName":"The Waking Shores"}]};
+    # var g_mapperData = {"16943":[{"count":31,"coords":[[48.4,47.6],[48.4,49.2]]}]};
     if mapperDatas := re.findall(r"g_mapperData\s*=\s*({\"\d+\":\[.+\]});", r.text):
         for mapperData in mapperDatas:
             locations = yaml.load(mapperData, Loader=Loader)
@@ -157,6 +158,8 @@ def fetchnpc(npc, loot_filter="source", base="https://wowhead.com"):
                     data["locations"] = []
                 for locationdata in locationdatas:
                     if "coords" in locationdata:
+                        locationdata["uiMapId"] = locationid_to_uimapid.get(int(locationid))
+                        locationdata["uiMapName"] = zones[locationdata["uiMapId"]][0]
                         locationdata["coords"] = [pack_coords(coord[0]/100, coord[1]/100) for coord in locationdata["coords"]]
                         data["locations"].append(locationdata)
                     else:

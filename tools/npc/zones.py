@@ -1208,4 +1208,130 @@ zoneid_to_mapid = {
     15513: False,  # Pocket Dimension
     15525: False,  # The Great Sea
     15667: False,  # Delves
+    15713: False,  # Wetlands
+    15714: False,  # The Hinterlands
+    15715: False,  # Twilight Highlands
+    15716: False,  # Arathi Highlands
+    15717: False,  # Hillsbrad Foothills
+    15764: False,  # Ny'alotha, the Waking City
+    15780: False,  # Forbidden Reach - (11.0.5 Version) - Dracthyr for All
+    15781: False,  # Tazavesh, the Veiled Market
+    15808: False,  # Windrunner Spire
+    15827: False,  # The Forgotten Vault
+    15829: False,  # Magisters' Terrace
+    15836: False,  # Excavation Site 9
+    15841: False,  # Scarlet Halls
+    15913: False,  # Blackrock Depths
+    15915: False,  # Warband Camp
+    15921: False,  # The Den
+    15942: False,  # Vision of Stormwind
+    15946: False,  # Vision of Orgrimmar
+    15947: False,  # Zul'Aman
+    15958: False,  # Masters' Perch
+    15959: False,  # Slayer's Rise
+    15968: False,  # Eversong Woods
+    15969: False,  # Silvermoon City
+    15989: False,  # Lordaeron Garrison
+    15990: False,  # Sidestreet Sluice
+    15991: False,  # Demolition Dome
+    16042: False,  # 13doodadtest
+    16077: False,  # Dornogal Test
+    16078: False,  # Warband_Plains
+    16091: False,  # Murder Row
+    16092: False,  # Dastardly Duos
+    16093: False,  # Undermine
+    16103: False,  # Delve Prototype
+    16104: False,  # Eco-Dome Al'dani
+    16105: False,  # Founder's Point
+    16107: False,  # Elwynn 2 test
+    16108: False,  # The Great Sea
+    16170: False,  # Scarlet Halls
+    16178: False,  # Manaforge Omega
+    16182: False,  # Isle of Quel'Danas
+    16194: False,  # Atal'Aman
+    16211: False,  # Parhelion Plaza
+    16215: False,  # Isle of Quel'Danas
+    16217: False,  # The Great Sea
+    16279: False,  # Sporefall
+    16300: False,  # Home Interior
+    16309: False,  # [DO NOT DISTURB]
+    16310: False,  # Isle of Quel'Danas
+    16311: False,  # Silvermoon City
+    16312: False,  # Eversong Woods
+    16340: False,  # The Voidspire
+    16342: False,  # Isle of Quel'Danas
+    16359: False,  # The Blinding Vale
+    16363: False,  # The Skyfire
+    16365: False,  # Atal'Utek
+    16368: False,  # Den of Nalorakk
+    16381: False,  # [DO NOT DISTURB]
+    16387: False,  # [DO NOT DISTURB]
+    16391: False,  # [DO NOT DISTURB]
+    16392: False,  # [DO NOT DISTURB]
+    16395: False,  # Maisara Caverns
+    16396: False,  # 12test
+    16402: False,  # [DO NOT DISTURB]
+    16403: False,  # [DO NOT DISTURB]
+    16404: False,  # [DO NOT DISTURB]
+    16405: False,  # [DO NOT DISTURB]
+    16406: False,  # [DO NOT DISTURB]
+    16407: False,  # [DO NOT DISTURB]
+    16408: False,  # [DO NOT DISTURB]
+    16409: False,  # [DO NOT DISTURB]
+    16410: False,  # [DO NOT DISTURB]
+    16411: False,  # [DO NOT DISTURB]
+    16412: False,  # [DO NOT DISTURB]
+    16413: False,  # [DO NOT DISTURB]
+    16414: False,  # [DO NOT DISTURB]
+    16423: False,  # Slayer's Rise
+    16425: False,  # Voidscar Arena
+    16427: False,  # Archival Assault
+    16428: False,  # Arathi Highlands RPE
+    16430: False,  # The Hinterlands
+    16431: False,  # Twilight Highlands
+    16432: False,  # Arathi Highlands
+    16433: False,  # Wetlands
+    16434: False,  # Hillsbrad Foothills
+    16479: False,  # Voidstorm
+    16502: False,  # PvP POI Dev Land
+    16505: False,  # Voidscar Cavern
+    16531: False,  # The Dreamrift
+    16533: False,  # [DO NOT DISTURB]
+    16539: False,  # Voidrazor Sanctuary
+    16540: False,  # [DO NOT DISTURB]
+    16541: False,  # 12DUR_Oasis_TEST_MCarwen
+    16542: False,  # Parhelion Plaza
+    16545: False,  # Collegiate Calamity
+    16548: False,  # The Grudge Pit
+    16549: False,  # Shadowguard Point
+    16551: False,  # Vault of the Incarnates (V2)
+    16556: False,  # Atal'Aman
+    16557: False,  # Twilight Crypts
+    16571: False,  # Wastes of K'aresh
+    16572: False,  # The Glassed Expanse
+    16573: False,  # Nexus-Point Xenas
+    16579: False,  # K'aresh
+    16592: False,  # Sunkiller Sanctum
+    16594: False,  # The Shadow Enclave
+    16595: False,  # The Gulf of Memory
+    16596: False,  # Torment's Rise
+    16621: False,  # [DO NOT DISTURB]
+    16641: False,  # The Heart of Rage
+    16642: False,  # The Darkway
+    16648: False,  # Voidstorm
+    16668: False,  # The Hinterlands
+    16686: False,  # Silvermoon City, Prop Hunt
+    16748: False,  # Ritual Site Outskirts
+    16752: False,  # Derelict Legion Vessel
+    16770: False,  # Zul'Aman
+    16773: False,  # Silvermoon City
+    16796: False,  # Ritual Site
+    16838: False,  # Atal'Utek (copy)
+    16860: False,  # The Great Sea
+    16873: False,  # Razorwind Camp
+    16874: False,  # Founders Point Camp
+    16900: 2599,  # Val
+    16939: False,  # Ritual Site
+    16943: 2600,  # Naigtal
+    16945: False,  # Ritual Site
 }
