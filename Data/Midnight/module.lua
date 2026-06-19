@@ -51,6 +51,8 @@ ns.ATALAMAN = 2536
 ns.HARANDAR = 2413
 ns.VOIDSTORM = 2405
 ns.SLAYERSRISE = 2444
+ns.VOIDSTORM_VAL = 2599
+ns.VOIDSTORM_NAIGTAL = 2600
 
 -- ns.WORLDQUESTS = ns.conditions.QuestComplete(79573)
 
@@ -1181,3 +1183,243 @@ do
 		loot_shared=loot_shared,
 	})
 end
+
+
+-- Invasions
+
+ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
+	[29106290] = {
+		label="Auredar's Chassis",
+		criteria=114009,
+		quest=96316, -- v
+		npc=264569,
+		loot={
+			274873, -- Funeral Attendant's Spire
+			275143, -- Draeni Ceremonial Cuffs
+			275159, -- Construct Manipulator Bracers
+			275167, -- Intact Construct Plates
+			-- 278116, -- Player Experience
+		},
+		vignette=7668,
+	},
+	[76203960] = {
+		label="Swalewing Matriarch",
+		criteria=114007,
+		quest=96207, -- v
+		npc=263954,
+		loot={
+			275153, -- Flickering Scale Sabatons
+			275145, -- Swalewing Skin Footpads
+			275161, -- Swamp-Resistant Stompers
+			276288, -- Forgotten Sword of Vilaldoun
+		},
+		vignette=7660,
+	},
+	[39904270] = {
+		label="Broxion",
+		-- [39904270, 41304680, 42004830, 42604800, 44905440, 45505340, 45805370, 46205600]
+		criteria=114006,
+		quest=96206, -- v
+		npc=263950,
+		loot={
+			274890, -- Enchanted Spore
+			275138, -- Spore-Handler's Handwraps
+			275146, -- Spore-Membrane Gloves
+			275154, -- Swamp Trekker's Grips
+			275162, -- Spore-Shined Gloves
+			276288, -- Forgotten Sword of Vilaldoun
+			-- 278116, -- Player Experience
+		},
+		vignette=7659,
+	},
+	[37606240] = {
+		label="Interminable Uarn",
+		criteria=114005,
+		quest=96205, -- v
+		npc=263947,
+		loot={
+			274862, -- Corrupted Draenei Priest's Kris
+			275139, -- Crown of Fungal Spores
+		},
+		vignette=7658,
+	},
+	[65906210] = {
+		label="Lomelith",
+		criteria=114008,
+		quest=96208, -- v
+		npc=263955,
+		loot={
+			274860, -- Ancient Spore-Coated Axe
+			274819, -- Fungal Fold Frock
+			-- 278116, -- Player Experience
+		},
+		vignette=7661,
+	},
+	[69407720] = {
+		label="Warp Agent Xi'grivr",
+		criteria=114010,
+		quest=96319, -- v
+		npc=264574,
+		loot={
+			274825, -- Hal'hadar Assassin's Signet
+			274870, -- Assassin's Void-String Bow
+		},
+		vignette=7670,
+	},
+	[54206240] = {
+		label="Slaipaan",
+		criteria=114012,
+		quest=96320, -- v
+		npc=264576,
+		loot={
+			275144, -- Leafy-Hide Coat
+			275160, -- Slaipaan's Carapace
+			276288, -- Forgotten Sword of Vilaldoun
+		},
+		vignette=7671,
+	},
+	[48006880] = {
+		label="Indomitable Mk XII",
+		criteria=114011,
+		quest=96317, -- v
+		npc=264571,
+		loot={
+			274891, -- Mk XII Gear Drive
+			275164, -- Indomitable Mechanized Legplates
+			275148, -- Reaver's Padded Trousers
+			275156, -- Gear-Linked Leggings
+			275140, -- Leggings of Tainted Stuffing
+			276298, -- Forgotten Fel-Shard Talon
+			276288, -- Forgotten Sword of Vilaldoun
+			-- 278116, -- Player Experience
+		},
+		route={48006880, 49006576, 49005920, 52425751, 53215440, 53534842, 54254436},
+		vignette=7669,
+	},
+}, {
+	achievement=62883, -- Showdown Slugger: Naigtal
+})
+-- Vilaldoun:
+ns.RegisterPoints(2646, {
+	[73608020] = {
+		label="Auredar's Chassis",
+		criteria=114009,
+		quest=96316, -- v
+		npc=264569,
+		loot={
+			274873, -- Funeral Attendant's Spire
+			275143, -- Draeni Ceremonial Cuffs
+			275159, -- Construct Manipulator Bracers
+			275167, -- Intact Construct Plates
+			-- 278116, -- Player Experience
+		},
+		vignette=7668,
+	},
+}, {
+	achievement=62883, -- Showdown Slugger: Naigtal
+})
+ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
+	[29201840] = {
+		label="Warbringer Thal'kuur",
+		quest=97014, -- v
+		npc=267422,
+		loot={
+			275141, -- Spore-Speckled Shoulderpads
+			275149, -- Fungal Draped Epaulets
+			275165, -- Petrified Mushroom Shoulderplates
+			276298, -- Forgotten Fel-Shard Talon
+		},
+		vignette=7744,
+	},
+	[48404760] = {
+		label="Voidwarped Sporebat",
+		quest=96566, -- v
+		npc=265698,
+		loot={
+			274866, -- Voidwarped Edge
+			275166, -- Voidwarped Greatbelt
+			275142, -- Voidwarped Sash
+			275158, -- Voidwarped Scale Girdle
+			275150, -- Sporebat Leather Belt
+			-- 278116, -- Player Experience
+		},
+		vignette=7699,
+	},
+})
+
+
+ns.RegisterPoints(ns.VOIDSTORM_VAL, {
+	[33005700] = {
+		label="Nelgothar",
+		criteria=114002,
+		quest=96374, -- v
+		npc=264869,
+		vignette=7679,
+	},
+	[54006700] = {
+		label="Sleet-Rune",
+		criteria=113995,
+		quest=95939, -- v
+		npc=261965,
+		vignette=7605,
+	},
+	[23004100] = {
+		label="The Horror Below",
+		criteria=114003,
+		quest=96375, -- v
+		npc=264870,
+		vignette=7680,
+	},
+	[37007600] = {
+		label="Atomus",
+		criteria=113996,
+		quest=95940, -- v
+		npc=262421,
+		vignette=7606,
+	},
+	[49007800] = {
+		label="Mercilus",
+		criteria=113998,
+		quest=96371, -- v
+		npc=264865,
+		vignette=7676,
+	},
+	[28007300] = {
+		label="Xirah",
+		criteria=113999,
+		quest=96370, -- v
+		npc=264864,
+		vignette=7675,
+	},
+	[33004200] = {
+		label="Opprimius",
+		criteria=114001,
+		quest=96373, -- v
+		npc=264868,
+		vignette=7678,
+	},
+	-- Unknown location, displayed to the side
+	[11001700] = {
+		label="Shadowguard Destroyer",
+		criteria=114004,
+		quest=96465, -- v
+		npc=265269,
+		vignette=7690,
+	},
+	[11002000] = {
+		label="Glacial Broodmother",
+		criteria=113997,
+		quest=95559, -- v
+		npc=261716,
+		vignette=7558,
+	},
+	[11002300] = {
+		label="Krilkan",
+		criteria=114000,
+		quest=96372, -- v
+		npc=264866,
+		vignette=7677,
+	},
+}, {
+	achievement=62881, -- Showdown Slugger: Val
+})
