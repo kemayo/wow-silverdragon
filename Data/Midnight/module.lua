@@ -1198,6 +1198,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 			275143, -- Draeni Ceremonial Cuffs
 			275159, -- Construct Manipulator Bracers
 			275167, -- Intact Construct Plates
+			274827, -- Draenic Drive Chain
 			-- 278116, -- Player Experience
 		},
 		vignette=7668,
@@ -1208,10 +1209,12 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		quest=96207, -- v
 		npc=263954,
 		loot={
+			274874, -- Flickering Wing Separator
+			275137, -- Flickering Soft-Steppers
 			275153, -- Flickering Scale Sabatons
 			275145, -- Swalewing Skin Footpads
 			275161, -- Swamp-Resistant Stompers
-			276288, -- Forgotten Sword of Vilaldoun
+			-- 276288, -- Forgotten Sword of Vilaldoun
 		},
 		vignette=7660,
 	},
@@ -1222,12 +1225,12 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		quest=96206, -- v
 		npc=263950,
 		loot={
-			274890, -- Enchanted Spore
 			275138, -- Spore-Handler's Handwraps
 			275146, -- Spore-Membrane Gloves
 			275154, -- Swamp Trekker's Grips
 			275162, -- Spore-Shined Gloves
-			276288, -- Forgotten Sword of Vilaldoun
+			274890, -- Enchanted Spore
+			-- 276288, -- Forgotten Sword of Vilaldoun
 			-- 278116, -- Player Experience
 		},
 		vignette=7659,
@@ -1240,6 +1243,10 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		loot={
 			274862, -- Corrupted Draenei Priest's Kris
 			275139, -- Crown of Fungal Spores
+			275147, -- Bioluminescent Swamp Mask
+			275155, -- Interminable Fungal Helmet
+			-- no plate helm?
+			274876, -- Reinforced Fungalhide Bulwark
 		},
 		vignette=7658,
 	},
@@ -1251,6 +1258,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		loot={
 			274860, -- Ancient Spore-Coated Axe
 			274819, -- Fungal Fold Frock
+			274823, -- Spongy Gill Loop
 			-- 278116, -- Player Experience
 		},
 		vignette=7661,
@@ -1261,8 +1269,9 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		quest=96319, -- v
 		npc=264574,
 		loot={
-			274825, -- Hal'hadar Assassin's Signet
 			274870, -- Assassin's Void-String Bow
+			274821, -- Drape of the Hal'hadar Assassin
+			274825, -- Hal'hadar Assassin's Signet
 		},
 		vignette=7670,
 	},
@@ -1272,9 +1281,12 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		quest=96320, -- v
 		npc=264576,
 		loot={
+			274871, -- Giant Worm Piercer
+			275136, -- Leaf-Woven Blouse
 			275144, -- Leafy-Hide Coat
+			275152, -- Burrower's Linked Hauberk
 			275160, -- Slaipaan's Carapace
-			276288, -- Forgotten Sword of Vilaldoun
+			-- 276288, -- Forgotten Sword of Vilaldoun
 		},
 		vignette=7671,
 	},
@@ -1284,13 +1296,13 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		quest=96317, -- v
 		npc=264571,
 		loot={
-			274891, -- Mk XII Gear Drive
-			275164, -- Indomitable Mechanized Legplates
+			276298, -- Forgotten Fel-Shard Talon
+			275140, -- Leggings of Tainted Stuffing
 			275148, -- Reaver's Padded Trousers
 			275156, -- Gear-Linked Leggings
-			275140, -- Leggings of Tainted Stuffing
-			276298, -- Forgotten Fel-Shard Talon
-			276288, -- Forgotten Sword of Vilaldoun
+			275164, -- Indomitable Mechanized Legplates
+			274891, -- Mk XII Gear Drive
+			-- 276288, -- Forgotten Sword of Vilaldoun
 			-- 278116, -- Player Experience
 		},
 		route={48006880, 49006576, 49005920, 52425751, 53215440, 53534842, 54254436},
@@ -1311,6 +1323,7 @@ ns.RegisterPoints(2646, {
 			275143, -- Draeni Ceremonial Cuffs
 			275159, -- Construct Manipulator Bracers
 			275167, -- Intact Construct Plates
+			274827, -- Draenic Drive Chain
 			-- 278116, -- Player Experience
 		},
 		vignette=7668,
@@ -1324,10 +1337,12 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		quest=97014, -- v
 		npc=267422,
 		loot={
+			276298, -- Forgotten Fel-Shard Talon
+			274864, -- Sporebloom Gavel
 			275141, -- Spore-Speckled Shoulderpads
 			275149, -- Fungal Draped Epaulets
+			275157, -- Swampwalker's Spaulders
 			275165, -- Petrified Mushroom Shoulderplates
-			276298, -- Forgotten Fel-Shard Talon
 		},
 		vignette=7744,
 	},
@@ -1337,10 +1352,10 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		npc=265698,
 		loot={
 			274866, -- Voidwarped Edge
-			275166, -- Voidwarped Greatbelt
 			275142, -- Voidwarped Sash
-			275158, -- Voidwarped Scale Girdle
 			275150, -- Sporebat Leather Belt
+			275158, -- Voidwarped Scale Girdle
+			275166, -- Voidwarped Greatbelt
 			-- 278116, -- Player Experience
 		},
 		vignette=7699,
@@ -1354,6 +1369,16 @@ ns.RegisterPoints(ns.VOIDSTORM_VAL, {
 		criteria=114002,
 		quest=96374, -- v
 		npc=264869,
+		loot={
+			276298, -- Forgotten Fel-Shard Talon
+			274840, -- Pants of the Lost Legion
+			274832, -- Fel-Tainted Trousers
+			274848, -- Legguards of Fel-Corruption
+			274856, -- Felguard's Frozen Greaves
+			274892, -- Resilient Felblood Vial
+			-- 276354, -- Frozen Fel Core
+			-- 278116, -- Player Experience
+		},
 		vignette=7679,
 	},
 	[54006700] = {
@@ -1361,6 +1386,13 @@ ns.RegisterPoints(ns.VOIDSTORM_VAL, {
 		criteria=113995,
 		quest=95939, -- v
 		npc=261965,
+		loot={
+			274869, -- Void-Iced Warglaives
+			274828, -- Domanaar Subjugator's Vestments
+			274836, -- Sleet-Resistant Jerkin
+			274844, -- Sleetlink Hauberk
+			274852, -- Sleetstone Chestplate
+		},
 		vignette=7605,
 	},
 	[23004100] = {
@@ -1368,6 +1400,11 @@ ns.RegisterPoints(ns.VOIDSTORM_VAL, {
 		criteria=114003,
 		quest=96375, -- v
 		npc=264870,
+		loot={
+			274872, -- Darkness' Horrific Barb
+			274826, -- Coiling Smoke Chain
+			274818, -- Drape of Intense Darkness
+		},
 		vignette=7680,
 	},
 	[37007600] = {
@@ -1375,6 +1412,13 @@ ns.RegisterPoints(ns.VOIDSTORM_VAL, {
 		criteria=113996,
 		quest=95940, -- v
 		npc=262421,
+		loot={
+			274868, -- Portal Master's Shortblade
+			274831, -- Portal Shaper's Circlet
+			274839, -- Cold-World Cover
+			274847, -- Atomus's Headcover
+			274855, -- Portal-Keeper's Helm
+		},
 		vignette=7606,
 	},
 	[49007800] = {
@@ -1382,6 +1426,13 @@ ns.RegisterPoints(ns.VOIDSTORM_VAL, {
 		criteria=113998,
 		quest=96371, -- v
 		npc=264865,
+		loot={
+			274867, -- Inscribed Domanaar's Sword
+			274834, -- Cord of Domineering Resolve
+			274842, -- Gatekeeper's Leather Waistguard
+			274850, -- Mercilus's Chain Waistguard
+			274858, -- Domanaar Battle Belt
+		},
 		vignette=7676,
 	},
 	[28007300] = {
@@ -1389,6 +1440,11 @@ ns.RegisterPoints(ns.VOIDSTORM_VAL, {
 		criteria=113999,
 		quest=96370, -- v
 		npc=264864,
+		loot={
+			274875, -- Riftwalker's Lanter
+			274820, -- Cloak of the Voracious Gorge
+			274824, -- Worldeater's Bone Ring
+		},
 		vignette=7675,
 	},
 	[33004200] = {
@@ -1396,7 +1452,44 @@ ns.RegisterPoints(ns.VOIDSTORM_VAL, {
 		criteria=114001,
 		quest=96373, -- v
 		npc=264868,
+		loot={
+			274863, -- Cudgel of the Twisted Reaper
+			274829, -- Creature Corruptor Slippers
+			274837, -- Corrupted Hide Boots
+			274845, -- Greaves of Corrupted Scale
+			274853, -- Creature Crushers
+			-- 278116, -- Player Experience
+		},
 		vignette=7678,
+	},
+	[44005840] = {
+		label="Krilkan",
+		criteria=114000,
+		quest=96372, -- v
+		npc=264866,
+		loot={
+			274835, -- Bands of Pincher Sinew
+			274843, -- Pincher-Proof Wristguards
+			274851, -- Glittering Frostscale Wraps
+			274859, -- Klaxid Plate Vambraces
+			274893, -- Frosty Klaxid Stinger
+			-- 278116, -- Player Experience
+		},
+		vignette=7677,
+	},
+	[67104180] = {
+		label="Glacial Broodmother",
+		criteria=113997,
+		quest=95559, -- v
+		npc=261716,
+		loot={
+			274861, -- Frosty Broodmother's Fang
+			274833, -- Icy Spidersilk Mantle
+			274841, -- Frigid Cavedweller's Shoulderpads
+			274849, -- Frostscale Spider's Monnion
+			274857, -- Chitonous Broodmother's Spaulders
+		},
+		vignette=7558,
 	},
 	-- Unknown location, displayed to the side
 	[11001700] = {
@@ -1404,21 +1497,13 @@ ns.RegisterPoints(ns.VOIDSTORM_VAL, {
 		criteria=114004,
 		quest=96465, -- v
 		npc=265269,
+		loot={
+			274865, -- Destroyer's Drop Hammer
+			274830, -- Ice-Glazed Gloves
+			274854, -- Shadowguard Plate Gauntlets
+		},
 		vignette=7690,
-	},
-	[11002000] = {
-		label="Glacial Broodmother",
-		criteria=113997,
-		quest=95559, -- v
-		npc=261716,
-		vignette=7558,
-	},
-	[11002300] = {
-		label="Krilkan",
-		criteria=114000,
-		quest=96372, -- v
-		npc=264866,
-		vignette=7677,
+		note="Seems to spawn after other rares are killed",
 	},
 }, {
 	achievement=62881, -- Showdown Slugger: Val
