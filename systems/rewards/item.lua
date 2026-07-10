@@ -392,7 +392,7 @@ function ns.rewards.Set:Name()
 	if info then
 		return info.name
 	end
-	return self:Super("Name")
+	return self:super("Name")
 end
 function ns.rewards.Set:TooltipLabel() return WARDROBE_SETS end
 function ns.rewards.Set:Obtained(...)
