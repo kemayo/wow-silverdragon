@@ -659,7 +659,7 @@ do
 		end
 		globaldb.mob_count[id] = globaldb.mob_count[id] + 1
 		globaldb.mob_seen[id] = time()
-		lastseen[id..zone] = time()
+		lastseen[id..':'..(zone or '?')] = time()
 		self.events:Fire("Seen", id, zone, x or 0, y or 0, is_dead, source, unit, GUID)
 		return true
 	end
