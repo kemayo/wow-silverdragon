@@ -84,10 +84,13 @@ end
 
 local spam = {}
 function module:CHAT_MSG_ADDON(event, prefix, msg, channel, sender)
-	if prefix ~= "SilverDragon" or sender == UnitName("player") then
+	if prefix ~= "SilverDragon" then
 		return
 	end
 	sender = Ambiguate(sender, "none")
+	if sender == UnitName("player") then
+		return
+	end
 	if channel == "GUILD" and not self.db.profile.guild then
 		return
 	end
