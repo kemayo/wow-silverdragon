@@ -396,7 +396,7 @@ function ns.rewards.Set:Name()
 end
 function ns.rewards.Set:TooltipLabel() return WARDROBE_SETS end
 function ns.rewards.Set:Obtained(...)
-	if not self:super("Obtained", ...) then return false end
+	if self:super("Obtained", ...) == false then return false end
 	if ns.CLASSIC then return GetItemCount(self.id, true) > 0 end
 	local info = C_TransmogSets.GetSetInfo(self.setid)
 	if info then
