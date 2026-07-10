@@ -181,7 +181,7 @@ function ns.Loot.HasInterestingMounts(id, ...)
 end
 function ns.Loot.HasPets(id, only_knowable, ...)
 	if not ns.Loot.GetLootTable(id, ...) then return false end
-	for _, item in ns.Loot.IterPets(id) do
+	for _, item in ns.Loot.IterPets(id, ...) do
 		if (not only_knowable) or item:Available() then
 			return true
 		end
