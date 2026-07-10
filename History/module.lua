@@ -95,6 +95,14 @@ function module:OnEnable()
 		self.window = self:CreateWindow()
 	end
 	core.RegisterCallback("History", "Seen", function(callback, id, zone, x, y, dead, source, unit, guid)
+		if source:match("^sync") then
+			local channel, player = source:match("sync:(.+):(.+)")
+			if channel == "GUILD" then
+				source = "guildsync"
+			else
+				source = "groupsync"
+			end
+		end
 		if not self.db.profile.sources[source] then
 			return
 		end
