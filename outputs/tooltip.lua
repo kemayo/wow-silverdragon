@@ -60,11 +60,11 @@ function module:UpdateTooltip(id, force_achievement, force_drop, force_id)
 		return
 	end
 
-	if self.db.profile.achievement or force_achievement == true and force_achievement ~= false then
+	if force_achievement or (self.db.profile.achievement and force_achievement ~= false) then
 		ns:UpdateTooltipWithCompletion(GameTooltip, id)
 	end
 
-	if (self.db.profile.drop and (self.db.profile.combatdrop or not InCombatLockdown())) or force_drop == true and force_drop ~= false then
+	if force_drop or ((self.db.profile.drop and (self.db.profile.combatdrop or not InCombatLockdown())) and force_drop ~= false) then
 		ns.Loot.Summary.UpdateTooltip(GameTooltip, id)
 	end
 
@@ -76,7 +76,7 @@ function module:UpdateTooltip(id, force_achievement, force_drop, force_id)
 		GameTooltip:AddLine("SilverDragon is ignoring this mob", 1, 0.5, 0)
 	end
 
-	if self.db.profile.id or force_id and force_id ~= false then
+	if force_id or (self.db.profile.id and force_id ~= false) then
 		GameTooltip:AddDoubleLine(ID, id, 1, 1, 0, 1, 1, 0)
 	end
 
