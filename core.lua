@@ -386,8 +386,11 @@ do
 	function addon:BuildLookupTables()
 		wipe(mobdb)
 		wipe(mobsByZone)
+		wipe(mobNamesByZone)
 		wipe(questMobLookup)
 		wipe(vignetteMobLookup)
+		wipe(worldQuestMobLookup)
+		wipe(ns.vignetteTreasureLookup)
 		for source, data in pairs(addon.datasources) do
 			if addon.db.global.datasources[source] then
 				for mobid, mobdata in pairs(data) do
