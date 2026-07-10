@@ -511,18 +511,28 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 			return false
 		end
 		if source == "vignette" or source == "point-of-interest" then
-			-- The vignette's presence implies no quest completion
-			Debug("ShouldAnnounce", true, "vignette implies quest")
+			-- Blizzard generally won't show a vignette if there's nothing left to
+			-- get from the mob, so trust it over our own completion data
+			Debug("ShouldAnnounce", true, "vignette implies available")
 			return true
 		end
 		if quest ~= nil then
+			-- a completed quest gates the loot off entirely, so completion decides it
 			Debug("ShouldAnnounce", not quest, "quest")
 			return not quest
 		end
 		if achievement ~= nil then
-			-- can just fall back on achievement
-			Debug("ShouldAnnounce", not achievement, "achievement")
-			return not achievement
+			if achievement then
+				-- achievements don't gate loot: the mob stays farmable, so keep
+				-- announcing a completed one while there's still uncollected loot,
+				-- or a BoE mount that's sellable even when already owned
+				local wants_loot = ns.Loot.Status(id, self.db.profile.already_transmog) == false
+					or ns.Loot.HasMounts(id, true, true)
+				Debug("ShouldAnnounce", wants_loot, "achievement complete, loot wanted?")
+				return wants_loot
+			end
+			Debug("ShouldAnnounce", true, "achievement incomplete")
+			return true
 		end
 	end
 
