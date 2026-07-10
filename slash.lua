@@ -39,7 +39,7 @@ local commands = {
     ignore = function(self, arg)
         local npcid = ns.input_to_mobid(arg)
         if npcid then
-            if not core:SetIgnoreMob(npcid, true) then
+            if not core:SetIgnore(npcid, true) then
                 return self:Printf("%s (%d) was already on the ignore list", core:NameForMob(npcid) or UNKNOWN, npcid)
             end
             return self:Printf("Added %s (%d) to the ignore list", core:NameForMob(npcid) or UNKNOWN, npcid)
