@@ -294,7 +294,7 @@ function ns.conditions.CalendarEvent:getEvent()
 	for i=1, C_Calendar.GetNumDayEvents(offset, day) do
 		local event = C_Calendar.GetDayEvent(offset, day, i)
 		if event.eventID == self.id then
-			return true
+			return event
 		end
 	end
 end
