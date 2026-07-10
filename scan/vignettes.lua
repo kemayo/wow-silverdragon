@@ -379,7 +379,7 @@ function module:NotifyIfNeeded(id, current_zone, x, y, variant, instanceid)
 	end
 	already_notified[instanceid] = true
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
-	local ret = core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, false, instanceid)
+	local ret = core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, false, nil, instanceid)
 	core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x, y, instanceid, id)
 	return ret
 end
