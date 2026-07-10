@@ -169,7 +169,7 @@ end
 function ns.Loot.HasMounts(id, only_knowable, only_boe, ...)
 	if not ns.Loot.GetLootTable(id, ...) then return false end
 	for _, item in ns.Loot.IterMounts(id, ...) do
-		if ((not only_knowable) or not item:Available() and ((not only_boe) or itemBindOnEquip(item))) then
+		if (not only_knowable) or (item:Available() and ((not only_boe) or itemBindOnEquip(item))) then
 			return true
 		end
 	end
