@@ -776,12 +776,16 @@ core.RegisterCallback("SD Announce Controller", "Announce", function(callback, i
 		vibrate_type = module.db.profile.vibrate_type
 		vibrate_intensity = module.db.profile.vibrate_intensity
 	end
-	C_GamePad.SetVibration(vibrate_type, vibrate_intensity)
+	if C_GamePad.IsEnabled() then
+		C_GamePad.SetVibration(vibrate_type, vibrate_intensity)
+	end
 end)
 core.RegisterCallback("SD AnnounceLoot Controller", "AnnounceLoot", function(callback, name, id, zone, x, y, instanceid)
 	if not module.db.profile.vibrate_loot then
 		return
 	end
-	C_GamePad.SetVibration(module.db.profile.vibrate_type_loot, module.db.profile.vibrate_intensity_loot)
+	if C_GamePad.IsEnabled() then
+		C_GamePad.SetVibration(module.db.profile.vibrate_type_loot, module.db.profile.vibrate_intensity_loot)
+	end
 end)
 
