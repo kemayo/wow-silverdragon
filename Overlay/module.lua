@@ -202,6 +202,8 @@ function module:Update()
     self:UpdateWorldMapIcons()
 end
 
+local isKnowable = function(item) return item:Obtained() ~= nil end
+
 function module:ShowTooltip(pin)
     local tooltip = self.tooltip
     if tooltip:IsShown() and tooltip.pin == pin then
@@ -225,8 +227,12 @@ function module:ShowTooltip(pin)
         if ns.mobdb[id].notes then
             tooltip:AddLine(core:RenderString(ns.mobdb[id].notes), 1, 1, 1, true)
         end
-        if pin:Config().tooltip_lootwindow and pin:Config().tooltip_regularloot and ns.Loot.HasRegularLoot(id) then
-            self.lootwindow = ns.Loot.Window.ShowForMob(id, false, false, true)
+        if pin:Config().tooltip_lootwindow then
+            local filter
+            if not pin:Config().tooltip_regularloot then
+                filter = isKnowable
+            end
+            self.lootwindow = ns.Loot.Window.ShowForMob(id, false, false, true, filter)
             if self.lootwindow then
                 self.lootwindow:SetParent(tooltip)
                 if pin:GetCenter() > UIParent:GetCenter() then
