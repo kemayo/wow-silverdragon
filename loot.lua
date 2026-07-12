@@ -710,9 +710,24 @@ do
 		core.events:Fire("LootWindowReleased", window)
 	end
 
-	function ns.Loot.Window.ShowForMob(id, independent, treasure, shared)
-		local loot = ns.Loot.GetLootTable(id, treasure)
-		local sharedLoot = shared and ns.Loot.GetLootTable(id, treasure, true)
+	local function lootFilter(filter, loot)
+		if loot then
+			if filter then
+				loot = tFilter(loot, filter, true)
+			end
+			if #loot == 0 then
+				return nil
+			end
+		end
+		return loot
+	end
+	function ns.Loot.Window.ShowForMob(id, independent, treasure, shared, extraFilter)
+		local filter = function(item)
+			if extraFilter and not extraFilter(item) then return false end
+			return not core.db.profile.charloot or item:MightDrop()
+		end
+		local loot = lootFilter(filter, ns.Loot.GetLootTable(id, treasure))
+		local sharedLoot = lootFilter(filter, shared and ns.Loot.GetLootTable(id, treasure, true))
 		if not (loot or sharedLoot) then
 			-- TODO: error message
 			return false
