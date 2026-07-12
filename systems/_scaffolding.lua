@@ -6,6 +6,10 @@ local myname, ns = ...
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 
 ns.db = setmetatable({}, {__index = function(self, key)
+    if key == "transmog_notable" then
+        local announce = core:GetModule("Announce", true)
+        return announce and announce.db.profile.already_transmog
+    end
 	return core.db.profile[key]
 end})
 
