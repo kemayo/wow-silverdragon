@@ -537,7 +537,7 @@ do
 		265543, -- Tempered Amani Spearhead
 		265554, -- Reinforced Amani Haft
 		265560, -- Toughened Amani Leather Wrap
-		-- Combine into: 265562, -- Amani Warrior's Spear
+		265562, -- Combine into: Amani Warrior's Spear
 		{257152, mount=true}, -- Amani Sharptalon
 		{257200, mount=true}, -- Escaped Witherbark Pango
 	}
