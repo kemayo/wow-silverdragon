@@ -638,6 +638,7 @@ end
 
 do
 	local lastseen = {}
+	local function seenkey(id, zone) return id..':'..(zone or '?') end
 	function addon:NotifyForMob(id, zone, x, y, is_dead, source, unit, silent, force, GUID, vignetteGUID)
 		self.events:Fire("Seen_Raw", id, zone, x, y, is_dead, source, unit)
 
@@ -650,7 +651,7 @@ do
 			return
 		end
 		if not force and not self:WouldNotifyForMob(id, zone) then
-			Debug("Skipping notification: seen", id, lastseen[id..zone], time() - self.db.profile.delay, source)
+			Debug("Skipping notification: seen", id, lastseen[seenkey(id, zone)], time() - self.db.profile.delay, source)
 			return
 		end
 		if not self:PlayerIsInteractive() then
@@ -659,12 +660,12 @@ do
 		end
 		globaldb.mob_count[id] = globaldb.mob_count[id] + 1
 		globaldb.mob_seen[id] = time()
-		lastseen[id..':'..(zone or '?')] = time()
+		lastseen[seenkey(id, zone)] = time()
 		self.events:Fire("Seen", id, zone, x or 0, y or 0, is_dead, source, unit, GUID, vignetteGUID)
 		return true
 	end
 	function addon:WouldNotifyForMob(id, zone)
-		return not (lastseen[id..zone] and time() < (lastseen[id..zone] + self.db.profile.delay))
+		return not (lastseen[seenkey(id, zone)] and time() < (lastseen[seenkey(id, zone)] + self.db.profile.delay))
 	end
 end
 do
