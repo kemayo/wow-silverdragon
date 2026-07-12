@@ -50,6 +50,12 @@ function module:ShowFrame(data)
 	return popup
 end
 
+function module:UpdateTextVisibility(popup)
+	-- General, look-independent control over the source and status lines
+	popup.source:SetShown(self.db.profile.showSource)
+	popup.status:SetShown(self.db.profile.showStatus)
+end
+
 function module:RefreshData(popup)
 	local data = popup.data
 	if data.type == "mob" then
@@ -57,6 +63,7 @@ function module:RefreshData(popup)
 	else
 		self:RefreshLootData(popup)
 	end
+	self:UpdateTextVisibility(popup)
 	local isTreasure = data.type == "loot"
 	local anyLoot = ns.Loot.GetLootTable(data.id, isTreasure)
 	if anyLoot and #anyLoot > 0 then

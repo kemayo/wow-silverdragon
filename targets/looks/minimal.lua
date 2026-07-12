@@ -120,11 +120,6 @@ module:RegisterLookConfig("Minimal", {
         step = 1,
         order = 6,
     },
-    showSource = {
-        type = "toggle",
-        name = "Show source",
-        order = 7,
-    },
     sourceFontSize = {
         type = "range",
         name = "Source font size",
@@ -132,7 +127,7 @@ module:RegisterLookConfig("Minimal", {
         min = 4,
         max = 32,
         step = 1,
-        order = 8,
+        order = 7,
     },
 }, {
     classcolor = false,
@@ -141,7 +136,6 @@ module:RegisterLookConfig("Minimal", {
     height = 60,
     titleFontSize = 12,
     statusFontSize = 12,
-    showSource = true,
     sourceFontSize = 12,
 }, function(_, popup, config)
     local r, g, b, a = unpack(config.background)
@@ -166,7 +160,6 @@ module:RegisterLookConfig("Minimal", {
         -- Source
         popup.source:SetFont([[Fonts\ARIALN.TTF]], config.sourceFontSize, "OUTLINE")
         popup.source:SetTextColor(1.0, 1.0, 1.0)
-        popup.source:SetShown(config.showSource)
     end
 
     if module.db.profile.model then
