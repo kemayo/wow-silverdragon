@@ -356,7 +356,9 @@ function ns.Loot.Summary.UpdateTooltip(tooltip, id, only_knowable, ...)
 	end
 
 	for _, item in ipairs(loot) do
-		item:AddToTooltip(tooltip)
+		if (not only_knowable or item:Obtained() ~= nil) and (not core.db.profile.charloot or item:MightDrop()) then
+			item:AddToTooltip(tooltip)
+		end
 	end
 end
 
