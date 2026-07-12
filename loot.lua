@@ -290,6 +290,8 @@ local function get_tooltip(tooltip, i)
 	return tooltip
 end
 
+local SHARED_HEADER = "Shared loot"
+
 ns.Loot.Details = {}
 
 local showRestrictions = function(tooltip, item)
@@ -350,14 +352,31 @@ end
 
 ns.Loot.Summary = {}
 function ns.Loot.Summary.UpdateTooltip(tooltip, id, only_knowable, ...)
-	local loot = ns.Loot.GetLootTable(id, ...)
-	if not loot then
-		return
+	local function shouldShow(item)
+		return (not only_knowable or item:Obtained() ~= nil)
+			and (not core.db.profile.charloot or item:MightDrop())
 	end
 
-	for _, item in ipairs(loot) do
-		if (not only_knowable or item:Obtained() ~= nil) and (not core.db.profile.charloot or item:MightDrop()) then
-			item:AddToTooltip(tooltip)
+	local loot = ns.Loot.GetLootTable(id, ...)
+	if loot then
+		for _, item in ipairs(loot) do
+			if shouldShow(item) then
+				item:AddToTooltip(tooltip)
+			end
+		end
+	end
+
+	local sharedLoot = ns.Loot.GetLootTable(id, ..., true)
+	if sharedLoot then
+		local sharedShown = false
+		for _, item in ipairs(sharedLoot) do
+			if shouldShow(item) then
+				if not sharedShown then
+					tooltip:AddLine(SHARED_HEADER, NORMAL_FONT_COLOR:GetRGB())
+					sharedShown = true
+				end
+				item:AddToTooltip(tooltip)
+			end
 		end
 	end
 end
