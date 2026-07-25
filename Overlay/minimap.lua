@@ -94,10 +94,13 @@ function dataProvider:ReleaseAllPins()
     end
 end
 
-module:RegisterEvent("MINIMAP_UPDATE_ZOOM", function() dataProvider:RefreshAllData() end)
+-- these go through UpdateMinimapIcons rather than straight to RefreshAllData
+-- because it refreshes the cached minimap zoom, which MINIMAP_UPDATE_ZOOM in
+-- particular has just told us changed
+module:RegisterEvent("MINIMAP_UPDATE_ZOOM", function() module:UpdateMinimapIcons() end)
 module:RegisterEvent("CVAR_UPDATE", function(_, varname)
     if varname == "ROTATE_MINIMAP" then
-        dataProvider:RefreshAllData()
+        module:UpdateMinimapIcons()
     end
 end)
 f:SetScript("OnUpdate", function(self)
@@ -244,11 +247,14 @@ SilverDragonOverlayMinimapRoutePinMixin.Config = module.SilverDragonOverlayPinMi
 do
     local APIfallback = not (C_Minimap and C_Minimap.GetViewRadius)
     local indoors, zoom
+    local function refreshZoom()
+        zoom = Minimap:GetZoom()
+        indoors = GetCVar("minimapZoom")+0 == zoom and "outdoor" or "indoor"
+    end
     function module:UpdateMinimapIcons()
         -- on PlayerZoneChanged
         if APIfallback then
-            zoom = Minimap:GetZoom()
-            indoors = GetCVar("minimapZoom")+0 == zoom and "outdoor" or "indoor"
+            refreshZoom()
         end
         self.MiniMapDataProvider:RefreshAllData()
     end
@@ -273,6 +279,10 @@ do
     }
     function module:GetMinimapViewDiameter()
         if APIfallback then
+            if not indoors then
+                -- we've been reached without anything having primed the cache
+                refreshZoom()
+            end
             return minimap_size[indoors][zoom]
         end
         return C_Minimap.GetViewRadius() * 2
