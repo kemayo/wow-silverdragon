@@ -308,9 +308,11 @@ end
 function ns.Loot.Details.UpdateTooltip(tooltip, id, only, ...)
 	if not ns.Loot.GetLootTable(id, ...) then return end
 
-	local toy = (not only or only == "toy") and ns.Loot.HasToys(id, ...)
-	local mount = (not only or only == "mount") and ns.Loot.HasMounts(id, ...)
-	local pet = (not only or only == "pet") and ns.Loot.HasPets(id, ...)
+	-- ... is the (treasure, shared) tail that GetLootTable / the iterators take,
+	-- so it has to be pushed past these functions' own leading arguments
+	local toy = (not only or only == "toy") and ns.Loot.HasToys(id, nil, ...)
+	local mount = (not only or only == "mount") and ns.Loot.HasMounts(id, nil, nil, ...)
+	local pet = (not only or only == "pet") and ns.Loot.HasPets(id, nil, ...)
 	local regular = (not only or only == "regular") and ns.Loot.HasRegularLoot(id, ...)
 
 	if mount then
