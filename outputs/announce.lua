@@ -741,11 +741,12 @@ do
 			flashframe:SetScript("OnShow", function(self)
 				local background = module.db.profile.flash_texture
 				local color = module.db.profile.flash_color
-				if self.id and ns.mobdb[self.id] then
+				local data = self.id and (self.isloot and ns.vignetteTreasureLookup or ns.mobdb)[self.id]
+				if data then
 					if module.db.profile.flash_mount and module:HasInterestingMounts(self.id, self.isloot) then
 						background = module.db.profile.flash_texture_mount
 						color = module.db.profile.flash_color_mount
-					elseif ns.mobdb[self.id].boss and module.db.profile.flash_boss then
+					elseif data.boss and module.db.profile.flash_boss then
 						background = module.db.profile.flash_texture_boss
 						color = module.db.profile.flash_color_boss
 					end
