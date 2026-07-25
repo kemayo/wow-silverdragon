@@ -73,9 +73,12 @@ function module:ProcessQueue()
 	if module.PAUSED or InCombatLockdown() then return end
 	while #self.queue > 0 do
 		local data = table.remove(self.queue)
-		if data then
+		-- ShowFrame returns nothing for data it can't identify; inserting that
+		-- nil doesn't error, but it leaves a hole that desyncs # from ipairs
+		local popup = data and self:ShowFrame(data)
+		if popup then
 			Debug("Showing queued popup")
-			table.insert(self.stack, 1, self:ShowFrame(data))
+			table.insert(self.stack, 1, popup)
 			-- overflow off the end:
 			if #self.stack > self.db.profile.stacksize then
 				local stacked = table.remove(self.stack)
@@ -87,8 +90,9 @@ function module:ProcessQueue()
 	while #self.overflow > 0 and #self.stack < self.db.profile.stacksize do
 		-- overflow data was previously pushed off the end of the stack, and so should be put back in at the end
 		local data = table.remove(self.overflow)
-		if data then
-			table.insert(self.stack, self:ShowFrame(data))
+		local popup = data and self:ShowFrame(data)
+		if popup then
+			table.insert(self.stack, popup)
 		end
 	end
 	self:Reflow()
