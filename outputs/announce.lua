@@ -742,7 +742,7 @@ do
 				local background = module.db.profile.flash_texture
 				local color = module.db.profile.flash_color
 				if self.id and ns.mobdb[self.id] then
-					if module.db.profile.flash_mount and module:HasInterestingMounts(self.id, isloot) then
+					if module.db.profile.flash_mount and module:HasInterestingMounts(self.id, self.isloot) then
 						background = module.db.profile.flash_texture_mount
 						color = module.db.profile.flash_color_mount
 					elseif ns.mobdb[self.id].boss and module.db.profile.flash_boss then
@@ -759,6 +759,7 @@ do
 
 		Debug("Flashing")
 		flashframe.id = id
+		flashframe.isloot = isloot
 		flashframe:Hide()
 		flashframe:Show()
 	end
