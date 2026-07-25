@@ -182,13 +182,20 @@ end
 function module:SeenVignette(event, name, vignetteid, atlas)
 	local config = core:GetModule("Config", true)
 	if not config then return end
-	local vignetteconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.specific.args
-	if not vignetteconfig["vignette:"..vignetteid] then
-		vignetteconfig["vignette:"..vignetteid] = vignetteToggle(vignetteid, name)
+	-- Either of these can be missing, for vignettes the client has told us
+	-- about without giving us any details beyond the GUID. Nothing to add to
+	-- the ignore lists in that case, since there'd be no way to match on it.
+	if vignetteid then
+		local vignetteconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.specific.args
+		if not vignetteconfig["vignette:"..vignetteid] then
+			vignetteconfig["vignette:"..vignetteid] = vignetteToggle(vignetteid, name)
+		end
 	end
-	local typeconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.type.args
-	if not typeconfig[atlas:lower()] then
-		typeconfig[atlas:lower()] = vignetteTypeToggle(atlas:lower(), CreateAtlasMarkup(atlas, 20, 20) .. " " .. atlas)
+	if atlas then
+		local typeconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.type.args
+		if not typeconfig[atlas:lower()] then
+			typeconfig[atlas:lower()] = vignetteTypeToggle(atlas:lower(), CreateAtlasMarkup(atlas, 20, 20) .. " " .. atlas)
+		end
 	end
 end
 
@@ -199,7 +206,7 @@ local already_notified = {
 	-- [instanceid] = true
 }
 local already_notified_loot = {
-	-- [vignetteid] = time()
+	-- [instanceid] = time()
 }
 
 local MOB = 1
@@ -291,7 +298,9 @@ function module:WorkOutMobFromVignette(instanceid)
 		if not core:PlayerIsInteractive() then
 			return -- Debug("skipping notification", "on taxi")
 		end
-		if already_notified_loot[vignetteInfo.vignetteGUID] and time() < (already_notified_loot[vignetteInfo.vignetteGUID] + core.db.profile.delay) then
+		-- instanceid *is* the vignetteGUID, and unlike vignetteInfo.vignetteGUID
+		-- it's guaranteed to be present, so it's the safer key to dedupe on
+		if already_notified_loot[instanceid] and time() < (already_notified_loot[instanceid] + core.db.profile.delay) then
 			return -- Debug("skipping notification", "delay not exceeded")
 		end
 		local treasure = ns.vignetteTreasureLookup[vignetteInfo.vignetteID]
@@ -305,7 +314,10 @@ function module:WorkOutMobFromVignette(instanceid)
 				return
 			end
 		end
-		already_notified_loot[vignetteInfo.vignetteGUID] = time()
+		already_notified_loot[instanceid] = time()
+		-- deliberately the raw value, not the `or 0` local: downstream treats
+		-- this as the treasure's identity, and 0 is truthy, so a sentinel would
+		-- collide across every vignette we couldn't identify
 		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x or 0, y or 0, instanceid)
 		core.events:Fire("SeenLoot", vignetteInfo.name, vignetteInfo.vignetteID, current_zone, x or 0, y or 0, instanceid)
 		return true
@@ -380,6 +392,9 @@ function module:NotifyIfNeeded(id, current_zone, x, y, variant, instanceid)
 	already_notified[instanceid] = true
 	local vignetteInfo = C_VignetteInfo.GetVignetteInfo(instanceid)
 	local ret = core:NotifyForMob(id, current_zone, x, y, false, variant or "vignette", false, nil, false, nil, instanceid)
-	core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x, y, instanceid, id)
+	if vignetteInfo then
+		-- here the mob id is the identity, so a missing vignetteID is fine to pass along
+		core.events:Fire("SeenVignette", vignetteInfo.name, vignetteInfo.vignetteID, vignetteInfo.atlasName, current_zone, x, y, instanceid, id)
+	end
 	return ret
 end
