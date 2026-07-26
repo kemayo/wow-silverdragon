@@ -363,6 +363,49 @@ function ns.conditions.Vignette:Label()
 	return Condition.Label(self)
 end
 
+-- Which map the poi belongs to is part of the condition rather than something
+-- passed in at check time, because the map being drawn isn't necessarily the
+-- one the point was registered against.
+ns.conditions.AreaPoi = Condition:extends{classname = "AreaPoi", type = 'areapoi', KEYFIELDS = {"uiMapID", "id"}}
+function ns.conditions.AreaPoi:init(uiMapID, id)
+	self.uiMapID = uiMapID
+	self.id = id
+end
+do
+	-- A map answers with all of its pois at once, so ask it at most once a
+	-- second however many conditions are watching it.
+	local byMap, expires = {}, {}
+	local function poisIn(uiMapID)
+		local now = time()
+		if not byMap[uiMapID] or now > expires[uiMapID] then
+			byMap[uiMapID] = wipe(byMap[uiMapID] or {})
+			for _, poi in ipairs(C_AreaPoiInfo.GetAreaPOIForMap(uiMapID) or {}) do
+				byMap[uiMapID][poi] = true
+			end
+			expires[uiMapID] = now + 1
+		end
+		return byMap[uiMapID]
+	end
+	function ns.conditions.AreaPoi:Matched()
+		return poisIn(self.uiMapID)[self.id] or false
+	end
+end
+function ns.conditions.AreaPoi:Label()
+	local info = C_AreaPoiInfo.GetAreaPOIInfo(self.uiMapID, self.id)
+	if info and info.name then
+		return info.name
+	end
+	return Condition.Label(self)
+end
+
+-- Same reasoning as AreaPoi for taking the map explicitly.
+ns.conditions.MapArt = Condition:extends{classname = "MapArt", type = 'mapart', KEYFIELDS = {"uiMapID", "id"}}
+function ns.conditions.MapArt:init(uiMapID, id)
+	self.uiMapID = uiMapID
+	self.id = id
+end
+function ns.conditions.MapArt:Matched() return C_Map.GetMapArtID(self.uiMapID) == self.id end
+
 ns.conditions.Level = Condition:extends{classname = "Level", type = 'level', CACHEABLE = false}
 function ns.conditions.Level:Label() return UNIT_LEVEL_TEMPLATE:format(self.id) end
 function ns.conditions.Level:Matched() return UnitLevel('player') >= self.id end
@@ -376,6 +419,18 @@ function ns.conditions.Class:Label()
 	return className
 end
 function ns.conditions.Class:Matched() return select(2, UnitClass("player")) == self.id end
+
+-- Distinct from Faction above, which is a reputation standing
+ns.conditions.PlayerFaction = Condition:extends{classname = "PlayerFaction", CACHEABLE = false}
+function ns.conditions.PlayerFaction:Label() return _G["FACTION_" .. strupper(self.id)] or self.id end
+function ns.conditions.PlayerFaction:Matched() return self.id == ns.playerFaction end
+
+ns.conditions.Outdoors = Condition:extends{classname = "Outdoors"}
+function ns.conditions.Outdoors:Label() return "Outdoors" end
+function ns.conditions.Outdoors:Matched() return not IsIndoors() end
+
+ns.conditions.Indoors = Negated(ns.conditions.Outdoors)
+function ns.conditions.Indoors:Label() return "Indoors" end
 
 ns.conditions.CalendarEvent = Condition:extends{classname = "CalendarEvent", type = 'calendarevent'}
 function ns.conditions.CalendarEvent:Label()

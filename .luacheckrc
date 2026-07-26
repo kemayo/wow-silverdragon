@@ -172,6 +172,7 @@ read_globals = {
     "IsInGuild",
     "IsInInstance",
     "IsInRaid",
+    "IsIndoors",
     "IsModifiedClick",
     "IsModifierKeyDown",
     "IsReagentBankUnlocked",
