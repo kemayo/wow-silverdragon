@@ -56,7 +56,6 @@ function module:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
 
 	self.data = {}
-	self.rares = {}
 	self.removed = {}
 	self.dataProvider = self:CreateDataProvider()
 
@@ -118,7 +117,6 @@ function module:OnEnable()
 			mob = true,
 			type = "mob",
 		}
-		table.insert(self.rares, data)
 		self:AddData(data)
 	end)
 	core.RegisterCallback("History", "SeenLoot", function(callback, name, id, zone, x, y, guid)
@@ -191,8 +189,18 @@ function module:OnDisable()
 	self.window:Hide()
 end
 
+local rares = {}
 function module:GetRares()
-	return self.rares
+	-- Derived rather than accumulated alongside self.data, so that clearing the
+	-- window or dismissing a line also takes it out of the broker's
+	-- "seen this session" list
+	wipe(rares)
+	for _, data in ipairs(self.data) do
+		if data.type == "mob" and not self.removed[data] then
+			table.insert(rares, data)
+		end
+	end
+	return rares
 end
 
 function module:CreateDataProvider()
