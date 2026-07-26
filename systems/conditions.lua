@@ -46,6 +46,32 @@ ns.conditions._Condition = Condition
 ns.conditions._RankedCondition = RankedCondition
 ns.conditions._Negated = Negated
 
+-- Groups don't otherwise nest: doTest calls :Matched() on each member, so a
+-- {any=true, ...} can't itself be a member of another group. These wrap one up
+-- as a condition in its own right, which can.
+ns.conditions.All = Condition:extends{classname = "All", JOINER = ", "}
+function ns.conditions.All:init(...)
+	self.conditions = {...}
+end
+function ns.conditions.All:Matched()
+	return ns.conditions.check(self.conditions)
+end
+function ns.conditions.All:Label()
+	-- deliberately not ns.conditions.summarize: it accumulates into a table it
+	-- shares between calls, so nesting would clobber the outer one
+	local labels = {}
+	for i, condition in ipairs(self.conditions) do
+		labels[i] = condition:Label()
+	end
+	return ("(%s)"):format(string.join(self.JOINER, unpack(labels)))
+end
+
+ns.conditions.Any = ns.conditions.All:extends{classname = "Any", JOINER = " / "}
+function ns.conditions.Any:init(...)
+	self:super("init", ...)
+	self.conditions.any = true
+end
+
 ns.conditions.Achievement = Condition:extends{classname = "Achievement", type="achievement"}
 function ns.conditions.Achievement:init(id, criteria, currentCharacter)
 	self:super("init", id)
