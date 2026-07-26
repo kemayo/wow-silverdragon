@@ -89,13 +89,16 @@ function module:IgnoreChanged(callback, id, ignored)
 	end
 end
 function module:CustomChanged(callback, id, watched, uiMapID)
+	-- Deliberately left in place when unwatched: the toggle goes unchecked, and
+	-- keeping it around is the easy way to re-add a mob you removed by mistake.
 	if not watched then return end
 	local config = core:GetModule("Config", true)
 	if config and config.options.plugins.mobs then
-		if not config.options.plugins.mobs.mobs.args.custom.args["map"..uiMapID] then
+		local args = config.options.plugins.mobs.mobs.args.custom.args.zones.args
+		if not args["map"..uiMapID] then
 			self:BuildCustomList(config.options)
 		else
-			config.options.plugins.mobs.mobs.args.custom.args["map"..uiMapID].args["mob"..id] = toggle_mob(id)
+			args["map"..uiMapID].args["mob"..id] = toggle_mob(id)
 		end
 	end
 end
