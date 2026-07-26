@@ -19,8 +19,10 @@ condition:Label() -> string
 ]]
 
 -- KEYFIELDS names whatever makes two of a condition different from each other;
--- subclasses that carry more than an id redeclare it.
-local Condition = ns.Class({classname = "Condition", CACHEABLE = true, KEYFIELDS = {"id"}})
+-- subclasses that carry more than an id redeclare it. SILENT is for the ones
+-- with nothing to tell anybody -- you only ever have one faction, map art is an
+-- internal id -- which summarize leaves out of its explanations.
+local Condition = ns.Class({classname = "Condition", CACHEABLE = true, KEYFIELDS = {"id"}, SILENT = false})
 function Condition:init(id) self.id = id end
 function Condition:Label() return ('{%s:%s}'):format(self.type, self.id) end
 function Condition:Matched() return false end
@@ -126,6 +128,13 @@ ns.conditions._Negated = Negated
 ns.conditions.All = Condition:extends{classname = "All", JOINER = ", ", CACHEABLE = false}
 function ns.conditions.All:init(...)
 	self.conditions = {...}
+	self.SILENT = true
+	for _, condition in ipairs(self.conditions) do
+		if not condition.SILENT then
+			self.SILENT = false
+			break
+		end
+	end
 end
 function ns.conditions.All:Matched()
 	return ns.conditions.check(self.conditions)
@@ -399,7 +408,7 @@ function ns.conditions.AreaPoi:Label()
 end
 
 -- Same reasoning as AreaPoi for taking the map explicitly.
-ns.conditions.MapArt = Condition:extends{classname = "MapArt", type = 'mapart', KEYFIELDS = {"uiMapID", "id"}}
+ns.conditions.MapArt = Condition:extends{classname = "MapArt", type = 'mapart', KEYFIELDS = {"uiMapID", "id"}, SILENT = true}
 function ns.conditions.MapArt:init(uiMapID, id)
 	self.uiMapID = uiMapID
 	self.id = id
@@ -421,7 +430,7 @@ end
 function ns.conditions.Class:Matched() return select(2, UnitClass("player")) == self.id end
 
 -- Distinct from Faction above, which is a reputation standing
-ns.conditions.PlayerFaction = Condition:extends{classname = "PlayerFaction", CACHEABLE = false}
+ns.conditions.PlayerFaction = Condition:extends{classname = "PlayerFaction", CACHEABLE = false, SILENT = true}
 function ns.conditions.PlayerFaction:Label() return _G["FACTION_" .. strupper(self.id)] or self.id end
 function ns.conditions.PlayerFaction:Matched() return self.id == ns.playerFaction end
 
@@ -549,16 +558,22 @@ do
 	end
 
 	local t = {}
+	-- Returns nil when there's nothing worth saying, so callers can drop the
+	-- line rather than print an empty "Requires ".
 	ns.conditions.summarize = function(conditions, short)
 		-- ERR_USE_LOCKED_WITH_ITEM_S
 		local fs = short and "%s" or ERR_USE_LOCKED_WITH_ITEM_S
 		table.wipe(t)
 		if ns.xtype(conditions) == "table" then
 			for _, condition in ipairs(conditions) do
-				table.insert(t, condition:Label())
+				if not condition.SILENT then
+					table.insert(t, condition:Label())
+				end
 			end
+			if #t == 0 then return end
 			return fs:format(string.join(', ', unpack(t)))
 		end
+		if conditions.SILENT then return end
 		return fs:format(conditions:Label())
 	end
 end

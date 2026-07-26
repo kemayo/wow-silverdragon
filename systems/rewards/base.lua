@@ -86,8 +86,9 @@ function Reward:TooltipName()
 	if not name then
 		name = SEARCH_LOADING_TEXT
 	end
-	if self.requires then
-		name = TEXT_MODE_A_STRING_VALUE_TYPE:format(name, ns.conditions.summarize(self.requires, true))
+	local requires = self.requires and ns.conditions.summarize(self.requires, true)
+	if requires then
+		name = TEXT_MODE_A_STRING_VALUE_TYPE:format(name, requires)
 	end
 	if self.note then
 		name = TEXT_MODE_A_STRING_VALUE_TYPE:format(name, self.note)
