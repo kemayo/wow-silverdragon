@@ -786,6 +786,9 @@ local mobs_to_achievement = {
 }
 ns.mobs_to_achievement = mobs_to_achievement
 local achievements_loaded = false
+local achievements_scanned = {
+	-- [achievementid] = true, once we've actually read criteria out of it
+}
 
 function ns:RegisterMobAchievement(mobid, achievementid)
 	if type(achievementid) ~= "number" or type(mobid) ~= "number" then return end
@@ -895,39 +898,54 @@ function ns:LoadAllAchievementMobs()
 	end
 	local known = {}
 	for achievement in pairs(achievements) do
-		local missing = 0
-		for k,v in pairs(achievements[achievement]) do
-			known[v] = k
-		end
-		local num_criteria = GetAchievementNumCriteria(achievement) or 0
-		for i = 1, num_criteria do
-			local description, ctype, completed, _, _, _, _, id, _, criteriaid = GetAchievementCriteriaInfo(achievement, i)
-			if not known[criteriaid] then
-				if ctype == 0 and id and id ~= 0 then
-					-- "kill a mob"
-					achievements[achievement][id] = criteriaid
-				-- elseif ctype == 27 then
-					-- "complete a quest"
-				else
-					if missing == 0 then
-						local _, name = GetAchievementInfo(achievement)
-						Debug('Missing mobs from achievement')
-						DebugF('[%s] = { -- %s', achievement, name)
+		-- GetAchievementNumCriteria comes back empty until the client actually
+		-- has the achievement data, so track the ones we managed to read and
+		-- leave anything that wasn't ready yet for a later pass
+		local num_criteria = achievements_scanned[achievement] and 0 or (GetAchievementNumCriteria(achievement) or 0)
+		if num_criteria > 0 then
+			achievements_scanned[achievement] = true
+			local missing = 0
+			for k,v in pairs(achievements[achievement]) do
+				known[v] = k
+			end
+			for i = 1, num_criteria do
+				local description, ctype, completed, _, _, _, _, id, _, criteriaid = GetAchievementCriteriaInfo(achievement, i)
+				if not known[criteriaid] then
+					if ctype == 0 and id and id ~= 0 then
+						-- "kill a mob"
+						achievements[achievement][id] = criteriaid
+					-- elseif ctype == 27 then
+						-- "complete a quest"
+					else
+						if missing == 0 then
+							local _, name = GetAchievementInfo(achievement)
+							Debug('Missing mobs from achievement')
+							DebugF('[%s] = { -- %s', achievement, name)
+						end
+						DebugF('	[] = %d, -- %s', criteriaid, description)
+						missing = missing + 1
 					end
-					DebugF('	[] = %d, -- %s', criteriaid, description)
-					missing = missing + 1
 				end
 			end
-			achievements_loaded = true
+			for mobid, criteriaid in pairs(achievements[achievement]) do
+				ns:RegisterMobAchievement(mobid, achievement)
+			end
+			if missing > 0 then
+				DebugF('} -- Got %d of %d', num_criteria - missing, num_criteria)
+			end
+			wipe(known)
 		end
-		for mobid, criteriaid in pairs(achievements[achievement]) do
-			ns:RegisterMobAchievement(mobid, achievement)
-		end
-		if missing > 0 then
-			DebugF('} -- Got %d of %d', num_criteria - missing, num_criteria)
-		end
-		wipe(known)
 	end
+	-- a full pass is done, so stop scanning on every lookup; if the client
+	-- hadn't handed over everything yet, RECEIVED_ACHIEVEMENT_LIST sends us
+	-- back around, and the achievements_scanned check keeps that pass cheap
+	achievements_loaded = true
+end
+
+if C_EventUtils.IsEventValid("RECEIVED_ACHIEVEMENT_LIST") then
+	core:RegisterEvent("RECEIVED_ACHIEVEMENT_LIST", function()
+		achievements_loaded = false
+	end)
 end
 
 function ns:UpdateTooltipWithCompletion(tooltip, id)
