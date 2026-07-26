@@ -71,7 +71,7 @@ function Reward:AddToTooltip(tooltip)
 	local r, g, b = self:TooltipNameColor():GetRGB()
 	local lr, lg, lb = self:TooltipLabelColor():GetRGB()
 	tooltip:AddDoubleLine(
-		self:TooltipLabel(),
+		self:TooltipLabel() or " ",
 		self:TooltipName(),
 		lr, lg, lb,
 		r, g, b

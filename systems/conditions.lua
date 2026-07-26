@@ -188,6 +188,8 @@ function ns.conditions.MajorFaction:Matched()
 	end
 end
 
+ns.conditions.NotMajorFaction = Negated(ns.conditions.MajorFaction)
+
 ns.conditions.GarrisonTalent = RankedCondition:extends{classname = "GarrisonTalent", type = 'garrisontalent'}
 function ns.conditions.GarrisonTalent:Matched()
 	local info = C_Garrison.GetTalentInfo(self.id)

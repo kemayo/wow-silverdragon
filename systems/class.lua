@@ -266,7 +266,6 @@ local function finalClass(members)
 	return class
 end
 
-
 -- Stands for "e*x*tended type". Like the built-in `type`, returns a string for
 -- the type of the given object. If the value `which` is a known object or a
 -- class, returns 'object' or 'class' respectively, otherwise defers to `type`.
