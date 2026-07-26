@@ -42,7 +42,7 @@ read_globals = {
     "sin", "cos", "tan",
     "hooksecurefunc",
     "table", "tinsert", "tInsertUnique", "tContains", "tAppendAll", "tDeleteItem", "wipe", "MergeTable", "tFilter",
-    "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower",
+    "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower", "strupper",
     "time", "date", "issecretvalue",
 
     -- our own globals

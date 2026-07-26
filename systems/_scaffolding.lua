@@ -38,7 +38,13 @@ ns.db = setmetatable({}, {__index = function(self, key)
 	return value
 end})
 
-ns.render_string = function(...) return core:RenderString(...) end
+-- Fallback names for the {covenant:} token when C_Covenants has no data
+ns.covenants = ns.covenants or {
+	[Enum.CovenantType.Kyrian] = "Kyrian",
+	[Enum.CovenantType.Necrolord] = "Necrolords",
+	[Enum.CovenantType.NightFae] = "NightFae",
+	[Enum.CovenantType.Venthyr] = "Venthyr",
+}
 
 ns.run_caches = {}
 ns.ClearRunCaches = function()
