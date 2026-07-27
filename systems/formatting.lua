@@ -8,14 +8,16 @@ local issecretvalue = _G.issecretvalue or function() return false end
 
 -- Looking a creature's name up from its id. The guards matter: before the data
 -- has loaded this answers UNKNOWNOBJECT, and caching that would stick for the
--- rest of the session with no retry.
+-- rest of the session with no retry. The secret check has to come first --
+-- comparing a secret string against a normal one is itself the error, so a
+-- guard sitting after that comparison never gets the chance to run.
 local name_from_creature_id
 if _G.C_TooltipInfo then
 	name_from_creature_id = function(id)
 		local info = C_TooltipInfo.GetHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
 		if info and info.lines and info.lines[1] and info.lines[1].type == Enum.TooltipDataLineType.UnitName then
 			local name = info.lines[1].leftText
-			if name and name ~= UNKNOWNOBJECT and not issecretvalue(name) then
+			if name and not issecretvalue(name) and name ~= UNKNOWNOBJECT then
 				return name
 			end
 		end
@@ -35,7 +37,7 @@ else
 		cache_tooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(id))
 		if cache_tooltip:IsShown() then
 			local name = leftText:GetText()
-			if name and name ~= UNKNOWNOBJECT and not issecretvalue(name) then
+			if name and not issecretvalue(name) and name ~= UNKNOWNOBJECT then
 				return name
 			end
 		end
