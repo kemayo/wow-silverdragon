@@ -82,7 +82,6 @@ function module:OnInitialize()
 			vibrate_loot = true,
 			vibrate_type_loot = "High",
 			vibrate_intensity_loot = 0.8,
-			instances = false,
 			dead = true,
 			filter = "notable", -- none | notable | everything
 			filter_loot = "everything", -- none | notable | everything
@@ -255,7 +254,6 @@ function module:OnInitialize()
 						order = 1, width = "double",
 					},
 					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not", 30),
-					instances = toggle("Instances", "Show announcements while in an instance", 50),
 				},
 			},
 			notable = {
@@ -539,12 +537,23 @@ function module:MigrateFilterOptions()
 	-- used to mean "a mount I already know still counts", which has no equivalent
 	-- and nothing to migrate to, so it just goes.
 	p.known_mounts = nil
+
+	-- There were two switches for instances, this one and core's "Scan in
+	-- instances", both off to start with and in different panels -- so turning
+	-- that one on by itself changed nothing you could hear. Core's covers both
+	-- now. It defaulted off, so a stored value here only ever means it was on.
+	if p.instances ~= nil then
+		if p.instances then
+			core.db.profile.instances = true
+		end
+		p.instances = nil
+	end
 end
 
 function module:Seen(callback, id, zone, x, y, is_dead, source, ...)
 	Debug("Announce:Seen", id, zone, x, y, is_dead, source, ...)
 
-	if not self.db.profile.instances and IsInInstance() then
+	if not core.db.profile.instances and IsInInstance() then
 		return
 	end
 
@@ -558,7 +567,7 @@ end
 function module:SeenLoot(callback, name, id, zone, x, y, ...)
 	Debug("Announce:SeenLoot", name, id, zone, x, y, ...)
 
-	if not self.db.profile.instances and IsInInstance() then
+	if not core.db.profile.instances and IsInInstance() then
 		return
 	end
 
