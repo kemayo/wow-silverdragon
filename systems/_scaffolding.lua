@@ -10,8 +10,14 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 -- have to be answered here.
 ns.db = setmetatable({}, {__index = function(self, key)
 	if key == "show_npcs_emphasizeNotable" then
-		-- emphasising notable rewards in tooltips isn't something we do yet
-		return false
+		-- The plugins have an option for this because it's tied to their map pins;
+		-- here it only colours reward labels in tooltips and the loot window, and
+		-- now that you can say what counts as notable there's no reason not to
+		-- point it out. Deliberately not tied to the announcement filter: the
+		-- notability options apply whatever that's set to, so having the tooltips
+		-- go quiet because you'd chosen to hear about every rare would be a very
+		-- odd thing to have to work out.
+		return true
 	end
 	return core.db.profile[key]
 end})
