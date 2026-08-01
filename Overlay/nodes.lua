@@ -90,6 +90,17 @@ do
             return false
         end
         local quest, achievement, achievement_completed_by_alt = ns:CompletionStatus(id)
+        if achievement_completed_by_alt and core.db.profile.alts_achievements_count then
+            -- you've said an alt's credit counts, so treat it as earned here too
+            achievement = true
+        end
+        if not module.db.profile.achieved and ns.MobIsNotable(id) == false then
+            -- Having nothing left on it you want is as good as having its
+            -- achievement: without this a mob whose loot you've collected stays
+            -- at full strength on the map forever. Only asked when the toggle is
+            -- off, since MobIsNotable drops the reward caches to answer.
+            return false
+        end
         if achievement ~= nil then
             if quest ~= nil then
                 -- we have a quest *and* an achievement; we're going to treat "show achieved" as "show achieved if I can still loot them"

@@ -25,7 +25,7 @@ function module:RegisterConfig()
                     achieved = {
                         type = "toggle",
                         name = "Show achieved",
-                        desc = "Whether to show icons for mobs you have already killed (tested by whether you've got their achievement progress)",
+                        desc = "Whether to show icons for mobs you're done with: ones you've got the achievement progress for, or that have nothing left on them you want (which is set up under Announcements, in \"What's notable?\")",
                         order = 10,
                     },
                     questcomplete = {
