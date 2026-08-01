@@ -12,31 +12,29 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Install luarocks
-        run: sudo apt-get install luarocks
-      - name: Install luacheck
-        run: luarocks install --local luacheck
+      - uses: actions/checkout@v7
       - name: Run luacheck
-        run: ~/.luarocks/bin/luacheck . --no-color -q
+        uses: lunarmodules/luacheck@v1
+        with:
+          args: . --no-color -q
   build:
     needs: lint
     runs-on: ubuntu-latest
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # reads history for commit changelog
 
-      - uses: kemayo/actions-recent-changelog@v1
+      - uses: kemayo/actions-recent-changelog@v2
         if: startsWith(github.ref, 'refs/tags')
         with:
           input: CHANGELOG.md
           output: RECENT_CHANGES.md
 
       - name: Create Mainline Package
-        uses: BigWigsMods/packager@master
+        uses: BigWigsMods/packager@v2
         with:
           args: -S
         env:
