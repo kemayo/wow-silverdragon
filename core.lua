@@ -402,19 +402,32 @@ function addon:OnInitialize()
 		},
 	}, true)
 	globaldb = self.db.global
+	self.db.RegisterCallback(self, "OnProfileChanged", "MigrateProfileOptions")
+	self.db.RegisterCallback(self, "OnProfileCopied", "MigrateProfileOptions")
+	self.db.RegisterCallback(self, "OnProfileReset", "MigrateProfileOptions")
 
 	if self.db.locale and self.db.locale.mob_name then
 		self.db.locale.mob_name = nil
 		self.db.locale.quest_name = nil
 	end
 
-	if self.db.profile.lootappearances ~= nil then
-		self.db.profile.transmog_specific = not self.db.profile.lootappearances
-	end
+	self:MigrateProfileOptions()
 
 	if globaldb.always then
 		MergeTable(globaldb.custom.any, globaldb.always)
 		globaldb.always = nil
+	end
+end
+
+-- Profile-scoped option migrations, so they also run when a profile is switched
+-- to, copied over or reset, long after OnInitialize. (The locale and global ones
+-- above don't need that: neither scope follows the profile.)
+function addon:MigrateProfileOptions()
+	if self.db.profile.lootappearances ~= nil then
+		self.db.profile.transmog_specific = not self.db.profile.lootappearances
+		-- has to be cleared, or this re-derives transmog_specific on every login
+		-- and the option can never be changed
+		self.db.profile.lootappearances = nil
 	end
 end
 
