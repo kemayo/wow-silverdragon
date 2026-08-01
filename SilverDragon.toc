@@ -45,6 +45,7 @@ systems\conditions.lua
 systems\rewards\base.lua
 systems\rewards\item.lua
 systems\rewards\upgradeloot.lua
+systems\notable.lua
 systems\_glue.lua
 
 shards.lua
