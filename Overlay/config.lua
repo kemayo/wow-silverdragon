@@ -78,10 +78,10 @@ function module:RegisterConfig()
                     icon_color = {
                         type = "select",
                         name = "Color",
-                        desc = "How to color the icons",
+                        desc = "How to color the icons.\n\n\"What's left on it\" asks what the announcement filter asks, and has four answers: a mount you'd want, something else you'd want, nothing you want, or nothing left at all.",
                         values = {
                             ["distinct"] = "Unique per-mob",
-                            ["completion"] = "Completion status",
+                            ["completion"] = "What's left on it",
                         },
                         order = 50,
                     },
