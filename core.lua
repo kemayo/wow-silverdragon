@@ -386,6 +386,19 @@ function addon:OnInitialize()
 			taxi = true,
 			charloot = false,
 			transmog_specific = false,
+			-- What counts as "notable"? These are read by the shared rewards
+			-- system via ns.db, so the key names have to match the ones my
+			-- HandyNotes plugins use.
+			achievement_notable = true,
+			mount_notable = true,
+			toy_notable = true,
+			pet_notable = true,
+			-- unlike the plugins, this starts off: it's migrated from the old
+			-- already_transmog, which was off
+			transmog_notable = false,
+			quest_notable = true,
+			decor_notable = true,
+			alts_achievements_count = false,
 		},
 	}, true)
 	globaldb = self.db.global

@@ -5,37 +5,15 @@ local myname, ns = ...
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 
--- Keys the rewards system expects from my HandyNotes plugins, but which
--- SilverDragon has no config for. Absent is *not* the same as false here:
--- Reward:Obtained() returns nil rather than false for a quest-gated reward you
--- haven't earned yet, and nil reads downstream as "unknowable", which hides it
--- from the only-knowable tooltips and loot windows entirely.
-local fallbacks = {
-	-- SilverDragon treats quest completion as knowledge about loot everywhere
-	-- else (Loot.Status.Quest, CompletionStatus), so it should do so here too
-	quest_notable = true,
-	-- these only reach Reward:Notable(), which only reaches the tooltip label
-	-- colour, which is gated on show_npcs_emphasizeNotable below -- so they do
-	-- nothing at all today, and are here so they won't surprise anyone if that
-	-- ever gets turned on
-	toy_notable = true,
-	mount_notable = true,
-	pet_notable = true,
-	decor_notable = true,
-	-- ...and emphasising notable rewards isn't something we do
-	show_npcs_emphasizeNotable = false,
-}
-
+-- The notability keys live in core.db.profile under the same names the plugins
+-- use, so they need no translation. Only keys SilverDragon has no equivalent of
+-- have to be answered here.
 ns.db = setmetatable({}, {__index = function(self, key)
-    if key == "transmog_notable" then
-        local announce = core:GetModule("Announce", true)
-        return announce and announce.db.profile.already_transmog
-    end
-	local value = core.db.profile[key]
-	if value == nil then
-		return fallbacks[key]
+	if key == "show_npcs_emphasizeNotable" then
+		-- emphasising notable rewards in tooltips isn't something we do yet
+		return false
 	end
-	return value
+	return core.db.profile[key]
 end})
 
 -- Fallback names for the {covenant:} token when C_Covenants has no data

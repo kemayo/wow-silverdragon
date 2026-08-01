@@ -84,10 +84,13 @@ function module:OnInitialize()
 			vibrate_intensity_loot = 0.8,
 			instances = false,
 			dead = true,
-			already = false,
-			already_drop = true,
-			already_transmog = false,
-			already_alt = true,
+			-- How much to filter. "lootable" is the pre-notability logic, kept
+			-- so upgrading doesn't change what anyone hears.
+			filter = "lootable", -- everything | lootable | notable
+			filter_loot = "everything", -- everything | notable
+			-- the already* keys this replaced are deliberately absent: they only
+			-- exist now as migration input, and giving them defaults would make
+			-- an un-migrated profile indistinguishable from a fresh one
 			sink_opts = {sink20OutputSink="UIErrorsFrame"},
 			channel = "Master",
 			unmute = false,
@@ -117,6 +120,32 @@ function module:OnInitialize()
 		then
 			self.db.profile.sink_opts.sink20OutputSink = "UIErrorsFrame"
 		end
+	end
+
+	-- Move the old already* booleans onto the filter / notability options. Any one
+	-- of them being stored means this profile predates the filter -- we can't just
+	-- look at `already`, because AceDB doesn't store a value matching its default,
+	-- so someone who only changed already_transmog has no stored `already` at all.
+	-- Hence `== false` below for the two that defaulted to true. Clearing all four
+	-- is what stops this running twice, as none of them have defaults any more.
+	local p = self.db.profile
+	if p.already ~= nil or p.already_drop ~= nil or p.already_transmog ~= nil or p.already_alt ~= nil then
+		if p.already then
+			-- an explicit "show me ones I've finished" wins: the notable filter
+			-- hides exactly those, so honouring already_drop here instead would
+			-- contradict it, and quietly announce less rather than more
+			p.filter = "everything"
+		elseif p.already_drop == false then
+			-- wanting loot you own to silence a rare *is* the notable filter
+			p.filter = "notable"
+		else
+			p.filter = "lootable"
+		end
+		core.db.profile.transmog_notable = p.already_transmog or false
+		-- already_alt was "tell me anyway", the inverse of counting an alt's as done
+		core.db.profile.alts_achievements_count = p.already_alt == false
+
+		p.already, p.already_drop, p.already_transmog, p.already_alt = nil, nil, nil, nil
 	end
 
 	core.RegisterCallback(self, "Seen")
@@ -219,20 +248,64 @@ function module:OnInitialize()
 			}
 		end
 
+		local filter_values = {
+			everything = "All of them",
+			lootable = "Ones I might still want",
+			notable = "Notable ones",
+		}
+		local filter_sorting = {"everything", "lootable", "notable"}
+
 		local options = {
 			general = {
 				type = "group", name = "Announcements", inline = true,
 				order = 10,
 				get = get, set = set,
 				args = {
-					already = toggle("Already found", "Announce when we see rares we've already killed / achieved (if known)", 0),
-					already_drop = toggle("Got the loot", "Still announce when we see rares which drop a mount / toy / pet you already have", 10),
-					already_transmog = toggle("...include transmog as loot", "Count transmog appearances as knowable loot", 11),
-					already_alt = toggle("Completed by an alt", "Announce when we see rares for an achievement that the current character doesn't have, but an alt has completed already", 20),
+					filter = {
+						type = "select", name = "Which rares?",
+						desc = "\"Ones I might still want\" is how this has always worked: hide a rare once its quest is complete, or once its achievement is done and there's no loot left on it you want.\n\n\"Notable ones\" asks the same question my HandyNotes plugins do, which you can adjust below. It's stricter about loot, and it ignores loot that can't drop for your specialization.\n\nEither way, rares we know nothing about still get announced.",
+						values = filter_values, sorting = filter_sorting,
+						order = 0, width = "double",
+					},
+					filter_loot = {
+						type = "select", name = "Which treasures?",
+						desc = "Treasures have never been filtered, so this starts at \"All of them\".\n\n\"Notable ones\" goes on what's inside: a chest whose contents you've already collected stops being announced. It won't hide one just because we think you've looted it, since the game removes a looted treasure's marker by itself.",
+						values = {everything = filter_values.everything, notable = filter_values.notable},
+						sorting = {"everything", "notable"},
+						disabled = function() return not self.db.profile.loot end,
+						order = 1, width = "double",
+					},
 					known_mounts = toggle("Known mounts are boring", "Treat mount-dropping rares whose mount you already know as if they're regular rares (unless the mount is BoE)", 25),
 					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not", 30),
 					instances = toggle("Instances", "Show announcements while in an instance", 50),
 					loot = toggle("Treasures", "Show announcements when treasure appears on the minimap", 60),
+				},
+			},
+			notable = {
+				type = "group", name = "What's notable?", inline = true,
+				desc = "Define exactly what counts as being \"notable\"",
+				order = 12,
+				-- these live on the core profile, because the shared rewards
+				-- system reads them and other parts of SilverDragon can use them
+				get = function(info) return core.db.profile[info[#info]] end,
+				set = function(info, v) core.db.profile[info[#info]] = v end,
+				disabled = function()
+					return self.db.profile.filter ~= "notable" and self.db.profile.filter_loot ~= "notable"
+				end,
+				args = {
+					-- these globals don't all exist in the classic clients, hence
+					-- the fallbacks
+					achievement_notable = toggle(_G.TRANSMOG_SOURCE_5 or ACHIEVEMENTS or "Achievement", "Count unlearned achievement-progress as notable", 10),
+					mount_notable = toggle(MOUNT or "Mount", "Count unlearned mounts as notable loot", 20),
+					toy_notable = toggle(TOY or "Toy", "Count unlearned toys as notable loot", 30),
+					pet_notable = toggle(TOOLTIP_BATTLE_PET or "Battle Pet", "Count uncaught pets as notable loot", 40),
+					transmog_notable = toggle("Transmog", "Count unlearned transmogrification appearances as notable loot", 50),
+					-- `or nil` so that on a client which has housing this doesn't
+					-- pass disabled=false, which would override the group's own
+					-- disabled and leave this one toggle clickable on its own
+					decor_notable = toggle(_G.BINDING_TAG_DECOR or "Decor", "Count unfound decor as notable loot", 60, nil, not _G.BINDING_TAG_DECOR or nil),
+					quest_notable = toggle("Quest-attached", "Count items with attached uncompleted quests as notable loot (this includes a lot of \"learnable\" items, weekly reputation drops, etc)", 70),
+					alts_achievements_count = toggle("An alt counts", "Treat an achievement one of your other characters has completed as done, rather than as something still to earn", 80),
 				},
 			},
 			message = {
@@ -476,7 +549,58 @@ function module:SeenLoot(callback, name, id, zone, x, y, ...)
 		return
 	end
 
+	-- as in ShouldAnnounce, only a definite "nothing here is wanted" silences it
+	if self.db.profile.filter_loot == "notable" and ns.MobIsNotable(id, true) == false then
+		Debug("Announce:SeenLoot", false, "not notable")
+		return
+	end
+
 	core.events:Fire("AnnounceLoot", name, id, zone, x, y, ...)
+end
+
+-- The "lootable" filter: how this worked before there was a notability system.
+-- Kept in the same order so that upgrading doesn't change what anyone hears.
+--
+-- The old already_drop check has gone: turning it off meant "loot I own should
+-- silence a rare", which is precisely the notable filter, so those profiles
+-- migrate to that instead. The two knobs it did keep are the shared notability
+-- ones, so they stay meaningful in both modes rather than freezing at whatever
+-- they were when the filter arrived.
+local function shouldAnnounceLootable(self, id, source)
+	-- hide already-completed mobs
+	local quest, achievement, by_alt = ns:CompletionStatus(id)
+	if by_alt and core.db.profile.alts_achievements_count then
+		-- an alt has completed the achievement, and we don't want to know about that
+		Debug("ShouldAnnounce", false, "alt got achievement")
+		return false
+	end
+	if source == "vignette" or source == "point-of-interest" then
+		-- Blizzard generally won't show a vignette if there's nothing left to
+		-- get from the mob, so trust it over our own completion data
+		Debug("ShouldAnnounce", true, "vignette implies available")
+		return true
+	end
+	if quest ~= nil then
+		-- a completed quest gates the loot off entirely, so completion decides it
+		Debug("ShouldAnnounce", not quest, "quest")
+		return not quest
+	end
+	if achievement ~= nil then
+		if achievement then
+			-- achievements don't gate loot: the mob stays farmable, so keep
+			-- announcing a completed one while there's still uncollected loot,
+			-- or a BoE mount that's sellable even when already owned
+			local wants_loot = ns.Loot.Status(id, core.db.profile.transmog_notable) == false
+				or ns.Loot.HasMounts(id, true, true)
+			Debug("ShouldAnnounce", wants_loot, "achievement complete, loot wanted?")
+			return wants_loot
+		end
+		Debug("ShouldAnnounce", true, "achievement incomplete")
+		return true
+	end
+
+	Debug("ShouldAnnounce", true, "fallback")
+	return true
 end
 
 function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
@@ -489,54 +613,36 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		Debug("ShouldAnnounce", true, "always")
 		return true
 	end
-	if not self.db.profile.already_drop and ns.Loot.Status(id, self.db.profile.already_transmog) == true and not ns.Loot.HasMounts(id, true, true) then
-		-- hide mobs which have a mount/pet/toy which you already own... apart from BoE mounts
-		-- this means there's knowable loot, and it's all known
-		Debug("ShouldAnnounce", false, "already got loot")
-		return false
-	end
 	if ns.mobdb[id] and (
 		(ns.mobdb[id].requires and not ns.conditions.check(ns.mobdb[id].requires)) or
 		(ns.mobdb[id].active and not ns.conditions.check(ns.mobdb[id].active))
 	) then
+		-- not a completion question, so it applies whatever the filter is
 		Debug("ShouldAnnounce", false, "requirements not met")
 		return false
 	end
-	if not self.db.profile.already then
-		-- hide already-completed mobs
-		local quest, achievement, by_alt = ns:CompletionStatus(id)
-		if by_alt and not self.db.profile.already_alt then
-			-- an alt has completed the achievement, and we don't want to know about that
-			Debug("ShouldAnnounce", false, "alt got achievement")
-			return false
-		end
+
+	local filter = self.db.profile.filter
+	if filter == "notable" then
 		if source == "vignette" or source == "point-of-interest" then
 			-- Blizzard generally won't show a vignette if there's nothing left to
 			-- get from the mob, so trust it over our own completion data
 			Debug("ShouldAnnounce", true, "vignette implies available")
 			return true
 		end
-		if quest ~= nil then
-			-- a completed quest gates the loot off entirely, so completion decides it
-			Debug("ShouldAnnounce", not quest, "quest")
-			return not quest
+		-- nil means we can't tell, which is no reason to keep quiet
+		if ns.MobIsNotable(id) == false then
+			Debug("ShouldAnnounce", false, "not notable")
+			return false
 		end
-		if achievement ~= nil then
-			if achievement then
-				-- achievements don't gate loot: the mob stays farmable, so keep
-				-- announcing a completed one while there's still uncollected loot,
-				-- or a BoE mount that's sellable even when already owned
-				local wants_loot = ns.Loot.Status(id, self.db.profile.already_transmog) == false
-					or ns.Loot.HasMounts(id, true, true)
-				Debug("ShouldAnnounce", wants_loot, "achievement complete, loot wanted?")
-				return wants_loot
-			end
-			Debug("ShouldAnnounce", true, "achievement incomplete")
-			return true
-		end
+		Debug("ShouldAnnounce", true, "notable")
+		return true
+	end
+	if filter == "lootable" then
+		return shouldAnnounceLootable(self, id, source)
 	end
 
-	Debug("ShouldAnnounce", true, "fallback")
+	Debug("ShouldAnnounce", true, "not filtering")
 	return true
 end
 

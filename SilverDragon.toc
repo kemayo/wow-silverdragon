@@ -51,6 +51,7 @@ systems\_glue.lua
 shards.lua
 achievements.lua
 loot.lua
+notable.lua
 slash.lua
 config.lua
 util.lua
