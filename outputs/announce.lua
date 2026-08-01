@@ -598,14 +598,12 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		Debug("ShouldAnnounce", true, "not filtering")
 		return true
 	end
-	if source == "vignette" or source == "point-of-interest" then
-		-- Blizzard generally won't show a vignette if there's nothing left to
-		-- get from the mob, so trust it over our own completion data
-		Debug("ShouldAnnounce", true, "vignette implies available")
-		return true
-	end
+	-- Being on a vignette says the mob still has something to give, whatever our
+	-- own quest data thinks -- but it says nothing about whether you want it, so
+	-- it's an argument to the check rather than a way around it.
+	local fromVignette = source == "vignette" or source == "point-of-interest"
 	-- nil means we can't tell, which is no reason to keep quiet
-	if ns.MobIsNotable(id) == false then
+	if ns.MobIsNotable(id, false, fromVignette) == false then
 		Debug("ShouldAnnounce", false, "not notable")
 		return false
 	end
