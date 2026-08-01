@@ -830,55 +830,13 @@ do
 	end
 end
 
-local allQuestsComplete
-do
-	local faction = UnitFactionGroup("player")
-	local function doTestAll(test, input, ...)
-		for _, value in ipairs(input) do
-			if not test(value, ...) then
-				return false
-			end
-		end
-		return true
-	end
-	local function doTestAny(test, input, ...)
-		for _, value in ipairs(input) do
-			if test(value, ...) then
-				return true
-			end
-		end
-		return false
-	end
-	local function doTest(test, input, ...)
-		if ns.xtype(input) == "table" then
-			if input.alliance then
-				return doTest(test, faction == "Alliance" and input.alliance or input.horde, ...)
-			end
-			if input.any then
-				return doTestAny(test, input, ...)
-			end
-			return doTestAll(test, input, ...)
-		else
-			return test(input, ...)
-		end
-	end
-	local function testMaker(test, override)
-		return function(...)
-			return (override or doTest)(test, ...)
-		end
-	end
-	-- local itemInBags = testMaker(function(item) return GetItemCount(item, true) > 0 end)
-	allQuestsComplete = testMaker(function(quest) return C_QuestLog.IsQuestFlaggedCompleted(quest) end)
-	ns.doTest = doTest
-end
-
 -- return quest_complete, all_criteria_complete, any_achievement_completed_by_alt
 -- `nil` if completion not knowable, true/false if knowable
 function ns:CompletionStatus(id)
 	if not ns.mobdb[id] then return end
 	local quest_complete
 	if ns.mobdb[id].quest then
-		quest_complete = allQuestsComplete(ns.mobdb[id].quest)
+		quest_complete = ns.allQuestsComplete(ns.mobdb[id].quest)
 	end
 	local all_criteria_complete, any_achievement_completed_by_alt
 	for _, _, _, criteria_complete, achievement_completed_by_alt in ns:AchievementMobStatus(id) do
@@ -962,7 +920,7 @@ function ns:UpdateTooltipWithCompletion(tooltip, id)
 		)
 	end
 	if ns.mobdb[id] and ns.mobdb[id].quest then
-		local completed = allQuestsComplete(ns.mobdb[id].quest)
+		local completed = ns.allQuestsComplete(ns.mobdb[id].quest)
 		tooltip:AddDoubleLine(
 			QUESTS_COLON:gsub(":", ""),
 			completed and COMPLETE or INCOMPLETE,

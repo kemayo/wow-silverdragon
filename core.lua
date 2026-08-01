@@ -275,9 +275,6 @@ end
 do
 	local function addQuestMobLookup(lookup, mobid, quest)
 		if ns.xtype(quest) == "table" then
-			if quest.alliance then
-				return addQuestMobLookup(lookup, mobid, faction == "Alliance" and quest.alliance or quest.horde)
-			end
 			for _, questid in ipairs(quest) do
 				if not lookup[questid] then
 					lookup[questid] = {}
