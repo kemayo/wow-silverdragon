@@ -1,5 +1,38 @@
 # Changelog
 
+## Changed in v2026.23
+
+* Announcements: rares are now filtered by whether they're still worth your time, using the same rules as my HandyNotes plugins
+    * A new "What's notable?" section lets you say what you actually care about: mounts, toys, pets, transmog, decor, quest-attached items and achievement progress
+    * **This filters more than before.** A rare you've collected everything from will go quiet, including ones the game is still flagging on your minimap. A finished kill-quest silences one outright, since it has nothing left to give. Set "Which rares?" to "All of them" if you'd rather keep hearing about all of them
+    * Loot that can't drop for your specialization no longer counts towards keeping a rare interesting
+    * Rares we know nothing about are still always announced, and the old "Already found", "Got the loot" and "Completed by an alt" settings carry over
+    * An appearance you haven't learned now counts as a reason to announce a rare, where the old "include transmog as loot" option started switched off. Untick Transmog under "What's notable?" if you'd rather it didn't
+    * Treasures get the same choice, starting at "All of them" so nothing changes unless you ask: a chest whose contents you've already collected can stay quiet. It won't hide one just because we think you've looted it, since the game stops showing those by itself
+    * Both settings have a "None" option to switch those announcements off completely. For treasures that replaces the old "Treasures" checkbox, and your setting carries over
+    * "Known mounts are boring" is gone: the Mount option covers it, and it's also what now decides whether a sighting gets the special mount sound and flash
+* Map Overlay: "Show achieved" now covers any mob you're done with, not just ones you have the achievement for, so turning it off also hides ones whose loot you've already collected
+* The targeting macro's "Skip completed mobs" now means what it says: it was only ever checking the tracking quest, so mobs whose loot you'd collected kept taking up one of its limited slots
+* Map Overlay: icons are coloured by what's left on a mob out of the box now, rather than a unique colour each. Pick "Unique per-mob" under Icon settings to get the old look back
+* The broker tooltip colours its rows the same way the map icons do now, so a rare means the same thing in both. A rare we know nothing about — no quest, no achievement, no loot — gets a plain row and a plain white icon, rather than being dressed up as something you want. It's still announced, since we can't say it isn't worth your time
+* Map Overlay: colouring icons by completion now has a colour for "you can still kill this, but there's nothing on it you want", which used to look the same as one you'd want. The five are a mount you'd want, an achievement you haven't finished, something else you'd want, nothing you want, and nothing left at all
+* Loot tooltips and the loot window now colour the label of anything notable, so what you're still missing stands out from what you're not
+* There were two separate instance switches, one for scanning and one for announcing, both off to start with and in different sections — so turning on "Scan in instances" by itself changed nothing you could hear. That one now covers both, and the announcement one is gone
+* Tooltips no longer print an empty "Requires" line for requirements that can't explain themselves
+* Bugfixes:
+    * The "know the appearance from this specific item" option reset itself every time you logged in
+    * A rare dropping a mount you already own but could still sell could be judged before the game had told us the mount was sellable, so it went unmentioned for the first little while after a login
+    * Map Overlay: counting an alt's achievement as done had no effect on map pins
+    * Requirements that depend on a zone-wide buff stopped counting as met the moment you entered combat
+    * Achievement criteria could load only partly and then never be looked at again, leaving some rares with no achievement status for the rest of the session
+    * Items the game can't tell us an appearance for were treated as known-but-uncollected, so they showed up in loot lists set to only show knowable loot
+    * Rewards attached to a quest you hadn't finished were missing from tooltips and loot lists when regular loot was turned off
+    * The announcement flash could keep the settings from the first flash of the session, and only checked mounts for mobs
+    * History: disabling it didn't stop the window reopening, "Clear all" left the broker's session list alone, and vignette entries never refreshed their position
+    * The custom mob list rebuilt itself from scratch on every change, losing the leftover toggle that lets you re-add a mob you removed by mistake
+    * Classic: the Overlay's minimap zoom could go stale, or never be worked out at all
+    * Assorted errors from vignettes with no id or atlas, and from popups that couldn't be shown
+
 ## Changed in v2026.22
 
 * Updated for 2.5.6
