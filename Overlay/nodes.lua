@@ -28,19 +28,21 @@ do
     -- PlayerDeadBlip = black circle with white X
     -- QuestSkull = gold glowy circle
     -- Warfront-NeutralHero-Silver = silver dragon on gold circle
-    -- Five states, and every theme wants all five:
+    -- Six states, and every theme wants all six:
     --   mount        there's a mount on it you'd want
     --   achievement  you haven't finished its achievement
-    --   something    something else on it you'd want -- and what an unknown mob gets
+    --   something    something else on it you'd want
     --   nothing      you can still kill it, but there's nothing on it for you
     --   done         it has nothing left to give at all
-    -- Grey for "nothing" so it recedes: the others are all saying something, and
-    -- this one is saying don't bother.
+    --   unknown      no quest, no achievement, no loot -- nothing to go on
+    -- Grey for "nothing" so it recedes, and plain white for "unknown", which is
+    -- making no claim either way.
     local icons = {
         circles = {
             achievement = tex("PlayerPartyBlip", 1, 0.33, 0.33, 1.3), -- red
             something = tex("Warfront-NeutralHero-Silver", 0.5, 1, 1, 1.3), -- cyan dragon
             nothing = tex("PlayerPartyBlip", 0.7, 0.7, 0.7, 1.3), -- grey
+            unknown = tex("PlayerPartyBlip", 1, 1, 1, 1.3), -- plain white
             done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1), -- green
             mount = tex("PlayerRaidBlip", 1, 0.33, 0.33, 1.3), -- red, dotted
         },
@@ -48,6 +50,7 @@ do
             achievement = tex("Islands-AzeriteBoss", 1, 0.33, 0.33, 1.8), -- red skull
             something = tex("nazjatar-nagaevent", 0.5, 1, 1, 1.8), -- cyan glowing skull
             nothing = tex("Islands-AzeriteBoss", 0.7, 0.7, 0.7, 1.5), -- grey skull
+            unknown = tex("Islands-AzeriteBoss", 1, 1, 1, 1.8), -- plain white skull
             done = tex("Islands-AzeriteBoss", 0.33, 1, 0.33, 1.5), -- green skull
             mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
         },
@@ -55,6 +58,7 @@ do
             achievement = tex("VignetteKill", 1, 0.33, 1, 1.6), -- magenta star
             something = tex("VignetteLootElite", 0.5, 1, 1, 1.6), -- cyan shiny star
             nothing = tex("VignetteKill", 0.7, 0.7, 0.7, 1.3), -- grey star
+            unknown = tex("VignetteKill", 1, 1, 1, 1.6), -- plain white star
             -- was 0,1,1 and labelled green, but that's a cyan too close to the
             -- "something you want" one to tell apart at icon size
             done = tex("VignetteKill", 0.33, 1, 0.33, 1.3), -- green star
@@ -66,6 +70,7 @@ do
             achievement = tex("DungeonSkull", 1, 0.33, 0.33, 1.3), -- red skull
             something = tex("VignetteKillElite", 0.5, 1, 1, 1.3), -- cyan glowing skull
             nothing = tex("DungeonSkull", 0.7, 0.7, 0.7, 1.3), -- grey skull
+            unknown = tex("DungeonSkull", 1, 1, 1, 1.3), -- plain white skull
             done = tex("DungeonSkull", 0.33, 1, 0.33, 1), -- green skull
             mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
         }
@@ -110,11 +115,9 @@ do
     local function icon_for_mob(id)
         local set = icons[module.db.profile.icon_theme]
         -- ns.MobState works the states out; the broker's tooltip colours its rows
-        -- from the same five, so they stay in step
-        if not ns.mobdb[id] then
-            return set.something
-        end
-        return set[ns.MobState(id)] or set.something
+        -- from the same six, so they stay in step. A mob that isn't in the data at
+        -- all comes back "unknown" from there, so it needs no case of its own.
+        return set[ns.MobState(id)] or set.unknown
     end
     local icon_cache = {}
     local function distinct_icon_for_mob(id)

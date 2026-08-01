@@ -120,16 +120,26 @@ function ns.MobState(id)
 	if achievement == false and ns.db.achievement_notable then
 		return "achievement"
 	end
-	-- nil from MobIsNotable -- nothing we can judge -- shares its answer with
-	-- "something for you", so an unknown mob reads as worth a look.
-	if ns.MobIsNotable(id) == false then
+	local notable = ns.MobIsNotable(id)
+	if notable == false then
 		return "nothing"
+	end
+	-- Showing "we have nothing to go on" apart from "there's something here you
+	-- want" is worth it where there's room to say so, even though the filter
+	-- treats them alike and announces both -- claiming a mob is worth your time
+	-- is a different thing from admitting we can't tell.
+	if notable == nil then
+		return "unknown"
 	end
 	return "something"
 end
 
 -- Mount and achievement share a colour: the map tells them apart by their icon,
 -- and the broker's tooltip has columns of its own for both.
+--
+-- "unknown" is deliberately absent. Callers leave anything they have no colour
+-- for alone, which is what we want for it -- there's nothing to report, so the
+-- row should look like it.
 ns.MobStateColor = {
 	mount = {1, 0.33, 0.33},
 	achievement = {1, 0.33, 0.33},
