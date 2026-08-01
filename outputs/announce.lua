@@ -99,6 +99,9 @@ function module:OnInitialize()
 			known_mounts = true,
 		},
 	})
+	self.db.RegisterCallback(self, "OnProfileChanged", "MigrateFilterOptions")
+	self.db.RegisterCallback(self, "OnProfileCopied", "MigrateFilterOptions")
+	self.db.RegisterCallback(self, "OnProfileReset", "MigrateFilterOptions")
 
 	self:SetSinkStorage(self.db.profile.sink_opts)
 
@@ -122,31 +125,7 @@ function module:OnInitialize()
 		end
 	end
 
-	-- Move the old already* booleans onto the filter / notability options. Any one
-	-- of them being stored means this profile predates the filter -- we can't just
-	-- look at `already`, because AceDB doesn't store a value matching its default,
-	-- so someone who only changed already_transmog has no stored `already` at all.
-	-- Hence `== false` below for the two that defaulted to true. Clearing all four
-	-- is what stops this running twice, as none of them have defaults any more.
-	local p = self.db.profile
-	if p.already ~= nil or p.already_drop ~= nil or p.already_transmog ~= nil or p.already_alt ~= nil then
-		if p.already then
-			-- an explicit "show me ones I've finished" wins: the notable filter
-			-- hides exactly those, so honouring already_drop here instead would
-			-- contradict it, and quietly announce less rather than more
-			p.filter = "everything"
-		elseif p.already_drop == false then
-			-- wanting loot you own to silence a rare *is* the notable filter
-			p.filter = "notable"
-		else
-			p.filter = "lootable"
-		end
-		core.db.profile.transmog_notable = p.already_transmog or false
-		-- already_alt was "tell me anyway", the inverse of counting an alt's as done
-		core.db.profile.alts_achievements_count = p.already_alt == false
-
-		p.already, p.already_drop, p.already_transmog, p.already_alt = nil, nil, nil, nil
-	end
+	self:MigrateFilterOptions()
 
 	core.RegisterCallback(self, "Seen")
 	core.RegisterCallback(self, "SeenLoot")
@@ -515,6 +494,40 @@ function module:OnInitialize()
 
 		config.options.args.general.plugins.announce = options
 	end
+end
+
+-- Move a profile's old already* booleans onto the filter / notability options.
+--
+-- Any one of them being stored means the profile predates the filter. We can't
+-- just look at `already`, because AceDB doesn't store a value matching its
+-- default, so someone who only changed already_transmog has no stored `already`
+-- at all -- hence `== false` for the two that used to default to true. Clearing
+-- all four is what stops this running twice, as none of them have defaults now.
+--
+-- This runs on profile change as well as at load: profiles are switched long
+-- after OnInitialize, and an old one would otherwise keep its already* keys and
+-- silently fall back to the default filter.
+function module:MigrateFilterOptions()
+	local p = self.db.profile
+	if p.already == nil and p.already_drop == nil and p.already_transmog == nil and p.already_alt == nil then
+		return
+	end
+	if p.already then
+		-- an explicit "show me ones I've finished" wins: the notable filter hides
+		-- exactly those, so honouring already_drop here instead would contradict
+		-- it, and quietly announce less rather than more
+		p.filter = "everything"
+	elseif p.already_drop == false then
+		-- wanting loot you own to silence a rare *is* the notable filter
+		p.filter = "notable"
+	else
+		p.filter = "lootable"
+	end
+	core.db.profile.transmog_notable = p.already_transmog or false
+	-- already_alt was "tell me anyway", the inverse of counting an alt's as done
+	core.db.profile.alts_achievements_count = p.already_alt == false
+
+	p.already, p.already_drop, p.already_transmog, p.already_alt = nil, nil, nil, nil
 end
 
 function module:HasInterestingMounts(id, isloot)
