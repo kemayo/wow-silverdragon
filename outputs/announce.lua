@@ -132,6 +132,11 @@ function module:OnInitialize()
 		local get = function(info) return self.db.profile[info[#info]] end
 		local set = function(info, v) self.db.profile[info[#info]] = v end
 
+		-- Singling a mount out asks the same question the filter does, so say so
+		-- wherever that happens -- it's not obvious from here that a checkbox in
+		-- another section can switch these off.
+		local mountNote = "\n\nWhich mounts count comes from the Mount option under \"What's notable?\": one you already know only counts if it's BoE, and with that unticked this stops happening at all."
+
 		local sink_config = self:GetSinkAce3OptionsDataTable()
 		local sink_args = {}
 		for k,v in pairs(sink_config.args) do
@@ -239,13 +244,13 @@ function module:OnInitialize()
 				args = {
 					filter = {
 						type = "select", name = "Which rares?",
-						desc = "\"Notable ones\" leaves out a rare once there's nothing left on it for you: its quest is done, or you've collected everything it drops. What counts is up to you, below.\n\nIt also ignores loot that can't drop for your specialization. Rares we know nothing about are always announced.",
+						desc = "\"Notable ones\" leaves out a rare once it has nothing left for you. What counts as worth having is up to you, below.\n\nLoot that can't drop for your specialization doesn't count. Rares we know nothing about are always announced.",
 						values = filter_values, sorting = filter_sorting,
 						order = 0, width = "double",
 					},
 					filter_loot = {
 						type = "select", name = "Which treasures?",
-						desc = "Treasures have never been filtered, so this starts at \"All of them\".\n\n\"Notable ones\" goes on what's inside: a chest whose contents you've already collected stops being announced. It won't hide one just because we think you've looted it, since the game removes a looted treasure's marker by itself.",
+						desc = "\"Notable ones\" leaves out a treasure once it has nothing left for you. What counts as worth having is up to you, below.\n\nLoot that can't drop for your specialization doesn't count. Treasures we know nothing about are always announced.",
 						values = filter_values, sorting = filter_sorting,
 						order = 1, width = "double",
 					},
@@ -261,21 +266,19 @@ function module:OnInitialize()
 				-- system reads them and other parts of SilverDragon can use them
 				get = function(info) return core.db.profile[info[#info]] end,
 				set = function(info, v) core.db.profile[info[#info]] = v end,
-				disabled = function()
-					return self.db.profile.filter ~= "notable" and self.db.profile.filter_loot ~= "notable"
-				end,
+				-- Deliberately not disabled when neither filter is "notable": Mount
+				-- still decides which sightings earn the mount sound and flash, and
+				-- greying out something that's still doing work is worse than
+				-- leaving it alone.
 				args = {
 					-- these globals don't all exist in the classic clients, hence
 					-- the fallbacks
 					achievement_notable = toggle(_G.TRANSMOG_SOURCE_5 or ACHIEVEMENTS or "Achievement", "Count unlearned achievement-progress as notable", 10),
-					mount_notable = toggle(MOUNT or "Mount", "Count unlearned mounts as notable loot", 20),
+					mount_notable = toggle(MOUNT or "Mount", "Count unlearned mounts as notable loot. This also picks which sightings get the mount sound and flash, whatever the filters above say", 20),
 					toy_notable = toggle(TOY or "Toy", "Count unlearned toys as notable loot", 30),
 					pet_notable = toggle(TOOLTIP_BATTLE_PET or "Battle Pet", "Count uncaught pets as notable loot", 40),
-					transmog_notable = toggle("Transmog", "Count unlearned transmogrification appearances as notable loot", 50),
-					-- `or nil` so that on a client which has housing this doesn't
-					-- pass disabled=false, which would override the group's own
-					-- disabled and leave this one toggle clickable on its own
-					decor_notable = toggle(_G.BINDING_TAG_DECOR or "Decor", "Count unfound decor as notable loot", 60, nil, not _G.BINDING_TAG_DECOR or nil),
+					transmog_notable = toggle("Transmog", "Count unlearned transmogrification appearances as notable loot.\n\nWhether an appearance you know from some other item counts as known here is up to \"Transmog exact items\", over in General's Loot options", 50),
+					decor_notable = toggle(_G.BINDING_TAG_DECOR or "Decor", "Count unfound decor as notable loot", 60, nil, not _G.BINDING_TAG_DECOR),
 					quest_notable = toggle("Quest-attached", "Count items with attached uncompleted quests as notable loot (this includes a lot of \"learnable\" items, weekly reputation drops, etc)", 70),
 					alts_achievements_count = toggle("An alt counts", "Treat an achievement one of your other characters has completed as done, rather than as something still to earn", 80),
 				},
@@ -335,7 +338,7 @@ function module:OnInitialize()
 					soundfile = soundfile("sound", 22),
 					sound_loop = soundrange(23),
 					mount = {type="header", name="", order=25,},
-					sound_mount = toggle("Mount sounds", "Play a sound for mobs that drop a mount", 26),
+					sound_mount = toggle("Mount sounds", "Play a sound for mobs that drop a mount" .. mountNote, 26),
 					soundfile_mount = soundfile("sound_mount", 27),
 					sound_mount_loop = soundrange(28),
 					boss = {type="header", name="", order=30,},
@@ -381,7 +384,7 @@ function module:OnInitialize()
 						order = 4,
 					},
 					mount = {type="header", name="", order=10,},
-					flash_mount = toggle("Mount flash", "Flash the screen differently when we see a mob with a mount?", 11),
+					flash_mount = toggle("Mount flash", "Flash the screen differently when we see a mob with a mount?" .. mountNote, 11),
 					flash_color_mount = {
 						name = COLOR,
 						type = "color",
@@ -447,12 +450,12 @@ function module:OnInitialize()
 			},
 		}
 
-		local function vibrate_section(t, key, order, heading)
+		local function vibrate_section(t, key, order, heading, description)
 			key = key and ("_"..key) or ""
 			if heading then
 				t["vibrate_heading" .. key] = {type="header", name="", order=order,}
 			end
-			t["vibrate" .. key] = toggle(heading or "Vibrate", "Vibrate the controller?", order + 1)
+			t["vibrate" .. key] = toggle(heading or "Vibrate", description or "Vibrate the controller?", order + 1)
 			t["vibrate_type" .. key] = {
 				type = "select", name = "Type",
 				desc = "What type of vibration to use",
@@ -481,7 +484,7 @@ function module:OnInitialize()
 		end
 		local order = 1
 		order = vibrate_section(options.controller.args, nil, 1)
-		order = vibrate_section(options.controller.args, "mount", order, "Vibrate for mounts")
+		order = vibrate_section(options.controller.args, "mount", order, "Vibrate for mounts", "Vibrate the controller?" .. mountNote)
 		order = vibrate_section(options.controller.args, "boss", order, "Vibrate for bosses")
 		order = vibrate_section(options.controller.args, "loot", order, "Vibrate for loot")
 
