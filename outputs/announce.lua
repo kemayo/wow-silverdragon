@@ -84,9 +84,7 @@ function module:OnInitialize()
 			vibrate_intensity_loot = 0.8,
 			instances = false,
 			dead = true,
-			-- How much to filter. "lootable" is the pre-notability logic, kept
-			-- so upgrading doesn't change what anyone hears.
-			filter = "lootable", -- everything | lootable | notable
+			filter = "notable", -- everything | notable
 			filter_loot = "everything", -- everything | notable
 			-- the already* keys this replaced are deliberately absent: they only
 			-- exist now as migration input, and giving them defaults would make
@@ -229,10 +227,9 @@ function module:OnInitialize()
 
 		local filter_values = {
 			everything = "All of them",
-			lootable = "Ones I might still want",
 			notable = "Notable ones",
 		}
-		local filter_sorting = {"everything", "lootable", "notable"}
+		local filter_sorting = {"everything", "notable"}
 
 		local options = {
 			general = {
@@ -242,15 +239,14 @@ function module:OnInitialize()
 				args = {
 					filter = {
 						type = "select", name = "Which rares?",
-						desc = "\"Ones I might still want\" is how this has always worked: hide a rare once its quest is complete, or once its achievement is done and there's no loot left on it you want.\n\n\"Notable ones\" asks the same question my HandyNotes plugins do, which you can adjust below. It's stricter about loot, and it ignores loot that can't drop for your specialization.\n\nEither way, rares we know nothing about still get announced.",
+						desc = "\"Notable ones\" leaves out a rare once there's nothing left on it for you: its quest is done, or you've collected everything it drops. What counts is up to you, below.\n\nIt also ignores loot that can't drop for your specialization. Rares we know nothing about are always announced.",
 						values = filter_values, sorting = filter_sorting,
 						order = 0, width = "double",
 					},
 					filter_loot = {
 						type = "select", name = "Which treasures?",
 						desc = "Treasures have never been filtered, so this starts at \"All of them\".\n\n\"Notable ones\" goes on what's inside: a chest whose contents you've already collected stops being announced. It won't hide one just because we think you've looted it, since the game removes a looted treasure's marker by itself.",
-						values = {everything = filter_values.everything, notable = filter_values.notable},
-						sorting = {"everything", "notable"},
+						values = filter_values, sorting = filter_sorting,
 						disabled = function() return not self.db.profile.loot end,
 						order = 1, width = "double",
 					},
@@ -501,8 +497,9 @@ end
 -- Any one of them being stored means the profile predates the filter. We can't
 -- just look at `already`, because AceDB doesn't store a value matching its
 -- default, so someone who only changed already_transmog has no stored `already`
--- at all -- hence `== false` for the two that used to default to true. Clearing
--- all four is what stops this running twice, as none of them have defaults now.
+-- at all -- hence `== false` for already_alt, which used to default to true.
+-- Clearing all four is what stops this running twice, as none of them have
+-- defaults now.
 --
 -- This runs on profile change as well as at load: profiles are switched long
 -- after OnInitialize, and an old one would otherwise keep its already* keys and
@@ -512,17 +509,11 @@ function module:MigrateFilterOptions()
 	if p.already == nil and p.already_drop == nil and p.already_transmog == nil and p.already_alt == nil then
 		return
 	end
-	if p.already then
-		-- an explicit "show me ones I've finished" wins: the notable filter hides
-		-- exactly those, so honouring already_drop here instead would contradict
-		-- it, and quietly announce less rather than more
-		p.filter = "everything"
-	elseif p.already_drop == false then
-		-- wanting loot you own to silence a rare *is* the notable filter
-		p.filter = "notable"
-	else
-		p.filter = "lootable"
-	end
+	-- `already` meant "don't filter on completion at all", so it's the only one
+	-- that maps to anything other than the default. already_drop asked for loot
+	-- you own to silence a rare, which is what the notable filter does anyway, so
+	-- it needs nothing beyond being cleared away below.
+	p.filter = p.already and "everything" or "notable"
 	core.db.profile.transmog_notable = p.already_transmog or false
 	-- already_alt was "tell me anyway", the inverse of counting an alt's as done
 	core.db.profile.alts_achievements_count = p.already_alt == false
@@ -571,51 +562,6 @@ function module:SeenLoot(callback, name, id, zone, x, y, ...)
 	core.events:Fire("AnnounceLoot", name, id, zone, x, y, ...)
 end
 
--- The "lootable" filter: how this worked before there was a notability system.
--- Kept in the same order so that upgrading doesn't change what anyone hears.
---
--- The old already_drop check has gone: turning it off meant "loot I own should
--- silence a rare", which is precisely the notable filter, so those profiles
--- migrate to that instead. The two knobs it did keep are the shared notability
--- ones, so they stay meaningful in both modes rather than freezing at whatever
--- they were when the filter arrived.
-local function shouldAnnounceLootable(self, id, source)
-	-- hide already-completed mobs
-	local quest, achievement, by_alt = ns:CompletionStatus(id)
-	if by_alt and core.db.profile.alts_achievements_count then
-		-- an alt has completed the achievement, and we don't want to know about that
-		Debug("ShouldAnnounce", false, "alt got achievement")
-		return false
-	end
-	if source == "vignette" or source == "point-of-interest" then
-		-- Blizzard generally won't show a vignette if there's nothing left to
-		-- get from the mob, so trust it over our own completion data
-		Debug("ShouldAnnounce", true, "vignette implies available")
-		return true
-	end
-	if quest ~= nil then
-		-- a completed quest gates the loot off entirely, so completion decides it
-		Debug("ShouldAnnounce", not quest, "quest")
-		return not quest
-	end
-	if achievement ~= nil then
-		if achievement then
-			-- achievements don't gate loot: the mob stays farmable, so keep
-			-- announcing a completed one while there's still uncollected loot,
-			-- or a BoE mount that's sellable even when already owned
-			local wants_loot = ns.Loot.Status(id, core.db.profile.transmog_notable) == false
-				or ns.Loot.HasMounts(id, true, true)
-			Debug("ShouldAnnounce", wants_loot, "achievement complete, loot wanted?")
-			return wants_loot
-		end
-		Debug("ShouldAnnounce", true, "achievement incomplete")
-		return true
-	end
-
-	Debug("ShouldAnnounce", true, "fallback")
-	return true
-end
-
 function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 	if is_dead and not self.db.profile.dead then
 		Debug("ShouldAnnounce", false, "dead")
@@ -635,27 +581,22 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		return false
 	end
 
-	local filter = self.db.profile.filter
-	if filter == "notable" then
-		if source == "vignette" or source == "point-of-interest" then
-			-- Blizzard generally won't show a vignette if there's nothing left to
-			-- get from the mob, so trust it over our own completion data
-			Debug("ShouldAnnounce", true, "vignette implies available")
-			return true
-		end
-		-- nil means we can't tell, which is no reason to keep quiet
-		if ns.MobIsNotable(id) == false then
-			Debug("ShouldAnnounce", false, "not notable")
-			return false
-		end
-		Debug("ShouldAnnounce", true, "notable")
+	if self.db.profile.filter ~= "notable" then
+		Debug("ShouldAnnounce", true, "not filtering")
 		return true
 	end
-	if filter == "lootable" then
-		return shouldAnnounceLootable(self, id, source)
+	if source == "vignette" or source == "point-of-interest" then
+		-- Blizzard generally won't show a vignette if there's nothing left to
+		-- get from the mob, so trust it over our own completion data
+		Debug("ShouldAnnounce", true, "vignette implies available")
+		return true
 	end
-
-	Debug("ShouldAnnounce", true, "not filtering")
+	-- nil means we can't tell, which is no reason to keep quiet
+	if ns.MobIsNotable(id) == false then
+		Debug("ShouldAnnounce", false, "not notable")
+		return false
+	end
+	Debug("ShouldAnnounce", true, "notable")
 	return true
 end
 

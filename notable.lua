@@ -31,7 +31,7 @@ function ns.MobIsNotable(id, isTreasure)
 
 	-- The mob's own quest gates its loot off entirely, so it decides alone: once
 	-- it's complete there's nothing left to kill the mob for, and an unfinished
-	-- achievement criteria can't be progressed either. The lootable filter agrees.
+	-- achievement criteria can't be progressed either.
 	-- Not quest_notable's business -- that's about loot with quests attached.
 	--
 	-- Treasures are exempt: they only ever reach us from a vignette, and the game
