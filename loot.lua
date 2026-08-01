@@ -64,6 +64,13 @@ local itemIsKnown = function(item)
 end
 local itemBindOnEquip = function(item)
 	local bindType = select(14, C_Item.GetItemInfo(item.id))
+	if bindType == nil then
+		-- The item isn't cached yet, and asking has just started fetching it. Say
+		-- yes for now: this decides whether a mount you already own is still worth
+		-- announcing because it sells, and a rare going unmentioned for the first
+		-- minute after a login is a worse trade than an extra mention.
+		return true
+	end
 	return bindType == Enum.ItemBind.OnEquip or bindType == Enum.ItemBind.OnUse
 end
 
