@@ -58,7 +58,9 @@ local options = {
 					type = "group",
 					name = "Loot",
 					inline = true,
-					order = 5,
+					-- last: both of these are fine-tuning, and everything the
+					-- modules add to this section matters more than they do
+					order = 110,
 					args = {
 						about = desc("Some options for how SilverDragon will treat loot drops from mobs", 0),
 						charloot = toggle("Current character only", "Only show loot that should drop for your current character.", 10),
