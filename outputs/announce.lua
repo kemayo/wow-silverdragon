@@ -84,8 +84,8 @@ function module:OnInitialize()
 			vibrate_intensity_loot = 0.8,
 			instances = false,
 			dead = true,
-			filter = "notable", -- everything | notable
-			filter_loot = "everything", -- everything | notable
+			filter = "notable", -- none | notable | everything
+			filter_loot = "everything", -- none | notable | everything
 			-- the already* keys this replaced are deliberately absent: they only
 			-- exist now as migration input, and giving them defaults would make
 			-- an un-migrated profile indistinguishable from a fresh one
@@ -93,7 +93,6 @@ function module:OnInitialize()
 			channel = "Master",
 			unmute = false,
 			background = false,
-			loot = true,
 			known_mounts = true,
 		},
 	})
@@ -226,10 +225,12 @@ function module:OnInitialize()
 		end
 
 		local filter_values = {
-			everything = "All of them",
+			none = "None",
 			notable = "Notable ones",
+			everything = "All of them",
 		}
-		local filter_sorting = {"everything", "notable"}
+		-- least noisy first, so the list reads as a scale
+		local filter_sorting = {"none", "notable", "everything"}
 
 		local options = {
 			general = {
@@ -247,13 +248,11 @@ function module:OnInitialize()
 						type = "select", name = "Which treasures?",
 						desc = "Treasures have never been filtered, so this starts at \"All of them\".\n\n\"Notable ones\" goes on what's inside: a chest whose contents you've already collected stops being announced. It won't hide one just because we think you've looted it, since the game removes a looted treasure's marker by itself.",
 						values = filter_values, sorting = filter_sorting,
-						disabled = function() return not self.db.profile.loot end,
 						order = 1, width = "double",
 					},
 					known_mounts = toggle("Known mounts are boring", "Treat mount-dropping rares whose mount you already know as if they're regular rares (unless the mount is BoE)", 25),
 					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not", 30),
 					instances = toggle("Instances", "Show announcements while in an instance", 50),
-					loot = toggle("Treasures", "Show announcements when treasure appears on the minimap", 60),
 				},
 			},
 			notable = {
@@ -492,33 +491,41 @@ function module:OnInitialize()
 	end
 end
 
--- Move a profile's old already* booleans onto the filter / notability options.
+-- Move a profile's old announcement options onto the two filters.
 --
--- Any one of them being stored means the profile predates the filter. We can't
--- just look at `already`, because AceDB doesn't store a value matching its
--- default, so someone who only changed already_transmog has no stored `already`
--- at all -- hence `== false` for already_alt, which used to default to true.
--- Clearing all four is what stops this running twice, as none of them have
--- defaults now.
+-- Each group keys off whether its old options are stored at all, because AceDB
+-- doesn't store a value matching its default: someone who only changed
+-- already_transmog has no stored `already`, and someone who left the Treasures
+-- toggle alone has no stored `loot`. Hence `== false` for the ones that used to
+-- default to true. Clearing the old keys is what stops this running twice, as
+-- none of them have defaults any more.
 --
 -- This runs on profile change as well as at load: profiles are switched long
--- after OnInitialize, and an old one would otherwise keep its already* keys and
--- silently fall back to the default filter.
+-- after OnInitialize, and an old one would otherwise keep its old keys and
+-- silently fall back to the default filters.
 function module:MigrateFilterOptions()
 	local p = self.db.profile
-	if p.already == nil and p.already_drop == nil and p.already_transmog == nil and p.already_alt == nil then
-		return
-	end
-	-- `already` meant "don't filter on completion at all", so it's the only one
-	-- that maps to anything other than the default. already_drop asked for loot
-	-- you own to silence a rare, which is what the notable filter does anyway, so
-	-- it needs nothing beyond being cleared away below.
-	p.filter = p.already and "everything" or "notable"
-	core.db.profile.transmog_notable = p.already_transmog or false
-	-- already_alt was "tell me anyway", the inverse of counting an alt's as done
-	core.db.profile.alts_achievements_count = p.already_alt == false
+	if p.already ~= nil or p.already_drop ~= nil or p.already_transmog ~= nil or p.already_alt ~= nil then
+		-- `already` meant "don't filter on completion at all", so it's the only one
+		-- that maps to anything other than the default. already_drop asked for loot
+		-- you own to silence a rare, which is what the notable filter does anyway,
+		-- so it needs nothing beyond being cleared away here.
+		p.filter = p.already and "everything" or "notable"
+		core.db.profile.transmog_notable = p.already_transmog or false
+		-- already_alt was "tell me anyway", the inverse of counting an alt's as done
+		core.db.profile.alts_achievements_count = p.already_alt == false
 
-	p.already, p.already_drop, p.already_transmog, p.already_alt = nil, nil, nil, nil
+		p.already, p.already_drop, p.already_transmog, p.already_alt = nil, nil, nil, nil
+	end
+
+	-- The "Treasures" toggle is the "None" end of the treasure filter now. It
+	-- defaulted to on, so a stored value only ever means it was turned off.
+	if p.loot ~= nil then
+		if not p.loot then
+			p.filter_loot = "none"
+		end
+		p.loot = nil
+	end
 end
 
 function module:HasInterestingMounts(id, isloot)
@@ -549,12 +556,13 @@ function module:SeenLoot(callback, name, id, zone, x, y, ...)
 		return
 	end
 
-	if not self.db.profile.loot then
+	local filter = self.db.profile.filter_loot
+	if filter == "none" then
+		Debug("Announce:SeenLoot", false, "treasures off")
 		return
 	end
-
 	-- as in ShouldAnnounce, only a definite "nothing here is wanted" silences it
-	if self.db.profile.filter_loot == "notable" and ns.MobIsNotable(id, true) == false then
+	if filter == "notable" and ns.MobIsNotable(id, true) == false then
 		Debug("Announce:SeenLoot", false, "not notable")
 		return
 	end
@@ -563,6 +571,11 @@ function module:SeenLoot(callback, name, id, zone, x, y, ...)
 end
 
 function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
+	-- an off switch, so it comes before the always-announce cases
+	if self.db.profile.filter == "none" then
+		Debug("ShouldAnnounce", false, "rares off")
+		return false
+	end
 	if is_dead and not self.db.profile.dead then
 		Debug("ShouldAnnounce", false, "dead")
 		return false
