@@ -512,7 +512,14 @@ function module:MigrateFilterOptions()
 		-- you own to silence a rare, which is what the notable filter does anyway,
 		-- so it needs nothing beyond being cleared away here.
 		p.filter = p.already and "everything" or "notable"
-		core.db.profile.transmog_notable = p.already_transmog or false
+		-- already_transmog deliberately doesn't carry over. It read as "count
+		-- appearances when working out whether you already have everything", so
+		-- off meant a transmog-only rare could never be called finished and kept
+		-- announcing. transmog_notable off does the reverse: appearances stop
+		-- being a reason, but hasKnowableLoot still sees them, so the rare reads
+		-- as knowably-not-wanted and goes quiet. Mapping one to the other turns
+		-- the old default upside down, so leave everyone on the new one.
+
 		-- already_alt was "tell me anyway", the inverse of counting an alt's as done
 		core.db.profile.alts_achievements_count = p.already_alt == false
 

@@ -393,9 +393,7 @@ function addon:OnInitialize()
 			mount_notable = true,
 			toy_notable = true,
 			pet_notable = true,
-			-- unlike the plugins, this starts off: it's migrated from the old
-			-- already_transmog, which was off
-			transmog_notable = false,
+			transmog_notable = true,
 			quest_notable = true,
 			decor_notable = true,
 			alts_achievements_count = false,
