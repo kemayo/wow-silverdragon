@@ -3,6 +3,14 @@ local myname, ns = ...
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local Debug = core.Debug
 
+-- A mount you already know can still be worth the kill, because a BoE one sells.
+-- Announce leans on this too, for whether a sighting earns the mount sound and
+-- flash rather than the ordinary ones -- if mounts aren't what you're here for,
+-- there's no reason to single them out either.
+function ns.HasNotableMounts(id, isTreasure)
+	return ns.db.mount_notable and ns.Loot.HasInterestingMounts(id, isTreasure)
+end
+
 -- "Is this rare still worth telling you about?"
 --
 -- Two questions in order: can it still give you anything at all, and if so is any
@@ -71,15 +79,9 @@ function ns.MobIsNotable(id, isTreasure, fromVignette)
 		end
 	end
 
-	-- A mount you already know can still be worth the kill, and Announce already
-	-- knows what makes one interesting: BoE mounts sell, and "known mounts are
-	-- boring" decides whether the rest count.
-	if ns.db.mount_notable then
-		local announce = core:GetModule("Announce", true)
-		if announce and announce:HasInterestingMounts(id, isTreasure) then
-			Debug("MobIsNotable", id, true, "interesting mount")
-			return true
-		end
+	if ns.HasNotableMounts(id, isTreasure) then
+		Debug("MobIsNotable", id, true, "interesting mount")
+		return true
 	end
 
 	if knowable then
