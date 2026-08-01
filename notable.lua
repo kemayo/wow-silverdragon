@@ -96,3 +96,44 @@ end
 -- /dump SilverDragon.MobIsNotable(32491)
 -- (without the vignette argument, so it answers as if you'd walked up to it)
 core.MobIsNotable = ns.MobIsNotable
+
+-- Boil the above down to one word, for the places that show a mob's standing
+-- rather than deciding whether to mention it: the map pins and the broker's
+-- tooltip rows. Both want the same five answers, and the same colours for them,
+-- so neither should be working them out for itself.
+function ns.MobState(id)
+	local quest, achievement, by_alt = ns:CompletionStatus(id)
+	-- The quest goes first for the same reason MobIsNotable gates on it: with it
+	-- done the mob can't hand anything over, so what it carries is academic. This
+	-- is the one state meaning "finished" rather than "nothing you happen to want".
+	if quest then
+		return "done"
+	end
+	if by_alt and ns.db.alts_achievements_count then
+		achievement = true
+	end
+	-- A mount outranks the rest, being what people are usually out here for, and
+	-- an unfinished achievement outranks ordinary loot.
+	if ns.HasNotableMounts(id) then
+		return "mount"
+	end
+	if achievement == false and ns.db.achievement_notable then
+		return "achievement"
+	end
+	-- nil from MobIsNotable -- nothing we can judge -- shares its answer with
+	-- "something for you", so an unknown mob reads as worth a look.
+	if ns.MobIsNotable(id) == false then
+		return "nothing"
+	end
+	return "something"
+end
+
+-- Mount and achievement share a colour: the map tells them apart by their icon,
+-- and the broker's tooltip has columns of its own for both.
+ns.MobStateColor = {
+	mount = {1, 0.33, 0.33},
+	achievement = {1, 0.33, 0.33},
+	something = {0.5, 1, 1},
+	nothing = {0.7, 0.7, 0.7},
+	done = {0.33, 1, 0.33},
+}

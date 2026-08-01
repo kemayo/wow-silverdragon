@@ -31,7 +31,7 @@ do
     -- Five states, and every theme wants all five:
     --   mount        there's a mount on it you'd want
     --   achievement  you haven't finished its achievement
-    --   default      something else on it you'd want -- and what an unknown mob gets
+    --   something    something else on it you'd want -- and what an unknown mob gets
     --   nothing      you can still kill it, but there's nothing on it for you
     --   done         it has nothing left to give at all
     -- Grey for "nothing" so it recedes: the others are all saying something, and
@@ -39,21 +39,21 @@ do
     local icons = {
         circles = {
             achievement = tex("PlayerPartyBlip", 1, 0.33, 0.33, 1.3), -- red
-            default = tex("Warfront-NeutralHero-Silver", 0.5, 1, 1, 1.3), -- cyan dragon
+            something = tex("Warfront-NeutralHero-Silver", 0.5, 1, 1, 1.3), -- cyan dragon
             nothing = tex("PlayerPartyBlip", 0.7, 0.7, 0.7, 1.3), -- grey
             done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1), -- green
             mount = tex("PlayerRaidBlip", 1, 0.33, 0.33, 1.3), -- red, dotted
         },
         skulls = {
             achievement = tex("Islands-AzeriteBoss", 1, 0.33, 0.33, 1.8), -- red skull
-            default = tex("nazjatar-nagaevent", 0.5, 1, 1, 1.8), -- cyan glowing skull
+            something = tex("nazjatar-nagaevent", 0.5, 1, 1, 1.8), -- cyan glowing skull
             nothing = tex("Islands-AzeriteBoss", 0.7, 0.7, 0.7, 1.5), -- grey skull
             done = tex("Islands-AzeriteBoss", 0.33, 1, 0.33, 1.5), -- green skull
             mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
         },
         stars = {
             achievement = tex("VignetteKill", 1, 0.33, 1, 1.6), -- magenta star
-            default = tex("VignetteLootElite", 0.5, 1, 1, 1.6), -- cyan shiny star
+            something = tex("VignetteLootElite", 0.5, 1, 1, 1.6), -- cyan shiny star
             nothing = tex("VignetteKill", 0.7, 0.7, 0.7, 1.3), -- grey star
             -- was 0,1,1 and labelled green, but that's a cyan too close to the
             -- "something you want" one to tell apart at icon size
@@ -64,7 +64,7 @@ do
     if ns.CLASSIC then
         icons.skulls = {
             achievement = tex("DungeonSkull", 1, 0.33, 0.33, 1.3), -- red skull
-            default = tex("VignetteKillElite", 0.5, 1, 1, 1.3), -- cyan glowing skull
+            something = tex("VignetteKillElite", 0.5, 1, 1, 1.3), -- cyan glowing skull
             nothing = tex("DungeonSkull", 0.7, 0.7, 0.7, 1.3), -- grey skull
             done = tex("DungeonSkull", 0.33, 1, 0.33, 1), -- green skull
             mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
@@ -107,41 +107,14 @@ do
         return false
     end
     module.should_show_mob = should_show_mob
-    local function key_for_mob(id)
-        local quest, achievement, by_alt = ns:CompletionStatus(id)
-        -- The quest goes first for the same reason MobIsNotable gates on it: with
-        -- it done the mob can't hand over anything, so whatever it carries is
-        -- academic. This is the one thing that means "finished", rather than
-        -- "nothing you happen to want".
-        if quest then
-            return 'done'
-        end
-        if by_alt and core.db.profile.alts_achievements_count then
-            achievement = true
-        end
-        -- A mount outranks the rest, being the thing people are usually out here
-        -- for, and an unfinished achievement outranks ordinary loot -- it's the
-        -- thing you can't come back for once the zone empties out.
-        if ns.HasNotableMounts(id) then
-            return 'mount'
-        end
-        if achievement == false and ns.db.achievement_notable then
-            return 'achievement'
-        end
-        -- nil from MobIsNotable -- nothing we can judge -- shares the icon with
-        -- "something for you", so an unknown mob reads as worth a look rather
-        -- than worth skipping.
-        if ns.MobIsNotable(id) == false then
-            return 'nothing'
-        end
-        return 'default'
-    end
     local function icon_for_mob(id)
         local set = icons[module.db.profile.icon_theme]
+        -- ns.MobState works the states out; the broker's tooltip colours its rows
+        -- from the same five, so they stay in step
         if not ns.mobdb[id] then
-            return set.default
+            return set.something
         end
-        return set[key_for_mob(id)] or set.default
+        return set[ns.MobState(id)] or set.something
     end
     local icon_cache = {}
     local function distinct_icon_for_mob(id)

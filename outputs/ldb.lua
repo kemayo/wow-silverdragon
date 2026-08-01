@@ -707,17 +707,11 @@ do
 			else
 				index, col = tooltip:SetCell(index, col, '')
 			end
-			if quest or achievement then
-				if (quest and achievement) or (quest == nil or achievement == nil) then
-					-- full completion
-					tooltip:SetLineColor(index, 0.33, 1, 0.33) -- green
-				else
-					-- partial completion
-					tooltip:SetLineColor(index, 1, 1, 0.33) -- yellow
-				end
-			else
-				tooltip:SetLineColor(index, 1, 0.33, 0.33) -- red
-			end
+		end
+		-- Same five states the map pins use, and the same colours for them
+		local color = ns.MobStateColor[ns.MobState(id)]
+		if color then
+			tooltip:SetLineColor(index, color[1], color[2], color[3])
 		end
 	end
 end
