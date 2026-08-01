@@ -42,7 +42,7 @@ function module:OnInitialize()
                 edge = module.const.EDGE_FOCUS
             },
             icon_theme = 'skulls', -- circles / skulls
-            icon_color = 'distinct', -- completion / distinct
+            icon_color = 'completion', -- completion / distinct
             achieved = true,
             questcomplete = false,
             achievementless = true,
