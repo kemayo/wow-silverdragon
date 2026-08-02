@@ -1305,7 +1305,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 			-- 276288, -- Forgotten Sword of Vilaldoun
 			-- 278116, -- Player Experience
 		},
-		route={48006880, 49006576, 49005920, 52425751, 53215440, 53534842, 54254436},
+		routes={{48006880, 49006576, 49005920, 52425751, 53215440, 53534842, 54254436}},
 		vignette=7669,
 	},
 }, {

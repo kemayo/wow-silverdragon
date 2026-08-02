@@ -240,9 +240,6 @@ do
 						table.insert(data.locations[uiMapID], acoord)
 					end
 				end
-				if point.route and ns.xtype(point.route) == "table" then
-					data.routes = {[uiMapID] = {point.route}}
-				end
 				if point.routes then
 					data.routes = {[uiMapID] = point.routes}
 				end

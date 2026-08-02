@@ -405,11 +405,11 @@ ns.RegisterPoints(ns.WAKINGSHORES, {
 			200563, -- Primal Ritual Shell
 			200859, -- Seasoned Hunter's Trophy
 		},
-		route={
+		routes={{
 			52906590, 53006650, 52006670, 51306660, 49606530, 48706530, 48436605, 47706890,
 			48007100, 46907360, 45407400, 42607250, 41706940, 40306820, 39306830, 37906960,
 			37607070, 36507160, 34607110,
-		},
+		}},
 		note="Patrols with {npc:192737:Qalashi War Mammoth}",
 		minimap=true,
 		vignette=5386, -- Qalashi War Party
@@ -970,7 +970,7 @@ ns.RegisterPoints(ns.WAKINGSHORES, {
 			200252, -- Molten Flak Cannon
 			200563, -- Primal Ritual Shell
 		},
-		route={54512137, 56202250, 56502480, r=1, g=0, b=0},
+		routes={{54512137, 56202250, 56502480, r=1, g=0, b=0}},
 		vignette=5372,
 	},
 	[60598286] = {
@@ -1712,10 +1712,10 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 		label="Nergazurai",
 		quest=74093,
 		npc=195895, -- 59027499
-		route={
+		routes={{
 			60417127, 58807080, 57807360, 58207460, 62207600, 63807600, 66807300, 65207060, 65206820,
 			66005880, 68805560, 68605160, 67205100, 68805680, 65605980, 65206900, r=1, g=0, b=0, loop=true,
-		},
+		}},
 	},
 	[36043433] = {
 		label="Lurgan",
@@ -1901,7 +1901,7 @@ ns.RegisterPoints(ns.AZURESPAN, {
 		npc=194210,
 		loot={},
 		note="Patrols the icy area",
-		route={61213127, 59163080, 57562986, 54223190, 52023452, 49283837},
+		routes={{61213127, 59163080, 57562986, 54223190, 52023452, 49283837}},
 		minimap=true,
 	},
 	[73002660] = {
@@ -2419,7 +2419,7 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 			200859, -- Seasoned Hunter's Trophy
 		},
 		note="Runs around, you can jump on it",
-		route={53104363, 53124230, 51624534, 50304953, 51534871, 52714652, loop=true},
+		routes={{53104363, 53124230, 51624534, 50304953, 51534871, 52714652, loop=true}},
 		minimap=true,
 		vignette=5180,
 	},
@@ -2747,7 +2747,7 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 		},
 		note="Bring a {item:200949:Case of Fresh Gleamfish} from 45.6, 54.8 in Azure Span and give it to {npc:191416:Patient Vaargo}; other quests in the area might interfere with this",
 		vignette=5439,
-		route={38436824, 32009999, highlightOnly=true},
+		routes={{38436824, 32009999, highlightOnly=true}},
 	},
 	[44806900] = {
 		label="Corrupted Proto-Dragon",
@@ -2843,7 +2843,7 @@ ns.RegisterPoints(ns.THALDRASZUS, {
 			200682, -- Hardened Scale Shoulderguards
 		},
 		note="Flying nearby",
-		route={37777413, 36307560, 36507860, 38407940, 40107780, 39507500, loop=true},
+		routes={{37777413, 36307560, 36507860, 38407940, 40107780, 39507500, loop=true}},
 		minimap=true,
 		vignette=5436,
 	},
