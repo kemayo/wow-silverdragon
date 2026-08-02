@@ -5,7 +5,7 @@
 * Announcements: rares are now filtered by whether they're still worth your time, using the same rules as my HandyNotes plugins
     * A new "What's notable?" section lets you say what you actually care about: mounts, toys, pets, transmog, decor, quest-attached items and achievement progress
     * **This filters more than before.** A rare you've collected everything from will go quiet, including ones the game is still flagging on your minimap. A finished kill-quest silences one outright, since it has nothing left to give. Set "Which rares?" to "All of them" if you'd rather keep hearing about all of them
-    * Loot that can't drop for your specialization no longer counts towards keeping a rare interesting
+    * "Current character only", under General's Loot options, now decides whether loot that can't drop for you counts towards a rare being worth announcing, as well as whether it shows up in loot lists
     * Rares we know nothing about are still always announced, and the old "Already found", "Got the loot" and "Completed by an alt" settings carry over
     * An appearance you haven't learned now counts as a reason to announce a rare, where the old "include transmog as loot" option started switched off. Untick Transmog under "What's notable?" if you'd rather it didn't
     * Treasures get the same choice, starting at "All of them" so nothing changes unless you ask: a chest whose contents you've already collected can stay quiet. It won't hide one just because we think you've looted it, since the game stops showing those by itself
@@ -22,6 +22,7 @@
 * Bugfixes:
     * The "know the appearance from this specific item" option reset itself every time you logged in
     * A rare dropping a mount you already own but could still sell could be judged before the game had told us the mount was sellable, so it went unmentioned for the first little while after a login
+    * Turning on "Transmog exact items" didn't take effect until you reloaded, and changing any of the loot or notability options left the map showing its old icons until something else redrew it
     * Map Overlay: counting an alt's achievement as done had no effect on map pins
     * Requirements that depend on a zone-wide buff stopped counting as met the moment you entered combat
     * Achievement criteria could load only partly and then never be looked at again, leaving some rares with no achievement status for the rest of the session
