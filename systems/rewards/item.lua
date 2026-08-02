@@ -235,7 +235,9 @@ do
 		end
 		local cached = hasAppearanceCache[itemID]
 		if cached ~= nil then
-			-- We cache unchanging things: true, or not-knowable-at-all
+			-- We cache unchanging things: known from this very item, or
+			-- not-knowable-at-all. Anything that depends on the `specific`
+			-- argument has to stay in the per-run cache instead.
 			-- *Technically* this could persist a false-positive if you obtain something and then trade/refund it
 			if cached == NOT_KNOWABLE then return end
 			ns.run_caches.appearances[itemID] = cached
@@ -267,7 +269,10 @@ do
 		if not sources then return end
 		for _, otherSourceID in ipairs(sources) do
 			if C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(otherSourceID) then
-				hasAppearanceCache[itemID] = true
+				-- Only true while `specific` is off, so it can't go in the lasting
+				-- cache: turning that option on would keep reading this as known
+				-- until a reload
+				ns.run_caches.appearances[itemID] = true
 				return true
 			end
 		end

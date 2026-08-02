@@ -99,6 +99,9 @@ function module:OnEnable()
     WorldMapFrame:RegisterCallback("WorldMapOnHide", self.OnWorldMapHide, self)
     HBD.RegisterCallback(self, "PlayerZoneChanged", "UpdateMinimapIcons")
     core.RegisterCallback(self, "Ready", "Update")
+    -- the notability options and the loot ones live on the core profile, and both
+    -- decide what our icons look like
+    core.RegisterCallback(self, "OptionsChanged", "Update")
     core.RegisterCallback(self, "BrokerMobClick")
     core.RegisterCallback(self, "BrokerMobEnter")
     core.RegisterCallback(self, "BrokerMobLeave")

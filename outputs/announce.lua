@@ -263,7 +263,10 @@ function module:OnInitialize()
 				-- these live on the core profile, because the shared rewards
 				-- system reads them and other parts of SilverDragon can use them
 				get = function(info) return core.db.profile[info[#info]] end,
-				set = function(info, v) core.db.profile[info[#info]] = v end,
+				set = function(info, v)
+					core.db.profile[info[#info]] = v
+					core.events:Fire("OptionsChanged", info[#info], v)
+				end,
 				-- Deliberately not disabled when neither filter is "notable": Mount
 				-- still decides which sightings earn the mount sound and flash, and
 				-- greying out something that's still doing work is worse than

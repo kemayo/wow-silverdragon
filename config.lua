@@ -27,7 +27,12 @@ local options = {
 	type = "group",
 	name = "SilverDragon",
 	get = function(info) return core.db.profile[info[#info]] end,
-	set = function(info, v) core.db.profile[info[#info]] = v end,
+	set = function(info, v)
+		core.db.profile[info[#info]] = v
+		-- anything drawing from these has to be told; the map in particular keeps
+		-- its pins up until something asks it to think again
+		core.events:Fire("OptionsChanged", info[#info], v)
+	end,
 	args = {
 		about = {
 			type = "group",
