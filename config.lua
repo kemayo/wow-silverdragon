@@ -68,7 +68,7 @@ local options = {
 					order = 110,
 					args = {
 						about = desc("Some options for how SilverDragon will treat loot drops from mobs", 0),
-						charloot = toggle("Current character only", "Only show loot that should drop for your current character.", 10),
+						charloot = toggle("Current character only", "Only show loot that should drop for your current character, and only count that loot towards a rare being worth announcing.", 10),
 						transmog_specific = toggle("Transmog exact items", "For transmog appearances, only count them as known if you know them from that exact item, rather than from another sharing the same appearance", 20),
 					}
 				},

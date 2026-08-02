@@ -243,13 +243,13 @@ function module:OnInitialize()
 				args = {
 					filter = {
 						type = "select", name = "Which rares?",
-						desc = "\"Notable ones\" leaves out a rare once it has nothing left for you. What counts as worth having is up to you, below.\n\nLoot that can't drop for your specialization doesn't count. Rares we know nothing about are always announced.",
+						desc = "\"Notable ones\" leaves out a rare once it has nothing left for you. What counts as worth having is up to you, below.\n\nWhether loot that can't drop for you counts is up to \"Current character only\", over in General's Loot options. Rares we know nothing about are always announced.",
 						values = filter_values, sorting = filter_sorting,
 						order = 0, width = "double",
 					},
 					filter_loot = {
 						type = "select", name = "Which treasures?",
-						desc = "\"Notable ones\" leaves out a treasure once it has nothing left for you. What counts as worth having is up to you, below.\n\nLoot that can't drop for your specialization doesn't count. Treasures we know nothing about are always announced.",
+						desc = "\"Notable ones\" leaves out a treasure once it has nothing left for you. What counts as worth having is up to you, below.\n\nWhether loot that can't drop for you counts is up to \"Current character only\", over in General's Loot options. Treasures we know nothing about are always announced.",
 						values = filter_values, sorting = filter_sorting,
 						order = 1, width = "double",
 					},

@@ -55,8 +55,13 @@ function Reward:Obtained(ignore_notable)
 	return result
 end
 function Reward:Notable()
-	-- Is it knowable and not obtained?
-	return self:MightDrop() and (self:Obtained() == false)
+	-- Is it knowable and not obtained? Whether loot that can't drop for you counts
+	-- is the same question the loot lists ask, so it takes the same answer rather
+	-- than quietly being stricter than they are.
+	if ns.db.charloot and not self:MightDrop() then
+		return false
+	end
+	return self:Obtained() == false
 end
 function Reward:Available()
 	if self.requires and not ns.conditions.check(self.requires) then
