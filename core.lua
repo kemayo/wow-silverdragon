@@ -163,6 +163,13 @@ function addon:RegisterTreasureData(source, data, updated)
 	end
 end
 do
+	-- a treasure can have several vignettes, the same as a mob can
+	local function addTreasureVignettes(treasures, data, ...)
+		for i=1, select("#", ...) do
+			local vignetteID = select(i, ...)
+			treasures[vignetteID] = data
+		end
+	end
 	function addon:RegisterHandyNotesData(source, uiMapID, points, defaults)
 		-- convenience for me, really...
 		addon.datasources[source] = addon.datasources[source] or {}
@@ -263,7 +270,7 @@ do
 						ns:RegisterMobAchievement(point.npc, point.achievement)
 					end
 				else
-					addon.treasuresources[source][point.vignette] = data
+					addTreasureVignettes(addon.treasuresources[source], data, ns.safe_unpack(point.vignette))
 				end
 			end
 		end
