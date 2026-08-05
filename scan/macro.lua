@@ -133,7 +133,8 @@ function module:Update()
 		-- 1023 for macrotext on a button, but...
 		local macroicon, macrotext = self:GetMacroArguments(255)
 		if lastmacrotext ~= macrotext then
-			EditMacro(GetMacroIndexByName("SilverDragon"), nil, macroicon, macrotext)
+			local _, currenticon = GetMacroInfo("SilverDragon")
+			EditMacro(GetMacroIndexByName("SilverDragon"), nil, currenticon or macroicon, macrotext)
 			lastmacrotext = macrotext
 			DebugF("Updated macro: %d characters", #macrotext)
 		end

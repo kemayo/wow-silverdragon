@@ -148,6 +148,7 @@ read_globals = {
     "GetItemSpecInfo",
     "GetLocale",
     "GetMacroIndexByName",
+    "GetMacroInfo",
     "GetNumGroupMembers",
     "GetNumMacros",
     "GetPlayerAuraBySpellID",
