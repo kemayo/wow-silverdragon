@@ -136,7 +136,7 @@ function SilverDragonOverlayPinMixinBase:ApplyFocusState()
         self.emphasis:Show()
         self.emphasis:SetVertexColor(0, 1, 1, 1)
     else
-        if not MouseIsOver(self) then
+        if not self:IsMouseOver() then
             self.emphasis:Hide()
         end
         self.emphasis:SetVertexColor(1, 1, 1, 1)
