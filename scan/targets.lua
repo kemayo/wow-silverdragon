@@ -14,9 +14,17 @@ function module:OnInitialize()
 			targets = true,
 			nameplate = true,
 			rare_only = true,
-			dead = true,
 		},
 	})
+	-- "Dead rares" used to live here as well as on Announce, two switches with the
+	-- same name in different sections. Core's covers both now. It defaulted on, so
+	-- a stored value here only ever means it was turned off.
+	if self.db.profile.dead ~= nil then
+		if not self.db.profile.dead then
+			core.db.profile.dead = false
+		end
+		self.db.profile.dead = nil
+	end
 
 	local config = core:GetModule("Config", true)
 	if config then
@@ -31,7 +39,6 @@ function module:OnInitialize()
 					targets = config.toggle("Targets", "Check the targets of people in your group.", 20),
 					nameplate = config.toggle("Nameplates", "Check units whose nameplates appear.", 30),
 					rare_only = config.toggle("Rare only", "Only look for mobs that are still flagged as rare", 40),
-					dead = config.toggle("Dead rares", "Targetted dead rares still count", 50),
 				},
 			},
 		}
@@ -93,7 +100,7 @@ function module:ProcessUnit(unit, source)
 	local unittype = UnitClassification(unit)
 	local is_rare = (id and rare_nonflags[id]) or (unittype == 'rare' or unittype == 'rareelite')
 	local is_dead = UnitIsDead(unit)
-	if is_dead and not self.db.profile.dead then return end
+	if is_dead and not core.db.profile.dead then return end
 	local should_process = false
 
 	if core:IsCustom(id, zone) then

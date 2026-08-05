@@ -95,6 +95,7 @@ local options = {
 					min = 30, max = (60 * 60), step = 10,
 					order = 20,
 				},
+				dead = toggle("Dead rares", "Count a rare that's already dead when we spot it, and tell you about it. Not every way of spotting them can tell whether one is dead.", 45),
 				instances = toggle("Scan in instances", "Look for rares while you're in an instance, and tell you about the ones we find. There aren't that many actual rares in instances, and scanning might slow things down at a time when you'd like the most performance possible.", 50),
 				taxi = toggle("Scan on taxis", "Keep scanning for rares while flying on a taxi or in a dragon race. Just hope that it'll still be there after you land and make your way back...", 55),
 			},

@@ -379,6 +379,7 @@ function addon:OnInitialize()
 		profile = {
 			scan = 1, -- scan interval, 0 for never
 			delay = 1200, -- number of seconds to wait between recording the same mob
+			dead = true,
 			instances = false,
 			taxi = true,
 			charloot = false,

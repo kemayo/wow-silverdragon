@@ -82,7 +82,6 @@ function module:OnInitialize()
 			vibrate_loot = true,
 			vibrate_type_loot = "High",
 			vibrate_intensity_loot = 0.8,
-			dead = true,
 			filter = "notable", -- none | notable | everything
 			filter_loot = "everything", -- none | notable | everything
 			-- the already* keys this replaced are deliberately absent: they only
@@ -253,7 +252,6 @@ function module:OnInitialize()
 						values = filter_values, sorting = filter_sorting,
 						order = 1, width = "double",
 					},
-					dead = toggle("Dead rares", "Announce when we see dead rares, if known. Not all scanning methods know whether a rare is dead or not", 30),
 				},
 			},
 			notable = {
@@ -551,6 +549,16 @@ function module:MigrateFilterOptions()
 		end
 		p.instances = nil
 	end
+
+	-- Same story for dead rares: this and the Targets scanner each had a switch
+	-- called "Dead rares". Core's covers both. It defaulted on, so a stored value
+	-- here only ever means it was turned off.
+	if p.dead ~= nil then
+		if not p.dead then
+			core.db.profile.dead = false
+		end
+		p.dead = nil
+	end
 end
 
 function module:Seen(callback, id, zone, x, y, is_dead, source, ...)
@@ -594,7 +602,7 @@ function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
 		Debug("ShouldAnnounce", false, "rares off")
 		return false
 	end
-	if is_dead and not self.db.profile.dead then
+	if is_dead and not core.db.profile.dead then
 		Debug("ShouldAnnounce", false, "dead")
 		return false
 	end
