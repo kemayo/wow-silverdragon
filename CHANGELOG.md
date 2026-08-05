@@ -17,9 +17,10 @@
 * The broker tooltip colours its rows the same way the map icons do now, so a rare means the same thing in both. A rare we know nothing about — no quest, no achievement, no loot — gets a plain row and a plain white icon, rather than being dressed up as something you want. It's still announced, since we can't say it isn't worth your time
 * Map Overlay: colouring icons by completion now has a colour for "you can still kill this, but there's nothing on it you want", which used to look the same as one you'd want. The five are a mount you'd want, an achievement you haven't finished, something else you'd want, nothing you want, and nothing left at all
 * Loot tooltips and the loot window now colour the label of anything notable, so what you're still missing stands out from what you're not
-* There were two separate instance switches, one for scanning and one for announcing, both off to start with and in different sections — so turning on "Scan in instances" by itself changed nothing you could hear. That one now covers both, and the announcement one is gone
-* Tooltips no longer print an empty "Requires" line for requirements that can't explain themselves
+* Unified some scanning and announcing preferences: instances and dead-rares are now in just one place
 * Bugfixes:
+    * The macro icon will no longer reset if you've changed it
+    * Tooltips no longer print an empty "Requires" line for requirements that can't explain themselves
     * The "know the appearance from this specific item" option reset itself every time you logged in
     * A rare dropping a mount you already own but could still sell could be judged before the game had told us the mount was sellable, so it went unmentioned for the first little while after a login
     * Turning on "Transmog exact items" didn't take effect until you reloaded, and changing any of the loot or notability options left the map showing its old icons until something else redrew it
