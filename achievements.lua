@@ -779,6 +779,9 @@ local achievements = {
 	[62881] = {}, -- Showdown Slugger: Val
 	[62883] = {}, -- Showdown Slugger: Naigtal
 	[63348] = {}, -- Heroic Slugger
+	[63358] = {}, -- Coiled To Strike
+	[63390] = {}, -- Turn the Surge
+	[62601] = {}, -- Soft Underbelly
 }
 ns.achievements = achievements
 local mobs_to_achievement = {
