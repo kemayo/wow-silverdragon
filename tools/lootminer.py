@@ -329,7 +329,7 @@ if __name__ == '__main__':
     parser.add_argument('--local', action="store_true", default=False, help="Export local data rather than fetching anything")
     parser.add_argument('--only_with_loot', action="store_true", default=False, help="Only output those with loot")
     parser.add_argument('--only_with_location', action="store_true", default=False, help="Only output those with locations")
-    parser.add_argument('--loot_filter', action="store", choices=("source", "notable", "all"), default="source", help="")
+    parser.add_argument('--loot_filter', action="store", choices=("source", "notable", "all"), default="notable", help="")
     args = parser.parse_args()
 
     if re.match(r"(?:[\d,]|^http)", args.input):
