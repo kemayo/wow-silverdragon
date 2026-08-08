@@ -81,9 +81,15 @@ do
         icon_cache[id].b = b
         return icon_cache[id]
     end
+    -- Work the whole zone out under one hold, then hand the mobs over. MobState
+    -- drops the reward caches on each call, so one mob at a time makes every one
+    -- of them redo the item lookups the last had just paid for. Two passes also
+    -- keep the hold clear of the yields, which a caller could stop early.
     local function mobsForZone(uiMapID)
         if not ns.mobsByZone[uiMapID] then return end
-        for id, coords in pairs(ns.mobsByZone[uiMapID]) do
+        local ids, mobIcons, alphas = {}, {}, {}
+        ns.HoldRunCaches()
+        for id in pairs(ns.mobsByZone[uiMapID]) do
             if should_show_mob(id, uiMapID) then
                 local icon
                 if module.db.profile.icon_color == 'distinct' then
@@ -95,9 +101,16 @@ do
                 if ns.mobdb[id] and ns.mobdb[id].active and not ns.conditions.check(ns.mobdb[id].active) then
                     alpha = alpha and (alpha * 0.6) or 0.6
                 end
-                for _, coord in ipairs(coords) do
-                    coroutine.yield(coord, id, icon, icon.scale, alpha)
-                end
+                table.insert(ids, id)
+                mobIcons[id] = icon
+                alphas[id] = alpha
+            end
+        end
+        ns.ReleaseRunCaches()
+        for _, id in ipairs(ids) do
+            local icon = mobIcons[id]
+            for _, coord in ipairs(ns.mobsByZone[uiMapID][id]) do
+                coroutine.yield(coord, id, icon, icon.scale, alphas[id])
             end
         end
     end

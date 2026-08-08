@@ -31,10 +31,32 @@ ns.covenants = ns.covenants or {
 }
 
 ns.run_caches = {}
-ns.ClearRunCaches = function()
+local held = 0
+local function wipeRunCaches()
 	for _, cache in pairs(ns.run_caches) do
 		table.wipe(cache)
 	end
+end
+ns.ClearRunCaches = function()
+	-- somebody's asked for one consistent run, so it's not ours to end
+	if held > 0 then return end
+	wipeRunCaches()
+end
+
+-- MobIsNotable clears the caches every time it's called, which is right for one
+-- mob and wasteful for a list of them: each mob throws away the item lookups the
+-- one before it just paid for, and mobs sharing loot pay again and again. Take a
+-- hold around a batch and they all share one set of answers instead.
+--
+-- Balance every Hold with a Release, including on the paths that give up early.
+ns.HoldRunCaches = function()
+	if held == 0 then
+		wipeRunCaches()
+	end
+	held = held + 1
+end
+ns.ReleaseRunCaches = function()
+	held = math.max(held - 1, 0)
 end
 
 local playerClassLocal, playerClass = UnitClass("player")
