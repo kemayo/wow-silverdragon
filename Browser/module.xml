@@ -1,0 +1,10 @@
+<Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+  <Script file="browser.lua"/>
+  <Script file="window.lua"/>
+  <Script file="list.lua"/>
+  <Script file="details.lua"/>
+  <Script file="map.lua"/>
+  <Script file="config.lua"/>
+  <Include file="looks\looks.xml"/>
+</Ui>

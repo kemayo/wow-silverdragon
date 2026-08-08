@@ -56,6 +56,7 @@ end
 BINDING_HEADER_SILVERDRAGON = "SilverDragon"
 _G["BINDING_NAME_CLICK SilverDragonPopupButton:LeftButton"] = "Target last found mob"
 _G["BINDING_NAME_CLICK SilverDragonMacroButton:LeftButton"] = "Scan for nearby mobs"
+BINDING_NAME_SILVERDRAGON_TOGGLE_BROWSER = "Browse rares"
 
 addon.escapes = {
 	-- |TTexturePath:size1:size2:xoffset:yoffset:dimx:dimy:coordx1:coordx2:coordy1:coordy2|t

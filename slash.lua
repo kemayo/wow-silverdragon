@@ -46,10 +46,15 @@ local commands = {
         end
         self:Print("Couldn't work out the mob id from your input")
     end,
+    browse = function(self)
+        core:GetModule("Browser"):Toggle()
+    end,
     debug = function(self, args)
         core:ShowDebugWindow()
     end,
 }
+commands.mobs = commands.browse
+commands.list = commands.browse
 
 function module:OnChatCommand(input)
     local command, arg = self:GetArgs(input, 2)

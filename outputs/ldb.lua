@@ -11,6 +11,7 @@ local module = core:NewModule("LDB", "AceEvent-3.0")
 local dataobject, tooltip
 
 local default_help = {
+	"Left-click to browse every rare",
 	"Right-click to open settings",
 }
 if core.debuggable then
@@ -165,7 +166,9 @@ function module:SetupDataObject()
 
 	function dataobject:OnClick(button)
 		if button ~= "RightButton" then
-			return
+			-- covers the minimap button and the addon compartment too, since
+			-- LibDBIcon sends both through here
+			return core:GetModule("Browser"):Toggle()
 		end
 		if IsShiftKeyDown() then
 			core:ShowDebugWindow()
@@ -282,20 +285,6 @@ function module:SetupWorldMap()
 end
 
 function module:SetupMounts()
-	local list = {}
-	for source, data in pairs(core.datasources) do
-		if core.db.global.datasources[source] then
-			for id, mobdata in pairs(data) do
-				if ns.Loot.HasMounts(id) and core:ShouldShowMob(id) then
-					table.insert(list, id)
-				end
-			end
-		end
-	end
-	local button_options = {
-		custom = list,
-		help = true,
-	}
 	local button = CreateFrame("Button", nil, MountJournal.MountCount)
 	button:SetSize(20, 20)
 	button:SetPoint("LEFT", MountJournal.MountCount, "RIGHT", 4, 0)
@@ -303,16 +292,43 @@ function module:SetupMounts()
 	button.texture = button:CreateTexture(nil, "ARTWORK")
 	button.texture:SetTexture("Interface\\Icons\\INV_Misc_Head_Dragon_01")
 	button.texture:SetAllPoints()
-	button:SetScript("OnEnter", function()
-		module:ShowTooltip(button, button_options)
+	-- Deliberately a plain tooltip, not the broker's. That one builds a row per
+	-- mob with a completion cell in every column, which is far too much work to
+	-- do on hover for a list this long. Click through to the browser instead.
+	button:SetScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:SetText(C_AddOns.GetAddOnMetadata(myname, "Title"))
+		GameTooltip:AddLine(("SilverDragon knows about %d rares that drop a mount."):format(module:CountMountMobs()), 1, 1, 1)
+		GameTooltip:AddLine("Click to see them", 0, 1, 1)
+		GameTooltip:Show()
 	end)
-	-- onleave is handled by the tooltip's autohide
-	button:SetScript("OnClick", dataobject.OnClick)
+	button:SetScript("OnLeave", GameTooltip_Hide)
+	button:SetScript("OnClick", function()
+		core:GetModule("Browser"):ShowLootCategory("mount")
+	end)
 	module.mounts = button
 	if not self.db.profile.mounts then
 		button:Hide()
 	end
 end
+
+local mountMobCount
+function module:CountMountMobs()
+	if not mountMobCount then
+		mountMobCount = 0
+		for source, data in pairs(core.datasources) do
+			if core.db.global.datasources[source] then
+				for id in pairs(data) do
+					if ns.Loot.HasMounts(id) then
+						mountMobCount = mountMobCount + 1
+					end
+				end
+			end
+		end
+	end
+	return mountMobCount
+end
+core.RegisterCallback("LDB_MountCount", "Ready", function() mountMobCount = nil end)
 
 do
 	local TextureCellProvider, TextureCellPrototype = LibQTip:CreateCellProvider()

@@ -3,4 +3,7 @@
 	</Binding>
 	<Binding name="CLICK SilverDragonMacroButton:LeftButton" category="ADDONS">
 	</Binding>
+	<Binding name="SILVERDRAGON_TOGGLE_BROWSER" category="ADDONS">
+		SilverDragon:GetModule("Browser"):Toggle()
+	</Binding>
 </Bindings>

@@ -76,6 +76,7 @@ targets\config.lua
 targets\looks\looks.xml
 
 mobs.lua
+Browser\module.xml
 
 # working with other addons
 integration\tomtom.lua
