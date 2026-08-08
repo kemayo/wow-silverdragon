@@ -200,7 +200,7 @@ end
 
 -- /script SilverDragon:GetModule("Overlay"):Update()
 function module:Update()
-    ns.ClearRunCaches()
+    -- no clear needed: each pass takes its own hold, which starts one
     self:UpdateMinimapIcons()
     self:UpdateWorldMapIcons()
 end

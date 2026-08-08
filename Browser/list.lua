@@ -765,6 +765,31 @@ function module:OnDataReady()
 	self:ScheduleRefresh()
 end
 
+-- The rows and the map pins both describe a mob, and should not describe it
+-- differently. Anchoring stays with the caller; only what it says is shared.
+function module:FillMobTooltip(tooltip, id, uiMapID, coord)
+	tooltip:AddLine(core:GetMobLabel(id))
+	if uiMapID then
+		local where = core.zone_names[uiMapID] or UNKNOWN
+		if coord then
+			local x, y = core:GetXY(coord)
+			tooltip:AddDoubleLine(where, ("%.1f, %.1f"):format(x * 100, y * 100))
+		else
+			tooltip:AddDoubleLine(LOCATION_COLON, where)
+		end
+		if not core:IsMobInPhase(id, uiMapID) then
+			tooltip:AddLine("Belongs to a different version of this zone", 1, 0.5, 0.5, true)
+		end
+	end
+	tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
+	ns:UpdateTooltipWithCompletion(tooltip, id)
+	ns.Loot.Summary.UpdateTooltip(tooltip, id)
+	local data = ns.mobdb[id]
+	if data and data.notes then
+		tooltip:AddLine(core:RenderString(data.notes, data), 1, 1, 1, true)
+	end
+end
+
 -- Rows
 
 local NavLineMixin = {}
@@ -888,13 +913,7 @@ NavLineMixin.Scripts = {
 		else
 			tooltip:SetPoint("TOPRIGHT", self, "TOPLEFT")
 		end
-		tooltip:AddLine(core:GetMobLabel(data.id))
-		tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[data.id]))
-		ns:UpdateTooltipWithCompletion(tooltip, data.id)
-		ns.Loot.Summary.UpdateTooltip(tooltip, data.id)
-		if ns.mobdb[data.id] and ns.mobdb[data.id].notes then
-			tooltip:AddLine(core:RenderString(ns.mobdb[data.id].notes), 1, 1, 1, true)
-		end
+		module:FillMobTooltip(tooltip, data.id, data.uiMapID)
 		tooltip:Show()
 	end,
 

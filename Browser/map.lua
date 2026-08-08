@@ -267,14 +267,7 @@ function MapMixin:AcquirePin()
 			core.events:Fire("BrokerMobEnter", p.mobid)
 			local tooltip = ns.Tooltip.Get("Browser")
 			tooltip:SetOwner(p, "ANCHOR_RIGHT")
-			tooltip:AddLine(core:GetMobLabel(p.mobid))
-			local x, y = core:GetXY(p.coord)
-			tooltip:AddDoubleLine(core.zone_names[p.uiMapID] or UNKNOWN,
-				("%.1f, %.1f"):format(x * 100, y * 100))
-			if not core:IsMobInPhase(p.mobid, p.uiMapID) then
-				tooltip:AddLine("Belongs to a different version of this zone", 1, 0.5, 0.5, true)
-			end
-			ns.Loot.Summary.UpdateTooltip(tooltip, p.mobid)
+			module:FillMobTooltip(tooltip, p.mobid, p.uiMapID, p.coord)
 			tooltip:Show()
 		end)
 		pin:SetScript("OnLeave", function(p)
