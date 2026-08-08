@@ -2,6 +2,17 @@
 
 ## Changed in v2026.23
 
+* Updated for 12.1.0
+* New rares in the Coiled Isle and Vaults of Atal'Utek
+* A window for browsing every rare SilverDragon knows about, from `/silverdragon browse`, a left-click on the minimap button, a keybinding, or the "Mobs" section of the options
+    * Rares are listed by expansion and then by zone, by achievement, or by what they drop. A zone with sub-zones shows them underneath it. Turn "Group by expansion" off to go straight to zones, with every expansion's rares together
+    * Picking one shows its model, where to find it, how far through its achievement and quest you are, what it drops, and a map of the zone with the rest of its rares marked on it. Click a marker to jump to that one
+    * Icons and colours mean the same thing they do on the map, so a rare you want stands out the same way in both
+    * Search by name — in your own language or the addon's — or by npc id
+    * Filters for hiding or isolating the rares you've ignored, and for the ones you've added yourself. Ignoring a rare, or watching for one everywhere, can be done from the list or from the rare itself
+    * Two looks: "Traditional", which sits alongside the adventure guide, and "Minimal". Pick one under Browser in the options
+* The mount journal's SilverDragon button now opens the browser showing every rare that drops a mount, rather than building a very long tooltip
+* The "Mobs" section of the options no longer lists every rare as a checkbox. The browser shows the same thing properly. "Custom" and "Ignore" stay where they were
 * Announcements: rares are now filtered by whether they're still worth your time, using the same rules as my HandyNotes plugins
     * A new "What's notable?" section lets you say what you actually care about: mounts, toys, pets, transmog, decor, quest-attached items and achievement progress
     * **This filters more than before.** A rare you've collected everything from will go quiet, including ones the game is still flagging on your minimap. A finished kill-quest silences one outright, since it has nothing left to give. Set "Which rares?" to "All of them" if you'd rather keep hearing about all of them
