@@ -225,7 +225,7 @@ core:RegisterMobData("BattleForAzeroth", {
 	[138618] = {name="Haywire Golem",locations={[896]={23603060},},loot={155362},quest=51698,},
 	[138667] = {name="Blighted Monstrosity",locations={[896]={35801120},},loot={163680},notes="World Quest",quest=52001,hidden=true,},
 	[138675] = {name="Gorged Boar",locations={[896]={28002580},},loot={154461},quest=51700,tameable=132184,},
-	[138794] = {name="Dunegorger Kraulok",locations={[894]={44005580},},loot={{174842,mount=1250,},161419,161399,161400,161402,161404,161405,161406,161408,164385},quest=52196,},
+	[138794] = {name="Dunegorger Kraulok",locations={[864]={44005580},},loot={{174842,mount=1250,},161419,161399,161400,161402,161404,161405,161406,161408,164385},quest=52196,},
 	[138863] = {name="Sister Martha",locations={[896]={33005700},},loot={155299},quest=51748,},
 	[138866] = {name="Mack",locations={[896]={24402200},},loot={154217},quest=51749,vignette=2979,},
 	[138870] = {name="Mick",locations={[896]={24402200},},quest=51749,vignette=2979,},
