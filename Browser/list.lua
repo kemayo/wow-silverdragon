@@ -143,6 +143,85 @@ local function zoneName(uiMapID)
 	return core.zone_names[uiMapID] or ("map" .. uiMapID)
 end
 
+-- Zone parents, remembered the way the names are. GetMapInfo is asked for the
+-- name anyway, so this costs nothing more.
+local zoneParent = setmetatable({}, {__index = function(self, uiMapID)
+	local info = C_Map.GetMapInfo(uiMapID)
+	local parent = info and info.parentMapID
+	if parent == 0 then parent = nil end
+	rawset(self, uiMapID, parent or false)
+	return parent or false
+end})
+
+--[[
+Which zones sit under which, for the zone grouping.
+
+A zone nests under the nearest ancestor that also has rares of its own. Anything
+higher is skipped: a continent almost never has any, and an empty level to open
+would be worse than a flat list. Most zones come out as roots for that reason,
+which is the intent -- this is for the handful of city and sub-zone maps whose
+parent really does have rares too.
+]]
+local function nestZones(branches)
+	local childrenOf, roots = {}, {}
+	for zone in pairs(branches) do
+		local parent, guard = zoneParent[zone], 0
+		while parent and not branches[parent] and guard < 12 do
+			parent = zoneParent[parent]
+			guard = guard + 1
+		end
+		if parent and branches[parent] then
+			childrenOf[parent] = childrenOf[parent] or {}
+			table.insert(childrenOf[parent], zone)
+		else
+			table.insert(roots, zone)
+		end
+	end
+	return roots, childrenOf
+end
+
+-- The zone you are in and every ancestor of it that made the tree, so the chain
+-- down to it all sorts first at its own level.
+local function pinnedZones(branches)
+	local pinned = {}
+	local zone, guard = HBD:GetPlayerZone(), 0
+	while zone and guard < 12 do
+		if branches[zone] then pinned[zone] = true end
+		zone = zoneParent[zone] or nil
+		guard = guard + 1
+	end
+	return pinned
+end
+
+local function sortZones(list, pinned)
+	table.sort(list, function(a, b)
+		if pinned[a] ~= pinned[b] then return pinned[a] end
+		return zoneName(a) < zoneName(b)
+	end)
+	return list
+end
+
+-- Deduped across the subtree: a rare recorded on both a zone and its parent is
+-- still one rare.
+local subtreeSeen = {}
+local function countZoneSubtree(branches, childrenOf, zone)
+	wipe(subtreeSeen)
+	local passing = 0
+	local function walk(this)
+		for _, id in ipairs(branches[this] or EMPTY) do
+			if not subtreeSeen[id] and passesFilter(id) then
+				subtreeSeen[id] = true
+				passing = passing + 1
+			end
+		end
+		for _, child in ipairs(childrenOf[this] or EMPTY) do
+			walk(child)
+		end
+	end
+	walk(zone)
+	return passing
+end
+
 local sortedSources = {}
 local function getSortedSources()
 	wipe(sortedSources)
@@ -255,26 +334,63 @@ local function addMobs(entries, source, branchKey, uiMapID, mobs, indent)
 	end
 end
 
+-- One zone and, if it is open, its sub-zones and then its own rares. Sub-zones
+-- come first: they are structure, and a long list of rares would bury them.
+local function addZone(entries, source, branches, childrenOf, zone, parentKey, indent, filtering, pinned)
+	local count = countZoneSubtree(branches, childrenOf, zone)
+	if count == 0 and filtering then return end
+
+	local key = parentKey .. "/z/" .. zone
+	table.insert(entries, {
+		kind = KIND_ZONE,
+		key = key,
+		indent = indent,
+		label = zoneName(zone),
+		uiMapID = zone,
+		source = source,
+		count = count,
+		-- enough to rebuild this branch alone when it is opened
+		mobs = branches[zone],
+		branches = branches,
+		childrenOf = childrenOf,
+	})
+	if not isExpanded(key) then return end
+
+	local children = childrenOf[zone]
+	if children then
+		local sorted = {}
+		for _, child in ipairs(children) do table.insert(sorted, child) end
+		for _, child in ipairs(sortZones(sorted, pinned)) do
+			addZone(entries, source, branches, childrenOf, child, key, indent + 1, filtering, pinned)
+		end
+	end
+	addMobs(entries, source, key, zone, branches[zone], indent + 1)
+end
+
+local function addZones(entries, source, branches, indent)
+	local roots, childrenOf = nestZones(branches)
+	local pinned = pinnedZones(branches)
+	local filtering = filtersActive()
+	local prefix = source or "*"
+	for _, zone in ipairs(sortZones(roots, pinned)) do
+		addZone(entries, source, branches, childrenOf, zone, prefix, indent, filtering, pinned)
+	end
+end
+
 local sortedBranches = {}
 local function addBranches(entries, source, branches, grouping, indent)
+	if grouping == "zone" then
+		return addZones(entries, source, branches, indent)
+	end
 	wipe(sortedBranches)
 	for branch in pairs(branches) do
 		table.insert(sortedBranches, branch)
 	end
-	local playerZone = grouping == "zone" and HBD:GetPlayerZone()
-	local nameFor = zoneName
-	if grouping == "achievement" then
-		nameFor = achievementName
-	elseif grouping == "loot" then
-		nameFor = function(category) return LOOT_CATEGORY_NAMES[category] or category end
-	end
+	local nameFor = grouping == "achievement" and achievementName
+		or function(category) return LOOT_CATEGORY_NAMES[category] or category end
 	table.sort(sortedBranches, function(a, b)
 		if grouping == "loot" then
 			return (LOOT_CATEGORY_ORDER[a] or 99) < (LOOT_CATEGORY_ORDER[b] or 99)
-		end
-		-- the zone you are in goes first, being the likeliest one you opened for
-		if playerZone and ((a == playerZone) ~= (b == playerZone)) then
-			return a == playerZone
 		end
 		return nameFor(a) < nameFor(b)
 	end)
@@ -290,14 +406,13 @@ local function addBranches(entries, source, branches, grouping, indent)
 				indent = indent,
 				label = nameFor(branch),
 				achievementID = grouping == "achievement" and branch or nil,
-				uiMapID = grouping == "zone" and branch or nil,
 				source = source,
 				count = count,
 				-- lets expanding build this branch alone, without the whole index
 				mobs = branches[branch],
 			})
 			if isExpanded(key) then
-				addMobs(entries, source, key, grouping == "zone" and branch or nil, branches[branch], indent + 1)
+				addMobs(entries, source, key, nil, branches[branch], indent + 1)
 			end
 		end
 	end
@@ -309,6 +424,20 @@ local function buildChildren(self, header)
 	local grouping = self.db.profile.grouping
 	if header.kind == KIND_SOURCE and header.branches then
 		addBranches(entries, header.source, header.branches, grouping, header.indent + 1)
+	elseif header.kind == KIND_ZONE and header.childrenOf then
+		-- a zone opens onto its sub-zones as well as its own rares
+		local pinned = pinnedZones(header.branches)
+		local filtering = filtersActive()
+		local children = header.childrenOf[header.uiMapID]
+		if children then
+			local sorted = {}
+			for _, child in ipairs(children) do table.insert(sorted, child) end
+			for _, child in ipairs(sortZones(sorted, pinned)) do
+				addZone(entries, header.source, header.branches, header.childrenOf, child,
+					header.key, header.indent + 1, filtering, pinned)
+			end
+		end
+		addMobs(entries, header.source, header.key, header.uiMapID, header.mobs, header.indent + 1)
 	elseif header.kind == KIND_ZONE and header.mobs then
 		addMobs(entries, header.source, header.key, header.uiMapID, header.mobs, header.indent + 1)
 	else
