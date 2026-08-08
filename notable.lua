@@ -147,3 +147,70 @@ ns.MobStateColor = {
 	nothing = {0.7, 0.7, 0.7},
 	done = {0.33, 1, 0.33},
 }
+
+-- The icons that go with those states, in three themes. Here rather than in the
+-- overlay because the overlay ships as its own addon and the browser needs the
+-- same six icons: two copies would drift, and a rare showing a red skull on the
+-- map and a grey one in the browser is the sort of thing nothing reports.
+--
+-- The theme *choice* stays the overlay's, since that's where the option lives.
+--
+-- DungeonSkull = skull
+-- VignetteKillElite = Skull with star around it
+-- Islands-AzeriteBoss = more detailed skull
+-- nazjatar-nagaevent = more detailed skull, glowing
+-- WhiteCircle-RaidBlips / PlayerPartyBlip = white circle
+-- WhiteDotCircle-RaidBlips / PlayerRaidBlip = white circle with dot
+-- PlayerDeadBlip = black circle with white X
+-- QuestSkull = gold glowy circle
+-- Warfront-NeutralHero-Silver = silver dragon on gold circle
+--
+-- Grey for "nothing" so it recedes, and plain white for "unknown", which is
+-- making no claim either way.
+do
+	local function tex(atlas, r, g, b, scale)
+		return {
+			atlas = atlas,
+			r = r, g = g, b = b, a = 0.9,
+			scale = scale or 1,
+		}
+	end
+	ns.MobStateIcons = {
+		circles = {
+			achievement = tex("PlayerPartyBlip", 1, 0.33, 0.33, 1.3), -- red
+			something = tex("Warfront-NeutralHero-Silver", 0.5, 1, 1, 1.3), -- cyan dragon
+			nothing = tex("PlayerPartyBlip", 0.7, 0.7, 0.7, 1.3), -- grey
+			unknown = tex("PlayerPartyBlip", 1, 1, 1, 1.3), -- plain white
+			done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1), -- green
+			mount = tex("PlayerRaidBlip", 1, 0.33, 0.33, 1.3), -- red, dotted
+		},
+		skulls = {
+			achievement = tex("Islands-AzeriteBoss", 1, 0.33, 0.33, 1.8), -- red skull
+			something = tex("nazjatar-nagaevent", 0.5, 1, 1, 1.8), -- cyan glowing skull
+			nothing = tex("Islands-AzeriteBoss", 0.7, 0.7, 0.7, 1.5), -- grey skull
+			unknown = tex("Islands-AzeriteBoss", 1, 1, 1, 1.8), -- plain white skull
+			done = tex("Islands-AzeriteBoss", 0.33, 1, 0.33, 1.5), -- green skull
+			mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
+		},
+		stars = {
+			achievement = tex("VignetteKill", 1, 0.33, 1, 1.6), -- magenta star
+			something = tex("VignetteLootElite", 0.5, 1, 1, 1.6), -- cyan shiny star
+			nothing = tex("VignetteKill", 0.7, 0.7, 0.7, 1.3), -- grey star
+			unknown = tex("VignetteKill", 1, 1, 1, 1.6), -- plain white star
+			-- was 0,1,1 and labelled green, but that's a cyan too close to the
+			-- "something you want" one to tell apart at icon size
+			done = tex("VignetteKill", 0.33, 1, 0.33, 1.3), -- green star
+			mount = tex("VignetteKillElite", 1, 0.33, 1, 1.8), -- magenta shiny star
+		},
+	}
+	if ns.CLASSIC then
+		ns.MobStateIcons.skulls = {
+			achievement = tex("DungeonSkull", 1, 0.33, 0.33, 1.3), -- red skull
+			something = tex("VignetteKillElite", 0.5, 1, 1, 1.3), -- cyan glowing skull
+			nothing = tex("DungeonSkull", 0.7, 0.7, 0.7, 1.3), -- grey skull
+			unknown = tex("DungeonSkull", 1, 1, 1, 1.3), -- plain white skull
+			done = tex("DungeonSkull", 0.33, 1, 0.33, 1), -- green skull
+			mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
+		}
+	end
+end

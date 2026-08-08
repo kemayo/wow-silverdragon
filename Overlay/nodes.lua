@@ -12,22 +12,6 @@ local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 -- The following is largely unmodified from the handynotes integration
 
 do
-    local function tex(atlas, r, g, b, scale)
-        return {
-            atlas = atlas,
-            r = r, g = g, b = b, a = 0.9,
-            scale = scale or 1,
-        }
-    end
-    -- DungeonSkull = skull
-    -- VignetteKillElite = Skull with star around it
-    -- Islands-AzeriteBoss = more detailed skull
-    -- nazjatar-nagaevent = more detailed skull, glowing
-    -- WhiteCircle-RaidBlips / PlayerPartyBlip = white circle
-    -- WhiteDotCircle-RaidBlips / PlayerRaidBlip = white circle with dot
-    -- PlayerDeadBlip = black circle with white X
-    -- QuestSkull = gold glowy circle
-    -- Warfront-NeutralHero-Silver = silver dragon on gold circle
     -- Six states, and every theme wants all six:
     --   mount        there's a mount on it you'd want
     --   achievement  you haven't finished its achievement
@@ -35,46 +19,9 @@ do
     --   nothing      you can still kill it, but there's nothing on it for you
     --   done         it has nothing left to give at all
     --   unknown      no quest, no achievement, no loot -- nothing to go on
-    -- Grey for "nothing" so it recedes, and plain white for "unknown", which is
-    -- making no claim either way.
-    local icons = {
-        circles = {
-            achievement = tex("PlayerPartyBlip", 1, 0.33, 0.33, 1.3), -- red
-            something = tex("Warfront-NeutralHero-Silver", 0.5, 1, 1, 1.3), -- cyan dragon
-            nothing = tex("PlayerPartyBlip", 0.7, 0.7, 0.7, 1.3), -- grey
-            unknown = tex("PlayerPartyBlip", 1, 1, 1, 1.3), -- plain white
-            done = tex("PlayerDeadBlip", 0.33, 1, 0.33, 1), -- green
-            mount = tex("PlayerRaidBlip", 1, 0.33, 0.33, 1.3), -- red, dotted
-        },
-        skulls = {
-            achievement = tex("Islands-AzeriteBoss", 1, 0.33, 0.33, 1.8), -- red skull
-            something = tex("nazjatar-nagaevent", 0.5, 1, 1, 1.8), -- cyan glowing skull
-            nothing = tex("Islands-AzeriteBoss", 0.7, 0.7, 0.7, 1.5), -- grey skull
-            unknown = tex("Islands-AzeriteBoss", 1, 1, 1, 1.8), -- plain white skull
-            done = tex("Islands-AzeriteBoss", 0.33, 1, 0.33, 1.5), -- green skull
-            mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
-        },
-        stars = {
-            achievement = tex("VignetteKill", 1, 0.33, 1, 1.6), -- magenta star
-            something = tex("VignetteLootElite", 0.5, 1, 1, 1.6), -- cyan shiny star
-            nothing = tex("VignetteKill", 0.7, 0.7, 0.7, 1.3), -- grey star
-            unknown = tex("VignetteKill", 1, 1, 1, 1.6), -- plain white star
-            -- was 0,1,1 and labelled green, but that's a cyan too close to the
-            -- "something you want" one to tell apart at icon size
-            done = tex("VignetteKill", 0.33, 1, 0.33, 1.3), -- green star
-            mount = tex("VignetteKillElite", 1, 0.33, 1, 1.8), -- magenta shiny star
-        }
-    }
-    if ns.CLASSIC then
-        icons.skulls = {
-            achievement = tex("DungeonSkull", 1, 0.33, 0.33, 1.3), -- red skull
-            something = tex("VignetteKillElite", 0.5, 1, 1, 1.3), -- cyan glowing skull
-            nothing = tex("DungeonSkull", 0.7, 0.7, 0.7, 1.3), -- grey skull
-            unknown = tex("DungeonSkull", 1, 1, 1, 1.3), -- plain white skull
-            done = tex("DungeonSkull", 0.33, 1, 0.33, 1), -- green skull
-            mount = tex("VignetteKillElite", 1, 0.33, 0.33, 1.8), -- red shiny skull
-        }
-    end
+    -- The themes themselves are in core, next to ns.MobState which decides
+    -- between them, because the mob browser draws the same six.
+    local icons = ns.MobStateIcons
     local function should_show_mob(id, uiMapID)
         if module.db.profile.hidden[id] or core:ShouldIgnoreMob(id, uiMapID) then
             return false
