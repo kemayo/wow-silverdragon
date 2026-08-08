@@ -111,6 +111,20 @@ function module:OptionsRequested(callback, options)
 			childGroups = "tab",
 			order = 15,
 			args = {
+				browse = {
+					type = "group",
+					name = "Browse",
+					order = 0,
+					args = {
+						about = core:GetModule("Config").desc("Every rare SilverDragon knows about, with where to find it and what it drops.", 0),
+						open = {
+							type = "execute",
+							name = "Browse rares",
+							func = function() core:GetModule("Browser"):Toggle() end,
+							order = 1,
+						},
+					},
+				},
 				custom = {
 					type = "group",
 					name = CUSTOM,
@@ -175,7 +189,6 @@ function module:OptionsRequested(callback, options)
 	}
 	self:BuildIgnoreList(options)
 	self:BuildCustomList(options)
-	self:BuildMobList(options)
 
 	core.UnregisterCallback(self, "OptionsRequested")
 end
@@ -220,160 +233,5 @@ function module:BuildCustomList(options)
 				args["map"..uiMapID].args["mob"..mobid] = toggle_mob(mobid)
 			end
 		end
-	end
-end
-
-function module:BuildMobList(options)
-	ns:LoadAllAchievementMobs()
-	for source, data in pairs(core.datasources) do
-		local group = {
-			type = "group",
-			name = source,
-			get = function(info)
-				return not core.db.global.ignore[info.arg]
-			end,
-			set = function(info, value)
-				core:SetIgnore(info.arg, not value)
-			end,
-			args = {
-				enabled = {
-					type = "toggle",
-					name = ENABLE,
-					desc = "If you disable this, SilverDragon will just not know about these mobs. They'll still be announced when you mouse over them, like any unknown rare.",
-					arg = source,
-					get = function(info) return core.db.global.datasources[info.arg] end,
-					set = function(info, value)
-						core.db.global.datasources[info.arg] = value
-						core:BuildLookupTables()
-					end,
-					disabled = false,
-				},
-				ignore = {
-					type = "toggle",
-					name = IGNORE,
-					desc = "Ignore every mob provided by this module. This will make them all not be announced, regardless of any other settings.",
-					arg = source,
-					get = function(info) return core.db.global.ignore_datasource[info.arg] end,
-					set = function(info, value)
-						core.db.global.ignore_datasource[info.arg] = value
-						core:BuildLookupTables()
-					end,
-					disabled = function(info)
-						return not core.db.global.datasources[info.arg]
-					end,
-				},
-				zones = {
-					type = "group",
-					name = ZONE,
-					inline = false,
-					childGroups = "tree",
-					args = {},
-				},
-			},
-		}
-		local mob_toggle_disabled = function(info)
-			return not core.db.global.datasources[info[#info - 3]]
-		end
-		local empty = {}
-		for id, mob in pairs(data) do
-			for _, achievement in ipairs(ns.mobs_to_achievement[id] or empty) do
-				if not group.args.achievements then
-					group.args.achievements = {
-						type = "group",
-						name = ACHIEVEMENTS,
-						inline = false,
-						childGroups = "tree",
-						args = {},
-					}
-				end
-				if not group.args.achievements.args["achievement"..achievement] then
-					group.args.achievements.args["achievement"..achievement] = {
-						type = "group",
-						inline = false,
-						name = 	select(2, GetAchievementInfo(achievement)) or "achievement:"..achievement,
-						desc = "ID: " .. achievement,
-						args = {
-							all = {
-								type = "execute",
-								name = ALL,
-								desc = "Select every mob in the list",
-								func = function(info)
-									if not ns.achievements[achievement] then return end
-									for mobid, criteria in pairs(ns.achievements[achievement]) do
-										core:SetIgnore(mobid, false, true)
-									end
-									self:BuildIgnoreList(info.options)
-								end,
-								width = "half",
-								order = 1,
-							},
-							none = {
-								type = "execute",
-								name = NONE,
-								desc = "Deselect every mob in the list",
-								func = function(info)
-									if not ns.achievements[achievement] then return end
-									for mobid, criteria in pairs(ns.achievements[achievement]) do
-										core:SetIgnore(mobid, true, true)
-									end
-									self:BuildIgnoreList(info.options)
-								end,
-								width = "half",
-								order = 2,
-							},
-						},
-					}
-				end
-				local toggle = toggle_mob(id)
-				toggle.disabled = mob_toggle_disabled
-				group.args.achievements.args["achievement"..achievement].args["mob"..id] = toggle
-			end
-			if not mob.hidden and mob.locations then
-				for zone in pairs(mob.locations) do
-					if not group.args.zones.args["map"..zone] then
-						group.args.zones.args["map"..zone] = {
-							type = "group",
-							inline = false,
-							name = core.zone_names[zone] or ("map"..zone),
-							desc = "ID: " .. zone,
-							args = {
-								all = {
-									type = "execute",
-									name = ALL,
-									desc = "Select every mob in the list",
-									func = function(info)
-										if not ns.mobsByZone[zone] then return end
-										for mobid, locations in pairs(ns.mobsByZone[zone]) do
-											core:SetIgnore(mobid, false, true)
-										end
-										self:BuildIgnoreList(info.options)
-									end,
-									width = "half",
-									order = 1,
-								},
-								none = {
-									type = "execute",
-									name = NONE,
-									desc = "Deselect every mob in the list",
-									func = function(info)
-										if not ns.mobsByZone[zone] then return end
-										for mobid, locations in pairs(ns.mobsByZone[zone]) do
-											core:SetIgnore(mobid, true, true)
-										end
-										self:BuildIgnoreList(info.options)
-									end,
-									width = "half",
-									order = 2,
-								},
-							},
-						}
-					end
-					local toggle = toggle_mob(id)
-					toggle.disabled = mob_toggle_disabled
-					group.args.zones.args["map"..zone].args["mob"..id] = toggle
-				end
-			end
-		end
-		options.plugins.mobs.mobs.args[source] = group
 	end
 end
