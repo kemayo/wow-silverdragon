@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2026.24
+
+* New option "General > Count Shared Loot", which makes loot shared across all rares in a zone get counted for notability and announcement types. Note: if you turn this on, (almost) every single rare in Midnight will yell at you because each zone has two extremely low drop-rate mounts shared across its rares.
+
 ## Changed in v2026.23
 
 * Updated for 12.1.0
