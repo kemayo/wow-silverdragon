@@ -175,15 +175,13 @@ do
 		-- convenience for me, really...
 		addon.datasources[source] = addon.datasources[source] or {}
 		addon.treasuresources[source] = addon.treasuresources[source] or {}
-		for coord, point in pairs(points) do
-			if defaults then
-				for k,v in pairs(defaults) do
-					if k == "note" and point[k] then
-						point[k] = v .. "\n" .. point[k]
-					end
-					point[k] = point[k] or v
-				end
+		if defaults then
+			local nodeType = ns.nodeMaker(defaults)
+			for coord, point in pairs(points) do
+			    points[coord] = nodeType(point)
 			end
+		end
+		for coord, point in pairs(points) do
 			if point.npc or point.vignette then
 				local data = {
 					name=point.label,
@@ -197,6 +195,7 @@ do
 					quest=point.quest,
 					hidden=point.hidden,
 					worldquest=point.worldquest,
+					achievement=point.achievement, criteria=point.criteria,
 				}
 				-- variations on "also register this elsewhere":
 				if point.translate or point.parent or point.levels then

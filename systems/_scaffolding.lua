@@ -87,3 +87,18 @@ function ns.GetCriteria(achievement, criteriaid)
     if not retOK then return end
     return criteriaString, criteriaType, completed, quantity, reqQuantity, charName, flags, assetID, quantityString, criteriaID, eligible
 end
+
+ns.nodeMaker = function(defaults)
+    local meta = {__index = defaults}
+    return function(details)
+        details = details or {}
+        if details.note and defaults.note then
+            details.note = details.note .. "\n" .. defaults.note
+        end
+        local meta2 = getmetatable(details)
+        if meta2 and meta2.__index then
+            return setmetatable(details, {__index = ns.merge(CopyTable(defaults, true), meta2.__index)})
+        end
+        return setmetatable(details, meta)
+    end
+end

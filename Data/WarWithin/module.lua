@@ -26,20 +26,7 @@ local ns = {
 		return point
 	end,
 	atlas_texture = function(atlas, ...) return atlas end,
-	nodeMaker = function(defaults)
-		local meta = {__index = defaults}
-		return function(details)
-			details = details or {}
-			if details.note and defaults.note then
-				details.note = details.note .. "\n" .. defaults.note
-			end
-			local meta2 = getmetatable(details)
-			if meta2 and meta2.__index then
-				return setmetatable(details, {__index = MergeTable(CopyTable(defaults), meta2.__index)})
-			end
-			return setmetatable(details, meta)
-		end
-	end,
+	nodeMaker = core.NAMESPACE.nodeMaker,
 }
 
 ns.KHAZALGAR = 2274
