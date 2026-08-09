@@ -272,7 +272,7 @@ function module:OnInitialize()
 				args = {
 					-- these globals don't all exist in the classic clients, hence
 					-- the fallbacks
-					achievement_notable = toggle(_G.TRANSMOG_SOURCE_5 or ACHIEVEMENTS or "Achievement", "Count unlearned achievement-progress as notable", 10),
+					achievement_notable = toggle(_G.TRANSMOG_SOURCE_5 or ACHIEVEMENTS or "Achievement", "Count unearned achievement-progress as notable", 10),
 					mount_notable = toggle(MOUNT or "Mount", "Count unlearned mounts as notable loot. This also picks which sightings get the mount sound and flash, whatever the filters above say", 20),
 					toy_notable = toggle(TOY or "Toy", "Count unlearned toys as notable loot", 30),
 					pet_notable = toggle(TOOLTIP_BATTLE_PET or "Battle Pet", "Count uncaught pets as notable loot", 40),
