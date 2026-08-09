@@ -286,6 +286,7 @@ read_globals = {
     "WorldMapPOIQuantizerMixin",
     "RegionUtil",
     "OpenAchievementFrameToAchievement",
+    "ShowAchievementFrameForAchievement",
     "ToggleWorldMap",
     "SetItemButtonCount",
     "SetItemButtonDesaturated",
