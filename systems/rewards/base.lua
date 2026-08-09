@@ -188,9 +188,10 @@ function ns.rewards.Currency:AddToItemButton(button, ...)
 end
 
 ns.rewards.Achievement = Reward:extends{classname="Achievement"}
-function ns.rewards.Achievement:init(id, criteria, ...)
+function ns.rewards.Achievement:init(id, criteria, currentCharacter, ...)
 	self:super("init", id, ...)
 	self.criteria = criteria
+	self.currentCharacter = currentCharacter
 
 	self.name = string.format("{achievementname:%d%s%s}", id, criteria and "." or "", criteria or "")
 end
@@ -202,7 +203,12 @@ function ns.rewards.Achievement:Icon()
 end
 function ns.rewards.Achievement:Obtained(...)
 	if self:super("Obtained", ...) == false then return false end
-	return (select(4, GetAchievementInfo(self.id))) -- 13 is for this character
+	if self.criteria then
+		local _, _, completed, _, _, completedBy = ns.GetCriteria(self.id, self.criteria)
+		if self.currentCharacter then return completedBy == ns.playerName end
+		return completed
+	end
+	return (select(self.currentCharacter and 13 or 4, GetAchievementInfo(self.id)))
 end
 function ns.rewards.Achievement:TooltipLabel()
 	return BATTLE_PET_SOURCE_6 -- "Achievement"
