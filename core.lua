@@ -390,6 +390,7 @@ function addon:OnInitialize()
 			instances = false,
 			taxi = true,
 			charloot = false,
+			sharedloot = false,
 			transmog_specific = false,
 			-- What counts as "notable"? These are read by the shared rewards
 			-- system via ns.db, so the key names have to match the ones my

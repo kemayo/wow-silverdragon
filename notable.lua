@@ -8,7 +8,17 @@ local Debug = core.Debug
 -- flash rather than the ordinary ones -- if mounts aren't what you're here for,
 -- there's no reason to single them out either.
 function ns.HasNotableMounts(id, isTreasure)
-	return ns.db.mount_notable and ns.Loot.HasInterestingMounts(id, isTreasure)
+	if not ns.db.mount_notable then
+		return false
+	end
+	if ns.Loot.HasInterestingMounts(id, isTreasure) then
+		return true
+	end
+	-- GetLootTable won't check both at once:
+	if ns.db.sharedloot and ns.Loot.HasInterestingMounts(id, isTreasure, true) then
+		return true
+	end
+	return false
 end
 
 -- "Is this rare still worth telling you about?"
@@ -69,14 +79,22 @@ function ns.MobIsNotable(id, isTreasure, fromVignette)
 		end
 	end
 
-	if data.loot then
-		if ns.hasNotableLoot(data.loot) then
-			Debug("MobIsNotable", id, true, "notable loot")
-			return true
-		end
-		if ns.hasKnowableLoot(data.loot, core.db.profile.charloot) then
-			knowable = true
-		end
+	if data.loot and ns.hasNotableLoot(data.loot) then
+		Debug("MobIsNotable", id, true, "notable loot")
+		return true
+	end
+	-- Only count shared loot if requested
+	local shared = ns.db.sharedloot and data.loot_shared or nil
+	if shared and ns.hasNotableLoot(shared) then
+		Debug("MobIsNotable", id, true, "notable shared loot")
+		return true
+	end
+
+	if data.loot and ns.hasKnowableLoot(data.loot, ns.db.charloot) then
+		knowable = true
+	end
+	if shared and ns.hasKnowableLoot(shared, ns.db.charloot) then
+		knowable = true
 	end
 
 	if ns.HasNotableMounts(id, isTreasure) then
