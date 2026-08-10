@@ -258,7 +258,14 @@ local function statusChecker(iterator, test)
 	end
 end
 -- these all have mobid as the argument and return true/false/nil for known/unknown/none
-local function obtained(item) return item:Available() and item:Obtained(true) end
+-- Obtained first: you still own it on a character that can't loot it. Restricted
+-- and unowned answers nil, not false -- you're not missing what you can't get.
+local function obtained(item)
+	local known = item:Obtained(true)
+	if known then return true end
+	if not item:Available() then return nil end
+	return known
+end
 
 ns.Loot.Status.Toy = statusChecker(ns.Loot.IterToys, obtained)
 ns.Loot.Status.Mount = statusChecker(ns.Loot.IterMounts, obtained)
