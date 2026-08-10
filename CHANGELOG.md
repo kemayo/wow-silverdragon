@@ -1,8 +1,16 @@
 # Changelog
 
+## Changed in v2026.25
+
+* Adjustments to that shared loot behavior:
+ 1. Shared loot counting towards completion is now on by default
+ 2. A new option modifying the behavior has been added under "General > Count Share Loot", "...for alerts?" which is *off* by default.
+ 3. Adds up to new default experience: rares in Midnight will keep on alerting normally until you've got the zone mounts. If you really want to, you *can* get the full Illidan-screaming-at-you treatment. I think it's a bit much, though.
+
 ## Changed in v2026.24
 
 * New option "General > Count Shared Loot", which makes loot shared across all rares in a zone get counted for notability and announcement types. Note: if you turn this on, (almost) every single rare in Midnight will yell at you because each zone has two extremely low drop-rate mounts shared across its rares.
+* Opening an achievement from the right-click menu in the map would error in 12.1.
 
 ## Changed in v2026.23
 
