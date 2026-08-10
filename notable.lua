@@ -23,6 +23,18 @@ function ns.HasNotableMounts(id, isTreasure)
 	return false
 end
 
+-- Something you already have can still be interesting if it's bind-on-equip,
+-- because it sells. Unowned ones are hasNotableLoot's business. Returns which kind,
+-- for the debug log.
+function ns.HasSellableLoot(id, isTreasure, shared)
+	if not ns.db.boeloot then return false end
+	if ns.db.mount_notable and ns.Loot.HasMounts(id, true, true, isTreasure, shared) then return "mount" end
+	if ns.db.toy_notable and ns.Loot.HasToys(id, true, true, isTreasure, shared) then return "toy" end
+	if ns.db.pet_notable and ns.Loot.HasPets(id, true, true, isTreasure, shared) then return "pet" end
+	-- No transmog here, because that's so many rares and so variable for whether people would care.
+	return false
+end
+
 -- Three-valued: true wanted, false knowably not wanted, nil nothing to go on.
 -- nil must stay distinct from false, because plenty of mobs have nothing to judge
 -- and item data is often still loading when one is spotted. Callers suppress on
@@ -79,6 +91,12 @@ function ns.MobIsNotable(id, isTreasure, fromVignette)
 		knowable = true
 	end
 
+	local sellable = ns.HasSellableLoot(id, isTreasure)
+		or (ns.db.sharedloot and ns.HasSellableLoot(id, isTreasure, true))
+	if sellable then
+		Debug("MobIsNotable", id, true, "sellable", sellable)
+		return true
+	end
 	if ns.HasNotableMounts(id, isTreasure) then
 		Debug("MobIsNotable", id, true, "interesting mount")
 		return true

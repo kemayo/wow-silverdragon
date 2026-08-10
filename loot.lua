@@ -164,36 +164,24 @@ do
 		return regular_iter, ns.Loot.GetLootTable(id, ...) or noloot, nil
 	end
 end
-function ns.Loot.HasToys(id, only_knowable, ...)
-	if not ns.Loot.GetLootTable(id, ...) then return false end
-	for _, item in ns.Loot.IterToys(id, ...) do
-		if (not only_knowable) or item:Available() then
-			return true
+local function hasMaker(iterator)
+	return function(id, only_knowable, only_boe, ...)
+		if not ns.Loot.GetLootTable(id, ...) then return false end
+		for _, item in iterator(id, ...) do
+			if (not only_knowable) or (item:Available() and ((not only_boe) or itemBindOnEquip(item))) then
+				return true
+			end
 		end
+		return false
 	end
-	return false
 end
-function ns.Loot.HasMounts(id, only_knowable, only_boe, ...)
-	if not ns.Loot.GetLootTable(id, ...) then return false end
-	for _, item in ns.Loot.IterMounts(id, ...) do
-		if (not only_knowable) or (item:Available() and ((not only_boe) or itemBindOnEquip(item))) then
-			return true
-		end
-	end
-	return false
-end
+ns.Loot.HasMounts = hasMaker(ns.Loot.IterMounts)
+ns.Loot.HasToys = hasMaker(ns.Loot.IterToys)
+ns.Loot.HasPets = hasMaker(ns.Loot.IterPets)
 function ns.Loot.HasInterestingMounts(id, ...)
 	-- This comes up a lot: mounts that you don't know, or which are BoE and so can be sold
-	return ns.Loot.Status.Mount(id, ...) == false or ns.Loot.HasMounts(id, true, true, ...)
-end
-function ns.Loot.HasPets(id, only_knowable, ...)
-	if not ns.Loot.GetLootTable(id, ...) then return false end
-	for _, item in ns.Loot.IterPets(id, ...) do
-		if (not only_knowable) or item:Available() then
-			return true
-		end
-	end
-	return false
+	return ns.Loot.Status.Mount(id, ...) == false
+		or (core.db.profile.boeloot and ns.Loot.HasMounts(id, true, true, ...) or false)
 end
 function ns.Loot.HasKnowableLoot(id, ...)
 	local loot = ns.Loot.GetLootTable(id, ...)
@@ -324,9 +312,9 @@ function ns.Loot.Details.UpdateTooltip(tooltip, id, only, ...)
 
 	-- ... is the (treasure, shared) tail that GetLootTable / the iterators take,
 	-- so it has to be pushed past these functions' own leading arguments
-	local toy = (not only or only == "toy") and ns.Loot.HasToys(id, nil, ...)
+	local toy = (not only or only == "toy") and ns.Loot.HasToys(id, nil, nil, ...)
 	local mount = (not only or only == "mount") and ns.Loot.HasMounts(id, nil, nil, ...)
-	local pet = (not only or only == "pet") and ns.Loot.HasPets(id, nil, ...)
+	local pet = (not only or only == "pet") and ns.Loot.HasPets(id, nil, nil, ...)
 	local regular = (not only or only == "regular") and ns.Loot.HasRegularLoot(id, ...)
 
 	if mount then
