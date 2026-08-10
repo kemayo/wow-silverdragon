@@ -390,7 +390,8 @@ function addon:OnInitialize()
 			instances = false,
 			taxi = true,
 			charloot = false,
-			sharedloot = false,
+			sharedloot = true,
+			sharedloot_alerts = false, -- core because it affects the map and announcements
 			transmog_specific = false,
 			-- What counts as "notable"? These are read by the shared rewards
 			-- system via ns.db, so the key names have to match the ones my

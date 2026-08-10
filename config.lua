@@ -69,7 +69,8 @@ local options = {
 					args = {
 						about = desc("Some options for how SilverDragon will treat loot drops from mobs", 0),
 						charloot = toggle("Current character only", "Only show loot that should drop for your current character, and only count that loot towards a rare being worth announcing.", 10),
-						sharedloot = toggle("Count shared loot", "Some rares draw on a loot table shared with others nearby. Count what's in it towards them being worth announcing, and towards the sort of alert they get, the same as their own loot.", 15),
+						sharedloot = toggle("Count shared loot", "Some rares draw on a loot table shared with others nearby. Count what's in it towards them being worth announcing, the same as their own loot.", 15),
+						sharedloot_alerts = toggle("...for alerts?", "A shared mount you haven't got will earn the mount sound, flash and map icon as well, rather than just being notable.", 16, nil, function() return not core.db.profile.sharedloot end),
 						transmog_specific = toggle("Transmog exact items", "For transmog appearances, only count them as known if you know them from that exact item, rather than from another sharing the same appearance", 20),
 					}
 				},

@@ -14,8 +14,12 @@ function ns.HasNotableMounts(id, isTreasure)
 	if ns.Loot.HasInterestingMounts(id, isTreasure) then
 		return true
 	end
-	-- GetLootTable won't check both at once:
-	if ns.db.sharedloot and ns.Loot.HasInterestingMounts(id, isTreasure, true) then
+	-- Only count a shared mount as specifically a notable-mount if the user has opted
+	-- in, since the mount warnings are a lot more emphatic.
+	-- (GetLootTable won't check both at once.)
+	if ns.db.sharedloot and ns.db.sharedloot_alerts
+		and ns.Loot.HasInterestingMounts(id, isTreasure, true)
+	then
 		return true
 	end
 	return false
