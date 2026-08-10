@@ -3,10 +3,8 @@ local myname, ns = ...
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local Debug = core.Debug
 
--- A mount you already know can still be worth the kill, because a BoE one sells.
--- Announce leans on this too, for whether a sighting earns the mount sound and
--- flash rather than the ordinary ones -- if mounts aren't what you're here for,
--- there's no reason to single them out either.
+-- A mount you already know still counts if it's BoE, because it sells. Announce
+-- uses this to pick the mount sound and flash, not just for the filter.
 function ns.HasNotableMounts(id, isTreasure)
 	if not ns.db.mount_notable then
 		return false
@@ -25,26 +23,12 @@ function ns.HasNotableMounts(id, isTreasure)
 	return false
 end
 
--- "Is this rare still worth telling you about?"
---
--- Two questions in order: can it still give you anything at all, and if so is any
--- of it something you want. The first is a gate -- fail it and there's no point
--- announcing whatever it might theoretically drop -- and only then do the reward
--- checks get a say.
---
--- The shared rewards system answers the second per reward (Reward:Notable, and
--- the *_notable options it reads), and systems/notable.lua aggregates a loot
--- table. This is the per-mob composition. Unlike the one in my HandyNotes plugins
--- it's three-valued: true wanted, false knowably not wanted, nil nothing knowable.
---
--- nil has to stay distinct from false. Plenty of mobs have no loot, quest or
--- achievement to go on (Deathmaw), and item data is often still loading the
--- moment a rare is spotted, where CanLearnAppearance answers nil until it isn't.
--- Callers suppress on false alone, so both cost a spurious alert rather than
--- eating a real one.
+-- Three-valued: true wanted, false knowably not wanted, nil nothing to go on.
+-- nil must stay distinct from false, because plenty of mobs have nothing to judge
+-- and item data is often still loading when one is spotted. Callers suppress on
+-- false alone, so an unknown costs a spurious alert rather than eating a real one.
 function ns.MobIsNotable(id, isTreasure, fromVignette)
-	-- not an and/or chain: a treasure id that's missing from the treasure lookup
-	-- must not fall through to being read as a mob id
+	-- not an and/or chain: a missing treasure must not fall through to the mob db
 	local data
 	if isTreasure then
 		data = ns.vignetteTreasureLookup[id]
@@ -56,13 +40,9 @@ function ns.MobIsNotable(id, isTreasure, fromVignette)
 	-- the rewards system memoises within a run, and this is a fresh one
 	ns.ClearRunCaches()
 
-	-- The gate: a completed quest means the mob has nothing left to give, so don't
-	-- bother weighing up loot it can't drop. A vignette overrules that, because the
-	-- game only puts one up while something remains -- trust it over our own quest
-	-- data. Treasures always arrive by vignette, so they never fail this.
-	--
-	-- Note this is unrelated to quest_notable, which is about loot that has a quest
-	-- attached to it.
+	-- Gate: a finished quest means there's nothing left to hand over. A vignette
+	-- overrules it, since the game only shows one while something remains, and
+	-- treasures always arrive by vignette. Not quest_notable, which is about loot.
 	if data.quest and not (isTreasure or fromVignette) and ns.allQuestsComplete(data.quest) then
 		Debug("MobIsNotable", id, false, "quest complete")
 		return false
@@ -70,9 +50,7 @@ function ns.MobIsNotable(id, isTreasure, fromVignette)
 
 	local knowable = false
 
-	-- Achievements come from AchievementMobStatus rather than data.achievement:
-	-- mobs imported from HandyNotes data don't carry the field, and a mob can
-	-- count for more than one achievement anyway.
+	-- AchievementMobStatus, not data.achievement: a mob can count towards several
 	if ns.db.achievement_notable and not isTreasure then
 		for _, _, _, criteria_complete, by_alt in ns:AchievementMobStatus(id) do
 			knowable = true
@@ -119,23 +97,18 @@ end
 -- (without the vignette argument, so it answers as if you'd walked up to it)
 core.MobIsNotable = ns.MobIsNotable
 
--- Boil the above down to one word, for the places that show a mob's standing
--- rather than deciding whether to mention it: the map pins and the broker's
--- tooltip rows. Both want the same five answers, and the same colours for them,
--- so neither should be working them out for itself.
+-- One word for the places that show a mob's standing rather than decide whether to
+-- mention it, so the map, the browser and the broker can't disagree.
 function ns.MobState(id)
 	local quest, achievement, by_alt = ns:CompletionStatus(id)
-	-- The quest goes first for the same reason MobIsNotable gates on it: with it
-	-- done the mob can't hand anything over, so what it carries is academic. This
-	-- is the one state meaning "finished" rather than "nothing you happen to want".
+	-- Quest first, as in MobIsNotable: the only state meaning "finished".
 	if quest then
 		return "done"
 	end
 	if by_alt and ns.db.alts_achievements_count then
 		achievement = true
 	end
-	-- A mount outranks the rest, being what people are usually out here for, and
-	-- an unfinished achievement outranks ordinary loot.
+	-- A mount outranks an unfinished achievement, which outranks ordinary loot.
 	if ns.HasNotableMounts(id) then
 		return "mount"
 	end
@@ -146,22 +119,17 @@ function ns.MobState(id)
 	if notable == false then
 		return "nothing"
 	end
-	-- Showing "we have nothing to go on" apart from "there's something here you
-	-- want" is worth it where there's room to say so, even though the filter
-	-- treats them alike and announces both -- claiming a mob is worth your time
-	-- is a different thing from admitting we can't tell.
+	-- Worth telling apart from "something you want" where there's room to show it,
+	-- even though the filter announces both.
 	if notable == nil then
 		return "unknown"
 	end
 	return "something"
 end
 
--- Mount and achievement share a colour: the map tells them apart by their icon,
--- and the broker's tooltip has columns of its own for both.
---
--- "unknown" is deliberately absent. Callers leave anything they have no colour
--- for alone, which is what we want for it -- there's nothing to report, so the
--- row should look like it.
+-- Mount and achievement share a colour; the icon and the broker's own columns tell
+-- them apart. "unknown" is deliberately absent: callers leave a state they have no
+-- colour for alone, which is how it should look.
 ns.MobStateColor = {
 	mount = {1, 0.33, 0.33},
 	achievement = {1, 0.33, 0.33},
@@ -170,12 +138,10 @@ ns.MobStateColor = {
 	done = {0.33, 1, 0.33},
 }
 
--- The icons that go with those states, in three themes. Here rather than in the
--- overlay because the overlay ships as its own addon and the browser needs the
--- same six icons: two copies would drift, and a rare showing a red skull on the
--- map and a grey one in the browser is the sort of thing nothing reports.
---
--- The theme *choice* stays the overlay's, since that's where the option lives.
+-- The icons for those states, in three themes. Here rather than in the overlay
+-- because the overlay ships as its own addon and the browser wants the same icons,
+-- and two copies would drift. The theme *choice* stays the overlay's, since that's
+-- where the option lives.
 --
 -- DungeonSkull = skull
 -- VignetteKillElite = Skull with star around it
