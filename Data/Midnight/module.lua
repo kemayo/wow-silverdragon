@@ -285,6 +285,29 @@ core:RegisterMobData("Midnight", {
 		},
 	},
 
+	[252959] = {
+		name="Nymrissa Wavecaller",
+		quest=97128,
+		worldquest=97128,
+		-- areaPoi=8896,
+		locations={[ns.COILEDISLE]={}}, -- 51605400
+		loot={
+			268199, -- Tidepiercer's Bubble Popper
+			268217, -- Rising Tide Wristguards
+			268221, -- Tidebound Sorcereress's Robes
+			268226, -- Swelling Sea Spaulders
+			268232, -- Cincture of the Abyssal Grotto
+			268238, -- Grips of Swirling Fury
+			268244, -- Forgotten Grotto Girdle
+			268247, -- Breakwater Boots
+			268262, -- Bubblefin Splash Guard
+			268263, -- Frostscale's Mystic Frond
+			268266, -- Alluring Bubbleband
+			270167, -- Wavecaller's Seastone
+			{279112, decor=true}, -- Clumped Asteroidea
+		},
+	},
+
 	-- Prepatch, Twilight Highlands / Two Minutes to Midnight
 	-- rotation rares:
 	-- listen to Umbric gets 92103
