@@ -794,7 +794,7 @@ ns.RegisterPoints(ns.HARANDAR, {
 		npc=249962,
 		loot={
 			264566, -- Lashtongue's Leaffroggers
-            264571, -- Ironleaf Wristguards
+			264571, -- Ironleaf Wristguards
 			{264895, class="HUNTER"}, -- Trials of the Florafaun Hunter
 			ns.rewards.Currency(ns.CURRENCY_HARATI, 50, {quest=94716}),
 		},
@@ -935,8 +935,7 @@ do
 
 	-- The Ultimate Predator
 	ns.RegisterPoints(ns.VOIDSTORM, {
-		[29515008] = {
-			label="Sundereth the Caller",
+		[29515008] = { -- Sundereth the Caller
 			criteria=111877, quest=90805,
 			npc=244272,
 			loot={
@@ -946,8 +945,7 @@ do
 			},
 			vignette=6949,
 		},
-		[34028218] = {
-			label="Territorial Voidscythe",
+		[34028218] = { -- Territorial Voidscythe
 			criteria=111878, quest=91050,
 			npc=238498,
 			loot={
@@ -957,8 +955,7 @@ do
 			},
 			vignette=6961,
 		},
-		[36308373] = {
-			label="Tremora",
+		[36308373] = { -- Tremora
 			criteria=111879, quest=91048,
 			npc=241443,
 			loot={
@@ -970,8 +967,7 @@ do
 			note="In the tunnel",
 			vignette=6962,
 		},
-		[43685151] = {
-			label="Screammaxa the Matriarch",
+		[43685151] = { -- Screammaxa the Matriarch
 			criteria=111880, quest=93966,
 			npc=256922,
 			loot={
@@ -981,8 +977,7 @@ do
 			},
 			vignette=7436,
 		},
-		[47058063] = {
-			label="Bane of the Vilebloods",
+		[47058063] = { -- Bane of the Vilebloods
 			criteria=111881, quest=93946,
 			npc=256923,
 			loot={
@@ -993,8 +988,7 @@ do
 			note="In cave",
 			vignette=7433,
 		},
-		[39246394] = {
-			label="Aeonelle Blackstar",
+		[39246394] = { -- Aeonelle Blackstar
 			criteria=111882, quest=93944,
 			npc=256924,
 			loot={
@@ -1005,8 +999,7 @@ do
 			note="In cave at lowest level",
 			vignette=7432,
 		},
-		[37887178] = {
-			label="Lotus Darkblossom",
+		[37887178] = { -- Lotus Darkblossom
 			criteria=111883, quest=93947,
 			npc=256925,
 			loot={
@@ -1016,8 +1009,7 @@ do
 			},
 			vignette=7434,
 		},
-		[55727945] = {
-			label="Queen o' War",
+		[55727945] = { -- Queen o' War
 			criteria=111884, quest=93934,
 			npc=256926,
 			loot={
@@ -1028,8 +1020,7 @@ do
 			note="Use the Crown",
 			vignette=7430,
 		},
-		[48815317] = {
-			label="Ravengerus",
+		[48815317] = { -- Ravengerus
 			criteria=111885, quest=93895,
 			npc=256808,
 			loot={
@@ -1039,8 +1030,7 @@ do
 			},
 			vignette=7426,
 		},
-		[35485023] = {
-			label="Bilemaw the Gluttonous",
+		[35485023] = { -- Bilemaw the Gluttonous
 			criteria=111887, quest=93884,
 			npc=256770,
 			loot={
@@ -1051,8 +1041,7 @@ do
 			path=35604931,
 			vignette=7422,
 		},
-		[40154119] = {
-			label="Nightbrood",
+		[40154119] = { -- Nightbrood
 			criteria=111889, quest=91051,
 			npc=245044,
 			loot={
@@ -1062,13 +1051,12 @@ do
 			},
 			vignette=6964,
 		},
-		[53946272] = {
-			label="Far'thana the Mad",
+		[53946272] = { -- Far'thana the Mad
 			criteria=111890, quest=93896,
 			npc=256821,
 			loot={
 				264912, -- Void-Channeler's Spire
-	            264913, -- Focused Netherslicer
+			264913, -- Focused Netherslicer
 				ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94755}),
 			},
 			vignette=7428,
@@ -1079,8 +1067,7 @@ do
 	})
 
 	ns.RegisterPoints(ns.SLAYERSRISE, {
-		[41268981] = {
-			label="Eruundi",
+		[41268981] = { -- Eruundi
 			criteria=111888, quest=91047,
 			npc=245182,
 			loot={
@@ -1090,8 +1077,7 @@ do
 			},
 			vignette=6963, -- vignette position APIs don't work on this one...
 		},
-		[46384093] = {
-			label="Rakshur the Bonegrinder",
+		[46384093] = { -- Rakshur the Bonegrinder
 			criteria=111886, quest=93953,
 			npc=257027,
 			loot={
@@ -1108,68 +1094,66 @@ do
 	})
 
 	ns.RegisterPoints(ns.VOIDSTORM, {
-		[30576661] = {
-			label="Voidseer Orivane",
-			quest=94459, -- v
+		[30066921] = { -- Voidseer Orivane
+			quest=94459,
 			npc=248791,
 			loot={
 				264556, -- Voidforged Cinch
 				264628, -- Spear of Nothingness
-				-- ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94765}),
 			},
 			vignette=7140,
 		},
-		[28827024] = {
-			label="The Many-Broken",
-			quest=94458, -- v
+		[28827024] = { -- The Many-Broken
+			quest=94458,
 			npc=248459, -- 248461, 248462
 			loot={
 				264577, -- Crystalforged Boots
 				264651, -- Resonating Traumatizer
-				-- ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94764}),
 			},
 			vignette=7133,
 		},
-		[28156593] = {
-			label="Abysslick",
-			quest=94462, -- v
+		[28156593] = { -- Abysslick
+			quest=94462,
 			npc=248700,
 			loot={
 				264596, -- Voidthread Veil
 				264634, -- Spire of Flowing Void
-				-- ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94750}),
 			},
 			vignette=7138,
 		},
-		[29806787] = {
-			label="Nullspiral",
-			quest=94460, -- v
+		[29796799] = { -- Nullspiral
+			quest=94460,
 			npc=248068,
 			loot={
 				264531, -- Shadowthread Slippers
 				264588, -- Shawl of Cosmic Whispers
-				-- ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94760}),
 			},
 			vignette=7129,
 		},
-		[24806780] = {
-			label="Blackcore",
-	        quest=94463, -- v
-	        npc=248823,
-	        loot={
-	            264519, -- Repurposed Voidwalker's Chestplate
-	            264606, -- Netherlocus Amulet
-	            -- ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=}),
-	        },
-	        vignette=7142,
+		[24736793] = { -- Blackcore
+			quest=94463,
+			npc=248823,
+			loot={
+				264519, -- Repurposed Voidwalker's Chestplate
+				264606, -- Netherlocus Amulet
+				ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94753}),
+			},
+			note="Gather 3x {item:248680:Unstable Focusing Crystal} from chests and {npc:248483:Crystal Fragment} to the east",
+			related={
+				[28257044]={label="{npc:248483:Crystal Fragment}", loot={248680}},
+			},
+			vignette=7142,
 		},
 	}, {
 		loot_shared=loot_shared,
 	})
 
 	ns.RegisterPoints(ns.SLAYERSRISE, {
-		[28465684] = {
-			label="Hardin Steellock",
+		[28465684] = { -- Hardin Steellock
 			quest=94461, -- v
 			npc=257199,
 			loot={
@@ -1181,8 +1165,7 @@ do
 			faction="Horde",
 			vignette=7442,
 		},
-		[69687730] = {
-			label="Gar'chak Skullcleave",
+		[69687730] = { -- Gar'chak Skullcleave
 			quest=94461, -- v
 			npc=257231,
 			loot={
@@ -1701,9 +1684,9 @@ ns.RegisterPoints(ns.COILEDISLE, {
 	},
 }, {
 	texture=ns.atlas_texture("Banker", {r=0.2, g=1, b=1}), scale=1.2,
-    minimap=true,
-    note="Quartermaster",
-    showallloot=true,
+	minimap=true,
+	note="Quartermaster",
+	showallloot=true,
 })
 
 -- Rares
