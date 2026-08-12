@@ -917,7 +917,8 @@ function ns:UpdateTooltipWithCompletion(tooltip, id)
 	for _, achievement, name, completed in ns:AchievementMobStatus(id) do
 		tooltip:AddDoubleLine(
 			name,
-			core:RenderString(completed and (achievements[achievement].completed or BOSS_DEAD) or (achievements[achievement].need or ACTION_PARTY_KILL)),
+			-- "Defeated" / "Need"
+			core:RenderString(completed and (achievements[achievement].completed or BOSS_DEAD) or (achievements[achievement].need or NEED)),
 			1, 1, 0,
 			completed and 0 or 1, completed and 1 or 0, 0
 		)
