@@ -307,7 +307,8 @@ function ns.rewards.Mount:MountID()
 	end
 	return self.mountid
 end
-function ns.rewards.Mount:TooltipLabel() return MOUNT end
+-- MOUNT is "Mount" but is localized as the verb not the noun; the PERKS_ isn't in classic; just let the super happen
+-- function ns.rewards.Mount:TooltipLabel() return PERKS_VENDOR_CATEGORY_MOUNT or MOUNTS end
 function ns.rewards.Mount:Obtained(...)
 	if self:super("Obtained", ...) == false then return false end
 	if ns.CLASSICERA then return GetItemCount(self.id, true) > 0 end
