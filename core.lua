@@ -389,7 +389,7 @@ function addon:OnInitialize()
 			dead = true,
 			instances = false,
 			taxi = true,
-			charloot = false,
+			charloot = true,
 			sharedloot = true,
 			sharedloot_alerts = false, -- core because it affects the map and announcements
 			boeloot = true,
