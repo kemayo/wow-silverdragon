@@ -865,6 +865,10 @@ do
 		else
 			window = GetWindow()
 		end
+		if sharedLoot and not loot then
+			-- needs to be set before addloot for sizing reasons
+			window:SetTitle(SHARED_LOOT_LABEL)
+		end
 		window:AddLoot(loot or sharedLoot)
 		if loot and sharedLoot and mergeShared then
 			window:AddLoot(sharedLoot, SHARED_LOOT_LABEL)
