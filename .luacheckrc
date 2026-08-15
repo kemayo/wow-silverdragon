@@ -322,6 +322,7 @@ read_globals = {
     "BANK_BAG_PURCHASE",
     "BANK_CONTAINER",
     "BATTLE_PET_SOURCE_6",
+    "BLUE_FONT_COLOR",
     "BOSS_DEAD",
     "CHAT_MSG_SAY",
     "CHAT_MSG_YELL",
