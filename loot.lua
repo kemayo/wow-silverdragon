@@ -846,10 +846,10 @@ do
 	-- mergeShared puts shared loot in the same grid rather than a second window
 	-- hanging off the bottom. For a host that's given the window a fixed space to
 	-- sit in there's nowhere for that second one to go.
-	function ns.Loot.Window.ShowForMob(id, independent, treasure, shared, extraFilter, mergeShared)
+	function ns.Loot.Window.ShowForMob(id, independent, treasure, shared, extraFilter, mergeShared, force)
 		local filter = function(item)
 			if extraFilter and not extraFilter(item) then return false end
-			return not core.db.profile.charloot or IsShiftKeyDown() or item:MightDrop()
+			return force or not core.db.profile.charloot or IsShiftKeyDown() or item:MightDrop()
 		end
 		local loot = lootFilter(filter, ns.Loot.GetLootTable(id, treasure))
 		local sharedLoot = lootFilter(filter, shared and ns.Loot.GetLootTable(id, treasure, true))
