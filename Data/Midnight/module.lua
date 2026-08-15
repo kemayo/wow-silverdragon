@@ -1690,265 +1690,288 @@ ns.RegisterPoints(ns.COILEDISLE, {
 })
 
 -- Rares
+do
+	local loot_shared = {
+		{276549, mount=true}, -- Topaz Skyfang
+		{276803, mount=true}, -- Ruby Writhe
+	}
 
--- Coiled to Strike
-ns.RegisterPoints(ns.COILEDISLE, {
-	[53777203] = { -- Farthik the Plunderer
-		criteria=115279, quest=96491,
-		npc=264854,
-		loot={
-			280692, -- Plunderer's Pummeler
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98344}),
+	-- Coiled to Strike
+	ns.RegisterPoints(ns.COILEDISLE, {
+		[53777203] = { -- Farthik the Plunderer
+			criteria=115279, quest=96491,
+			npc=264854,
+			loot={
+				280692, -- Plunderer's Pummeler
+				280717, -- Farthik's Precious Pendant
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98344}),
+			},
+			vignette=7694,
+			note="Unguarded...",
 		},
-		vignette=7694,
-		note="Unguarded...",
-	},
-	[50006907] = { -- Siltmouth
-		criteria=115280, quest=97112,
-		npc=268049,
-		loot={
-			276051, -- Fangmouth Warspear
-			280704, -- Siltmouth's Venom Waders
-			280718, -- Unflappable Flapping Cape
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98345}),
+		[50006907] = { -- Siltmouth
+			criteria=115280, quest=97112,
+			npc=268049,
+			loot={
+				280704, -- Siltmouth's Venom Waders
+				280718, -- Unflappable Flapping Cape
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98345}),
+				-- 276051, -- Fangmouth Warspear
+			},
+			vignette=7756,
 		},
-		vignette=7756,
-	},
-	[24897354] = { -- Kari'zah the Forgotten
-		criteria=115784, quest=97122,
-		npc=268090,
-		loot={
-			280694, -- Blade of the Forgotten
-			280711, -- Pitted Specter Shackles
-			280376, -- Shadow Shard Sliver
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98346}),
+		[24897354] = { -- Kari'zah the Forgotten
+			criteria=115784, quest=97122,
+			npc=268090,
+			loot={
+				280694, -- Blade of the Forgotten
+				280711, -- Pitted Specter Shackles
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98346}),
+				-- 280376, -- Shadow Shard Sliver
+			},
+			vignette=7757,
+			translate={[ns.ZULAMAN]=true},
 		},
-		vignette=7757,
-		translate={[ns.ZULAMAN]=true},
-	},
-	[31645677] = { -- Lockjaw
-		criteria=115284, quest=96456,
-		npc=265237,
-		loot={
-			276031, -- Flamebeak Cord
-			280690, -- Bow of the Snapper
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98347}),
+		[31645677] = { -- Lockjaw
+			criteria=115284, quest=96456,
+			npc=265237,
+			loot={
+				280690, -- Bow of the Snapper
+				280708, -- Venom-Shelled Sash
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98347}),
+				-- 276031, -- Flamebeak Cord
+			},
+			vignette=7688,
 		},
-		vignette=7688,
-	},
-	[43855086] = { -- Hisstara
-		criteria=115281, quest=96464,
-		npc=265262,
-		loot={
-			280691, -- Dagger of the Slithering Ritual
-			280702, -- Mantle of the Riser
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98348}),
+		[43855086] = { -- Hisstara
+			criteria=115281, quest=96464,
+			npc=265262,
+			loot={
+				280691, -- Dagger of the Slithering Ritual
+				280702, -- Mantle of the Riser
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98348}),
+			},
+			vignette=7689,
 		},
-		vignette=7689,
-	},
-	[69514483] = { -- Garsecg
-		criteria=110172, quest=94856,
-		npc=258916,
-		loot={
-			280710, -- Garsecg's Barnacled Girdle
-			280714, -- Hull Render Hauberk
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98350}),
-			-- 276039, -- Flamebeak Drape
-			-- 276047, -- Swamp Whomper
+		[69514483] = { -- Garsecg
+			criteria=110172, quest=94856,
+			npc=258916,
+			loot={
+				280710, -- Garsecg's Barnacled Girdle
+				280714, -- Hull Render Hauberk
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98350}),
+				-- 276039, -- Flamebeak Drape
+				-- 276047, -- Swamp Whomper
+			},
+			vignette=7500,
 		},
-		vignette=7500,
-	},
-	[57326610] = { -- Coin-Eye Skully
-		criteria=115285, quest=94619,
-		npc=257906,
-		loot={
-			276023, -- Flamebeak Mantle
-			280715, -- Eye of Skully
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98352}),
+		[57326610] = { -- Coin-Eye Skully
+			criteria=115285, quest=94619,
+			npc=257906,
+			loot={
+				280695, -- Skully's Skullcleaver
+				280715, -- Eye of Skully
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98352}),
+				-- 276023, -- Flamebeak Mantle
+			},
+			note="Swims around the ship",
+			vignette=7484,
 		},
-		note="Swims around the ship",
-		vignette=7484,
-	},
-	[70036344] = { -- Big Mon
-		criteria=115286, quest=93829,
-		npc=256631,
-		loot={
-			{280540, pet=true}, -- Lil' Mon
-			280689, -- Big Mon's Big Spear
-			280713, -- Big Mon's Buckle
-			274499, -- Toxiferous Transfusion
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98353}),
-			-- 276037, -- Counter-Curse Circlet
-			-- 276041, -- Stonehide Cape
-			-- 276054, -- Serpentvine Machete
+		[70036344] = { -- Big Mon
+			criteria=115286, quest=93829,
+			npc=256631,
+			loot={
+				{280540, pet=true}, -- Lil' Mon
+				280689, -- Big Mon's Big Spear
+				280713, -- Big Mon's Buckle
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98353}),
+				-- 274499, -- Toxiferous Transfusion
+				-- 276037, -- Counter-Curse Circlet
+				-- 276041, -- Stonehide Cape
+				-- 276054, -- Serpentvine Machete
+			},
+			vignette=7417,
 		},
-		vignette=7417,
-	},
-	[57334045] = { -- Sss'alik
-		criteria=115287, quest=95447,
-		npc=261109,
-		loot={
-			280700, -- Armbands of the Rotten Claw
-			280706, -- Sss'alik's Rotting Claws
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98354}),
-			-- 276037, -- Counter-Curse Circlet
-			-- 276047, -- Swamp Whomper
+		[57334045] = { -- Sss'alik
+			criteria=115287, quest=95447,
+			npc=261109,
+			loot={
+				280700, -- Armbands of the Rotten Claw
+				280706, -- Sss'alik's Rotting Claws
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98354}),
+				-- 276037, -- Counter-Curse Circlet
+				-- 276047, -- Swamp Whomper
+			},
+			note="Patrols",
+			vignette=7548,
 		},
-		note="Patrols",
-		vignette=7548,
-	},
-	[52053229] = { -- Destra
-		criteria=115288, quest=95452,
-		npc=261142,
-		loot={
-			280709, -- Triple Threat Pauldrons
-			280712, -- Bracers of the Sleeping Hydra
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98355}),
+		[52053229] = { -- Destra
+			criteria=115288, quest=95452,
+			npc=261142,
+			loot={
+				280709, -- Triple Threat Pauldrons
+				280712, -- Bracers of the Sleeping Hydra
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98355}),
+			},
+			vignette=7550,
 		},
-		vignette=7550,
-	},
-}, {
-	achievement=63358, -- Coiled to Strike
-})
-local NARZIRA = { -- Nar'zira
-	achievement=63358, -- Coiled to Strike
-	criteria=115283, quest=94860,
-	npc=258920,
-	loot={
-		280716, -- Locket of the Omnilegent
-		280693, -- Staff of All-Knowing
-		ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98351}),
-		-- 276020, -- Stonehide Pauldrons
-	},
-	vignette=7501,
-}
-ns.RegisterPoints(ns.COILEDISLE, {
-	[52364308] = NARZIRA, -- vignette's at 52054488, this is the entrance
-})
-ns.RegisterPoints(2642, { -- Tomb of the Lost Priest
-	[64826092] = NARZIRA,
-})
+	}, {
+		achievement=63358, -- Coiled to Strike
+		loot_shared=loot_shared,
+	})
+	local NARZIRA = { -- Nar'zira
+		achievement=63358, -- Coiled to Strike
+		criteria=115283, quest=94860,
+		npc=258920,
+		loot={
+			280716, -- Locket of the Omnilegent
+			280693, -- Staff of All-Knowing
+			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98351}),
+			-- 276020, -- Stonehide Pauldrons
+		},
+		loot_shared=loot_shared,
+		vignette=7501,
+	}
+	ns.RegisterPoints(ns.COILEDISLE, {
+		[52364308] = NARZIRA, -- vignette's at 52054488, this is the entrance
+	})
+	ns.RegisterPoints(2642, { -- Tomb of the Lost Priest
+		[64826092] = NARZIRA,
+	})
 
--- Deeply nested...
-local SZARITH = ns.nodeMaker{ -- Szarith the Fanged
-	achievement=63358, -- Coiled to Strike
-	criteria=115282, quest=96030,
-	npc=263456,
-	loot={
-		280698, -- Szarith's Underbelly Slicer
-		280047, -- Feathered Bell
-		ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98349}),
-		ns.rewards.Achievement(62601, 113661), -- Soft Underbelly
-		-- 276025, -- Skytalon Breeches
-	},
-	vignette=7629,
-}
-ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
-	[47300640] = SZARITH{parent=true},
-})
-ns.RegisterPoints(2613, { -- The Underbelly
-	[37681723] = SZARITH{},
-})
-
--- Turn the Surge
-ns.RegisterPoints(ns.COILEDISLE, {
-	[71303138] = { -- Ss'akrithos (Ski'thari @ 70913197)
-		criteria=115370, quest=93715, --todo: 93715 + 96968 triggered
-		npc=258254,
+	-- Deeply nested...
+	local SZARITH = ns.nodeMaker{ -- Szarith the Fanged
+		achievement=63358, -- Coiled to Strike
+		criteria=115282, quest=96030,
+		npc=263456,
 		loot={
-			276171, -- Ophidian Circle
-			-- 279477, -- Ss'akrithos's Forked Tongue
-			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=96968}),
+			280698, -- Szarith's Underbelly Slicer
+			280047, -- Feathered Bell
+			ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=98349}),
+			ns.rewards.Achievement(62601, 113661), -- Soft Underbelly
+			-- 276025, -- Skytalon Breeches
 		},
-		vignette={7764, 7413}, -- Soucaller Ski'thari / Ss'akrithos
-		areaPoi=8889, -- murloc sacrifice event
-	},
-	[26406480] = { -- Looming Mutagenitor
-		criteria=115368,
-		npc=255088,
-		loot={
-			276172, -- Headdress of Mutagenesis
-			-- 279475, -- Mutagenitor's Feather
-		},
-		vignette={7414, 7686},
-	},
-	[44702593] = { -- Vassti, the Exalted Broodmother
-		criteria=115369,
-		npc=257863,
-		loot={
-			276173, -- Clutchguard Sandals
-			276175, -- Broodmother's Embrace
-			-- 273000, -- Corrosive Soul
-			-- 279476, -- Vassti's Claw
-		},
-		vignette=7763,
-	},
-	[46996223] = { -- Malformed Leviathan
-		criteria=111353,
-		npc=255087,
-		loot={
-			-- 279479, -- Leviathan's Eye
-		},
-		areaPoi=8891,
-		vignette={7412, 7453}, -- only saw the former
-	},
-	[67167752] = { -- Venom Lancer Ori'kassi
-		criteria=115371,
-		npc=255927,
-		loot={
-			274496, -- Ophidian Bone Whistle
-			276009, -- Skytalon Gloves
-			276178, -- Venom Lancer's Gauntlets
-			-- 273000, -- Corrosive Soul
-			-- 279478, -- Ori'kassi's Barbed Tail
-		},
-		areaPoi=8890,
-		vignette=7415,
-	},
-}, {
-	achievement=63390, -- Turn the Surge
-	atlas="poi-torghast", scale=1.1,
-})
+		loot_shared=loot_shared,
+		vignette=7629,
+	}
+	ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
+		[47300640] = SZARITH{parent=true},
+	})
+	ns.RegisterPoints(2613, { -- The Underbelly
+		[37681723] = SZARITH{},
+	})
 
--- Vaults of Atal'Utek
+	-- Turn the Surge
+	ns.RegisterPoints(ns.COILEDISLE, {
+		[71303138] = { -- Ss'akrithos (Ski'thari @ 70913197)
+			criteria=115370, quest=93715, --todo: 93715 + 96968 triggered
+			npc=258254,
+			loot={
+				276168, -- Fang of Ss'akrithos
+				276171, -- Ophidian Circle
+				-- 279477, -- Ss'akrithos's Forked Tongue
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=96968}),
+			},
+			vignette={7764, 7413}, -- Soucaller Ski'thari / Ss'akrithos
+			areaPoi=8889, -- murloc sacrifice event
+		},
+		[26406480] = { -- Looming Mutagenitor
+			criteria=115368,
+			npc=255088,
+			loot={
+				276166, -- Twin-Headed Twinblade
+				276172, -- Headdress of Mutagenesis
+				-- 279475, -- Mutagenitor's Feather
+				-- ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=}),
+			},
+			vignette={7414, 7686},
+		},
+		[44702593] = { -- Vassti, the Exalted Broodmother
+			criteria=115369,
+			npc=257863,
+			loot={
+				276173, -- Clutchguard Sandals
+				276175, -- Broodmother's Embrace
+				-- 279476, -- Vassti's Claw
+				-- ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=}),
+				-- 273000, -- Corrosive Soul
+			},
+			vignette=7763,
+		},
+		[46996223] = { -- Malformed Leviathan
+			criteria=111353,
+			npc=255087,
+			loot={
+				276169, -- Malformed Barrier
+				276174, -- Leviathan's Oozing Scalemail
+				-- 279479, -- Leviathan's Eye
+				-- ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=}),
+			},
+			areaPoi=8891,
+			vignette={7412, 7453}, -- only saw the former
+		},
+		[67167752] = { -- Venom Lancer Ori'kassi
+			criteria=115371,
+			npc=255927,
+			loot={
+				276167, -- Ori'kassi's Lance
+				276178, -- Venom Lancer's Gauntlets
+				-- 279478, -- Ori'kassi's Barbed Tail
+				-- ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=}),
+				-- 274496, -- Ophidian Bone Whistle
+				-- 273000, -- Corrosive Soul
+				-- 276009, -- Skytalon Gloves
+			},
+			areaPoi=8890,
+			vignette=7415,
+		},
+	}, {
+		achievement=63390, -- Turn the Surge
+		atlas="poi-torghast", scale=1.1,
+		loot_shared=loot_shared,
+	})
 
---[[
-TODO:
-62604 Dance While Everyone Watches
-]]
+	-- Vaults of Atal'Utek
 
-ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
-	-- [] = {criteria=113661, quest=96030, npc=263456, vignette=7629}, -- Szarith the Fanged
-	-- These ones don't have a match in vignettes.db2
-	-- [] = {criteria=113558, quest=nil, npc=263371, vignette=nil}, -- Priest of the First Rattle
-	-- [] = {criteria=113557, quest=nil, npc=263322, vignette=nil}, -- Champion of the Scale
-	-- [] = {criteria=113556, quest=nil, npc=263335, vignette=nil}, -- Guardian of the Sacrifice
-	-- [] = {criteria=113662, quest=nil, npc=263851, vignette=nil}, -- Vserix the Sneaky
-}, {
-	achievement=62601, -- Soft Underbelly
-})
+	--[[
+	TODO:
+	62604 Dance While Everyone Watches
+	]]
 
-local HONOREDDEAD = ns.nodeMaker{
-	achievement=63610,
-	atlas="animachannel-icon-necrolord-map", scale=1.2,
-	minimap=true, -- they don't appear until you're close
-}
-ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
-	-- The Honored Dead
-	[49535654] = {criteria=116407, quest=98029, vignette=7872}, -- To a daughter.
-	[52214512] = {criteria=116408, quest=98030, vignette=7873}, -- To a lover.
-	[55634070] = {criteria=116410, quest=98032, vignette=7875}, -- To a dream.
-	[52893386] = {criteria=116411, quest=98033, vignette=7876}, -- To a captain.
-	[42913993] = {criteria=116412, quest=98034, vignette=7877}, -- To sons.
-	[45846175] = {criteria=116413, quest=98035, vignette=7878}, -- To failure.
-	[47252877] = {criteria=116414, quest=98036, vignette=7879, note="Lower level"}, -- To a father.
-	[46790751] = {criteria=116415, quest=98037, vignette=7880}, -- To a sister.
-	[42513309] = {criteria=116417, quest=98039, vignette=7882, note="Lower level"}, -- To a stranger.
-	[56492288] = {criteria=116418, quest=98040, vignette=7883}, -- To a shield-bearer.
-}, HONOREDDEAD{})
-ns.RegisterPoints(2636, { -- Vault of Restless Bones
-	[76713465] = {criteria=116416, quest=98038, vignette=7881}, -- To comrades.
-}, HONOREDDEAD{parent=true})
-ns.RegisterPoints(2638, { -- Profaned Mausoleum
-	[12666418] = {criteria=116409, quest=98031, vignette=7874}, -- To parents.
-}, HONOREDDEAD{parent=true})
+	ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
+		-- [] = {criteria=113661, quest=96030, npc=263456, vignette=7629}, -- Szarith the Fanged
+		-- These ones don't have a match in vignettes.db2
+		-- [] = {criteria=113558, quest=nil, npc=263371, vignette=nil}, -- Priest of the First Rattle
+		-- [] = {criteria=113557, quest=nil, npc=263322, vignette=nil}, -- Champion of the Scale
+		-- [] = {criteria=113556, quest=nil, npc=263335, vignette=nil}, -- Guardian of the Sacrifice
+		-- [] = {criteria=113662, quest=nil, npc=263851, vignette=nil}, -- Vserix the Sneaky
+	}, {
+		achievement=62601, -- Soft Underbelly
+		loot_shared=loot_shared,
+	})
+
+	local HONOREDDEAD = ns.nodeMaker{
+		achievement=63610,
+		atlas="animachannel-icon-necrolord-map", scale=1.2,
+		minimap=true, -- they don't appear until you're close
+	}
+	ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
+		-- The Honored Dead
+		[49535654] = {criteria=116407, quest=98029, vignette=7872}, -- To a daughter.
+		[52214512] = {criteria=116408, quest=98030, vignette=7873}, -- To a lover.
+		[55634070] = {criteria=116410, quest=98032, vignette=7875}, -- To a dream.
+		[52893386] = {criteria=116411, quest=98033, vignette=7876}, -- To a captain.
+		[42913993] = {criteria=116412, quest=98034, vignette=7877}, -- To sons.
+		[45846175] = {criteria=116413, quest=98035, vignette=7878}, -- To failure.
+		[47252877] = {criteria=116414, quest=98036, vignette=7879, note="Lower level"}, -- To a father.
+		[46790751] = {criteria=116415, quest=98037, vignette=7880}, -- To a sister.
+		[42513309] = {criteria=116417, quest=98039, vignette=7882, note="Lower level"}, -- To a stranger.
+		[56492288] = {criteria=116418, quest=98040, vignette=7883}, -- To a shield-bearer.
+	}, HONOREDDEAD{})
+	ns.RegisterPoints(2636, { -- Vault of Restless Bones
+		[76713465] = {criteria=116416, quest=98038, vignette=7881}, -- To comrades.
+	}, HONOREDDEAD{parent=true})
+	ns.RegisterPoints(2638, { -- Profaned Mausoleum
+		[12666418] = {criteria=116409, quest=98031, vignette=7874}, -- To parents.
+	}, HONOREDDEAD{parent=true})
+end
