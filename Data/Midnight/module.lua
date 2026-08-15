@@ -1694,6 +1694,84 @@ do
 	local loot_shared = {
 		{276549, mount=true}, -- Topaz Skyfang
 		{276803, mount=true}, -- Ruby Writhe
+		-- weapons
+		276042, -- Templetusk Shield
+		276043, -- Vilefang Censer
+		276044, -- Loa-Infused Battlestaff
+		276045, -- Trailblazing Soulblade
+		276046, -- Superclutch Smasher
+		276047, -- Swamp Whomper
+		276048, -- Vipersbane Dagger
+		276049, -- Snakeslayer's Claymore
+		276052, -- Venomshot Greatbow
+		276054, -- Serpentvine Machete
+		276055, -- Soulweaver's Curseblade
+		276057, -- Cryptbound Scepter
+		276058, -- Ruinous Slitherslicer
+		276059, -- Headhunter's Hacker
+		276060, -- Hexxer's Blastin' Rod
+		276061, -- Witch Doctor's Bloodletter
+		276062, -- Hydra Neckchopper
+		-- plate
+		276000, -- Stonehide Vambraces
+		276004, -- Stonehide Sabatons
+		276008, -- Stonehide Gauntlets
+		276012, -- Stonehide Chestguard
+		276016, -- Stonehide Casque
+		276020, -- Stonehide Pauldrons
+		276024, -- Stonehide Greaves
+		276028, -- Stonehide Girdle
+		276041, -- Stonehide Cape
+		-- mail
+		276001, -- Skytalon Armguards
+		276005, -- Skytalon Treads
+		276009, -- Skytalon Gloves
+		276013, -- Skytalon Hauberk
+		276017, -- Skytalon Helmet
+		276021, -- Skytalon Spaulders
+		276025, -- Skytalon Breeches
+		276029, -- Skytalon Belt
+		276038, -- Skytalon Cloak
+		-- leather
+		276002, -- Shadowclaw Wristguards
+		276006, -- Shadowclaw Footpads
+		276010, -- Shadowclaw Handguards
+		276014, -- Shadowclaw Jerkin
+		276018, -- Shadowclaw Headdress
+		276022, -- Shadowclaw Shoulderpads
+		276026, -- Shadowclaw Legguards
+		276030, -- Shadowclaw Sash
+		276040, -- Shadowclaw Shroud
+		-- cloth
+		276003, -- Flamebeak Bracers
+		276007, -- Flamebeak Sandals
+		276011, -- Flamebeak Grips
+		276015, -- Flamebeak Robes
+		276019, -- Flamebeak Crown
+		276023, -- Flamebeak Mantle
+		276027, -- Flamebeak Leggings
+		276031, -- Flamebeak Cord
+		276039, -- Flamebeak Drape
+		-- jewelery
+		-- 276032, -- Bad Juju Necklace
+		-- 276033, -- Loa Watcher's Pendant
+		-- 276034, -- Entangling Brood Ring
+		-- 276035, -- Soulcoiler's Signet
+		-- 276036, -- Ever-Constricting Band
+		-- 276037, -- Counter-Curse Circlet
+		-- trinkets
+		-- 274494, -- Chiral Marrowgrafter
+		-- 274495, -- Pulse Seeker's Oculus
+		-- 274496, -- Ophidian Bone Whistle
+		-- 274497, -- Spirit-Rending Poison
+		-- 274498, -- Spirit Ward
+		-- 274499, -- Toxiferous Transfusion
+		-- 276043, -- Vilefang Censer
+		-- 280047, -- Feathered Bell
+		-- 280091, -- Latent Purifier
+		-- 280123, -- Sharp Axe Holster
+		-- 280376, -- Shadow Shard Sliver
+		-- 280377, -- Breath of Jan'alai
 	}
 
 	-- Coiled to Strike
