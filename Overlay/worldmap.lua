@@ -5,67 +5,98 @@ local module = core:GetModule("Overlay")
 local Debug = core.Debug
 local ns = core.NAMESPACE
 
-local HBD = LibStub("HereBeDragons-2.0")
-local HBDPins = LibStub("HereBeDragons-Pins-2.0")
+local frameLevelType = ns.CLASSIC and "PIN_FRAME_LEVEL_WORLD_QUEST" or "PIN_FRAME_LEVEL_VIGNETTE"
 
-module.WorldMapDataProvider = CreateFromMixins(MapCanvasDataProviderMixin)
+-- Mobs
 
-function module.WorldMapDataProvider:OnAdded(owningMap)
-    self.owningMap = owningMap
+local mobs = {
+    template = "SilverDragonOverlayWorldMapPinTemplate",
+    data = {},
+}
 
-    if not self.poiQuantizer and _G.WorldMapPOIQuantizerMixin then
-        self.poiQuantizer = CreateFromMixins(WorldMapPOIQuantizerMixin)
-        self.poiQuantizer.size = 75
-        self.poiQuantizer:OnLoad(self.poiQuantizer.size, self.poiQuantizer.size)
+-- IterateNodes works the whole zone out under one cache hold, so its results
+-- have to be carried rather than looked up again per-pin. These are reused by
+-- index to keep a refresh from allocating.
+local nodecache = {}
+function mobs:OnRefresh()
+    wipe(self.data)
+
+    -- if we're here really early for some reason
+    if not module.db then return end
+    if not module.db.profile.worldmap.enabled then return end
+
+    local uiMapID = WorldMapFrame:GetMapID()
+    if not uiMapID then return end
+    if module.db.profile.worldmap.zone_disabled[uiMapID] then return end
+
+    for coord, mobid, icon, scale, alpha in module:IterateNodes(uiMapID, false) do
+        ns.Loot.Cache(mobid)
+        local index = #self.data + 1
+        local node = nodecache[index]
+        if not node then
+            node = {}
+            nodecache[index] = node
+        end
+        node.coord, node.mobid, node.icon = coord, mobid, icon
+        node.scale, node.alpha, node.uiMapID = scale or 1, alpha or 1, uiMapID
+        self.data[index] = node
     end
 end
 
-function module.WorldMapDataProvider:RemoveAllData()
-    if not self:GetMap() then return end
-    self:GetMap():RemoveAllPinsByTemplate("SilverDragonOverlayWorldMapPinTemplate")
-    -- routes
-    self:GetMap():RemoveAllPinsByTemplate("SilverDragonOverlayRoutePinTemplate")
-    if self.connectionPool then
-        self.connectionPool:ReleaseAll()
+function mobs.OnPinCreated(pin)
+    pin:OnLoad()
+end
+
+function mobs.OnPinAcquire(pin, node)
+    -- the pool resets the frame level on release, so this can't live in OnLoad
+    pin:SetFrameLevel(ns.MapSystem.GetWorldMapFrameLevelByType(frameLevelType))
+    pin:OnAcquired(node.mobid, node.icon, node.scale, node.alpha, node.coord, node.uiMapID, false)
+    return node.uiMapID, core:GetXY(node.coord)
+end
+
+function mobs.OnPinReset(pin)
+    -- the quantizer prefers whatever it last wrote to the pin's new position
+    pin.quantizedX, pin.quantizedY = nil, nil
+    if pin.OnReleased then
+        -- pins only have the mixin once they've been created
+        pin:OnReleased()
     end
+end
+
+function mobs.OnPinEnter(pin)
+    pin:OnMouseEnter()
+end
+
+function mobs.OnPinLeave(pin)
+    pin:OnMouseLeave()
+end
+
+function mobs.OnPinClick(pin, button, down)
+    if down then return end
+    pin:OnClick(button)
+end
+
+local quantizer
+if _G.WorldMapPOIQuantizerMixin then
+    quantizer = CreateFromMixins(WorldMapPOIQuantizerMixin)
+    quantizer.size = 75
+    quantizer:OnLoad(quantizer.size, quantizer.size)
 end
 
 local pinsToQuantize = {}
-function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
-    if not self:GetMap() then return end
-    self:RemoveAllData()
-    if not self.connectionPool then
-        self.connectionPool = CreateFramePool("FRAME", self:GetMap():GetCanvas(), "SilverDragonOverlayRoutePinConnectionTemplate")
-    end
-
-    if not module.db.profile.worldmap.enabled then return end
-
-    local uiMapID = self:GetMap():GetMapID()
-    if not uiMapID then return end
-
-    if module.db.profile.worldmap.zone_disabled[uiMapID] then return end
-
-    -- Regular nodes
-    for coord, mobid, textureData, scale, alpha in module:IterateNodes(uiMapID, false) do
-        local x, y = core:GetXY(coord)
-        if x and y then
-            local pin = self:GetMap():AcquirePin("SilverDragonOverlayWorldMapPinTemplate", mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, false)
-            ns.Loot.Cache(mobid)
+function mobs:AfterRefresh()
+    if quantizer then
+        wipe(pinsToQuantize)
+        for pin in self:EnumeratePins() do
             table.insert(pinsToQuantize, pin)
         end
-    end
-    if self.poiQuantizer then
-        self.poiQuantizer:ClearAndQuantize(pinsToQuantize)
+        -- the quantizer reads x/y off the pins and writes quantizedX/Y back
+        local ratio = WorldMapFrame:DenormalizeHorizontalSize(1.0) / WorldMapFrame:DenormalizeVerticalSize(1.0)
+        quantizer:Resize(math.ceil(quantizer.size * ratio), quantizer.size)
+        quantizer:ClearAndQuantize(pinsToQuantize)
         for _, pin in ipairs(pinsToQuantize) do
-            pin:SetPosition(pin.quantizedX or pin.normalizedX, pin.quantizedY or pin.normalizedY)
-        end
-    end
-    wipe(pinsToQuantize)
-
-    -- Routes
-    if module.db.profile.worldmap.routes and ns.mobsByZone[uiMapID] and self:GetMap():IsVisible() then
-        for mobid, coords in pairs(ns.mobsByZone[uiMapID]) do
-            self:AddRoute(uiMapID, mobid)
+            pin.x = pin.quantizedX or pin.x
+            pin.y = pin.quantizedY or pin.y
         end
     end
 
@@ -78,120 +109,136 @@ function module.WorldMapDataProvider:RefreshAllData(fromOnShow)
     end
 end
 
-local routePins = {}
-function module.WorldMapDataProvider:AddRoute(uiMapID, mobid)
-    local data = ns.mobdb[mobid or 0]
-    if not data then return end
-    if not (data.routes and data.routes[uiMapID]) then return end
-    if not (core:IsMobInPhase(mobid, uiMapID) and not core:ShouldIgnoreMob(mobid, uiMapID)) then return end
-    if not module.should_show_mob(mobid) then return end
-    for _, route in ipairs(data.routes[uiMapID]) do
-        for _, node in ipairs(route) do
-            local x, y = core:GetXY(node)
-            local pin = self:GetMap():AcquirePin("SilverDragonOverlayRoutePinTemplate")
-            pin.mobid = mobid
-            pin:SetPosition(x, y)
-            pin.Icon:Hide()
-            pin:Show()
-            if routePins[#routePins] then
-                self:ConnectPins(routePins[#routePins], pin, mobid, route)
-            end
-            table.insert(routePins, pin)
-        end
-        if route.loop and #routePins > 1 then
-            self:ConnectPins(routePins[#routePins], routePins[1], mobid, route)
-        end
-        wipe(routePins)
-    end
-end
-
-function module.WorldMapDataProvider:ConnectPins(pin1, pin2, mobid, route)
-    local connection = self.connectionPool:Acquire()
-    connection.mobid = mobid
-    connection:Connect(pin1, pin2)
-    local r, g, b, a = 1, 1, 1, 0.6
-    if route and route.r then
-        r, g, b, a = route.r or 1, route.g or 1, route.b or 1, route.a or 0.6
-    else
-        r, g, b = module.id_to_color(mobid)
-    end
-    connection.Line:SetVertexColor(r, g, b, a)
-    connection:Show()
-end
-
-function module.WorldMapDataProvider:OnCanvasSizeChanged()
-    if self.poiQuantizer then
-        local ratio = self:GetMap():DenormalizeHorizontalSize(1.0) / self:GetMap():DenormalizeVerticalSize(1.0)
-        self.poiQuantizer:Resize(math.ceil(self.poiQuantizer.size * ratio), self.poiQuantizer.size)
-    end
-end
-
--- /script SilverDragon:GetModule("Overlay").WorldMapDataProvider:Ping(32487)
-function module.WorldMapDataProvider:Ping(mobid)
-    for pin in self:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
+-- /script SilverDragon:GetModule("Overlay").WorldMapProvider:Ping(32487)
+function mobs:Ping(mobid)
+    for pin in self:EnumeratePins() do
         if pin.mobid == mobid then
             pin:Ping()
         end
     end
 end
 
-SilverDragonOverlayWorldMapPinMixin = CreateFromMixins(MapCanvasPinMixin, module.SilverDragonOverlayPinMixinBase)
+function mobs:Emphasize(mobid, state)
+    for pin in self:EnumeratePins() do
+        if pin.mobid == mobid then
+            pin.emphasis:SetVertexColor(1, 1, 1, 1)
+            pin.emphasis:SetShown(state)
+        end
+    end
+end
+
+function mobs:ApplyFocusState()
+    for pin in self:EnumeratePins() do
+        pin:ApplyFocusState()
+        if pin.mobid == module.focus_mob then
+            pin:Ping()
+        end
+    end
+end
+
+module.WorldMapProvider = ns.MapSystem:AddProvider(mobs)
+
+-- Routes
+
+local routes = {
+    data = {},
+}
+
+local routecache = {}
+function routes:OnRefresh()
+    wipe(self.data)
+
+    if not module.db then return end
+    if not (module.db.profile.worldmap.enabled and module.db.profile.worldmap.routes) then return end
+
+    local uiMapID = WorldMapFrame:GetMapID()
+    if not uiMapID then return end
+    if module.db.profile.worldmap.zone_disabled[uiMapID] then return end
+    if not ns.mobsByZone[uiMapID] then return end
+
+    for mobid in pairs(ns.mobsByZone[uiMapID]) do
+        local data = ns.mobdb[mobid]
+        if data and data.routes and data.routes[uiMapID]
+            and core:IsMobInPhase(mobid, uiMapID)
+            and not core:ShouldIgnoreMob(mobid, uiMapID)
+            and module.should_show_mob(mobid, uiMapID)
+        then
+            for _, route in ipairs(data.routes[uiMapID]) do
+                if not routecache[route] then
+                    routecache[route] = {route = route, mobid = mobid, uiMapID = uiMapID}
+                end
+                table.insert(self.data, routecache[route])
+            end
+        end
+    end
+end
+
+function routes.OnPinCreated(pin)
+    pin:EnableMouse(false)
+end
+
+function routes.OnPinReset(pin)
+    pin.mobid = nil
+    pin.line = nil
+end
+
+function routes:Connect(pin1, pin2, routedata)
+    local route = routedata.route
+    local r, g, b, a = 1, 1, 1, 0.6
+    if route.r then
+        r, g, b, a = route.r or 1, route.g or 1, route.b or 1, route.a or 0.6
+    else
+        r, g, b = module.id_to_color(routedata.mobid)
+    end
+    local line = ns.MapSystem:AttachLine(pin1, pin2)
+    line.baseThickness = line:GetThickness()
+    line:SetVertexColor(r, g, b, a)
+    return line
+end
+
+function routes:HandleData(routedata)
+    local firstPin, prevPin
+    for _, coord in ipairs(routedata.route) do
+        local pin = self:AcquirePin()
+        pin:SetSize(1, 1) -- needs a size or the route can't connect
+        pin.mobid = routedata.mobid
+        if pin:SetPosition(routedata.uiMapID, core:GetXY(coord)) then
+            pin:Show()
+            if prevPin then
+                pin.line = self:Connect(prevPin, pin, routedata)
+            end
+            prevPin = pin
+            firstPin = firstPin or pin
+        else
+            self:ReleasePin(pin)
+        end
+    end
+    if routedata.route.loop and firstPin and prevPin ~= firstPin then
+        firstPin.line = self:Connect(prevPin, firstPin, routedata)
+    end
+end
+
+function routes:Emphasize(mobid, state)
+    for pin in self:EnumeratePins() do
+        if pin.line and pin.mobid == mobid then
+            pin.line:SetThickness(pin.line.baseThickness * (state and 1.5 or 1))
+        end
+    end
+end
+
+module.WorldMapRouteProvider = ns.MapSystem:AddProvider(routes)
+
+-- Pin mixin
+
+SilverDragonOverlayWorldMapPinMixin = CreateFromMixins(module.SilverDragonOverlayPinMixinBase)
 
 function SilverDragonOverlayWorldMapPinMixin:OnLoad()
-    self:UseFrameLevelType(ns.CLASSIC and "PIN_FRAME_LEVEL_WORLD_QUEST" or "PIN_FRAME_LEVEL_VIGNETTE")
     self:SetScalingLimits(1, 1.0, 1.2)
+    self:EnableMouse(true)
+    self:SetMouseClickEnabled(true)
+    self:SetMouseMotionEnabled(true)
 end
-
-SilverDragonOverlayRoutePinMixin = CreateFromMixins(MapCanvasPinMixin)
-function SilverDragonOverlayRoutePinMixin:OnLoad()
-    -- This is below normal pins
-    self:UseFrameLevelType(ns.CLASSIC and "PIN_FRAME_LEVEL_AREA_POI" or "PIN_FRAME_LEVEL_EVENT_OVERLAY");
-
-    self:SetMouseMotionEnabled(false)
-    self:SetMouseClickEnabled(false)
-end
-
--- 10.1.5 protected SetPassThroughButtons and it's called automatically inside AcquirePin, so we'll break it harder here until Blizzard fixes it:
-SilverDragonOverlayRoutePinMixin.SetPassThroughButtons = function() end
-
-SilverDragonOverlayRoutePinConnectionMixin = {}
-
-function SilverDragonOverlayRoutePinConnectionMixin:Connect(pin1, pin2)
-    self:SetParent(pin1)
-    -- Anchor straight up from the origin
-    self:SetPoint("BOTTOM", pin1, "CENTER")
-    if not (pin1:GetCenter() and pin2:GetCenter()) then
-        -- I'm seeing reports of errors in CalculateAngleBetween which would imply one of the pins
-        -- isn't returning a center. I can't reproduce this to test it, but I think aborting here
-        -- should avoid errors.
-        return
-    end
-    -- Then adjust the height to be the length from origin to pin
-    local length = RegionUtil.CalculateDistanceBetween(pin1, pin2) * pin1:GetEffectiveScale()
-    self:SetHeight(length)
-    -- And finally rotate all the textures around the origin so they line up
-    local quarter = (math.pi / 2)
-    local angle = RegionUtil.CalculateAngleBetween(pin1, pin2) - quarter
-    self:RotateTextures(angle, 0.5, 0)
-    -- self.Line:SetRotation(angle, 0.5, 0)
-    self.angle = angle
-    pin1.connectionOut = self
-    pin2.connectionIn = self
-
-    if ns.CLASSIC then
-        -- self.Line:SetTexture("Interface\\TaxiFrame\\UI-Taxi-Line")
-        self.Line:SetAtlas("_UI-Taxi-Line-horizontal")
-    else
-        self.Line:SetAtlas("_AnimaChannel-Channel-Line-horizontal")
-    end
-
-    self.Line:SetStartPoint("CENTER", pin1)
-    self.Line:SetEndPoint("CENTER", pin2)
-
-    self.Line:SetThickness(20)
-end
-
 
 function module:UpdateWorldMapIcons()
-    self.WorldMapDataProvider:RefreshAllData()
+    ns.MapSystem:UpdateProviders()
 end

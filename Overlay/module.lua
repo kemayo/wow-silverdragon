@@ -95,7 +95,6 @@ function module:OnInitialize()
 end
 
 function module:OnEnable()
-    WorldMapFrame:AddDataProvider(self.WorldMapDataProvider)
     WorldMapFrame:RegisterCallback("WorldMapOnHide", self.OnWorldMapHide, self)
     HBD.RegisterCallback(self, "PlayerZoneChanged", "UpdateMinimapIcons")
     core.RegisterCallback(self, "Ready", "Update")
@@ -110,9 +109,6 @@ function module:OnEnable()
     self:RegisterEvent("LOOT_CLOSED", "Update")
 end
 function module:OnDisable()
-    if WorldMapFrame.dataProviders[self.WorldMapDataProvider] then
-        WorldMapFrame:RemoveDataProvider(self.WorldMapDataProvider)
-    end
     HBD.UnregisterCallback(self, "PlayerZoneChanged")
     core.UnregisterCallback(self, "Ready")
     core.UnregisterCallback(self, "BrokerMobClick")
@@ -139,43 +135,22 @@ function module:Seen(_, id, zone, x, y, dead, source, unit)
     self.last_mob = id
     self.last_mob_time = time()
     if WorldMapFrame:IsShown() then
-        self.WorldMapDataProvider:Ping(id)
+        self.WorldMapProvider:Ping(id)
     end
 end
 
 function module:HighlightMob(mobid)
     if mobid == self.focus_mob then return end
     if not WorldMapFrame:IsShown() then return end
-    for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
-        if pin.mobid == mobid then
-            pin.emphasis:SetVertexColor(1, 1, 1, 1)
-            pin.emphasis:Show()
-        end
-    end
-    if self.WorldMapDataProvider.connectionPool then
-        for connection in self.WorldMapDataProvider.connectionPool:EnumerateActive() do
-            if connection.mobid == mobid then
-                connection.Line:SetThickness(30)
-            end
-        end
-    end
+    self.WorldMapProvider:Emphasize(mobid, true)
+    self.WorldMapRouteProvider:Emphasize(mobid, true)
 end
 
 function module:UnhighlightMob(mobid)
     if mobid == self.focus_mob then return end
     if not WorldMapFrame:IsShown() then return end
-    for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
-        if pin.mobid == mobid then
-            pin.emphasis:Hide()
-        end
-    end
-    if self.WorldMapDataProvider.connectionPool then
-        for connection in self.WorldMapDataProvider.connectionPool:EnumerateActive() do
-            if connection.mobid == mobid then
-                connection.Line:SetThickness(20)
-            end
-        end
-    end
+    self.WorldMapProvider:Emphasize(mobid, false)
+    self.WorldMapRouteProvider:Emphasize(mobid, false)
 end
 
 function module:FocusMob(mobid)
@@ -186,12 +161,7 @@ function module:FocusMob(mobid)
         self.focus_mob = mobid
     end
     if WorldMapFrame:IsShown() then
-        for pin in self.WorldMapDataProvider:GetMap():EnumeratePinsByTemplate("SilverDragonOverlayWorldMapPinTemplate") do
-            pin:ApplyFocusState()
-            if pin.mobid == self.focus_mob then
-                pin:Ping()
-            end
-        end
+        self.WorldMapProvider:ApplyFocusState()
     else
         self.focus_mob_ping = true
     end

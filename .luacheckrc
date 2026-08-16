@@ -250,6 +250,8 @@ read_globals = {
     "CreateFramePool",
     "CreateObjectPool",
     "CreateTexturePool",
+    "CreateUnsecuredObjectPool",
+    "CreateVector2D",
     "CreateScrollBoxListLinearView",
     "CreateFromMixins",
     "CreateAndInitFromMixin",
@@ -306,6 +308,8 @@ read_globals = {
     "EventRegistry",
     "TalentUtil",
     "TalentButtonUtil",
+    "Lerp",
+    "Saturate",
 
     -- FrameXML Constants
     "ACHIEVEMENTS",

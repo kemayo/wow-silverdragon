@@ -14,24 +14,11 @@ local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 local SilverDragonOverlayPinMixinBase = {}
 module.SilverDragonOverlayPinMixinBase = SilverDragonOverlayPinMixinBase
 
--- 10.1.5 protected SetPassThroughButtons and it's called automatically inside AcquirePin, so we'll break it harder here until Blizzard fixes it:
-SilverDragonOverlayPinMixinBase.SetPassThroughButtons = function() end
-
-function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, x, y, textureInfo, scale, alpha, originalCoord, originalMapID, minimap)
+function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, textureInfo, scale, alpha, originalCoord, originalMapID, minimap)
     self.mobid = mobid
     self.coord = originalCoord
     self.uiMapID = originalMapID
     self.minimap = minimap
-
-    if not minimap then
-        self:SetPosition(x, y)
-
-        -- MapCanvasMixin:AcquirePin sets right-click to pass through so zoom-out can happen
-        -- ...but we want it, because we have a right-click menu to show
-        if self.SetPassThroughButtons then
-            self:SetPassThroughButtons("")
-        end
-    end
 
     local size = 12
     scale = scale * self:Config().icon_scale
@@ -92,10 +79,8 @@ function SilverDragonOverlayPinMixinBase:OnMouseLeave()
     module:CleanupTooltip()
 end
 
-function SilverDragonOverlayPinMixinBase:OnMouseDown(button)
-end
-
-function SilverDragonOverlayPinMixinBase:OnMouseUp(button)
+-- not OnMouseUp: the map system's pin mixin takes that name for its own routing
+function SilverDragonOverlayPinMixinBase:OnClick(button)
     local targets = core:GetModule("ClickTarget", true)
     if button == "RightButton" then
         if IsShiftKeyDown() then

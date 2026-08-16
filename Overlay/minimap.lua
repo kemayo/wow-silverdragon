@@ -33,7 +33,7 @@ function dataProvider:RefreshAllData()
 
     for coord, mobid, textureData, scale, alpha in module:IterateNodes(uiMapID, true) do
         local x, y = core:GetXY(coord)
-        local pin = self:AcquirePin("SilverDragonOverlayMinimapPinTemplate", mobid, x, y, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, true)
+        local pin = self:AcquirePin("SilverDragonOverlayMinimapPinTemplate", mobid, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, true)
 
         local edge = module.db.profile.minimap.edge == module.const.EDGE_ALWAYS
         if module.db.profile.minimap.edge == module.const.EDGE_FOCUS then
@@ -171,7 +171,7 @@ function SilverDragonOverlayMinimapPinMixin:OnLoad()
 
     self:SetScript("OnEnter", self.OnMouseEnter)
     self:SetScript("OnLeave", self.OnMouseLeave)
-    self:SetScript("OnMouseUp", self.OnMouseUp)
+    self:SetScript("OnMouseUp", self.OnClick)
 
     self:SetMouseClickEnabled(true)
     self:SetMouseMotionEnabled(true)
