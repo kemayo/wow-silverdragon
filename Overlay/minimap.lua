@@ -45,10 +45,30 @@ function dataProvider:RefreshAllData()
         pin:UpdateEdge()
     end
 
+    self.moveThreshold = nil
+
     if module.db.profile.minimap.routes and ns.mobsByZone[uiMapID] then
+        -- Route segments are culled against where the player is standing now, so
+        -- note it: CheckMovement rebuilds the whole set once they've gone far
+        -- enough that something culled could be close to coming into view.
+        local radius = module:GetMinimapViewDiameter() / 2
+        self.playerX, self.playerY = HBD:GetPlayerWorldPosition()
+        self.moveThreshold = radius / 2
+        self.cullDistance = radius + self.moveThreshold
+
         for mobid, coords in pairs(ns.mobsByZone[uiMapID]) do
             self:AddRoute(uiMapID, mobid)
         end
+    end
+end
+
+function dataProvider:CheckMovement()
+    if not (self.moveThreshold and self.playerX) then return end
+    local x, y = HBD:GetPlayerWorldPosition()
+    if not x then return end
+    local dx, dy = x - self.playerX, y - self.playerY
+    if (dx * dx + dy * dy) > (self.moveThreshold * self.moveThreshold) then
+        module:UpdateMinimapIcons()
     end
 end
 
@@ -120,6 +140,7 @@ C_Timer.NewTicker(0.5, function(...)
             end
         end
     end
+    dataProvider:CheckMovement()
 end)
 
 function dataProvider:AddRoute(uiMapID, mobid)
@@ -143,12 +164,24 @@ end
 -- edge, and square enough that rotating its texture doesn't distort it.
 local SEGMENT_LENGTH = 16
 
+local function screenLength(worldDistance)
+    return Minimap:GetWidth() * (worldDistance / module:GetMinimapViewDiameter())
+end
+
 local function onScreenLength(x1, y1, x2, y2, uiMapID)
     local wx1, wy1 = HBD:GetWorldCoordinatesFromZone(x1, y1, uiMapID)
     local wx2, wy2 = HBD:GetWorldCoordinatesFromZone(x2, y2, uiMapID)
     if not (wx1 and wx2) then return 0 end
-    local distance = math.sqrt((wx2-wx1)^2 + (wy2-wy1)^2)
-    return Minimap:GetWidth() * (distance / module:GetMinimapViewDiameter())
+    return screenLength(math.sqrt((wx2-wx1)^2 + (wy2-wy1)^2))
+end
+
+-- HereBeDragons hides the pins that fall outside the minimap, but it still has
+-- to look at every one it's been handed, so segments the player can't be near
+-- are better off never being registered.
+function dataProvider:InView(wx, wy, reach)
+    if not self.playerX then return true end
+    local dx, dy = wx - self.playerX, wy - self.playerY
+    return (dx * dx + dy * dy) <= (reach * reach)
 end
 
 local segmented = {}
@@ -157,7 +190,12 @@ function dataProvider:DrawSegment(coord1, coord2, uiMapID, ...)
     local x1, y1 = core:GetXY(coord1)
     local x2, y2 = core:GetXY(coord2)
 
-    local segments = max(ceil(onScreenLength(x1, y1, x2, y2, uiMapID) / SEGMENT_LENGTH), 1)
+    local wx1, wy1 = HBD:GetWorldCoordinatesFromZone(x1, y1, uiMapID)
+    local wx2, wy2 = HBD:GetWorldCoordinatesFromZone(x2, y2, uiMapID)
+    if not (wx1 and wx2) then return end
+
+    local worldLength = math.sqrt((wx2-wx1)^2 + (wy2-wy1)^2)
+    local segments = max(ceil(screenLength(worldLength) / SEGMENT_LENGTH), 1)
 
     for i=0, segments do
         segmented[#segmented + 1] = core:GetCoord(
@@ -165,8 +203,14 @@ function dataProvider:DrawSegment(coord1, coord2, uiMapID, ...)
             y1 + (y2-y1) / segments * i
         )
     end
+
+    -- zone to world is affine, so a segment's midpoint interpolates exactly
+    local reach = (self.cullDistance or 0) + (worldLength / segments) / 2
     for i=1, #segmented - 1 do
-        self:AcquirePin("SilverDragonOverlayMinimapRoutePinTemplate", segmented[i], segmented[i + 1], uiMapID, ...)
+        local along = (i - 0.5) / segments
+        if self:InView(wx1 + (wx2-wx1) * along, wy1 + (wy2-wy1) * along, reach) then
+            self:AcquirePin("SilverDragonOverlayMinimapRoutePinTemplate", segmented[i], segmented[i + 1], uiMapID, ...)
+        end
     end
 end
 
