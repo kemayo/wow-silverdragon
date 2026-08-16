@@ -85,14 +85,18 @@ end
 
 local pinsToQuantize = {}
 function mobs:AfterRefresh()
-    if quantizer then
+    -- Sizing the grid from a canvas that hasn't been laid out makes its cell
+    -- counts NaN, which then errors inside the quantizer for every pin, and the
+    -- grid stays poisoned until a refresh manages to replace it.
+    local width = WorldMapFrame:DenormalizeHorizontalSize(1.0)
+    local height = WorldMapFrame:DenormalizeVerticalSize(1.0)
+    if quantizer and width > 0 and height > 0 then
         wipe(pinsToQuantize)
         for pin in self:EnumeratePins() do
             table.insert(pinsToQuantize, pin)
         end
         -- the quantizer reads x/y off the pins and writes quantizedX/Y back
-        local ratio = WorldMapFrame:DenormalizeHorizontalSize(1.0) / WorldMapFrame:DenormalizeVerticalSize(1.0)
-        quantizer:Resize(math.ceil(quantizer.size * ratio), quantizer.size)
+        quantizer:Resize(math.ceil(quantizer.size * (width / height)), quantizer.size)
         quantizer:ClearAndQuantize(pinsToQuantize)
         for _, pin in ipairs(pinsToQuantize) do
             pin.x = pin.quantizedX or pin.x

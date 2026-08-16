@@ -207,12 +207,15 @@ local function updatePinSize()
 end
 
 local function updateProviders()
+    local visible = WorldMapFrame:IsVisible()
     ns.MapSystem:ReleaseLines()
     for _, provider in next, providers do
-        if provider.OnRefresh then provider:OnRefresh() end
         provider.pool:ReleaseAll()
-        provider:RefreshData()
-        if provider.AfterRefresh then provider:AfterRefresh() end
+        if visible then
+            if provider.OnRefresh then provider:OnRefresh() end
+            provider:RefreshData()
+            if provider.AfterRefresh then provider:AfterRefresh() end
+        end
     end
     -- a refresh takes fresh pins out of the pool with their anchors cleared, and
     -- nothing else places them until the canvas next changes scale
