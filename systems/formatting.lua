@@ -65,6 +65,7 @@ ns.quick_texture_markup = quick_texture_markup
 local completeColor = CreateColor(0, 1, 0, 1)
 local incompleteColor = CreateColor(1, 0, 0, 1)
 local function render_replacer(variant, id, fallback)
+	local baseVariant, baseID = variant, id
 	local mainid, subid = id:match("(%d+)%.(%d+)")
 	mainid, subid = mainid and tonumber(mainid), subid and tonumber(subid)
 	id = mainid or (id:match('^%d+$') and tonumber(id) or id)
@@ -106,6 +107,28 @@ local function render_replacer(variant, id, fallback)
 	elseif variant == "questid" then
 		if subvariant == "plain" then return id end
 		return CreateAtlasMarkup("questnormal") .. (C_QuestLog.IsQuestFlaggedCompleted(id) and completeColor or incompleteColor):WrapTextInColorCode(id)
+	elseif variant == "questline" or variant == "questlinebyquest" then
+		local questLine
+		if variant == "questlinebyquest" then
+			questLine = C_QuestLine.GetQuestLineInfo(id, subid)
+			-- questlinebyquest:questID[.uiMapID]
+		else
+			-- questline:uiMapID.questLineID
+			local questLines = C_QuestLine.GetAvailableQuestLines(id)
+			if not questLines then return end
+			for _, line in ipairs(questLines) do
+				if line.questLineID == subid then
+					questLine = line
+					break
+				end
+			end
+		end
+		if questLine then
+			if subvariant == "plain" then return questLine.questLineName end
+			local completed = questLine.isAccountCompleted and not questLine.inProgress
+			return CreateAtlasMarkup("questlog-storylineicon") .. " " ..
+				(completed and completeColor or incompleteColor):WrapTextInColorCode(questLine.questLineName)
+		end
 	elseif variant == "achievement" or variant == "achievementname" then
 		if mainid and subid then
 			local criteria, _, completed, _, _, completedBy = ns.GetCriteria(mainid, subid)
@@ -229,7 +252,7 @@ local function render_replacer(variant, id, fallback)
 		end
 		return CreateAtlasMarkup(id)
 	end
-	return fallback ~= "" and fallback or (variant .. ':' .. id)
+	return fallback ~= "" and fallback or (baseVariant .. ':' .. baseID)
 end
 local function safe_render_replacer(...)
 	local replacement = render_replacer(...)
