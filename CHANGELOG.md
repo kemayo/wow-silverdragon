@@ -1,5 +1,15 @@
 # Changelog
 
+## Changed in v2026.28
+
+* Coiled Isle:
+    * questids for the Surge mobs
+    * shared loot for all rares
+* Showing character-loot only is now the default
+* If set to show character-loot only, notify when items were hidden, show them with the shift key
+* The "shared loot" title will now show in the window even if a mob *only* has shared loot
+* Browser: always show all possible loot regardless of settings
+
 ## Changed in v2026.27
 
 * Coiled Isle: added more rare loot, shared mounts
