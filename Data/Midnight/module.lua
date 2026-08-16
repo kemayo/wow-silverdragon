@@ -1954,48 +1954,48 @@ do
 			areaPoi=8889, -- murloc sacrifice event
 		},
 		[26406480] = { -- Looming Mutagenitor
-			criteria=115368,
+			criteria=115368, quest=93718,
 			npc=255088,
 			loot={
 				276166, -- Twin-Headed Twinblade
 				276172, -- Headdress of Mutagenesis
 				-- 279475, -- Mutagenitor's Feather
-				-- ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=96966}),
 			},
 			vignette={7414, 7686},
 		},
 		[44702593] = { -- Vassti, the Exalted Broodmother
-			criteria=115369,
+			criteria=115369, quest=93676,
 			npc=257863,
 			loot={
 				276173, -- Clutchguard Sandals
 				276175, -- Broodmother's Embrace
 				-- 279476, -- Vassti's Claw
-				-- ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=96967}),
 				-- 273000, -- Corrosive Soul
 			},
 			vignette=7763,
 		},
 		[46996223] = { -- Malformed Leviathan
-			criteria=111353,
+			criteria=111353, quest=93673,
 			npc=255087,
 			loot={
 				276169, -- Malformed Barrier
 				276174, -- Leviathan's Oozing Scalemail
 				-- 279479, -- Leviathan's Eye
-				-- ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=96970}),
 			},
 			areaPoi=8891,
 			vignette={7412, 7453}, -- only saw the former
 		},
 		[67167752] = { -- Venom Lancer Ori'kassi
-			criteria=115371,
+			criteria=115371, quest=93722,
 			npc=255927,
 			loot={
 				276167, -- Ori'kassi's Lance
 				276178, -- Venom Lancer's Gauntlets
 				-- 279478, -- Ori'kassi's Barbed Tail
-				-- ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_ZULJARRA, 50, {quest=96969}),
 				-- 274496, -- Ophidian Bone Whistle
 				-- 273000, -- Corrosive Soul
 				-- 276009, -- Skytalon Gloves
