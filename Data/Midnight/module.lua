@@ -1056,7 +1056,7 @@ do
 			npc=256821,
 			loot={
 				264912, -- Void-Channeler's Spire
-			264913, -- Focused Netherslicer
+				264913, -- Focused Netherslicer
 				ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94755}),
 			},
 			vignette=7428,
@@ -1187,8 +1187,7 @@ end
 -- Invasions
 
 ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
-	[29106290] = {
-		label="Auredar's Chassis",
+	[29106290] = { -- Auredar's Chassis
 		criteria=114009,
 		quest=96316, -- v
 		npc=264569,
@@ -1202,8 +1201,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7668,
 	},
-	[76203960] = {
-		label="Swalewing Matriarch",
+	[76203960] = { -- Swalewing Matriarch
 		criteria=114007,
 		quest=96207, -- v
 		npc=263954,
@@ -1217,8 +1215,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7660,
 	},
-	[39904270] = {
-		label="Broxion",
+	[39904270] = { -- Broxion
 		-- [39904270, 41304680, 42004830, 42604800, 44905440, 45505340, 45805370, 46205600]
 		criteria=114006,
 		quest=96206, -- v
@@ -1234,10 +1231,9 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7659,
 	},
-	[37606240] = {
-		label="Interminable Uarn",
+	[39516103] = { -- Interminable Uarn
 		criteria=114005,
-		quest=96205, -- v
+		quest=96205,
 		npc=263947,
 		loot={
 			274862, -- Corrupted Draenei Priest's Kris
@@ -1249,10 +1245,9 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7658,
 	},
-	[65906210] = {
-		label="Lomelith",
+	[68546229] = { -- Lomelith
 		criteria=114008,
-		quest=96208, -- v
+		quest=96208,
 		npc=263955,
 		loot={
 			274860, -- Ancient Spore-Coated Axe
@@ -1262,8 +1257,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7661,
 	},
-	[69407720] = {
-		label="Warp Agent Xi'grivr",
+	[69407720] = { -- Warp Agent Xi'grivr
 		criteria=114010,
 		quest=96319, -- v
 		npc=264574,
@@ -1274,8 +1268,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7670,
 	},
-	[54206240] = {
-		label="Slaipaan",
+	[54206240] = { -- Slaipaan
 		criteria=114012,
 		quest=96320, -- v
 		npc=264576,
@@ -1289,8 +1282,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7671,
 	},
-	[48006880] = {
-		label="Indomitable Mk XII",
+	[48006880] = { -- Indomitable Mk XII
 		criteria=114011,
 		quest=96317, -- v
 		npc=264571,
@@ -1310,10 +1302,8 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 }, {
 	achievement=62883, -- Showdown Slugger: Naigtal
 })
--- Vilaldoun:
-ns.RegisterPoints(2646, {
-	[73608020] = {
-		label="Auredar's Chassis",
+ns.RegisterPoints(2646, { -- Naigral (Vilaldoun)
+	[73608020] = { -- Auredar's Chassis
 		criteria=114009,
 		quest=96316, -- v
 		npc=264569,
@@ -1331,9 +1321,8 @@ ns.RegisterPoints(2646, {
 	achievement=62883, -- Showdown Slugger: Naigtal
 })
 ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
-	[29201840] = {
-		label="Warbringer Thal'kuur",
-		quest=97014, -- v
+	[29751928] = { -- Warbringer Thal'kuur
+		quest=97014,
 		npc=267422,
 		loot={
 			276298, -- Forgotten Fel-Shard Talon
@@ -1345,8 +1334,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7744,
 	},
-	[48404760] = {
-		label="Voidwarped Sporebat",
+	[48404760] = { -- Voidwarped Sporebat
 		quest=96566, -- v
 		npc=265698,
 		loot={
@@ -1358,6 +1346,34 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 			-- 278116, -- Player Experience
 		},
 		vignette=7699,
+	},
+	[68235161] = { -- Sleepy Mandrake
+		label="{npc:267910:Sleepy Mandrake}",
+		loot={
+			{262768, pet=true}, -- Sleepy Mandrake
+		},
+		note=function()
+			local function done(q) return C_QuestLog.IsQuestFlaggedCompletedOnAccount(q) and "{a:common-icon-checkmark}" or "{a:common-icon-redx}" end
+			return "Feed five mushrooms:\n"..
+				done(97091).." {item:276365:Highland Redcap}\n"..
+				done(97092).." {item:276366:Dusty Redcap}\n"..
+				done(97093).." {item:276367:Marshy Redcap}\n"..
+				done(97094).." {item:276368:Partially-Digested Redcap} (mob drop)\n"..
+				done(97095).." {item:276369:Airy Redcap}"
+		end,
+		related={
+			[28906176] = { -- Highland Redcap
+				quest=97091, loot={276365}, label="{item:276365}",
+				path={28906176, 29786262, 30156525, 30426609, 32676921, 33417072, 36217266, 36637216, 36407136, 31146332, 31316254, 31816023, 33475950},
+			},
+			[27914996] = {quest=97092, loot={276366}, label="{item:276366}", note="In the crypts"}, -- Dusty Redcap
+			[71423705] = {quest=97093, loot={276367}, label="{item:276367}", path=75643814}, -- Marshy Redcap
+			-- [] = {quest=97094, loot={276368}}, -- Partially-Digested Redcap
+			[95092667] = {quest=97095, loot={276369}, label="{item:276369}", path=88812597, note="On top of the tallest mushroom, bounce up"}, -- Airy Redcap
+			atlas="TeleportationNetwork-Ardenweald-32x32", minimap=true,
+		},
+		path=67505416,
+		atlas="VignetteLootElite", scale=1.1, minimap=true,
 	},
 })
 
