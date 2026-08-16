@@ -158,11 +158,7 @@ function routes:OnRefresh()
 
     for mobid in pairs(ns.mobsByZone[uiMapID]) do
         local data = ns.mobdb[mobid]
-        if data and data.routes and data.routes[uiMapID]
-            and core:IsMobInPhase(mobid, uiMapID)
-            and not core:ShouldIgnoreMob(mobid, uiMapID)
-            and module.should_show_mob(mobid, uiMapID)
-        then
+        if data and data.routes and data.routes[uiMapID] and module.should_show_mob(mobid, uiMapID) then
             for _, route in ipairs(data.routes[uiMapID]) do
                 if not routecache[route] then
                     routecache[route] = {route = route, mobid = mobid, uiMapID = uiMapID}
