@@ -530,40 +530,12 @@ function addon:IsMobInZone(id, uiMapID, suppressAnyZone)
 	return self:IsCustom(id, uiMapID, suppressAnyZone), false
 end
 do
-	local poi_expirations = {}
-	local poi_zone_expirations = {}
-	local pois_byzone = {}
-	local poi_methods = {"GetAreaPOIForMap", "GetEventsForMap", "GetQuestHubsForMap", "GetDelvesForMap", "GetDragonridingRacesForMap"}
-	local function refreshPois(zone)
-		local now = time()
-		if not poi_zone_expirations[zone] or now > poi_zone_expirations[zone] then
-			Debug("Refreshing zone POIs", zone)
-			pois_byzone[zone] = wipe(pois_byzone[zone] or {})
-			for _, method in ipairs(poi_methods) do
-				if C_AreaPoiInfo[method] then
-					for _, poiID in ipairs(C_AreaPoiInfo[method](zone)) do
-						Debug("Found POI", poiID)
-						pois_byzone[zone][poiID] = true
-						if C_AreaPoiInfo.IsAreaPOITimed(poiID) then
-							poi_expirations[poiID] = now + (C_AreaPoiInfo.GetAreaPOISecondsLeft(poiID) or 60)
-						else
-							poi_expirations[poiID] = now + 600
-						end
-					end
-				end
-			end
-			poi_zone_expirations[zone] = now + 10
-		end
-	end
+	-- A mob's poi is a flat list of zone / poiID pairs, and each pair names its
+	-- own zone because the POI need not sit on the map the mob does.
 	local function checkPois(...)
 		for i=1, select("#", ...), 2 do
 			local zone, poiID = select(i, ...)
-			local now = time()
-			if now > (poi_expirations[poiID] or 0) then
-				refreshPois(zone)
-				poi_expirations[poiID] = poi_expirations[poiID] or (now + 60)
-			end
-			if pois_byzone[zone][poiID] then
+			if ns.areaPoi.IsActive(poiID, zone) then
 				return true
 			end
 		end

@@ -41,6 +41,7 @@ core.lua
 systems\_scaffolding.lua
 systems\class.lua
 systems\formatting.lua
+systems\areapoi.lua
 systems\conditions.lua
 systems\rewards\base.lua
 systems\rewards\item.lua

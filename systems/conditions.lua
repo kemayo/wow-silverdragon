@@ -380,29 +380,13 @@ function ns.conditions.AreaPoi:init(uiMapID, id)
 	self.uiMapID = uiMapID
 	self.id = id
 end
-do
-	-- A map answers with all of its pois at once, so ask it at most once a
-	-- second however many conditions are watching it.
-	local byMap, expires = {}, {}
-	local function poisIn(uiMapID)
-		local now = time()
-		if not byMap[uiMapID] or now > expires[uiMapID] then
-			byMap[uiMapID] = wipe(byMap[uiMapID] or {})
-			for _, poi in ipairs(C_AreaPoiInfo.GetAreaPOIForMap(uiMapID) or {}) do
-				byMap[uiMapID][poi] = true
-			end
-			expires[uiMapID] = now + 1
-		end
-		return byMap[uiMapID]
-	end
-	function ns.conditions.AreaPoi:Matched()
-		return poisIn(self.uiMapID)[self.id] or false
-	end
+function ns.conditions.AreaPoi:Matched()
+	return ns.areaPoi.IsActive(self.id, self.uiMapID)
 end
 function ns.conditions.AreaPoi:Label()
-	local info = C_AreaPoiInfo.GetAreaPOIInfo(self.uiMapID, self.id)
-	if info and info.name then
-		return info.name
+	local name = ns.areaPoi.GetName(self.id, self.uiMapID)
+	if name then
+		return name
 	end
 	return Condition.Label(self)
 end
