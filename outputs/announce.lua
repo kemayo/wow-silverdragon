@@ -54,14 +54,17 @@ function module:OnInitialize()
 			sound_mount = true,
 			sound_boss = true,
 			sound_loot = true,
+			sound_loot_junk = true,
 			soundfile = "Loatheb: I see you",
 			soundfile_mount = "Illidan: Not Prepared",
 			soundfile_boss = "Magtheridon: I am Unleashed",
 			soundfile_loot = "Ikiss: Trinkets",
+			soundfile_loot_junk = "Kobold: Not junk",
 			sound_loop = 1,
 			sound_mount_loop = 1,
 			sound_boss_loop = 1,
 			sound_loot_loop = 1,
+			sound_loot_junk_loop = 1,
 			flash = true,
 			flash_texture = "Blizzard Low Health",
 			flash_color = {r=1,g=0,b=1,a=1,},
@@ -346,9 +349,12 @@ function module:OnInitialize()
 					soundfile_boss = soundfile("sound_boss", 35),
 					sound_boss_loop = soundrange(37),
 					loot = {type="header", name="", order=40,},
-					sound_loot = toggle("Loot sounds", "Play a sound for treasures", 41),
+					sound_loot = toggle("Loot sounds", "Play a sound for notable treasures", 41),
 					soundfile_loot = soundfile("sound_loot", 45),
 					sound_loot_loop = soundrange(47),
+					sound_loot_junk = toggle("Junk loot sounds", "Play a sound for treasures that aren't notable. Only reachable when the treasures filter, over in Announcements, is set to \"All of them\"", 48),
+					soundfile_loot_junk = soundfile("sound_loot_junk", 49),
+					sound_loot_junk_loop = soundrange(50),
 				},
 			},
 			flash = {
@@ -781,16 +787,21 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zo
 	module:PlaySound{soundfile = soundfile, loops = loops}
 end)
 core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback, name, id, zone, x, y, instanceid)
-	if not (module.db.profile.sound_loot and LSM) then
-		return
-	end
+	if not LSM then return end
 	if nowplaying then return end
 	local soundfile, loops
 	if ns.HasNotableMounts(id, true) then
 		if not module.db.profile.sound_mount then return end
 		soundfile = module.db.profile.soundfile_mount
 		loops = module.db.profile.sound_mount_loop
+	elseif ns.MobIsNotable(id, true) == false then
+		-- only reachable at all when the treasures filter is "everything", since
+		-- "notable" stops AnnounceLoot firing for these before it gets here
+		if not module.db.profile.sound_loot_junk then return end
+		soundfile = module.db.profile.soundfile_loot_junk
+		loops = module.db.profile.sound_loot_junk_loop
 	else
+		if not module.db.profile.sound_loot then return end
 		soundfile = module.db.profile.soundfile_loot
 		loops = module.db.profile.sound_loot_loop
 	end
