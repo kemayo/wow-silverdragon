@@ -207,6 +207,18 @@ core:RegisterTreasureData("Midnight", {
 		notes="Inside the building; drag objects out 3x",
 	},
 	[7447] = {name="Scout's Pack", achievement=62126, criteria=111870, quest=94387, loot={266101, SINGULARITY}},
+
+	-- Junk
+	-- Zul'Aman
+	[7044] = {name="Forgotten Amani Cache", loot={}},
+	[7336] = {name="Spiritpaw Satchel", loot={}},
+	[7337] = {name="Twilight Ordinance", loot={}},
+	[7348] = {name="Giant Grab Bag", loot={}},
+	[7349] = {name="Shabby Stockpile", loot={}},
+	-- Coiled Isle
+	[7705] = {name="Cracked Canopic Jar", loot={}},
+	[7712] = {name="Venom-Clotted Bauble", loot={}},
+	[7713] = {name="Singing Shell", loot={}},
 }, true)
 
 local moth = {name="Glowing Moth", achievement=61052, loot={ns.rewards.Currency(3385)}}
@@ -290,7 +302,7 @@ core:RegisterMobData("Midnight", {
 		quest=97128,
 		worldquest=97128,
 		-- areaPoi=8896,
-		locations={[ns.COILEDISLE]={}}, -- 51605400
+		locations={[ns.COILEDISLE]={}}, -- 59996622
 		loot={
 			268199, -- Tidepiercer's Bubble Popper
 			268217, -- Rising Tide Wristguards
