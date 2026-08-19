@@ -106,6 +106,15 @@ function ns.MobIsNotable(id, isTreasure, fromVignette)
 		Debug("MobIsNotable", id, false, "nothing wanted")
 		return false
 	end
+	-- A registered entry can still end up here with nothing pending: no quest gate,
+	-- loot recorded as explicitly empty (nil is untouched -- nobody's checked, so
+	-- it stays unknown, not confirmed-empty), no shared loot either. Unlike an
+	-- unregistered id, nothing here can later load in and change the answer, so
+	-- it's a confirmed no rather than an unknown.
+	if not data.quest and data.loot and #data.loot == 0 and (not shared or #shared == 0) then
+		Debug("MobIsNotable", id, false, "registered, nothing to check")
+		return false
+	end
 	Debug("MobIsNotable", id, nil, "nothing knowable")
 	return nil
 end
