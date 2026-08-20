@@ -205,7 +205,7 @@ function module:ShowTooltip(pin)
             if not pin:Config().tooltip_regularloot then
                 filter = isKnowable
             end
-            self.lootwindow = ns.Loot.Window.ShowForMob(id, false, false, true, filter)
+            self.lootwindow = ns.Loot.Window.ShowForMob(id, false, false, filter)
             if self.lootwindow then
                 self.lootwindow:SetParent(tooltip)
                 if pin:GetCenter() > UIParent:GetCenter() then

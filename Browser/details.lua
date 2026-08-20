@@ -19,10 +19,10 @@ local ACTIONS_HEIGHT = 52
 local LABEL_HEIGHT = 16
 local SCROLL_INSET = 4
 
--- Two rows and a heading: a row of the mob's own loot, the "Shared loot"
--- heading, and the first row of that. Asked of loot.lua, so it keeps up if those
--- metrics change.
-local LOOT_HEIGHT = ns.Loot.Window.HeightForRows(2, 1) + (2 * SCROLL_INSET)
+-- Two rows and two headings: a row of the mob's own loot, plus one more section
+-- (shared, or off-character) with its own first row. Asked of loot.lua, so it
+-- keeps up if those metrics change.
+local LOOT_HEIGHT = ns.Loot.Window.HeightForRows(2, 2) + (2 * SCROLL_INSET)
 
 -- Two lines, and it scrolls, so a long note is still reachable
 local NOTES_HEIGHT = 30
@@ -437,11 +437,7 @@ function DetailMixin:SetMob(id)
 end
 
 function DetailMixin:SetLoot(id)
-	-- Merged rather than the usual second window for shared loot: this one has a
-	-- box of its own to sit in, and a second window below it lands on the map.
-	-- The merge keeps its heading, so the two are still told apart. This forces
-	-- all loot to be visible, regardless of the character loot setting.
-	local window = ns.Loot.Window.ShowForMob(id, false, false, true, nil, true, true)
+	local window = ns.Loot.Window.ShowForMob(id, false, false)
 	self.lootEmpty:SetShown(not window)
 	if not window then
 		self.lootScroll:Reset()

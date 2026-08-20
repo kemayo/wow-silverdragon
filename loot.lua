@@ -469,6 +469,7 @@ do
 			button.KnownIcon:Hide()
 		end
 		button.lootdata = nil
+		button:SetScale(1)
 		button:ClearAllPoints()
 		button:SetParent(nil)
 		button:Hide()
@@ -565,15 +566,23 @@ do
 	-- window rather than a constant.
 	--
 	-- rowBreaks[index] = section heading. The button at that index starts a fresh
-	-- row with the heading above it, which is how merged shared loot stays
-	-- distinguishable from the rest instead of just running on.
+	-- row with the heading above it, which is how merged shared/off-character loot
+	-- stays distinguishable from the rest instead of just running on.
+	-- Still assumes full-size rows: it's a planning aid for hosts reserving space
+	-- ahead of time, not something layoutButtons itself uses any more.
 	local ROW_STEP = ITEM_HEIGHT - ITEM_YOFFSET
 	local SHARED_LOOT_LABEL = "Shared loot"
+	local OFFCHARACTER_LOOT_LABEL = "Not for this character"
+	local SHARED_OFFCHARACTER_LOOT_LABEL = "Shared, not for this character"
 
+	-- Off-character buttons render at a smaller scale (AddItem's `mini`), so layout
+	-- works in actual pixels rather than a fixed-size column count, and every
+	-- button anchors straight to the window instead of chaining off the previous
+	-- one, to avoid reasoning about one button's SetScale shifting another's anchor.
 	local function layoutButtons(window)
-		local perRow = window:GetItemsPerRow()
+		local perRowWidth = window:GetItemsPerRow() * (ITEM_WIDTH + math.abs(ITEM_XOFFSET)) - math.abs(ITEM_XOFFSET)
 		local y = BORDER_WIDTH + (window.title:IsShown() and TITLE_SPACING or 0)
-		local column, widest, used = 0, 0, 0
+		local x, rowHeight, widestRow, widestLabel, used = 0, 0, 0, 0, 0
 		window.sectionLabels = window.sectionLabels or {}
 		for _, label in ipairs(window.sectionLabels) do
 			label:Hide()
@@ -581,8 +590,12 @@ do
 
 		for index, button in ipairs(window.buttons) do
 			local heading = window.rowBreaks and window.rowBreaks[index]
-			if column > 0 and (heading or column >= perRow) then
-				column, y = 0, y + ROW_STEP
+			local scale = button:GetScale()
+			local w = ITEM_WIDTH * scale
+			local h = ITEM_HEIGHT * scale
+			if x > 0 and (heading or x + w > perRowWidth) then
+				y = y + rowHeight + math.abs(ITEM_YOFFSET)
+				x, rowHeight = 0, 0
 			end
 			if heading then
 				used = used + 1
@@ -595,21 +608,22 @@ do
 				label:SetPoint("TOPLEFT", window, "TOPLEFT", BORDER_WIDTH, -y)
 				label:SetText(heading)
 				label:Show()
+				widestLabel = math.max(widestLabel, label:GetStringWidth())
 				y = y + TITLE_SPACING
 			end
 			button:ClearAllPoints()
-			if column == 0 then
-				button:SetPoint("TOPLEFT", window, "TOPLEFT", BORDER_WIDTH, -y)
-			else
-				button:SetPoint("TOPLEFT", window.buttons[index - 1], "TOPRIGHT", ITEM_XOFFSET, 0)
-			end
-			column = column + 1
-			widest = math.max(widest, column)
+			-- SetPoint's offsets are in the calling region's own scale, so a scaled
+			-- button's window-space offset has to be divided by that scale here, or
+			-- it lands closer to the window's corner than intended.
+			button:SetPoint("TOPLEFT", window, "TOPLEFT", (BORDER_WIDTH + x) / scale, -y / scale)
+			x = x + w + math.abs(ITEM_XOFFSET)
+			rowHeight = math.max(rowHeight, h)
+			widestRow = math.max(widestRow, x - math.abs(ITEM_XOFFSET))
 		end
 
-		window.gridColumns = widest
+		window.contentWidth = math.max(widestRow, widestLabel)
 		window.contentHeight = #window.buttons > 0
-			and (y + ITEM_HEIGHT + BORDER_WIDTH)
+			and (y + rowHeight + BORDER_WIDTH)
 			or (2 * BORDER_WIDTH)
 	end
 
@@ -670,7 +684,7 @@ do
 				self.tooltip = nil
 			end
 		end,
-		AddItem = function(self, item)
+		AddItem = function(self, item, mini)
 			local button, isNew = buttonPool:Acquire()
 			button:SetParent(self)
 			if isNew then
@@ -687,6 +701,7 @@ do
 				button.KnownIcon:SetPoint("BOTTOMRIGHT", 4, -4)
 				button.KnownIcon:SetSize(16, 16)
 			end
+			button:SetScale(mini and 0.6 or 1)
 
 			tinsert(self.buttons, button)
 			layoutButtons(self)
@@ -723,15 +738,15 @@ do
 			button:Show()
 			return button
 		end,
-		-- A heading only makes sense once there's something for it to sit below;
-		-- a window whose whole contents are one section says so in its title.
-		AddLoot = function(self, loot, heading)
-			if heading and #self.buttons > 0 then
+		-- Whether a heading on the very first section makes sense is the caller's
+		-- call (ShowForMob skips it when the window's title already says as much).
+		AddLoot = function(self, loot, heading, mini)
+			if heading then
 				self.rowBreaks = self.rowBreaks or {}
 				self.rowBreaks[#self.buttons + 1] = heading
 			end
 			for _, item in ipairs(loot) do
-				self:AddItem(item)
+				self:AddItem(item, mini)
 			end
 		end,
 		GetItemsPerRow = function(self)
@@ -745,12 +760,12 @@ do
 			self:SizeForButtons()
 		end,
 		-- Both measurements come from the layout pass, so the frame always fits
-		-- what's actually in it -- section headings and part-filled rows included.
+		-- what's actually in it -- section headings, part-filled rows, and mixed
+		-- button sizes included.
 		SizeForButtons = function(self)
-			local columns = self.gridColumns or 0
 			self:SetSize(
 				(2 * BORDER_WIDTH) + math.max(
-					(columns * ITEM_WIDTH) + ((columns - 1) * math.abs(ITEM_XOFFSET)),
+					self.contentWidth or 0,
 					self.title:IsShown() and self.title:GetStringWidth() or 0
 				),
 				self.contentHeight or (2 * BORDER_WIDTH)
@@ -765,7 +780,7 @@ do
 			for _, label in ipairs(self.sectionLabels or {}) do
 				label:Hide()
 			end
-			self.gridColumns, self.contentHeight = 0, nil
+			self.contentWidth, self.contentHeight = 0, nil
 		end,
 		SetTitle = function(self, title)
 			if title then
@@ -784,10 +799,6 @@ do
 				self.timer.additional = additional
 				self.timer.callback = callback
 				self.timer.watch = self
-				if self.sharedWindow then
-					self.timer.additional = self.timer.additional or {}
-					tinsert(self.timer.additional, self.sharedWindow)
-				end
 				self.timer:Show()
 			elseif self.timer then
 				timerPool:Release(self.timer)
@@ -821,11 +832,6 @@ do
 
 	ns.Loot.Window.Release = function(window)
 		if not window then return end
-		if window.sharedWindow then
-			windowPool:Release(window.sharedWindow)
-			core.events:Fire("LootWindowReleased", window.sharedWindow)
-			window.sharedWindow = nil
-		end
 		-- this will hide / clearallpoints / clearloot the window
 		windowPool:Release(window)
 
@@ -843,20 +849,33 @@ do
 		end
 		return loot
 	end
-	-- mergeShared puts shared loot in the same grid rather than a second window
-	-- hanging off the bottom. For a host that's given the window a fixed space to
-	-- sit in there's nowhere for that second one to go.
-	function ns.Loot.Window.ShowForMob(id, independent, treasure, shared, extraFilter, mergeShared, force)
-		local filter = function(item)
-			if extraFilter and not extraFilter(item) then return false end
-			return force or not core.db.profile.charloot or IsShiftKeyDown() or item:MightDrop()
+	-- Splits a loot list into what suits this character and what doesn't, the
+	-- same nil-for-empty shape lootFilter uses, so callers can just check
+	-- truthiness either way.
+	local function partitionByCharacter(loot)
+		if not loot then return nil, nil end
+		local ok, notOk
+		for _, item in ipairs(loot) do
+			if suitable(item) then
+				ok = ok or {}
+				tinsert(ok, item)
+			else
+				notOk = notOk or {}
+				tinsert(notOk, item)
+			end
 		end
-		local loot = lootFilter(filter, ns.Loot.GetLootTable(id, treasure))
-		local sharedLoot = lootFilter(filter, shared and ns.Loot.GetLootTable(id, treasure, true))
+		return ok, notOk
+	end
+	function ns.Loot.Window.ShowForMob(id, independent, treasure, extraFilter)
+		local loot = lootFilter(extraFilter, ns.Loot.GetLootTable(id, treasure))
+		local sharedLoot = lootFilter(extraFilter, ns.Loot.GetLootTable(id, treasure, true))
 		if not (loot or sharedLoot) then
 			-- TODO: error message
 			return false
 		end
+		local lootOk, lootNotOk = partitionByCharacter(loot)
+		local sharedOk, sharedNotOk = partitionByCharacter(sharedLoot)
+
 		local window
 		if independent then
 			for other in windowPool:EnumerateActive() do
@@ -876,22 +895,33 @@ do
 		else
 			window = GetWindow()
 		end
-		if sharedLoot and not loot then
-			-- needs to be set before addloot for sizing reasons
-			window:SetTitle(SHARED_LOOT_LABEL)
+
+		-- Order decides which section goes first: your own ordinary loot, then
+		-- shared, then either kind that isn't for you.
+		local sections = {
+			{list = lootOk},
+			{list = sharedOk, heading = SHARED_LOOT_LABEL},
+			{list = lootNotOk, heading = OFFCHARACTER_LOOT_LABEL, mini = true},
+			{list = sharedNotOk, heading = SHARED_OFFCHARACTER_LOOT_LABEL, mini = true},
+		}
+		local base
+		for _, section in ipairs(sections) do
+			if section.list then
+				base = section
+				break
+			end
 		end
-		window:AddLoot(loot or sharedLoot)
-		if loot and sharedLoot and mergeShared then
-			window:AddLoot(sharedLoot, SHARED_LOOT_LABEL)
-		elseif loot and sharedLoot then
-			local sharedWindow = GetWindow()
-			window.sharedWindow = sharedWindow
-			sharedWindow:SetParent(window)
-			sharedWindow:SetPoint("TOPLEFT", window, "BOTTOMLEFT")
-			sharedWindow:SetTitle(SHARED_LOOT_LABEL)
-			sharedWindow:AddLoot(sharedLoot)
-			sharedWindow:Show()
-			core.events:Fire("LootWindowOpened", sharedWindow)
+		if base.heading and not independent then
+			-- needs to be set before addloot for sizing reasons. An independent
+			-- window keeps the mob name set above instead, so base's own heading (if
+			-- any) shows in the grid below it like any other section's would.
+			window:SetTitle(base.heading)
+			base.heading = nil
+		end
+		for _, section in ipairs(sections) do
+			if section.list then
+				window:AddLoot(section.list, section.heading, section.mini)
+			end
 		end
 		window:Show()
 

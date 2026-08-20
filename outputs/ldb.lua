@@ -463,7 +463,7 @@ do
 			if lootwindow then
 				ns.Loot.Window.Release(lootwindow)
 			end
-			lootwindow = ns.Loot.Window.ShowForMob(mobid, false, false, true)
+			lootwindow = ns.Loot.Window.ShowForMob(mobid, false, false)
 			if lootwindow then
 				-- lootwindow:SetParent(cell)
 				lootwindow:SetFrameStrata(cell:GetFrameStrata())
@@ -481,7 +481,7 @@ do
 				ns.Loot.Window.Release(lootwindow)
 				lootwindow = nil
 			end
-			ns.Loot.Window.ShowForMob(mobid, true, false, true)
+			ns.Loot.Window.ShowForMob(mobid, true, false)
 		end
 	end
 	local function show_achievement_tooltip(cell, mobid)

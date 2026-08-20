@@ -683,7 +683,7 @@ PopupMixin.scripts = {
 		end
 		if not self.window then
 			local data = self:GetParent().data
-			self.window = ns.Loot.Window.ShowForMob(data.id, false, data.type == "loot", true)
+			self.window = ns.Loot.Window.ShowForMob(data.id, false, data.type == "loot")
 			if not self.window then return end
 			self.window:SetParent(self)
 			self.window:Hide()
