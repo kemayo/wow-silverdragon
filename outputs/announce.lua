@@ -582,8 +582,8 @@ function module:Seen(callback, id, zone, x, y, is_dead, source, ...)
 	core.events:Fire("Announce", id, zone, x, y, is_dead, source, ...)
 end
 
-function module:SeenLoot(callback, name, id, zone, x, y, ...)
-	Debug("Announce:SeenLoot", name, id, zone, x, y, ...)
+function module:SeenLoot(callback, name, id, zone, x, y, instanceid)
+	Debug("Announce:SeenLoot", name, id, zone, x, y, instanceid)
 
 	if not core.db.profile.instances and IsInInstance() then
 		return
@@ -594,13 +594,16 @@ function module:SeenLoot(callback, name, id, zone, x, y, ...)
 		Debug("Announce:SeenLoot", false, "treasures off")
 		return
 	end
+	-- computed once and passed on, rather than making every AnnounceLoot
+	-- subscriber (the sound handler, notably) work it out again for itself
+	local notable = ns.MobIsNotable(id, true)
 	-- as in ShouldAnnounce, only a definite "nothing here is wanted" silences it
-	if filter == "notable" and ns.MobIsNotable(id, true) == false then
+	if filter == "notable" and notable == false then
 		Debug("Announce:SeenLoot", false, "not notable")
 		return
 	end
 
-	core.events:Fire("AnnounceLoot", name, id, zone, x, y, ...)
+	core.events:Fire("AnnounceLoot", name, id, zone, x, y, instanceid, notable)
 end
 
 function module:ShouldAnnounce(id, zone, x, y, is_dead, source, ...)
@@ -786,7 +789,7 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zo
 	end
 	module:PlaySound{soundfile = soundfile, loops = loops}
 end)
-core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback, name, id, zone, x, y, instanceid)
+core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback, name, id, zone, x, y, instanceid, notable)
 	if not LSM then return end
 	if nowplaying then return end
 	local soundfile, loops
@@ -794,7 +797,7 @@ core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback
 		if not module.db.profile.sound_mount then return end
 		soundfile = module.db.profile.soundfile_mount
 		loops = module.db.profile.sound_mount_loop
-	elseif ns.MobIsNotable(id, true) == false then
+	elseif notable == false then
 		-- only reachable at all when the treasures filter is "everything", since
 		-- "notable" stops AnnounceLoot firing for these before it gets here
 		if not module.db.profile.sound_loot_junk then return end
