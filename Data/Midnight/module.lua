@@ -960,7 +960,7 @@ ns.RegisterPoints(ns.HARANDAR, {
 
 do
 	local loot_shared = {
-		246951, -- Stormarion Core
+		-- 246951, -- Stormarion Core
 		251786, -- Ever-Collapsing Void Fissure
 		264694, -- Ultradon Cuirass
 		264701, -- Cosmic Bell
@@ -1195,19 +1195,19 @@ do
 				-- 264364, -- Hardin Steellock's Head
 				264599, -- Kul'Tiran Signet Ring
 				264615, -- Hardin's Backup Blade
-				-- ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94757}),
 			},
 			faction="Horde",
 			vignette=7442,
 		},
 		[69687730] = { -- Gar'chak Skullcleave
-			quest=94461, -- v
+			quest=94461,
 			npc=257231,
 			loot={
 				-- 264363, -- Gar'chak Skullcleave's Head
 				264609, -- Gar'chak's Mark of Honor
 				264641, -- Sharpened Skullcleaver
-				-- ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=}),
+				ns.rewards.Currency(ns.CURRENCY_SINGULARITY, 50, {quest=94756}),
 			},
 			faction="Alliance",
 			vignette=7445,
