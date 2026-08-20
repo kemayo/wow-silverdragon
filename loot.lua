@@ -521,8 +521,8 @@ do
 
 	local function button_onenter(self)
 		local loot_tooltip = ns.Tooltip.Get("Loot")
-		loot_tooltip:SetFrameStrata(self:GetFrameStrata())
-		loot_tooltip:SetFrameLevel(self:GetFrameLevel() + 1)
+		loot_tooltip:SetFrameStrata("TOOLTIP")
+		loot_tooltip:SetFrameLevel(self:GetFrameLevel() + 10)
 		if self:GetCenter() > UIParent:GetCenter() then
 			loot_tooltip:SetOwner(self, "ANCHOR_LEFT")
 		else
