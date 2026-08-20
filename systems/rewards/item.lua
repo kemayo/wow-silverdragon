@@ -411,6 +411,7 @@ function ns.rewards.Set:Obtained(...)
 	local info = C_TransmogSets.GetSetInfo(self.setid)
 	if info then
 		if info.collected then return true end
+		if info.validForCharacter then return false end
 		-- we want to fall through and return nil for sets the current class can't learn:
 		if info.classMask and bit.band(info.classMask, ns.playerClassMask) == ns.playerClassMask then return false end
 	end
