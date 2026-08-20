@@ -305,6 +305,10 @@ function module:WorkOutMobFromVignette(instanceid)
 		end
 		local treasure = ns.vignetteTreasureLookup[vignetteInfo.vignetteID]
 		if treasure then
+			if not core:PassesFactionCheck(treasure) then
+				-- Debug("skipping notification", "wrong faction")
+				return
+			end
 			if treasure.requires and not ns.conditions.check(treasure.requires) then
 				-- Debug("skipping notification", "vignette requirements not met", ns.conditions.summarize(treasure.requires))
 				return

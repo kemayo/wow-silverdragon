@@ -164,6 +164,10 @@ function addon:RegisterTreasureData(source, data, updated)
 	end
 end
 do
+	-- HandyNotes' point.faction means "faction required to see this". SilverDragon's
+	-- own data.faction means the opposite, "faction this belongs to", so flip it here.
+	local opposingFaction = {Horde="Alliance", Alliance="Horde"}
+
 	-- a treasure can have several vignettes, the same as a mob can
 	local function addTreasureVignettes(treasures, data, ...)
 		for i=1, select("#", ...) do
@@ -196,6 +200,7 @@ do
 					hidden=point.hidden,
 					worldquest=point.worldquest,
 					achievement=point.achievement, criteria=point.criteria,
+					faction=point.faction and opposingFaction[point.faction],
 				}
 				-- variations on "also register this elsewhere":
 				if point.translate or point.parent or point.levels then
@@ -609,6 +614,12 @@ do
 		return not (lastseen[seenkey(id, zone)] and time() < (lastseen[seenkey(id, zone)] + self.db.profile.delay))
 	end
 end
+-- Shared by mobs and treasures, so both hide on a data.faction match.
+-- TODO: add an option for this?
+function addon:PassesFactionCheck(data)
+	return not (data and data.faction == faction)
+end
+
 do
 	local zone_ignores = {
 		[550] = {
@@ -623,9 +634,7 @@ do
 			if mobdb[id].hidden then
 				return false
 			end
-			if mobdb[id].faction == faction then
-				--This checks unit faction and ignores mobs your faction cannot do anything with.
-				--TODO: add an option for this?
+			if not self:PassesFactionCheck(mobdb[id]) then
 				return false
 			end
 			if mobdb[id].requires and not ns.conditions.check(mobdb[id].requires) then
