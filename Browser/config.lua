@@ -70,7 +70,7 @@ function module:RegisterConfig()
 			},
 			mapShowAll = {
 				type = "toggle",
-				name = "Dim the rest of the zone",
+				name = "Show other rares in the zone",
 				desc = "With a rare selected, whether the others in the zone stay on the map, dimmed, or go away entirely",
 				set = function(info, v)
 					self.db.profile[info[#info]] = v

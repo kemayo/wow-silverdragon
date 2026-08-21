@@ -440,7 +440,7 @@ function module:ShowConfigMenu(owner)
 			module.window.detailPane:SetMob(module.selectedMob)
 			return MenuResponse.Refresh
 		end)
-		rootDescription:CreateCheckbox("Dim the rest of the zone", function()
+		rootDescription:CreateCheckbox("Show other rares in the zone", function()
 			return module.db.profile.mapShowAll
 		end, function()
 			module.db.profile.mapShowAll = not module.db.profile.mapShowAll
