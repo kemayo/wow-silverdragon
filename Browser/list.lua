@@ -84,23 +84,38 @@ end
 --
 -- "hidden" here means hidden from the browser by the user's filter choices, not
 -- the data's own `hidden` flag, which is applied when the index is built.
+local function isWatched(id)
+	if core.db.global.custom.any[id] then return true end
+	for uiMapID, mobs in pairs(core.db.global.custom) do
+		if uiMapID ~= "any" and mobs[id] then return true end
+	end
+	return false
+end
+
+-- Ignored means you said so, about this rare or about everything from its
+-- source. Adding one by hand says the opposite, and wins -- the same order
+-- core:ShouldIgnoreMob settles it in.
+--
+-- The source is only consulted once the per-mob flag has come back empty, and
+-- the hand-added list only once the source has come back ignored: this runs for
+-- every mob in the data whenever a header counts its rows.
+local function isIgnored(id)
+	if core.db.global.ignore[id] then return true end
+	local data = ns.mobdb[id]
+	if not (data and data.source and core.db.global.ignore_datasource[data.source]) then
+		return false
+	end
+	return not isWatched(id)
+end
+
 local function passesFilter(id)
 	local db = module.db.profile
-	local ignored = core.db.global.ignore[id]
-	if db.filterIgnored == "hide" and ignored then return false end
-	if db.filterIgnored == "only" and not ignored then return false end
-	if db.filterWatched then
-		local watched = core.db.global.custom.any[id]
-		if not watched then
-			for uiMapID, mobs in pairs(core.db.global.custom) do
-				if uiMapID ~= "any" and mobs[id] then
-					watched = true
-					break
-				end
-			end
-		end
-		if not watched then return false end
+	if db.filterIgnored ~= "show" then
+		local ignored = isIgnored(id)
+		if db.filterIgnored == "hide" and ignored then return false end
+		if db.filterIgnored == "only" and not ignored then return false end
 	end
+	if db.filterWatched and not isWatched(id) then return false end
 	return true
 end
 module.passesFilter = passesFilter
