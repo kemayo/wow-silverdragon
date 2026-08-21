@@ -322,6 +322,14 @@ function module:UpdateHeaderButtons()
 	self.window.grouping:GenerateMenu()
 end
 
+local openConfig = function()
+	local config = core:GetModule("Config", true)
+	if config then
+		config:ShowConfig()
+		LibStub("AceConfigDialog-3.0"):SelectGroup("SilverDragon", "browser")
+	end
+end
+
 local filterIgnoredLabels = {
 	show = "Show ignored",
 	hide = "Hide ignored",
@@ -405,14 +413,17 @@ function module:ShowFilterMenu(owner)
 			LibStub("AceConfigDialog-3.0"):SelectGroup("SilverDragon", "mobs", "custom")
 			return MenuResponse.CloseAll
 		end)
+
+		local config = core:GetModule("Config", true)
+		if config then
+			rootDescription:CreateButton(OPTIONS, openConfig)
+		end
 	end)
 end
 
 function module:ShowConfigMenu(owner)
 	if not (_G.MenuUtil and MenuUtil.CreateContextMenu) then
-		local config = core:GetModule("Config", true)
-		if config then config:ShowConfig() end
-		return
+		return openConfig()
 	end
 	MenuUtil.CreateContextMenu(owner, function(_, rootDescription)
 		rootDescription:SetTag("MENU_SILVERDRAGON_BROWSER_CONTEXT")
@@ -450,10 +461,7 @@ function module:ShowConfigMenu(owner)
 		rootDescription:CreateDivider()
 		local config = core:GetModule("Config", true)
 		if config then
-			rootDescription:CreateButton(OPTIONS, function()
-				config:ShowConfig()
-				LibStub("AceConfigDialog-3.0"):SelectGroup("SilverDragon", 'browser')
-			end)
+			rootDescription:CreateButton(OPTIONS, openConfig)
 		end
 		rootDescription:CreateButton(CLOSE, function()
 			module.window:Hide()
