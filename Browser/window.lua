@@ -448,6 +448,13 @@ function module:ShowConfigMenu(owner)
 			return MenuResponse.Refresh
 		end)
 		rootDescription:CreateDivider()
+		local config = core:GetModule("Config", true)
+		if config then
+			rootDescription:CreateButton(OPTIONS, function()
+				config:ShowConfig()
+				LibStub("AceConfigDialog-3.0"):SelectGroup("SilverDragon", 'browser')
+			end)
+		end
 		rootDescription:CreateButton(CLOSE, function()
 			module.window:Hide()
 			return MenuResponse.CloseAll
