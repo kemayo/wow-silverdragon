@@ -27,6 +27,19 @@ local function toggle_mob(id)
 	}
 end
 
+-- Worded the way the browser's filter menu words them, these being the same
+-- two switches reached from two places.
+local SOURCE_KNOWN_DESC = "If you disable this, SilverDragon will just not know about these mobs. They'll still be announced when you mouse over them, like any unknown rare."
+local SOURCE_IGNORE_DESC = "Ignore every mob provided by this module. This will make them all not be announced, regardless of any other settings."
+
+local function toggle_source(source)
+	return {
+		arg = source,
+		name = source,
+		type = "toggle",
+	}
+end
+
 local mob_names = {}
 local function input_to_mobid(value)
 	if not value then return end
@@ -111,17 +124,45 @@ function module:OptionsRequested(callback, options)
 			childGroups = "tab",
 			order = 15,
 			args = {
-				browse = {
+				sources = {
 					type = "group",
-					name = "Browse",
+					name = "Sources",
 					order = 0,
 					args = {
-						about = core:GetModule("Config").desc("Every rare SilverDragon knows about, with where to find it and what it drops.", 0),
+						about = core:GetModule("Config").desc("Where SilverDragon gets its rares from. Both of these reach the whole addon, not just one part of it.", 0),
 						open = {
 							type = "execute",
 							name = "Browse rares",
 							func = function() core:GetModule("Browser"):Toggle() end,
 							order = 1,
+						},
+						known = {
+							type = "group",
+							name = "Sources SilverDragon knows",
+							inline = true,
+							order = 10,
+							get = function(info) return core.db.global.datasources[info.arg] end,
+							set = function(info, value)
+								core.db.global.datasources[info.arg] = value
+								core:BuildLookupTables()
+							end,
+							args = {
+								about = core:GetModule("Config").desc(SOURCE_KNOWN_DESC, 0),
+							},
+						},
+						ignore = {
+							type = "group",
+							name = "Sources to ignore",
+							inline = true,
+							order = 20,
+							get = function(info) return core.db.global.ignore_datasource[info.arg] end,
+							set = function(info, value)
+								core.db.global.ignore_datasource[info.arg] = value or nil
+								core:BuildLookupTables()
+							end,
+							args = {
+								about = core:GetModule("Config").desc(SOURCE_IGNORE_DESC, 0),
+							},
 						},
 					},
 				},
@@ -187,10 +228,19 @@ function module:OptionsRequested(callback, options)
 			},
 		},
 	}
+	self:BuildSourceList(options)
 	self:BuildIgnoreList(options)
 	self:BuildCustomList(options)
 
 	core.UnregisterCallback(self, "OptionsRequested")
+end
+
+function module:BuildSourceList(options)
+	local args = options.plugins.mobs.mobs.args.sources.args
+	for source in pairs(core.datasources) do
+		args.known.args["source"..source] = toggle_source(source)
+		args.ignore.args["source"..source] = toggle_source(source)
+	end
 end
 
 function module:BuildIgnoreList(options)
