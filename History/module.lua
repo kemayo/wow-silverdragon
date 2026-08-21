@@ -504,7 +504,7 @@ function module:ShowConfigMenu(frame)
 			module:ClearAll()
 			return MenuResponse.CloseAll
 		end)
-		rootDescription:CreateButton("Open options...", openConfig)
+		rootDescription:CreateButton(OPTIONS, openConfig)
 	end)
 end
 
