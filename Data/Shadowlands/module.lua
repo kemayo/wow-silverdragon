@@ -272,6 +272,8 @@ core:RegisterMobData("Shadowlands", {
 	[184409] = {name="Euv'ouk",locations={[1970]={47454515},},loot={189949,190047,189956,189993},quest=65555,vignette=4961,},
 	[184413] = {name="Shifting Stargorger",locations={[1970]={42302100},},loot={189908,189916,189941,{189972,covenant=Enum.CovenantType.NightFae,quest=65505,}},quest=65549,},
 	[184804] = {name="Helmix",hidden=true},
+	-- soulshapes
+	[181682] = {name="Lost Soul",locations={[1533]={49854685}},loot={{187818, quest=64959, covenant=Enum.CovenantType.NightFae}},notes="/hug",requires=core.conditions.Covenant(Enum.CovenantType.NightFae)},
 }, true)
 core:RegisterTreasureData("Shadowlands", {
 	[4925] = {name="Template Archive",loot={{190060,quest=65527}},},
