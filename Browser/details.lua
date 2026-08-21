@@ -414,6 +414,11 @@ function DetailMixin:SetMob(id)
 		table.insert(meta, ("|cffaaaaaaQuest|r |cff%s%s|r"):format(
 			complete and "33ff33" or "ff3333", complete and COMPLETE or INCOMPLETE))
 	end
+	-- The Ignore box below is the per-mob one, so on its own it would say this
+	-- rare is fine while nothing is ever announced for it.
+	if data.source and core.db.global.ignore_datasource[data.source] then
+		table.insert(meta, ("|cffff3333Every rare from %s is ignored|r"):format(data.source))
+	end
 	for _, field in ipairs({"requires", "active"}) do
 		if data[field] then
 			local met = core.conditions.check(data[field])

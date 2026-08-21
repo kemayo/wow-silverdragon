@@ -989,6 +989,12 @@ function NavLineMixin:SetData(data)
 		elseif watched then
 			self.badge:SetAtlas("VignetteKill")
 		end
+	elseif data.kind == KIND_SOURCE and data.source
+		and core.db.global.ignore_datasource[data.source] then
+		-- every mob under here is ignored, so the heading wears the same mark a
+		-- single ignored one does
+		self.badge:SetAtlas("common-icon-redx")
+		self.badge:Show()
 	else
 		self.badge:Hide()
 	end
@@ -1019,8 +1025,9 @@ function NavLineMixin:SetData(data)
 		if data.kind == KIND_SOURCE and data.source and not data.noToggle then
 			-- there's no checkbox on the row any more, so say it in the label
 			local off = not core.db.global.datasources[data.source]
+			local ignored = core.db.global.ignore_datasource[data.source]
 			self.title:SetText(off and (data.source .. " |cff999999(not loaded)|r") or data.source)
-			self.title:SetAlpha(off and 0.5 or 1)
+			self.title:SetAlpha(off and 0.5 or ignored and 0.4 or 1)
 		else
 			self.title:SetText(data.kind == KIND_SOURCE and data.source or data.label or "")
 		end
