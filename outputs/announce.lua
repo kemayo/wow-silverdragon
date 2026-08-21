@@ -708,7 +708,7 @@ local channel_cvars = {
 local delays = {
 	["Ikiss: Trinkets"] = 5.7,
 }
-local nowplaying
+local nowplaying = {}
 function module:PlaySound(s)
 	-- Arg is a table, to make scheduling the loops easier. I am lazy.
 	Debug("Playing sound", s.soundfile, s.loops)
@@ -728,7 +728,7 @@ function module:PlaySound(s)
 			end
 			cvar_overrides = false
 		end
-		nowplaying = false
+		nowplaying[s.soundfile] = false
 		return
 	end
 	if not cvar_overrides then
@@ -764,11 +764,10 @@ function module:PlaySound(s)
 	s.loops = s.loops - 1
 	-- we guarantee one callback, in case we need to do cleanup
 	self:ScheduleTimer("PlaySound", delays[s.soundfile] or 4.5, s)
-	nowplaying = true
+	nowplaying[s.soundfile] = true
 end
 core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zone, x, y, dead, source)
 	if not LSM then return end
-	if nowplaying then return end
 	if source:match("^sync") then
 		local channel, player = source:match("sync:(.+):(.+)")
 		if channel == "GUILD" and not module.db.profile.soundguild or (channel == "PARTY" or channel == "RAID") and not module.db.profile.soundgroup then return end
@@ -787,11 +786,11 @@ core.RegisterCallback("SD Announce Sound", "Announce", function(callback, id, zo
 		soundfile = module.db.profile.soundfile
 		loops = module.db.profile.sound_loop
 	end
+	if nowplaying[soundfile] then return end
 	module:PlaySound{soundfile = soundfile, loops = loops}
 end)
 core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback, name, id, zone, x, y, instanceid, notable)
 	if not LSM then return end
-	if nowplaying then return end
 	local soundfile, loops
 	if ns.HasNotableMounts(id, true) then
 		if not module.db.profile.sound_mount then return end
@@ -808,6 +807,7 @@ core.RegisterCallback("SD AnnounceLoot Sound", "AnnounceLoot", function(callback
 		soundfile = module.db.profile.soundfile_loot
 		loops = module.db.profile.sound_loot_loop
 	end
+	if nowplaying[soundfile] then return end
 	module:PlaySound{soundfile = soundfile, loops = loops}
 end)
 
