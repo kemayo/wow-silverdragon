@@ -1080,7 +1080,7 @@ NavLineMixin.Scripts = {
 		if button == "RightButton" then
 			-- by value: rows recycle, and a menu holding onto this frame would
 			-- act on whatever scrolled into it
-			return module:ShowRowMenu(self, data.kind, data.id, data.key, data.uiMapID)
+			return module:ShowRowMenu(self, data.kind, data.id, data.key, data.uiMapID, data.source)
 		end
 		if data.kind == KIND_MOB then
 			return module:SelectMob(data.id, data.uiMapID)
@@ -1095,7 +1095,7 @@ NavLineMixin.Scripts = {
 	end,
 }
 
-function module:ShowRowMenu(owner, kind, id, key, uiMapID)
+function module:ShowRowMenu(owner, kind, id, key, uiMapID, source)
 	if not (_G.MenuUtil and MenuUtil.CreateContextMenu) then
 		return self:ShowConfigMenu(owner)
 	end
@@ -1129,6 +1129,10 @@ function module:ShowRowMenu(owner, kind, id, key, uiMapID)
 		end
 		-- a header: what the options panel's All / None buttons did, said plainly
 		rootDescription:CreateTitle(owner.title:GetText() or "")
+		if kind == KIND_SOURCE and source then
+			module:AddSourceSwitches(rootDescription, source)
+			rootDescription:CreateDivider()
+		end
 		local ids = {}
 		for _, entry in module.dataProvider:Enumerate() do
 			if entry.kind == KIND_MOB and entry.key:find(key, 1, true) == 1 then
