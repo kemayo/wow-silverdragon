@@ -1408,7 +1408,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 			atlas="TeleportationNetwork-Ardenweald-32x32", minimap=true,
 		},
 		path=67505416,
-		atlas="VignetteLootElite", scale=1.1, minimap=true,
+		atlas="VignetteLootElite", scale=1.3, minimap=true,
 	},
 })
 
@@ -1583,7 +1583,7 @@ ns.RegisterPoints(ns.COILEDISLE, {
 			minimap=true, worldmap=false,
 		},
 		vignette=7480, -- Privateer's Cache
-		atlas="VignetteLootElite", scale=1.1,
+		atlas="VignetteLootElite", scale=1.3,
 	},
 	[45916628] = {criteria=115313, quest=95938, loot={281571, ZULJARRA}, vignette=7604}, -- Fangbound Sack, Focus of Fangs
 	[65440560] = { -- Sunken Diver's Chest
@@ -1594,7 +1594,7 @@ ns.RegisterPoints(ns.COILEDISLE, {
 		},
 		note="Kill nearby {npc:263081:Glittering Grouper Brintail} for {item:271424:Diver's Key Fragment}x3",
 		vignette=7599,
-		atlas="VignetteLootElite", scale=1.1,
+		atlas="VignetteLootElite", scale=1.3,
 	},
 	[67264846] = { -- Grave of Someone Forgotten
 		criteria=115291, quest=95956,
@@ -1611,7 +1611,7 @@ ns.RegisterPoints(ns.COILEDISLE, {
 			minimap=true, worldmap=true,
 		},
 		vignette=7608,
-		atlas="VignetteLootElite", scale=1.1,
+		atlas="VignetteLootElite", scale=1.3,
 	},
 	[43646738] = { -- Profane Ritual Spoils (Ritual Chest)
 		criteria=115292, quest=95941,
@@ -1622,14 +1622,14 @@ ns.RegisterPoints(ns.COILEDISLE, {
 		},
 		note="Use {npc:263202:Mysterious Trinket}: upper right, upper left, bottom right, bottom left",
 		vignette=7607, -- Ritual Chest
-		atlas="VignetteLootElite", scale=1.1,
+		atlas="VignetteLootElite", scale=1.3,
 	},
 	[70637663] = { -- Brine-Crusted Chest
 		criteria=115294, quest=95995, -- 96001 pearl dropped, 96002 key dropped
 		loot={{274921, toy=true}, ZULJARRA}, -- Pearl of Jubilation
 		note="Find a Bubbling Clam underwater outside the cave; bring a {item:271815:Luminescent Pearl} and put it down for {npc:263347:Nacretta}; take the {item:271881:Dropped Key}; open the chest",
 		vignette=7627, -- Ancient Amani Chest
-		atlas="VignetteLootElite", scale=1.1,
+		atlas="VignetteLootElite", scale=1.3,
 	},
 	[31438349] = {criteria=115295, quest=96985, loot={279051, ZULJARRA}, vignette=7743}, -- Possessed Vase
 	[75376833] = {criteria=115306, quest=95164, loot={{268504, toy=true}, ZULJARRA}, vignette=7532}, -- Malfunctioning Staff
@@ -1696,7 +1696,7 @@ ns.RegisterPoints(ns.COILEDISLE, {
 			minimap=true, worldmap=true,
 		},
 		vignette=7610,
-		atlas="VignetteLootElite", scale=1.1,
+		atlas="VignetteLootElite", scale=1.3,
 	},
 	[43952649] = {criteria=115297, quest=95727, loot={281566, ns.rewards.Currency(ns.CURRENCY_VOIDLIGHT, 150), ZULJARRA}, vignette=7577}, -- Zul'jan's Stash, Amani Warrior's Cleaver
 }, {
