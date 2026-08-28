@@ -498,14 +498,8 @@ function module:OnInitialize()
 	end
 end
 
--- Move a profile's old announcement options onto the two filters.
---
--- Each group keys off whether its old options are stored at all, because AceDB
--- doesn't store a value matching its default: someone who only changed
--- already_transmog has no stored `already`, and someone who left the Treasures
--- toggle alone has no stored `loot`. Hence `== false` for the ones that used to
--- default to true. Clearing the old keys is what stops this running twice, as
--- none of them have defaults any more.
+-- Move a profile's old announcement options onto their replacements, mostly the
+-- two filters.
 --
 -- This runs on profile change as well as at load: profiles are switched long
 -- after OnInitialize, and an old one would otherwise keep its old keys and
@@ -515,18 +509,15 @@ function module:MigrateFilterOptions()
 	if p.already ~= nil or p.already_drop ~= nil or p.already_transmog ~= nil or p.already_alt ~= nil then
 		-- `already` meant "don't filter on completion at all", so it's the only one
 		-- that maps to anything other than the default. already_drop asked for loot
-		-- you own to silence a rare, which is what the notable filter does anyway,
-		-- so it needs nothing beyond being cleared away here.
+		-- you own to silence a rare; the notable filter already does that, so it
+		-- just needs clearing.
 		p.filter = p.already and "everything" or "notable"
-		-- already_transmog deliberately doesn't carry over. It read as "count
-		-- appearances when working out whether you already have everything", so
-		-- off meant a transmog-only rare could never be called finished and kept
-		-- announcing. transmog_notable off does the reverse: appearances stop
-		-- being a reason, but hasKnowableLoot still sees them, so the rare reads
-		-- as knowably-not-wanted and goes quiet. Mapping one to the other turns
-		-- the old default upside down, so leave everyone on the new one.
+		-- already_transmog doesn't carry over. Its nearest match, transmog_notable,
+		-- is its inverse, so mapping across would flip the old default. Everyone
+		-- stays on the new one.
 
-		-- already_alt was "tell me anyway", the inverse of counting an alt's as done
+		-- already_alt was "tell me anyway", the inverse of counting an alt's
+		-- achievement as done
 		core.db.profile.alts_achievements_count = p.already_alt == false
 
 		p.already, p.already_drop, p.already_transmog, p.already_alt = nil, nil, nil, nil
@@ -541,31 +532,22 @@ function module:MigrateFilterOptions()
 		p.loot = nil
 	end
 
-	-- known_mounts is gone; the Mount notability option covers it. Turning it off
-	-- used to mean "a mount I already know still counts", which has no equivalent
-	-- and nothing to migrate to, so it just goes.
-	p.known_mounts = nil
-
-	-- There were two switches for instances, this one and core's "Scan in
-	-- instances", both off to start with and in different panels -- so turning
-	-- that one on by itself changed nothing you could hear. Core's covers both
-	-- now. It defaulted off, so a stored value here only ever means it was on.
-	if p.instances ~= nil then
-		if p.instances then
-			core.db.profile.instances = true
-		end
-		p.instances = nil
-	end
-
-	-- Same story for dead rares: this and the Targets scanner each had a switch
-	-- called "Dead rares". Core's covers both. It defaulted on, so a stored value
-	-- here only ever means it was turned off.
+	-- Dead rares had two switches as well: this one and the Targets scanner's.
+	-- Core's covers both now. It defaulted on, so a stored value here only ever
+	-- means it was turned off.
 	if p.dead ~= nil then
 		if not p.dead then
 			core.db.profile.dead = false
 		end
 		p.dead = nil
 	end
+
+	-- These are just gone and being cleaned up:
+
+	-- Now covered by core's mount notability
+	p.known_mounts = nil
+	-- Now covered by core's instance toggle, for scanning and announcing
+	p.instances = nil
 end
 
 function module:Seen(callback, id, zone, x, y, is_dead, source, ...)
