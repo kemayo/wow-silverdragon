@@ -131,6 +131,9 @@ ns.vignetteMobLookup = vignetteMobLookup
 ns.vignetteTreasureLookup = {
 	-- [vignetteid] = { data },
 }
+ns.treasureByZone = {
+	-- [zoneid] = { [vignetteid] = {coord, ...}, ... }
+}
 -- Shared tail of every register path. Safe to re-run: upgradeloot skips entries
 -- that are already Reward objects, and RegisterMobAchievement no-ops on repeat.
 local function normalizeMobEntry(id, entry)
@@ -284,6 +287,20 @@ do
 	end
 end
 do
+	local function mergeLocations(lookup, id, locations)
+		if not locations then return end
+		for uiMapID, coords in pairs(locations) do
+			if not lookup[uiMapID] then
+				lookup[uiMapID] = {}
+			end
+			if not lookup[uiMapID][id] then
+				lookup[uiMapID][id] = {}
+			end
+			for _, coord in ipairs(coords) do
+				lookup[uiMapID][id][coord] = true
+			end
+		end
+	end
 	local function addQuestMobLookup(lookup, mobid, quest)
 		if ns.xtype(quest) == "table" then
 			for _, questid in ipairs(quest) do
@@ -312,14 +329,7 @@ do
 		if mobdata.hidden then
 			return
 		end
-		if mobdata.locations then
-			for zoneid, coords in pairs(mobdata.locations) do
-				if not mobsByZone[zoneid] then
-					mobsByZone[zoneid] = {}
-				end
-				mobsByZone[zoneid][mobid] = coords
-			end
-		end
+		mergeLocations(mobsByZone, mobid, mobdata.locations)
 		-- In the olden days, we had one mob per quest and/or vignette. Alas...
 		if mobdata.quest then
 			addQuestMobLookup(questMobLookup, mobid, mobdata.quest)
@@ -331,6 +341,13 @@ do
 			addVignetteMobLookups(mobid, ns.safe_unpack(mobdata.vignette))
 		end
 	end
+	local function addTreasureToLookups(vignetteid, vignettedata)
+		ns.vignetteTreasureLookup[vignetteid] = vignettedata
+		if vignettedata.hidden then
+			return
+		end
+		mergeLocations(ns.treasureByZone, vignetteid, vignettedata.locations)
+	end
 	function addon:BuildLookupTables()
 		wipe(mobdb)
 		wipe(mobsByZone)
@@ -338,6 +355,7 @@ do
 		wipe(questMobLookup)
 		wipe(vignetteMobLookup)
 		wipe(worldQuestMobLookup)
+		wipe(ns.treasureByZone)
 		wipe(ns.vignetteTreasureLookup)
 		for source, data in pairs(addon.datasources) do
 			if addon.db.global.datasources[source] then
@@ -355,7 +373,7 @@ do
 					vignettedata.id = vignetteid
 					vignettedata.source = source
 
-					ns.vignetteTreasureLookup[vignetteid] = vignettedata
+					addTreasureToLookups(vignetteid, vignettedata)
 				end
 			end
 		end
@@ -492,7 +510,7 @@ do
 	local function mobsForZone(uiMapID, suppressAnyZone)
 		local mobs = ns.mobsByZone[uiMapID] or empty
 		for id, coords in pairs(mobs) do
-			coroutine.yield(id, #coords > 0, false)
+			coroutine.yield(id, next(coords) ~= nil, false)
 		end
 		if globaldb.custom[uiMapID] then
 			for id in pairs(globaldb.custom[uiMapID]) do
@@ -530,11 +548,11 @@ function addon:MobHasVignette(id)
 	return mobdb[id] and mobdb[id].vignette
 end
 function addon:IsMobInZone(id, uiMapID, suppressAnyZone)
-	-- returns isInZone, hasCoords
+	-- returns isInZone
 	if uiMapID and mobsByZone[uiMapID] and mobsByZone[uiMapID][id] then
-		return true, #mobsByZone[uiMapID][id] > 0
+		return true
 	end
-	return self:IsCustom(id, uiMapID, suppressAnyZone), false
+	return self:IsCustom(id, uiMapID, suppressAnyZone)
 end
 do
 	-- A mob's poi is a flat list of zone / poiID pairs, and each pair names its
@@ -563,12 +581,8 @@ end
 function addon:GetMobByCoord(zone, coord, include_ignored)
 	if not mobsByZone[zone] then return end
 	for id, locations in pairs(mobsByZone[zone]) do
-		if self:IsMobInPhase(id, zone) and (include_ignored or not self:ShouldIgnoreMob(id)) then
-			for _, mob_coord in ipairs(locations) do
-				if coord == mob_coord then
-					return id, self:GetMobInfo(id)
-				end
-			end
+		if locations[coord] and self:IsMobInPhase(id, zone) and (include_ignored or not self:ShouldIgnoreMob(id)) then
+			return id, self:GetMobInfo(id)
 		end
 	end
 end

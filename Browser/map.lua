@@ -237,7 +237,7 @@ function MapMixin:RefreshPins()
 		local show, dim = self:PinState(id)
 		if show then
 			local icon = theme[module:MobStateFor(id)] or theme.unknown
-			for _, coord in ipairs(coords) do
+			for coord in pairs(coords) do
 				table.insert(placed, {id = id, coord = coord, icon = icon, dim = dim})
 			end
 		end

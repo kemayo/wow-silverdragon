@@ -109,7 +109,7 @@ do
         ns.ReleaseRunCaches()
         for _, id in ipairs(ids) do
             local icon = mobIcons[id]
-            for _, coord in ipairs(ns.mobsByZone[uiMapID][id]) do
+            for coord in pairs(ns.mobsByZone[uiMapID][id]) do
                 coroutine.yield(coord, id, icon, icon.scale, alphas[id])
             end
         end

@@ -177,7 +177,7 @@ do
     local function createWaypointForAll(uiMapID, mobid)
         if not TomTom then return end
         if not (ns.mobsByZone[uiMapID] and ns.mobsByZone[uiMapID][mobid]) then return end
-        for _, mob_coord in ipairs(ns.mobsByZone[uiMapID][mobid]) do
+        for mob_coord in pairs(ns.mobsByZone[uiMapID][mobid]) do
             local x, y = core:GetXY(mob_coord)
             TomTom:AddWaypoint(uiMapID, x, y, {
                 title = core:GetMobLabel(mobid),
