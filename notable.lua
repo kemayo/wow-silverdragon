@@ -209,7 +209,7 @@ do
 		},
 		stars = {
 			achievement = tex("VignetteKill", 1, 0.33, 1, 1.6), -- magenta star
-			something = tex("VignetteLootElite", 0.5, 1, 1, 1.6), -- cyan shiny star
+			something = tex("VignetteEventElite", 0.5, 1, 1, 1.6), -- cyan shiny star
 			nothing = tex("VignetteKill", 0.7, 0.7, 0.7, 1.3), -- grey star
 			unknown = tex("VignetteKill", 1, 1, 1, 1.6), -- plain white star
 			-- was 0,1,1 and labelled green, but that's a cyan too close to the
