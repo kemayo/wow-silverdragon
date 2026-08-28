@@ -131,6 +131,19 @@ ns.vignetteMobLookup = vignetteMobLookup
 ns.vignetteTreasureLookup = {
 	-- [vignetteid] = { data },
 }
+-- Shared tail of every register path. Safe to re-run: upgradeloot skips entries
+-- that are already Reward objects, and RegisterMobAchievement no-ops on repeat.
+local function normalizeMobEntry(id, entry)
+	entry.loot = ns.upgradeloot(entry.loot)
+	entry.loot_shared = ns.upgradeloot(entry.loot_shared)
+	if entry.achievement and entry.criteria then
+		ns:RegisterMobAchievement(id, entry.achievement, entry.criteria)
+	end
+end
+local function normalizeTreasureEntry(entry)
+	entry.loot = ns.upgradeloot(entry.loot)
+	entry.loot_shared = ns.upgradeloot(entry.loot_shared)
+end
 function addon:RegisterMobData(source, data, updated)
 	if not updated then
 		if not self.HASWARNEDABOUTOLDDATA then
@@ -141,17 +154,8 @@ function addon:RegisterMobData(source, data, updated)
 	end
 	if not addon.datasources[source] then addon.datasources[source] = {} end
 	MergeTable(addon.datasources[source], data)
-	-- pick up achievements if needed
 	for mobid, mobdata in pairs(data) do
-		if mobdata.achievement and mobdata.criteria then
-			if not ns.achievements[mobdata.achievement] then
-				ns.achievements[mobdata.achievement] = {}
-			end
-			ns.achievements[mobdata.achievement][mobid] = mobdata.criteria
-			ns:RegisterMobAchievement(mobid, mobdata.achievement)
-		end
-		mobdata.loot = ns.upgradeloot(mobdata.loot)
-		mobdata.loot_shared = ns.upgradeloot(mobdata.loot_shared)
+		normalizeMobEntry(mobid, mobdata)
 	end
 end
 function addon:RegisterTreasureData(source, data, updated)
@@ -159,8 +163,7 @@ function addon:RegisterTreasureData(source, data, updated)
 	if not addon.treasuresources[source] then addon.treasuresources[source] = {} end
 	MergeTable(addon.treasuresources[source], data)
 	for vignetteid, vignettedata in pairs(data) do
-		vignettedata.loot = ns.upgradeloot(vignettedata.loot)
-		vignettedata.loot_shared = ns.upgradeloot(vignettedata.loot_shared)
+		normalizeTreasureEntry(vignettedata)
 	end
 end
 do
@@ -175,6 +178,10 @@ do
 			treasures[vignetteID] = data
 		end
 	end
+	-- Fold my HandyNotes plugin point format into datasources/treasuresources.
+	-- The field mapping is the `data` table below; the non-obvious parts: a point
+	-- with `vignette` and no `npc` is a treasure, `requires` also answers to the
+	-- older name `hide_before`, and `faction` is flipped (see above).
 	function addon:RegisterHandyNotesData(source, uiMapID, points, defaults)
 		-- convenience for me, really...
 		addon.datasources[source] = addon.datasources[source] or {}
@@ -182,7 +189,7 @@ do
 		if defaults then
 			local nodeType = ns.nodeMaker(defaults)
 			for coord, point in pairs(points) do
-			    points[coord] = nodeType(point)
+				points[coord] = nodeType(point)
 			end
 		end
 		for coord, point in pairs(points) do
@@ -190,8 +197,8 @@ do
 				local data = {
 					name=point.label,
 					locations={[uiMapID]={coord}},
-					loot=ns.upgradeloot(point.loot),
-					loot_shared=ns.upgradeloot(point.loot_shared),
+					loot=point.loot,
+					loot_shared=point.loot_shared,
 					notes=point.note,
 					active=point.active,
 					requires=point.requires or point.hide_before,
@@ -256,6 +263,7 @@ do
 					data.routes = {[uiMapID] = point.routes}
 				end
 				if point.npc then
+					normalizeMobEntry(point.npc, data)
 					if not addon.datasources[source][point.npc] then
 						addon.datasources[source][point.npc] = data
 					else
@@ -267,14 +275,8 @@ do
 							end
 						end
 					end
-					if point.achievement and point.criteria then
-						if not ns.achievements[point.achievement] then
-							ns.achievements[point.achievement] = {}
-						end
-						ns.achievements[point.achievement][point.npc] = point.criteria
-						ns:RegisterMobAchievement(point.npc, point.achievement)
-					end
 				else
+					normalizeTreasureEntry(data)
 					addTreasureVignettes(addon.treasuresources[source], data, ns.safe_unpack(point.vignette))
 				end
 			end

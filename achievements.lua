@@ -793,8 +793,14 @@ local achievements_scanned = {
 	-- [achievementid] = true, once we've actually read criteria out of it
 }
 
-function ns:RegisterMobAchievement(mobid, achievementid)
+function ns:RegisterMobAchievement(mobid, achievementid, criteria)
 	if type(achievementid) ~= "number" or type(mobid) ~= "number" then return end
+	if not achievements[achievementid] then
+		achievements[achievementid] = {}
+	end
+	if criteria then
+		achievements[achievementid][mobid] = criteria
+	end
 	if not mobs_to_achievement[mobid] then
 		mobs_to_achievement[mobid] = {achievementid, id=mobid}
 	elseif not tContains(mobs_to_achievement[mobid], achievementid) then
