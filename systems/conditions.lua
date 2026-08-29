@@ -391,6 +391,8 @@ function ns.conditions.AreaPoi:Label()
 	return Condition.Label(self)
 end
 
+ns.conditions.NotAreaPoi = Negated(ns.conditions.AreaPoi)
+
 -- Same reasoning as AreaPoi for taking the map explicitly.
 ns.conditions.MapArt = Condition:extends{classname = "MapArt", type = 'mapart', KEYFIELDS = {"uiMapID", "id"}, SILENT = true}
 function ns.conditions.MapArt:init(uiMapID, id)

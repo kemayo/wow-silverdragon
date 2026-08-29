@@ -22,9 +22,6 @@ ns.atlas_texture = ns.atlas_texture or function(atlas) return atlas end
 -- RegisterHandyNotesData skips them; this only has to be callable.
 ns.mapLink = ns.mapLink or function(point) return point end
 
--- Older handler code negates AreaPoi under this name; a current conditions.lua
--- already provides it.
-ns.conditions.NotAreaPoi = ns.conditions.NotAreaPoi or ns.conditions._Negated(ns.conditions.AreaPoi)
 
 -- A point table whose __get entries compute fields (note, texture) on read.
 -- SilverDragon reads none of those keys off an imported point, so this only
