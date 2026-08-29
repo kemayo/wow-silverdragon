@@ -22,31 +22,87 @@ function module:RegisterConfig()
                 name = "What to display",
                 inline = true,
                 args = {
-                    achieved = {
-                        type = "toggle",
-                        name = "Show achieved",
-                        desc = "Whether to show icons for mobs you're done with: ones you've got the achievement progress for, or that have nothing left on them you want (which is set up under Announcements, in \"What's notable?\")",
+                    rares = {
+                        type = "group",
+                        name = "Rares",
+                        inline = true,
+                        args = {
+                            showMobs = {
+                                type = "toggle",
+                                name = "Show rares",
+                                desc = "Whether to put rare mobs on the map at all",
+                                width = "full",
+                                order = 0,
+                            },
+                            achieved = {
+                                type = "toggle",
+                                name = "Show achieved",
+                                desc = "Whether to show icons for mobs you're done with: ones you've got the achievement progress for, or that have nothing left on them you want (which is set up under Announcements, in \"What's notable?\")",
+                                disabled = function() return not self.db.profile.showMobs end,
+                                order = 10,
+                            },
+                            questcomplete = {
+                                type = "toggle",
+                                name = "Show quest-complete",
+                                desc = "Whether to show icons for mobs you have the tracking quest complete for (which probably means they won't drop anything)",
+                                disabled = function() return not self.db.profile.showMobs end,
+                                order = 15,
+                            },
+                            achievementless = {
+                                type = "toggle",
+                                name = "Show non-achievement mobs",
+                                desc = "Whether to show icons for mobs which aren't part of the criteria for any known achievement",
+                                disabled = function() return not self.db.profile.showMobs end,
+                                width = "full",
+                                order = 20,
+                            },
+                        },
                         order = 10,
                     },
-                    questcomplete = {
-                        type = "toggle",
-                        name = "Show quest-complete",
-                        desc = "Whether to show icons for mobs you have the tracking quest complete for (which probably means they won't drop anything)",
-                        order = 15,
-                    },
-                    achievementless = {
-                        type = "toggle",
-                        name = "Show non-achievement mobs",
-                        desc = "Whether to show icons for mobs which aren't part of the criteria for any known achievement",
-                        width = "full",
+                    treasures = {
+                        type = "group",
+                        name = "Treasures",
+                        inline = true,
+                        args = {
+                            showTreasures = {
+                                type = "toggle",
+                                name = "Show treasures",
+                                desc = "Whether to put treasures on the map at all",
+                                width = "full",
+                                order = 0,
+                            },
+                            achievedTreasure = {
+                                type = "toggle",
+                                name = "Show achieved",
+                                desc = "Whether to show icons for treasures you're done with: ones you've got the achievement progress for, or that have nothing left in them you want (which is set up under Announcements, in \"What's notable?\")",
+                                disabled = function() return not self.db.profile.showTreasures end,
+                                order = 10,
+                            },
+                            questcompleteTreasure = {
+                                type = "toggle",
+                                name = "Show looted",
+                                desc = "Whether to show icons for treasures you've already opened. Unlike a rare, a treasure doesn't come back, so these are off by default",
+                                disabled = function() return not self.db.profile.showTreasures end,
+                                order = 15,
+                            },
+                            achievementlessTreasure = {
+                                type = "toggle",
+                                name = "Show non-achievement treasures",
+                                desc = "Whether to show icons for treasures which aren't part of the criteria for any known achievement",
+                                disabled = function() return not self.db.profile.showTreasures end,
+                                width = "full",
+                                order = 20,
+                            },
+                        },
                         order = 20,
                     },
                     unhide = {
                         type = "execute",
-                        name = "Reset hidden mobs",
+                        name = "Reset hidden nodes",
                         desc = "Show all nodes that you manually hid by right-clicking on them and choosing \"hide\".",
                         func = function()
                             wipe(self.db.profile.hidden)
+                            wipe(self.db.profile.hiddenTreasure)
                             module:Update()
                         end,
                         order = 50,

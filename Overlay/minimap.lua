@@ -31,13 +31,13 @@ function dataProvider:RefreshAllData()
     local uiMapID = HBD:GetPlayerZone()
     if not uiMapID then return end
 
-    for coord, mobid, textureData, scale, alpha in module:IterateNodes(uiMapID, true) do
+    for coord, pointType, id, textureData, scale, alpha in module:IterateNodes(uiMapID, true) do
         local x, y = core:GetXY(coord)
-        local pin = self:AcquirePin("SilverDragonOverlayMinimapPinTemplate", mobid, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, true)
+        local pin = self:AcquirePin("SilverDragonOverlayMinimapPinTemplate", id, pointType, textureData, scale or 1.0, alpha or 1.0, coord, uiMapID, true)
 
         local edge = module.db.profile.minimap.edge == module.const.EDGE_ALWAYS
         if module.db.profile.minimap.edge == module.const.EDGE_FOCUS then
-            edge = mobid == module.focus_mob
+            edge = module:IsFocused(id, pointType == "treasure")
         end
 
         HBDPins:AddMinimapIconMap(self, pin, uiMapID, x, y, false, edge)
@@ -147,7 +147,7 @@ function dataProvider:AddRoute(uiMapID, mobid)
     local data = ns.mobdb[mobid or 0]
     if not data then return end
     if not (data.routes and data.routes[uiMapID]) then return end
-    if not module.should_show_mob(mobid, uiMapID) then return end
+    if not module.should_show_point(mobid, uiMapID) then return end
     for _, route in ipairs(data.routes[uiMapID]) do
         for i=1, #route - 1 do
             self:DrawSegment(route[i], route[i+1], uiMapID, mobid, route)

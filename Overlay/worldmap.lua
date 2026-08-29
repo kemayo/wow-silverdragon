@@ -29,15 +29,15 @@ function mobs:OnRefresh()
     if not uiMapID then return end
     if module.db.profile.worldmap.zone_disabled[uiMapID] then return end
 
-    for coord, mobid, icon, scale, alpha in module:IterateNodes(uiMapID, false) do
-        ns.Loot.Cache(mobid)
+    for coord, pointType, id, icon, scale, alpha in module:IterateNodes(uiMapID, false) do
+        ns.Loot.Cache(id, pointType == "treasure")
         local index = #self.data + 1
         local node = nodecache[index]
         if not node then
             node = {}
             nodecache[index] = node
         end
-        node.coord, node.mobid, node.icon = coord, mobid, icon
+        node.coord, node.id, node.type, node.icon = coord, id, pointType, icon
         node.scale, node.alpha, node.uiMapID = scale or 1, alpha or 1, uiMapID
         self.data[index] = node
     end
@@ -50,7 +50,7 @@ end
 function mobs.OnPinAcquire(pin, node)
     -- the pool resets the frame level on release, so this can't live in OnLoad
     pin:SetFrameLevel(ns.MapSystem.GetWorldMapFrameLevelByType(frameLevelType))
-    pin:OnAcquired(node.mobid, node.icon, node.scale, node.alpha, node.coord, node.uiMapID, false)
+    pin:OnAcquired(node.id, node.type, node.icon, node.scale, node.alpha, node.coord, node.uiMapID, false)
     return node.uiMapID, core:GetXY(node.coord)
 end
 
@@ -107,24 +107,29 @@ function mobs:AfterRefresh()
     if module.last_mob and time() < (module.last_mob_time + 30) then
         self:Ping(module.last_mob)
     end
-    if module.focus_mob_ping then
-        self:Ping(module.focus_mob)
-        module.focus_mob_ping = nil
+    if module.focus_ping then
+        self:Ping(module.focus_id, module.focus_treasure)
+        module.focus_ping = nil
     end
 end
 
+-- pins always carry a real boolean; callers dealing only in mobs pass nothing
+local function pinIs(pin, id, isTreasure)
+    return pin.id == id and pin.isTreasure == (isTreasure or false)
+end
+
 -- /script SilverDragon:GetModule("Overlay").WorldMapProvider:Ping(32487)
-function mobs:Ping(mobid)
+function mobs:Ping(id, isTreasure)
     for pin in self:EnumeratePins() do
-        if pin.mobid == mobid then
+        if pinIs(pin, id, isTreasure) then
             pin:Ping()
         end
     end
 end
 
-function mobs:Emphasize(mobid, state)
+function mobs:Emphasize(id, isTreasure, state)
     for pin in self:EnumeratePins() do
-        if pin.mobid == mobid then
+        if pinIs(pin, id, isTreasure) then
             pin.emphasis:SetVertexColor(1, 1, 1, 1)
             pin.emphasis:SetShown(state)
         end
@@ -134,7 +139,7 @@ end
 function mobs:ApplyFocusState()
     for pin in self:EnumeratePins() do
         pin:ApplyFocusState()
-        if pin.mobid == module.focus_mob then
+        if module:IsFocused(pin.id, pin.isTreasure) then
             pin:Ping()
         end
     end
@@ -162,10 +167,10 @@ function routes:OnRefresh()
 
     for mobid in pairs(ns.mobsByZone[uiMapID]) do
         local data = ns.mobdb[mobid]
-        if data and data.routes and data.routes[uiMapID] and module.should_show_mob(mobid, uiMapID) then
+        if data and data.routes and data.routes[uiMapID] and module.should_show_point(mobid, uiMapID) then
             for _, route in ipairs(data.routes[uiMapID]) do
                 if not routecache[route] then
-                    routecache[route] = {route = route, mobid = mobid, uiMapID = uiMapID}
+                    routecache[route] = {route = route, id = mobid, uiMapID = uiMapID}
                 end
                 table.insert(self.data, routecache[route])
             end
@@ -178,7 +183,7 @@ function routes.OnPinCreated(pin)
 end
 
 function routes.OnPinReset(pin)
-    pin.mobid = nil
+    pin.id = nil
     pin.line = nil
 end
 
@@ -188,7 +193,7 @@ function routes:Connect(pin1, pin2, routedata)
     if route.r then
         r, g, b, a = route.r or 1, route.g or 1, route.b or 1, route.a or 0.6
     else
-        r, g, b = module.id_to_color(routedata.mobid)
+        r, g, b = module.id_to_color(routedata.id)
     end
     local line = ns.MapSystem:AttachLine(pin1, pin2)
     line.baseThickness = line:GetThickness()
@@ -201,7 +206,7 @@ function routes:HandleData(routedata)
     for _, coord in ipairs(routedata.route) do
         local pin = self:AcquirePin()
         pin:SetSize(1, 1) -- needs a size or the route can't connect
-        pin.mobid = routedata.mobid
+        pin.id = routedata.id
         if pin:SetPosition(routedata.uiMapID, core:GetXY(coord)) then
             pin:Show()
             if prevPin then
@@ -218,9 +223,10 @@ function routes:HandleData(routedata)
     end
 end
 
-function routes:Emphasize(mobid, state)
+function routes:Emphasize(id, isTreasure, state)
+    if isTreasure then return end -- only mobs have routes
     for pin in self:EnumeratePins() do
-        if pin.line and pin.mobid == mobid then
+        if pin.line and pin.id == id then
             pin.line:SetThickness(pin.line.baseThickness * (state and 1.5 or 1))
         end
     end

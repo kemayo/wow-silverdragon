@@ -43,10 +43,18 @@ function module:OnInitialize()
             },
             icon_theme = 'skulls', -- circles / skulls
             icon_color = 'completion', -- completion / distinct
+            -- What to display, per kind. A treasure is looted once and gone, so
+            -- a finished one is clutter in a way a farmable rare isn't.
+            showMobs = true,
             achieved = true,
             questcomplete = false,
             achievementless = true,
             hidden = {},
+            showTreasures = true,
+            achievedTreasure = false,
+            questcompleteTreasure = false,
+            achievementlessTreasure = true,
+            hiddenTreasure = {},
         },
     })
 
@@ -122,13 +130,13 @@ function module:OnWorldMapHide()
 end
 
 function module:BrokerMobClick(_, mobid)
-    self:FocusMob(mobid)
+    self:FocusPoint(mobid)
 end
 function module:BrokerMobEnter(_, mobid)
-    self:HighlightMob(mobid)
+    self:HighlightPoint(mobid)
 end
 function module:BrokerMobLeave(_, mobid)
-    self:UnhighlightMob(mobid)
+    self:UnhighlightPoint(mobid)
 end
 
 function module:Seen(_, id, zone, x, y, dead, source, unit)
@@ -139,31 +147,40 @@ function module:Seen(_, id, zone, x, y, dead, source, unit)
     end
 end
 
-function module:HighlightMob(mobid)
-    if mobid == self.focus_mob then return end
-    if not WorldMapFrame:IsShown() then return end
-    self.WorldMapProvider:Emphasize(mobid, true)
-    self.WorldMapRouteProvider:Emphasize(mobid, true)
+-- Only one point is focused at a time, but a vignette id can be the same number
+-- as an npc id, so the kind has to be part of every comparison.
+function module:IsFocused(id, isTreasure)
+    if id == nil or id ~= self.focus_id then return false end
+    return (isTreasure or false) == (self.focus_treasure or false)
 end
 
-function module:UnhighlightMob(mobid)
-    if mobid == self.focus_mob then return end
+function module:HighlightPoint(id, isTreasure)
+    if self:IsFocused(id, isTreasure) then return end
     if not WorldMapFrame:IsShown() then return end
-    self.WorldMapProvider:Emphasize(mobid, false)
-    self.WorldMapRouteProvider:Emphasize(mobid, false)
+    self.WorldMapProvider:Emphasize(id, isTreasure, true)
+    self.WorldMapRouteProvider:Emphasize(id, isTreasure, true)
 end
 
-function module:FocusMob(mobid)
-    if self.focus_mob == mobid then
-        self.focus_mob = nil
-        self.focus_mob_ping = nil
+function module:UnhighlightPoint(id, isTreasure)
+    if self:IsFocused(id, isTreasure) then return end
+    if not WorldMapFrame:IsShown() then return end
+    self.WorldMapProvider:Emphasize(id, isTreasure, false)
+    self.WorldMapRouteProvider:Emphasize(id, isTreasure, false)
+end
+
+function module:FocusPoint(id, isTreasure)
+    if self:IsFocused(id, isTreasure) then
+        self.focus_id = nil
+        self.focus_treasure = nil
+        self.focus_ping = nil
     else
-        self.focus_mob = mobid
+        self.focus_id = id
+        self.focus_treasure = isTreasure or nil
     end
     if WorldMapFrame:IsShown() then
         self.WorldMapProvider:ApplyFocusState()
     else
-        self.focus_mob_ping = true
+        self.focus_ping = true
     end
     self:UpdateMinimapIcons()
 end
@@ -189,23 +206,28 @@ function module:ShowTooltip(pin)
     else
         tooltip:SetOwner(pin, "ANCHOR_RIGHT")
     end
-    local id = pin.mobid
-    if id and ns.mobdb[id] then
-        tooltip:AddLine(core:GetMobLabel(id))
-        tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
-        if pin:Config().tooltip_completion then
-            ns:UpdateTooltipWithCompletion(tooltip, id)
-            ns.Loot.Summary.UpdateTooltip(tooltip, id, not pin:Config().tooltip_regularloot)
+    local id = pin.id
+    local isTreasure = pin.isTreasure
+    local data = id and core:GetData(id, isTreasure)
+    if data then
+        tooltip:AddLine(core:GetLabel(id, isTreasure))
+        if not isTreasure then
+            -- nothing tracks when a treasure was last seen
+            tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
         end
-        if ns.mobdb[id].notes then
-            tooltip:AddLine(core:RenderString(ns.mobdb[id].notes), 1, 1, 1, true)
+        if pin:Config().tooltip_completion then
+            ns:UpdateTooltipWithCompletion(tooltip, id, isTreasure)
+            ns.Loot.Summary.UpdateTooltip(tooltip, id, not pin:Config().tooltip_regularloot, isTreasure)
+        end
+        if data.notes then
+            tooltip:AddLine(core:RenderString(data.notes), 1, 1, 1, true)
         end
         if pin:Config().tooltip_lootwindow then
             local filter
             if not pin:Config().tooltip_regularloot then
                 filter = isKnowable
             end
-            self.lootwindow = ns.Loot.Window.ShowForMob(id, false, false, filter)
+            self.lootwindow = ns.Loot.Window.ShowForMob(id, false, isTreasure, filter)
             if self.lootwindow then
                 self.lootwindow:SetParent(tooltip)
                 if pin:GetCenter() > UIParent:GetCenter() then
@@ -219,19 +241,19 @@ function module:ShowTooltip(pin)
                 end)
             end
         end
-        if ns.mobdb[id].requires then
-            local metRequirements = ns.conditions.check(ns.mobdb[id].requires)
+        if data.requires then
+            local metRequirements = ns.conditions.check(data.requires)
             local r, g, b = (metRequirements and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
             tooltip:AddLine(
-                core:RenderString(ns.conditions.summarize(ns.mobdb[id].requires), ns.mobdb[id]),
+                core:RenderString(ns.conditions.summarize(data.requires), data),
                 r, g, b, true
             )
         end
-        if ns.mobdb[id].active then
-            local isActive = ns.conditions.check(ns.mobdb[id].active)
+        if data.active then
+            local isActive = ns.conditions.check(data.active)
             local r, g, b = (isActive and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
             tooltip:AddLine(
-                core:RenderString(ns.conditions.summarize(ns.mobdb[id].active), ns.mobdb[id]),
+                core:RenderString(ns.conditions.summarize(data.active), data),
                 r, g, b, true
             )
         end
@@ -282,7 +304,7 @@ end
 local function AddTreasureToTooltip(tooltip, vignetteID)
     if not (vignetteID and ns.vignetteTreasureLookup[vignetteID]) then return end
     if module.db.profile.worldmap.tooltip_completion then
-        -- ns:UpdateTooltipWithCompletion(tooltip, mobid)
+        ns:UpdateTooltipWithCompletion(tooltip, vignetteID, true)
         ns.Loot.Summary.UpdateTooltip(tooltip, vignetteID, not module.db.profile.worldmap.tooltip_regularloot, true)
     end
     if ns.vignetteTreasureLookup[vignetteID].notes then

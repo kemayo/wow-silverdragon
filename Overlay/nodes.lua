@@ -22,22 +22,56 @@ do
     -- The themes themselves are in core, next to ns.MobState which decides
     -- between them, because the mob browser draws the same six.
     local icons = ns.MobStateIcons
-    local function should_show_mob(id, uiMapID)
-        if module.db.profile.hidden[id] or core:ShouldIgnoreMob(id, uiMapID) then
+    -- Each display toggle has a treasure twin, so the two kinds can be filtered
+    -- separately. Spelled out rather than built from a suffix per call, which
+    -- this is far too hot for.
+    local display = {
+        mob = {
+            show = "showMobs",
+            hidden = "hidden",
+            achieved = "achieved",
+            questcomplete = "questcomplete",
+            achievementless = "achievementless",
+        },
+        treasure = {
+            show = "showTreasures",
+            hidden = "hiddenTreasure",
+            achieved = "achievedTreasure",
+            questcomplete = "questcompleteTreasure",
+            achievementless = "achievementlessTreasure",
+        },
+    }
+    local function should_show_point(id, uiMapID, isTreasure)
+        local profile = module.db.profile
+        local option = display[isTreasure and "treasure" or "mob"]
+        if not profile[option.show] then
             return false
         end
-        if not core:IsMobInPhase(id, uiMapID) then
+        if profile[option.hidden][id] then
             return false
         end
-        if ns.mobdb[id] and ns.mobdb[id].requires and not ns.conditions.check(ns.mobdb[id].requires) then
+        if isTreasure then
+            -- the only ignore list treasures have; the scanner owns it
+            local vignettes = core:GetModule("Scan_Vignettes", true)
+            if vignettes and vignettes:ShouldIgnoreVignette(id) then
+                return false
+            end
+        elseif core:ShouldIgnoreMob(id, uiMapID) then
             return false
         end
-        local quest, achievement, achievement_completed_by_alt = ns:CompletionStatus(id)
+        if not core:IsMobInPhase(id, uiMapID, isTreasure) then
+            return false
+        end
+        local data = core:GetData(id, isTreasure)
+        if data and data.requires and not ns.conditions.check(data.requires) then
+            return false
+        end
+        local quest, achievement, achievement_completed_by_alt = ns:CompletionStatus(id, isTreasure)
         if achievement_completed_by_alt and core.db.profile.alts_achievements_count then
             -- you've said an alt's credit counts, so treat it as earned here too
             achievement = true
         end
-        if not module.db.profile.achieved and ns.MobIsNotable(id) == false then
+        if not profile[option.achieved] and ns.MobIsNotable(id, isTreasure) == false then
             -- Having nothing left on it you want is as good as having its
             -- achievement: without this a mob whose loot you've collected stays
             -- at full strength on the map forever. Only asked when the toggle is
@@ -47,18 +81,18 @@ do
         if achievement ~= nil then
             if quest ~= nil then
                 -- we have a quest *and* an achievement; we're going to treat "show achieved" as "show achieved if I can still loot them"
-                return (module.db.profile.questcomplete or not quest) and (module.db.profile.achieved or not achievement)
+                return (profile[option.questcomplete] or not quest) and (profile[option.achieved] or not achievement)
             end
             -- no quest, but achievement
-            return module.db.profile.achieved or not achievement
+            return profile[option.achieved] or not achievement
         end
-        if module.db.profile.achievementless then
+        if profile[option.achievementless] then
             -- no achievement, but quest
-            return module.db.profile.questcomplete or not quest
+            return profile[option.questcomplete] or not quest
         end
         return false
     end
-    module.should_show_mob = should_show_mob
+    module.should_show_point = should_show_point
     local function icon_for_mob(id)
         local set = icons[module.db.profile.icon_theme]
         -- ns.MobState works the states out; the broker's tooltip colours its rows
@@ -66,58 +100,90 @@ do
         -- all comes back "unknown" from there, so it needs no case of its own.
         return set[ns.MobState(id)] or set.unknown
     end
-    local icon_cache = {}
-    local function distinct_icon_for_mob(id)
-        local icon = icon_for_mob(id)
-        if not icon_cache[id] then
-            icon_cache[id] = {}
+    -- Treasures skip MobState entirely. Its six states rank what a rare still has
+    -- left to give, which needs a target you can go back to; a treasure is looted
+    -- once and gone, so one that's still drawing always has the same answer. The
+    -- import can name its own atlas instead, which plenty of them do.
+    local defaultTreasureIcon = {atlas = "VignetteLoot", r = 1, g = 1, b = 1, a = 0.9, scale = 1}
+    local treasure_icons = {}
+    local function icon_for_treasure(data)
+        if not (data and data.atlas) then
+            return defaultTreasureIcon
+        end
+        -- keyed by look rather than by id, so the many treasures sharing an atlas
+        -- share one table
+        local scale = data.scale or 1
+        if not treasure_icons[data.atlas] then
+            treasure_icons[data.atlas] = {}
+        end
+        if not treasure_icons[data.atlas][scale] then
+            treasure_icons[data.atlas][scale] = {
+                atlas = data.atlas,
+                r = 1, g = 1, b = 1, a = 0.9,
+                scale = scale,
+            }
+        end
+        return treasure_icons[data.atlas][scale], true
+    end
+    -- Keyed by kind as well as id: the two number spaces overlap, and the world
+    -- map holds onto these tables until its next refresh, so a shared one would
+    -- let a treasure recolour a mob's icon out from under an already-queued node.
+    local icon_cache = {mob = {}, treasure = {}}
+    local function distinct_icon(pointType, id, icon)
+        local cache = icon_cache[pointType]
+        if not cache[id] then
+            cache[id] = {}
         end
         for k,v in pairs(icon) do
-            icon_cache[id][k] = v
+            cache[id][k] = v
         end
         local r, g, b = module.id_to_color(id)
-        icon_cache[id].r = r
-        icon_cache[id].g = g
-        icon_cache[id].b = b
-        return icon_cache[id]
+        cache[id].r = r
+        cache[id].g = g
+        cache[id].b = b
+        return cache[id]
     end
-    -- Work the whole zone out under one hold, then hand the mobs over. MobState
-    -- drops the reward caches on each call, so one mob at a time makes every one
-    -- of them redo the item lookups the last had just paid for. Two passes also
-    -- keep the hold clear of the yields, which a caller could stop early.
-    local function mobsForZone(uiMapID)
-        if not ns.mobsByZone[uiMapID] then return end
-        local ids, mobIcons, alphas = {}, {}, {}
-        ns.HoldRunCaches()
-        for id in pairs(ns.mobsByZone[uiMapID]) do
-            if should_show_mob(id, uiMapID) then
-                local icon
-                if module.db.profile.icon_color == 'distinct' then
-                    icon = distinct_icon_for_mob(id)
+    local function pointsForZone(uiMapID, byZone, pointType)
+        if not byZone[uiMapID] then return end
+        local isTreasure = pointType == "treasure"
+        for id, coords in pairs(byZone[uiMapID]) do
+            if should_show_point(id, uiMapID, isTreasure) then
+                local data = core:GetData(id, isTreasure)
+                local icon, custom
+                if isTreasure then
+                    icon, custom = icon_for_treasure(data)
                 else
                     icon = icon_for_mob(id)
                 end
-                local alpha = icon.alpha
-                if ns.mobdb[id] and ns.mobdb[id].active and not ns.conditions.check(ns.mobdb[id].active) then
-                    alpha = alpha and (alpha * 0.6) or 0.6
+                -- an atlas the data picked is deliberate art, so leave it alone
+                if not custom and module.db.profile.icon_color == 'distinct' then
+                    icon = distinct_icon(pointType, id, icon)
                 end
-                table.insert(ids, id)
-                mobIcons[id] = icon
-                alphas[id] = alpha
-            end
-        end
-        ns.ReleaseRunCaches()
-        for _, id in ipairs(ids) do
-            local icon = mobIcons[id]
-            for coord in pairs(ns.mobsByZone[uiMapID][id]) do
-                coroutine.yield(coord, id, icon, icon.scale, alphas[id])
+                -- dimmed while it isn't up; nil leaves the pin at its own default
+                local alpha
+                if data and data.active and not ns.conditions.check(data.active) then
+                    alpha = 0.6
+                end
+                for coord in pairs(coords) do
+                    coroutine.yield(coord, pointType, id, icon, icon.scale, alpha)
+                end
             end
         end
     end
+    -- Work the whole zone out under one hold, then hand the points over. MobState
+    -- drops the reward caches on each call, so one at a time makes every one of
+    -- them redo the item lookups the last had just paid for.
+    local function nodesForZone(uiMapID)
+        ns.HoldRunCaches()
+        pointsForZone(uiMapID, ns.mobsByZone, "mob")
+        pointsForZone(uiMapID, ns.treasureByZone, "treasure")
+        ns.ReleaseRunCaches()
+    end
+    -- Iterates over all nodes in a zone, giving `coord, pointType, id, icon, scale, alpha`
+    -- Callers MUST NOT break out of iterating this early, or must manually call
+    -- ReleaseRunCaches themselves if they do.
     function module:IterateNodes(uiMapID, minimap)
         Debug("Overlay IterateNodes", uiMapID, minimap)
-        return coroutine.wrap(function()
-            return mobsForZone(uiMapID)
-        end)
+        return coroutine.wrap(function() nodesForZone(uiMapID) end)
     end
 end

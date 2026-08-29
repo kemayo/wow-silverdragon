@@ -14,8 +14,9 @@ local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 local SilverDragonOverlayPinMixinBase = {}
 module.SilverDragonOverlayPinMixinBase = SilverDragonOverlayPinMixinBase
 
-function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, textureInfo, scale, alpha, originalCoord, originalMapID, minimap)
-    self.mobid = mobid
+function SilverDragonOverlayPinMixinBase:OnAcquired(id, pointType, textureInfo, scale, alpha, originalCoord, originalMapID, minimap)
+    self.id = id
+    self.isTreasure = pointType == "treasure"
     self.coord = originalCoord
     self.uiMapID = originalMapID
     self.minimap = minimap
@@ -52,7 +53,8 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(mobid, textureInfo, scale, a
 end
 
 function SilverDragonOverlayPinMixinBase:OnReleased()
-    self.mobid = nil
+    self.id = nil
+    self.isTreasure = nil
     self.coord = nil
     self.uiMapID = nil
     self.minimap = nil
@@ -64,14 +66,14 @@ end
 
 function SilverDragonOverlayPinMixinBase:OnMouseEnter()
     if not self.minimap then
-        module:HighlightMob(self.mobid)
+        module:HighlightPoint(self.id, self.isTreasure)
     end
     module:ShowTooltip(self)
 end
 
 function SilverDragonOverlayPinMixinBase:OnMouseLeave()
     if not self.minimap then
-        module:UnhighlightMob(self.mobid)
+        module:UnhighlightPoint(self.id, self.isTreasure)
     end
 
     if module.lootwindow then return end
@@ -81,11 +83,9 @@ end
 
 -- not OnMouseUp: the map system's pin mixin takes that name for its own routing
 function SilverDragonOverlayPinMixinBase:OnClick(button)
-    local targets = core:GetModule("ClickTarget", true)
     if button == "RightButton" then
         if IsShiftKeyDown() then
-            module.db.profile.hidden[self.mobid] = true
-            module:Update()
+            module.HidePoint(self.id, self.isTreasure)
         else
             module:ShowPinDropdown(self, self.uiMapID, self.coord)
         end
@@ -93,20 +93,15 @@ function SilverDragonOverlayPinMixinBase:OnClick(button)
     end
     if button == "LeftButton" then
         if IsAltKeyDown() then
-           module.CreateWaypoint(self.uiMapID, self.coord)
+           module.CreateWaypoint(self.uiMapID, self.coord, self.id, self.isTreasure)
            return
         end
         if IsShiftKeyDown() then
-            if targets then
-                local x, y = core:GetXY(self.coord)
-                if x and y then
-                    targets:SendLinkToMob(self.mobid, self.uiMapID, x, y)
-                end
-            end
+            module.SendPointToChat(self.id, self.uiMapID, self.coord, self.isTreasure)
             return
         end
         if not self.minimap then
-            module:FocusMob(self.mobid)
+            module:FocusPoint(self.id, self.isTreasure)
         end
     end
 end
@@ -117,7 +112,7 @@ function SilverDragonOverlayPinMixinBase:Ping()
 end
 
 function SilverDragonOverlayPinMixinBase:ApplyFocusState()
-    if self.mobid == module.focus_mob then
+    if module:IsFocused(self.id, self.isTreasure) then
         self.emphasis:Show()
         self.emphasis:SetVertexColor(0, 1, 1, 1)
     else
@@ -160,27 +155,30 @@ end
 do
     local clicked_zone, clicked_coord
 
-    local function hideMob(mobid)
-        if mobid then
-            module.db.profile.hidden[mobid] = true
+    function module.HidePoint(id, isTreasure)
+        if id then
+            module.db.profile[isTreasure and "hiddenTreasure" or "hidden"][id] = true
             module:Update()
         end
     end
 
-    function module.CreateWaypoint(uiMapID, coord)
+    function module.CreateWaypoint(uiMapID, coord, id, isTreasure)
         -- point to it, without a timeout, and ignoring whether it'll be replacing an existing waypoint
-        local id, name = core:GetMobByCoord(uiMapID, coord)
         local x, y = core:GetXY(coord)
-        core:GetModule("TomTom"):PointTo(id, uiMapID, x, y, 0, true)
+        -- PointTo titles a number by looking the mob up and takes anything else as
+        -- the title itself, which is how a treasure gets named
+        core:GetModule("TomTom"):PointTo(isTreasure and core:GetLabel(id, true) or id, uiMapID, x, y, 0, true)
     end
 
-    local function createWaypointForAll(uiMapID, mobid)
+    local function createWaypointForAll(uiMapID, id, isTreasure)
         if not TomTom then return end
-        if not (ns.mobsByZone[uiMapID] and ns.mobsByZone[uiMapID][mobid]) then return end
-        for mob_coord in pairs(ns.mobsByZone[uiMapID][mobid]) do
-            local x, y = core:GetXY(mob_coord)
+        local byZone = isTreasure and ns.treasureByZone or ns.mobsByZone
+        if not (byZone[uiMapID] and byZone[uiMapID][id]) then return end
+        local title = core:GetLabel(id, isTreasure)
+        for coord in pairs(byZone[uiMapID][id]) do
+            local x, y = core:GetXY(coord)
             TomTom:AddWaypoint(uiMapID, x, y, {
-                title = core:GetMobLabel(mobid),
+                title = title,
                 persistent = nil,
                 minimap = true,
                 world = true
@@ -197,49 +195,66 @@ do
         end
     end
 
-    local function sendToChat(mobid, uiMapID, coord)
+    function module.SendPointToChat(id, uiMapID, coord, isTreasure)
         local targets = core:GetModule("ClickTarget", true)
-        if targets then
-            local x, y = core:GetXY(coord)
-            if x and y then
-                targets:SendLinkToMob(mobid, uiMapID, x, y)
-            end
+        if not targets then return end
+        local x, y = core:GetXY(coord)
+        if not (x and y) then return end
+        if isTreasure then
+            targets:SendLinkToLoot(core:GetLabel(id, true), uiMapID, x, y)
+        else
+            targets:SendLinkToMob(id, uiMapID, x, y)
         end
     end
 
     local generateMenu = function(owner, rootDescription, uiMapID, coord, pin)
-        local mobid = pin.mobid
+        local id, isTreasure = pin.id, pin.isTreasure
         rootDescription:SetTag("MENU_WORLD_MAP_CONTEXT_SILVERDRAGON")
         rootDescription:CreateTitle(myfullname)
 
-        if mobid then
-            for _, achievement in ns:AchievementMobStatus(mobid) do
-                rootDescription:CreateButton(
-                    -- core:RenderString(TEXT_MODE_A_STRING_VALUE_TYPE:format(OBJECTIVES_VIEW_ACHIEVEMENT, "{achievement:" .. achievement .. "}")),
-                    core:RenderString("Show {achievement:" .. achievement .. "}"),
-                    showAchievement, achievement
-                )
+        local function achievementButton(achievement)
+            rootDescription:CreateButton(
+                -- core:RenderString(TEXT_MODE_A_STRING_VALUE_TYPE:format(OBJECTIVES_VIEW_ACHIEVEMENT, "{achievement:" .. achievement .. "}")),
+                core:RenderString("Show {achievement:" .. achievement .. "}"),
+                showAchievement, achievement
+            )
+        end
+        if id then
+            if isTreasure then
+                -- as in the tooltip: AchievementMobStatus is keyed by npc id, whose
+                -- numbers overlap with vignette ids, so a treasure asks its own data
+                local data = core:GetData(id, true)
+                if data and data.achievement then
+                    achievementButton(data.achievement)
+                end
+            else
+                for _, achievement in ns:AchievementMobStatus(id) do
+                    achievementButton(achievement)
+                end
             end
         end
-        rootDescription:CreateButton("Create waypoint", function() module.CreateWaypoint(uiMapID, coord) end)
+        rootDescription:CreateButton("Create waypoint", function() module.CreateWaypoint(uiMapID, coord, id, isTreasure) end)
             :SetEnabled(core:GetModule("TomTom"):CanPointTo(uiMapID))
 
         -- Specifically for TomTom, since it supports multiples:
         rootDescription:CreateButton(
             "Create waypoint for all locations",
-            function() createWaypointForAll(uiMapID, mobid) end
+            function() createWaypointForAll(uiMapID, id, isTreasure) end
         ):SetEnabled(TomTom and true or false) -- can't be nil
 
         -- Link to chat
         if _G.MAP_PIN_HYPERLINK then
             rootDescription:CreateButton(
                 COMMUNITIES_INVITE_MANAGER_LINK_TO_CHAT,
-                function() sendToChat(mobid, uiMapID, coord) end
+                function() module.SendPointToChat(id, uiMapID, coord, isTreasure) end
             )
         end
 
         -- Hide menu item
-        rootDescription:CreateButton("Hide mob", hideMob, mobid)
+        rootDescription:CreateButton(
+            isTreasure and "Hide treasure" or "Hide mob",
+            function() module.HidePoint(id, isTreasure) end
+        )
 
         -- Close menu item
         rootDescription:CreateButton(CLOSE, function() return MenuResponse.CloseAll end)
