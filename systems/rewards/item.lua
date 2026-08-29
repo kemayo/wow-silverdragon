@@ -46,11 +46,11 @@ function ns.rewards.Item:TooltipLabel()
 	end
 	return label
 end
-function ns.rewards.Item:TooltipLabelColor()
-	if ns.db.show_npcs_emphasizeNotable and self:Notable() and self.CanLearnAppearance(self.id) then
+function ns.rewards.Item:NotableColor()
+	if self.CanLearnAppearance(self.id) then
 		return self.NOTABLE_TRANSMOG_COLOR
 	end
-	return self:super('TooltipLabelColor')
+	return self:super("NotableColor")
 end
 function ns.rewards.Item:Icon() return (select(5, C_Item.GetItemInfoInstant(self.id))) end
 function ns.rewards.Item:Obtained(ignore_notable, ...)

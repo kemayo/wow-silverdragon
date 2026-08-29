@@ -111,9 +111,15 @@ function Reward:TooltipNameColor()
 	return NORMAL_FONT_COLOR
 end
 function Reward:TooltipLabel() return UNKNOWN end
+-- What colour says "you want this". Split out from the tooltip label so that
+-- anything else marking a reward as wanted uses the same one, rather than the
+-- two drifting apart and reading as different things.
+function Reward:NotableColor()
+	return self.NOTABLE_COLOR
+end
 function Reward:TooltipLabelColor()
 	if ns.db.show_npcs_emphasizeNotable and self:Notable() then
-		return self.NOTABLE_COLOR
+		return self:NotableColor()
 	end
 	return NORMAL_FONT_COLOR
 end
