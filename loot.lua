@@ -486,10 +486,20 @@ do
 					self.item = item
 					self.itemID = itemID
 					SetItemButtonTexture(button, icon)
+					-- classic wouldn't actually do this part, but...
+					local quality = C_Item.GetItemQualityByID(item)
+					if quality then
+						local r, g, b = C_Item.GetItemQualityColor(quality)
+						button.IconBorder:Show()
+						button.IconBorder:SetVertexColor(r, g, b)
+					else
+						button.IconBorder:Hide()
+					end
 				else
 					self.item = nil
 					self.itemID = nil
 					SetItemButtonTexture(button, false)
+					button.IconBorder:Hide()
 				end
 			end
 			function button:GetItem()
