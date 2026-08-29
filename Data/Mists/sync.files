@@ -1,0 +1,14 @@
+# Files copied from ../HandyNotes_MistsOfPandariaTreasures by bin/syncdata.sh.
+# Paths are relative to that plugin's root.
+
+zones/DreadWastes.lua
+zones/IsleOfGiants.lua
+zones/IsleOfThunder.lua
+zones/JadeForest.lua
+zones/KrasarangWilds.lua
+zones/KunLaiSummit.lua
+zones/TimelessIsle.lua
+zones/TownlongSteppes.lua
+zones/ValeOfEternalBlossoms.lua
+zones/ValleyOfTheFourWinds.lua
+zones/VeiledStair.lua

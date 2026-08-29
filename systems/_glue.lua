@@ -22,6 +22,12 @@ ns.atlas_texture = ns.atlas_texture or function(atlas) return atlas end
 -- RegisterHandyNotesData skips them; this only has to be callable.
 ns.mapLink = ns.mapLink or function(point) return point end
 
+ns.path = ns.nodeMaker{
+    label = "Path to treasure",
+    atlas = "poi-door", -- 'PortalPurple' / 'PortalRed'?
+    minimap = true,
+    scale = 0.9,
+}
 
 -- A point table whose __get entries compute fields (note, texture) on read.
 -- SilverDragon reads none of those keys off an imported point, so this only
