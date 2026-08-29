@@ -252,8 +252,9 @@ do
 	end
 	-- Fold my HandyNotes plugin point format into datasources/treasuresources.
 	-- The field mapping is the `data` table below; the non-obvious parts: a point
-	-- with `vignette` and no `npc` is a treasure, `requires` also answers to the
-	-- older name `hide_before`, and `faction` is flipped (see above).
+	-- with no `npc` is a treasure, keyed by its vignette if it has one and by
+	-- zone+coord if it doesn't, `requires` also answers to the older name
+	-- `hide_before`, and `faction` is flipped (see above).
 	--
 	-- `atlas`/`scale` are only honoured for treasures. Rares draw from MobState,
 	-- which ranks what's left on them, and a fixed icon would hide that.
@@ -268,7 +269,10 @@ do
 			end
 		end
 		for coord, point in pairs(points) do
-			if point.npc or point.vignette then
+			-- npc means a rare; loot or completion tracking means a treasure. A
+			-- point with neither is usually a flightpath or portal marker the
+			-- plugins also register through here, which isn't ours to show.
+			if point.npc or point.vignette or point.quest or point.criteria or point.achievement or point.loot then
 				local data = {
 					name=point.label,
 					locations={[uiMapID]={coord}},
@@ -361,7 +365,15 @@ do
 					end
 				else
 					normalizeTreasureEntry(data)
-					addTreasureVignettes(addon.treasuresources[source], data, ns.safe_unpack(point.vignette))
+					if point.vignette then
+						addTreasureVignettes(addon.treasuresources[source], data, ns.safe_unpack(point.vignette))
+					else
+						-- No vignette, so no natural id: key it by zone and coord the
+						-- way the plugins key their own points. The result sits well
+						-- above the vignette-id range, so it can share the treasure
+						-- lookup without the scanner mistaking it for a real vignette.
+						addon.treasuresources[source][(uiMapID * 1e9) + coord] = data
+					end
 				end
 			end
 		end

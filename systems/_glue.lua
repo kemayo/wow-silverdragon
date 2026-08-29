@@ -18,7 +18,7 @@ core.rewards = ns.rewards
 ns.atlas_texture = ns.atlas_texture or function(atlas) return atlas end
 
 -- A plugin map-link point opens a different map on right-click. SilverDragon
--- has no equivalent pin and these points carry no npc or vignette, so
+-- has no equivalent pin and these points carry no loot or completion data, so
 -- RegisterHandyNotesData skips them; this only has to be callable.
 ns.mapLink = ns.mapLink or function(point) return point end
 
