@@ -134,6 +134,73 @@ ns.vignetteTreasureLookup = {
 ns.treasureByZone = {
 	-- [zoneid] = { [vignetteid] = {coord, ...}, ... }
 }
+
+-- Deliberately not an and/or chain: a treasure that isn't registered must come
+-- back nil, not fall through to whatever mob shares its number.
+function addon:GetData(id, isTreasure)
+	if isTreasure then
+		return ns.vignetteTreasureLookup[id]
+	end
+	return mobdb[id]
+end
+
+-- Most imported treasures carry no label: the HandyNotes plugin they come from
+-- reads the name off the live vignette, which a map pin never has. This follows
+-- the same fallbacks as work_out_label in that plugin's handler, so the two name
+-- a point the same way. Steps it has that we don't carry data for (follower,
+-- currency, npc) are left out; a currency arrives as loot and is named there.
+-- Unresolved ids degrade to "achievement:63359.115313" rather than UNKNOWN,
+-- which says what to go and look up.
+function addon:GetTreasureLabel(id)
+	local data = self:GetData(id, true)
+	if not data then
+		return UNKNOWN
+	end
+	if data.name then
+		-- parens: drop the substitution count gsub returns alongside the string
+		return (self:RenderString(data.name, data))
+	end
+	local fallback
+	if data.achievement and data.criteria and data.criteria ~= true then
+		-- one criteria is the same as a list of one, and naming them is
+		-- all-or-nothing: a partial list would read as a shorter point
+		local ids = type(data.criteria) == "table" and data.criteria or {data.criteria}
+		local named = {}
+		for _, criteriaid in ipairs(ids) do
+			local criteria = ns.GetCriteria(data.achievement, criteriaid)
+			if criteria then
+				table.insert(named, criteria)
+			end
+		end
+		if #named == #ids then
+			return string.join(', ', unpack(named))
+		end
+		fallback = 'achievement:'..data.achievement..'.'..string.join('+', unpack(ids))
+	end
+	if data.loot and #data.loot > 0 then
+		local name = data.loot[1]:Name(true)
+		if name then
+			return name
+		end
+		fallback = 'item:'..data.loot[1].id
+	end
+	if data.achievement and (not data.criteria or data.criteria == true) then
+		local _, achievement = GetAchievementInfo(data.achievement)
+		if achievement then
+			return achievement
+		end
+		fallback = 'achievement:'..data.achievement
+	end
+	return fallback or UNKNOWN
+end
+
+function addon:GetLabel(id, isTreasure)
+	if isTreasure then
+		return self:GetTreasureLabel(id)
+	end
+	return self:GetMobLabel(id)
+end
+
 -- Shared tail of every register path. Safe to re-run: upgradeloot skips entries
 -- that are already Reward objects, and RegisterMobAchievement no-ops on repeat.
 local function normalizeMobEntry(id, entry)
@@ -185,6 +252,9 @@ do
 	-- The field mapping is the `data` table below; the non-obvious parts: a point
 	-- with `vignette` and no `npc` is a treasure, `requires` also answers to the
 	-- older name `hide_before`, and `faction` is flipped (see above).
+	--
+	-- `atlas`/`scale` are only honoured for treasures. Rares draw from MobState,
+	-- which ranks what's left on them, and a fixed icon would hide that.
 	function addon:RegisterHandyNotesData(source, uiMapID, points, defaults)
 		-- convenience for me, really...
 		addon.datasources[source] = addon.datasources[source] or {}
@@ -211,6 +281,7 @@ do
 					worldquest=point.worldquest,
 					achievement=point.achievement, criteria=point.criteria,
 					faction=point.faction and opposingFaction[point.faction],
+					atlas=point.atlas, scale=point.scale,
 				}
 				-- variations on "also register this elsewhere":
 				if point.translate or point.parent or point.levels then
@@ -565,14 +636,15 @@ do
 			end
 		end
 	end
-	function addon:IsMobInPhase(id, zone)
+	function addon:IsMobInPhase(id, zone, isTreasure)
 		local phased, poiPresent = true, true
-		if not mobdb[id] then return true end
-		if mobdb[id].art then
-			phased = mobdb[id].art == C_Map.GetMapArtID(zone)
+		local data = self:GetData(id, isTreasure)
+		if not data then return true end
+		if data.art then
+			phased = data.art == C_Map.GetMapArtID(zone)
 		end
-		if mobdb[id].poi then
-			poiPresent = checkPois(unpack(mobdb[id].poi))
+		if data.poi then
+			poiPresent = checkPois(unpack(data.poi))
 		end
 		return phased and poiPresent
 	end

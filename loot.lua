@@ -79,7 +79,7 @@ ns.Loot = {}
 
 function ns.Loot.GetLootTable(id, treasure, shared)
 	if not id then return end
-	local data = ns[treasure and "vignetteTreasureLookup" or "mobdb"][id]
+	local data = core:GetData(id, treasure)
 	if not data then return end
 	if shared then
 		return data.loot_shared

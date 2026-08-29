@@ -835,7 +835,7 @@ do
 			flashframe:SetScript("OnShow", function(self)
 				local background = module.db.profile.flash_texture
 				local color = module.db.profile.flash_color
-				local data = self.id and (self.isloot and ns.vignetteTreasureLookup or ns.mobdb)[self.id]
+				local data = self.id and core:GetData(self.id, self.isloot)
 				if data then
 					if module.db.profile.flash_mount and ns.HasNotableMounts(self.id, self.isloot) then
 						background = module.db.profile.flash_texture_mount

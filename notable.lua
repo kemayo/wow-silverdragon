@@ -35,18 +35,17 @@ function ns.HasSellableLoot(id, isTreasure, shared)
 	return false
 end
 
+-- An alt's credit only settles it if you've said it counts.
+local function criteriaWanted(criteria_complete, by_alt)
+	return not criteria_complete and not (by_alt and ns.db.alts_achievements_count)
+end
+
 -- Three-valued: true wanted, false knowably not wanted, nil nothing to go on.
 -- nil must stay distinct from false, because plenty of mobs have nothing to judge
 -- and item data is often still loading when one is spotted. Callers suppress on
 -- false alone, so an unknown costs a spurious alert rather than eating a real one.
 function ns.MobIsNotable(id, isTreasure, fromVignette)
-	-- not an and/or chain: a missing treasure must not fall through to the mob db
-	local data
-	if isTreasure then
-		data = ns.vignetteTreasureLookup[id]
-	else
-		data = ns.mobdb[id]
-	end
+	local data = core:GetData(id, isTreasure)
 	if not data then return end
 
 	-- the rewards system memoises within a run, and this is a fresh one
@@ -62,13 +61,26 @@ function ns.MobIsNotable(id, isTreasure, fromVignette)
 
 	local knowable = false
 
-	-- AchievementMobStatus, not data.achievement: a mob can count towards several
-	if ns.db.achievement_notable and not isTreasure then
-		for _, _, _, criteria_complete, by_alt in ns:AchievementMobStatus(id) do
-			knowable = true
-			if not criteria_complete and not (by_alt and ns.db.alts_achievements_count) then
-				Debug("MobIsNotable", id, true, "achievement incomplete")
-				return true
+	if ns.db.achievement_notable then
+		if isTreasure then
+			-- one achievement, read from the treasure's own criteria: the mob lookup
+			-- is keyed by npc id, whose numbers overlap with vignette ids
+			local _, criteria_complete, by_alt = ns:CompletionStatus(id, true)
+			if criteria_complete ~= nil then
+				knowable = true
+				if criteriaWanted(criteria_complete, by_alt) then
+					Debug("MobIsNotable", id, true, "achievement incomplete")
+					return true
+				end
+			end
+		else
+			-- AchievementMobStatus, not data.achievement: a mob can count towards several
+			for _, _, _, criteria_complete, by_alt in ns:AchievementMobStatus(id) do
+				knowable = true
+				if criteriaWanted(criteria_complete, by_alt) then
+					Debug("MobIsNotable", id, true, "achievement incomplete")
+					return true
+				end
 			end
 		end
 	end

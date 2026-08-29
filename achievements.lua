@@ -808,6 +808,32 @@ function ns:RegisterMobAchievement(mobid, achievementid, criteria)
 	end
 end
 
+-- name, criteria_completed, completed_by_alt
+-- `criteria` takes the same shapes the HandyNotes points do: one id, a list of
+-- them, or `true` for the achievement itself rather than any one criteria.
+local function criteriaCompletion(achievementid, criteria)
+	local _, name, _, achievement_completed, _, _, _, _, _, _, _, _, completedByMe = GetAchievementInfo(achievementid)
+	local completed = achievement_completed
+	if criteria and criteria ~= true then
+		local ids = type(criteria) == "table" and criteria or {criteria}
+		local all
+		for _, criteriaid in ipairs(ids) do
+			local _, _, criteria_completed = ns.GetCriteria(achievementid, criteriaid)
+			if criteria_completed == nil then
+				-- a criteria that doesn't belong to its achievement is a data error
+				-- on our side; let the achievement's own state stand instead
+				all = nil
+				break
+			end
+			all = (all or all == nil) and criteria_completed
+		end
+		if all ~= nil then
+			completed = all
+		end
+	end
+	return name, completed, achievement_completed and not completedByMe
+end
+
 do
 	local function aIter(mob_achievements, i)
 		i = i + 1
@@ -819,13 +845,7 @@ do
 		if achievement.requires and not ns.conditions.check(achievement.requires) then
 			return aIter(mob_achievements, i)
 		end
-		local criteria = achievements[achievementid][mob_achievements.id]
-		local _, name, _, achievement_completed, _, _, _, _, _, _, _, _, completedByMe = GetAchievementInfo(achievementid)
-		local retOK, _, _, completed = pcall(criteria < 100 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID, achievementid, criteria, true)
-		if not retOK then
-			return
-		end
-		return i, achievementid, name, completed, achievement_completed and not completedByMe
+		return i, achievementid, criteriaCompletion(achievementid, achievements[achievementid][mob_achievements.id])
 	end
 	function ns:AchievementMobStatus(id)
 		if not achievements_loaded then
@@ -841,16 +861,23 @@ end
 
 -- return quest_complete, all_criteria_complete, any_achievement_completed_by_alt
 -- `nil` if completion not knowable, true/false if knowable
-function ns:CompletionStatus(id)
-	if not ns.mobdb[id] then return end
+function ns:CompletionStatus(id, isTreasure)
+	local data = core:GetData(id, isTreasure)
+	if not data then return end
 	local quest_complete
-	if ns.mobdb[id].quest then
-		quest_complete = ns.allQuestsComplete(ns.mobdb[id].quest)
+	if data.quest then
+		quest_complete = ns.allQuestsComplete(data.quest)
 	end
 	local all_criteria_complete, any_achievement_completed_by_alt
-	for _, _, _, criteria_complete, achievement_completed_by_alt in ns:AchievementMobStatus(id) do
-		all_criteria_complete = (all_criteria_complete or all_criteria_complete == nil) and criteria_complete
-		any_achievement_completed_by_alt = any_achievement_completed_by_alt or achievement_completed_by_alt
+	if isTreasure then
+		if data.achievement then
+			all_criteria_complete, any_achievement_completed_by_alt = select(2, criteriaCompletion(data.achievement, data.criteria))
+		end
+	else
+		for _, _, _, criteria_complete, achievement_completed_by_alt in ns:AchievementMobStatus(id) do
+			all_criteria_complete = (all_criteria_complete or all_criteria_complete == nil) and criteria_complete
+			any_achievement_completed_by_alt = any_achievement_completed_by_alt or achievement_completed_by_alt
+		end
 	end
 	return quest_complete, all_criteria_complete, any_achievement_completed_by_alt
 end
@@ -915,22 +942,40 @@ if C_EventUtils.IsEventValid("RECEIVED_ACHIEVEMENT_LIST") then
 	end)
 end
 
-function ns:UpdateTooltipWithCompletion(tooltip, id)
+local function addAchievementLine(tooltip, achievementid, name, completed)
+	-- GetAchievementInfo comes back empty until the client hands the data over
+	if not name then return end
+	-- a treasure's achievement need not be one we track mobs for, so there may be
+	-- no entry here to take the custom wording from
+	local achievement = achievements[achievementid]
+	tooltip:AddDoubleLine(
+		name,
+		-- "Defeated" / "Need"
+		core:RenderString(completed and (achievement and achievement.completed or BOSS_DEAD) or (achievement and achievement.need or NEED)),
+		1, 1, 0,
+		completed and 0 or 1, completed and 1 or 0, 0
+	)
+end
+
+function ns:UpdateTooltipWithCompletion(tooltip, id, isTreasure)
 	if not id then
 		return
 	end
+	local data = core:GetData(id, isTreasure)
 
-	for _, achievement, name, completed in ns:AchievementMobStatus(id) do
-		tooltip:AddDoubleLine(
-			name,
-			-- "Defeated" / "Need"
-			core:RenderString(completed and (achievements[achievement].completed or BOSS_DEAD) or (achievements[achievement].need or NEED)),
-			1, 1, 0,
-			completed and 0 or 1, completed and 1 or 0, 0
-		)
+	if isTreasure then
+		-- a treasure carries its own criteria: the mob lookup is keyed by npc id,
+		-- which shares a number space with vignette ids
+		if data and data.achievement then
+			addAchievementLine(tooltip, data.achievement, criteriaCompletion(data.achievement, data.criteria))
+		end
+	else
+		for _, achievement, name, completed in ns:AchievementMobStatus(id) do
+			addAchievementLine(tooltip, achievement, name, completed)
+		end
 	end
-	if ns.mobdb[id] and ns.mobdb[id].quest then
-		local completed = ns.allQuestsComplete(ns.mobdb[id].quest)
+	if data and data.quest then
+		local completed = ns.allQuestsComplete(data.quest)
 		tooltip:AddDoubleLine(
 			QUESTS_COLON:gsub(":", ""),
 			completed and COMPLETE or INCOMPLETE,
