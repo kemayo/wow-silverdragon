@@ -14,6 +14,11 @@ module.const = {
     EDGE_NEVER = 0,
     EDGE_FOCUS = 1,
     EDGE_ALWAYS = 2,
+    -- flags, so LOOT_BOTH is just the two places at once
+    LOOT_NONE = 0,
+    LOOT_TOOLTIP = 1,
+    LOOT_WINDOW = 2,
+    LOOT_BOTH = 3,
 }
 
 function module:OnInitialize()
@@ -22,9 +27,7 @@ function module:OnInitialize()
             worldmap = {
                 enabled = true,
                 tooltip_help = true,
-                tooltip_completion = true,
-                tooltip_regularloot = true,
-                tooltip_lootwindow = true,
+                loot = module.const.LOOT_BOTH,
                 icon_scale = 1,
                 icon_alpha = 1,
                 routes = true,
@@ -33,9 +36,7 @@ function module:OnInitialize()
             minimap = {
                 enabled = true,
                 tooltip_help = false,
-                tooltip_completion = true,
-                tooltip_regularloot = true,
-                tooltip_lootwindow = false,
+                loot = module.const.LOOT_TOOLTIP,
                 icon_scale = 1,
                 icon_alpha = 1,
                 routes = true,
@@ -70,7 +71,6 @@ function module:OnInitialize()
         ifnotnil(db.worldmap, "enabled", enabled)
         ifnotnil(db.worldmap, "tooltip_help", db.tooltip_help)
         ifnotnil(db.worldmap, "tooltip_completion", db.tooltip_completion)
-        ifnotnil(db.worldmap, "tooltip_regularloot", db.tooltip_regularloot)
         ifnotnil(db.worldmap, "icon_scale", db.icon_scale)
         ifnotnil(db.worldmap, "icon_alpha", db.icon_alpha)
 
@@ -79,7 +79,6 @@ function module:OnInitialize()
         ifnotnil(db.minimap, "enabled", enabled)
         ifnotnil(db.minimap, "tooltip_help", db.tooltip_help)
         ifnotnil(db.minimap, "tooltip_completion", db.tooltip_completion)
-        ifnotnil(db.minimap, "tooltip_regularloot", db.tooltip_regularloot)
         ifnotnil(db.minimap, "icon_scale", db.icon_scale_minimap)
         ifnotnil(db.minimap, "icon_alpha", db.icon_alpha_minimap)
         ifnotnil(db.minimap, "edge", db.minimap_edge)
@@ -93,6 +92,31 @@ function module:OnInitialize()
         db.icon_scale_minimap = nil
         db.icon_alpha = nil
         db.icon_alpha_minimap = nil
+    end
+
+    -- "completion" and "popout loot window" became one choice of where loot goes,
+    -- and regular-loot moved to the Tooltip module. Either of the old pair being
+    -- saved means the profile predates this; whichever isn't saved was still at
+    -- the default it had back then.
+    local wasDefault = {
+        worldmap = {completion = true, window = true},
+        minimap = {completion = true, window = false},
+    }
+    for section, old in pairs(wasDefault) do
+        local cfg = db[section]
+        if cfg.tooltip_completion ~= nil or cfg.tooltip_lootwindow ~= nil then
+            local inTooltip = cfg.tooltip_completion
+            if inTooltip == nil then inTooltip = old.completion end
+            local inWindow = cfg.tooltip_lootwindow
+            if inWindow == nil then inWindow = old.window end
+            cfg.loot = (inTooltip and inWindow and module.const.LOOT_BOTH)
+                or (inTooltip and module.const.LOOT_TOOLTIP)
+                or (inWindow and module.const.LOOT_WINDOW)
+                or module.const.LOOT_NONE
+            cfg.tooltip_completion = nil
+            cfg.tooltip_lootwindow = nil
+        end
+        cfg.tooltip_regularloot = nil
     end
 
     self.tooltip = ns.Tooltip.Get("OverlayPin")
@@ -194,6 +218,16 @@ end
 
 local isKnowable = function(item) return item:Obtained() ~= nil end
 
+-- Whether to leave the plain items out. One answer for every tooltip we draw,
+-- and it's the Tooltip module's to give.
+local function onlyKnowableLoot()
+    local tooltips = core:GetModule("Tooltip", true)
+    return (tooltips and tooltips:OnlyKnowableLoot()) or false
+end
+local function lootGoesIn(config, where)
+    return bit.band(config.loot, where) ~= 0
+end
+
 function module:ShowTooltip(pin)
     local tooltip = self.tooltip
     if tooltip:IsShown() and tooltip.pin == pin then
@@ -215,16 +249,16 @@ function module:ShowTooltip(pin)
             -- nothing tracks when a treasure was last seen
             tooltip:AddDoubleLine("Last seen", core:FormatLastSeen(core.db.global.mob_seen[id]))
         end
-        if pin:Config().tooltip_completion then
-            ns:UpdateTooltipWithCompletion(tooltip, id, isTreasure)
-            ns.Loot.Summary.UpdateTooltip(tooltip, id, not pin:Config().tooltip_regularloot, isTreasure)
+        ns:UpdateTooltipWithCompletion(tooltip, id, isTreasure)
+        if lootGoesIn(pin:Config(), module.const.LOOT_TOOLTIP) then
+            ns.Loot.Summary.UpdateTooltip(tooltip, id, onlyKnowableLoot(), isTreasure)
         end
         if data.notes then
             tooltip:AddLine(core:RenderString(data.notes), 1, 1, 1, true)
         end
-        if pin:Config().tooltip_lootwindow then
+        if lootGoesIn(pin:Config(), module.const.LOOT_WINDOW) then
             local filter
-            if not pin:Config().tooltip_regularloot then
+            if onlyKnowableLoot() then
                 filter = isKnowable
             end
             self.lootwindow = ns.Loot.Window.ShowForMob(id, false, isTreasure, filter)
@@ -291,9 +325,9 @@ local function AddMobToTooltip(tooltip, mobid, name)
     if name then
         tooltip:AddLine(core:GetMobLabel(mobid))
     end
-    if module.db.profile.worldmap.tooltip_completion then
-        ns:UpdateTooltipWithCompletion(tooltip, mobid)
-        ns.Loot.Summary.UpdateTooltip(tooltip, mobid, not module.db.profile.worldmap.tooltip_regularloot)
+    ns:UpdateTooltipWithCompletion(tooltip, mobid)
+    if lootGoesIn(module.db.profile.worldmap, module.const.LOOT_TOOLTIP) then
+        ns.Loot.Summary.UpdateTooltip(tooltip, mobid, onlyKnowableLoot())
     end
     if ns.mobdb[mobid].notes then
         tooltip:AddLine(core:RenderString(ns.mobdb[mobid].notes), 1, 1, 1, true)
@@ -303,9 +337,9 @@ end
 
 local function AddTreasureToTooltip(tooltip, vignetteID)
     if not (vignetteID and ns.vignetteTreasureLookup[vignetteID]) then return end
-    if module.db.profile.worldmap.tooltip_completion then
-        ns:UpdateTooltipWithCompletion(tooltip, vignetteID, true)
-        ns.Loot.Summary.UpdateTooltip(tooltip, vignetteID, not module.db.profile.worldmap.tooltip_regularloot, true)
+    ns:UpdateTooltipWithCompletion(tooltip, vignetteID, true)
+    if lootGoesIn(module.db.profile.worldmap, module.const.LOOT_TOOLTIP) then
+        ns.Loot.Summary.UpdateTooltip(tooltip, vignetteID, onlyKnowableLoot(), true)
     end
     if ns.vignetteTreasureLookup[vignetteID].notes then
         tooltip:AddLine(core:RenderString(ns.vignetteTreasureLookup[vignetteID].notes), 1, 1, 1, true)

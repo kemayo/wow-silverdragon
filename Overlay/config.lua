@@ -5,6 +5,29 @@ local module = core:GetModule("Overlay")
 local Debug = core.Debug
 local ns = core.NAMESPACE
 
+-- Both map sections offer this, and quest/achievement completion is shown either
+-- way, so it's only ever about the loot.
+local function lootSelect(order)
+    return {
+        type = "select",
+        name = "Show loot",
+        desc = "Where to list what a mob or treasure drops. Whether that includes plain items is set under Tooltips",
+        values = {
+            [module.const.LOOT_TOOLTIP] = "In the tooltip",
+            [module.const.LOOT_WINDOW] = "In a popout window",
+            [module.const.LOOT_BOTH] = "Both",
+            [module.const.LOOT_NONE] = "Don't",
+        },
+        sorting = {
+            module.const.LOOT_TOOLTIP,
+            module.const.LOOT_WINDOW,
+            module.const.LOOT_BOTH,
+            module.const.LOOT_NONE,
+        },
+        order = order,
+    }
+end
+
 function module:RegisterConfig()
     local config = core:GetModule("Config", true)
     if not config then return end
@@ -179,9 +202,7 @@ function module:RegisterConfig()
                         order = 30,
                     },
                     routes = config.toggle("Routes", "Show the routes that some mobs take", 40),
-                    tooltip_completion = config.toggle("Completion", "Show achievement/drop completion in the tooltip", 50),
-                    tooltip_regularloot = config.toggle("Regular Loot", "Show regular untrackable loot in the tooltip", 51),
-                    tooltip_lootwindow = config.toggle("Popout loot window", "Show a popout for the loot so you can see its details", 52),
+                    loot = lootSelect(50),
                     tooltip_help = config.toggle("Help", "Show the click shortcuts in the tooltip", 53),
                 },
                 order = 20,
@@ -228,9 +249,7 @@ function module:RegisterConfig()
                         order = 30,
                     },
                     routes = config.toggle("Routes", "Show the routes that some mobs take", 40),
-                    tooltip_completion = config.toggle("Completion", "Show achievement/drop completion in the tooltip", 40),
-                    tooltip_regularloot = config.toggle("Regular Loot", "Show regular untrackable loot in the tooltip", 41),
-                    tooltip_lootwindow = config.toggle("Popout loot window", "Show a popout for the loot so you can see its details", 42),
+                    loot = lootSelect(41),
                     tooltip_help = config.toggle("Help", "Show the click shortcuts in the tooltip", 43),
                 },
                 order = 30,
