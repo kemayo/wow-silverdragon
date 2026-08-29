@@ -10,6 +10,7 @@
   <Script file="Legion/module.lua"/>
   <Script file="BattleForAzeroth/module.lua"/>
   <Script file="Shadowlands/module.lua"/>
+  <Script file="Dragonflight/constants.lua"/>
   <Script file="Dragonflight/module.lua"/>
 
   <!-- WarWithin and Midnight: constants and the curated module.lua load first,
