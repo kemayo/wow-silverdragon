@@ -84,10 +84,10 @@ integration\tomtom.lua
 
 # data imports
 Data\module.xml
-Data_Classic\module.xml
+Data_Classic\module.xml [AllowLoadGameType vanilla, tbc, wrath, cata]
 #@debug@
 # overlay
 History\module.xml
 Overlay\module.xml
-RangeExtender\module.xml [AllowLoadGameType mainline,mists]
+RangeExtender\module.xml [AllowLoadGameType mainline, mists]
 #@end-debug@
