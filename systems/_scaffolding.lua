@@ -5,6 +5,16 @@ local myname, ns = ...
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 
+-- Shallow table merge from the handler, used by nodeMaker below and by the
+-- odd copied zone file.
+ns.merge = ns.merge or function(t1, t2)
+    if not t2 then return t1 end
+    for k, v in pairs(t2) do
+        t1[k] = v
+    end
+    return t1
+end
+
 -- The notability keys live in core.db.profile under the same names the plugins
 -- use, so they need no translation. Only keys SilverDragon has no equivalent of
 -- have to be answered here.

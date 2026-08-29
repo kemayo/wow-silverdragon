@@ -241,7 +241,9 @@ do
 	-- own data.faction means the opposite, "faction this belongs to", so flip it here.
 	local opposingFaction = {Horde="Alliance", Alliance="Horde"}
 
-	-- a treasure can have several vignettes, the same as a mob can
+	-- a treasure can have several vignettes, the same as a mob can. module.lua
+	-- loads before the zone files, so last-wins lets a zone entry -- which is
+	-- coord-keyed and has real locations -- replace a barer curated one.
 	local function addTreasureVignettes(treasures, data, ...)
 		for i=1, select("#", ...) do
 			local vignetteID = select(i, ...)
@@ -357,9 +359,8 @@ do
 		end
 		-- The plugins use this for treasures they only ever want shown as a
 		-- vignette, never as a map pin: the entries carry no coordinates. Here
-		-- that's just another treasure source. RegisterTreasureData entries and
-		-- npc/vignette points win, since those carry the curated name and
-		-- achievement -- this only fills gaps.
+		-- that's just another treasure source. Called from zone files, after
+		-- module.lua, so these replace any curated entry for the same vignette.
 		function addon:RegisterHandyNotesVignettes(source, uiMapID, vignettes, defaults)
 			addon.treasuresources[source] = addon.treasuresources[source] or {}
 			if defaults then
@@ -369,7 +370,7 @@ do
 				end
 			end
 			for vignetteID, point in pairs(vignettes) do
-				if not (point.hidden or addon.treasuresources[source][vignetteID]) then
+				if not point.hidden then
 					local data = {
 						name=point.label,
 						loot=point.loot,

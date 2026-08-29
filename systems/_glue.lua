@@ -26,6 +26,15 @@ ns.mapLink = ns.mapLink or function(point) return point end
 -- already provides it.
 ns.conditions.NotAreaPoi = ns.conditions.NotAreaPoi or ns.conditions._Negated(ns.conditions.AreaPoi)
 
+-- A point table whose __get entries compute fields (note, texture) on read.
+-- SilverDragon reads none of those keys off an imported point, so this only
+-- has to build a table the shape the zone file expects.
+ns.Getterize = ns.Getterize or function(tbl)
+    return setmetatable(tbl, {__index = function(self, key)
+        if self.__get[key] then return self.__get[key](self) end
+    end})
+end
+
 ns.SUPERRARE = ns.SUPERRARE or function(point)
     local note = "This is a \"super rare\" which can drop higher level loot"
     point.note = point.note and (point.note .. "\n" .. note) or note
