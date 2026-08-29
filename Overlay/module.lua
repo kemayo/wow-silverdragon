@@ -228,6 +228,13 @@ local function lootGoesIn(config, where)
     return bit.band(config.loot, where) ~= 0
 end
 
+-- The world map pin hooks borrow Blizzard's tooltip and have no popout window,
+-- so any loot the user wants shown at all has to go inline there.
+local function pinLootGoesInTooltip()
+    local config = module.db.profile.worldmap
+    return lootGoesIn(config, module.const.LOOT_TOOLTIP) or lootGoesIn(config, module.const.LOOT_WINDOW)
+end
+
 function module:ShowTooltip(pin)
     local tooltip = self.tooltip
     if tooltip:IsShown() and tooltip.pin == pin then
@@ -326,7 +333,7 @@ local function AddMobToTooltip(tooltip, mobid, name)
         tooltip:AddLine(core:GetMobLabel(mobid))
     end
     ns:UpdateTooltipWithCompletion(tooltip, mobid)
-    if lootGoesIn(module.db.profile.worldmap, module.const.LOOT_TOOLTIP) then
+    if pinLootGoesInTooltip() then
         ns.Loot.Summary.UpdateTooltip(tooltip, mobid, onlyKnowableLoot())
     end
     if ns.mobdb[mobid].notes then
@@ -338,7 +345,7 @@ end
 local function AddTreasureToTooltip(tooltip, vignetteID)
     if not (vignetteID and ns.vignetteTreasureLookup[vignetteID]) then return end
     ns:UpdateTooltipWithCompletion(tooltip, vignetteID, true)
-    if lootGoesIn(module.db.profile.worldmap, module.const.LOOT_TOOLTIP) then
+    if pinLootGoesInTooltip() then
         ns.Loot.Summary.UpdateTooltip(tooltip, vignetteID, onlyKnowableLoot(), true)
     end
     if ns.vignetteTreasureLookup[vignetteID].notes then
