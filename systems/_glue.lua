@@ -56,3 +56,8 @@ function ns.RegisterVignettes(zone, vignettes, defaults)
     if not currentSource then return end
     return core:RegisterHandyNotesVignettes(currentSource, zone, vignettes, defaults)
 end
+
+-- This doesn't do anything in SilverDragon, but the handynotes handler
+-- sometimes expects to call it to suppress its map-button appearing in
+-- mostly-unrelated zones.
+ns.suppressoverlay = {}
