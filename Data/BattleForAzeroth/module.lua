@@ -17,10 +17,10 @@ local VALE_MOGU = core.conditions.WorldQuestActive(57008)
 local VALE_MANTID = core.conditions.WorldQuestActive(57728)
 
 local darkshoreDecor = {
-    {241066, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Forsaken Spiked Brazier
-    {245462, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Banshee Queen's Banner
-    {245627, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Elven Temple Brazier
-    {246110, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Filigree Moon Sconce
+	{241066, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Forsaken Spiked Brazier
+	{245462, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Banshee Queen's Banner
+	{245627, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Elven Temple Brazier
+	{246110, decor=true, expansion=LE_EXPANSION_WAR_WITHIN}, -- Filigree Moon Sconce
 }
 
 core:RegisterMobData("BattleForAzeroth", {
@@ -217,7 +217,7 @@ core:RegisterMobData("BattleForAzeroth", {
 			161474, -- Lion's Strength
 			163195, -- Schematic: Makeshift Azerite Detector
 			{163828,toy=true,}, -- Toy Siege Tower
-        },
+		},
 	},
 	[138279] = {name="Adhara White",locations={[895]={85204340},},quest=54953,hidden=true,},
 	[138288] = {name="Ghost of the Deep",locations={[895]={69404700},},notes="World Quest",quest=51611,hidden=true,},
@@ -515,21 +515,21 @@ core:RegisterMobData("BattleForAzeroth", {
 	[152682] = {name="Prince Vortran",locations={[1355]={42407440},},loot={{169368,pet=2702,}},quest=56290,},
 	[152697] = {
 		name="Ulmath",
-	    quest=56057, -- The Soulbinder
-	    worldquest=56057, -- The Soulbinder
-	    locations={[1355]={83913611}},
-	    loot={
-	        168603, -- Cloak of Restless Spirits
-	        169317, -- Enthraller's Bindstone
-	        170088, -- Ulmath's Soulseeker
-	        170089, -- Liara's Spire
-	        170090, -- Merciless Pincher
-	        170091, -- Willbinder's Halberd
-	        170092, -- Netherdancer's Knife
-	        170093, -- Tyr'mar's Greatsword
-	        170094, -- Temple Guardian's Saber
-	        170095, -- Moon Priestess' Baton
-	    },
+		quest=56057, -- The Soulbinder
+		worldquest=56057, -- The Soulbinder
+		locations={[1355]={83913611}},
+		loot={
+			168603, -- Cloak of Restless Spirits
+			169317, -- Enthraller's Bindstone
+			170088, -- Ulmath's Soulseeker
+			170089, -- Liara's Spire
+			170090, -- Merciless Pincher
+			170091, -- Willbinder's Halberd
+			170092, -- Netherdancer's Knife
+			170093, -- Tyr'mar's Greatsword
+			170094, -- Temple Guardian's Saber
+			170095, -- Moon Priestess' Baton
+		},
 	},
 	[152712] = {name="Blindlight",locations={[1355]={37208260},},loot={{169372,pet=2682,}},quest=56269,},
 	[152729] = {name="Moon Priestess Liara",locations={[1355]={}},quest=56057,hidden=true},
@@ -591,14 +591,14 @@ core:RegisterMobData("BattleForAzeroth", {
 	[154600] = {name="Teng the Awakened",locations={[1530]={47406420},},requires=VALE_MOGU,quest=56332,},
 	[154604] = {name="Lord Aj'qirai",locations={[1527]={34401840},},loot={{174475,pet=2847,}},requires=ULDUM_AQIR,quest=56340,},
 	[154638] = {name="Grand Empress Shek'zara",locations={[1530]={5405620}},requires={VALE_MOGU,VALE_MANTID,any=true},quest=58705,worldquest=58705,--todo actual quest
-        loot={
-            174234, -- Maniacal Speaker's Cover
-            174243, -- Guise of the Voracious Prowler
-            174255, -- Greaves of Shattered Thoughts
-            174264, -- Chitinous Conqueror's Legplates
-            174268, -- Loop of Abhorrent Celerity
-        },
-    },
+		loot={
+			174234, -- Maniacal Speaker's Cover
+			174243, -- Guise of the Voracious Prowler
+			174255, -- Greaves of Shattered Thoughts
+			174264, -- Chitinous Conqueror's Legplates
+			174268, -- Loop of Abhorrent Celerity
+		},
+	},
 	[154701] = {name="Gorged Gear-Cruncher",locations={[1462]={69205340,73206000,76804720,77405460},},loot={{167846,quest=55061,}},quest=56367,},
 	[154739] = {name="Caustic Mechaslime",locations={[1462]={66505870,73405420},},loot={{169170,quest=55078,}},quest=56368,},
 	[154968] = {name="Armored Vaultbot",locations={[1462]={53404940},},quest=55546,hidden=true,},
@@ -685,14 +685,14 @@ core:RegisterMobData("BattleForAzeroth", {
 	[160968] = {name="Jade Colossus",locations={[1530]={14601120,19601460},},requires=VALE_MOGU,quest=58295,},
 	[160970] = {name="Vuk'laz the Earthbreaker",locations={[1527]={45401620}},quest=58510,worldquest=55466,
 		requires={ULDUM_AQIR, ULDUM_AMATHET, any=true},
-        loot={
-            174237, -- Breeches of Faithful Execution
-            174247, -- Grotesque Mutilator's Leggings
-            174250, -- Psyche Tormentor's Visage
-            174258, -- Greathelm of Indiscriminate Brutality
-            174469, -- Band of Insidious Ruminations
-        },
-    },
+		loot={
+			174237, -- Breeches of Faithful Execution
+			174247, -- Grotesque Mutilator's Leggings
+			174250, -- Psyche Tormentor's Visage
+			174258, -- Greathelm of Indiscriminate Brutality
+			174469, -- Band of Insidious Ruminations
+		},
+	},
 	[161033] = {name="Shadowmaw",locations={[1527]={52403740,52404280},},requires=ULDUM_NZOTH,quest=58333,},
 	[162140] = {name="Skikx'traz",locations={[1527]={21256105},},loot={{174476,pet=2848,}},requires=ULDUM_AQIR,quest=58697,tameable=236196,},
 	[162141] = {name="Zuythiz",locations={[1527]={40404300},},requires=ULDUM_AQIR,quest=58695,},
