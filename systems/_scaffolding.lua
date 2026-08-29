@@ -95,6 +95,9 @@ ns.nodeMaker = function(defaults)
         if details.note and defaults.note then
             details.note = details.note .. "\n" .. defaults.note
         end
+        if rawget(details, "loot") and defaults.loot then
+            tAppendAll(details.loot, defaults.loot)
+        end
         local meta2 = getmetatable(details)
         if meta2 and meta2.__index then
             return setmetatable(details, {__index = ns.merge(CopyTable(defaults, true), meta2.__index)})

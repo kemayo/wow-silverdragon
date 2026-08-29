@@ -355,6 +355,38 @@ do
 				end
 			end
 		end
+		-- The plugins use this for treasures they only ever want shown as a
+		-- vignette, never as a map pin: the entries carry no coordinates. Here
+		-- that's just another treasure source. RegisterTreasureData entries and
+		-- npc/vignette points win, since those carry the curated name and
+		-- achievement -- this only fills gaps.
+		function addon:RegisterHandyNotesVignettes(source, uiMapID, vignettes, defaults)
+			addon.treasuresources[source] = addon.treasuresources[source] or {}
+			if defaults then
+				local nodeType = ns.nodeMaker(defaults)
+				for vignetteID, point in pairs(vignettes) do
+					vignettes[vignetteID] = nodeType(point)
+				end
+			end
+			for vignetteID, point in pairs(vignettes) do
+				if not (point.hidden or addon.treasuresources[source][vignetteID]) then
+					local data = {
+						name=point.label,
+						loot=point.loot,
+						loot_shared=point.loot_shared,
+						notes=point.note,
+						active=point.active,
+						requires=point.requires or point.hide_before,
+						vignette=vignetteID,
+						quest=point.quest,
+						worldquest=point.worldquest,
+						achievement=point.achievement, criteria=point.criteria,
+					}
+					normalizeTreasureEntry(data)
+					addon.treasuresources[source][vignetteID] = data
+				end
+			end
+		end
 	end
 end
 do
