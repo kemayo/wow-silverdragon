@@ -340,15 +340,23 @@ do
 				end
 				if point.npc then
 					normalizeMobEntry(point.npc, data)
-					if not addon.datasources[source][point.npc] then
+					local existing = addon.datasources[source][point.npc]
+					if not existing then
 						addon.datasources[source][point.npc] = data
 					else
-						if not addon.datasources[source][point.npc].locations[uiMapID] then
-							addon.datasources[source][point.npc].locations[uiMapID] = data.locations[uiMapID]
+						-- Same mob in another zone: the plugins split a roaming
+						-- rare (the Zandalari scouts) across one point per zone,
+						-- each with its own coords and route.
+						if not existing.locations[uiMapID] then
+							existing.locations[uiMapID] = data.locations[uiMapID]
 						else
 							for _, pcoord in ipairs(data.locations[uiMapID]) do
-								tInsertUnique(addon.datasources[source][point.npc].locations[uiMapID], pcoord)
+								tInsertUnique(existing.locations[uiMapID], pcoord)
 							end
+						end
+						if data.routes then
+							existing.routes = existing.routes or {}
+							existing.routes[uiMapID] = data.routes[uiMapID]
 						end
 					end
 				else
