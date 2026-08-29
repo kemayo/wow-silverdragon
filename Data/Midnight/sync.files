@@ -1,8 +1,17 @@
-# Files copied verbatim from ../HandyNotes_MidnightTreasures by bin/syncdata.sh.
+# Files copied from ../HandyNotes_MidnightTreasures by bin/syncdata.sh.
 # Paths are relative to that plugin's root.
 
 constants.lua
 
-# Zone point data is still inlined in module.lua for now. When it moves out,
-# add the zones/ and shared/ files here and give this folder its own load
-# list (module.xml) that puts constants.lua and module.lua around them.
+zones/Quelthalas.lua
+zones/EversongWoods.lua
+zones/SilvermoonCity.lua
+zones/Zulaman.lua
+zones/Voidstorm.lua
+zones/Harandar.lua
+zones/IsleOfQueldanas.lua
+zones/Arcantina.lua
+zones/CoiledIsle.lua
+
+# Not carried: shared/Delves.lua (pulls in HandyNotes/HBD) and
+# shared/WorldBosses.lua (SilverDragon hides world boss pins).

@@ -2,7 +2,11 @@ std = "lua51"
 max_line_length = false
 exclude_files = {
     "libs/",
-    ".luacheckrc"
+    ".luacheckrc",
+    -- Copied verbatim from the HandyNotes plugins, which lint them themselves.
+    "Data/*/constants.lua",
+    "Data/*/zones/",
+    "Data/*/shared/",
 }
 
 ignore = {

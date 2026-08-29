@@ -1,0 +1,3 @@
+local myname, ns = ...
+
+ns.RegisterPoints(ns.QUELTHALAS, {})

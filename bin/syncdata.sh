@@ -46,7 +46,10 @@ if [ -n "$missing" ]; then
 	printf >&2 '  %s\n' $missing
 fi
 
-labelfix='s|^([[:space:]]*\[[0-9]+\][[:space:]]*=[[:space:]]*\{)[[:space:]]*--[[:space:]]*(.*[^[:space:]])[[:space:]]*$|\1 label="\2",|'
+# `[12345678] = { -- Some Name`  ->  `[12345678] = { label="Some Name",`
+# The plugin convention is exactly `{ -- Name`; require the space so `--- x`
+# and `{ --note` stay comments, and skip names with a quote in them.
+labelfix='s|^([[:space:]]*\[[0-9]+\][[:space:]]*=[[:space:]]*\{)[[:space:]]*-- ([^"]*[^"[:space:]])[[:space:]]*$|\1 label="\2",|'
 
 while IFS= read -r rel; do
 	rel=${rel%%#*}; rel=${rel//$'\r'/}; rel=$(echo $rel)

@@ -11,8 +11,31 @@
   <Script file="BattleForAzeroth/module.lua"/>
   <Script file="Shadowlands/module.lua"/>
   <Script file="Dragonflight/module.lua"/>
+
+  <!-- WarWithin and Midnight: constants and the curated module.lua load first,
+       then the zone files copied from the HandyNotes plugins. See
+       Data/<expansion>/sync.files. -->
   <Script file="WarWithin/constants.lua"/>
   <Script file="WarWithin/module.lua"/>
+  <Script file="WarWithin/zones/IsleOfDorn.lua"/>
+  <Script file="WarWithin/zones/Dornogal.lua"/>
+  <Script file="WarWithin/zones/KhazAlgar.lua"/>
+  <Script file="WarWithin/zones/RingingDeeps.lua"/>
+  <Script file="WarWithin/zones/Hallowfall.lua"/>
+  <Script file="WarWithin/zones/AzjKahet.lua"/>
+  <Script file="WarWithin/zones/SirenIsle.lua"/>
+  <Script file="WarWithin/zones/Undermine.lua"/>
+  <Script file="WarWithin/zones/Karesh.lua"/>
+
   <Script file="Midnight/constants.lua"/>
   <Script file="Midnight/module.lua"/>
+  <Script file="Midnight/zones/Quelthalas.lua"/>
+  <Script file="Midnight/zones/EversongWoods.lua"/>
+  <Script file="Midnight/zones/SilvermoonCity.lua"/>
+  <Script file="Midnight/zones/Zulaman.lua"/>
+  <Script file="Midnight/zones/Voidstorm.lua"/>
+  <Script file="Midnight/zones/Harandar.lua"/>
+  <Script file="Midnight/zones/IsleOfQueldanas.lua"/>
+  <Script file="Midnight/zones/Arcantina.lua"/>
+  <Script file="Midnight/zones/CoiledIsle.lua"/>
 </Ui>
