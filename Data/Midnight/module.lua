@@ -1,67 +1,18 @@
-if LE_EXPANSION_LEVEL_CURRENT < (LE_EXPANSION_MIDNIGHT or math.huge) then return end
+local myname, ns = ...
+
+if LE_EXPANSION_LEVEL_CURRENT < (LE_EXPANSION_MIDNIGHT or math.huge) then
+	ns.BeginDataModule(nil)
+	return
+end
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 
--- Handynotes imports
---[[
-minor transformations applied:
-s/(?<= ){ -- (.+)$/{\n\t\tlabel="$1",/g",
---]]
-
--- Stub time!
-local ns = {
-	RegisterPoints = function(...)
-		core:RegisterHandyNotesData("Midnight", ...)
-	end,
-	rewards = core.rewards,
-	conditions = core.conditions,
-	MAXLEVEL = core.conditions.Level(90),
-	SUPERRARE = function(point)
-		local note = "This is a \"super rare\" which can drop higher level loot"
-		if point.note then
-			point.note = point.note .. "\n" .. note
-		else
-			point.note = note
-		end
-		return point
-	end,
-	atlas_texture = function(atlas, ...) return atlas end,
-	nodeMaker = core.NAMESPACE.nodeMaker,
-}
-
-ns.QUELTHALAS = 2537
-ns.ISLEOFQUELDANAS = 2424
-ns.EVERSONGWOODS = 2395
-ns.SILVERMOONCITY = 2393
-ns.ZULAMAN = 2437
-ns.ATALAMAN = 2536
-ns.HARANDAR = 2413
-ns.VOIDSTORM = 2405
-ns.SLAYERSRISE = 2444
-ns.VOIDSTORM_VAL = 2599
-ns.VOIDSTORM_NAIGTAL = 2600
-ns.COILEDISLE = 2512
-ns.VAULTSOFATALUTEK = 2509
-
--- ns.WORLDQUESTS = ns.conditions.QuestComplete(79573)
-
-ns.DRAGONRIDING = ns.conditions.SpellKnown(376777)
-
-ns.FACTION_AMANI = 2696 -- paragon:2705
-ns.FACTION_SINGULARITY = 2699 -- paragon:2725
-ns.FACTION_HARATI = 2704 -- paragon:2726
-ns.FACTION_SILVERMOONCOURT = 2710 -- paragon:2727
--- ns.FACTION_VANGUARDLIGHT = 2709
-ns.FACTION_ZULJARRA = 2772
-ns.FACTION_CAPTAIN_TOKKA = 2773
-
-ns.CURRENCY_VALORSTONE = 3008
-ns.CURRENCY_VOIDLIGHT = 3316
-ns.CURRENCY_AMANI = 3354 --  renown:3355
-ns.CURRENCY_SINGULARITY = 3389 -- renown:3388
-ns.CURRENCY_HARATI = 3370 -- renown:3369
-ns.CURRENCY_SILVERMOONCOURT = 3365 -- renown:3371
-ns.CURRENCY_ZULJARRA = 3504 -- renown:3471
+-- Rares, treasures and mob data, curated in SilverDragon's own shape. The ids
+-- come from constants.lua; the zone point data below is copied out of
+-- HandyNotes_MidnightTreasures (see Data/Midnight/sync.files). ns.RegisterPoints and
+-- friends are wired to core in systems/_glue.lua.
+ns.BeginDataModule("Midnight")
+ns.MAXLEVEL = ns.conditions.Level(90)
 
 -- Treasures
 

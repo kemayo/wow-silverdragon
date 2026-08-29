@@ -1,0 +1,8 @@
+# Files copied verbatim from ../HandyNotes_WarWithin by bin/syncdata.sh.
+# Paths are relative to that plugin's root.
+
+constants.lua
+
+# Zone point data is still inlined in module.lua for now. When it moves out,
+# add the zones/ and shared/ files here and give this folder its own load
+# list (module.xml) that puts constants.lua and module.lua around them.

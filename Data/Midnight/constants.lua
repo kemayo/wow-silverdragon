@@ -1,0 +1,60 @@
+local myname, ns = ...
+
+-- Zone, faction and currency ids, plus the conditions built from them. Kept
+-- in their own file so SilverDragon can pull it in verbatim alongside the zone
+-- data; plugin setup (profile defaults, groups) stays in the main file.
+
+ns.QUELTHALAS = 2537
+ns.ISLEOFQUELDANAS = 2424
+ns.EVERSONGWOODS = 2395
+ns.SILVERMOONCITY = 2393
+ns.ZULAMAN = 2437
+ns.ATALAMAN = 2536
+ns.HARANDAR = 2413
+ns.HARANDARDEN = 2576
+ns.VOIDSTORM = 2405
+ns.SLAYERSRISE = 2444
+ns.ARCANTINA = 2541
+ns.VOIDSTORM_VAL = 2599
+ns.VOIDSTORM_NAIGTAL = 2600
+ns.COILEDISLE = 2512
+ns.VAULTSOFATALUTEK = 2509
+
+ns.WORLDQUESTS = ns.conditions.QuestComplete(90806) -- from spell=1234841; also 95276?
+
+-- ns.MAXLEVEL = {ns.conditions.QuestComplete(67030), ns.conditions.Level(70)}
+ns.DRAGONRIDING = ns.conditions.SpellKnown(376777)
+
+ns.FACTION_AMANI = 2696 -- paragon:2705
+ns.FACTION_SINGULARITY = 2699 -- paragon:2725
+ns.FACTION_HARATI = 2704 -- paragon:2726
+ns.FACTION_SILVERMOONCOURT = 2710 -- paragon:2727
+-- ns.FACTION_VANGUARDLIGHT = 2709
+ns.FACTION_ZULJARRA = 2772
+ns.FACTION_CAPTAIN_TOKKA = 2773
+
+ns.FACTION_DELVES = 2796
+ns.FACTION_RITUALSITES = 2792
+ns.FACTION_PREYHUNTER = 2808
+
+ns.CURRENCY_VALORSTONE = 3008
+ns.CURRENCY_VOIDLIGHT = 3316
+ns.CURRENCY_AMANI = 3354 --  renown:3355
+ns.CURRENCY_SINGULARITY = 3389 -- renown:3388
+ns.CURRENCY_HARATI = 3370 -- renown:3369
+ns.CURRENCY_SILVERMOONCOURT = 3365 -- renown:3371
+ns.CURRENCY_ZULJARRA = 3504 -- renown:3471
+
+ns.PROF_MIDNIGHT_ALCHEMY = 2906 -- spell:
+ns.PROF_MIDNIGHT_BLACKSMITHING = 2907 -- spell:
+ns.PROF_MIDNIGHT_COOKING = 2908 -- spell:
+ns.PROF_MIDNIGHT_ENCHANTING = 2909 -- spell:
+ns.PROF_MIDNIGHT_ENGINEERING = 2910 -- spell:
+ns.PROF_MIDNIGHT_FISHING = 2911
+ns.PROF_MIDNIGHT_HERBALISM = 2912
+ns.PROF_MIDNIGHT_INSCRIPTION = 2913 -- spell:
+ns.PROF_MIDNIGHT_JEWELCRAFTING = 2914 -- spell:
+ns.PROF_MIDNIGHT_LEATHERWORKING = 2915 -- spell:
+ns.PROF_MIDNIGHT_MINING = 2916
+ns.PROF_MIDNIGHT_SKINNING = 2917
+ns.PROF_MIDNIGHT_TAILORING = 2918 -- spell:

@@ -11,6 +11,8 @@
   <Script file="BattleForAzeroth/module.lua"/>
   <Script file="Shadowlands/module.lua"/>
   <Script file="Dragonflight/module.lua"/>
+  <Script file="WarWithin/constants.lua"/>
   <Script file="WarWithin/module.lua"/>
+  <Script file="Midnight/constants.lua"/>
   <Script file="Midnight/module.lua"/>
 </Ui>

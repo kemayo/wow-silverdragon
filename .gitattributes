@@ -1,0 +1,11 @@
+# Shell scripts must keep LF endings or the shebang breaks on Windows checkouts
+# (core.autocrlf would otherwise rewrite them to CRLF).
+*.sh text eol=lf
+
+# Files bin/syncdata.sh reads or writes: keep them LF, the way it writes them,
+# so a CRLF checkout doesn't break the manifest compare or churn git status.
+Data/*/sync.files text eol=lf
+Data/*/constants.lua text eol=lf
+Data/*/module.xml text eol=lf
+Data/*/zones/*.lua text eol=lf
+Data/*/shared/*.lua text eol=lf

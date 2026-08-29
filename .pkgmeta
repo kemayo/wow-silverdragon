@@ -35,6 +35,8 @@ move-folders:
 
 ignore:
    - tools
+   - bin
+   - Data/*/sync.files
    - lib/ChatThrottleLib/ChatThrottleLib.toc
    - lib/ChatThrottleLib/ChatThrottleStats.lua
    - lib/ChatThrottleLib/README.txt
