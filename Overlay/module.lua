@@ -355,25 +355,52 @@ do
     gateFrame:SetScript("OnHide", function() already = false end)
     gateFrame:SetScript("OnUpdate", function(self) self:Hide() end)
 
+    local function getSubordinateTooltip()
+        local subordinate = _G[myname.."SubordinateTooltip"]
+        if not subordinate then
+            subordinate = CreateFrame("GameTooltip", myname.."SubordinateTooltip", UIParent, "GameTooltipTemplate")
+            if _G.GameTooltipDataMixin then Mixin(subordinate, _G.GameTooltipDataMixin) end
+            subordinate:SetFrameStrata("TOOLTIP")
+            subordinate:SetClampedToScreen(true)
+        end
+        return subordinate
+    end
+
     local handleWorldMapPin = function(pin)
         if not pin then return end
         if already then return end
         gateFrame:Show()
+
+        -- Appending to a tooltip Blizzard has already inserted widgets into
+        -- taints the widget's cached data, which later blocks arithmetic on
+        -- its now-secret layout fields. Hang our lines off a separate tooltip
+        -- below instead, like the item-comparison one does off the side.
+        -- (2026-08, 12.1; mirrors HandyNotes handler commit e12d76a.)
+        local tooltip = GameTooltip
+        if GameTooltip.insertedFrames and #GameTooltip.insertedFrames > 0 then
+            tooltip = getSubordinateTooltip()
+            tooltip:SetOwner(GameTooltip, "ANCHOR_NONE")
+            tooltip:ClearAllPoints()
+            tooltip:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 0, -10)
+        elseif _G[myname.."SubordinateTooltip"] then
+            _G[myname.."SubordinateTooltip"]:Hide()
+        end
+
         local point
         if pin.vignetteID then
             if ns.vignetteTreasureLookup[pin.vignetteID] then
-                AddTreasureToTooltip(GameTooltip, pin.vignetteID)
+                AddTreasureToTooltip(tooltip, pin.vignetteID)
             elseif ns.vignetteMobLookup[pin.vignetteID] then
                 for mobid in pairs(ns.vignetteMobLookup[pin.vignetteID]) do
-                    AddMobToTooltip(GameTooltip, mobid)
+                    AddMobToTooltip(tooltip, mobid)
                 end
             elseif pin.vignetteInfo and pin.vignetteInfo.name then
-                AddMobToTooltip(GameTooltip, core:IdForMob(pin.vignetteInfo.name))
+                AddMobToTooltip(tooltip, core:IdForMob(pin.vignetteInfo.name))
             end
         elseif pin.worldQuest and pin.questID then
             if not ns.worldQuestMobLookup[pin.questID] then return end
             for mobid in pairs(ns.worldQuestMobLookup[pin.questID]) do
-                AddMobToTooltip(GameTooltip, mobid, true)
+                AddMobToTooltip(tooltip, mobid, true)
             end
         elseif pin.poiInfo and pin.poiInfo.areaPoiID then
             -- point = ns.POIsToPoints[pin.poiInfo.areaPoiID]
@@ -382,6 +409,7 @@ do
     local hideComparison = function()
         -- 10.0.2 doesn't hide this by default any more
         if _G[myname.."ComparisonTooltip"] then _G[myname.."ComparisonTooltip"]:Hide() end
+        if _G[myname.."SubordinateTooltip"] then _G[myname.."SubordinateTooltip"]:Hide() end
         gateFrame:Hide()
     end
 
