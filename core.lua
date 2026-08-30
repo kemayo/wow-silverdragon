@@ -252,12 +252,13 @@ do
 	end
 	-- Fold my HandyNotes plugin point format into datasources/treasuresources.
 	-- The field mapping is the `data` table below; the non-obvious parts: a point
-	-- with no `npc` is a treasure, keyed by its vignette if it has one and by
+	-- with `npc` is a rare and most everything else we take is a treasure (see
+	-- the guard below), a treasure is keyed by its vignette if it has one and by
 	-- zone+coord if it doesn't, `requires` also answers to the older name
 	-- `hide_before`, and `faction` is flipped (see above).
 	--
-	-- `atlas`/`scale` are only honoured for treasures. Rares draw from MobState,
-	-- which ranks what's left on them, and a fixed icon would hide that.
+	-- `atlas`/`texture`/`scale` are only honoured for treasures. Rares draw from
+	-- MobState, which ranks what's left on them, and a fixed icon would hide that.
 	function addon:RegisterHandyNotesData(source, uiMapID, points, defaults)
 		-- convenience for me, really...
 		addon.datasources[source] = addon.datasources[source] or {}
@@ -269,9 +270,11 @@ do
 			end
 		end
 		for coord, point in pairs(points) do
-			-- npc means a rare; loot or completion tracking means a treasure. A
-			-- point with neither is usually a flightpath or portal marker the
-			-- plugins also register through here, which isn't ours to show.
+			-- npc means a rare; a vignette, completion tracking, or plain loot
+			-- means a treasure -- the same split the plugins' own overlay makes,
+			-- vendors included. A questless loot-only point still drops off the
+			-- map once its knowable loot is collected. Points with none of these
+			-- are flightpaths, portals and map links, which aren't ours to show.
 			if point.npc or point.vignette or point.quest or point.criteria or point.achievement or point.loot then
 				local data = {
 					name=point.label,
@@ -287,7 +290,7 @@ do
 					worldquest=point.worldquest,
 					achievement=point.achievement, criteria=point.criteria,
 					faction=point.faction and opposingFaction[point.faction],
-					atlas=point.atlas, scale=point.scale,
+					atlas=point.atlas, texture=point.texture, scale=point.scale,
 				}
 				-- variations on "also register this elsewhere":
 				if point.translate or point.parent or point.levels then

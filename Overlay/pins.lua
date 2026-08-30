@@ -37,13 +37,16 @@ function SilverDragonOverlayPinMixinBase:OnAcquired(id, pointType, textureInfo, 
         self.texture:SetVertexColor(1, 1, 1, 1)
     end
     if textureInfo.atlas then
+        self.texture:SetTexCoord(0, 1, 0, 1)
         self.texture:SetAtlas(textureInfo.atlas)
     else
-        if textureInfo.tCoordLeft then
-            self.texture:SetTexCoord(textureInfo.tCoordLeft, textureInfo.tCoordRight, textureInfo.tCoordTop, textureInfo.tCoordBottom)
-        else
-            self.texture:SetTexCoord(0, 1, 0, 1)
-        end
+        -- a HandyNotes texture spec: an icon file plus a crop, from an imported
+        -- treasure's `texture`. Icons that are only an atlas take the branch
+        -- above -- no need to resolve those to a file ourselves.
+        self.texture:SetTexCoord(
+            textureInfo.tCoordLeft or 0, textureInfo.tCoordRight or 1,
+            textureInfo.tCoordTop or 0, textureInfo.tCoordBottom or 1
+        )
         self.texture:SetTexture(textureInfo.icon)
     end
 

@@ -10,12 +10,36 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 core.conditions = ns.conditions
 core.rewards = ns.rewards
 
--- In the handler this returns a HandyNotes texture-spec table, which lands on
--- point.texture. SilverDragon never reads point.texture on imported points --
--- icons come from the MobState/treasure rules, and RegisterHandyNotesData
--- takes point.atlas straight from the data -- so the return here is dead. It
--- only has to be callable.
-ns.atlas_texture = ns.atlas_texture or function(atlas) return atlas end
+-- Builds the HandyNotes texture spec the plugins put on point.texture: an icon
+-- file plus tex-coords, tinted or scaled by `extra`, with an optional inset (one
+-- number trims every side, four give left/right/top/bottom). The overlay pin
+-- applies it as-is. Kept close to the handler's own copy, but resolves the atlas
+-- to `filename` when it has no `file` fileID.
+ns.atlas_texture = ns.atlas_texture or function(atlas, extra, left, right, top, bottom)
+    local info = C_Texture.GetAtlasInfo(atlas)
+        or C_Texture.GetAtlasInfo("QuestObjective")
+        or C_Texture.GetAtlasInfo("VignetteLoot")
+    if type(extra) == "number" then
+        extra = {scale = extra}
+    end
+    if left and not right then
+        right, top, bottom = 1 - left, left, 1 - left
+    end
+    if left then
+        -- an atlas is already a crop of its file, so the inset scales into that
+        local horizontal = info.rightTexCoord - info.leftTexCoord
+        local vertical = info.bottomTexCoord - info.topTexCoord
+        info.rightTexCoord = info.leftTexCoord + (right * horizontal)
+        info.leftTexCoord = info.leftTexCoord + (left * horizontal)
+        info.bottomTexCoord = info.topTexCoord + (bottom * vertical)
+        info.topTexCoord = info.topTexCoord + (top * vertical)
+    end
+    return ns.merge({
+        icon = info.file or info.filename,
+        tCoordLeft = info.leftTexCoord, tCoordRight = info.rightTexCoord,
+        tCoordTop = info.topTexCoord, tCoordBottom = info.bottomTexCoord,
+    }, extra)
+end
 
 -- A plugin map-link point opens a different map on right-click. SilverDragon
 -- has no equivalent pin and these points carry no loot or completion data, so

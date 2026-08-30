@@ -103,10 +103,16 @@ do
     -- Treasures skip MobState entirely. Its six states rank what a rare still has
     -- left to give, which needs a target you can go back to; a treasure is looted
     -- once and gone, so one that's still drawing always has the same answer. The
-    -- import can name its own atlas instead, which plenty of them do.
+    -- import can name its own icon instead -- a `texture` spec or an `atlas` --
+    -- and plenty of them do.
     local defaultTreasureIcon = {atlas = "VignetteLoot", r = 1, g = 1, b = 1, a = 0.9, scale = 1}
     local treasure_icons = {}
     local function icon_for_treasure(data)
+        -- A ready-made texture spec from the plugin data: already the shape the
+        -- pin wants, and shared between points, so hand it straight back.
+        if data and type(data.texture) == "table" then
+            return data.texture, true
+        end
         if not (data and data.atlas) then
             return defaultTreasureIcon
         end
