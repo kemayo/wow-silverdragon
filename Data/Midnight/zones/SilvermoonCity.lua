@@ -19,4 +19,14 @@ ns.RegisterPoints(ns.SILVERMOONCITY, {
 		atlas="banker", minimap=true,
 		note="Trade {item:264882:Finery Funds} for Ensembles",
 	},
+	[28754669] = {
+		label="{npc:273775:J'imothy}",
+		loot={{282417, pet=true}}, -- Stubby Whistle
+		note="Find {npc:273760:Ensorcelled Cryptid}, {spell:1313803:Drain Barrier} to remove {spell:1313802:Barrier Integrity}, keep moving to dodge interruptions.",
+		additional={51445362, 58304190},
+		minimap=true,
+		texture=ns.atlas_texture("WildBattlePetCapturable", {r=0, g=0.5, b=1}),
+		backdrop=ns.atlas_texture("CircleMaskScalable", {r=0.5, g=1, b=1, a=0.75}),
+		border=ns.atlas_texture("Adventures-Buff-Heal-Ring")
+	},
 })
