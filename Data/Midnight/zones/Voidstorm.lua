@@ -352,10 +352,12 @@ ns.RegisterPoints(ns.SLAYERSRISE, {
 
 -- Invasions
 
+-- Naigtal
+
 ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
-	[29106290] = { label="Auredar's Chassis",
+	[29216389] = { label="Auredar's Chassis",
 		criteria=114009,
-		quest=96316, -- v
+		quest=96316,
 		npc=264569,
 		loot={
 			274873, -- Funeral Attendant's Spire
@@ -366,10 +368,12 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 			-- 278116, -- Player Experience
 		},
 		vignette=7668,
+		path=28155061,
+		note="In {map:2646:Vilaldoun}",
 	},
-	[76203960] = { label="Swalewing Matriarch",
+	[77813839] = { label="Swalewing Matriarch",
 		criteria=114007,
-		quest=96207, -- v
+		quest=96207,
 		npc=263954,
 		loot={
 			274874, -- Flickering Wing Separator
@@ -381,10 +385,9 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7660,
 	},
-	[39904270] = { label="Broxion",
-		-- [39904270, 41304680, 42004830, 42604800, 44905440, 45505340, 45805370, 46205600]
+	[45155545] = { label="Broxion",
 		criteria=114006,
-		quest=96206, -- v
+		quest=96206,
 		npc=263950,
 		loot={
 			275138, -- Spore-Handler's Handwraps
@@ -423,9 +426,9 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7661,
 	},
-	[69407720] = { label="Warp Agent Xi'grivr",
+	[70327633] = { label="Warp Agent Xi'grivr",
 		criteria=114010,
-		quest=96319, -- v
+		quest=96319,
 		npc=264574,
 		loot={
 			274870, -- Assassin's Void-String Bow
@@ -434,9 +437,9 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7670,
 	},
-	[54206240] = { label="Slaipaan",
+	[55256199] = { label="Slaipaan",
 		criteria=114012,
-		quest=96320, -- v
+		quest=96320,
 		npc=264576,
 		loot={
 			274871, -- Giant Worm Piercer
@@ -448,7 +451,7 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7671,
 	},
-	[48006880] = { label="Indomitable Mk XII",
+	[54604299] = { label="Indomitable Mk XII",
 		criteria=114011,
 		quest=96317, -- v
 		npc=264571,
@@ -500,8 +503,8 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 		},
 		vignette=7744,
 	},
-	[48404760] = { label="Voidwarped Sporebat",
-		quest=96566, -- v
+	[50654792] = { label="Voidwarped Sporebat",
+		quest=96566,
 		npc=265698,
 		loot={
 			274866, -- Voidwarped Edge
@@ -533,23 +536,87 @@ ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
 				path={28906176, 29786262, 30156525, 30426609, 32676921, 33417072, 36217266, 36637216, 36407136, 31146332, 31316254, 31816023, 33475950},
 			},
 			[27914996] = {quest=97092, loot={276366}, label="{item:276366}", note="In the crypts"}, -- Dusty Redcap
-			[71423705] = {quest=97093, loot={276367}, label="{item:276367}", path=75643814}, -- Marshy Redcap
+			[71423705] = {quest=97093, loot={276367}, label="{item:276367}", note="In cave", path=74713809}, -- Marshy Redcap
 			-- [] = {quest=97094, loot={276368}}, -- Partially-Digested Redcap
-			[95092667] = {quest=97095, loot={276369}, label="{item:276369}", path=88812597, note="On top of the tallest mushroom, bounce up"}, -- Airy Redcap
+			[95082667] = {quest=97095, loot={276369}, label="{item:276369}", path=89152516, note="On top of the tallest mushroom, bounce up. It will be extremely helpful to have {spell:1303597:Lightforge Hookshot} unlocked."}, -- Airy Redcap
 			atlas="TeleportationNetwork-Ardenweald-32x32", minimap=true,
 		},
 		path=67505416,
 		atlas="VignetteLootElite", scale=1.3, minimap=true,
 	},
 })
-ns.RegisterPoints(2646, { -- Naigral (Vilaldoun)
+ns.RegisterPoints(2646, { -- Naigtal (Vilaldoun)
 	[22626135] = {
 		quest=97092,
 		loot={276366}, -- Dusty Redcap
 		-- translate={[ns.VOIDSTORM_NAIGTAL]=true}, -- confusing
 		atlas="TeleportationNetwork-Ardenweald-32x32", minimap=true,
 	},
+	[55702670] = {
+		label="Ancient Crypt Reliquary",
+		loot={
+			276285, -- Elonath's Defender's Sword
+			276292, -- Ancient Anchorite's Beacon
+			276302, -- Taalvilor Crystalsmith's Mace
+			276303, -- Blessed Blade of Taalvilor
+		},
+		additional={59701650, 65503710, 60404870, 66706900, 71506270, 76708040, 70208330, 49606350, 44405870, 32707950, 23706500},
+		note="Random spawn, doesn't show on your minimap",
+	}
 })
+
+ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
+	[46678290] = {}, -- Umbral Base Camp
+	[55064695] = {}, -- Nexus Port
+	[77294291] = {}, -- Sporeforge
+	[32274604] = {}, -- Extraction Coast
+}, {
+	label="{spell:1244638:Manaforge Translocator}",
+	hide_before=ns.conditions.QuestComplete(96809),
+	atlas="FlightMaster_Argus-TaxiNode_Neutral", scale=1.3,
+	minimap=true, -- They are on the minimap, but only when you're incredibly close to them
+	group=TUTORIAL_TITLE35, -- Travel
+})
+
+-- Unfazed Diver
+local UNFAZED = {
+	backdrop=ns.atlas_texture("CircleMaskScalable", {r=0.7, g=0, b=1, a=0.75}),
+	border=ns.atlas_texture("Adventures-Buff-Heal-Ring", {r=1, g=0, b=1}),
+	minimap=true,
+}
+ns.RegisterPoints(2472, { -- K'aresh, Tazavesh
+	[46905856] = {
+		quest=97098,
+		label="{item:275670:Bill of Lading}",
+		loot={
+			275670, -- Bill of Lading
+			275665, -- Phase-Displaced Toy
+		},
+		active=ns.conditions.AuraActive(1214374), -- Phase Diving
+		note="Unlocks {item:246723:Unfazed Diver} in {map:2600:Naigtal}. Next step is in {map:2405:Voidstorm}.\n\nRemember you need your {item:235499:Reshii Wraps} for {spell:1214374:Phase Diving}; you might need to relog before it works after putting it on.",
+		atlas="poi-workorders",
+		parent=true,
+	},
+}, UNFAZED)
+ns.RegisterPoints(ns.VOIDSTORM, {
+	[48187032] = {
+		quest=97099,
+		label="Odd Smelling Crate",
+		hide_before=ns.conditions.QuestComplete(97098),
+		note="Use, then move on to {map:2600:Naigtal}.\n\nUnlocks {item:246723:Unfazed Diver} in {map:2600:Naigtal}. First step was in {map:2472:Tazavesh}.",
+		atlas="mechagon-projects",
+	},
+}, UNFAZED)
+ns.RegisterPoints(ns.VOIDSTORM_NAIGTAL, {
+	[71474531] = {
+		label="Specimen Container",
+		loot={{246723, pet=true}}, -- Unfazed Diver
+		hide_before=ns.conditions.QuestComplete(97099),
+		note="Kill {npc:265891:Hal'hadar Manatech} nearby for the {item:276465:Specimen Container Key}.\n\nFirst step was in {map:2472:Tazavesh}.",
+	}
+}, UNFAZED)
+
+-- Val
 
 ns.RegisterPoints(ns.VOIDSTORM_VAL, {
 	[33005700] = { label="Nelgothar",
