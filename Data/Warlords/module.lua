@@ -38,7 +38,7 @@ core:RegisterMobData("Warlords", {
 	[77140] = {name="Amaukwa",locations={[539]={29203100,34803460,35202900,40203000},},loot={109060},quest=33061,tameable=236190,},
 	[77310] = {name="Mad \"King\" Sporeon",locations={[539]={44602100},},loot={113561},quest=35906,},
 	[77513] = {name="Coldstomp the Griever",locations={[525]={25405440},},loot={112066},quest=34129,tameable=1044794,vignette=225,},
-	[77519] = {name="Giantbane",locations={[525]={57003800,58603240},},tameable=1044794,},
+	[77519] = {name="Giantbane",locations={[525]={57003800,58603240},},loot={},tameable=1044794,},
 	[77526] = {name="Scout Goreseeker",locations={[525]={76406340},},loot={112094},quest=34132,},
 	[77527] = {name="The Beater",locations={[525]={26603140},},loot={111475},quest=34133,},
 	[77529] = {name="Yazheera the Incinerator",locations={[535]={53802580},},loot={112263},quest=34135,},
