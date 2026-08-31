@@ -51,10 +51,12 @@ function ns.MobIsNotable(id, isTreasure, fromVignette)
 	-- the rewards system memoises within a run, and this is a fresh one
 	ns.ClearRunCaches()
 
-	-- Gate: a finished quest means there's nothing left to hand over. A vignette
-	-- overrules it, since the game only shows one while something remains, and
-	-- treasures always arrive by vignette. Not quest_notable, which is about loot.
-	if data.quest and not (isTreasure or fromVignette) and ns.allQuestsComplete(data.quest) then
+	-- Gate: a finished quest means there's nothing left to hand over, unless a
+	-- live vignette says otherwise. Treasures are gated the same way -- a
+	-- repeatable treasure has no quest, so one that has a quest is a single
+	-- pickup that the map keeps drawing from static data after its vignette is
+	-- gone. Not quest_notable, which is about loot.
+	if data.quest and not fromVignette and ns.allQuestsComplete(data.quest) then
 		Debug("MobIsNotable", id, false, "quest complete")
 		return false
 	end
@@ -136,10 +138,12 @@ end
 -- (without the vignette argument, so it answers as if you'd walked up to it)
 core.MobIsNotable = ns.MobIsNotable
 
--- One word for the places that show a mob's standing rather than decide whether to
--- mention it, so the map, the browser and the broker can't disagree.
-function ns.MobState(id)
-	local quest, achievement, by_alt = ns:CompletionStatus(id)
+-- One word for the places that show a thing's standing rather than decide whether
+-- to mention it, so the map, the browser and the broker can't disagree. Pass
+-- isTreasure and it ranks a treasure on the same six states: a single-pickup one
+-- like a rare, a repeatable one (no quest) on its loot.
+function ns.MobState(id, isTreasure)
+	local quest, achievement, by_alt = ns:CompletionStatus(id, isTreasure)
 	-- Quest first, as in MobIsNotable: the only state meaning "finished".
 	if quest then
 		return "done"
@@ -148,13 +152,13 @@ function ns.MobState(id)
 		achievement = true
 	end
 	-- A mount outranks an unfinished achievement, which outranks ordinary loot.
-	if ns.HasNotableMounts(id) then
+	if ns.HasNotableMounts(id, isTreasure) then
 		return "mount"
 	end
 	if achievement == false and ns.db.achievement_notable then
 		return "achievement"
 	end
-	local notable = ns.MobIsNotable(id)
+	local notable = ns.MobIsNotable(id, isTreasure)
 	if notable == false then
 		return "nothing"
 	end

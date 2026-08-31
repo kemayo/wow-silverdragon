@@ -137,7 +137,7 @@ function module:OnInitialize()
 		-- Singling a mount out asks the same question the filter does, so say so
 		-- wherever that happens -- it's not obvious from here that a checkbox in
 		-- another section can switch these off.
-		local mountNote = "\n\nWhich mounts count comes from the Mount option under \"What's notable?\": one you already know only counts if it's BoE, and with that unticked this stops happening at all."
+		local mountNote = "\n\nWhich mounts count comes from the Mount option under Notability: one you already know only counts if it's BoE, and with that unticked this stops happening at all."
 
 		local sink_config = self:GetSinkAce3OptionsDataTable()
 		local sink_args = {}
@@ -246,44 +246,16 @@ function module:OnInitialize()
 				args = {
 					filter = {
 						type = "select", name = "Which rares?",
-						desc = "\"Notable ones\" leaves out a rare once it has nothing left for you. What counts as worth having is up to you, below.\n\nWhether loot that can't drop for you counts is up to \"Current character only\", over in General's Loot options. Rares we know nothing about are always announced.",
+						desc = "\"Notable ones\" leaves out a rare once it has nothing left for you. What counts as worth having is set under Notability.\n\nWhether loot that can't drop for you counts is up to \"Current character only\", over in General's Loot options. Rares we know nothing about are always announced.",
 						values = filter_values, sorting = filter_sorting,
 						order = 0, width = "double",
 					},
 					filter_loot = {
 						type = "select", name = "Which treasures?",
-						desc = "\"Notable ones\" leaves out a treasure once it has nothing left for you. What counts as worth having is up to you, below.\n\nWhether loot that can't drop for you counts is up to \"Current character only\", over in General's Loot options. Treasures we know nothing about are always announced.",
+						desc = "\"Notable ones\" leaves out a treasure once it has nothing left for you. What counts as worth having is set under Notability.\n\nWhether loot that can't drop for you counts is up to \"Current character only\", over in General's Loot options. Treasures we know nothing about are always announced.",
 						values = filter_values, sorting = filter_sorting,
 						order = 1, width = "double",
 					},
-				},
-			},
-			notable = {
-				type = "group", name = "What's notable?", inline = true,
-				desc = "Define exactly what counts as being \"notable\"",
-				order = 12,
-				-- these live on the core profile, because the shared rewards
-				-- system reads them and other parts of SilverDragon can use them
-				get = function(info) return core.db.profile[info[#info]] end,
-				set = function(info, v)
-					core.db.profile[info[#info]] = v
-					core.events:Fire("OptionsChanged", info[#info], v)
-				end,
-				-- Deliberately not disabled when neither filter is "notable": Mount
-				-- still decides which sightings earn the mount sound and flash, and
-				-- greying out something that's still doing work is worse than
-				-- leaving it alone.
-				args = {
-					-- these globals don't all exist in the classic clients, hence
-					-- the fallbacks
-					achievement_notable = toggle(_G.TRANSMOG_SOURCE_5 or ACHIEVEMENTS or "Achievement", "Count unearned achievement-progress as notable", 10),
-					mount_notable = toggle(PERKS_VENDOR_CATEGORY_MOUNT or MOUNTS or "Mount", "Count unlearned mounts as notable loot. This also picks which sightings get the mount sound and flash, whatever the filters above say", 20),
-					toy_notable = toggle(TOY or "Toy", "Count unlearned toys as notable loot", 30),
-					pet_notable = toggle(TOOLTIP_BATTLE_PET or "Battle Pet", "Count uncaught pets as notable loot", 40),
-					transmog_notable = toggle("Transmog", "Count unlearned transmogrification appearances as notable loot.\n\nWhether an appearance you know from some other item counts as known here is up to \"Transmog exact items\", over in General's Loot options", 50),
-					decor_notable = toggle(_G.BINDING_TAG_DECOR or "Decor", "Count unfound decor as notable loot", 60, nil, not _G.BINDING_TAG_DECOR),
-					quest_notable = toggle("Quest-attached", "Count items with attached uncompleted quests as notable loot (this includes a lot of \"learnable\" items, weekly reputation drops, etc)", 70),
-					alts_achievements_count = toggle("An alt counts", "Treat an achievement one of your other characters has completed as done, rather than as something still to earn", 80),
 				},
 			},
 			message = {
@@ -577,8 +549,11 @@ function module:SeenLoot(callback, name, id, zone, x, y, instanceid)
 		return
 	end
 	-- computed once and passed on, rather than making every AnnounceLoot
-	-- subscriber (the sound handler, notably) work it out again for itself
-	local notable = ns.MobIsNotable(id, true)
+	-- subscriber (the sound handler, notably) work it out again for itself.
+	-- This only fires off a live treasure vignette, so pass fromVignette: the
+	-- game wouldn't show one if there were nothing left, whatever our quest data
+	-- thinks.
+	local notable = ns.MobIsNotable(id, true, true)
 	-- as in ShouldAnnounce, only a definite "nothing here is wanted" silences it
 	if filter == "notable" and notable == false then
 		Debug("Announce:SeenLoot", false, "not notable")

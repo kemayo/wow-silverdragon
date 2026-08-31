@@ -78,6 +78,28 @@ local options = {
 			},
 			plugins = {},
 		},
+		notable = {
+			type = "group",
+			name = "Notability",
+			order = 15,
+			-- One shared definition of "worth your attention": the announcement
+			-- filter, the map overlay and the click-target macro all ask it.
+			-- Deliberately not greyed out when neither filter is set to "notable" --
+			-- Mount still decides which sightings earn the mount sound and flash,
+			-- and hiding a control that's still working is worse than leaving it.
+			args = {
+				about = desc("These decide what SilverDragon treats as worth your attention. The announcement filter, the map overlay and the click-target macro all ask the same question.", 0),
+				achievement_notable = toggle(_G.TRANSMOG_SOURCE_5 or ACHIEVEMENTS or "Achievement", "Count unearned achievement-progress as notable", 10),
+				mount_notable = toggle(PERKS_VENDOR_CATEGORY_MOUNT or MOUNTS or "Mount", "Count unlearned mounts as notable loot. This also picks which sightings get the mount sound and flash, whatever the filters say", 20),
+				toy_notable = toggle(TOY or "Toy", "Count unlearned toys as notable loot", 30),
+				pet_notable = toggle(TOOLTIP_BATTLE_PET or "Battle Pet", "Count uncaught pets as notable loot", 40),
+				transmog_notable = toggle("Transmog", "Count unlearned transmogrification appearances as notable loot.\n\nWhether an appearance you know from some other item counts as known here is up to \"Transmog exact items\", over in General's Loot options", 50),
+				decor_notable = toggle(_G.BINDING_TAG_DECOR or "Decor", "Count unfound decor as notable loot", 60, nil, not _G.BINDING_TAG_DECOR),
+				quest_notable = toggle("Quest-attached", "Count items with attached uncompleted quests as notable loot (this includes a lot of \"learnable\" items, weekly reputation drops, etc)", 70),
+				alts_achievements_count = toggle("An alt counts", "Treat an achievement one of your other characters has completed as done, rather than as something still to earn", 80),
+			},
+			plugins = {},
+		},
 		scanning = {
 			type = "group",
 			name = "Scanning",

@@ -70,7 +70,7 @@ function module:OnInitialize()
 					skipcomplete = {
 						type = "toggle",
 						name = "Skip completed mobs",
-						desc = "Don't even try to target mobs with nothing left on them for you. This asks the same question the announcement filter does, so \"What's notable?\" decides what counts",
+						desc = "Don't even try to target mobs with nothing left on them for you. This asks the same question the announcement filter does, so Notability decides what counts",
 						order = 35,
 					},
 					skipvignette = {

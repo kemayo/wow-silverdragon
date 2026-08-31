@@ -44,16 +44,22 @@ function module:OnInitialize()
             },
             icon_theme = 'skulls', -- circles / skulls
             icon_color = 'completion', -- completion / distinct
-            -- What to display, per kind. A treasure is looted once and gone, so
-            -- a finished one is clutter in a way a farmable rare isn't.
+            emphasize = false,
+            -- What to display, per kind, from ns.MobState. "notable" leaves off
+            -- the ones with nothing left; the "also" toggles add a state back.
+            -- Unsure ones show by default, as with announcements.
             showMobs = true,
-            achieved = true,
-            questcomplete = false,
+            filter = 'notable', -- notable / everything
+            showUnknown = true,
+            showNothing = false,
+            showDone = false,
             achievementless = true,
             hidden = {},
             showTreasures = true,
-            achievedTreasure = false,
-            questcompleteTreasure = false,
+            filterTreasure = 'notable',
+            showUnknownTreasure = true,
+            showNothingTreasure = false,
+            showDoneTreasure = false,
             achievementlessTreasure = true,
             hiddenTreasure = {},
         },
@@ -117,6 +123,35 @@ function module:OnInitialize()
             cfg.tooltip_lootwindow = nil
         end
         cfg.tooltip_regularloot = nil
+    end
+
+    -- "Show achieved" / "Show quest-complete" became a notability filter plus
+    -- "also show" toggles (see ns.MobState). An explicitly-set legacy key is a
+    -- choice to carry over; an absent one was the old default, so it gives way
+    -- to the new default -- a quieter map that leaves off finished things.
+    do
+        local function migrate(oldAchieved, oldQuest, filterKey, nothingKey, doneKey)
+            if db[oldAchieved] == nil and db[oldQuest] == nil then
+                return
+            end
+            -- "achieved" on, or untouched, meant finished things stayed on the map
+            local achieved = db[oldAchieved]
+            if achieved == nil then achieved = true end
+            if achieved then
+                db[nothingKey] = true
+                db[doneKey] = true
+            else
+                db[filterKey] = 'notable'
+            end
+            -- "quest-complete" only ever added the quest-done pile back
+            if db[oldQuest] then
+                db[doneKey] = true
+            end
+            db[oldAchieved] = nil
+            db[oldQuest] = nil
+        end
+        migrate("achieved", "questcomplete", "filter", "showNothing", "showDone")
+        migrate("achievedTreasure", "questcompleteTreasure", "filterTreasure", "showNothingTreasure", "showDoneTreasure")
     end
 
     self.tooltip = ns.Tooltip.Get("OverlayPin")
