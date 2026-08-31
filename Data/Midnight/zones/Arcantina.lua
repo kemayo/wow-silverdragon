@@ -2,7 +2,11 @@ local myname, ns = ...
 
 ns.RegisterPoints(ns.ARCANTINA, {
 	[54534241] = {quest=79550, loot={213202}}, -- Pepe: A Tiny Explorer's Hat
-	--
+}, {
+	group="Pepe",
+	minimap=true,
+})
+ns.RegisterPoints(ns.ARCANTINA, {
 	[45076050] = {quest=92349, loot={6662}}, -- Elixir of Giant Growth
 	[28603980] = {quest=92350, loot={6662}}, -- Elixir of Giant Growth
 	[18474420] = {quest=92351, loot={6662}}, -- Elixir of Giant Growth

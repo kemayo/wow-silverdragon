@@ -92,6 +92,13 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 
 -- Rares
 
+local loot_shared={
+	251788, -- Gift of Light
+	251791, -- Holy Retributor's Order
+	{257147, mount=true}, -- Cobalt Dragonhawk
+	{257156, mount=true}, -- Cerulean Hawkstrider
+}
+
 -- A Bloody Song
 ns.RegisterPoints(ns.EVERSONGWOODS, {
 	[51397502] = { label="Warden of Weeds",
@@ -242,19 +249,14 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 	},
 }, {
 	achievement=61507,
-	loot_shared={
-		251788, -- Gift of Light
-		251791, -- Holy Retributor's Order
-		{257147, mount=true}, -- Cobalt Dragonhawk
-		{257156, mount=true}, -- Cerulean Hawkstrider
-	},
+	loot_shared=loot_shared,
 })
 
 -- Bloated Snapdragon
 ns.RegisterPoints(ns.EVERSONGWOODS, {
 	-- Normal
 	[36566407] = {requires=ns.conditions.NotAreaPoi(ns.EVERSONGWOODS, 8758)},
-	-- Void invasions
+	-- Void invasions (8615 for the ritual site would probably also work?)
 	[37696427] = {requires=ns.conditions.AreaPoi(ns.EVERSONGWOODS, 8758)},
 }, {
 	achievement=61507,
@@ -266,5 +268,6 @@ ns.RegisterPoints(ns.EVERSONGWOODS, {
 		260647, -- Digested Human Hand
 		ns.rewards.Currency(ns.CURRENCY_SILVERMOONCOURT, 50, {quest=94685}),
 	},
+	loot_shared=loot_shared,
 	vignette=7294,
 })
