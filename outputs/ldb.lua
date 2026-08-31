@@ -195,6 +195,18 @@ function module:SetupDataObject()
 	end
 end
 
+-- Returns whether the menu opened, so the click can fall back to the config.
+function module:ShowWorldMapMenu(owner)
+	local overlay = core:GetModule("Overlay", true)
+	if not (overlay and overlay.ShowDisplayMenu) then return end
+	-- the hover tooltip is still up (the mouse hasn't left the button) and would
+	-- sit over the menu
+	if tooltip then
+		LibQTip:Release(tooltip)
+	end
+	return overlay:ShowDisplayMenu(owner)
+end
+
 function module:SetupWorldMap()
 	local button
 	if WorldMapFrame.AddOverlayFrame and WorldMapFrame.NavBar then
@@ -231,10 +243,13 @@ function module:SetupWorldMap()
 			if not button.options.config_path then
 				button.options.config_path = {'overlay'}
 				button.options.help = {
-					"Click to toggle map icons",
-					"Shift-click to toggle map icons for this zone only",
+					"Left-click to toggle map icons",
+					"Shift-left-click to toggle them for this zone only",
+					"Right-click for what to show",
 				}
-				tAppendAll(button.options.help, default_help)
+				if core.debuggable then
+					table.insert(button.options.help, "Shift-right-click to view debug information")
+				end
 			end
 		else
 			button.options.help = {
@@ -274,6 +289,9 @@ function module:SetupWorldMap()
 			end
 			overlay:UpdateWorldMapIcons()
 			self:Refresh()
+			return
+		end
+		if overlay and mButton == "RightButton" and not IsShiftKeyDown() and module:ShowWorldMapMenu(self) then
 			return
 		end
 		dataobject.OnClick(self, mButton)

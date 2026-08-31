@@ -5,6 +5,8 @@ local module = core:GetModule("Overlay")
 local Debug = core.Debug
 local ns = core.NAMESPACE
 
+local _, myfullname = C_AddOns.GetAddOnInfo("SilverDragon")
+
 -- Both map sections offer this, and quest/achievement completion is shown either
 -- way, so it's only ever about the loot.
 local function lootSelect(order)
@@ -159,6 +161,13 @@ function module:RegisterConfig()
                         },
                         order = 20,
                     },
+                    emphasize = {
+                        type = "toggle",
+                        name = "Emphasize notable",
+                        desc = "Make the icons bigger for anything that still has something on it for you: a mount, an unfinished achievement, or loot you don't have. Useful when the map is showing emptied or finished ones alongside.",
+                        width = "full",
+                        order = 30,
+                    },
                     unhide = {
                         type = "execute",
                         name = "Reset hidden nodes",
@@ -203,13 +212,6 @@ function module:RegisterConfig()
                             ["completion"] = "What's left on it",
                         },
                         order = 50,
-                    },
-                    emphasize = {
-                        type = "toggle",
-                        name = "Emphasize notable",
-                        desc = "Make the icons bigger for anything that still has something on it for you: a mount, an unfinished achievement, or loot you don't have. Useful when the map is showing emptied or finished ones alongside.",
-                        width = "full",
-                        order = 60,
                     },
                 },
                 order = 10,
@@ -303,4 +305,84 @@ function module:RegisterConfig()
             },
         },
     }, }
+end
+
+-- The "what to display" options as a right-click menu. The broker module hangs
+-- this off its world-map button; keeping it here means it stays in step with the
+-- options above. Worldmap/minimap tuning is left out -- fiddly, and rarely
+-- touched -- so those wait on the full panel.
+local unsureTip = "Nothing to judge by: no tracking quest, no achievement, no known loot. Shown by default, as with announcements."
+local menuKinds = {
+    {name = "Rares", show = "showMobs", filter = "filter", showTip = "Put rare mobs on the map",
+     also = {
+        {key = "showUnknown", text = "...and unsure ones", tip = unsureTip},
+        {key = "showNothing", text = "...and emptied ones", tip = "Still there to kill, but with nothing on it for you right now."},
+        {key = "showDone", text = "...and finished ones", tip = "Nothing left at all: the achievement is done, or the tracking quest is complete."},
+     },
+     achless = {key = "achievementless", text = "Non-achievement rares", tip = "Rares that aren't part of any known achievement."}},
+    {name = "Treasures", show = "showTreasures", filter = "filterTreasure", showTip = "Put treasures on the map",
+     also = {
+        {key = "showUnknownTreasure", text = "...and unsure ones", tip = unsureTip},
+        {key = "showNothingTreasure", text = "...and emptied ones", tip = "A repeatable treasure with nothing in it for you right now."},
+        {key = "showDoneTreasure", text = "...and looted ones", tip = "Nothing left: a one-time treasure you've opened, or its achievement is done."},
+     },
+     achless = {key = "achievementlessTreasure", text = "Non-achievement treasures", tip = "Treasures that aren't part of any known achievement."}},
+}
+
+local function displayMenu(owner, rootDescription)
+    local odb = module.db.profile
+
+    rootDescription:SetTag("MENU_SILVERDRAGON_OVERLAY_DISPLAY")
+    rootDescription:CreateTitle(myfullname)
+
+    local function toggle(parent, text, key, tip, enabled)
+        local item = parent:CreateCheckbox(text,
+            function() return odb[key] end,
+            function() odb[key] = not odb[key]; module:Update() end)
+        item:SetTitleAndTextTooltip(nil, tip)
+        if enabled == false then item:SetEnabled(false) end
+        return item
+    end
+    local function filterRadios(parent, key, enabled)
+        local function on(v) return function() return odb[key] == v end end
+        -- close after a pick: the "also show" rows enable and disable with the
+        -- filter, and they're only rebuilt when the menu reopens
+        local function pick(v) return function() odb[key] = v; module:Update(); return MenuResponse.Close end end
+        local a = parent:CreateRadio("Notable ones", on("notable"), pick("notable"))
+        local b = parent:CreateRadio("All of them", on("everything"), pick("everything"))
+        a:SetTitleAndTextTooltip(nil, "Just the ones that still have a mount, an unfinished achievement, or loot you don't have. What counts is set under Notability.")
+        b:SetTitleAndTextTooltip(nil, "Every one in the zone, whatever's left on it.")
+        if enabled == false then a:SetEnabled(false) b:SetEnabled(false) end
+    end
+
+    for _, k in ipairs(menuKinds) do
+        local root = toggle(rootDescription, k.name, k.show, k.showTip)
+        -- as in the options: the "also show" rows do nothing while everything's
+        -- already showing, and nothing at all while the kind is switched off
+        local also = odb[k.show] and odb[k.filter] ~= "everything"
+        filterRadios(root, k.filter, odb[k.show])
+        root:CreateDivider()
+        for _, row in ipairs(k.also) do
+            toggle(root, row.text, row.key, row.tip, also)
+        end
+        root:CreateDivider()
+        toggle(root, k.achless.text, k.achless.key, k.achless.tip, odb[k.show])
+    end
+
+    toggle(rootDescription, "Emphasize notable", "emphasize",
+        "Bigger icons for anything with a mount, an unfinished achievement, or loot you're missing.")
+
+    rootDescription:CreateDivider()
+    rootDescription:CreateButton("Open settings", function()
+        local config = core:GetModule("Config", true)
+        if not config then return end
+        config:ShowConfig()
+        LibStub("AceConfigDialog-3.0"):SelectGroup("SilverDragon", "overlay")
+    end)
+end
+
+function module:ShowDisplayMenu(owner)
+    if not (_G.MenuUtil and MenuUtil.CreateContextMenu) then return false end
+    MenuUtil.CreateContextMenu(owner, displayMenu)
+    return true
 end
