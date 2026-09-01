@@ -1,0 +1,6 @@
+# Files copied from ../HandyNotes_TreasureHunter by bin/syncdata.sh.
+# Paths are relative to that plugin's root.
+
+zones/*
+features/Mounts.lua
+features/Pepe.lua

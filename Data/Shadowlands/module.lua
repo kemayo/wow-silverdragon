@@ -7,10 +7,6 @@ end
 
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 
--- Rares, treasures and mob data, curated in SilverDragon's own shape. The ids
--- come from constants.lua; the zone point data below is copied out of
--- HandyNotes_WarWithin (see Data/WarWithin/sync.files). ns.RegisterPoints and
--- friends are wired to core in systems/_glue.lua.
 ns.BeginDataModule("Shadowlands")
 
 core:RegisterMobData("Shadowlands", {
