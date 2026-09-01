@@ -335,38 +335,39 @@ local function displayMenu(owner, rootDescription)
     rootDescription:SetTag("MENU_SILVERDRAGON_OVERLAY_DISPLAY")
     rootDescription:CreateTitle(myfullname)
 
+    -- enabled is a predicate, not a value: the menu polls it, so a row greys out
+    -- the moment the toggle it depends on changes, without reopening the menu
     local function toggle(parent, text, key, tip, enabled)
         local item = parent:CreateCheckbox(text,
             function() return odb[key] end,
             function() odb[key] = not odb[key]; module:Update() end)
         item:SetTitleAndTextTooltip(nil, tip)
-        if enabled == false then item:SetEnabled(false) end
+        if enabled then item:SetEnabled(enabled) end
         return item
     end
     local function filterRadios(parent, key, enabled)
         local function on(v) return function() return odb[key] == v end end
-        -- close after a pick: the "also show" rows enable and disable with the
-        -- filter, and they're only rebuilt when the menu reopens
-        local function pick(v) return function() odb[key] = v; module:Update(); return MenuResponse.Close end end
+        local function pick(v) return function() odb[key] = v; module:Update(); return MenuResponse.Refresh end end
         local a = parent:CreateRadio("Notable ones", on("notable"), pick("notable"))
         local b = parent:CreateRadio("All of them", on("everything"), pick("everything"))
         a:SetTitleAndTextTooltip(nil, "Just the ones that still have a mount, an unfinished achievement, or loot you don't have. What counts is set under Notability.")
         b:SetTitleAndTextTooltip(nil, "Every one in the zone, whatever's left on it.")
-        if enabled == false then a:SetEnabled(false) b:SetEnabled(false) end
+        if enabled then a:SetEnabled(enabled) b:SetEnabled(enabled) end
     end
 
     for _, k in ipairs(menuKinds) do
-        local root = toggle(rootDescription, k.name, k.show, k.showTip)
+        local kindOn = function() return odb[k.show] end
         -- as in the options: the "also show" rows do nothing while everything's
         -- already showing, and nothing at all while the kind is switched off
-        local also = odb[k.show] and odb[k.filter] ~= "everything"
-        filterRadios(root, k.filter, odb[k.show])
+        local alsoOn = function() return odb[k.show] and odb[k.filter] ~= "everything" end
+        local root = toggle(rootDescription, k.name, k.show, k.showTip)
+        filterRadios(root, k.filter, kindOn)
         root:CreateDivider()
         for _, row in ipairs(k.also) do
-            toggle(root, row.text, row.key, row.tip, also)
+            toggle(root, row.text, row.key, row.tip, alsoOn)
         end
         root:CreateDivider()
-        toggle(root, k.achless.text, k.achless.key, k.achless.tip, odb[k.show])
+        toggle(root, k.achless.text, k.achless.key, k.achless.tip, kindOn)
     end
 
     toggle(rootDescription, "Emphasize notable", "emphasize",
