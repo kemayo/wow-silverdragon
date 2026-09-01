@@ -1,5 +1,4 @@
-local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
-local ns = core.NAMESPACE
+local myname, ns = ...
 
 ns.MapSystem = {}
 

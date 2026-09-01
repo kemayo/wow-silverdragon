@@ -1,11 +1,20 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 
-<Script file="_scaffolding.lua"/>
+<!-- Shared between the handler and SilverDragon; loads before either host's code. -->
+
 <Script file="class.lua"/>
+<Script file="formatting.lua"/>
 <Script file="conditions.lua"/>
+<Script file="foldconditions.lua"/>
+<Script file="areapoi.lua"/>
+<Script file="notable.lua"/>
+
 <Script file="rewards\base.lua"/>
 <Script file="rewards\item.lua"/>
-<Script file="_glue.lua"/>
+<Script file="rewards\upgradeloot.lua"/>
+
+<Script file="map\pins.lua"/>
+<Script file="map\lines.lua"/>
 
 </Ui>

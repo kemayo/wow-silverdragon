@@ -68,11 +68,9 @@ ns.SUPERRARE = ns.SUPERRARE or function(point)
     return point
 end
 
--- foldConditions splits a point's gates into `requires` (hidden now) and
--- `hide_before` (hidden until). SilverDragon has no "until" state -- both just
--- hide -- so core folds the two together with this. Each side is a bare
--- condition or a plain AND-list by the time it gets here; an or-group has to
--- stay wrapped so its members aren't ANDed with everything else.
+-- foldConditions leaves gates split across `requires` and `hide_before`;
+-- SilverDragon has no "until" state, so AND them into one. An or-group stays
+-- wrapped so it isn't flattened into the AND.
 function ns.combineRequires(a, b)
     if not a then return b end
     if not b then return a end

@@ -1,11 +1,8 @@
 local myname, ns = ...
 
--- ns.foldConditions(zone, point): collapse the pre-ns.conditions point keys
--- (requires_item, requires_buff, art, poi, faction, level, ...) into
--- point.requires and point.hide_before as condition objects, at registration.
--- One path for "can this be seen" instead of a dozen near-identical checks in
--- should_show_point. Called from points.lua's registerPoint; kept in its own
--- file so SilverDragon can sync it.
+-- These keys all predate ns.conditions, and each grew its own check in
+-- should_show_point. Folding them into requires at registration leaves one
+-- path for "can this be seen" rather than a dozen near-identical ones.
 do
 	-- Each takes either a single value or a list, and what a list means isn't
 	-- the same for all of them, so the default is spelled out per key.

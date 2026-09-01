@@ -1,7 +1,6 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-  <Script file="system/pins.lua"/>
-  <Script file="system/lines.lua"/>
+  <!-- ns.MapSystem moved to the main addon's systems/map/ -->
   <Script file="module.lua"/>
   <Script file="pins.lua"/>
   <Script file="worldmap.lua"/>

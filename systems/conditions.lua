@@ -52,6 +52,8 @@ do
 	-- A miss and a cached nil have to be distinguishable
 	local NOTHING = {}
 	local cache = {}
+	-- systems loads before the host now, so don't assume it seeded this
+	ns.run_caches = ns.run_caches or {}
 	ns.run_caches.conditions = cache
 	-- Wiping every frame means a result can't outlive the draw that asked for
 	-- it, and wiping early would only ever cost a re-check, never correctness.

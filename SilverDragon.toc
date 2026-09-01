@@ -37,17 +37,9 @@ embeds.xml
 # the core
 core.lua
 
-# systems
+# systems: _scaffolding shims, then the shared systems.xml, then _glue
 systems\_scaffolding.lua
-systems\class.lua
-systems\formatting.lua
-systems\areapoi.lua
-systems\conditions.lua
-systems\foldconditions.lua
-systems\rewards\base.lua
-systems\rewards\item.lua
-systems\rewards\upgradeloot.lua
-systems\notable.lua
+systems\systems.xml
 systems\_glue.lua
 
 shards.lua
