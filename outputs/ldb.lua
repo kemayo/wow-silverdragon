@@ -533,20 +533,20 @@ do
 				end
 			end
 			if ns.mobdb[mobid].requires then
-			    local metRequirements = ns.conditions.check(ns.mobdb[mobid].requires)
-			    local r, g, b = (metRequirements and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
-			    GameTooltip:AddLine(
-			        core:RenderString(ns.conditions.summarize(ns.mobdb[mobid].requires), ns.mobdb[mobid]),
-			        r, g, b, true
-			    )
+			    local summary = ns.conditions.summarize(ns.mobdb[mobid].requires)
+			    if summary then
+			        local metRequirements = ns.conditions.check(ns.mobdb[mobid].requires)
+			        local r, g, b = (metRequirements and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+			        GameTooltip:AddLine(core:RenderString(summary, ns.mobdb[mobid]), r, g, b, true)
+			    end
 			end
 			if ns.mobdb[mobid].active then
-			    local isActive = ns.conditions.check(ns.mobdb[mobid].active)
-			    local r, g, b = (isActive and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
-			    GameTooltip:AddLine(
-			        core:RenderString(ns.conditions.summarize(ns.mobdb[mobid].active), ns.mobdb[mobid]),
-			        r, g, b, true
-			    )
+			    local summary = ns.conditions.summarize(ns.mobdb[mobid].active)
+			    if summary then
+			        local isActive = ns.conditions.check(ns.mobdb[mobid].active)
+			        local r, g, b = (isActive and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+			        GameTooltip:AddLine(core:RenderString(summary, ns.mobdb[mobid]), r, g, b, true)
+			    end
 			end
 		end
 		if not _G.C_TooltipInfo then

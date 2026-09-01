@@ -420,11 +420,12 @@ function DetailMixin:SetMob(id)
 		table.insert(meta, ("|cffff3333Every rare from %s is ignored|r"):format(data.source))
 	end
 	for _, field in ipairs({"requires", "active"}) do
-		if data[field] then
+		local summary = data[field] and core.conditions.summarize(data[field])
+		if summary then
 			local met = core.conditions.check(data[field])
 			table.insert(meta, ("|cff%s%s|r"):format(
 				met and "33ff33" or "ff3333",
-				core:RenderString(core.conditions.summarize(data[field]), data)
+				core:RenderString(summary, data)
 			))
 		end
 	end

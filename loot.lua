@@ -298,10 +298,11 @@ ns.Loot.Details = {}
 
 local showRestrictions = function(tooltip, item)
 	if not ns.IsA(item, ns.rewards.Reward) then return end
-	if item.requires then
+	local summary = item.requires and core.conditions.summarize(item.requires)
+	if summary then
 		local active = core.conditions.check(item.requires)
 		tooltip:AddLine(
-			core:RenderString(core.conditions.summarize(item.requires)),
+			core:RenderString(summary),
 			(active and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
 		)
 	end

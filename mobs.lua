@@ -7,10 +7,9 @@ local module = core:NewModule("Mobs", "AceConsole-3.0")
 local Debug = core.Debug
 
 local function toggle_mob_desc(id)
-	if ns.mobdb[id] and ns.mobdb[id].requires then
-		return core:RenderString(
-			string.format("ID: %d, %s", id, core.conditions.summarize(ns.mobdb[id].requires))
-		)
+	local summary = ns.mobdb[id] and ns.mobdb[id].requires and core.conditions.summarize(ns.mobdb[id].requires)
+	if summary then
+		return core:RenderString(string.format("ID: %d, %s", id, summary))
 	end
 	return "ID: " .. id
 end
