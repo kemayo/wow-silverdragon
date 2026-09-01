@@ -237,10 +237,6 @@ function addon:RegisterTreasureData(source, data, updated)
 	end
 end
 do
-	-- HandyNotes' point.faction means "faction required to see this". SilverDragon's
-	-- own data.faction means the opposite, "faction this belongs to", so flip it here.
-	local opposingFaction = {Horde="Alliance", Alliance="Horde"}
-
 	-- a treasure can have several vignettes, the same as a mob can. module.lua
 	-- loads before the zone files, so last-wins lets a zone entry -- which is
 	-- coord-keyed and has real locations -- replace a barer curated one.
@@ -253,9 +249,10 @@ do
 	-- Fold my HandyNotes plugin point format into datasources/treasuresources.
 	-- The field mapping is the `data` table below; the non-obvious parts: a point
 	-- with `npc` is a rare and most everything else we take is a treasure (see
-	-- the guard below), a treasure is keyed by its vignette if it has one and by
-	-- zone+coord if it doesn't, `requires` also answers to the older name
-	-- `hide_before`, and `faction` is flipped (see above).
+	-- the guard below), and a treasure is keyed by its vignette if it has one and
+	-- by zone+coord if it doesn't. ns.foldConditions turns the older visibility
+	-- keys (faction, level, requires_item, art, poi, ...) into conditions on
+	-- `requires`/`hide_before`, which combineRequires then merges into one gate.
 	--
 	-- `atlas`/`texture`/`scale` are only honoured for treasures. Rares draw from
 	-- MobState, which ranks what's left on them, and a fixed icon would hide that.
@@ -276,6 +273,7 @@ do
 			-- map once its knowable loot is collected. Points with none of these
 			-- are flightpaths, portals and map links, which aren't ours to show.
 			if point.npc or point.vignette or point.quest or point.criteria or point.achievement or point.loot then
+				ns.foldConditions(uiMapID, point)
 				local data = {
 					name=point.label,
 					locations={[uiMapID]={coord}},
@@ -283,13 +281,12 @@ do
 					loot_shared=point.loot_shared,
 					notes=point.note,
 					active=point.active,
-					requires=point.requires or point.hide_before,
+					requires=ns.combineRequires(point.requires, point.hide_before),
 					vignette=point.vignette,
 					quest=point.quest,
 					hidden=point.hidden,
 					worldquest=point.worldquest,
 					achievement=point.achievement, criteria=point.criteria,
-					faction=point.faction and opposingFaction[point.faction],
 					atlas=point.atlas, texture=point.texture, scale=point.scale,
 				}
 				-- variations on "also register this elsewhere":
@@ -394,13 +391,14 @@ do
 			end
 			for vignetteID, point in pairs(vignettes) do
 				if not point.hidden then
+					ns.foldConditions(uiMapID, point)
 					local data = {
 						name=point.label,
 						loot=point.loot,
 						loot_shared=point.loot_shared,
 						notes=point.note,
 						active=point.active,
-						requires=point.requires or point.hide_before,
+						requires=ns.combineRequires(point.requires, point.hide_before),
 						vignette=vignetteID,
 						quest=point.quest,
 						worldquest=point.worldquest,

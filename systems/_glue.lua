@@ -68,6 +68,29 @@ ns.SUPERRARE = ns.SUPERRARE or function(point)
     return point
 end
 
+-- foldConditions splits a point's gates into `requires` (hidden now) and
+-- `hide_before` (hidden until). SilverDragon has no "until" state -- both just
+-- hide -- so core folds the two together with this. Each side is a bare
+-- condition or a plain AND-list by the time it gets here; an or-group has to
+-- stay wrapped so its members aren't ANDed with everything else.
+function ns.combineRequires(a, b)
+    if not a then return b end
+    if not b then return a end
+    local out = {}
+    local function append(gate)
+        if ns.IsObject(gate) then
+            out[#out + 1] = gate
+        elseif gate.any then
+            out[#out + 1] = ns.conditions.Any(unpack(gate))
+        else
+            for _, condition in ipairs(gate) do out[#out + 1] = condition end
+        end
+    end
+    append(a)
+    append(b)
+    return out
+end
+
 -- Each Data/<Expansion>/module.lua names its source once, then RegisterPoints
 -- and RegisterVignettes feed core under that name. A nil source (the file's
 -- gate failed, wrong expansion for this client) makes both a no-op so the

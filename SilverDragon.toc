@@ -43,6 +43,7 @@ systems\class.lua
 systems\formatting.lua
 systems\areapoi.lua
 systems\conditions.lua
+systems\foldconditions.lua
 systems\rewards\base.lua
 systems\rewards\item.lua
 systems\rewards\upgradeloot.lua
