@@ -71,7 +71,7 @@ local itemBindOnEquip = function(item)
 		-- minute after a login is a worse trade than an extra mention.
 		return true
 	end
-	return bindType == Enum.ItemBind.OnEquip or bindType == Enum.ItemBind.OnUse
+	return bindType == Enum.ItemBind.OnEquip or bindType == Enum.ItemBind.OnUse or bindType == Enum.ItemBind.None
 end
 
 ns.Loot = {}
