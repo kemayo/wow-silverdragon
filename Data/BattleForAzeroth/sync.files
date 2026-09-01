@@ -1,0 +1,5 @@
+# Files copied from ../HandyNotes_BattleForAzerothTreasures by bin/syncdata.sh.
+# Paths are relative to that plugin's root.
+
+zones/*
+achievements/UnboundMonstrosities.lua

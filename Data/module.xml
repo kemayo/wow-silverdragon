@@ -5,13 +5,13 @@
   <Script file="BurningCrusade/module.lua [AllowLoadGameType mainline, mists, cata, wrath, tbc]"/>
   <Script file="Wrath/module.lua [AllowLoadGameType mainline, mists, cata, wrath]"/>
   <Script file="Cataclysm/module.lua [AllowLoadGameType mainline, mists, cata]"/>
-  <Script file="BattleForAzeroth/module.lua [AllowLoadGameType mainline]"/>
 
   <!-- Expansions synced from the HandyNotes plugins have more than one file;
        each keeps its own load list. -->
   <Include file="Mists/module.xml [AllowLoadGameType mainline, mists]"/>
   <Include file="Warlords/module.xml [AllowLoadGameType mainline]"/>
   <Include file="Legion/module.xml [AllowLoadGameType mainline]"/>
+  <Include file="BattleForAzeroth/module.xml [AllowLoadGameType mainline]"/>
   <Include file="Dragonflight/module.xml [AllowLoadGameType mainline]"/>
   <Include file="WarWithin/module.xml [AllowLoadGameType mainline]"/>
   <Include file="Midnight/module.xml [AllowLoadGameType mainline]"/>
