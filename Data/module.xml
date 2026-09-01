@@ -8,7 +8,6 @@
   <Script file="Warlords/module.lua [AllowLoadGameType mainline]"/>
   <Script file="Legion/module.lua [AllowLoadGameType mainline]"/>
   <Script file="BattleForAzeroth/module.lua [AllowLoadGameType mainline]"/>
-  <Script file="Shadowlands/module.lua [AllowLoadGameType mainline]"/>
 
   <!-- Expansions synced from the HandyNotes plugins have more than one file;
        each keeps its own load list. -->
@@ -16,4 +15,5 @@
   <Include file="Dragonflight/module.xml [AllowLoadGameType mainline]"/>
   <Include file="WarWithin/module.xml [AllowLoadGameType mainline]"/>
   <Include file="Midnight/module.xml [AllowLoadGameType mainline]"/>
+  <Include file="Shadowlands/module.xml [AllowLoadGameType mainline]"/>
 </Ui>

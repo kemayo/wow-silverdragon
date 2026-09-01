@@ -88,3 +88,4 @@ end
 -- sometimes expects to call it to suppress its map-button appearing in
 -- mostly-unrelated zones.
 ns.suppressoverlay = {}
+ns.groups = {}
