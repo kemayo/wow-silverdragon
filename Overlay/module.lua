@@ -318,20 +318,22 @@ function module:ShowTooltip(pin)
             end
         end
         if data.requires then
-            local metRequirements = ns.conditions.check(data.requires)
-            local r, g, b = (metRequirements and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
-            tooltip:AddLine(
-                core:RenderString(ns.conditions.summarize(data.requires), data),
-                r, g, b, true
-            )
+            -- summarize is nil when every condition is SILENT (e.g. a lone
+            -- MapArt from a folded `art` key); nothing to say, so no line
+            local summary = ns.conditions.summarize(data.requires)
+            if summary then
+                local metRequirements = ns.conditions.check(data.requires)
+                local r, g, b = (metRequirements and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+                tooltip:AddLine(core:RenderString(summary, data), r, g, b, true)
+            end
         end
         if data.active then
-            local isActive = ns.conditions.check(data.active)
-            local r, g, b = (isActive and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
-            tooltip:AddLine(
-                core:RenderString(ns.conditions.summarize(data.active), data),
-                r, g, b, true
-            )
+            local summary = ns.conditions.summarize(data.active)
+            if summary then
+                local isActive = ns.conditions.check(data.active)
+                local r, g, b = (isActive and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+                tooltip:AddLine(core:RenderString(summary, data), r, g, b, true)
+            end
         end
     else
         tooltip:AddLine(UNKNOWN)

@@ -263,6 +263,7 @@ local function safe_render_replacer(...)
 end
 local function render_string(s, context)
 	if type(s) == "function" then s = s(context) end
+	if not s then return end
 	return s:gsub("{([^:}]+):([^:}]+):?([^}]*)}", safe_render_replacer)
 end
 local function cache_string(s, context)
