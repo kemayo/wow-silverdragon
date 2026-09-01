@@ -228,6 +228,16 @@ local function render_replacer(variant, id, fallback)
 			return info.professionName
 		end
 	elseif variant == "zone" or variant == "map" then
+		if subvariant == "group" then
+			local groupID = C_Map.GetMapGroupID(id)
+			if groupID then
+				for _, groupInfo in ipairs(C_Map.GetMapGroupMembersInfo(groupID)) do
+					if groupInfo.mapID == id then
+						return groupInfo.name
+					end
+				end
+			end
+		end
 		local info = C_Map.GetMapInfo(id)
 		if info and info.name then
 			return info.name
