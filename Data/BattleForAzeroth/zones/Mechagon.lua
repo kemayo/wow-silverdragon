@@ -82,7 +82,7 @@ ns.RegisterPoints(1462, { -- Mechagon
     [56803990] = {quest=55515, npc=151296, loot={{168492, quest=55071}}, criteria=45129}, -- OOX-Avenger/MG
     [53003300] = {quest=55539, npc=151308, loot={{169688, quest=56515}}, criteria=45131}, -- Boggac Skullbash
     [35804300] = {quest=55514, npc=151569, loot={{167836, quest=55057}}, criteria=45128}, -- Deepwater Maw
-    [71204840] = {quest=55364, npc=151623, loot={{167846, quest=55061}, 168435}, criteria=45118}, -- The Scrap King
+    [71204840] = {quest=55364, npc=151625, loot={{167846, quest=55061}, 168435}, criteria=45118}, -- The Scrap King
     [59806080] = {quest=55859, npc=151627, loot={{168248, quest=55068}, {167794, quest=55454}}, criteria=45156}, -- Mr. Fixthis
     [86801940] = {quest=55386, npc=151672, loot={{169393, pet=2720}}, criteria=45119}, -- Mecharantula
     [75404400] = {quest=55399, npc=151684, loot=nil, criteria=45121}, -- Jawbreaker

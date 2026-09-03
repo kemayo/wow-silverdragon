@@ -9,6 +9,8 @@ local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 
 ns.BeginDataModule("BattleForAzeroth")
 
+local ULDUM_NZOTH = core.conditions.WorldQuestActive(57157)
+
 core:RegisterMobData("BattleForAzeroth", {
 	[128578] = {name="Zujothgul",locations={[863]={39454969},},loot={161101},notes="World Quest",quest=50460,hidden=true,},
 	[129027] = {name="Golanar",locations={[864]={57000620},},loot={160972},notes="World Quest",quest=51157,tameable=463493,hidden=true,},
@@ -166,6 +168,12 @@ core:RegisterMobData("BattleForAzeroth", {
 	[155838] = {name="Incantatrix Vazina",locations={[1355]={78805040},},quest=56895,hidden=true,},
 	[155840] = {name="Warlord Zalzjar",locations={[1355]={47403220},},hidden=true,},
 	[155841] = {name="Shadowbinder Athissa",locations={[1355]={73403140},},hidden=true,},
+	[157390] = {name="R'oyolok the Reality Eater",locations={[1527]={49608020,50408740,55207920},},requires=ULDUM_NZOTH,quest=57434,},
+	[157469] = {name="Zoth'rum the Intellect Pillager",locations={[1527]={49807960,50208720,55607900},},requires=ULDUM_NZOTH,quest=57435,},
+	[157470] = {name="R'aas the Anima Devourer",locations={[1527]={49808040,50208720},},requires=ULDUM_NZOTH,quest=57436,},
+	[157472] = {name="Aphrom the Guise of Madness",locations={[1527]={49207840,49408680,54407940},},requires=ULDUM_NZOTH,quest=57437,},
+	[157473] = {name="Yiphrim the Will Ravager",locations={[1527]={50007860,50408800,55207940},},loot={{174874,toy=true,}},requires=ULDUM_NZOTH,quest=57438,},
+	[157476] = {name="Shugshul the Flesh Gorger",locations={[1527]={49407900,50608720,54407960},},requires=ULDUM_NZOTH,quest=57439,},
 	[158632] = {name="Corrupted Fleshbeast",locations={[1527]={},},quest=58691,hidden=true,},
-	[160631] = {name="Hungering Miasma",locations={[1527]={60003940},},--[[requires=ULDUM_NZOTH,]]quest=58206,hidden=true,},
+	[160631] = {name="Hungering Miasma",locations={[1527]={60003940},},requires=ULDUM_NZOTH,quest=58206,hidden=true,},
 }, true)

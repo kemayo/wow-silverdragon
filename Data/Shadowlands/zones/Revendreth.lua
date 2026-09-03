@@ -848,7 +848,7 @@ ns.RegisterPoints(1525, {
         quest=58259,
         npc=160821,
         loot={
-            {180583, quest=61188}, -- Impressionable Gorger Spawn
+            {180583, quest=61188, mount=1391}, -- Impressionable Gorger Spawn
         },
         note="Use {item:173939} from nearby mobs near braziers. There's strong speculation that completing {quest:60480:The Endmire} @ 65 63 is needed for the drop.",
     },
