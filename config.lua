@@ -45,11 +45,12 @@ local options = {
 						"If you want to adjust the way the targeting popup appears, go to the \"ClickTarget\" "..
 						"section.\n\n"..
 						"If you want to change how you're told about seeing a rare, check out the "..
-						"\"Outputs\" section.\n\n"..
+						"\"Announcements\" section.\n\n"..
 						"If you want to add a custom mob to scan for, look at \"Custom\" in the \"Mobs\" "..
 						"section.\n\n"..
 						"If you want SilverDragon to please, please stop telling you about a certain "..
-						"mob, look at \"Ignore\" in the \"Mobs\" section."),
+						"mob, look at \"Ignore\" in the \"Mobs\" section.\n\n"..
+						"The same but about a treasure is in \"Scanning\" > \"Vignettes\"."),
 			},
 			order = 0,
 		},
@@ -58,14 +59,11 @@ local options = {
 			name = "General",
 			order = 10,
 			args = {
-				about = desc("SilverDragon wants to tell you things. Check out the sub-sections here to adjust how it does that.", 0),
 				loot = {
 					type = "group",
 					name = "Loot",
 					inline = true,
-					-- last: both of these are fine-tuning, and everything the
-					-- modules add to this section matters more than they do
-					order = 110,
+					order = 10,
 					args = {
 						about = desc("Some options for how SilverDragon will treat loot drops from mobs", 0),
 						charloot = toggle("Current character only", "Only count loot that should drop for your current character towards a rare being worth announcing. The loot window still shows everything, with what won't drop for you moved to its own section.", 10),
@@ -81,12 +79,7 @@ local options = {
 		notable = {
 			type = "group",
 			name = "Notability",
-			order = 15,
-			-- One shared definition of "worth your attention": the announcement
-			-- filter, the map overlay and the click-target macro all ask it.
-			-- Deliberately not greyed out when neither filter is set to "notable" --
-			-- Mount still decides which sightings earn the mount sound and flash,
-			-- and hiding a control that's still working is worse than leaving it.
+			order = 13,
 			args = {
 				about = desc("These decide what SilverDragon treats as worth your attention. The announcement filter, the map overlay and the click-target macro all ask the same question.", 0),
 				achievement_notable = toggle(_G.TRANSMOG_SOURCE_5 or ACHIEVEMENTS or "Achievement", "Count unearned achievement-progress as notable", 10),
@@ -97,6 +90,15 @@ local options = {
 				decor_notable = toggle(_G.BINDING_TAG_DECOR or "Decor", "Count unfound decor as notable loot", 60, nil, not _G.BINDING_TAG_DECOR),
 				quest_notable = toggle("Quest-attached", "Count items with attached uncompleted quests as notable loot (this includes a lot of \"learnable\" items, weekly reputation drops, etc)", 70),
 				alts_achievements_count = toggle("An alt counts", "Treat an achievement one of your other characters has completed as done, rather than as something still to earn", 80),
+			},
+			plugins = {},
+		},
+		announcements = {
+			type = "group",
+			name = "Announcements",
+			order = 17,
+			args = {
+				about = desc("SilverDragon wants to tell you when it sees a rare. These options set how it does that.", 0),
 			},
 			plugins = {},
 		},

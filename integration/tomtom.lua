@@ -23,7 +23,7 @@ function module:OnInitialize()
 
 	local config = core:GetModule("Config", true)
 	if config then
-		config.options.plugins.tomtom = {
+		config.options.args.announcements.plugins.tomtom = {
 			tomtom = {
 				type = "group",
 				name = "Waypoints",
@@ -42,11 +42,19 @@ function module:OnInitialize()
 							loot = config.toggle("Loot", "Make a waypoint for loot", 27),
 						},
 					},
+					outputs = {
+						type = "group",
+						inline = true,
+						name = "Where to make them...",
+						order = 27,
+						args = {
+							blizzard = config.toggle("Use built-in", "Use the built-in Blizzard waypoints", 40),
+							mappinenhanced = config.toggle("Use MapPinEnhanced", "If MapPinEnhanced is installed, use it", 50, nil, function() return not MapPinEnhanced end),
+							tomtom = config.toggle("Use TomTom", "If TomTom is installed, use it", 60, nil, function() return not TomTom end),
+							dbm = config.toggle("Use DeadlyBossMods", "If DeadlyBossMods is installed, use it", 70, nil, function() return not DBM end),
+						},
+					},
 					whiledead = config.toggle("While dead", "...even when you're dead", 30),
-					blizzard = config.toggle("Use built-in", "Use the built-in Blizzard waypoints", 40),
-					mappinenhanced = config.toggle("Use MapPinEnhanced", "If MapPinEnhanced is installed, use it", 50, nil, function() return not MapPinEnhanced end),
-					tomtom = config.toggle("Use TomTom", "If TomTom is installed, use it", 60, nil, function() return not TomTom end),
-					dbm = config.toggle("Use DeadlyBossMods", "If DeadlyBossMods is installed, use it", 70, nil, function() return not DBM end),
 					replace = config.toggle("Replace waypoints", "Replace an existing waypoint if one is set", 80),
 					duration = {
 						type = "range",

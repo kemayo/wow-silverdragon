@@ -73,6 +73,7 @@ function module:OnInitialize()
 					ignore = {
 						type="group",
 						name=IGNORE,
+						inline = true,
 						args={
 							desc = config.desc("These lists will fill in as vignettes are announced. Check a box, and we'll remember to never announce that specific vignette again.", 0),
 							type = {

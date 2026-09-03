@@ -239,9 +239,9 @@ function module:OnInitialize()
 		local filter_sorting = {"none", "notable", "everything"}
 
 		local options = {
-			general = {
-				type = "group", name = "Announcements", inline = true,
-				order = 10,
+			filter = {
+				type = "group", name = "Filters", inline = true,
+				order = 5,
 				get = get, set = set,
 				args = {
 					filter = {
@@ -421,7 +421,7 @@ function module:OnInitialize()
 				type = "group", name = "Controller",
 				get = get, set = set,
 				disabled = function(info) return info[#info] ~= "controller" and not C_GamePad.IsEnabled() end,
-				order = 15,
+				order = 150,
 				args = {
 					about = config.desc("Vibrate a connected controller when a rare is seen. Only works if controller support is enabled. You can turn it on by typing `/console GamePadEnable 1` in the chat box.", 0),
 				},
@@ -466,7 +466,7 @@ function module:OnInitialize()
 		order = vibrate_section(options.controller.args, "boss", order, "Vibrate for bosses")
 		order = vibrate_section(options.controller.args, "loot", order, "Vibrate for loot")
 
-		config.options.args.general.plugins.announce = options
+		config.options.args.announcements.plugins.announce = options
 	end
 end
 

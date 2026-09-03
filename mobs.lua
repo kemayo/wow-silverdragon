@@ -128,7 +128,7 @@ function module:OptionsRequested(callback, options)
 					name = "Sources",
 					order = 0,
 					args = {
-						about = core:GetModule("Config").desc("Where SilverDragon gets its rares from. Both of these reach the whole addon, not just one part of it.", 0),
+						about = core:GetModule("Config").desc("Where SilverDragon gets its rares from.", 0),
 						open = {
 							type = "execute",
 							name = "Browse rares",
