@@ -419,6 +419,27 @@ do
         return subordinate
     end
 
+    -- My HandyNotes plugins name their own copy of this workaround the same
+    -- way, and our data is synced from theirs, so the same vignette often has
+    -- both of us reaching for the identical spot below GameTooltip. Stack under
+    -- whichever of theirs is already showing instead of covering it.
+    local function findSiblingSubordinateTooltip()
+        local lowest, lowestBottom
+        for i = 1, C_AddOns.GetNumAddOns() do
+            local name = C_AddOns.GetAddOnInfo(i)
+            if name and name ~= myname then
+                local sibling = _G[name.."SubordinateTooltip"]
+                if type(sibling) == "table" and sibling.IsShown and sibling:IsShown() then
+                    local bottom = sibling:GetBottom() -- lower on screen = smaller Y
+                    if bottom and (not lowestBottom or bottom < lowestBottom) then
+                        lowest, lowestBottom = sibling, bottom
+                    end
+                end
+            end
+        end
+        return lowest
+    end
+
     local handleWorldMapPin = function(pin)
         if not pin then return end
         if already then return end
@@ -434,7 +455,7 @@ do
             tooltip = getSubordinateTooltip()
             tooltip:SetOwner(GameTooltip, "ANCHOR_NONE")
             tooltip:ClearAllPoints()
-            tooltip:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 0, -10)
+            tooltip:SetPoint("TOPLEFT", findSiblingSubordinateTooltip() or GameTooltip, "BOTTOMLEFT", 0, -10)
         elseif _G[myname.."SubordinateTooltip"] then
             _G[myname.."SubordinateTooltip"]:Hide()
         end
