@@ -236,7 +236,7 @@ ns.RegisterPoints(554, {
 -- once-per-character, and a daily. Daily only triggers on your second kill.
 
 ns.RegisterPoints(554, { -- Timeless Isle
-    [56633595] = { label="Archiereus of Flame +4",
+    [56633595] = { label="Archiereus of Flame",
         additional={48203320, 49602200, 58202490},
         quest=33312, -- first:33288
         criteria=31, -- API says 0 for its ID, maybe because of the two npc ids?
@@ -328,7 +328,7 @@ ns.RegisterPoints(554, { -- Timeless Isle
         },
         vignette=85,
     },
-    [55913785] = { label="Flintlord Gairan +4",
+    [55913785] = { label="Flintlord Gairan",
         additional={40202580,43803320,46203920,48803700},
         quest=33309, -- first:33285
         criteria=23995,
@@ -356,7 +356,7 @@ ns.RegisterPoints(554, { -- Timeless Isle
             104263, -- Glinting Pile of Stone
         },
     },
-    [40208280] = { label="Gu'chi the Swarmbringer +5",
+    [40208280] = { label="Gu'chi the Swarmbringer",
         quest=33294, -- first: 33260
         criteria=23970,
         npc=72909,
@@ -503,7 +503,7 @@ ns.RegisterPoints(554, { -- Timeless Isle
     achievement=8714, -- Timeless Champion
 })
 ns.RegisterPoints(554, { -- Timeless Isle
-    [30805060] = { label="Emerald Gander +11",
+    [30805060] = { label="Emerald Gander",
         quest=33295, -- first: 33261
         criteria=23967,
         npc=73158,
@@ -512,7 +512,7 @@ ns.RegisterPoints(554, { -- Timeless Isle
         },
         note="Rare spawn of {npc:72762:Brilliant Windfeather}",
     },
-    [23604980] = { label="Great Turtle Furyshell +6",
+    [23604980] = { label="Great Turtle Furyshell",
         quest=33297, -- first: 33272
         criteria=23969,
         npc=73161,
@@ -521,7 +521,7 @@ ns.RegisterPoints(554, { -- Timeless Isle
         },
         note="Rare spawn of {npc:72764:Great Turtle}",
     },
-    [29206320] = { label="Imperial Python +10",
+    [29206320] = { label="Imperial Python",
         quest=33303, -- first: 33278
         criteria=23989,
         npc=73163,
@@ -531,13 +531,13 @@ ns.RegisterPoints(554, { -- Timeless Isle
         },
         note="Rare spawn of {npc:72841:Death Adder}",
     },
-    [31805840] = { label="Ironfur Steelhorn +9",
+    [31805840] = { label="Ironfur Steelhorn",
         quest=33296, -- first: 33270
         criteria=23968,
         npc=73160,
         note="Rare spawn of {npc:72844:Ironfur Great Bull}",
     },
-    [18805460] = { label="Monstrous Spineclaw +14",
+    [18805460] = { label="Monstrous Spineclaw",
         quest=33302, -- first: 33277
         criteria=23985,
         npc=73166,
@@ -561,7 +561,7 @@ ns.RegisterPoints(555, { -- Cavern of Lost Spirits
             104313, -- Golden Moss
         },
     },
-    [47806180] = { label="Spirit of Jadefire +7",
+    [47806180] = { label="Spirit of Jadefire",
         quest=33293, -- first: 33259
         npc=72769,
         loot={

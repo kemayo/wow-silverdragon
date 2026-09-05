@@ -38,7 +38,7 @@ ns.RegisterPoints(390, { -- Vale of Eternal Blossoms
         },
         vignette=107,
     },
-    [37535721] = { label="Moldo One-Eye +2",
+    [37535721] = { label="Moldo One-Eye",
         quest=nil,
         criteria=21096,
         npc=50806,

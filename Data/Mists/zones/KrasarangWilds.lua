@@ -27,7 +27,7 @@ ns.RegisterPoints(418, { -- Krasarang Wilds
         criteria=21057,
         npc=50768,
     },
-    [53403860] = { label="Gaarn the Toxic +2",
+    [53403860] = { label="Gaarn the Toxic",
         quest=nil,
         criteria=21071,
         npc=50340,
