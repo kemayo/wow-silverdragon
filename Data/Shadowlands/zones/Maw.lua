@@ -440,7 +440,7 @@ ns.RegisterPoints(1543, {
         },
         --level=60,
     },
-    [40695512] = { label="Valis the Cruel",
+    [40705962] = { label="Valis the Cruel",
         achievement=14660, criteria=49492,
         quest=61728,
         npc=173086,
