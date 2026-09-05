@@ -11,7 +11,8 @@
 # the plugin checkout, sorted, in place. `#` comments and blank lines are
 # ignored. Files land verbatim except that a `[coord] = { -- Some Name` label
 # comment becomes a real `label="Some Name"` key, so the Browser has names
-# without a live lookup.
+# without a live lookup. The miner's ` +N` "has N other coordinates" tag is
+# dropped from the name first.
 #
 # module.lua (the curated RegisterMobData/RegisterTreasureData) is
 # SilverDragon-specific and never written here. module.xml is regenerated from
@@ -84,6 +85,9 @@ fi
 # `[12345678] = { -- Some Name`  ->  `[12345678] = { label="Some Name",`
 # The plugin convention is exactly `{ -- Name`; require the space so `--- x`
 # and `{ --note` stay comments, and skip names with a quote in them.
+# striptag runs first: the miner ends the comment with ` +N` when the mob has N
+# other coordinates, which is a reader's note, not part of the name.
+striptag='s|^([[:space:]]*\[[0-9]+\][[:space:]]*=[[:space:]]*\{[[:space:]]*-- [^"]*[^"[:space:]])[[:space:]]+\+[0-9]+[[:space:]]*$|\1|'
 labelfix='s|^([[:space:]]*\[[0-9]+\][[:space:]]*=[[:space:]]*\{)[[:space:]]*-- ([^"]*[^"[:space:]])[[:space:]]*$|\1 label="\2",|'
 
 for rel in "${files[@]}"; do
@@ -96,7 +100,7 @@ for rel in "${files[@]}"; do
 	if [ "$rel" = "constants.lua" ]; then
 		tr -d '\r' < "$PLUGIN/$rel" > "$DEST/$rel"
 	else
-		sed -E "$labelfix" "$PLUGIN/$rel" | tr -d '\r' > "$DEST/$rel"
+		sed -E -e "$striptag" -e "$labelfix" "$PLUGIN/$rel" | tr -d '\r' > "$DEST/$rel"
 	fi
 done
 
