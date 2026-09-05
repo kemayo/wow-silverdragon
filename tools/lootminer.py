@@ -37,9 +37,14 @@ session.mount('https://', HTTPAdapter(max_retries=retries))
 session.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0'})
 
 
+def log(*args):
+    """Progress and diagnostics, kept off stdout so that stays the output."""
+    print(*args, file=sys.stderr)
+
+
 def fetch(url, timeout=15):
-    """Get a page, or stop. Progress goes to stderr to keep stdout for output."""
-    print("Fetching", url, file=sys.stderr)
+    """Get a page, or stop."""
+    log("Fetching", url)
     r = session.get(url, timeout=timeout)
     if r.status_code != 200:
         # Every parse here reads a page it does not understand as an absence:
@@ -62,7 +67,7 @@ def __keysort(k):
 
 
 def additemdata(item, base="https://wowhead.com"):
-    print("additemdata", item)
+    log("additemdata", item)
     item = normalizeitem(item)
 
     r = fetch(f"{base}/item={item[1]}")
@@ -82,7 +87,7 @@ def additemdata(item, base="https://wowhead.com"):
     if m := re.search(r"new Listview\({\n\s*template: 'quest'.+?id: 'provided-for',.+?data: .+?\"id\":(\d+),", r.text, re.DOTALL):
         item["quest"] = int(m.group(1))
     elif m := re.search(r"\(WH\.enhanceTooltip\.bind\(tt\)\)\([^\)]+?\[(\d+)\]", r.text, re.DOTALL):
-        print("found a spell, checking for quest")
+        log("found a spell, checking for quest")
         rs = fetch(f"{base}/spell={m.group(1)}")
         # this might be fragile, but...
         if m2 := re.search(r'Complete Quest.+?href="/quest=(\d+)"', rs.text):
@@ -152,10 +157,10 @@ def fetchnpc(npc, loot_filter="source", base="https://wowhead.com"):
     if m := re.search(r"^\$.extend\(g_npcs\[\d+], ?({.+})\);?$", r.text, re.MULTILINE):
         data = yaml.load(m.group(1), Loader=Loader)
         if data["id"] != npc:
-            print("couldn't find npc data in g_npcs")
+            log("couldn't find npc data in g_npcs")
             return False
     else:
-        print("couldn't find g_npc data")
+        log("couldn't find g_npc data")
         return False
 
     # var g_mapperData = {"16943":[{"count":31,"coords":[[48.4,47.6],[48.4,49.2]]}]};
@@ -172,7 +177,7 @@ def fetchnpc(npc, loot_filter="source", base="https://wowhead.com"):
                         locationdata["coords"] = [pack_coords(coord[0]/100, coord[1]/100) for coord in locationdata["coords"]]
                         data["locations"].append(locationdata)
                     else:
-                        print("No locationdata")
+                        log("No locationdata")
 
     if m := re.search(r"^new Listview\({template: 'item', id: 'drops',.*data:(\[.+\])}\);$", r.text, re.MULTILINE):
         lootdata = yaml.load(m.group(1).replace("undefined", "null"), Loader=Loader)
@@ -181,7 +186,7 @@ def fetchnpc(npc, loot_filter="source", base="https://wowhead.com"):
             if isvaliddrop(npc, loot, loot_filter):
                 data["loot"].append(loot["id"])
     else:
-        print("No drops")
+        log("No drops")
 
     return data
 
@@ -234,11 +239,11 @@ def update(f):
             try:
                 data = lua.loadtable(match.group(2))
             except SyntaxError as e:
-                print("Skipping", npcid)
+                log("Skipping", npcid)
                 output.append(line)
                 continue
 
-            print("Loading", npcid, data["name"])
+            log("Loading", npcid, data["name"])
             remote = fetchnpc(int(npcid))
 
             loot = data.get("loot", [])
@@ -267,13 +272,13 @@ def export(inf, outf, hn=False, local=False):
             try:
                 data = lua.loadtable(match.group(2))
             except SyntaxError as e:
-                print("Skipping", npcid)
+                log("Skipping", npcid)
                 continue
 
             if local:
                 data["loot"] = [normalizeitem(item) for item in data.get("loot", [])]
             else:
-                print("Loading", npcid, data["name"])
+                log("Loading", npcid, data["name"])
                 remote = fetchnpc(int(npcid))
 
                 loot = data.get("loot", [])
@@ -357,13 +362,13 @@ if __name__ == '__main__':
         for npcid in npcids:
             npc = fetchnpc(npcid, args.loot_filter, base)
             if not npc:
-                print("couldn't fetch", npcid)
+                log("couldn't fetch", npcid)
                 continue
             if args.only_with_loot and not npc.get("loot", False):
-                print("skipping no-loot")
+                log("skipping no-loot")
                 continue
             if args.only_with_location and not npc.get("locations", False):
-                print("skipping no-location")
+                log("skipping no-location")
                 continue
             if "loot" in npc:
                 npc["loot"] = [additemdata(item, base) for item in npc["loot"]]
@@ -398,9 +403,9 @@ if __name__ == '__main__':
     else:
         for f in glob.glob(args.input, recursive=True):
             if args.export:
-                print("Exporting", f)
+                log("Exporting", f)
                 export(f, args.export, hn=args.export_handynotes, local=args.local)
             else:
-                print("Updating", f)
+                log("Updating", f)
                 update(f)
 

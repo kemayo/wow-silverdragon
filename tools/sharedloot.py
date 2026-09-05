@@ -7,7 +7,6 @@ exact set of NPCs that drop it, and can print the result as Lua.
 """
 
 import argparse
-import contextlib
 import re
 import sys
 import textwrap
@@ -19,7 +18,7 @@ try:
 except ImportError:
     from yaml import Loader
 
-from lootminer import fetch, additemdata, cleanloot, __keysort
+from lootminer import fetch, log, additemdata, cleanloot, __keysort
 from npc import lua
 
 # Trade goods and quest items are rarely worth a tooltip line.
@@ -60,13 +59,13 @@ def fetchdrops(npc, base):
         data = yaml.load(m.group(1), Loader=Loader)
         if data["id"] != npc:
             # The era sites reuse ids, so a mismatch means we asked the wrong site
-            print(f"  ignoring: {base} has npc {data['id']} under that id", file=sys.stderr)
+            log(f"  ignoring: {base} has npc {data['id']} under that id")
             return None, {}
         name = data.get("name", name)
 
     m = re.search(r"^new Listview\({template: 'item', id: 'drops',.*data:(\[.+\])}\);$", r.text, re.MULTILINE)
     if not m:
-        print("  no drops listed", file=sys.stderr)
+        log("  no drops listed")
         return name, {}
 
     drops = [Drop(d, npc) for d in yaml.load(m.group(1).replace("undefined", "null"), Loader=Loader)]
@@ -203,9 +202,7 @@ def lua_items(items, holders, indent, args):
     for perNpc in items:
         item = {1: perNpc[0].id}
         if args.enrich:
-            # additemdata chatters on stdout, which is where the Lua goes
-            with contextlib.redirect_stdout(sys.stderr):
-                item = additemdata(item, args.base)
+            item = additemdata(item, args.base)
         name = item.pop("name", perNpc[0].name)
         serialized = lua.serialize(cleanloot(item), key=__keysort, trailingcomma=True)
         lines.append(f"{indent}{serialized}, -- {name}{partial(perNpc, holders)}\n")
