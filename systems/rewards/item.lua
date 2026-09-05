@@ -33,7 +33,12 @@ end
 function ns.rewards.Item:TooltipLabel()
 	local _, itemType, itemSubtype, equipLoc, icon, classID, subclassID = C_Item.GetItemInfoInstant(self.id)
 	local label = ENCOUNTER_JOURNAL_ITEM
-	if classID == Enum.ItemClass.Armor and subclassID ~= Enum.ItemArmorSubclass.Shield then
+		if
+		-- Although shields are armor, just saying "shield" looks better than the equipLoc of "offhand"
+		classID == Enum.ItemClass.Armor and subclassID ~= Enum.ItemArmorSubclass.Shield and
+		-- this one becomes "", which messes with tooltips, and the itemSubtype of Miscellaneous is generally better
+		equipLoc ~= "INVTYPE_NON_EQUIP_IGNORE"
+	then
 		label = _G[equipLoc] or label
 		if materials[subclassID] and equipLoc ~= "INVTYPE_CLOAK" then
 			label = TEXT_MODE_A_STRING_VALUE_TYPE:format(label, itemSubtype)
@@ -43,6 +48,10 @@ function ns.rewards.Item:TooltipLabel()
 	end
 	if label and ns.IsCosmeticItem(self.id) then
 		label = TEXT_MODE_A_STRING_VALUE_TYPE:format(label, self.COSMETIC_COLOR:WrapTextInColorCode(ITEM_COSMETIC))
+	end
+		if label == "" then
+		-- just to avoid this being truthy
+		return nil
 	end
 	return label
 end
