@@ -1,5 +1,26 @@
 # Changelog
 
+## Changed in v2026.32
+
+* The map overlay now shows treasures as well as rares, from the same data as my HandyNotes treasure plugins
+* "What to display" for rares and treasures is now: show all of them, or just the ones that still have something for you
+* Treasure icons are coloured by what's left in them now, the way rare icons already were -- this matters most for repeatable treasures that come back each week
+* New "Emphasize notable" option, to make the icons bigger for anything that still has a mount, an unfinished achievement, or loot you're missing
+* Right-clicking SilverDragon's icon in the world map header now opens a menu of the rares and treasures display options, rather than going straight to the settings
+* "What's notable?" has moved out of General and into its own top-level "Notability" section
+* Overlay tooltips:
+    * Quest and achievement completion is always shown now
+    * "Completion" and "Popout loot window" have become a single "Show loot" choice: in the tooltip, in a popout window, both, or neither
+    * "Regular loot" moved to the Tooltips options, where it now covers mouseover tooltips as well -- those always listed everything before
+* Loot window:
+    * Loot that's notable is marked with a coloured frame
+    * Classic: item borders are coloured by quality, the way they already were on retail
+* Classic: fix locations for Clutchmother Zavas, Tsu'zee, Lord Hel'nurath
+* Bugfixes:
+    * Overlay: the "something you want" icon in the stars theme is a star again
+    * Several attempts to avoid secret-taint with some 12.1 adjustments
+    * Items that didn't bind at all weren't counting as "sellable duplicates"; I'm looking at you, Nok-Karosh
+
 ## Changed in v2026.31
 
 * Announcements: overlapping sounds are no longer completely suppressed. The exact same sound cannot play simultaneously, but if you see e.g. a rare and a mount-rare and a piece of junk loot all at the same time they'll all play
