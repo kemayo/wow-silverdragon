@@ -230,8 +230,9 @@ local function render_replacer(variant, id, fallback)
 	elseif variant == "zone" or variant == "map" then
 		if subvariant == "group" then
 			local groupID = C_Map.GetMapGroupID(id)
+			-- GetMapGroupMembersInfo can come back nil rather than an empty table
 			if groupID then
-				for _, groupInfo in ipairs(C_Map.GetMapGroupMembersInfo(groupID)) do
+				for _, groupInfo in ipairs(C_Map.GetMapGroupMembersInfo(groupID) or {}) do
 					if groupInfo.mapID == id then
 						return groupInfo.name
 					end
