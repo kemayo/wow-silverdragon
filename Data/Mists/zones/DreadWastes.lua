@@ -29,6 +29,9 @@ ns.RegisterPoints(422, { -- Dread Wastes
         quest=nil,
         criteria=21102,
         npc=50334,
+        loot={
+            86567, -- Yaungol Wind Chime
+        },
     },
     [35603060] = { label="Gar'lok",
         quest=nil,
@@ -76,6 +79,9 @@ ns.RegisterPoints(422, { -- Dread Wastes
         quest=nil,
         criteria=21095,
         npc=50805,
+        loot={
+            86585, -- Golden Fleece
+        },
     },
 }, {
     achievement=7439, -- Glorious!

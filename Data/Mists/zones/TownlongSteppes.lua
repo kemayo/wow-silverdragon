@@ -34,6 +34,9 @@ ns.RegisterPoints(388, { -- Townlong Steppes
         quest=nil,
         criteria=21080,
         npc=50355,
+        loot={
+            87218, -- Big Bag of Arms
+        },
     },
     [41807860] = { label="Lith'ik the Stalker",
         quest=nil,
@@ -47,6 +50,9 @@ ns.RegisterPoints(388, { -- Townlong Steppes
         quest=nil,
         criteria=21101,
         npc=50333,
+        loot={
+            87219, -- Huge Bag of Herbs
+        },
     },
     [53806340] = { label="Norlaxx",
         quest=nil,
@@ -60,6 +66,9 @@ ns.RegisterPoints(388, { -- Townlong Steppes
         quest=nil,
         criteria=21094,
         npc=50791,
+        loot={
+            87223, -- Big Bag of Skins
+        },
     },
     [67607420] = { label="The Yowler",
         quest=nil,

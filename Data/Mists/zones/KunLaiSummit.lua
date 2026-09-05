@@ -49,6 +49,9 @@ ns.RegisterPoints(379, { -- Kun-Lai Summit
         quest=nil,
         criteria=21072,
         npc=50341,
+        loot={
+            86570, -- Crate of Kidnapped Puppies
+        },
         vignette=152,
     },
     [59357376] = { label="Havak",

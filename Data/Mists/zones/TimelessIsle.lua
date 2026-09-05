@@ -604,6 +604,7 @@ ns.RegisterPoints(555, { -- Cavern of Lost Spirits
         npc=73157,
         loot={
             104313, -- Golden Moss
+            104312, -- Strange Glowing Mushroom
         },
     },
     [47806180] = { label="Spirit of Jadefire",

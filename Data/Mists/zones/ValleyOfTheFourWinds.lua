@@ -86,6 +86,9 @@ ns.RegisterPoints(376, { -- Valley of the Four Winds
         quest=nil,
         criteria=21070,
         npc=50339,
+        loot={
+            86569, -- Crystal of Insanity
+        },
     },
 }, {
     achievement=7439, -- Glorious!

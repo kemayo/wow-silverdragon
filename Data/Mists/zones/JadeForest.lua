@@ -41,41 +41,65 @@ ns.RegisterPoints(371, { -- The Jade Forest
         quest=nil,
         criteria=21055,
         npc=50750,
+        loot={
+            87649, -- Pool-Stirrer
+        },
     },
     [52004460] = { label="Ferdinand",
         quest=nil,
         criteria=21097,
         npc=51078,
+        loot={
+            87652, -- Ook-Breaker Mace
+        },
     },
     [43407640] = { label="Kor'nas Nightsavage",
         quest=nil,
         criteria=21069,
         npc=50338,
+        loot={
+            87642, -- Darkstaff of Annihilation
+        },
     },
     [39406240] = { label="Krax'ik",
         quest=nil,
         criteria=21062,
         npc=50363,
+        loot={
+            87646, -- Needlefang Throatripper
+        },
     },
     [42403880] = { label="Mister Ferocious",
         quest=nil,
         criteria=21048,
         npc=50823,
+        loot={
+            87652, -- Ook-Breaker Mace
+        },
     },
     [40801520] = { label="Morgrinn Crackfang",
         quest=nil,
         criteria=21076,
         npc=50350,
+        loot={
+            87643, -- Fangcracker Battlemace
+        },
     },
     [64407400] = { label="Sarnak",
         quest=nil,
         criteria=21090,
         npc=50782,
+        loot={
+            87650, -- Fishsticker Crossbow
+        },
     },
     [57207160] = { label="Urobi the Walker",
         quest=nil,
         criteria=21083,
         npc=50808,
+        loot={
+            87651, -- Pathwalker Greatstaff
+        },
     },
 }, {
     achievement=7439, -- Glorious!

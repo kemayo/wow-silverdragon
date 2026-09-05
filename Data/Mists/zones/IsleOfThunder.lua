@@ -102,6 +102,8 @@ ns.RegisterPoints(504, { -- Isle of Thunder
         npc=70530,
         loot={
             95566, -- Ra'sha's Sacrificial Dagger
+            94159, -- Small Bag of Zandalari Supplies
+            94158, -- Big Bag of Zandalari Supplies
         },
         path=40658016,
         vignette=96,
