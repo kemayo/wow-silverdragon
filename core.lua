@@ -348,10 +348,32 @@ do
 					if not existing then
 						addon.datasources[source][point.npc] = data
 					else
-						-- Same mob in another zone: the plugins split a roaming
-						-- rare (the Zandalari scouts) across one point per zone,
-						-- each with its own coords and route.
+						-- Same mob, another point
+						if existing.requires ~= data.requires then
+							-- If conditions differ between points, record that for later display
+							existing.locationRequires = existing.locationRequires or {}
+							if existing.requires ~= nil then
+								for tzone, coords in pairs(existing.locations) do
+									local gated = existing.locationRequires[tzone] or {}
+									existing.locationRequires[tzone] = gated
+									for _, c in ipairs(coords) do
+										if gated[c] == nil then gated[c] = existing.requires end
+									end
+								end
+								existing.requires = nil
+							end
+							if data.requires ~= nil then
+								for tzone, coords in pairs(data.locations) do
+									local gated = existing.locationRequires[tzone] or {}
+									existing.locationRequires[tzone] = gated
+									for _, c in ipairs(coords) do
+										gated[c] = data.requires
+									end
+								end
+							end
+						end
 						if not existing.locations[uiMapID] then
+							-- e.g. Zandalari Warscout in Mists is in multiple zones
 							existing.locations[uiMapID] = data.locations[uiMapID]
 						else
 							for _, pcoord in ipairs(data.locations[uiMapID]) do
@@ -703,11 +725,19 @@ do
 		return phased and poiPresent
 	end
 end
+-- A mob merged from several HandyNotes points can gate individual coordinates
+-- rather than the whole mob (see RegisterHandyNotesData).
+function addon:CoordGateMet(data, zone, coord)
+	local gated = data and data.locationRequires and data.locationRequires[zone]
+	gated = gated and gated[coord]
+	return not gated or ns.conditions.check(gated)
+end
+
 -- Returns id, addon:GetMobInfo(id)
 function addon:GetMobByCoord(zone, coord, include_ignored)
 	if not mobsByZone[zone] then return end
 	for id, locations in pairs(mobsByZone[zone]) do
-		if locations[coord] and self:IsMobInPhase(id, zone) and (include_ignored or not self:ShouldIgnoreMob(id)) then
+		if locations[coord] and self:CoordGateMet(mobdb[id], zone, coord) and self:IsMobInPhase(id, zone) and (include_ignored or not self:ShouldIgnoreMob(id)) then
 			return id, self:GetMobInfo(id)
 		end
 	end

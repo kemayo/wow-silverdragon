@@ -201,7 +201,9 @@ do
                     scale = (scale or 1) * 1.3
                 end
                 for coord in pairs(coords) do
-                    coroutine.yield(coord, pointType, id, icon, scale, alpha)
+                    if core:CoordGateMet(data, uiMapID, coord) then
+                        coroutine.yield(coord, pointType, id, icon, scale, alpha)
+                    end
                 end
             end
         end
