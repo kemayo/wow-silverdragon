@@ -50,9 +50,9 @@ function module:OnInitialize()
             -- Unsure ones show by default, as with announcements.
             showMobs = true,
             filter = 'notable', -- notable / everything
-            showUnknown = true,
-            showNothing = false,
-            showDone = false,
+            showUnknown = true, -- no data about loot/completion
+            showNothing = false, -- nothing notable remaining
+            showDone = true, -- quest-complete (achivement is in showNothing)
             achievementless = true,
             hidden = {},
             showTreasures = true,
