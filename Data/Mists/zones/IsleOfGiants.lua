@@ -13,10 +13,7 @@ ns.RegisterPoints(507, { -- Isle of Giants
     [77608220] = { label="War-God Dokah",
         quest=nil,
         npc=70096,
-        loot={
-            94159, -- Small Bag of Zandalari Supplies
-            94158, -- Big Bag of Zandalari Supplies
-        },
+        loot_shared=ns.zandalari_loot,
     },
     [32685411] = { label="Ku'ma",
         label="{npc:70022:Ku'ma}",

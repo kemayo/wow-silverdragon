@@ -57,6 +57,9 @@ ns.RegisterPoints(504, { -- Isle of Thunder
     },
 }, {
     achievement=8103, -- Champions of Lei Shen
+    loot_shared={
+        94222, -- Key to the Palace of Lei Shen
+    },
 })
 ns.RegisterPoints(505, { -- Lightning Vein Mine
     [33802760] = { label="Backbreaker Uru",
@@ -66,6 +69,10 @@ ns.RegisterPoints(505, { -- Lightning Vein Mine
         vignette=170,
         parent=true,
     },
+}, {
+    loot_shared={
+        94222, -- Key to the Palace of Lei Shen
+    },
 })
 ns.RegisterPoints(506, { -- The Swollen Vault
     [36003250] = { label="Molthor",
@@ -74,6 +81,10 @@ ns.RegisterPoints(506, { -- The Swollen Vault
         npc=70003,
         vignette=172,
         -- not parent, because we want to have the main map point as the door
+    },
+}, {
+    loot_shared={
+        94222, -- Key to the Palace of Lei Shen
     },
 })
 

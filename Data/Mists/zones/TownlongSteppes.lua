@@ -79,6 +79,14 @@ ns.RegisterPoints(388, { -- Townlong Steppes
     },
 }, {
     achievement=7439, -- Glorious!
+    loot_shared={
+        87217, -- Small Bag of Goods
+        87622, -- Yoke of Niuzao
+        87623, -- Razor-Sharp Chitin Choker
+        87624, -- Yaungol Mist-Shaman's Amulet
+        87625, -- Congealed Mist Amulet
+        87626, -- Suna's Shattered Locket
+    },
 })
 ns.RegisterPoints(388, { -- Townlong Steppes
     [36408540] = { label="Zandalari Warbringer",
@@ -89,16 +97,14 @@ ns.RegisterPoints(388, { -- Townlong Steppes
             {94229,mount=535,}, -- Reins of the Slate Primordial Direhorn
             {94231,mount=536,}, -- Reins of the Jade Primordial Direhorn
         },
+        loot_shared=ns.zandalari_loot,
         atlas="VignetteKillElite", scale=1.2,
         vignette=163,
     },
     [48808460] = { label="Zandalari Warscout",
         quest=nil,
         npc=69768,
-        loot={
-            94159, -- Small Bag of Zandalari Supplies
-            94158, -- Big Bag of Zandalari Supplies
-        },
+        loot_shared=ns.zandalari_loot,
         routes={
             {48808460, 46808960, 43609080, 40808980, 37008480, 40008040, 40407740, 44207480, 47407440, 49407320},
         },

@@ -67,14 +67,6 @@ ns.RegisterPoints(371, { -- The Jade Forest
         criteria=21076,
         npc=50350,
     },
-    [32206500] = { label="Nasra Spothide",
-        quest=nil,
-        criteria=21084,
-        npc=50811,
-        loot={
-            86587, -- Seed of Tranquil Growth
-        },
-    },
     [64407400] = { label="Sarnak",
         quest=nil,
         criteria=21090,
@@ -87,6 +79,18 @@ ns.RegisterPoints(371, { -- The Jade Forest
     },
 }, {
     achievement=7439, -- Glorious!
+    loot_shared={
+        87217, -- Small Bag of Goods
+        87586, -- Forest Trickster's Leggings
+        87587, -- Orchard Tender's Leggings
+        87588, -- Leggings of Spiritsong Melody
+        87589, -- Leggings of Fractured Reflection
+        87590, -- Jade Heart Leggings
+        87591, -- Tian Trainee Leggings
+        87592, -- Grookin' Grookin' Trousers
+        87593, -- Gan Shi Warlord Legguards
+        87594, -- Leggings of Forgotten War
+    },
 })
 ns.RegisterPoints(371, { -- The Jade Forest
     [52401880] = { label="Zandalari Warbringer",
@@ -97,16 +101,14 @@ ns.RegisterPoints(371, { -- The Jade Forest
             {94229,mount=535,}, -- Reins of the Slate Primordial Direhorn
             {94231,mount=536,}, -- Reins of the Jade Primordial Direhorn
         },
+        loot_shared=ns.zandalari_loot,
         atlas="VignetteKillElite", scale=1.2,
         vignette=163,
     },
     [50803680] = { label="Zandalari Warscout",
         quest=nil,
         npc=69768,
-        loot={
-            94159, -- Small Bag of Zandalari Supplies
-            94158, -- Big Bag of Zandalari Supplies
-        },
+        loot_shared=ns.zandalari_loot,
         routes={
             {50803680, 53003460, 52603260, 54202760, 52802380, 53001960, 47602100, 45401740, 43201720},
         },

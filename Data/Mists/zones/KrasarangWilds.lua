@@ -60,6 +60,18 @@ ns.RegisterPoints(418, { -- Krasarang Wilds
     },
 }, {
     achievement=7439, -- Glorious!
+    loot_shared={
+        87217, -- Small Bag of Goods
+        87604, -- Beachcomber's Hat
+        87605, -- Crest of the Red Crane
+        87606, -- Tidehunter Helm
+        87607, -- Unearthed Dojani Headcover
+        87608, -- Korjan Mystic's Hood
+        87609, -- Brushstalker Helm
+        87610, -- Deepwild Hunting Helm
+        87611, -- Shen-zin Shell Headguard
+        87612, -- Ancient Krasari Helm
+    },
 })
 
 ns.RegisterPoints(418, { -- Krasarang Wilds
@@ -127,6 +139,9 @@ ns.RegisterPoints(418, { -- Krasarang Wilds
 }, {
     art=499,
     achievement=7932,
+    loot_shared={
+        87217, -- Small Bag of Goods
+    },
 })
 
 ns.RegisterPoints(418, { -- Krasarang Wilds
@@ -138,16 +153,14 @@ ns.RegisterPoints(418, { -- Krasarang Wilds
             {94229,mount=535,}, -- Reins of the Slate Primordial Direhorn
             {94231,mount=536,}, -- Reins of the Jade Primordial Direhorn
         },
+        loot_shared=ns.zandalari_loot,
         atlas="VignetteKillElite", scale=1.2,
         vignette=163,
     },
     [20004060] = { label="Zandalari Warscout",
         quest=nil,
         npc=69768,
-        loot={
-            94159, -- Small Bag of Zandalari Supplies
-            94158, -- Big Bag of Zandalari Supplies
-        },
+        loot_shared=ns.zandalari_loot,
         routes={
             {20004060,25604140,31004680,36005840,38606440,42805860,50404120,51202900,57802920},
         },

@@ -163,6 +163,49 @@ ns.RegisterPoints(554, { -- Timeless Isle
 
 -- Rares
 
+-- The armour is tokens, which the per-character loot filter cannot narrow down
+-- the way it narrows normal gear, so all 36 pieces would show for everybody.
+-- They stay here commented out until LibArmorToken can sort them.
+local timeless_loot = {
+    103982, -- Burden of Eternity
+    -- 102318, -- Timeless Cloak
+    -- 102291, -- Timeless Signet
+    -- 104345, -- Timeless Lavalliere
+    -- 104347, -- Timeless Curio
+    -- 102263, -- Timeless Plate Chestpiece
+    -- 102264, -- Timeless Plate Boots
+    -- 102265, -- Timeless Plate Gloves
+    -- 102266, -- Timeless Plate Helm
+    -- 102267, -- Timeless Plate Leggings
+    -- 102268, -- Timeless Plate Spaulders
+    -- 102269, -- Timeless Plate Belt
+    -- 102320, -- Timeless Plate Bracers
+    -- 102270, -- Timeless Mail Chestpiece
+    -- 102271, -- Timeless Mail Boots
+    -- 102272, -- Timeless Mail Gloves
+    -- 102273, -- Timeless Mail Helm
+    -- 102274, -- Timeless Mail Leggings
+    -- 102275, -- Timeless Mail Spaulders
+    -- 102276, -- Timeless Mail Belt
+    -- 102323, -- Timeless Mail Bracers
+    -- 102277, -- Timeless Leather Chestpiece
+    -- 102278, -- Timeless Leather Boots
+    -- 102279, -- Timeless Leather Gloves
+    -- 102280, -- Timeless Leather Helm
+    -- 102281, -- Timeless Leather Leggings
+    -- 102282, -- Timeless Leather Spaulders
+    -- 102283, -- Timeless Leather Belt
+    -- 102322, -- Timeless Leather Bracers
+    -- 102284, -- Timeless Cloth Robes
+    -- 102285, -- Timeless Cloth Boots
+    -- 102286, -- Timeless Cloth Gloves
+    -- 102287, -- Timeless Cloth Helm
+    -- 102288, -- Timeless Cloth Leggings
+    -- 102289, -- Timeless Cloth Spaulders
+    -- 102290, -- Timeless Cloth Belt
+    -- 102321, -- Timeless Cloth Bracers
+}
+
 ns.RegisterPoints(554, {
     [55001810] = { label="Ordos",
         achievement=8533,
@@ -501,6 +544,7 @@ ns.RegisterPoints(554, { -- Timeless Isle
     },
 }, {
     achievement=8714, -- Timeless Champion
+    loot_shared=timeless_loot,
 })
 ns.RegisterPoints(554, { -- Timeless Isle
     [30805060] = { label="Emerald Gander",
@@ -550,6 +594,7 @@ ns.RegisterPoints(554, { -- Timeless Isle
     },
 }, {
     achievement=8714, -- Timeless Champion
+    loot_shared=timeless_loot,
     note="Kill similar mobs nearby until it spawns",
 })
 ns.RegisterPoints(555, { -- Cavern of Lost Spirits
@@ -571,4 +616,5 @@ ns.RegisterPoints(555, { -- Cavern of Lost Spirits
     },
 }, {
     achievement=8714, -- Timeless Champion
+    loot_shared=timeless_loot,
 })

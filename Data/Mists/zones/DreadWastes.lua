@@ -79,6 +79,18 @@ ns.RegisterPoints(422, { -- Dread Wastes
     },
 }, {
     achievement=7439, -- Glorious!
+    loot_shared={
+        87217, -- Small Bag of Goods
+        87627, -- Kunchong Carapace Chestguard
+        87628, -- Spinebreaker Chestpiece
+        87629, -- Chestplate of Manifest Dread
+        87630, -- Chestpiece of Twinkling Stars
+        87631, -- Jiao-Skin Tunic
+        87632, -- Fearsworn Chestpiece
+        87633, -- Sharkskin Armor
+        87634, -- Mazu's Robe
+        87635, -- Amber-Starched Robes
+    },
 })
 
 ns.RegisterPoints(422, { -- Dread Wastes
@@ -90,16 +102,14 @@ ns.RegisterPoints(422, { -- Dread Wastes
             {94229,mount=535,}, -- Reins of the Slate Primordial Direhorn
             {94231,mount=536,}, -- Reins of the Jade Primordial Direhorn
         },
+        loot_shared=ns.zandalari_loot,
         atlas="VignetteKillElite", scale=1.2,
         vignette=163,
     },
     [37004820] = { label="Zandalari Warscout",
         quest=nil,
         npc=69768,
-        loot={
-            94159, -- Small Bag of Zandalari Supplies
-            94158, -- Big Bag of Zandalari Supplies
-        },
+        loot_shared=ns.zandalari_loot,
         routes={
             {57606600, 53606660, 50006480, 48406100, 47006080, 45405600, 43005160, 37004820},
         },

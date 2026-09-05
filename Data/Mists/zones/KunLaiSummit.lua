@@ -106,6 +106,18 @@ ns.RegisterPoints(379, { -- Kun-Lai Summit
     },
 }, {
     achievement=7439, -- Glorious!
+    loot_shared={
+        87217, -- Small Bag of Goods
+        87613, -- Frozen Zandalari Bracer
+        87614, -- Kafa Picker's Bracers
+        87615, -- Yakwasher's Bracers
+        87616, -- Mountain Trailblazer's Cuffs
+        87617, -- Bracers of the Serene Mountaintop
+        87618, -- Ice Encrusted Bracer
+        87619, -- Terracotta Guardian's Bracer
+        87620, -- Bracers of the Frozen Summit
+        87621, -- Wristguards of Great Fortune
+    },
 })
 
 ns.RegisterPoints(379, { -- Kun-Lai Summit
@@ -117,15 +129,13 @@ ns.RegisterPoints(379, { -- Kun-Lai Summit
             {94229,mount=535,}, -- Reins of the Slate Primordial Direhorn
             {94231,mount=536,}, -- Reins of the Jade Primordial Direhorn
         },
+        loot_shared=ns.zandalari_loot,
         atlas="VignetteKillElite", scale=1.2,
     },
     [64606400] = { label="Zandalari Warscout",
         quest=nil,
         npc=69768,
-        loot={
-            94159, -- Small Bag of Zandalari Supplies
-            94158, -- Big Bag of Zandalari Supplies
-        },
+        loot_shared=ns.zandalari_loot,
         routes={
             {64606400, 68006440, 74606780, 71607240, 71207420, 67807940},
         },

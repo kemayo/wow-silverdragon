@@ -63,6 +63,7 @@ ns.RegisterPoints(376, { -- Valley of the Four Winds
         loot={
             86587, -- Seed of Tranquil Growth
         },
+        translate={[371]=true}, -- The Jade Forest
     },
     [67405940] = { label="Salyin Warscout",
         quest=nil,
@@ -88,6 +89,18 @@ ns.RegisterPoints(376, { -- Valley of the Four Winds
     },
 }, {
     achievement=7439, -- Glorious!
+    loot_shared={
+        87217, -- Small Bag of Goods
+        87595, -- Gloves of Burrow Spelunking
+        87596, -- Mudmug's Mitts
+        87597, -- Gloves of Congealed Mist
+        87598, -- Monstrous Silk Gloves
+        87599, -- Grower's Gloves
+        87600, -- Marshsong Gloves
+        87601, -- Plough Driving Grips
+        87602, -- Grain Warden's Gauntlets
+        87603, -- Thunderfall Gauntlets
+    },
 })
 
 ns.RegisterPoints(376, { -- Valley of the Four Winds

@@ -74,6 +74,14 @@ ns.RegisterPoints(390, { -- Vale of Eternal Blossoms
     },
 }, {
     achievement=7439, -- Glorious!
+    loot_shared={
+        87217, -- Small Bag of Goods
+        87636, -- Cloak of the Forgotten Emperor
+        87637, -- Jade Harbinger's Cloak
+        87638, -- Cloak of Tranquil Clouds
+        87639, -- Tattered Guo-Lai Dynasty Cloak
+        87640, -- Softfoot's Drape
+    },
 })
 
 ns.RegisterPoints(390, { -- Vale of Eternal Blossoms
@@ -160,6 +168,9 @@ ns.RegisterPoints(390, { -- Vale of Eternal Blossoms
     },
 }, {
     achievement=7317, -- One Many Army
+    loot_shared={
+        103624, -- Treasures of the Vale
+    },
 })
 ns.RegisterPoints(395, {-- Guo-Lai Halls
     [64041911] = { label="Huo-Shuang",
@@ -178,6 +189,10 @@ ns.RegisterPoints(395, {-- Guo-Lai Halls
         quest=nil,
         criteria=20525,
         npc=62881,
+    },
+}, {
+    loot_shared={
+        103624, -- Treasures of the Vale
     },
 })
 
