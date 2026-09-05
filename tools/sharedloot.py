@@ -19,7 +19,7 @@ try:
 except ImportError:
     from yaml import Loader
 
-from lootminer import session, additemdata, cleanloot, __keysort
+from lootminer import fetch, additemdata, cleanloot, __keysort
 from npc import lua
 
 # Trade goods and quest items are rarely worth a tooltip line.
@@ -53,9 +53,7 @@ def sitebase(base):
 
 def fetchdrops(npc, base):
     """Return (npc name, {item id: Drop}) for one NPC."""
-    url = f"{base}/npc={npc}"
-    print("Fetching", url, file=sys.stderr)
-    r = session.get(url, timeout=15)
+    r = fetch(f"{base}/npc={npc}")
 
     name = str(npc)
     if m := re.search(r"^\$.extend\(g_npcs\[\d+], ?({.+})\);?$", r.text, re.MULTILINE):
@@ -88,8 +86,7 @@ def rareshare(item, base):
     """
     if item in _rareshare:
         return _rareshare[item]
-    print("Checking sources of item", item, file=sys.stderr)
-    r = session.get(f"{base}/item={item}", timeout=15)
+    r = fetch(f"{base}/item={item}")
     start = r.text.find("id: 'dropped-by'")
     droppers = []
     if start >= 0:

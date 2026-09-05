@@ -29,10 +29,25 @@ zones = defaultdict(lambda: ("Unknown", (-1, -1)))
 zones.update(zones_raw)
 
 session = requests_cache.CachedSession()
-retries = Retry(total=5, backoff_factor=1, status_forcelist=[ 502, 503, 504 ])
+# Enough datamining in one sitting and wowhead starts answering 429, so retry
+# that alongside the server errors. urllib3 obeys any Retry-After it sends.
+retries = Retry(total=8, backoff_factor=2, status_forcelist=[ 429, 500, 502, 503, 504 ])
 session.mount('http://', HTTPAdapter(max_retries=retries))
 session.mount('https://', HTTPAdapter(max_retries=retries))
 session.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0'})
+
+
+def fetch(url, timeout=15):
+    """Get a page, or stop. Progress goes to stderr to keep stdout for output."""
+    print("Fetching", url, file=sys.stderr)
+    r = session.get(url, timeout=timeout)
+    if r.status_code != 200:
+        # Every parse here reads a page it does not understand as an absence:
+        # no drops, no name, no npcs. Reporting that as fact is worse than
+        # stopping, because nothing downstream can tell the two apart.
+        throttled = r.status_code == 429 and " Retries did not outlast it; wait a while and run again." or ""
+        raise SystemExit(f"{url} answered {r.status_code}.{throttled}")
+    return r
 
 __start = ("name", "mount", "pet", "toy")
 __end = ("hidden")
@@ -50,10 +65,7 @@ def additemdata(item, base="https://wowhead.com"):
     print("additemdata", item)
     item = normalizeitem(item)
 
-    url = f"{base}/item={item[1]}"
-    print("Fetching", url)
-    r = session.get(url, timeout=5)
-    print("fetch completed")
+    r = fetch(f"{base}/item={item[1]}")
 
     if m := re.search(r'<meta property="og:title" content="([^"]+)">', r.text):
         item["name"] = html.unescape(m.group(1))
@@ -71,7 +83,7 @@ def additemdata(item, base="https://wowhead.com"):
         item["quest"] = int(m.group(1))
     elif m := re.search(r"\(WH\.enhanceTooltip\.bind\(tt\)\)\([^\)]+?\[(\d+)\]", r.text, re.DOTALL):
         print("found a spell, checking for quest")
-        rs = session.get(f"{base}/spell={m.group(1)}")
+        rs = fetch(f"{base}/spell={m.group(1)}")
         # this might be fragile, but...
         if m2 := re.search(r'Complete Quest.+?href="/quest=(\d+)"', rs.text):
             item["quest"] = int(m2.group(1))
@@ -127,10 +139,7 @@ def isvaliddrop(npc, loot, loot_filter="source"):
 
 
 def fetchnpc(npc, loot_filter="source", base="https://wowhead.com"):
-    url = f"{base}/npc={npc}"
-    print("fetchnpc", npc, url)
-    r = session.get(url, timeout=5)
-    print("fetch completed", r.url)
+    r = fetch(f"{base}/npc={npc}")
 
     data = None
 
@@ -306,7 +315,7 @@ def export(inf, outf, hn=False, local=False):
 
 def fetch_npcids_from_search(url):
     # assume this is a wowhead search page and pull down everything included on it
-    r = session.get(url, timeout=5)
+    r = fetch(url)
     match = re.search(
         r'new Listview\({[^{]+?"?data"?:\s*\[(.+?)\]}\);(?:\n|</script>)', r.text
     )
