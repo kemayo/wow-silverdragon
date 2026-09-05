@@ -65,7 +65,22 @@ function module:OnInitialize()
         },
     })
 
-    -- migration
+    -- Profiles switch long after OnInitialize (and can be copied or reset at
+    -- any point), so every migration below has to be able to run again on
+    -- whichever profile is now current, not just the one active at login.
+    self:MigrateOptions()
+    self.db.RegisterCallback(self, "OnProfileChanged", "MigrateOptions")
+    self.db.RegisterCallback(self, "OnProfileCopied", "MigrateOptions")
+    self.db.RegisterCallback(self, "OnProfileReset", "MigrateOptions")
+
+    self.tooltip = ns.Tooltip.Get("OverlayPin")
+
+    GameTooltip:HookScript("OnShow", function(tooltip) self:CleanupTooltip() end)
+
+    self:RegisterConfig()
+end
+
+function module:MigrateOptions()
     local db = self.db.profile
     if type(db.enabled) == "boolean" or db.icon_scale or db.icon_scale_minimap or db.icon_alpha or db.icon_alpha_minimap then
         local function ifnotnil(t, key, val)
@@ -128,7 +143,7 @@ function module:OnInitialize()
     -- "Show achieved" / "Show quest-complete" became a notability filter plus
     -- "also show" toggles (see ns.MobState). An explicitly-set legacy key is a
     -- choice to carry over; an absent one was the old default, so it gives way
-    -- to the new default -- a quieter map that leaves off finished things.
+    -- to the new default.
     do
         local function migrate(oldAchieved, oldQuest, filterKey, nothingKey, doneKey)
             if db[oldAchieved] == nil and db[oldQuest] == nil then
@@ -153,12 +168,6 @@ function module:OnInitialize()
         migrate("achieved", "questcomplete", "filter", "showNothing", "showDone")
         migrate("achievedTreasure", "questcompleteTreasure", "filterTreasure", "showNothingTreasure", "showDoneTreasure")
     end
-
-    self.tooltip = ns.Tooltip.Get("OverlayPin")
-
-    GameTooltip:HookScript("OnShow", function(tooltip) self:CleanupTooltip() end)
-
-    self:RegisterConfig()
 end
 
 function module:OnEnable()
