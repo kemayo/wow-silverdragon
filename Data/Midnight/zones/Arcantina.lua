@@ -6,6 +6,7 @@ ns.RegisterPoints(ns.ARCANTINA, {
 	group="Pepe",
 	minimap=true,
 })
+--[[
 ns.RegisterPoints(ns.ARCANTINA, {
 	[45076050] = {quest=92349, loot={6662}}, -- Elixir of Giant Growth
 	[28603980] = {quest=92350, loot={6662}}, -- Elixir of Giant Growth
@@ -27,3 +28,4 @@ ns.RegisterPoints(ns.ARCANTINA, {
 	junk=true,
 	minimap=true,
 })
+--]]
