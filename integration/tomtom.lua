@@ -126,14 +126,27 @@ do
 		local title = type(id) == "number" and core:GetMobLabel(id) or id or UNKNOWN
 		if hasTomTom() and db.tomtom then
 			-- Tomtom has multiple waypoints, so we'll interpret the "don't replace" as "don't push onto the crazy arrow"
-			waypoints.tomtom[id] = TomTom:AddWaypoint(zone, x, y, {
+			local existing = waypoints.tomtom[id]
+			local arrowFree = TomTom:IsCrazyArrowEmpty()
+			-- AddWaypoint applies none of our options to a waypoint which already
+			-- exists at this spot, so leave the arrow out of it and do that below
+			local waypoint = TomTom:AddWaypoint(zone, x, y, {
 				title = title,
 				persistent = false,
 				minimap = false,
 				world = false,
-				crazy = force or db.replace or TomTom:IsCrazyArrowEmpty(),
+				crazy = false,
 				cleardistance = 25
 			})
+			waypoints.tomtom[id] = waypoint
+			local moved = existing and existing ~= waypoint and TomTom:IsValidWaypoint(existing)
+			if moved then
+				-- we keep one waypoint per thing, so drop the one for where it was
+				TomTom:RemoveWaypoint(existing)
+			end
+			if waypoint and (force or db.replace or arrowFree or moved) then
+				TomTom:SetCrazyArrow(waypoint, waypoint.arrivaldistance or 15, title)
+			end
 		end
 		if DBM and db.dbm and (db.replace or not DBM.Arrow:IsShown()) then
 			waypoints.dbm = {mobid = id}
