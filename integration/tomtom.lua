@@ -120,6 +120,7 @@ end
 do
 	local waypoints = {tomtom={}}
 	local previous
+	local timers = {}
 	-- C_Map hands back a copy every time, so identity has to be by position
 	local function isOurWaypoint(waypoint)
 		return waypoints.blizzard and waypoint
@@ -192,8 +193,12 @@ do
 			end
 		end
 
+		-- pointing at something again supersedes any hide already scheduled for it
+		timers[id] = (timers[id] or 0) + 1
 		if duration and duration > 0 then
+			local timer = timers[id]
 			C_Timer.After(duration, function()
+				if timers[id] ~= timer then return end
 				Debug("Waypoint.AutoHide", id)
 				self:Hide(id)
 			end)
@@ -237,6 +242,7 @@ do
 				waypoints.dbm = nil
 			end
 		end
+		timers[id] = nil
 	end
 
 	function module:PopupHide(_, data, automatic)
