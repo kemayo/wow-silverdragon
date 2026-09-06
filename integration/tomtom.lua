@@ -101,11 +101,17 @@ function module:AnnounceLoot(_, name, id, zone, x, y, vignetteGUID)
 	self:PointTo(name, zone, x, y, self.db.profile.duration)
 end
 
+-- MapPinEnhanced shims in a fake TomTom which only has AddWaypoint, so look for
+-- something we need which the shim doesn't have
+local function hasTomTom()
+	return TomTom and TomTom.IsCrazyArrowEmpty
+end
+
 function module:CanPointTo(zone)
 	if not zone then return false end
 	local db = self.db.profile
 	if MapPinEnhanced and db.mappinenhanced then return true end
-	if TomTom and db.tomtom then return true end
+	if hasTomTom() and db.tomtom then return true end
 	if DBM and db.dbm then return true end
 	if db.blizzard and C_Map.CanSetUserWaypointOnMap and C_Map.CanSetUserWaypointOnMap(zone) then return true end
 	return false
@@ -118,7 +124,7 @@ do
 		Debug("Waypoint.PointTo", id, zone, x, y, duration, force)
 		local db = self.db.profile
 		local title = type(id) == "number" and core:GetMobLabel(id) or id or UNKNOWN
-		if TomTom and db.tomtom then
+		if hasTomTom() and db.tomtom then
 			-- Tomtom has multiple waypoints, so we'll interpret the "don't replace" as "don't push onto the crazy arrow"
 			waypoints.tomtom[id] = TomTom:AddWaypoint(zone, x, y, {
 				title = title,
@@ -189,7 +195,7 @@ do
 				waypoints.blizzard = nil
 			end
 		end
-		if TomTom and db.tomtom then
+		if hasTomTom() and db.tomtom then
 			for wid, waypoint in pairs(waypoints.tomtom) do
 				if wid == id then
 					Debug("Hiding TomTom")
