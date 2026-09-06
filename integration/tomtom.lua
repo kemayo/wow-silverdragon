@@ -120,6 +120,12 @@ end
 do
 	local waypoints = {tomtom={}}
 	local previous
+	-- C_Map hands back a copy every time, so identity has to be by position
+	local function isOurWaypoint(waypoint)
+		return waypoints.blizzard and waypoint
+			and waypoints.blizzard.uiMapID == waypoint.uiMapID
+			and Vector2DMixin.IsEqualTo(waypoints.blizzard.position, waypoint.position)
+	end
 	function module:PointTo(id, zone, x, y, duration, force)
 		Debug("Waypoint.PointTo", id, zone, x, y, duration, force)
 		local db = self.db.profile
@@ -171,15 +177,18 @@ do
 			}
 		elseif db.blizzard and C_Map.CanSetUserWaypointOnMap and C_Map.CanSetUserWaypointOnMap(zone) and x > 0 and y > 0 then
 			-- MapPinEnhanced takes over from blizzard waypoints, so don't try to set them both
-			previous = C_Map.GetUserWaypoint()
-			if previous then
-				previous.wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
-			end
-			local uiMapPoint = UiMapPoint.CreateFromCoordinates(zone, x, y)
-			if (not previous) or db.replace or force then
-				C_Map.SetUserWaypoint(uiMapPoint)
+			local current = C_Map.GetUserWaypoint()
+			if (not current) or db.replace or force then
+				if current and not isOurWaypoint(current) then
+					-- only remember a waypoint somebody else set, or we'd restore our
+					-- own the moment it expires
+					previous = current
+					previous.wasTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
+				end
+				C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(zone, x, y))
 				C_SuperTrack.SetSuperTrackedUserWaypoint(true)
 				waypoints.blizzard = C_Map.GetUserWaypoint()
+				waypoints.blizzard.mobid = id
 			end
 		end
 
@@ -193,11 +202,9 @@ do
 	function module:Hide(id)
 		Debug("Waypoint.Hide", id)
 		local db = self.db.profile
-		if waypoints.blizzard then
+		if waypoints.blizzard and waypoints.blizzard.mobid == id then
 			Debug("Hiding C_Map")
-			local waypoint = waypoints.blizzard
-			local stillCurrent = C_Map.GetUserWaypoint()
-			if stillCurrent and waypoint.uiMapID == stillCurrent.uiMapID and Vector2DMixin.IsEqualTo(waypoint.position, stillCurrent.position) then
+			if isOurWaypoint(C_Map.GetUserWaypoint()) then
 				C_Map.ClearUserWaypoint()
 				if previous then
 					-- restore the one we replaced
@@ -205,8 +212,8 @@ do
 					C_SuperTrack.SetSuperTrackedUserWaypoint(previous.wasTracked)
 					previous = nil
 				end
-				waypoints.blizzard = nil
 			end
+			waypoints.blizzard = nil
 		end
 		if hasTomTom() and db.tomtom then
 			for wid, waypoint in pairs(waypoints.tomtom) do
