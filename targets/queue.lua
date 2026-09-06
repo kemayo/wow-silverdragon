@@ -83,7 +83,9 @@ function module:ProcessQueue()
 			if #self.stack > self.db.profile.stacksize then
 				local stacked = table.remove(self.stack)
 				table.insert(module.overflow, 1, stacked.data)
-				stacked:Hide()
+				-- We know we're not in combat so it'd be safe to call Hide, but
+				-- we need to pass `automatic` through.
+				stacked:HideWhenPossible(true)
 			end
 		end
 	end
