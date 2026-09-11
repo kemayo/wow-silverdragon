@@ -193,7 +193,7 @@ function routes:Connect(pin1, pin2, routedata)
     if route.r then
         r, g, b, a = route.r or 1, route.g or 1, route.b or 1, route.a or 0.6
     else
-        r, g, b = module.id_to_color(routedata.id)
+        r, g, b = module.id_to_color(routedata.id, routedata.uiMapID)
     end
     local line = ns.MapSystem:AttachLine(pin1, pin2)
     line.baseThickness = line:GetThickness()

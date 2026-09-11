@@ -7,74 +7,84 @@ local ns = core.NAMESPACE
 
 module.colors = {}
 for _, color in ipairs({
-    -- This was me having fun with https://medialab.github.io/iwanthue/ yes
-    {208,44,178},
-    {108,227,62},
-    {186,63,231},
-    {92,190,41},
-    {131,83,241},
-    {80,229,111},
-    {223,70,223},
-    {183,209,41},
-    {84,103,240},
-    {227,196,48},
-    {172,92,224},
-    {65,181,71},
-    {237,85,210},
-    {39,144,39},
-    {229,51,155},
-    {77,223,158},
-    {180,78,179},
-    {126,174,32},
-    {136,113,227},
-    {169,213,86},
-    {71,121,234},
-    {234,167,51},
-    {83,138,229},
-    {229,86,32},
-    {68,185,114},
-    {225,121,223},
-    {139,218,111},
-    {115,98,189},
-    {107,174,72},
-    {196,76,148},
-    {73,141,40},
-    {181,123,210},
-    {163,180,66},
-    {236,118,180},
-    {52,145,73},
-    {229,56,46},
-    {39,122,53},
-    {220,73,121},
-    {71,123,37},
-    {224,67,89},
-    {112,152,52},
-    {219,99,78},
-    {127,143,33},
-    {231,128,43},
-    {210,205,95},
-    {196,101,48},
-    {119,120,18},
-    {212,151,64},
-    {181,161,53},
-    {166,111,24},
+    -- Fifty colours, in the order they get handed out. The first 24 differ in
+    -- hue and saturation alone, with no help from brightness. The icon art
+    -- already varies its own brightness across a single skull, so two colours
+    -- that differ only in brightness look like one colour at two strengths.
+    {255,87,157},
+    {86,248,21},
+    {5,168,251},
+    {235,241,187},
+    {171,130,255},
+    {250,69,254},
+    {57,254,230},
+    {251,132,100},
+    {233,250,10},
+    {229,204,251},
+    {252,192,185},
+    {181,251,244},
+    {250,108,219},
+    {249,146,187},
+    {152,201,250},
+    {167,252,186},
+    {241,163,251},
+    {254,187,116},
+    {210,104,249},
+    {158,251,115},
+    {122,151,255},
+    {10,254,170},
+    {8,219,251},
+    {251,231,105},
+    -- Fifty do not fit on hue and saturation alone, so the rest use brightness
+    -- as well. Only a dense zone reaches them.
+    {125,174,127},
+    {5,193,70},
+    {183,187,11},
+    {189,150,112},
+    {169,148,200},
+    {80,175,193},
+    {57,213,160},
+    {193,193,139},
+    {139,212,201},
+    {206,148,13},
+    {212,129,208},
+    {240,188,23},
+    {253,151,34},
+    {183,173,253},
+    {59,228,97},
+    {118,180,72},
+    {124,163,217},
+    {165,163,74},
+    {137,214,117},
+    {168,217,16},
+    {16,183,161},
+    {198,224,136},
+    {241,111,131},
+    {228,156,148},
+    {202,135,165},
+    {219,171,203},
 }) do
-    table.insert(module.colors, CreateColorFromBytes(color[1], color[2], color[3], 1))
+    table.insert(module.colors, CreateColorFromBytes(color[1], color[2], color[3], 255))
 end
 
-function module.id_to_color(id)
-    return module.colors[(id % #module.colors) + 1]:GetRGB()
+-- Each entry in the table stands as far as it can from the ones before it, so
+-- the colours go out in order: a zone that shows ten points gets a well-spread
+-- ten. The count restarts per zone to keep every map at the front of the order.
+-- A mob in two zones has no need of the same colour in both. The two id spaces
+-- overlap, so mobs and treasures count separately.
+local assigned = {}
+function module.id_to_color(id, uiMapID, isTreasure)
+    local zone = assigned[uiMapID]
+    if not zone then
+        zone = {count = 0, mob = {}, treasure = {}}
+        assigned[uiMapID] = zone
+    end
+    local kind = isTreasure and zone.treasure or zone.mob
+    local index = kind[id]
+    if not index then
+        index = zone.count % #module.colors + 1
+        zone.count = zone.count + 1
+        kind[id] = index
+    end
+    return module.colors[index]:GetRGB()
 end
-
--- the other approach
--- local function scale(value, currmin, currmax, min, max)
---     -- take a value between currmin and currmax and scale it to be between min and max
---     return ((value - currmin) / (currmax - currmin)) * (max - min) + min
--- end
--- local function hasher(value)
---     return scale(select(2, math.modf(math.abs(math.tan(value)) * 10000, 1)), 0, 1, 0.3, 1)
--- end
--- local function id_to_color(id)
---     return hasher(id + 1), hasher(id + 2), hasher(id + 3)
--- end
--- module.id_to_color = id_to_color

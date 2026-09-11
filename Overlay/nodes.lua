@@ -131,19 +131,24 @@ do
         end
         return treasure_icons[data.atlas][scale], true
     end
-    -- Keyed by kind as well as id: the two number spaces overlap, and the world
-    -- map holds onto these tables until its next refresh, so a shared one would
-    -- let a treasure recolour a mob's icon out from under an already-queued node.
-    local icon_cache = {mob = {}, treasure = {}}
-    local function distinct_icon(pointType, id, icon)
-        local cache = icon_cache[pointType]
+    -- Keyed by zone as well as kind and id: the two number spaces overlap, and a
+    -- distinct colour belongs to a mob in a zone rather than to the mob itself.
+    -- The world map holds onto these tables until its next refresh, so anything
+    -- shared could recolour a node that is already queued.
+    local distinct_cache = {mob = {}, treasure = {}}
+    local function distinct_icon(pointType, id, icon, uiMapID)
+        local byZone = distinct_cache[pointType]
+        if not byZone[uiMapID] then
+            byZone[uiMapID] = {}
+        end
+        local cache = byZone[uiMapID]
         if not cache[id] then
             cache[id] = {}
         end
         for k,v in pairs(icon) do
             cache[id][k] = v
         end
-        local r, g, b = module.id_to_color(id)
+        local r, g, b = module.id_to_color(id, uiMapID, pointType == "treasure")
         cache[id].r = r
         cache[id].g = g
         cache[id].b = b
@@ -151,12 +156,14 @@ do
     end
     -- As distinct_icon, but coloured by how far along you are. MobStateColor has
     -- no "unknown" -- that state makes no claim, so its icon keeps its colour.
+    -- Its own cache, and no zone in the key: a state is the same on every map.
+    local completion_cache = {mob = {}, treasure = {}}
     local function completion_icon(pointType, id, icon, state)
         local color = ns.MobStateColor[state]
         if not color then
             return icon
         end
-        local cache = icon_cache[pointType]
+        local cache = completion_cache[pointType]
         if not cache[id] then
             cache[id] = {}
         end
@@ -184,7 +191,7 @@ do
                 -- state-coloured, so only treasures reach completion_icon.
                 if not custom then
                     if module.db.profile.icon_color == 'distinct' then
-                        icon = distinct_icon(pointType, id, icon)
+                        icon = distinct_icon(pointType, id, icon, uiMapID)
                     elseif isTreasure then
                         icon = completion_icon(pointType, id, icon, state)
                     end

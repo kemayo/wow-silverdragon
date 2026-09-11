@@ -267,7 +267,7 @@ function SilverDragonOverlayMinimapRoutePinMixin:OnAcquired(coord1, coord2, uiMa
     if route and route.r then
         r, g, b, a = route.r or 1, route.g or 1, route.b or 1, route.a or 0.6
     else
-        r, g, b = module.id_to_color(mobid)
+        r, g, b = module.id_to_color(mobid, uiMapID)
     end
     self.texture:SetVertexColor(r, g, b, a * self:Config().icon_alpha)
 
