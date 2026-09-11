@@ -30,6 +30,11 @@ local function lootSelect(order)
     }
 end
 
+local unknownTip = "Nothing to judge by: no tracking quest, no achievement, no known loot"
+local nothingTip = "Still lootable, but with nothing notable remaining"
+local doneTip = "Nothing left at all: the achievement is done and everything is looted, or the tracking quest is complete"
+local achievementlessTip = "Whether to show icons for things which aren't part of the criteria for any known achievement"
+
 function module:RegisterConfig()
     local config = core:GetModule("Config", true)
     if not config then return end
@@ -62,7 +67,7 @@ function module:RegisterConfig()
                             filter = {
                                 type = "select",
                                 name = "Which rares",
-                                desc = "\"Notable ones\" asks what the announcement filter asks: is there a mount, an unfinished achievement, or loot you don't have yet? What counts as notable loot is set under Notability.",
+                                desc = "What counts as \"notable\" is set in the Notability settings; generally it means some collectable loot",
                                 values = {
                                     everything = "All of them",
                                     notable = "Notable ones",
@@ -74,29 +79,29 @@ function module:RegisterConfig()
                             },
                             showUnknown = {
                                 type = "toggle",
-                                name = "...and unsure ones",
-                                desc = "Also show rares there's nothing to judge by: no tracking quest, no achievement, no known loot. On by default, as with announcements",
+                                name = "...and unknown ones",
+                                desc = unknownTip,
                                 disabled = function() return not self.db.profile.showMobs or self.db.profile.filter == "everything" end,
                                 order = 10,
                             },
                             showNothing = {
                                 type = "toggle",
                                 name = "...and emptied ones",
-                                desc = "Also show rares you can still kill but that have nothing left on them for you right now",
+                                desc = nothingTip,
                                 disabled = function() return not self.db.profile.showMobs or self.db.profile.filter == "everything" end,
                                 order = 11,
                             },
                             showDone = {
                                 type = "toggle",
                                 name = "...and finished ones",
-                                desc = "Also show rares with nothing left to give at all: the achievement is done, or the tracking quest is complete",
+                                desc = doneTip,
                                 disabled = function() return not self.db.profile.showMobs or self.db.profile.filter == "everything" end,
                                 order = 12,
                             },
                             achievementless = {
                                 type = "toggle",
                                 name = "Show non-achievement rares",
-                                desc = "Whether to show icons for mobs which aren't part of the criteria for any known achievement",
+                                desc = achievementlessTip,
                                 disabled = function() return not self.db.profile.showMobs end,
                                 width = "full",
                                 order = 20,
@@ -119,7 +124,7 @@ function module:RegisterConfig()
                             filterTreasure = {
                                 type = "select",
                                 name = "Which treasures",
-                                desc = "\"Notable ones\" asks what the announcement filter asks: is there a mount, an unfinished achievement, or loot you don't have yet? What counts as notable loot is set under Notability.",
+                                desc = "What counts as \"notable\" is set in the Notability settings; generally it means some collectable loot",
                                 values = {
                                     everything = "All of them",
                                     notable = "Notable ones",
@@ -132,28 +137,28 @@ function module:RegisterConfig()
                             showUnknownTreasure = {
                                 type = "toggle",
                                 name = "...and unsure ones",
-                                desc = "Also show treasures there's nothing to judge by: no tracking quest, no achievement, no known loot. On by default, as with announcements",
+                                desc = unknownTip,
                                 disabled = function() return not self.db.profile.showTreasures or self.db.profile.filterTreasure == "everything" end,
                                 order = 10,
                             },
                             showNothingTreasure = {
                                 type = "toggle",
                                 name = "...and emptied ones",
-                                desc = "Also show repeatable treasures that have nothing in them for you right now",
+                                desc = nothingTip,
                                 disabled = function() return not self.db.profile.showTreasures or self.db.profile.filterTreasure == "everything" end,
                                 order = 11,
                             },
                             showDoneTreasure = {
                                 type = "toggle",
                                 name = "...and looted ones",
-                                desc = "Also show treasures with nothing left to give: the achievement is done, or a one-time treasure you've already opened. Unlike a rare, a one-time treasure doesn't come back, so this is off by default",
+                                desc = doneTip,
                                 disabled = function() return not self.db.profile.showTreasures or self.db.profile.filterTreasure == "everything" end,
                                 order = 12,
                             },
                             achievementlessTreasure = {
                                 type = "toggle",
                                 name = "Show non-achievement treasures",
-                                desc = "Whether to show icons for treasures which aren't part of the criteria for any known achievement",
+                                desc = achievementlessTip,
                                 disabled = function() return not self.db.profile.showTreasures end,
                                 width = "full",
                                 order = 20,
@@ -164,7 +169,7 @@ function module:RegisterConfig()
                     emphasize = {
                         type = "toggle",
                         name = "Emphasize notable",
-                        desc = "Make the icons bigger for anything that still has something on it for you: a mount, an unfinished achievement, or loot you don't have. Useful when the map is showing emptied or finished ones alongside.",
+                        desc = "Make the icons bigger for anything that still has something notable. Useful when the map is showing emptied or finished rares.",
                         width = "full",
                         order = 30,
                     },
@@ -311,22 +316,21 @@ end
 -- this off its world-map button; keeping it here means it stays in step with the
 -- options above. Worldmap/minimap tuning is left out -- fiddly, and rarely
 -- touched -- so those wait on the full panel.
-local unsureTip = "Nothing to judge by: no tracking quest, no achievement, no known loot. Shown by default, as with announcements."
 local menuKinds = {
     {name = "Rares", show = "showMobs", filter = "filter", showTip = "Put rare mobs on the map",
      also = {
-        {key = "showUnknown", text = "...and unsure ones", tip = unsureTip},
-        {key = "showNothing", text = "...and emptied ones", tip = "Still there to kill, but with nothing on it for you right now."},
-        {key = "showDone", text = "...and finished ones", tip = "Nothing left at all: the achievement is done, or the tracking quest is complete."},
+        {key = "showUnknown", text = "...and unsure ones", tip = unknownTip},
+        {key = "showNothing", text = "...and emptied ones", tip = nothingTip},
+        {key = "showDone", text = "...and finished ones", tip = doneTip},
      },
-     achless = {key = "achievementless", text = "Non-achievement rares", tip = "Rares that aren't part of any known achievement."}},
+     achless = {key = "achievementless", text = "Non-achievement rares", tip = achievementlessTip}},
     {name = "Treasures", show = "showTreasures", filter = "filterTreasure", showTip = "Put treasures on the map",
      also = {
-        {key = "showUnknownTreasure", text = "...and unsure ones", tip = unsureTip},
-        {key = "showNothingTreasure", text = "...and emptied ones", tip = "A repeatable treasure with nothing in it for you right now."},
-        {key = "showDoneTreasure", text = "...and looted ones", tip = "Nothing left: a one-time treasure you've opened, or its achievement is done."},
+        {key = "showUnknownTreasure", text = "...and unsure ones", tip = unknownTip},
+        {key = "showNothingTreasure", text = "...and emptied ones", tip = nothingTip},
+        {key = "showDoneTreasure", text = "...and looted ones", tip = doneTip},
      },
-     achless = {key = "achievementlessTreasure", text = "Non-achievement treasures", tip = "Treasures that aren't part of any known achievement."}},
+     achless = {key = "achievementlessTreasure", text = "Non-achievement treasures", tip = achievementlessTip}},
 }
 
 local function displayMenu(owner, rootDescription)
@@ -350,8 +354,6 @@ local function displayMenu(owner, rootDescription)
         local function pick(v) return function() odb[key] = v; module:Update(); return MenuResponse.Refresh end end
         local a = parent:CreateRadio("Notable ones", on("notable"), pick("notable"))
         local b = parent:CreateRadio("All of them", on("everything"), pick("everything"))
-        a:SetTitleAndTextTooltip(nil, "Just the ones that still have a mount, an unfinished achievement, or loot you don't have. What counts is set under Notability.")
-        b:SetTitleAndTextTooltip(nil, "Every one in the zone, whatever's left on it.")
         if enabled then a:SetEnabled(enabled) b:SetEnabled(enabled) end
     end
 
@@ -370,8 +372,7 @@ local function displayMenu(owner, rootDescription)
         toggle(root, k.achless.text, k.achless.key, k.achless.tip, kindOn)
     end
 
-    toggle(rootDescription, "Emphasize notable", "emphasize",
-        "Bigger icons for anything with a mount, an unfinished achievement, or loot you're missing.")
+    toggle(rootDescription, "Emphasize notable", "emphasize", "Bigger icons for anything notable")
 
     rootDescription:CreateDivider()
     rootDescription:CreateButton("Open settings", function()
