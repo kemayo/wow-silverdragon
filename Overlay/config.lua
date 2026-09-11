@@ -30,6 +30,25 @@ local function lootSelect(order)
     }
 end
 
+local iconThemes = {
+    {value = "skulls", text = "Skulls"},
+    {value = "circles", text = "Circles"},
+    {value = "stars", text = "Stars"},
+}
+local iconColors = {
+    {value = "distinct", text = "Unique per-mob",
+     tip = "A color of its own for every mob and treasure in the zone."},
+    {value = "completion", text = "What's left on it",
+     tip = "Four colors: a mount, something notable, nothing notable, or nothing at all."},
+}
+local function selectValues(list)
+    local values = {}
+    for _, entry in ipairs(list) do
+        values[entry.value] = entry.text
+    end
+    return values
+end
+
 local unknownTip = "Nothing to judge by: no tracking quest, no achievement, no known loot"
 local nothingTip = "Still lootable, but with nothing notable remaining"
 local doneTip = "Nothing left at all: the achievement is done and everything is looted, or the tracking quest is complete"
@@ -201,21 +220,14 @@ function module:RegisterConfig()
                         type = "select",
                         name = "Theme",
                         desc = "Which icon set to use",
-                        values = {
-                            ["skulls"] = "Skulls",
-                            ["circles"] = "Circles",
-                            ["stars"] = "Stars",
-                        },
+                        values = selectValues(iconThemes),
                         order = 40,
                     },
                     icon_color = {
                         type = "select",
                         name = "Color",
-                        desc = "How to color the icons.\n\n\"What's left on it\" asks what the announcement filter asks, and has four answers: a mount you'd want, something else you'd want, nothing you want, or nothing left at all.",
-                        values = {
-                            ["distinct"] = "Unique per-mob",
-                            ["completion"] = "What's left on it",
-                        },
+                        desc = "How to color the icons.\n\n\"What's left on it\" has four colors: a mount, something notable, nothing notable, or nothing at all.",
+                        values = selectValues(iconColors),
                         order = 50,
                     },
                 },
@@ -373,6 +385,21 @@ local function displayMenu(owner, rootDescription)
     end
 
     toggle(rootDescription, "Emphasize notable", "emphasize", "Bigger icons for anything notable")
+
+    rootDescription:CreateDivider()
+    rootDescription:CreateTitle("Icons")
+    local function picker(text, key, list, tip)
+        local submenu = rootDescription:CreateButton(text)
+        submenu:SetTitleAndTextTooltip(nil, tip)
+        for _, entry in ipairs(list) do
+            local item = submenu:CreateRadio(entry.text,
+                function() return odb[key] == entry.value end,
+                function() odb[key] = entry.value; module:Update(); return MenuResponse.Refresh end)
+            if entry.tip then item:SetTitleAndTextTooltip(nil, entry.tip) end
+        end
+    end
+    picker("Theme", "icon_theme", iconThemes, "Which icon set to use")
+    picker("Color", "icon_color", iconColors, "How to color the icons")
 
     rootDescription:CreateDivider()
     rootDescription:CreateButton("Open settings", function()
