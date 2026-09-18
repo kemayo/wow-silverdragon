@@ -1,19 +1,19 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-  <Script file="Events/module.lua [AllowLoadGameType mainline]"/>
-  <Script file="Vanilla/module.lua [AllowLoadGameType mainline, mists]"/>
-  <Script file="BurningCrusade/module.lua [AllowLoadGameType mainline, mists, cata, wrath, tbc]"/>
-  <Script file="Wrath/module.lua [AllowLoadGameType mainline, mists, cata, wrath]"/>
-  <Script file="Cataclysm/module.lua [AllowLoadGameType mainline, mists, cata]"/>
+  <Script file="Events/module.lua [AllowLoadGameType standard]"/>
+  <Script file="Vanilla/module.lua [AllowLoadGameType standard, mists]"/>
+  <Script file="BurningCrusade/module.lua [AllowLoadGameType standard, mists, cata, wrath, tbc]"/>
+  <Script file="Wrath/module.lua [AllowLoadGameType standard, mists, cata, wrath]"/>
+  <Script file="Cataclysm/module.lua [AllowLoadGameType standard, mists, cata]"/>
 
   <!-- Expansions synced from the HandyNotes plugins have more than one file;
        each keeps its own load list. -->
-  <Include file="Mists/module.xml [AllowLoadGameType mainline, mists]"/>
-  <Include file="Warlords/module.xml [AllowLoadGameType mainline]"/>
-  <Include file="Legion/module.xml [AllowLoadGameType mainline]"/>
-  <Include file="BattleForAzeroth/module.xml [AllowLoadGameType mainline]"/>
-  <Include file="Dragonflight/module.xml [AllowLoadGameType mainline]"/>
-  <Include file="WarWithin/module.xml [AllowLoadGameType mainline]"/>
-  <Include file="Midnight/module.xml [AllowLoadGameType mainline]"/>
-  <Include file="Shadowlands/module.xml [AllowLoadGameType mainline]"/>
+  <Include file="Mists/module.xml [AllowLoadGameType standard, mists]"/>
+  <Include file="Warlords/module.xml [AllowLoadGameType standard]"/>
+  <Include file="Legion/module.xml [AllowLoadGameType standard]"/>
+  <Include file="BattleForAzeroth/module.xml [AllowLoadGameType standard]"/>
+  <Include file="Shadowlands/module.xml [AllowLoadGameType standard]"/>
+  <Include file="Dragonflight/module.xml [AllowLoadGameType standard]"/>
+  <Include file="WarWithin/module.xml [AllowLoadGameType standard]"/>
+  <Include file="Midnight/module.xml [AllowLoadGameType standard]"/>
 </Ui>
