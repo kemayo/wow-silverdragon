@@ -16,6 +16,7 @@ others don't still gets made here, and the others hide it.
 	window.icon       the dragon-head icon, top left
 	window.title      window title
 	window.close      close button
+	window.closeDefault  {x, y} offset from TOPRIGHT the client gives its own close buttons
 	window.search     search box
 	window.grouping   picks what the second level of the tree lists
 	window.filter     opens the filter menu
@@ -139,8 +140,10 @@ function module:CreateWindow()
 	title:SetJustifyV("MIDDLE")
 	title:SetText(C_AddOns.GetAddOnMetadata(myname, "Title"))
 
-	local close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
+	local close = CreateFrame("Button", nil, frame, "UIPanelCloseButtonDefaultAnchors")
 	frame.close = close
+	-- where this client puts a built-in frame's close button; it differs by client
+	frame.closeDefault = {select(4, close:GetPoint())}
 	close:SetScript("OnClick", function() frame:Hide() end)
 
 	local search = CreateFrame("EditBox", nil, header, "SearchBoxTemplate")

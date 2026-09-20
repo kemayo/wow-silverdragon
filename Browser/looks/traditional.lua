@@ -65,7 +65,7 @@ function module.Looks:Traditional(window)
 		window.portraitMask:SetPoint("TOPLEFT", window.icon, "TOPLEFT", 4, -2)
 		window.portraitMask:SetPoint("BOTTOMRIGHT", window.icon, "BOTTOMRIGHT", -6, 6)
 		window.icon:AddMaskTexture(window.portraitMask)
-		window.close:SetPoint("TOPRIGHT", 0, 0)
+		window.close:SetPoint("TOPRIGHT", unpack(window.closeDefault))
 	else
 		window.icon:SetSize(ICON_SIZE, ICON_SIZE)
 		window.icon:SetPoint("TOPLEFT", 8, -4)
