@@ -358,7 +358,7 @@ ns.RegisterPoints(ns.COILEDISLE, {
 		vignette=7689,
 	},
 	[69514483] = { label="Garsecg",
-		criteria=110172, quest=94856,
+		criteria=118221, quest=94856,
 		npc=258916,
 		loot={
 			280710, -- Garsecg's Barnacled Girdle
