@@ -145,6 +145,7 @@ do
 				crazy = false,
 				cleardistance = 25
 			})
+			if type(waypoint) ~= "table" then waypoint = nil end
 			waypoints.tomtom[id] = waypoint
 			local moved = existing and existing ~= waypoint and TomTom:IsValidWaypoint(existing)
 			if moved then
