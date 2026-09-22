@@ -132,7 +132,8 @@ function module.Looks:Traditional(window)
 	window.title:SetPoint("TOPRIGHT", 0, -6)
 	window.title:SetJustifyH("CENTER")
 
-	window.collapseButton:SetPoint("TOPRIGHT", window, "TOPRIGHT", 0, 0)
+	window.collapseButton:ClearAllPoints()
+	window.collapseButton:SetPoint("TOPRIGHT", window, "TOPRIGHT", unpack(window.closeDefault or {0, 0}))
 
 	window.headerHeight = HEADERHEIGHT
 	window.minHeight = MINHEIGHT

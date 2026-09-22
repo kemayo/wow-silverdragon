@@ -30,6 +30,7 @@ about itself rather than relying on a previous look's reset.
 	window.minHeight      floor for "grow to max height", so a border has room to render without overlapping itself
 	window.nineSlice      Traditional's border chrome; hidden for looks that don't want it
 	window.collapseMask   a plain rectangle Traditional clips its top corners to when collapsed
+	window.closeDefault   {x, y} offset from TOPRIGHT the client gives its own close buttons
 
 A look can also add itself to LookCollapse, called whenever the collapsed
 state changes (and after CreateWindow/ApplyLook, so it starts out correct).
@@ -311,6 +312,17 @@ function module:CreateWindow()
 		nineSlice:SetAllPoints()
 		nineSlice:SetFrameLevel(frame:GetFrameLevel())
 		nineSlice:Hide()
+	end
+
+	-- Same trick the Browser window uses for its close button: where this
+	-- client puts a built-in frame's own close button varies (Forever moves
+	-- it), and the nine-slice corner in Traditional is drawn expecting
+	-- something to sit there. There's no close button here to read it off
+	-- directly, so a throwaway one is made just to ask.
+	local closeOK, closeProbe = pcall(CreateFrame, "Button", nil, frame, "UIPanelCloseButtonDefaultAnchors")
+	if closeOK and closeProbe then
+		frame.closeDefault = {select(4, closeProbe:GetPoint())}
+		closeProbe:Hide()
 	end
 
 	-- Traditional fakes a portrait frame: the icon is masked round, and this
