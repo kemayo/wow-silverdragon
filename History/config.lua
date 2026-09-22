@@ -38,6 +38,24 @@ function module:RegisterConfig()
 			grow = config.toggle("Grow to max height", "Whether to fit the window to its contents until you reach the maximum height", 25),
 			relative = config.toggle("Use relative time", "Whether to show time in the window as relative or absolute", 30),
 			loot = config.toggle("Include loot", "Whether to include treasure vignettes", 35),
+			style = {
+				type = "select",
+				name = "Style",
+				desc = "How the window looks",
+				values = function(info)
+					local values = {}
+					for key in pairs(self.Looks) do
+						values[key] = key
+					end
+					-- replace ourself with the built values table
+					info.option.values = values
+					return values
+				end,
+				set = function(info, v)
+					self:SetLook(v)
+				end,
+				order = 5,
+			},
 			othershard = {
 				type = "select", name = "Mobs from other shards",
 				desc = "How to treat mobs which are not from your current shard, and so which are probably inaccessible to you right now",
