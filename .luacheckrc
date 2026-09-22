@@ -62,6 +62,7 @@ read_globals = {
     "MapPinEnhanced",
 
     -- API functions
+    "Constants",
     "C_AddOns",
     "C_AreaPoiInfo",
     "C_Calendar",
