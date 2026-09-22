@@ -216,7 +216,8 @@ function module:CreateMacro()
 	local macroIndex = GetMacroIndexByName("SilverDragon")
 	if macroIndex == 0 then
 		local numglobal,numperchar = GetNumMacros()
-		if numglobal < MAX_ACCOUNT_MACROS then
+		local maxmacros = MAX_ACCOUNT_MACROS or Constants.MacroConsts.MAX_ACCOUNT_MACROS
+		if numglobal < maxmacros then
 			CreateMacro("SilverDragon", self:GetMacroArguments())
 			self:Print("Created the SilverDragon macro. Open the macro editor with /macro and drag it onto your actionbar to use it.")
 		else
