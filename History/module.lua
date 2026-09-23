@@ -314,17 +314,6 @@ function module:CreateWindow()
 		nineSlice:Hide()
 	end
 
-	-- Same trick the Browser window uses for its close button: where this
-	-- client puts a built-in frame's own close button varies (Forever moves
-	-- it), and the nine-slice corner in Traditional is drawn expecting
-	-- something to sit there. There's no close button here to read it off
-	-- directly, so a throwaway one is made just to ask.
-	local closeOK, closeProbe = pcall(CreateFrame, "Button", nil, frame, "UIPanelCloseButtonDefaultAnchors")
-	if closeOK and closeProbe then
-		frame.closeDefault = {select(4, closeProbe:GetPoint())}
-		closeProbe:Hide()
-	end
-
 	-- Traditional fakes a portrait frame: the icon is masked round, and this
 	-- ring sits over it as decoration. Both stay hidden until a look wants them.
 	frame.portraitMask = frame:CreateMaskTexture()

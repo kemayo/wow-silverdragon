@@ -1,5 +1,9 @@
 local myname = ...
 
+local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and LE_EXPANSION_LEVEL_CURRENT ~= LE_EXPANSION_CLASSIC
+local isForever = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_CLASSIC
+local isClassic = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE
+
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:GetModule("History")
 
@@ -19,8 +23,8 @@ end
 
 -- ButtonFrameTemplateNoPortrait has no portrait corner to draw one over, so
 -- one is faked instead: the icon masked round, with this ring over it.
-local RING = "hud-PlayerFrame-portraitring-large"
-local RING_SIZE = 30 -- bigger than the plain icon, so the ring's bezel isn't clipped
+local RING = isRetail and "hud-PlayerFrame-portraitring-large" or "communities-ring-gold"
+local RING_SIZE = isClassic and 26 or 30 -- bigger than the plain icon, so the ring's bezel isn't clipped
 
 -- the left corner/edge pieces overhang the frame's own left edge, so the fill
 -- and everything in it needs to start a little further right to sit inside the
@@ -109,7 +113,14 @@ function module.Looks:Traditional(window)
 	window.icon:SetDrawLayer("OVERLAY", 1)
 	window.icon:ClearAllPoints()
 	window.icon:SetSize(24, 24)
-	window.icon:SetPoint("TOPLEFT", 2, -1)
+	if isRetail then
+		window.icon:SetPoint("TOPLEFT", 2, -1)
+	elseif isForever then
+		window.icon:SetPoint("TOPLEFT", 2, 2)
+	else
+		window.icon:SetSize(22, 22)
+		window.icon:SetPoint("TOPLEFT", 3, -1)
+	end
 	window.icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
 	window.icon:AddMaskTexture(window.portraitMask)
 	window.portraitMask:ClearAllPoints()
@@ -133,7 +144,11 @@ function module.Looks:Traditional(window)
 	window.title:SetJustifyH("CENTER")
 
 	window.collapseButton:ClearAllPoints()
-	window.collapseButton:SetPoint("TOPRIGHT", window, "TOPRIGHT", unpack(window.closeDefault or {0, 0}))
+	if isForever then
+		window.collapseButton:SetPoint("TOPRIGHT", window, "TOPRIGHT", -3, 0)
+	else
+		window.collapseButton:SetPoint("TOPRIGHT", window, "TOPRIGHT", 0, 0)
+	end
 
 	window.headerHeight = HEADERHEIGHT
 	window.minHeight = MINHEIGHT
