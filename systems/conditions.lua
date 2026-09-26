@@ -488,18 +488,21 @@ function ns.conditions.CalendarEvent:getEvent()
 	local offset, day = self:getOffsets()
 	for i=1, C_Calendar.GetNumDayEvents(offset, day) do
 		local event = C_Calendar.GetDayEvent(offset, day, i)
-		if event.eventID == self.id then
+		if event and event.eventID == self.id then
 			return self:Remember(event)
 		end
 	end
 	return self:Remember(nil)
 end
-function ns.conditions.CalendarEvent:getOffsets(current)
+-- The day APIs take a month offset from whatever month the calendar shows, so
+-- this is where `current` falls relative to that.
+function ns.conditions.CalendarEvent:getOffsets(current, stayPut)
 	-- we could call C_Calendar.SetMonth, but that'd jump the calendar around if it's open... so instead, work out the actual offset
 	current = current or C_DateAndTime.GetCurrentCalendarTime()
 	local selected = C_Calendar.GetMonthInfo()
-	local offset = (selected.month - current.month) + ((selected.year - current.year) * 12)
-	if offset >= 1 or offset <= -1 then
+	local offset = (current.month - selected.month) + ((current.year - selected.year) * 12)
+	-- a caller partway through reading the calendar can't have it move under it
+	if not stayPut and (offset >= 1 or offset <= -1) then
 		-- calendar APIs only return information on events within the next month either way
 		if not (_G.CalendarFrame and _G.CalendarFrame:IsVisible()) then
 			-- calendar's not visible, so it's fine to move it around
@@ -519,8 +522,11 @@ function ns.conditions.CalendarEventStartTexture:getEvent()
 	for i=1, C_Calendar.GetNumDayEvents(offset, day) do
 		local event = C_Calendar.GetDayEvent(offset, day, i)
 		if event and event.startTime then
-			local startoffset, startday = self:getOffsets(event.startTime)
-			for ii=1, C_Calendar.GetNumDayEvents(startoffset, startday) do
+			-- the calendar only answers about the month either side of the
+			-- one it shows, so an event started longer ago than that can't
+			-- be checked
+			local startoffset, startday = self:getOffsets(event.startTime, true)
+			for ii=1, (startoffset >= -1 and startoffset <= 1) and C_Calendar.GetNumDayEvents(startoffset, startday) or 0 do
 				local startEvent = C_Calendar.GetDayEvent(startoffset, startday, ii)
 				if startEvent and startEvent.iconTexture == self.id then
 					return self:Remember(event)
