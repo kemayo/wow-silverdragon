@@ -278,8 +278,8 @@ local function render_string(s, context)
 	return s:gsub("{([^:}]+):([^:}]+):?([^}]*)}", safe_render_replacer)
 end
 local function cache_string(s, context)
-	if not s then return end
 	if type(s) == "function" then s = s(context) end
+	if not s then return end
 	for variant, id, fallback in s:gmatch("{(%l+):(%d+):?([^}]*)}") do
 		id = tonumber(id)
 		if variant == "item" then
