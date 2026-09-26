@@ -74,8 +74,9 @@ ns.allCriteriaComplete = allCriteriaComplete
 local hasNotableLoot = testMaker(function(item, notransmog)
 	if item:Notable() then
 		if notransmog and ns.IsA(item, ns.rewards.Item) then
-			-- still notable without transmog involved?
-			return item:IsTransmog() == false
+			-- still notable without transmog involved? Retail answers nil rather
+			-- than false for anything that isn't an appearance source.
+			return not item:IsTransmog()
 		end
 		return true
 	end
