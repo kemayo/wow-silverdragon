@@ -95,7 +95,7 @@ function module:OnInitialize()
 							[7] = ICON_LIST[7] .. "0|t Cross",
 							[8] = ICON_LIST[8] .. "0|t Skull",
 						},
-						disabled = LE_EXPANSION_LEVEL_CURRENT < (LE_EXPANSION_MIDNIGHT or 0),
+						disabled = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE,
 						order=45,
 					},
 					create = {

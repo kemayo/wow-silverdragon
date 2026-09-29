@@ -1,7 +1,7 @@
 local myname, ns = ...
 
-if LE_EXPANSION_LEVEL_CURRENT >= (LE_EXPANSION_MIDNIGHT or math.huge) then
-	-- Midnight protected these, so we can't do this any more
+-- Marker-setting has been protected since Midnight (and then into Forever)
+if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
 	return
 end
 
