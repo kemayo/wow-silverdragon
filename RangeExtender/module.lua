@@ -81,8 +81,13 @@ function module:VIGNETTES_UPDATED()
 	local vignetteids = C_VignetteInfo.GetVignettes()
 	-- Debug("VIGNETTES_UPDATED", #vignetteids)
 
+	local present = {}
+	for i=1, #vignetteids do
+		present[vignetteids[i]] = true
+	end
+
 	for instanceid, icon in pairs(vignetteIcons) do
-		if not tContains(vignetteids, instanceid) or (icon.info and not self.db.profile.types[icon.info.atlasName:lower()]) or (not icon.info and not self.db.profile.mystery) or not self.db.profile.enabled then
+		if not present[instanceid] or (icon.info and not self.db.profile.types[icon.info.atlasName:lower()]) or (not icon.info and not self.db.profile.mystery) or not self.db.profile.enabled then
 			HBDPins:RemoveMinimapIcon(self, icon)
 			icon:Hide()
 			icon.info = nil
@@ -92,17 +97,18 @@ function module:VIGNETTES_UPDATED()
 		end
 	end
 
+	local uiMapID = C_Map.GetBestMapForUnit("player")
 	for i=1, #vignetteids do
-		self:UpdateVignetteOnMinimap(vignetteids[i])
+		self:UpdateVignetteOnMinimap(vignetteids[i], uiMapID)
 	end
 end
 
-function module:UpdateVignetteOnMinimap(instanceid)
+function module:UpdateVignetteOnMinimap(instanceid, uiMapID)
 	if compat_disabled or not self.db.profile.enabled then
 		return
 	end
 	-- Debug("considering vignette", instanceid)
-	local uiMapID = C_Map.GetBestMapForUnit("player")
+	uiMapID = uiMapID or C_Map.GetBestMapForUnit("player")
 	if not uiMapID then
 		return -- Debug("can't determine current zone")
 	end

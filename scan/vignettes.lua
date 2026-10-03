@@ -273,6 +273,12 @@ function module:WorkOutMobFromVignette(instanceid)
 	if self:ShouldIgnoreVignette(vignetteID, vignetteInfo.atlasName) then
 		return -- Debug("Vignette was ignored", vignetteInfo.vignetteID, vignetteInfo.name)
 	end
+	-- instanceid *is* the vignetteGUID, and unlike vignetteInfo.vignetteGUID it's
+	-- guaranteed to be present, so it's the safer key to dedupe on. Checked early
+	-- to skip the position and zone lookups below.
+	if already_notified_loot[instanceid] and time() < (already_notified_loot[instanceid] + core.db.profile.delay) then
+		return -- Debug("skipping notification", "delay not exceeded")
+	end
 	local current_zone = HBD:GetPlayerZone()
 	if not current_zone or current_zone == 0 then
 		return -- Debug("We don't know what zone we're in", current_zone)
@@ -305,11 +311,6 @@ function module:WorkOutMobFromVignette(instanceid)
 		end
 		if not core:PlayerIsInteractive() then
 			return -- Debug("skipping notification", "on taxi")
-		end
-		-- instanceid *is* the vignetteGUID, and unlike vignetteInfo.vignetteGUID
-		-- it's guaranteed to be present, so it's the safer key to dedupe on
-		if already_notified_loot[instanceid] and time() < (already_notified_loot[instanceid] + core.db.profile.delay) then
-			return -- Debug("skipping notification", "delay not exceeded")
 		end
 		local treasure = ns.vignetteTreasureLookup[vignetteInfo.vignetteID]
 		if treasure then
