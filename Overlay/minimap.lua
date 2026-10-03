@@ -8,6 +8,9 @@ local ns = core.NAMESPACE
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDPins = LibStub("HereBeDragons-Pins-2.0")
 
+-- cached so the OnUpdate doesn't read the cvar every frame
+local rotating = GetCVar("rotateMinimap") == "1"
+
 local f = CreateFrame("Frame", myname .. "MiniMapDataProviderFrame")
 local dataProvider = {
     facing = GetPlayerFacing(),
@@ -25,7 +28,7 @@ function dataProvider:RefreshAllData()
     self:ReleaseAllPins()
 
     -- if we either can't display anything meaningful, or are disabled
-    if GetCVar('rotateMinimap') == '1' and self.facing == nil then return end
+    if rotating and self.facing == nil then return end
     if not module.db.profile.minimap.enabled then return end
 
     local uiMapID = HBD:GetPlayerZone()
@@ -120,11 +123,12 @@ end
 module:RegisterEvent("MINIMAP_UPDATE_ZOOM", function() module:UpdateMinimapIcons() end)
 module:RegisterEvent("CVAR_UPDATE", function(_, varname)
     if varname == "ROTATE_MINIMAP" then
+        rotating = GetCVar("rotateMinimap") == "1"
         module:UpdateMinimapIcons()
     end
 end)
 f:SetScript("OnUpdate", function(self)
-    if GetCVar("rotateMinimap") == "1" then
+    if rotating then
         local facing = GetPlayerFacing()
         if facing ~= dataProvider.facing then
             dataProvider.facing = facing
@@ -274,7 +278,7 @@ function SilverDragonOverlayMinimapRoutePinMixin:OnAcquired(coord1, coord2, uiMa
     local x, y = (x1+x2)/2, (y1+y2)/2
     HBDPins:AddMinimapIconMap(dataProvider, self, uiMapID, x, y)
 
-    if GetCVar('rotateMinimap') == '1' then self:UpdateRotation() end
+    if rotating then self:UpdateRotation() end
 end
 function SilverDragonOverlayMinimapRoutePinMixin:OnReleased()
     self.texture:SetRotation(0)
