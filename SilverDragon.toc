@@ -1,4 +1,4 @@
-﻿## Interface: 120100, 120007, 50504, 30405, 20506, 11509, 16001
+﻿## Interface: 120100, 50504, 30405, 20506, 11509, 16001
 ## Title: SilverDragon
 ## Notes: Remember where rares were
 ## Title-zhTW: SilverDragon
@@ -82,5 +82,5 @@ Data_Classic\module.xml [AllowLoadGameType vanilla, tbc, wrath, cata, camelot]
 # overlay
 History\module.xml
 Overlay\module.xml
-RangeExtender\module.xml [AllowLoadGameType mainline, mists]
+RangeExtender\module.xml [AllowLoadGameType standard, mists]
 #@end-debug@
