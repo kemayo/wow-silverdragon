@@ -591,6 +591,13 @@ function addon:OnInitialize()
 
 	self:MigrateProfileOptions()
 
+	-- ignore ids are always numbers; a string key breaks the options panel
+	for id in pairs(globaldb.ignore) do
+		if type(id) ~= "number" then
+			globaldb.ignore[id] = nil
+		end
+	end
+
 	if globaldb.always then
 		MergeTable(globaldb.custom.any, globaldb.always)
 		globaldb.always = nil

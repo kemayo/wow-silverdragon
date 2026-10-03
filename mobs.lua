@@ -22,7 +22,8 @@ local function toggle_mob(id)
 		type = "toggle",
 		width = "double",
 		descStyle = "inline",
-		order = id,
+		-- AceConfig treats a string order as a handler method name and errors
+		order = tonumber(id) or 100,
 	}
 end
 

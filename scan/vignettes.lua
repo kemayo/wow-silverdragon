@@ -14,7 +14,8 @@ local function vignetteToggle(vignetteid, name)
 		arg = vignetteid,
 		-- width = "double",
 		descStyle = "inline",
-		order = vignetteid,
+		-- AceConfig treats a string order as a handler method name and errors
+		order = tonumber(vignetteid) or 100,
 	}
 end
 
@@ -51,6 +52,12 @@ function module:OnInitialize()
 
 	-- migrate!
 	local db = self.db.profile
+	-- ignore ids are always numbers; a string key breaks the options panel
+	for id in pairs(db.ignore) do
+		if type(id) ~= "number" then
+			db.ignore[id] = nil
+		end
+	end
 	if db.loot == false then
 		db.ignore_type.vignetteloot = true
 		db.ignore_type.vignettelootelite = true
