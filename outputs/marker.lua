@@ -1,7 +1,6 @@
 local myname, ns = ...
 
--- Marker-setting has been protected since Midnight (and then into Forever)
-if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+if ns.MARKERS_PROTECTED then
 	return
 end
 
