@@ -1,11 +1,12 @@
 local myname = ...
 
-local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and LE_EXPANSION_LEVEL_CURRENT ~= LE_EXPANSION_CLASSIC
-local isForever = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_CLASSIC
-local isClassic = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE
-
 local core = LibStub("AceAddon-3.0"):GetAddon("SilverDragon")
 local module = core:GetModule("History")
+local ns = core.NAMESPACE
+
+local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+local isForever = ns.FOREVER
+local isClassic = ns.CLASSIC
 
 -- The Blizzard panel look, minus the portrait: that corner art doesn't cope
 -- with this window's resizing. ButtonFrameTemplateNoPortrait is registered on

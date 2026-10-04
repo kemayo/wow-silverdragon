@@ -11,10 +11,12 @@ addon.Class = ns.Class
 addon.IsObject = ns.IsObject
 addon.conditions = ns.conditions
 
-ns.CLASSIC = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE -- rolls forward
+-- Forever has its own project ID, but the retail client's UI and APIs
+ns.FOREVER = WOW_PROJECT_ID == WOW_PROJECT_CAMELOT
+ns.CLASSIC = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and not ns.FOREVER -- rolls forward
 ns.CLASSICERA = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC -- forever vanilla
--- Protected since Midnight. Forever (camelot) has the same client, but its own project ID.
-ns.MARKERS_PROTECTED = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE or WOW_PROJECT_ID == WOW_PROJECT_CAMELOT
+-- Protected since Midnight
+ns.MARKERS_PROTECTED = not ns.CLASSIC
 
 local GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID or _G.GetPlayerAuraBySpellID
 
