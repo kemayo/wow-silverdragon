@@ -42,8 +42,6 @@ function areaPoi.Soon()
 	return (minutes and minutes * 60) or DEFAULT_SOON
 end
 
-local CLASSIC = WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE
-
 -- Blizzard's wording, so it needs no translating. The two reminder strings
 -- belong to the event scheduler, which the classic clients do not have.
 local TIME_LEFT = _G.MAP_TOOLTIP_TIME_LEFT or "Time left: %s"
@@ -323,7 +321,7 @@ function areaPoi.GetInfo(areaPoiID, uiMapID)
 	uiMapID = uiMapID or mapFor(areaPoiID)
 	-- uiMapID became optional once the client started filling in whichever map
 	-- the POI belongs to, but not far enough back to rely on
-	if CLASSIC and not uiMapID then return end
+	if ns.CLASSIC and not uiMapID then return end
 	return C_AreaPoiInfo.GetAreaPOIInfo(uiMapID, areaPoiID)
 end
 

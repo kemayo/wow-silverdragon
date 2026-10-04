@@ -220,7 +220,7 @@ do
 			canLearnCache[itemID] = false
 			return false
 		end
-		if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+		if not ns.CLASSIC then
 			-- Retail made it so everything is learnable
 			canLearnCache[itemID] = true
 		else
