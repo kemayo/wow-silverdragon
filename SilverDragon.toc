@@ -49,6 +49,7 @@ notable.lua
 slash.lua
 config.lua
 util.lua
+idlist.lua
 
 scan\targets.lua
 scan\macro.lua
@@ -69,7 +70,6 @@ targets\popup.lua
 targets\config.lua
 targets\looks\looks.xml
 
-idlist.lua
 mobs.lua
 Browser\module.xml
 

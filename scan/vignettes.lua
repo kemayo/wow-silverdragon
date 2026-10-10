@@ -6,18 +6,11 @@ local Debug = core.Debug
 
 local HBD = LibStub("HereBeDragons-2.0")
 
-local function vignetteToggle(vignetteid, name)
-	return {
-		type = "toggle",
-		name = type(name) == "string" and name or tostring(vignetteid),
-		desc = "ID: " .. vignetteid,
-		arg = vignetteid,
-		-- width = "double",
-		descStyle = "inline",
-		-- AceConfig treats a string order as a handler method name and errors
-		order = tonumber(vignetteid) or 100,
-	}
-end
+-- Vignettes seen this session, as {[id] = name or true}. They stay listed under
+-- Ignore once unticked, so an accidental untick is easy to undo.
+local listed = {}
+
+ns.RegisterIDListWidget("SilverDragonVignetteList", {})
 
 local function vignetteTypeToggle(atlas, name, order)
 	return {
@@ -102,23 +95,34 @@ function module:OnInitialize()
 								order=10,
 							},
 							specific = {
-								type="group",
+								type="multiselect",
 								name="Specific",
-								inline=true,
-								get=function(info) return self.db.profile.ignore[info.arg] end,
-								set=function(info, value) self:SetIgnore(info.arg, value and info.option.name or nil) end,
-								args={},
+								dialogControl="SilverDragonVignetteList",
+								arg="vignettes",
+								width="full",
 								order=20,
+								values=function()
+									local values = {}
+									for id, name in pairs(listed) do
+										values[id] = name
+									end
+									for id, name in pairs(self.db.profile.ignore) do
+										-- the name stored when it was ignored beats the one seen this session
+										values[id] = type(name) == "string" and name or values[id] or true
+									end
+									return values
+								end,
+								get=function(info, id) return self.db.profile.ignore[id] end,
+								set=function(info, id, value)
+									local name = listed[id]
+									self:SetIgnore(id, value and (type(name) == "string" and name or tostring(id)) or nil)
+								end,
 							},
 						},
 					},
 				},
 			},
 		}
-		local vignettes = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.specific.args
-		for vignetteid, name in pairs(self.db.profile.ignore) do
-			vignettes['vignette:'..vignetteid] = vignetteToggle(vignetteid, name)
-		end
 		local types = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.type.args
 		for atlas in pairs(self.db.profile.ignore_type) do
 			if not types[atlas:lower()] then
@@ -194,9 +198,10 @@ function module:SeenVignette(event, name, vignetteid, atlas)
 	-- about without giving us any details beyond the GUID. Nothing to add to
 	-- the ignore lists in that case, since there'd be no way to match on it.
 	if vignetteid then
-		local vignetteconfig = config.options.args.scanning.plugins.vignettes.vignettes.args.ignore.args.specific.args
-		if not vignetteconfig["vignette:"..vignetteid] then
-			vignetteconfig["vignette:"..vignetteid] = vignetteToggle(vignetteid, name)
+		if type(name) == "string" then
+			listed[vignetteid] = name
+		elseif not listed[vignetteid] then
+			listed[vignetteid] = true
 		end
 	end
 	if atlas then
