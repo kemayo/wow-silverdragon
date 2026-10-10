@@ -44,6 +44,9 @@ local mob_names = {}
 -- Mobs seen or ignored this session stay listed under Ignore once unticked, so
 -- an accidental untick is easy to undo.
 local listed = {}
+local customListed = {
+	-- [uiMapID] = {[id] = true}
+}
 
 ns.RegisterIDListWidget("SilverDragonMobList", {
 	label = function(id) return core:GetMobLabel(id) end,
@@ -112,10 +115,10 @@ function module:CustomChanged(callback, id, watched, uiMapID)
 	local config = core:GetModule("Config", true)
 	if config and config.options.plugins.mobs then
 		local args = config.options.plugins.mobs.mobs.args.custom.args.zones.args
+		customListed[uiMapID] = customListed[uiMapID] or {}
+		customListed[uiMapID][id] = true
 		if not args["map"..uiMapID] then
 			self:BuildCustomList(config.options)
-		else
-			args["map"..uiMapID].args["mob"..id] = toggle_mob(id)
 		end
 	end
 end
@@ -219,6 +222,7 @@ function module:OptionsRequested(callback, options)
 							type = "multiselect",
 							name = REMOVE,
 							dialogControl = "SilverDragonMobList",
+							arg = "ignore",
 							width = "full",
 							order = 10,
 							values = function()
@@ -264,12 +268,6 @@ function module:BuildCustomList(options)
 	for uiMapID, mobs in pairs(core.db.global.custom) do
 		args["map"..uiMapID] = {
 			type = "group",
-			get = function(info)
-				return core.db.global.custom[uiMapID][info.arg]
-			end,
-			set = function(info, value)
-				core:SetCustom(uiMapID, info.arg, value)
-			end,
 			inline = false,
 			name = uiMapID == "any" and ALL or core.zone_names[uiMapID] or ("map"..uiMapID),
 			desc = "ID: " .. uiMapID,
@@ -277,13 +275,32 @@ function module:BuildCustomList(options)
 				add = mob_input(ADD, "Add a mob by entering its id, name, 'target', or 'mouseover'", 1, function(info, id)
 					core:SetCustom(uiMapID, id, true)
 				end),
+				mobs = {
+					type = "multiselect",
+					name = "Mobs",
+					dialogControl = "SilverDragonMobList",
+					arg = "custom" .. uiMapID,
+					width = "full",
+					order = 10,
+					values = function()
+						local values = {}
+						for id in pairs(customListed[uiMapID] or {}) do
+							values[id] = true
+						end
+						for id, enabled in pairs(core.db.global.custom[uiMapID]) do
+							if enabled then
+								values[id] = true
+							end
+						end
+						return values
+					end,
+					get = function(info, id) return core.db.global.custom[uiMapID][id] end,
+					set = function(info, id, value)
+						core:SetCustom(uiMapID, id, value)
+					end,
+				},
 			},
 			order = uiMapID == "any" and 0 or uiMapID,
 		}
-		for mobid, enabled in pairs(mobs) do
-			if enabled then
-				args["map"..uiMapID].args["mob"..mobid] = toggle_mob(mobid)
-			end
-		end
 	end
 end

@@ -25,7 +25,7 @@ end
 -- hooks.detail(key) -> string for the smaller second line (defaults to "ID: key")
 function ns.RegisterIDListWidget(widgetType, hooks)
 	-- the panel is rebuilt after every change, which makes a fresh widget; this
-	-- keeps your place in the list across that
+	-- keeps your place in each list across that, keyed by the option's `arg`
 	local memory = {}
 	local count = 0
 
@@ -46,6 +46,7 @@ function ns.RegisterIDListWidget(widgetType, hooks)
 			self:SetDisabled(false)
 		end,
 		OnRelease = function(self)
+			self.memoryKey = nil
 			self.frame:ClearAllPoints()
 			self.frame:Hide()
 			self:SetFilterText("")
@@ -69,12 +70,16 @@ function ns.RegisterIDListWidget(widgetType, hooks)
 			end
 			table.sort(keys, compare)
 			self.keys = keys
-			local saved = memory[widgetType]
+			self:Refilter(0)
+		end,
+		-- AceConfigDialog passes the option's `arg` once the list is filled in.
+		-- It's what tells several lists of one type apart.
+		SetCustomData = function(self, arg)
+			self.memoryKey = arg
+			local saved = memory[arg]
 			if saved then
 				self:SetFilterText(saved.filter or "")
 				self:Refilter(saved.offset)
-			else
-				self:Refilter(0)
 			end
 		end,
 		SetItemValue = function(self, key, value)
@@ -111,7 +116,9 @@ function ns.RegisterIDListWidget(widgetType, hooks)
 			local shown = self.shown
 			FauxScrollFrame_Update(self.scroll, #shown, ROWS, ROW_HEIGHT)
 			local offset = FauxScrollFrame_GetOffset(self.scroll)
-			memory[widgetType] = {filter = self.filter:GetText(), offset = offset}
+			if self.memoryKey then
+				memory[self.memoryKey] = {filter = self.filter:GetText(), offset = offset}
+			end
 			for i, row in ipairs(self.rows) do
 				local key = shown[offset + i]
 				row.key = key
