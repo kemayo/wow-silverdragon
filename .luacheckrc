@@ -46,6 +46,7 @@ read_globals = {
     "abs", "mod", "max", "min",
     "sin", "cos", "tan",
     "hooksecurefunc",
+    "FauxScrollFrame_Update", "FauxScrollFrame_OnVerticalScroll", "FauxScrollFrame_GetOffset", "FauxScrollFrame_SetOffset",
     "table", "tinsert", "tInsertUnique", "tContains", "tAppendAll", "tDeleteItem", "wipe", "MergeTable", "tFilter",
     "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower", "strupper",
     "time", "date", "issecretvalue",
