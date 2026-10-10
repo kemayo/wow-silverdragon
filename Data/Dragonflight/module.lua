@@ -31,27 +31,27 @@ core:RegisterMobData("Dragonflight", {
 	},
 	-- Stormed off
 	-- Storm
-	[193653] = {name="Gaelzion", locations=LOC_alldragonisles,notes="Storm Invasions"},
-	[193647] = {name="Karantun", locations=LOC_alldragonisles,notes="Storm Invasions", loot={200170}, vignette=5227, quest=74004,},
-	[193684] = {name="Pipspark Thundersnap", locations=LOC_alldragonisles,notes="Storm Invasions"},
-	[193674] = {name="Voraazka", locations=LOC_alldragonisles,notes="Storm Invasions"},
+	[193653] = {name="Gaelzion", locations=LOC_alldragonisles,notes="Storm Invasions", vignette=5232, quest=69959,},
+	[193647] = {name="Karantun", locations=LOC_alldragonisles,notes="Storm Invasions", loot={200170}, vignette=5227, quest=69953,}, -- 74004
+	[193684] = {name="Pipspark Thundersnap", locations=LOC_alldragonisles,notes="Storm Invasions", vignette=5246, quest=69974,},
+	[193674] = {name="Voraazka", locations=LOC_alldragonisles,notes="Storm Invasions", vignette=5241, quest=69969,},
 	-- Earth
-	[193644] = {name="Bouldron", locations=LOC_alldragonisles,notes="Earth Invasions"},
-	[193680] = {name="Zurgaz Corebreaker", locations=LOC_alldragonisles,notes="Earth Invasions"},
-	[193652] = {name="Grizzlerock", locations=LOC_alldragonisles,notes="Earth Invasions"},
-	[193654] = {name="Gravlion", locations=LOC_alldragonisles,notes="Earth Invasions"},
+	[193644] = {name="Bouldron", locations=LOC_alldragonisles,notes="Earth Invasions", vignette=5225, quest=69951,},
+	[193680] = {name="Zurgaz Corebreaker", locations=LOC_alldragonisles,notes="Earth Invasions", vignette=5244, quest=69972,},
+	[193652] = {name="Grizzlerock", locations=LOC_alldragonisles,notes="Earth Invasions", vignette=5231, quest=69956,},
+	[193654] = {name="Gravlion", locations=LOC_alldragonisles,notes="Earth Invasions", vignette=5233, quest=69960,},
 	-- Fire
-	[193648] = {name="Infernum", locations=LOC_alldragonisles,notes="Fire Invasions"},
-	[193686] = {name="Neela Firebane", locations=LOC_alldragonisles,notes="Fire Invasions"},
-	[193675] = {name="Kain Firebrand", locations=LOC_alldragonisles,notes="Fire Invasions"},
-	[193650] = {name="Emblazion", locations=LOC_alldragonisles,notes="Fire Invasions"},
+	[193648] = {name="Infernum", locations=LOC_alldragonisles,notes="Fire Invasions", vignette=5228, quest=69954,},
+	[193686] = {name="Neela Firebane", locations=LOC_alldragonisles,notes="Fire Invasions", vignette=5247, quest=69975,}, -- 74016
+	[193675] = {name="Kain Firebrand", locations=LOC_alldragonisles,notes="Fire Invasions", vignette=5242, quest=69970,},
+	[193650] = {name="Emblazion", locations=LOC_alldragonisles,notes="Fire Invasions", vignette=5230, quest=69955,},
 	-- Water
-	[193645] = {name="Crystalus", locations=LOC_alldragonisles,notes="Water Invasions",},
-	[193682] = {name="Rouen Icewind", locations=LOC_alldragonisles,notes="Water Invasions",},
-	[193655] = {name="Frozion", locations=LOC_alldragonisles,notes="Water Invasions",},
-	[193677] = {name="Maeleera", locations=LOC_alldragonisles,notes="Water Invasions",vignette=5243,},
-	[193678] = {name="Fieraan", locations=LOC_alldragonisles,notes="Water Invasions",vignette=5243,},
-	[193679] = {name="Leerain", locations=LOC_alldragonisles,notes="Water Invasions",vignette=5243,},
+	[193645] = {name="Crystalus", locations=LOC_alldragonisles,notes="Water Invasions", vignette=5226, quest=69952,},
+	[193682] = {name="Rouen Icewind", locations=LOC_alldragonisles,notes="Water Invasions", vignette=5245, quest=69973,},
+	[193655] = {name="Frozion", locations=LOC_alldragonisles,notes="Water Invasions", vignette=5234, quest=69961,},
+	[193677] = {name="Maeleera", locations=LOC_alldragonisles,notes="Water Invasions", vignette=5243, quest=69971,},
+	[193678] = {name="Fieraan", locations=LOC_alldragonisles,notes="Water Invasions", vignette=5243, quest=69971,},
+	[193679] = {name="Leerain", locations=LOC_alldragonisles,notes="Water Invasions", vignette=5243, quest=69971,},
 	-- Assorted hidden things
 	[190971] = {name="Shas'ith", hidden=true}, -- the locked-up variant which is always there
 	[201563] = {name="Rugren", hidden=true}, -- Accompanies Huntmaster Yrgena
