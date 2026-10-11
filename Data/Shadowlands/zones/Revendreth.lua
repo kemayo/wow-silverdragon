@@ -594,8 +594,9 @@ ns.RegisterPoints(1525, {
         npc=166393,
         loot={
             183729, -- Filth-Splattered Headcover
+            {182704, quest=62180, covenant=Enum.CovenantType.Venthyr}, -- Green Muck Dye
         },
-        note="When {quest:57443:Dirty Job Demolition Detail} world quest is up, open a Rubbish Box and use {spell:324115} into the water",
+        note="Use a Rubbish Box and use {spell:324115:Throw Rubbish} into the water to summon {npc:166318:Violent Muckmare}; kill until the rare spawns",
     },
     [25304850] = { label="Amalgamation of Light",
         achievement=14310, criteria=48811,
