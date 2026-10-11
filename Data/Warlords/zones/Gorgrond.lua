@@ -25,7 +25,7 @@ ns.RegisterPoints(543, { -- Gorgrond
     [53107440]={quest=36654, loot={118714}, label="Remains of Balik Orecrusher"},
     [57805600]={quest=36605, loot={118703}, label="Remains of Balldir Deeprock"},
     [59406370]={quest=36628, loot={118712}, label="Vindicator's Hammer", note="on a mushroom, climb up into Wildwood from 59.8,53.5 (yes, it's a long way), jump to the mushrooms at 61.9,60.0, and carry on across to the one with a nest on top"},
-    [71906660]={quest=nil, loot={ns.rewards.Currency(824)}, label="Sunken Treasure"},
+    -- [71906660]={quest=nil, loot={ns.rewards.Currency(824)}, label="Sunken Treasure"},
 }, {
     achievement=9728,
     hide_quest=36465,
