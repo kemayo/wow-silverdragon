@@ -97,7 +97,7 @@ ns.RegisterPoints(1355, { -- Nazjatar
     [50606920] = {quest=56287, npc=152567, loot={170184}, criteria=45535, note="Requries charming a Muck Slug using a [Prismatic Crystal] and bringing it in front of him"}, -- Kelpwillow
     [78602580] = {quest=56288, npc=152397, loot={170184}, criteria=45539, note="Requires summoning the Drowned Hatchling pet in front of him"}, -- Oronu
     [31603060] = {quest=56299, npc=152568, loot={170184}, criteria=45557, note="Must kill a Staghorn Reefwalker in front of him"}, -- Urduu
-    [71605420] = {quest=56282, npc=152561, loot={170179}, criteria=45524, note="Spawns after you kill Siltstalker"}, -- Banescale the Packfather
+    [71605420] = {quest=56282, npc=152361, loot={170179}, criteria=45524, note="Spawns after you kill Siltstalker"}, -- Banescale the Packfather
     [56204360] = {quest=56272, npc=152291, loot=nil, criteria=45530}, -- Deepglider
     [28802900] = {quest=55671, npc=152323, loot={{169371, pet=2681}}, criteria=45536, note="Requires to Shoo the Bloodfin Tadpoles until the King emotes a few times"}, -- King Gakula
     [71405480] = {quest=56297, npc=152359, loot={170179}, criteria=45550}, -- Siltstalker the Packmother
