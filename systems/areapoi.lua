@@ -280,12 +280,14 @@ function areaPoi.GetStatus(areaPoiID, uiMapID)
 	return status
 end
 
--- Running beats upcoming, and a countdown beats no countdown. Where both count,
--- the nearer deadline wins: the ids for one event measure slightly different
--- things, so this has to order them the same way whichever comes first.
+-- Running beats upcoming, timed beats untimed, and a countdown beats no
+-- countdown. Where both count, the nearer deadline wins: the ids for one
+-- event measure slightly different things, so this has to order them the
+-- same way whichever comes first.
 local function betterThan(status, best)
 	if status.active ~= best.active then return status.active end
 	if not status.active then return status.secondsUntil < best.secondsUntil end
+	if status.timed ~= best.timed then return status.timed end
 	if not best.secondsLeft then return status.secondsLeft ~= nil end
 	if not status.secondsLeft then return false end
 	return status.secondsLeft < best.secondsLeft

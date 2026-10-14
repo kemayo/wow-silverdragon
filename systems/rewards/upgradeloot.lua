@@ -31,6 +31,7 @@ do
 		upgrade.warband = item.warband
 		upgrade.spell = item.spell
 		upgrade.note = item.note
+		upgrade.held = item.held
 		if item.class then
 			upgrade.class = item.class -- kept for SilverDragon's loot popup icons
 			table.insert(available, ns.conditions.Class(item.class))

@@ -7,7 +7,7 @@ local materials = {
 	[Enum.ItemArmorSubclass.Plate] = true,
 }
 
-ns.rewards.Item = ns.rewards.Reward:extends({classname="Item"})
+ns.rewards.Item = ns.rewards.Reward:extends({classname="Item", held=false})
 function ns.rewards.Item:init(id, amount, ...)
 	if ns.xtype(amount) == 'table' then
 		-- backwards compatible
@@ -64,7 +64,7 @@ end
 function ns.rewards.Item:Icon() return (select(5, C_Item.GetItemInfoInstant(self.id))) end
 function ns.rewards.Item:Obtained(ignore_notable, ...)
 	local result = self:super("Obtained", ignore_notable, ...)
-	if ns.CLASSICERA then return result and GetItemCount(self.id, true) > 0 end
+	if self.held or ns.CLASSICERA then return result and C_Item.GetItemCount(self.id, true) > 0 end
 	if not result and (ignore_notable or ns.db.transmog_notable) and self.CanLearnAppearance(self.id) then
 		return self.HasAppearance(self.id, ns.db.transmog_specific)
 	end
@@ -296,7 +296,7 @@ end
 ns.rewards.Toy = ns.rewards.Item:extends({classname="Toy"})
 function ns.rewards.Toy:TooltipLabel() return TOY end
 function ns.rewards.Toy:Obtained(...)
-	if ns.CLASSICERA then return GetItemCount(self.id, true) > 0 end
+	if ns.CLASSICERA then return C_Item.GetItemCount(self.id, true) > 0 end
 	return self:super("Obtained", ...) ~= false and PlayerHasToy(self.id)
 end
 function ns.rewards.Toy:Notable(...) return ns.db.toy_notable and self:super("Notable", ...) end
@@ -320,7 +320,7 @@ end
 -- function ns.rewards.Mount:TooltipLabel() return PERKS_VENDOR_CATEGORY_MOUNT or MOUNTS end
 function ns.rewards.Mount:Obtained(...)
 	if self:super("Obtained", ...) == false then return false end
-	if ns.CLASSICERA then return GetItemCount(self.id, true) > 0 end
+	if ns.CLASSICERA then return C_Item.GetItemCount(self.id, true) > 0 end
 	if not _G.C_MountJournal then return false end
 	return self:MountID() and (select(11, C_MountJournal.GetMountInfoByID(self:MountID())))
 end
@@ -365,7 +365,7 @@ end
 function ns.rewards.Pet:TooltipLabel() return TOOLTIP_BATTLE_PET end
 function ns.rewards.Pet:Obtained(...)
 	if self:super("Obtained", ...) == false then return false end
-	if ns.CLASSICERA then return GetItemCount(self.id, true) > 0 end
+	if ns.CLASSICERA then return C_Item.GetItemCount(self.id, true) > 0 end
 	return self:PetID() and C_PetJournal.GetNumCollectedInfo(self:PetID()) > 0
 end
 function ns.rewards.Pet:Notable(...) return ns.db.pet_notable and self:super("Notable", ...) end
@@ -416,7 +416,7 @@ end
 function ns.rewards.Set:TooltipLabel() return WARDROBE_SETS end
 function ns.rewards.Set:Obtained(...)
 	if self:super("Obtained", ...) == false then return false end
-	if ns.CLASSIC then return GetItemCount(self.id, true) > 0 end
+	if ns.CLASSIC then return C_Item.GetItemCount(self.id, true) > 0 end
 	local info = C_TransmogSets.GetSetInfo(self.setid)
 	if info then
 		if info.collected then return true end
@@ -475,7 +475,7 @@ function ns.rewards.Decor:Obtained(...)
 		-- quests, etc
 		return true
 	end
-	if not C_HousingCatalog then return GetItemCount(self.id, true) > 0 end
+	if not C_HousingCatalog then return C_Item.GetItemCount(self.id, true) > 0 end
 	local pattern = HOUSING_DECOR_OWNED_COUNT_FORMAT:gsub("([%(%)])", "%%%1"):gsub("%%d", "(%%d+)")
 	local info = C_TooltipInfo.GetItemByID(self.id)
 	if info then

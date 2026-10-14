@@ -25,6 +25,7 @@ condition:Label() -> string
 local Condition = ns.Class({classname = "Condition", CACHEABLE = true, KEYFIELDS = {"id"}, SILENT = false})
 function Condition:init(id) self.id = id end
 function Condition:Label() return ('{%s:%s}'):format(self.type, self.id) end
+function Condition:CompletionLabel() return (self:Matched() and GREEN_FONT_COLOR or RED_FONT_COLOR):WrapTextInColorCode(self:Label()) end
 function Condition:Matched() return false end
 -- Identity for the cache below: two conditions sharing a key are
 -- interchangeable, so only the first of them has to ask the game. Built from
@@ -601,13 +602,13 @@ do
 		if ns.xtype(conditions) == "table" then
 			for _, condition in ipairs(conditions) do
 				if not condition.SILENT then
-					table.insert(t, condition:Label())
+					table.insert(t, condition:CompletionLabel())
 				end
 			end
 			if #t == 0 then return end
 			return fs:format(string.join(', ', unpack(t)))
 		end
 		if conditions.SILENT then return end
-		return fs:format(conditions:Label())
+		return fs:format(conditions:CompletionLabel())
 	end
 end
