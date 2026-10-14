@@ -1,5 +1,9 @@
 # Changelog
 
+## Changed in v2026.39
+
+* Update for 12.1.5
+
 ## Changed in v2026.38
 
 * Various mob-list configs now use a custom widget rather than plain aceconfig toggles, to avoid horrible performance if you've e.g. ignored thousands of mobs
