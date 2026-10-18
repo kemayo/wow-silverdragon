@@ -1,5 +1,6 @@
 local myname, ns = ...
 local Class = ns.Class
+local L = ns.L
 
 local GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID or _G.GetPlayerAuraBySpellID
 local issecretvalue = _G.issecretvalue or function() return false end
@@ -464,11 +465,11 @@ function ns.conditions.PlayerFaction:Label() return _G["FACTION_" .. strupper(se
 function ns.conditions.PlayerFaction:Matched() return self.id == ns.playerFaction end
 
 ns.conditions.Outdoors = Condition:extends{classname = "Outdoors"}
-function ns.conditions.Outdoors:Label() return "Outdoors" end
+function ns.conditions.Outdoors:Label() return L["Outdoors"] end
 function ns.conditions.Outdoors:Matched() return not IsIndoors() end
 
 ns.conditions.Indoors = Negated(ns.conditions.Outdoors)
-function ns.conditions.Indoors:Label() return "Indoors" end
+function ns.conditions.Indoors:Label() return L["Indoors"] end
 
 ns.conditions.CalendarEvent = Condition:extends{classname = "CalendarEvent", type = 'calendarevent'}
 function ns.conditions.CalendarEvent:Label()
@@ -553,7 +554,7 @@ function ns.conditions.DayOfWeek:Label()
 	if self.DAYS[self.id] then
 		return _G["WEEKDAY_" .. self.DAYS[self.id]]
 	end
-	return "day " .. self.id
+	return L["day %d"]:format(self.id)
 end
 function ns.conditions.DayOfWeek:Matched()
 	return tonumber(date('%w')) == self.id
