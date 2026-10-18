@@ -102,7 +102,7 @@ ns.RegisterVignettes(ns.UNDERMINE, {
     [6687] = {}, -- starting
 }, {
     loot={
-        ns.rewards.Achievement(41590), -- Really No Littering
+        ns.rewards.Achievement(41590), -- No Littering
         ns.rewards.Achievement(41591), -- Really No Littering
         ns.rewards.Achievement(41593), -- Cleanin' the Streets
         {229953, mount=true}, -- Salvaged Goblin Gazillionaire's Flying Machine (from Garbage)

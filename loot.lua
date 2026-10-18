@@ -424,10 +424,25 @@ do
 		return false
 	end
 
+	-- Buttons can sit outside the window's own rect (mixed scales, section
+	-- headings), so also ask what the mouse is actually over.
+	local function isMouseOverChild(window)
+		local foci = _G.GetMouseFoci and _G.GetMouseFoci() or (_G.GetMouseFocus and {_G.GetMouseFocus()}) or {}
+		for _, focus in ipairs(foci) do
+			while focus do
+				if focus == window then
+					return true
+				end
+				focus = focus.GetParent and focus:GetParent()
+			end
+		end
+		return false
+	end
+
 	local function timer_onupdate(self, elapsed)
 		self.checkThreshold = self.checkThreshold + elapsed
 		if self.checkThreshold > 0.1 then
-			if isMouseOver(self.watch, self.additional) then
+			if isMouseOver(self.watch, self.additional) or isMouseOverChild(self.watch) then
 				self.timeOffFrame = 0
 			else
 				self.timeOffFrame = self.timeOffFrame + self.checkThreshold
