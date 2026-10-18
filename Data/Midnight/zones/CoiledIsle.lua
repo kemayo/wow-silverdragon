@@ -184,7 +184,7 @@ ns.RegisterPoints(ns.COILEDISLE, {
 
 -- Mysterious Mix Master
 ns.RegisterPoints(ns.COILEDISLE, {
-	[57404860] = {
+	[57444878] = {
 		achievement=63432,
 		note=function()
 			local function done(c)
@@ -462,7 +462,7 @@ ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
 	[47300640] = SZARITH{parent=true},
 })
 ns.RegisterPoints(2613, { -- The Underbelly
-	[37681723] = SZARITH{},
+	[39582718] = SZARITH{},
 })
 
 -- Turn the Surge
@@ -544,13 +544,49 @@ TODO:
 62604 Dance While Everyone Watches
 ]]
 
+-- Altar of Corrosion trait unlocks
 ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
-	[47210382] = ns.mapLink{link=2613}, -- The Underbelly
+	[41605350] = {
+		label="Venom-Worn Coffer",
+		loot={278536}, -- Mummified Lynx's Paw
+		requires=ns.conditions.Item(280004), -- Corroded Key
+		texture=ns.atlas_texture("VignetteLoot", {r=0, g=1, b=0}),
+		additional={47203820, 41801080, 40101830, 52601070, 53701810, 52205460, 53005340, 42505460},
+		note="Could be at any of these points, floating under a waterfall",
+	},
+	[48502576] = {
+		label="{item:278523:Feather of Tok'jara}",
+		loot={278523}, -- Feather of Tok'jara
+		requires=ns.conditions.Item(280006), -- Spirit Loupe
+		texture=ns.atlas_texture("VignetteLoot", {r=1, g=1, b=0}),
+	},
+}, {
+	minimap=true,
 })
-ns.RegisterPoints(2613, {
-	[52739720] = ns.mapLink{link=ns.VAULTSOFATALUTEK, atlas="CaveUnderground-Up"}, -- The Underbelly
+ns.RegisterPoints(2613, { -- Underbelly
+	[67952996] = {
+		label="{item:278534:Eye of Szarith}",
+		loot={278534}, -- Eye of Szarith
+		requires=ns.conditions.Item(280003), -- Excising Knife
+		texture=ns.atlas_texture("VignetteLoot", {r=0, g=1, b=1}),
+	},
+}, {
+	minimap=true,
+	parent=true,
+})
+ns.RegisterPoints(2638, { -- Profaned Mausoleum
+	[36802370] = {
+		label="Jin'tal's Reliquary",
+		loot={278517}, -- Lost Med'jai Amulet
+		requires=ns.conditions.Item(280005), -- Dispelling Charm
+		texture=ns.atlas_texture("VignetteLoot", {r=1, g=0, b=1}),
+	},
+}, {
+	minimap=true,
+	parent=true,
 })
 
+--[[
 ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
 	-- [] = {criteria=113661, quest=96030, npc=263456, vignette=7629}, -- Szarith the Fanged
 	-- These ones don't have a match in vignettes.db2
@@ -562,6 +598,7 @@ ns.RegisterPoints(ns.VAULTSOFATALUTEK, {
 	achievement=62601, -- Soft Underbelly
 	loot_shared=loot_shared,
 })
+--]]
 
 local HONOREDDEAD = ns.nodeMaker{
 	achievement=63610,
