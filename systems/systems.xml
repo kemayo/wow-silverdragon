@@ -4,6 +4,7 @@
 <!-- Shared between the handler and SilverDragon; loads before either host's code. -->
 
 <Script file="class.lua"/>
+<Script file="locale.lua"/>
 <Script file="formatting.lua"/>
 <Script file="conditions.lua"/>
 <Script file="foldconditions.lua"/>
