@@ -199,17 +199,20 @@ local function callFromSuperClass(self, f, ...)
 
 	-- If the superclass also has a superclass, temporarily set :super to call THAT superclass' methods
 	local supersSuper = _registry.class[super].__superClass
+	local original = _registry.class[superClass].__superClass
 	if supersSuper then
 		_registry.class[superClass].__superClass = supersSuper
 	end
 
 	local method = super[f]
-	local result = method(self, ...)
+	-- pcall so an error in the method can't leave the superclass swapped
+	local ok, result = pcall(method, self, ...)
 
 	-- And set the superclass back, if necessary
 	if supersSuper then
-		_registry.class[superClass].__superClass = super
+		_registry.class[superClass].__superClass = original
 	end
+	if not ok then error(result, 0) end
 	return result
 end
 
