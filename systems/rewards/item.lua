@@ -443,10 +443,33 @@ function ns.rewards.Set:ObtainedTag()
 	return self:super("ObtainedTag")
 end
 
+-- Recipes and decor can only be told apart from their tooltip text, and every
+-- caller asks again for each point it draws, so keep the answer for the run.
+-- Not cached while the tooltip data is still loading.
+ns.run_caches.tooltipOwned = {}
+local function tooltipOwned(itemID, matches)
+	local cache = ns.run_caches.tooltipOwned
+	if cache[itemID] ~= nil then return cache[itemID] end
+	local info = C_TooltipInfo.GetItemByID(itemID)
+	if not info then return end
+	local owned = false
+	for _, line in ipairs(info.lines) do
+		if matches(line) then
+			owned = true
+			break
+		end
+	end
+	cache[itemID] = owned
+	return owned
+end
+
 ns.rewards.Recipe = ns.rewards.Item:extends{classname="Recipe"}
 function ns.rewards.Recipe:init(id, spellid, ...)
 	self:super("init", id, ...)
 	self.spellid = spellid
+end
+local function lineIsRecipeKnown(line)
+	return line.leftText and string.match(line.leftText, _G.ITEM_SPELL_KNOWN)
 end
 function ns.rewards.Recipe:Obtained(...)
 	if self:super("Obtained", ...) then
@@ -454,15 +477,7 @@ function ns.rewards.Recipe:Obtained(...)
 		return true
 	end
 	-- can't use the tradeskill functions + the recipe-spell because that data's only available after the tradeskill window has been opened...
-	local info = C_TooltipInfo.GetItemByID(self.id)
-	if info then
-		for _, line in ipairs(info.lines) do
-			if line.leftText and string.match(line.leftText, _G.ITEM_SPELL_KNOWN) then
-				return true
-			end
-		end
-	end
-	return false
+	return tooltipOwned(self.id, lineIsRecipeKnown) or false
 end
 function ns.rewards.Recipe:Cache()
 	self:super("Cache")
@@ -470,22 +485,20 @@ function ns.rewards.Recipe:Cache()
 end
 
 ns.rewards.Decor = ns.rewards.Item:extends{classname="Decor"}
+local decorOwnedPattern
+local function lineIsDecorOwned(line)
+	if not decorOwnedPattern then
+		decorOwnedPattern = HOUSING_DECOR_OWNED_COUNT_FORMAT:gsub("([%(%)])", "%%%1"):gsub("%%d", "(%%d+)")
+	end
+	return line.type == Enum.TooltipDataLineType.None and line.leftText and string.match(line.leftText, decorOwnedPattern)
+end
 function ns.rewards.Decor:Obtained(...)
 	if self:super("Obtained", ...) then
 		-- quests, etc
 		return true
 	end
 	if not C_HousingCatalog then return C_Item.GetItemCount(self.id, true) > 0 end
-	local pattern = HOUSING_DECOR_OWNED_COUNT_FORMAT:gsub("([%(%)])", "%%%1"):gsub("%%d", "(%%d+)")
-	local info = C_TooltipInfo.GetItemByID(self.id)
-	if info then
-		for _, line in ipairs(info.lines) do
-			if line.type == Enum.TooltipDataLineType.None and line.leftText and string.match(line.leftText, pattern) then
-				return true
-			end
-		end
-		return false
-	end
+	return tooltipOwned(self.id, lineIsDecorOwned)
 end
 function ns.rewards.Decor:Notable(...)
 	-- could only count xp-granting as notable? firstAcquisitionBonus on C_HousingCatalog.GetCatalogEntryInfoByItem
