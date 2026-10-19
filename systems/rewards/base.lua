@@ -219,8 +219,68 @@ end
 function ns.rewards.Achievement:TooltipLabel()
 	return BATTLE_PET_SOURCE_6 -- "Achievement"
 end
+function ns.rewards.Achievement:AddToTooltip(tooltip)
+	self:super("AddToTooltip", tooltip)
+	self:AddProgressToTooltip(tooltip)
+end
 function ns.rewards.Achievement:SetTooltip(tooltip)
 	tooltip:SetHyperlink(GetAchievementLink(self.id))
+	self:AddProgressToTooltip(tooltip)
+end
+function ns.rewards.Achievement:AddProgressToTooltip(tooltip)
+	local achievement, criteria = self.id, self.criteria
+	if criteria then
+		if criteria == true then
+			local numCriteria = GetAchievementNumCriteria(achievement, true) -- include hidden
+			if numCriteria > 10 then
+				local numComplete = 0
+				for i=1, numCriteria do
+					if select(3, GetAchievementCriteriaInfo(achievement, i, true)) then
+						numComplete = numComplete + 1
+					end
+				end
+				local _, _, _, anyComplete, _, _, _, _, _, _, _, _, completedByMe = GetAchievementInfo(achievement)
+				local complete = completedByMe or (ns.db.alts_achievements_count and anyComplete)
+				tooltip:AddDoubleLine(" ", GENERIC_FRACTION_STRING:format(numComplete, numCriteria),
+					nil, nil, nil,
+					(complete and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+				)
+			else
+				for i=1, numCriteria do
+					self:TooltipCriteria(tooltip, achievement, i, true)
+				end
+			end
+		elseif type(criteria) == "table" then
+			for _, id in ipairs(criteria) do
+				self:TooltipCriteria(tooltip, achievement, id, true)
+			end
+		elseif type(criteria) == "number" then
+			self:TooltipCriteria(tooltip, achievement, criteria, true)
+		end
+	elseif GetAchievementNumCriteria(achievement) == 1 then
+		self:TooltipCriteria(tooltip, achievement, 1)
+	end
+end
+function ns.rewards.Achievement:TooltipCriteria(tooltip, achievement, criteriaid, ignore_quantityString)
+	local criteria, _, complete, _, _, completedBy, flags, _, quantityString = ns.GetCriteria(achievement, criteriaid) -- include hidden
+	-- by this current character, or by any character if the setting says it's okay
+	if completedBy and not complete then
+		criteria = TEXT_MODE_A_STRING_VALUE_TYPE:format(criteria, GREEN_FONT_COLOR:WrapTextInColorCode(completedBy))
+	end
+	local r, g, b = (complete and GREEN_FONT_COLOR or RED_FONT_COLOR):GetRGB()
+	if quantityString and not ignore_quantityString then
+		local is_progressbar = bit.band(flags, EVALUATION_TREE_FLAG_PROGRESS_BAR) == EVALUATION_TREE_FLAG_PROGRESS_BAR
+		local label = (criteria and #criteria > 0 and not is_progressbar) and criteria or PVP_PROGRESS_REWARDS_HEADER
+		tooltip:AddDoubleLine(
+			label, quantityString,
+			r, g, b, r, g, b
+		)
+	else
+		tooltip:AddDoubleLine(" ", criteria,
+			nil, nil, nil,
+			r, g, b
+		)
+	end
 end
 
 ns.rewards.BattlePet = Reward:extends({classname="BattlePet",
