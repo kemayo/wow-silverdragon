@@ -57,6 +57,7 @@ end
 function mobs.OnPinReset(pin)
     -- the quantizer prefers whatever it last wrote to the pin's new position
     pin.quantizedX, pin.quantizedY = nil, nil
+    pin.normalizedX, pin.normalizedY = nil, nil
     if pin.OnReleased then
         -- pins only have the mixin once they've been created
         pin:OnReleased()
@@ -84,25 +85,46 @@ if _G.WorldMapPOIQuantizerMixin then
 end
 
 local pinsToQuantize = {}
-function mobs:AfterRefresh()
+local quantizedRows
+
+local function quantizerShape()
     -- Sizing the grid from a canvas that hasn't been laid out makes its cell
     -- counts NaN, which then errors inside the quantizer for every pin, and the
     -- grid stays poisoned until a refresh manages to replace it.
     local width = WorldMapFrame:DenormalizeHorizontalSize(1.0)
     local height = WorldMapFrame:DenormalizeVerticalSize(1.0)
-    if quantizer and width > 0 and height > 0 then
-        wipe(pinsToQuantize)
-        for pin in self:EnumeratePins() do
-            table.insert(pinsToQuantize, pin)
-        end
-        -- the quantizer reads x/y off the pins and writes quantizedX/Y back
-        quantizer:Resize(math.ceil(quantizer.size * (width / height)), quantizer.size)
-        quantizer:ClearAndQuantize(pinsToQuantize)
-        for _, pin in ipairs(pinsToQuantize) do
-            pin.x = pin.quantizedX or pin.x
-            pin.y = pin.quantizedY or pin.y
-        end
+    if not (width > 0 and height > 0) then return end
+    local container = WorldMapFrame.ScrollContainer
+    local zoom = container:GetCanvasScale() / container:GetScaleForMinZoom()
+    -- pins keep their screen size as you zoom, so they cover less of the map
+    if zoom ~= zoom or zoom < 1 then zoom = 1 end -- NaN if the min scale is 0
+    local rows = math.ceil(quantizer.size * zoom)
+    return math.ceil(rows * (width / height)), rows
+end
+
+function mobs:Quantize()
+    if not (quantizer and module.db.profile.worldmap.quantize) then return end
+    local columns, rows = quantizerShape()
+    if not columns then return end
+
+    wipe(pinsToQuantize)
+    for pin in self:EnumeratePins() do
+        -- the quantizer reads normalizedX/Y, and x/y get overwritten with its answer
+        pin.normalizedX = pin.normalizedX or pin.x
+        pin.normalizedY = pin.normalizedY or pin.y
+        table.insert(pinsToQuantize, pin)
     end
+    quantizer:Resize(columns, rows)
+    quantizer:ClearAndQuantize(pinsToQuantize)
+    for _, pin in ipairs(pinsToQuantize) do
+        pin.x = pin.quantizedX or pin.normalizedX
+        pin.y = pin.quantizedY or pin.normalizedY
+    end
+    quantizedRows = rows
+end
+
+function mobs:AfterRefresh()
+    self:Quantize()
 
     if module.last_mob and time() < (module.last_mob_time + 30) then
         self:Ping(module.last_mob)
@@ -146,6 +168,23 @@ function mobs:ApplyFocusState()
 end
 
 module.WorldMapProvider = ns.MapSystem:AddProvider(mobs)
+
+-- The grid only changes in whole rows, so most of a zoom animation does nothing.
+hooksecurefunc(WorldMapFrame, "OnCanvasScaleChanged", function()
+    if not (quantizer and module.db and module.db.profile.worldmap.quantize) then return end
+    local _, rows = quantizerShape()
+    if not rows or rows == quantizedRows then return end
+
+    local provider = module.WorldMapProvider
+    provider:Quantize()
+    -- the shared pin code has already placed them for this scale, with the old positions
+    for pin in provider:EnumeratePins() do
+        local scale = pin:GetCurrentScale()
+        local overlay = pin:GetParent()
+        pin:SetPoint("CENTER", overlay, "TOPLEFT",
+            (overlay:GetWidth() * pin.x) / scale, -(overlay:GetHeight() * pin.y) / scale)
+    end
+end)
 
 -- Routes
 

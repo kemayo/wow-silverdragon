@@ -268,6 +268,7 @@ function module:RegisterConfig()
                         order = 30,
                     },
                     routes = config.toggle("Routes", "Show the routes that some mobs take", 40),
+                    quantize = config.toggle("Stop icons overlapping", "Nudge icons that are close together onto a grid, so they do not sit on top of each other", 45),
                     loot = lootSelect(50),
                     tooltip_help = config.toggle("Help", "Show the click shortcuts in the tooltip", 53),
                 },

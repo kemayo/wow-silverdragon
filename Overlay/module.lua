@@ -31,6 +31,7 @@ function module:OnInitialize()
                 icon_scale = 1,
                 icon_alpha = 1,
                 routes = true,
+                quantize = true,
                 zone_disabled = {},
             },
             minimap = {
