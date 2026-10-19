@@ -281,7 +281,7 @@ function ns.conditions.Faction:Matched()
 		name, _, standingid = GetFactionInfoByID(self.id)
 	end
 	if name and standingid then
-		return self.rank <= standingid
+		return not self.rank or self.rank <= standingid
 	end
 end
 function ns.conditions.Faction:Label()
