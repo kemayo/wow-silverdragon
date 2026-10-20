@@ -16,4 +16,5 @@
   <Include file="Dragonflight/module.xml [AllowLoadGameType standard]"/>
   <Include file="WarWithin/module.xml [AllowLoadGameType standard]"/>
   <Include file="Midnight/module.xml [AllowLoadGameType standard]"/>
+  <Include file="Forever/module.xml [AllowLoadGameType forever]"/>
 </Ui>

@@ -1,0 +1,6 @@
+local myname, ns = ...
+
+ns.MOUNTHYJAL = 2482
+ns.RIVERGLADES = 2548
+ns.SHENDRALAS = 2652
+ns.ZEPHRASISLE = 2521

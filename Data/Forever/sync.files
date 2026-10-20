@@ -1,0 +1,6 @@
+# Files copied from ../HandyNotes_WoWForever by bin/syncdata.sh.
+# Paths are relative to that plugin's root.
+
+constants.lua
+
+zones/*
