@@ -48,7 +48,7 @@ read_globals = {
     "hooksecurefunc",
     "FauxScrollFrame_Update", "FauxScrollFrame_OnVerticalScroll", "FauxScrollFrame_GetOffset", "FauxScrollFrame_SetOffset",
     "table", "tinsert", "tInsertUnique", "tContains", "tAppendAll", "tDeleteItem", "wipe", "MergeTable", "tFilter",
-    "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower", "strupper",
+    "string", "tostringall", "strtrim", "strmatch", "strjoin", "strsplit", "strlower", "strupper", "debugprofilestop",
     "time", "date", "issecretvalue",
 
     -- our own globals
@@ -92,6 +92,7 @@ read_globals = {
     "C_Reputation",
     "C_Secrets",
     "C_Spell",
+    "C_StringUtil",
     "C_SuperTrack",
     "C_TaskQuest",
     "C_Texture",

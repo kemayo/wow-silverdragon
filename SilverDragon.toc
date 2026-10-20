@@ -55,6 +55,7 @@ scan\targets.lua
 scan\macro.lua
 scan\vignettes.lua
 scan\chat.lua
+scan\minimap.lua
 #scan\darkmagic.lua
 
 # optional bits
