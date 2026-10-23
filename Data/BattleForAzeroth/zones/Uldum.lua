@@ -114,27 +114,27 @@ ns.RegisterPoints(1527, { -- Uldum
 
 -- Aqir Assault
 ns.RegisterPoints(1527, { -- Uldum
-    [22006160] = {quest=56823, npc=155531, loot=aqirWeapons, note="Kill {npc:154369} to spawn",}, -- Infested Wastewander Captain
-    [21256105] = {quest=58697, npc=162140, loot=tAppendAll({{174476,pet=2848}}, aqirWeapons),}, -- Skikx'traz
+    [22006160] = {quest=56823, npc=155531, note="Kill {npc:154369} to spawn",}, -- Infested Wastewander Captain
+    [21256105] = {quest=58697, npc=162140, loot={{174476,pet=2848}},}, -- Skikx'traz
     [28601420] = { label="R'krox the Runt",
         quest=58864, npc=162173,
-        loot=aqirWeapons,
         -- routes={{30603200, 30202760, 28601420, 25400900, 30800940, 33801100, 37801000}},
     },
-    [30006500] = {quest=56952, npc=156078, loot=aqirWeapons,}, -- Magus Rehleth
-    [30404940] = {quest=58696, npc=162147, loot=tAppendAll({{174769,mount=1319}}, aqirWeapons),}, -- Corpse Eater
-    [33402580] = {quest=58702, npc=162170, loot=aqirWeapons,}, -- Warcaster Xeshro
-    [34401840] = {quest=56340, npc=154604, loot=tAppendAll({{174475,pet=2847}}, aqirWeapons),}, -- Lord Aj'qirai
-    [37205940] = {quest=58693, npc=162142, loot=aqirWeapons,}, -- Qho
-    [40404300] = {quest=58695, npc=162141, loot=aqirWeapons,}, -- Zuythiz
-    [45805940] = {quest=58701, npc=162163, loot=aqirWeapons,}, -- High Priest Ytaessis
-    [45405780] = {quest=58699, npc=162171, loot=aqirWeapons,}, -- Captain Dunewalker
+    [30006500] = {quest=56952, npc=156078,}, -- Magus Rehleth
+    [30404940] = {quest=58696, npc=162147, loot={{174769,mount=1319}},}, -- Corpse Eater
+    [33402580] = {quest=58702, npc=162170,}, -- Warcaster Xeshro
+    [34401840] = {quest=56340, npc=154604, loot={{174475,pet=2847}},}, -- Lord Aj'qirai
+    [37205940] = {quest=58693, npc=162142,}, -- Qho
+    [40404300] = {quest=58695, npc=162141,}, -- Zuythiz
+    [45805940] = {quest=58701, npc=162163,}, -- High Priest Ytaessis
+    [45405780] = {quest=58699, npc=162171,}, -- Captain Dunewalker
     -- Kill enough of related mobs all over the place...
     -- [] = {quest=58612, npc=154578,}, -- Aqir Flayer
     -- [] = {quest=58614, npc=154576,}, -- Aqir Titanus
     -- [] = {quest=58694, npc=162172,}, -- Aqir Warcaster
 }, {
     requires=AQIR,
+    loot_shared=aqirWeapons,
 })
 
 -- multi-assault:
@@ -152,7 +152,7 @@ ns.RegisterPoints(1527, {
     [60607300] = {quest=58169, npc=160532, requires={NZOTH, AQIR, any=true},}, -- Shoth the Darkened
     [58006000] = { label="R'khuzj the Unfathomable",
         quest=57430, npc=156299,
-        loot=aqirWeapons,
+        loot_shared=aqirWeapons,
         requires={NZOTH, AQIR, any=true},
         -- routes={{50205080,56405240,58006000,58406640,57407820}},
     },
@@ -160,8 +160,8 @@ ns.RegisterPoints(1527, {
 
 -- Any assault
 ns.RegisterPoints(1527, { -- Uldum
-    [32406440] = {quest=56834, npc=155703, loot=aqirWeapons,}, -- Anq'uri the Titanic
-    [35001740] = {quest=58681, npc=162196, loot=aqirWeapons,}, -- Obsidian Annihilator
+    [32406440] = {quest=56834, npc=155703, loot_shared=aqirWeapons,}, -- Anq'uri the Titanic
+    [35001740] = {quest=58681, npc=162196, loot_shared=aqirWeapons,}, -- Obsidian Annihilator
     [73808340] = {quest=57259, npc=157134, loot={{174641, mount=1314}}}, -- Ishak of the Four Winds
     -- [] = {quest=58691, npc=162254,}, -- Corrupted Observer
     -- [] = {quest=58691, npc=158632,}, -- Corrupted Fleshbeast

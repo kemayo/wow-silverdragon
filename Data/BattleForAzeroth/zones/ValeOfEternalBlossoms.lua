@@ -49,7 +49,7 @@ ns.RegisterPoints(1530, { -- Vale of Eternal Blossoms
     [17006660] = {quest=59216, npc=157183, }, -- Coagulated Anima
     [19807300] = {quest=59216, npc=157183, }, -- Coagulated Anima
     [21206380] = {quest=59216, npc=157183, }, -- Coagulated Anima
-    [20401260] = {quest=57346, npc=157162, loot=tAppendAll({174230,{174649,mount=1313}}, moguWeapons), note="Use the scale to buy the mount",}, -- Rei Lun
+    [20401260] = {quest=57346, npc=157162, loot={174230,{174649,mount=1313}}, note="Use the scale to buy the mount",}, -- Rei Lun
     [27007400] = { label="Stormhowl",
         quest=57348, npc=157279,
         -- routes={{23807700,27007400,27207140}},
@@ -58,29 +58,30 @@ ns.RegisterPoints(1530, { -- Vale of Eternal Blossoms
     [29053930] = { label="Ha-Li",
         quest=57344, npc=157153,
         -- routes={{37323630,33973378,29053930,31524387,37313632,37323630,loop=true}},
-        loot=tAppendAll({{173887,mount=1297}}, moguWeapons),
+        loot={{173887,mount=1297}},
         note="Flying in a circle counterclockwise",
     },
     [28404020] = {quest=57347, npc=157171,}, -- Heixi the Stonelord
     [29402220] = {quest=58507, npc=155958, loot={{174873, toy=true}}}, -- Tashara
-    [33406740] = {quest=57363, npc=157466, loot=tAppendAll({{174840,mount=1328}}, moguWeapons),}, -- Anh-De the Loyal
+    [33406740] = {quest=57363, npc=157466, loot={{174840,mount=1328}}}, -- Anh-De the Loyal
     [41406000] = {quest=57349, npc=157287,}, -- Dokani Obliterator
-    [47605600] = {quest=56954, npc=156083, loot=tAppendAll({174071}, moguWeapons),}, -- Sanguifang
+    [47605600] = {quest=56954, npc=156083, loot={174071}}, -- Sanguifang
     [47406420] = {quest=56332, npc=154600,}, -- Teng the Awakened
     [53204960] = {quest=57358, npc=157443,}, -- Xiln the Mountain
     [11603160] = { label="Houndlord Ren",
         quest=57345, npc=157160,
-        loot=tAppendAll({{174841,mount=1327}}, moguWeapons),
+        loot={{174841,mount=1327}},
         routes={{09003520,11603160,12802640}},
     },
     [26805510] = { label="Ivory Cloud Serpent",
         npc=163042,
         loot={{174752,mount=1311}},
+        loot_shared=false,
         note="You need a {item:174927:Zan-Tien Lasso} to catch it. It spawns fairly high up",
     },
 }, {
     requires=MOGU,
-    loot=moguWeapons,
+    loot_shared=moguWeapons,
 })
 
 -- Mantid Assault
@@ -106,12 +107,12 @@ ns.RegisterPoints(1530, { -- Vale of Eternal Blossoms
     [25406780] = {quest=58304, npc=160872,}, -- Destroyer Krox'tazar
 }, {
     requires=MANTID,
-    loot=mantidWeapons,
+    loot_shared=mantidWeapons,
 })
 
 -- Any assault
 ns.RegisterPoints(1530, { -- Vale of Eternal Blossoms
-    [9406740] = {quest=57364, npc=157468, loot=moguWeapons}, -- Tisiphon
+    [9406740] = {quest=57364, npc=157468, loot_shared=moguWeapons}, -- Tisiphon
     [5405620] = { label="Grand Empress Shek'zara",
         quest=58705, -- todo: actual quest
         worldquest=58705,
