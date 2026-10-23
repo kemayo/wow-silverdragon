@@ -40,7 +40,7 @@ core:RegisterTreasureData("Midnight", {
 	-- Val
 	[7707] = {name="Domanaar Storage Vessel", loot={}},
 	-- Coiled Isle
-	[7704] = {name="Decrepit Cache", loot={}},
+	[7704] = {name="Decrepit Cache", loot={}, requires=ns.conditions.Item(275048)},
 	[7705] = {name="Cracked Canopic Jar", loot={}},
 	[7712] = {name="Venom-Clotted Bauble", loot={}},
 	[7713] = {name="Singing Shell", loot={}},
