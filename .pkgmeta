@@ -34,7 +34,6 @@ move-folders:
    SilverDragon/History: SilverDragon_History
 
 ignore:
-   - tools
    - bin
    - Data/*/sync.files
    - lib/ChatThrottleLib/ChatThrottleLib.toc

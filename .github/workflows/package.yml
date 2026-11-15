@@ -6,7 +6,6 @@ on:
     tags: [ '*' ]
     paths-ignore:
       - '.github/**'
-      - 'tools/**'
 
 jobs:
   lint:
