@@ -106,4 +106,4 @@ core:RegisterMobData("Forever", {
 	-- [269111] = {name="Gortek the Apprentice",loot={280077,280078},},
 	-- [269151] = {name="Sabella No-Eyes",loot={280083,280084},},
 	-- [277981] = {name="Aidan's Test Creature DNT",},
-})
+}, true)
