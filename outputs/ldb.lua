@@ -516,6 +516,7 @@ do
 		-- TODO: this should get combined with the near-identical code in Overlay...
 		tooltip:SetFrameStrata("DIALOG")
 		GameTooltip:SetOwner(cell, "ANCHOR_NONE")
+		GameTooltip:ClearAllPoints()
 		GameTooltip:SetPoint("TOPLEFT", cell, "BOTTOMLEFT")
 		GameTooltip:SetHyperlink(("unit:Creature-0-0-0-0-%d"):format(mobid))
 		if ns.mobdb[mobid] then

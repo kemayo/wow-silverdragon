@@ -712,6 +712,7 @@ LineMixin = {
 			if not data then return end
 
 			GameTooltip:SetOwner(self, "ANCHOR_NONE")
+			GameTooltip:ClearAllPoints()
 			if self:GetCenter() < (UIParent:GetWidth() / 2) then
 				GameTooltip:SetPoint("TOPLEFT", self, "TOPRIGHT")
 			else

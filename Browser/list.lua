@@ -1059,6 +1059,7 @@ NavLineMixin.Scripts = {
 		if not (data and data.kind == KIND_MOB) then return end
 		local tooltip = ns.Tooltip.Get("Browser")
 		tooltip:SetOwner(self, "ANCHOR_NONE")
+		tooltip:ClearAllPoints()
 		if self:GetCenter() < (UIParent:GetWidth() / 2) then
 			tooltip:SetPoint("TOPLEFT", self, "TOPRIGHT")
 		else
