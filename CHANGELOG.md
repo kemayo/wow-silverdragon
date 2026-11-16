@@ -1,5 +1,10 @@
 # Changelog
 
+## Changed in v2026.42
+
+* Forever: added new data for all the classic zones
+* Try to avoid an obscure error that seems to happen with the History tooltip
+
 ## Changed in v2026.41
 
 * New scan method: minimap tracking, off by default. This only works in Forever currently, but the methods are *probably* coming to 12.1.7.
