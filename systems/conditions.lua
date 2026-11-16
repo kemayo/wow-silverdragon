@@ -571,7 +571,8 @@ do
 	}
 	function ns.conditions.Vehicle:UnitID(unit)
 		local guid = UnitGUID(unit)
-		if not guid then return end
+		-- secret while unit identity is restricted, and matching on it errors
+		if issecretvalue(guid) or not guid then return end
 		local unit_type, id = guid:match("(%a+)-%d+-%d+-%d+-%d+-(%d+)-.+")
 		if not (unit_type and valid_unit_types[unit_type]) then
 			return
