@@ -3,6 +3,11 @@ local myname, ns = ...
 -- These keys all predate ns.conditions, and each grew its own check in
 -- should_show_point. Folding them into requires at registration leaves one
 -- path for "can this be seen" rather than a dozen near-identical ones.
+ns.foldedKeys = {
+	requires_item = true, requires_buff = true, requires_no_buff = true,
+	requires_worldquest = true, art = true, poi = true,
+	outdoors_only = true, faction = true, level = true,
+}
 do
 	-- Each takes either a single value or a list, and what a list means isn't
 	-- the same for all of them, so the default is spelled out per key.
@@ -70,9 +75,9 @@ do
 		-- Clearing only reaches keys the point owns: one coming from a
 		-- RegisterPoints defaults table stays visible through the metatable,
 		-- which costs a redundant check but not a wrong answer.
-		point.requires_item, point.requires_buff, point.requires_no_buff = nil, nil, nil
-		point.requires_worldquest, point.art, point.poi = nil, nil, nil
-		point.outdoors_only, point.faction, point.level = nil, nil, nil
+		for key in pairs(ns.foldedKeys) do
+			point[key] = nil
+		end
 		point.requires = combine(point.requires, hides)
 		point.hide_before = combine(point.hide_before, upcoming)
 	end
