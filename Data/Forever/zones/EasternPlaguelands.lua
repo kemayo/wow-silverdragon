@@ -1,0 +1,55 @@
+local myname, ns = ...
+
+ns.RegisterPoints(ns.EASTERNPLAGUELANDS, {
+	[40805060] = { label="Deathspeaker Selendre",
+		-- [39005340, 39205380, 40805020, 40805060, 41804980, 83003900, 85804620]
+		quest=nil,
+		npc=10827,
+	},
+	[29808040] = { label="Duggan Wildhammer",
+		quest=nil,
+		npc=10817,
+		loot={
+			284105, -- Wildhammer Soldier's Spaulders
+		},
+	},
+	[59805340] = { label="Gish the Unmoving",
+		quest=nil,
+		npc=10825,
+	},
+	[57904100] = { label="Hed'mush the Rotting",
+		-- [37807560, 38207500, 55602540, 57904100, 66204960]
+		quest=nil,
+		npc=10821,
+	},
+	[85408460] = { label="High General Abbendis",
+		quest=nil,
+		npc=10828,
+	},
+	[80007400] = { label="High General Abbendis",
+		-- [80007400, 80207480]
+		quest=nil,
+		npc=243893,
+	},
+	[37002640] = { label="Lord Darkscythe",
+		quest=nil,
+		npc=10826,
+	},
+	[52401760] = { label="Ranger Lord Hawkspear",
+		quest=nil,
+		npc=10824,
+	},
+	[67408320] = { label="Scarlet Captain",
+		-- [67408320, 67808320]
+		quest=nil,
+		npc=243046,
+	},
+	[67402140] = { label="Warlord Thresh'jin",
+		quest=nil,
+		npc=10822,
+	},
+	[71601640] = { label="Zul'Brin Warpbranch",
+		quest=nil,
+		npc=10823,
+	},
+})

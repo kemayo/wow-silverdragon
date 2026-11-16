@@ -79,7 +79,7 @@ integration\tomtom.lua
 
 # data imports
 Data\module.xml
-Data_Classic\module.xml [AllowLoadGameType vanilla, tbc, wrath, cata, camelot]
+Data_Classic\module.xml [AllowLoadGameType vanilla, tbc, wrath, cata]
 #@debug@
 # overlay
 History\module.xml
