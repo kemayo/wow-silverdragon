@@ -24,7 +24,7 @@ core:RegisterMobData("Cataclysm", {
 	[50065] = {name="Armagedillo",locations={[249]={44804140},},loot={67243},},
 	[50085] = {name="Overlord Sunderfury",locations={[241]={57803340},},loot={67244},},
 	[50086] = {name="Tarvus the Vile",locations={[241]={50808260},},loot={67245},},
-	[50089] = {name="Julak-Doom",boss=true,locations={[241]={49400860,54401160,58400600},},loot={69844},},
+	[50089] = {name="Julak-Doom",boss=true,locations={[241]={58400600},},routes={[241]={{58400600,56470767,56911074,54401160,51771074,51770873,49400860}}},loot={69844},},
 	[50138] = {name="Karoma",locations={[241]={49207440,53805360,54207600,58206360,59004400,65006040},},loot={68055},tameable=236165,},
 	[50154] = {name="Madexx",locations={[249]={44401100,44802220,50002380},},loot={68055},tameable=132195,variant="Brown",},
 	[50159] = {name="Sambas",locations={[241]={38205300,42203900,45402920,49002260,68802580},},loot={68055},tameable=132185,},
